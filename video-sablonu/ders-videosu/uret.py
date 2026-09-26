@@ -59,7 +59,7 @@ def kareler(html, o, out, fps=30):
     from playwright.sync_api import sync_playwright
     name, W, H = YON[o]
     ff = subprocess.Popen([ffmpeg(), "-hide_banner", "-loglevel", "error", "-y", "-f", "image2pipe", "-framerate", str(fps), "-c:v", "mjpeg", "-i", "-",
-                           "-c:v", "libx264", "-preset", "medium", "-crf", "21", "-pix_fmt", "yuv420p", "-r", str(fps), str(out)], stdin=subprocess.PIPE)
+                           "-c:v", "libx264", "-preset", "medium", "-crf", "23", "-pix_fmt", "yuv420p", "-r", str(fps), str(out)], stdin=subprocess.PIPE)
     t0 = time.time()
     with sync_playwright() as p:
         b = p.chromium.launch(args=["--allow-file-access-from-files"])
