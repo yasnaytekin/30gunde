@@ -6,3 +6,6 @@ video-sablonu/*/onizleme_*.png
 video-sablonu/*/pv_*.png
 video-sablonu/tanitim-videosu/music.wav
 .DS_Store
+video-sablonu/ders-videosu/modeller/
+video-sablonu/ders-videosu/is/
+cikti/

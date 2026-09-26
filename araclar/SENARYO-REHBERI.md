@@ -70,3 +70,28 @@ Kodi'de ayrıca el-sallama.
 - `input()` kullanan Python kodu ve DOM/`document` kullanan JavaScript kodu çalıştırılamaz: bunlarda
   `"calistir": false` yap ve `cikti` alanına ekranda görünmesi gerekeni yaz.
 - `hata` sahnesinde `"calistir": true` ise kodun gerçekten hata vermesi beklenir.
+
+## Sesli video için ek alanlar (isteğe bağlı)
+`video-sablonu/ders-videosu/uret.py` bu alanları kullanır; doğrulayıcı da denetler.
+
+```json
+{
+  "dil": "tr",                    // tr | en; İngilizce senaryo <kurs>/video-senaryolari/en/gun-XX.json
+  "giris": { "anlatim": "Gün 1: ... Bu derste ... öğreneceksin.", "maddeler": ["...", "...", "..."] },
+  "cikis": { "anlatim": "Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor...", "baslik": "İnteraktif dersler için",
+             "adres": "30gunde.com.tr", "maddeler": ["...", "...", "..."] },
+  "sahneler": [{
+    "seslendirme": "Yalnızca okunacak metin (telaffuz için); altyazıda anlatim görünür. Cümle sayısı aynı olmalı.",
+    "ekran": {
+      "cikti_cumle": 3,           // çıktı paneli kaçıncı cümlede açılsın (0'dan başlar); yoksa konuşmanın ortasında
+      "izgara": true,             // çıktıyı sahne ızgarası olarak da çiz (* Piko, # duvar, o altın, H kalp)
+      "duzeltme": { "kod": "print(\"Merhaba!\")\n", "cikti": "Merhaba!" }  // hata sahnesi: son cümlede kod düzelir
+    }
+  }]
+}
+```
+
+- `giris`: videonun başındaki konu tanıtımı; 1–2 cümle, 3 kısa madde.
+- `cikis`: videonun sonunda interaktif dersler için 30gunde.com.tr'ye yönlendirme. Fiyat ya da "bedava" vurgusu yok.
+- Sahne süreleri seslendirmeye göre ayarlanır; `sure_sn` yine de doğru tahmin edilmeli (sessiz önizleme ve denetim için).
+- İngilizce senaryoda kod içindeki metinler de İngilizce olur (`print("Hello World!")`) ve çıktılar yeniden doğrulanır.

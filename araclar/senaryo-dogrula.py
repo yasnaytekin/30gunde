@@ -1,6 +1,7 @@
 # Video senaryolarını doğrular ve her JSON senaryodan okunabilir bir Markdown üretir.
 #   python3 araclar/senaryo-dogrula.py                 # hepsi
 #   python3 araclar/senaryo-dogrula.py python 1-15     # bir kurs, gün aralığı
+# Başka dillerdeki senaryolar <kurs>/video-senaryolari/<dil>/gun-XX.json (ör. en/) içinde durur ve aynı denetimden geçer.
 # Denetimler: alanlar, poz adları, görsel yolları, süreler, seslendirme uzunluğu (≈2,3 kelime/sn),
 # "calistir": true olan kod sahnelerinde kodu gerçekten çalıştırıp "cikti" ile karşılaştırma.
 import json, re, subprocess, sys, tempfile
@@ -38,7 +39,8 @@ def check(course, path):
         v = json.loads(path.read_text("utf8"))
     except Exception as e:
         return [f"{path.name}: JSON okunamadı: {e}"], None
-    E = lambda m: errs.append(f"{course}/{path.name}: {m}")
+    name = path.name if path.parent.name == "video-senaryolari" else f"{path.parent.name}/{path.name}"
+    E = lambda m: errs.append(f"{course}/{name}: {m}")
     for k in ("kurs", "gun", "baslik", "maskot", "ozet", "hedef_sure_sn", "sahneler"):
         if k not in v:
             E(f"'{k}' eksik")
@@ -46,6 +48,11 @@ def check(course, path):
         return errs, v
     if v["kurs"] != course or v["maskot"] != MASCOT[course]:
         E("kurs/maskot yanlış")
+    if v.get("dil", "tr") != (path.parent.name if path.parent.name != "video-senaryolari" else "tr"):
+        E("'dil' alanı klasörle uyuşmuyor")
+    for k in ("giris", "cikis"):
+        if k in v and not (v[k].get("anlatim") or "").strip():
+            E(f"{k}.anlatim boş")
     day = int(re.search(r"(\d+)", path.name).group(1))
     if v["gun"] != day:
         E("gün numarası dosya adıyla uyuşmuyor")
@@ -98,22 +105,32 @@ def check(course, path):
                 P(f"kod hata verdi: {err.strip().splitlines()[-1]}")
             elif "cikti" in ek and norm(out) != norm(ek["cikti"]):
                 P(f"ekran.cikti gerçek çıktıyla aynı değil. Gerçek:\n{out}")
+            fix = ek.get("duzeltme")
+            if fix:
+                out, err = run_code(course, fix.get("kod", ""))
+                if out is None or (err or "").strip():
+                    P("duzeltme.kod çalışmadı")
+                elif norm(out) != norm(fix.get("cikti")):
+                    P(f"duzeltme.cikti gerçek çıktıyla aynı değil. Gerçek:\n{out}")
     if not 60 <= total <= 210:
         E(f"toplam süre {total} sn (60–210 olmalı)")
     return errs, v
 
 
-def to_md(course, v):
+def to_md(course, v, up=".."):
     lang = LANG[course]
     total = sum(s.get("sure_sn", 0) for s in v["sahneler"])
     out = [f"# Video senaryosu: Gün {v['gun']}, {v['baslik']}", "",
            f"**Kurs:** {'30 Günde Python' if course == 'python' else '30 Günde JavaScript'}  ·  **Maskot:** {v['maskot'].capitalize()}  ·  **Süre:** ~{total} sn", "",
-           v["ozet"], "", f"Ders metni: [gun-{v['gun']:02d}.md](../gunler/gun-{v['gun']:02d}.md)", "",
+           v["ozet"], "", f"Ders metni: [gun-{v['gun']:02d}.md]({up}/gunler/gun-{v['gun']:02d}.md)", "",
            "| # | Tür | Süre | Maskot |", "|---|---|---|---|"]
     for s in v["sahneler"]:
         m = s.get("maskot") or {}
         out.append(f"| {s['no']} | {s['tur']} | {s['sure_sn']} sn | {m.get('poz', '-')} ({m.get('konum', 'yok')}) |")
     out.append("")
+    if v.get("giris"):
+        out += ["## Giriş (konu tanıtımı)", "", f"**Seslendirme:** {v['giris']['anlatim']}", ""]
+        out += [f"- {b}" for b in v["giris"].get("maddeler", [])] + [""]
     for s in v["sahneler"]:
         ek = s.get("ekran") or {}
         m = s.get("maskot") or {}
@@ -128,12 +145,20 @@ def to_md(course, v):
             out += [f"**Kod**{' (vurgulanan satırlar: ' + ', '.join(map(str, vs)) + ')' if vs else ''}:", "", f"```{ek.get('dil', lang)}", ek["kod"].rstrip("\n"), "```", ""]
         if ek.get("cikti"):
             out += ["**Çıktı:**", "", "```text", ek["cikti"].rstrip("\n"), "```", ""]
+        if ek.get("duzeltme"):
+            out += ["**Düzeltilmiş kod:**", "", f"```{ek.get('dil', lang)}", ek["duzeltme"]["kod"].rstrip("\n"), "```", "",
+                    "**Düzeltilmiş çıktı:**", "", "```text", ek["duzeltme"]["cikti"].rstrip("\n"), "```", ""]
         if ek.get("gorsel"):
             out += [f"**Görsel:** `{ek['gorsel']}`", ""]
         if m.get("konum", "yok") != "yok":
             out += [f"**Maskot:** {m.get('poz')} pozu, {m.get('konum')}" + (f"; {m['not']}" if m.get("not") else ""), ""]
         if s.get("yonetmen_notu"):
             out += [f"*Yönetmen notu: {s['yonetmen_notu']}*", ""]
+    if v.get("cikis"):
+        c = v["cikis"]
+        out += ["## Çıkış (30gunde.com.tr yönlendirmesi)", "", f"**Seslendirme:** {c['anlatim']}", "",
+                f"**Ekranda:** {c.get('baslik', '')} **{c.get('adres', '30gunde.com.tr')}**", ""]
+        out += [f"- {b}" for b in c.get("maddeler", [])] + [""]
     return "\n".join(out).rstrip() + "\n"
 
 
@@ -145,7 +170,7 @@ def main():
     bad = 0; ok = 0
     for c in courses:
         d = REPO / c / "video-senaryolari"
-        for f in sorted(d.glob("gun-*.json")):
+        for f in sorted(d.glob("gun-*.json")) + sorted(d.glob("*/gun-*.json")):
             day = int(re.search(r"(\d+)", f.name).group(1))
             if rng and not rng[0] <= day <= rng[1]:
                 continue
@@ -155,7 +180,7 @@ def main():
             bad += len(errs)
             if not errs:
                 ok += 1
-                f.with_suffix(".md").write_text(to_md(c, v), "utf8")
+                f.with_suffix(".md").write_text(to_md(c, v, ".." if f.parent == d else "../.."), "utf8")
     print(f"{ok} senaryo geçerli, {bad} sorun.")
     sys.exit(1 if bad else 0)
 

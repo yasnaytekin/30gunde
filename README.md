@@ -32,14 +32,16 @@ video-sablonu/
 araclar/
   disa-aktar.py             # içeriği uygulamanın lessons.json dosyalarından yeniden üretir
   senaryo-dogrula.py        # senaryoları doğrular (kodları çalıştırıp çıktıyı karşılaştırır), .md üretir
+  agiz-rig.py               # Piko pozlarından dudak senkronu parçaları üretir
   SENARYO-REHBERI.md        # yeni senaryo yazarken uyulacak kurallar ve JSON şeması
 ```
 
 ## Konu anlatım videosu üretmek
 
-1. Senaryoyu oku ya da düzenle: `python/video-senaryolari/gun-01.md` (kaynağı `.json`).
+1. Senaryoyu oku ya da düzenle: `python/video-senaryolari/gun-01.md` (kaynağı `.json`); İngilizcesi `python/video-senaryolari/en/`.
 2. Doğrula: `python3 araclar/senaryo-dogrula.py python 1-1`
-3. Videoyu üret: [video-sablonu/README.md](video-sablonu/README.md)
+3. Videoyu üret (seslendirme, konuşan maskot, müzik, giriş ve 30gunde.com.tr çıkışı dahil):
+   `cd video-sablonu/ders-videosu && python3 uret.py python 1` → `cikti/python/gun-01/` (ayrıntılar: [video-sablonu/README.md](video-sablonu/README.md))
 
 Her senaryo 8–14 sahneden oluşur (açılış, anlatım, kod ve çıktı, sık yapılan hata, mini soru, görevler,
 özet, kapanış). Toplam süre: Python 30 video ~70 dk, JavaScript 30 video ~79 dk.
