@@ -5,6 +5,25 @@
   "maskot": "piko",
   "ozet": "Piko, Veri Ormanı'nda kahramanın çantasını bir listeyle düzenliyor: liste oluşturmak, eleman eklemek, çıkarmak, değiştirmek ve sum, max, sorted ile incelemek.",
   "hedef_sure_sn": 118,
+  "dil": "tr",
+  "giris": {
+    "anlatim": "Gün 5: Listeler! Bu derste kahramanın çantasını bir listeyle düzenlemeyi; eleman eklemeyi, çıkarmayı ve listeyi incelemeyi öğreneceksin.",
+    "maddeler": [
+      "Liste oluşturmak ve indeks",
+      "append, remove, pop",
+      "sum, max, sorted"
+    ]
+  },
+  "cikis": {
+    "anlatim": "Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!",
+    "baslik": "İnteraktif dersler için",
+    "adres": "30gunde.com.tr",
+    "maddeler": [
+      "Kodunu tarayıcıda yaz ve çalıştır",
+      "Görevleri tamamla, rozet kazan",
+      "30 günde adım adım Python"
+    ]
+  },
   "sahneler": [
     {
       "no": 1,
@@ -113,7 +132,11 @@
         "vurgu_satirlari": [
           2
         ],
-        "cikti": "IndexError: list index out of range"
+        "cikti": "IndexError: list index out of range",
+        "duzeltme": {
+          "kod": "inventory = [\"kılıç\", \"iksir\", \"harita\"]\nprint(inventory[-1])\n",
+          "cikti": "harita"
+        }
       },
       "maskot": {
         "poz": "sasirma",

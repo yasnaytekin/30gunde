@@ -5,6 +5,25 @@
   "maskot": "piko",
   "ozet": "Piko, Veri Ormanı'ndaki mühürlü koordinatlar üzerinden tuple'ları anlatıyor: oluşturmak, neden değiştirilemediğini görmek, listeye çevirmek, açmak ve tek elemanlı tuple tuzağı.",
   "hedef_sure_sn": 124,
+  "dil": "tr",
+  "giris": {
+    "anlatim": "Gün 6: Tuple'lar! Bu derste değiştirilemeyen mühürlü kutuları, onları açmayı ve tek elemanlı tuple tuzağını öğreneceksin.",
+    "maddeler": [
+      "Tuple nedir, neden değişmez?",
+      "list() ve tuple() ile dönüştürme",
+      "Tuple açmak: x, y = pos"
+    ]
+  },
+  "cikis": {
+    "anlatim": "Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!",
+    "baslik": "İnteraktif dersler için",
+    "adres": "30gunde.com.tr",
+    "maddeler": [
+      "Kodunu tarayıcıda yaz ve çalıştır",
+      "Görevleri tamamla, rozet kazan",
+      "30 günde adım adım Python"
+    ]
+  },
   "sahneler": [
     {
       "no": 1,

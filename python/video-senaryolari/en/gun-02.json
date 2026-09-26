@@ -1,0 +1,270 @@
+{
+  "kurs": "python",
+  "gun": 2,
+  "baslik": "Variables and built-in functions",
+  "maskot": "piko",
+  "ozet": "Piko explains how to keep the hero's details in labeled boxes: variables, data types, reading input with input(), and built-in functions like len, round and max.",
+  "hedef_sure_sn": 148,
+  "dil": "en",
+  "giris": {
+    "anlatim": "Day 2: Variables and built-in functions! In this lesson you'll store information in labeled boxes, get to know data types, and use Python's built-in functions.",
+    "maddeler": [
+      "Variables: labeled boxes",
+      "Data types and input()",
+      "len, round, max, min"
+    ]
+  },
+  "cikis": {
+    "anlatim": "The interactive version of this lesson is waiting for you at 30gunde.com.tr. Write your code right in the browser, run it instantly, and finish the tasks!",
+    "baslik": "Interactive lessons at",
+    "adres": "30gunde.com.tr",
+    "maddeler": [
+      "Write and run code in your browser",
+      "Finish tasks, earn badges",
+      "Learn Python step by step in 30 days"
+    ]
+  },
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 11,
+      "anlatim": "Hi, I'm Piko! We're still at Base Camp. Our game is going to have a hero. But how will the computer remember the hero's name, health and gold? Today we open labeled boxes in memory!",
+      "ekran": {
+        "baslik": "Day 2: Variables and built-in functions",
+        "gorsel": "gorseller/python/harita/kamp.webp"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 13,
+      "anlatim": "A variable is a labeled box you put information in. The equals sign here isn't the one from math: it means put the value on the right into the box on the left. Then you use what's inside by writing the box's name.",
+      "ekran": {
+        "baslik": "A variable: a labeled box",
+        "kod": "name = \"Piko\"\nhp = 100\nprint(name)\nprint(hp)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          1,
+          2
+        ],
+        "cikti": "Piko\n100"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 3,
+      "tur": "anlatim",
+      "sure_sn": 12,
+      "anlatim": "There are a few rules for naming boxes. A name starts with a letter or an underscore and has no spaces. Uppercase and lowercase are different. Most importantly, pick names that make sense.",
+      "ekran": {
+        "baslik": "Naming rules",
+        "maddeler": [
+          "Start with a letter or _: score",
+          "No spaces, use _: player_name",
+          "Score and score are different boxes",
+          "Pick clear names: gold, not x"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "Different kinds of information go in boxes. Text is a string, whole numbers are int, decimals are float, and True or False is a bool. If you wonder what type a value is, just ask the type function.",
+      "ekran": {
+        "baslik": "Data types",
+        "kod": "name = \"Piko\"\nhp = 100\nspeed = 2.5\nis_alive = True\nprint(name, hp, speed, is_alive)\nprint(type(name))\nprint(type(hp))\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          6,
+          7
+        ],
+        "cikti": "Piko 100 2.5 True\n<class 'str'>\n<class 'int'>"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 10,
+      "anlatim": "Put a new value in a box and it replaces the old one. The third line says: take the current gold, add twenty-five, and put the result back in the same box.",
+      "ekran": {
+        "baslik": "Changing what's inside",
+        "kod": "gold = 10\nprint(\"At first:\", gold)\ngold = gold + 25\nprint(\"After the treasure:\", gold)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          3
+        ],
+        "cikti": "At first: 10\nAfter the treasure: 35"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "With input you ask the user a question. The answer always comes back as text. If you need a number, convert it with int. On this site you type your answers in the Input box under the editor, one answer per line.",
+      "ekran": {
+        "baslik": "Getting input from the user",
+        "kod": "name = input(\"What's your name? \")\nprint(\"Hello\", name)\nage = int(input(\"How old are you? \"))\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          1,
+          3
+        ],
+        "cikti": "What's your name? Ece\nHello Ece\nHow old are you? 12"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 7,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "Python comes with ready-to-use functions. len measures length, float turns text into a decimal number, round rounds, and max and min find the biggest and the smallest.",
+      "ekran": {
+        "baslik": "Built-in functions",
+        "kod": "name = \"Piko\"\nprint(len(name))\nprint(float(\"2.5\") + 1)\nprint(round(7.6))\nprint(max(3, 9, 4), min(3, 9, 4))\n",
+        "dil": "python",
+        "cikti": "4\n3.5\n8\n9 3"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "hata",
+      "sure_sn": 14,
+      "anlatim": "The most common mistake: trying to add text and a number. Twelve in quotes is text, but one is a number. Python says TypeError: you can only add text to text. You'll figure out how to fix it yourself in the Type detective task.",
+      "ekran": {
+        "baslik": "Text + number = error",
+        "kod": "age = \"12\"\nprint(age + 1)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "TypeError: can only concatenate str (not \"int\") to str"
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "soru",
+      "sure_sn": 8,
+      "anlatim": "Let's see. What do you think this code prints? Ten, five, or something else?",
+      "ekran": {
+        "baslik": "What will it print?",
+        "kod": "gold = 10\ngold = gold + 5\nprint(gold)\n",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 10,
+      "tur": "cikti",
+      "sure_sn": 8,
+      "anlatim": "Fifteen! First the box held ten. The second line added five and put the result back into the same box.",
+      "ekran": {
+        "baslik": "The answer",
+        "kod": "gold = 10\ngold = gold + 5\nprint(gold)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "15"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 11,
+      "tur": "gorev",
+      "sure_sn": 14,
+      "anlatim": "Task time! First you'll put your own name in a box. Then you'll make a hero card with three variables. In the Type detective task you'll rescue a broken piece of code. And in the challenge you'll swap what's inside two boxes.",
+      "ekran": {
+        "baslik": "Today's tasks",
+        "maddeler": [
+          "Task 1: Fill the box",
+          "Task 2: Hero card",
+          "Task 3: Type detective",
+          "Stage task: Variable army",
+          "Challenge: Swap the boxes"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 12,
+      "tur": "ozet",
+      "sure_sn": 8,
+      "anlatim": "Today we opened boxes and put different types of information in them. We got input from the user and put built-in functions to work.",
+      "ekran": {
+        "baslik": "What you learned today",
+        "maddeler": [
+          "Variable = labeled box; = puts the right side on the left",
+          "Types: str, int, float, bool; check with type()",
+          "input() always gives text; convert with int()"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 13,
+      "tur": "kapanis",
+      "sure_sn": 10,
+      "anlatim": "Your training at camp is done, congratulations! Tomorrow we head to Python Village. At the village market we'll do math with operators and ask true or false questions.",
+      "ekran": {
+        "baslik": "Tomorrow: Operators",
+        "gorsel": "gorseller/python/harita/koy.webp"
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

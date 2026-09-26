@@ -1,0 +1,228 @@
+{
+  "kurs": "python",
+  "gun": 6,
+  "baslik": "Tuples",
+  "maskot": "piko",
+  "ozet": "Using the sealed coordinates of the Data Forest, Piko explains tuples: creating them, why they can't change, converting to lists, unpacking, and the one-item tuple trap.",
+  "hedef_sure_sn": 124,
+  "dil": "en",
+  "giris": {
+    "anlatim": "Day 6: Tuples! In this lesson you'll meet sealed boxes that can't be changed, learn to unpack them, and avoid the one-item tuple trap.",
+    "maddeler": [
+      "What is a tuple, and why can't it change?",
+      "Converting with list() and tuple()",
+      "Unpacking: x, y = pos"
+    ]
+  },
+  "cikis": {
+    "anlatim": "The interactive version of this lesson is waiting for you at 30gunde.com.tr. Write your code right in the browser, run it instantly, and finish the tasks!",
+    "baslik": "Interactive lessons at",
+    "adres": "30gunde.com.tr",
+    "maddeler": [
+      "Write and run code in your browser",
+      "Finish tasks, earn badges",
+      "Learn Python step by step in 30 days"
+    ]
+  },
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 12,
+      "anlatim": "Hi, I'm Piko! Old explorers carved marks into the trees of the Data Forest: three comma five, eight comma two. These are the coordinates of secret places, and nobody can change them. Today we open sealed boxes, called tuples!",
+      "ekran": {
+        "baslik": "Day 6: Tuples",
+        "gorsel": "gorseller/python/harita/orman.webp"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "A tuple looks a lot like a list, but it's written with parentheses. You still reach items by position number, and len works too. So what's the difference? Once it's created, it can't be changed.",
+      "ekran": {
+        "baslik": "What is a tuple?",
+        "kod": "colors = (\"blue\", \"yellow\", \"green\")\nprint(colors[0])\nprint(colors[-1])\nprint(len(colors))\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          1
+        ],
+        "cikti": "blue\ngreen\n3"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 3,
+      "tur": "hata",
+      "sure_sn": 14,
+      "anlatim": "Let's try to break the seal. Python gives a TypeError: a tuple doesn't allow changing its items. That's a feature! It stops us from accidentally breaking things that should never change, like map coordinates or the days of the week.",
+      "ekran": {
+        "baslik": "The seal can't be broken",
+        "kod": "colors = (\"blue\", \"yellow\", \"green\")\ncolors[0] = \"red\"\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "TypeError: 'tuple' object does not support item assignment"
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "If you really need to change it, there's a way. Unlock it with list, change the list, then seal it again with tuple. So the only way to change a tuple is to make a new one.",
+      "ekran": {
+        "baslik": "Unlock, change, lock",
+        "kod": "colors = (\"blue\", \"yellow\")\nitems = list(colors)\nitems.append(\"green\")\ncolors = tuple(items)\nprint(colors)\nprint(type(colors))\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2,
+          4
+        ],
+        "cikti": "('blue', 'yellow', 'green')\n<class 'tuple'>"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "You can spread a tuple's values into separate variables in one line. This is called unpacking. The two names on the left take the two values on the right in order: x becomes three and y becomes five.",
+      "ekran": {
+        "baslik": "Unpacking a tuple",
+        "kod": "pos = (3, 5)\nx, y = pos\nprint(\"x =\", x)\nprint(\"y =\", y)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "x = 3\ny = 5"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "Tuples have useful tools too. in asks whether something is there, and index tells you its position. Add two tuples with plus, and you get a brand new tuple.",
+      "ekran": {
+        "baslik": "Handy operations",
+        "kod": "colors = (\"blue\", \"yellow\", \"green\")\nprint(\"yellow\" in colors)\nprint(colors.index(\"yellow\"))\nprint((1, 2) + (3, 4))\n",
+        "dil": "python",
+        "cikti": "True\n1\n(1, 2, 3, 4)"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "soru",
+      "sure_sn": 10,
+      "anlatim": "Now a little trap! Both variables look like a five in parentheses. Do you think they have the same type?",
+      "ekran": {
+        "baslik": "What will it print?",
+        "kod": "a = (5)\nb = (5,)\nprint(type(a))\nprint(type(b))\n",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "cikti",
+      "sure_sn": 10,
+      "anlatim": "They're not the same! Without a comma, Python thinks it's just an ordinary number in parentheses. When you write a one-item tuple, don't forget the comma.",
+      "ekran": {
+        "baslik": "The answer",
+        "kod": "a = (5)\nb = (5,)\nprint(type(a))\nprint(type(b))\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "<class 'int'>\n<class 'tuple'>"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "gorev",
+      "sure_sn": 14,
+      "anlatim": "Task time! You'll unpack a position into two variables, find the first and last color of a palette, and add a new item to a sealed bag. In the challenge you'll swap two variables without using a third one.",
+      "ekran": {
+        "baslik": "Today's tasks",
+        "maddeler": [
+          "Task 1: Unpack the position",
+          "Task 2: Color palette",
+          "Task 3: Add a new item",
+          "Challenge: Swap them"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 10,
+      "tur": "ozet",
+      "sure_sn": 6,
+      "anlatim": "Today we opened sealed boxes, spread out what was inside, and learned the comma trap.",
+      "ekran": {
+        "baslik": "What you learned today",
+        "maddeler": [
+          "Tuple: written with ( ), can't be changed",
+          "Unlock with list(), reseal with tuple()",
+          "Unpack with x, y = pos; one item: (5,)"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "kapanis",
+      "sure_sn": 8,
+      "anlatim": "The coordinates are safe! Tomorrow we'll pass the same places in the forest again and again, and meet sets, which throw away repeats on their own.",
+      "ekran": {
+        "baslik": "Tomorrow: Sets",
+        "gorsel": "gorseller/python/harita/orman.webp"
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

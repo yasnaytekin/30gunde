@@ -35,7 +35,7 @@ Videonun akışı:
 
 Ses ve konuşturma:
 
-- **Seslendirme** çevrim dışı yapılır ([sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx)): Türkçe Piper `tr_TR-fettah-medium`,
+- **Seslendirme** çevrim dışı yapılır ([sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx)): Türkçe Piper `tr_TR-fahrettin-medium`,
   İngilizce Kokoro `am_michael` (biraz inceltilmiş). Ayarlar ve telaffuz düzeltmeleri `ses.py` içinde (`SESLER`, `TELAFFUZ`;
   ör. "Python" → "Pay tın"). Bir sahnede özel okuma gerekirse sahneye `"seslendirme": "..."` yazılır, altyazı `anlatim` kalır.
 - **Sahne süreleri sese göre** ayarlanır (senaryodaki `sure_sn` yalnızca sessiz önizlemede kullanılır). Altyazılar cümle cümle

@@ -14,8 +14,8 @@ SR = 48000
 ENV_FPS = 60  # dudak senkronu verisinin kare hızı
 
 SESLER = {
-    # tr: Piper "fettah" (genç tınılı erkek sesi, veri seti CC0). en: Kokoro "am_michael" (Apache-2.0), biraz inceltilir.
-    "tr": {"tur": "piper", "klasor": "vits-piper-tr_TR-fettah-medium", "model": "tr_TR-fettah-medium.onnx", "hiz": 1.08, "perde": 1.0},
+    # tr: Piper "fahrettin" (erkek sesi; örneklerden seçildi). en: Kokoro "am_michael" (Apache-2.0), biraz inceltilir.
+    "tr": {"tur": "piper", "klasor": "vits-piper-tr_TR-fahrettin-medium", "model": "tr_TR-fahrettin-medium.onnx", "hiz": 1.0, "perde": 1.0},
     "en": {"tur": "kokoro", "klasor": "kokoro-en-v0_19", "sid": 6, "hiz": 1.05, "perde": 1.26},
 }
 
@@ -26,12 +26,38 @@ TELAFFUZ = {
         (r"\bPython", "Pay tın"),
         (r"\bJavaScript", "Cava skript"),
         (r"\bNameError\b", "neym erör"),
+        (r"\bTypeError\b", "tayp erör"),
+        (r"\bIndexError\b", "indeks erör"),
+        (r"\bf-string", "ef string"),
+        (r"\btuple", "tapıl"),
+        (r"\bChallenge", "Çelınc"),
+        (r"\bstr\b", "string"),
+        (r"\bfloat\b", "flot"),
+        (r"\bbool\b", "bul"),
+        (r"\btype\b", "tayp"),
+        (r"\bround\b", "raund"),
+        (r"\bmax\b", "maks"),
+        (r"\bsum\b", "sam"),
+        (r"\bappend\b", "apend"),
+        (r"\bremove\b", "rimuv"),
+        (r"\binsert\b", "insört"),
+        (r"\bsorted\b", "sortıd"),
+        (r"\bupper\b", "apır"),
+        (r"\btitle\b", "taytıl"),
+        (r"\bcount\b", "kaunt"),
+        (r"\bindex\b", "indeks"),
+        (r"\band\b", "end"),
+        (r"\bTrue\b", "tru"),
+        (r"\bFalse\b", "fols"),
         (r"\(\)", ""),
     ],
     "en": [
         (r"30gunde\.com\.tr", "thirty goon-deh dot com dot T R"),
         (r"30 Günde", "thirty goon-deh"),
         (r"\bNameError\b", "Name Error"),
+        (r"\bTypeError\b", "Type Error"),
+        (r"\bIndexError\b", "Index Error"),
+        (r"\bf-strings?\b", "F string"),
         (r"\(\)", ""),
     ],
 }

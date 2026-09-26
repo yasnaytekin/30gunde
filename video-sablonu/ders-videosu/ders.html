@@ -310,6 +310,13 @@ function buildScene(seg) {
   if (pos !== "yok" && m.poz) { masc = makeMascot(m.poz, pos); el.append(masc.el); }
   stage.insertBefore(el, subEl);
   const codeLines = hasCode ? [...el.querySelectorAll(".src")] : [];
+  if (hasCode) {  // uzun satırlar kutuya sığmıyorsa kod yazısını küçült (DejaVu Sans Mono: karakter ≈ 0,602 em)
+    const maxLen = Math.max(...[e.kod, (e.duzeltme || {}).kod || ""].flatMap((k) => k.split("\n").map((l) => l.length)));
+    const code = el.querySelector(".code"), pre = code.querySelector("pre");
+    const avail = code.clientWidth - 30 - 44 - 30 - 6;
+    const fs = Math.min(34, Math.floor(avail / (0.602 * maxLen)));
+    if (fs < 34) pre.style.fontSize = fs + "px";
+  }
   return { seg, s, e, el, masc, codeLines, codeLen: codeLines.reduce((a, x) => a + x.dataset.src.length, 0), fixed: false };
 }
 function buildIntro(seg) {
