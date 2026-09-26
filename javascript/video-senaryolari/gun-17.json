@@ -1,0 +1,256 @@
+{
+  "kurs": "javascript",
+  "gun": 17,
+  "baslik": "Klavye ve ses",
+  "maskot": "kodi",
+  "ozet": "Kodi, Olay Kuşağı'nda keydown ve keyup olaylarını, e.key değerlerini, bir elemanı sınırlar içinde hareket ettirmeyi, preventDefault'u ve Web Audio ile bip sesi çalmayı anlatıyor.",
+  "hedef_sure_sn": 173,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 12,
+      "anlatim": "Selam, ben Kodi! Olay Kuşağı'na hoş geldin. Burada her şey bir sinyale tepki veriyor. Peki gemini fareyle değil de klavyeyle yönetebilir misin? Bugün klavye olaylarını ve sesi öğreniyoruz!",
+      "ekran": {
+        "baslik": "Gün 17: Klavye ve ses",
+        "gorsel": "gorseller/javascript/bolgeler/kusak.webp"
+      },
+      "maskot": {
+        "poz": "el-sallama",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "Bir tuşa bastığın an keydown, bıraktığın an keyup olayı olur. Tuşları bütün sayfada duymak için olayı document'a bağlarız. Hangi tuşa basıldığı e.key içindedir.",
+      "ekran": {
+        "baslik": "keydown ve e.key",
+        "kod": "document.addEventListener(\"keydown\", (e) => {\n  console.log(\"Basıldı:\", e.key);\n});\n",
+        "vurgu_satirlari": [
+          1,
+          2
+        ],
+        "cikti": "Sol oka basınca konsolda: Basıldı: ArrowLeft",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 3,
+      "tur": "anlatim",
+      "sure_sn": 13,
+      "anlatim": "İşte en çok kullanacağın tuş adları. Oklar ArrowLeft, ArrowRight gibi yazılır. Boşluk tuşu ise içinde tek boşluk olan bir metindir. Büyük küçük harfe dikkat!",
+      "ekran": {
+        "baslik": "e.key değerleri",
+        "maddeler": [
+          "Oklar: \"ArrowLeft\", \"ArrowRight\", \"ArrowUp\", \"ArrowDown\"",
+          "Enter: \"Enter\"  ·  Esc: \"Escape\"",
+          "Boşluk: \" \"",
+          "Harfler: \"a\", \"A\", rakamlar: \"1\""
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 17,
+      "anlatim": "Bir şeyi hareket ettirmek için konumunu bir değişkende tutarız. Math.min büyük sayıyı 260'a indirir, Math.max küçüğünü sıfıra çeker. Böylece roket alanın dışına kaçamaz. Buna sınırlamak denir.",
+      "ekran": {
+        "baslik": "Sınırlamak: Math.max ve Math.min",
+        "kod": "let x = 250;\nfunction move(dx) {\n  x = Math.max(0, Math.min(260, x + dx)); // 0 ile 260 arası\n  return x;\n}\nconsole.log(move(20));\nconsole.log(move(-300));\nconsole.log(move(40));\n",
+        "vurgu_satirlari": [
+          3
+        ],
+        "cikti": "260\n0\n40",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 18,
+      "anlatim": "Şimdi hepsi bir arada. Ok tuşları x ve y'yi yirmişer piksel değiştiriyor, başka tuşlar return ile atlanıyor. preventDefault sayfanın kaymasını durduruyor, sonra noktanın left ve top stilini güncelliyoruz.",
+      "ekran": {
+        "baslik": "Ok tuşlarıyla nokta",
+        "kod": "document.addEventListener(\"keydown\", (e) => {\n  if (e.key === \"ArrowRight\") x += 20;\n  else if (e.key === \"ArrowLeft\") x -= 20;\n  else return;\n  e.preventDefault();\n  x = Math.max(0, Math.min(220, x));\n  dot.style.left = x + \"px\";\n});\n",
+        "vurgu_satirlari": [
+          4,
+          5,
+          7
+        ],
+        "cikti": "Sağ oka her basışta nokta 20 piksel sağa kayar, kenarda durur.",
+        "html": "<div id=\"area\"><div id=\"dot\"></div></div>",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sol"
+      },
+      "calistir": false
+    },
+    {
+      "no": 6,
+      "tur": "anlatim",
+      "sure_sn": 13,
+      "anlatim": "Kullanıcı bir kutuya yazı yazarken oyun kısayolları çalışmamalı. Olayın nerede olduğunu e.target söyler. Yazı kutusundaysa hemen çıkıyoruz.",
+      "ekran": {
+        "baslik": "Kutuya yazarken kısayol yok",
+        "kod": "document.addEventListener(\"keydown\", (e) => {\n  if (e.target.tagName === \"INPUT\") return; // kutuya yazılıyor\n  // oyun tuşları burada\n});\n",
+        "vurgu_satirlari": [
+          2
+        ],
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 7,
+      "tur": "kod",
+      "sure_sn": 17,
+      "anlatim": "Tarayıcı kendi başına ses de üretebilir! AudioContext küçük bir ses stüdyosu, oscillator ise ton üreten bir hoparlör gibi. Ses her cihazda çalışmayabilir, bu yüzden try ve catch içine koyuyoruz.",
+      "ekran": {
+        "baslik": "Web Audio ile bip",
+        "kod": "function beep(freq = 440) {\n  try {\n    const audio = new AudioContext();\n    const osc = audio.createOscillator();\n    osc.frequency.value = freq; // büyüdükçe ses incelir\n    osc.connect(audio.destination);\n    osc.start();\n    osc.stop(audio.currentTime + 0.15);\n  } catch (err) { console.log(\"Ses çalınamadı.\"); }\n}\n",
+        "vurgu_satirlari": [
+          3,
+          4,
+          8
+        ],
+        "cikti": "Düğmeye basınca 0,15 saniyelik kısa bir bip sesi duyulur.",
+        "html": "<button id=\"beep\">Bip!</button>",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": false,
+      "yonetmen_notu": "Bip anında ekranda küçük bir ses dalgası animasyonu."
+    },
+    {
+      "no": 8,
+      "tur": "hata",
+      "sure_sn": 14,
+      "anlatim": "Sık hata: boşluk tuşunu Space diye aramak. e.key boşluk için tek boşluklu bir metin verir, o yüzden bu koşul hiç tutmaz. Hata mesajı da çıkmaz, sadece hiçbir şey olmaz!",
+      "ekran": {
+        "baslik": "Sık hata: yanlış tuş adı",
+        "kod": "document.addEventListener(\"keydown\", (e) => {\n  if (e.key === \"Space\") fire(); // hiç çalışmaz!\n  if (e.key === \" \") fire();     // doğrusu\n});\n",
+        "vurgu_satirlari": [
+          2,
+          3
+        ],
+        "cikti": "Boşluğa basınca ilk satır hiçbir şey yapmaz.",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "uzgun",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 9,
+      "tur": "soru",
+      "sure_sn": 9,
+      "anlatim": "Soru zamanı! Roket 240'ta duruyor ve 40 ileri gitmek istiyor. Sence x kaç olur?",
+      "ekran": {
+        "baslik": "Sence ne yazar?",
+        "kod": "let x = 240;\nx = Math.max(0, Math.min(260, x + 40));\nconsole.log(x);\n",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 10,
+      "tur": "cikti",
+      "sure_sn": 9,
+      "anlatim": "Cevap 260! 240 artı 40, 280 eder ama Math.min onu sınır olan 260'a indirir. Roket kenarda durur.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "let x = 240;\nx = Math.max(0, Math.min(260, x + 40));\nconsole.log(x);\n",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "260",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 11,
+      "tur": "gorev",
+      "sure_sn": 13,
+      "anlatim": "Görevlerin hazır! Basılan tuşun adını gösteren bir dedektör, ok tuşlarıyla sınırlar içinde kayan bir roket ve boşluk basılı tutulunca çalışan bir motor yapacaksın.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Tuş dedektörü",
+          "Görev 2: Roketi kaydır",
+          "Görev 3: Motor düğmesi"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 12,
+      "tur": "ozet",
+      "sure_sn": 12,
+      "anlatim": "Özetleyelim: keydown ve keyup'ı document'a bağla, tuşu e.key ile tanı. Konumu sınırla ve kendi tuşların için preventDefault çağır. Ses ise bir bonus.",
+      "ekran": {
+        "baslik": "Özet",
+        "maddeler": [
+          "keydown / keyup + e.key",
+          "Konumu değişkende tut, Math.max/min ile sınırla",
+          "Web Audio ile bip; oyun sese bağlı olmasın"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 13,
+      "tur": "kapanis",
+      "sure_sn": 10,
+      "anlatim": "Süper, artık gemin klavyeyi dinliyor! Yarın zamanın kendisini kontrol edeceğiz: geri sayımlar, saatler ve kronometreler. Görüşürüz!",
+      "ekran": {
+        "baslik": "Yarın: Zamanlayıcılar",
+        "gorsel": "gorseller/javascript/arka-plan/bg-space-wide.webp"
+      },
+      "maskot": {
+        "poz": "el-sallama",
+        "konum": "orta"
+      }
+    }
+  ]
+}

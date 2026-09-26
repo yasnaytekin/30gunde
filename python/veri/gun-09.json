@@ -1,0 +1,1415 @@
+{
+ "day": 9,
+ "title": "Koşullar",
+ "region": "kale",
+ "project_contribution": "Oyun kuralları",
+ "game_role": "Oyunun kazanma ve kaybetme kuralları senin koşullarındır.",
+ "xp_complete": 150,
+ "objective": "if, elif ve else ile programın karar vermesini sağlamak",
+ "story": "Mantık Kalesi'nin kapısı sadece anahtarı olanlara açılır! Oyunlarda her şey kurallarla çalışır: can biterse oyun biter, anahtar varsa kapı açılır. Bugün bu kuralları Python'a yazmayı öğreneceğiz.",
+ "sections": [
+  {
+   "title": "True ve False",
+   "body": "Python'a soru sorabilirsin, cevabı `True` (doğru) ya da `False` (yanlış) olur:\n\n- `==` eşit mi? Tek `=` kutuya koymaktır, iki `==` sormaktır!\n- `!=` eşit değil mi?\n- `>` ve `<` büyük mü, küçük mü?\n- `>=` ve `<=` büyük eşit, küçük eşit\n\n```python\nhp = 30\nprint(hp > 50)   # False\nprint(hp == 30)  # True\n```"
+  },
+  {
+   "title": "if: eğer",
+   "body": "```python\nif has_key:\n    print(\"Kapı açıldı!\")\n```\n\nİki şeye dikkat: satırın sonunda **iki nokta** (`:`) var ve alttaki satır **4 boşluk içeride**. Bu boşluğa **girinti** denir; Python hangi satırların if'e ait olduğunu girintiye bakarak anlar. Editörde `:` yazıp Enter'a basınca girinti kendiliğinden gelir."
+  },
+  {
+   "title": "else ve elif",
+   "body": "`else` \"değilse\" demektir. Birden fazla durum varsa `elif` (\"değilse eğer\") kullanırız. Python yukarıdan aşağı bakar ve **ilk doğru olan** bloğu çalıştırır:\n\n```python\nif hp > 70:\n    print(\"Güçlüsün\")\nelif hp > 30:\n    print(\"Dikkatli ol\")\nelse:\n    print(\"İksir iç!\")\n```"
+  },
+  {
+   "title": "and, or, not",
+   "body": "- `and`: ikisi de doğruysa doğru\n- `or`: biri doğruysa doğru\n- `not`: tersine çevirir\n\n```python\nif has_key and gold >= 10:\n    print(\"Sandık açıldı\")\n```\n\nListelerle de koşul yazabilirsin: `if \"anahtar\" in inventory:`"
+  }
+ ],
+ "examples": [
+  {
+   "title": "Kapı",
+   "code": "has_key = True\nif has_key:\n    print(\"Kapı açıldı!\")\nelse:\n    print(\"Kapı kilitli.\")\n",
+   "note": "has_key'i False yapıp tekrar çalıştır."
+  },
+  {
+   "title": "Can durumu",
+   "code": "hp = 45\nif hp > 70:\n    print(\"Güçlüsün\")\nelif hp > 30:\n    print(\"Dikkatli ol\")\nelse:\n    print(\"İksir iç!\")\n",
+   "note": ""
+  },
+  {
+   "title": "Yaş sorusu",
+   "code": "age = int(input(\"Kaç yaşındasın? \"))\nif age >= 13 and age < 20:\n    print(\"Sen bir gençsin!\")\nelse:\n    print(\"Yaşın:\", age)\n",
+   "note": "Girdi kutusuna farklı yaşlar yazıp dene.",
+   "inputs": [
+    "14"
+   ]
+  }
+ ],
+ "tasks": [
+  {
+   "id": "d9-t1",
+   "title": "Kalenin kapısı",
+   "prompt": "`has_key` True ise `Kapı açıldı!`, değilse `Kapı kilitli.` yazdır.",
+   "starter": "has_key = True\n\n# has_key True ise \"Kapı açıldı!\", değilse \"Kapı kilitli.\" yazdır\n",
+   "solution": "has_key = True\n\nif has_key:\n    print(\"Kapı açıldı!\")\nelse:\n    print(\"Kapı kilitli.\")\n",
+   "hints": [
+    "if has_key: yazıp Enter'a bas.",
+    "else: bloğu if ile aynı hizada olmalı."
+   ],
+   "check": {
+    "code_contains": [
+     "if",
+     "else"
+    ],
+    "python": "\nassert \"Kapı açıldı!\" in _output, \"has_key True iken 'Kapı açıldı!' yazmalı.\"\nout, _ = _run(_set(_code, \"has_key\", False))\nassert \"Kapı kilitli.\" in out and \"Kapı açıldı!\" not in out, \"has_key False olunca sadece 'Kapı kilitli.' yazmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "has_key = True",
+      "notes": [
+       "`has_key` adında bir değişken oluşturuluyor ve içine `True` (mantıksal değer (True/False)) konuyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "if has_key:",
+      "notes": [
+       "Koşul: `has_key` doğruysa altındaki girintili satırlar çalışır."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "    print(\"Kapı açıldı!\")",
+      "notes": [
+       "`print(\"Kapı açıldı!\")`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "else:",
+      "notes": [
+       "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+      ]
+     },
+     {
+      "n": 6,
+      "code": "    print(\"Kapı kilitli.\")",
+      "notes": [
+       "`print(\"Kapı kilitli.\")`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "has_key",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `True`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "True",
+      "kind": "değer",
+      "desc": "Doğru (mantıksal değer)."
+     },
+     {
+      "term": "if",
+      "kind": "anahtar kelime",
+      "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     },
+     {
+      "term": "else",
+      "kind": "anahtar kelime",
+      "desc": "Yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d9-t2",
+   "title": "Can göstergesi",
+   "prompt": "`hp` 70'ten büyükse `Güçlüsün`, 30'dan büyükse `Dikkatli ol`, değilse `İksir iç!` yazdır.",
+   "starter": "hp = 25\n\n# hp 70'ten büyükse \"Güçlüsün\"\n# 30'dan büyükse \"Dikkatli ol\"\n# değilse \"İksir iç!\"\n",
+   "solution": "hp = 25\n\nif hp > 70:\n    print(\"Güçlüsün\")\nelif hp > 30:\n    print(\"Dikkatli ol\")\nelse:\n    print(\"İksir iç!\")\n",
+   "hints": [
+    "Üç durum var: if, elif ve else.",
+    "Büyükten küçüğe doğru kontrol et."
+   ],
+   "check": {
+    "python": "\nmessages = [\"Güçlüsün\", \"Dikkatli ol\", \"İksir iç!\"]\nfor value, expected in [(80, \"Güçlüsün\"), (50, \"Dikkatli ol\"), (10, \"İksir iç!\"), (25, \"İksir iç!\")]:\n    out, _ = _run(_set(_code, \"hp\", value))\n    assert expected in out, \"hp = \" + str(value) + \" olunca '\" + expected + \"' yazmalı.\"\n    for other in messages:\n        if other != expected:\n            assert other not in out, \"hp = \" + str(value) + \" olunca sadece '\" + expected + \"' yazmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "hp = 25",
+      "notes": [
+       "`hp` adında bir değişken oluşturuluyor ve içine `25` (tam sayı) konuyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "if hp > 70:",
+      "notes": [
+       "Koşul: `hp > 70` doğruysa altındaki girintili satırlar çalışır."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "    print(\"Güçlüsün\")",
+      "notes": [
+       "`print(\"Güçlüsün\")`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "elif hp > 30:",
+      "notes": [
+       "`elif`: yukarıdaki koşul yanlışsa `hp > 30` koşuluna bakılır."
+      ]
+     },
+     {
+      "n": 6,
+      "code": "    print(\"Dikkatli ol\")",
+      "notes": [
+       "`print(\"Dikkatli ol\")`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     },
+     {
+      "n": 7,
+      "code": "else:",
+      "notes": [
+       "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+      ]
+     },
+     {
+      "n": 8,
+      "code": "    print(\"İksir iç!\")",
+      "notes": [
+       "`print(\"İksir iç!\")`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "hp",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `25`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "if",
+      "kind": "anahtar kelime",
+      "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+     },
+     {
+      "term": ">",
+      "kind": "operatör",
+      "desc": "Büyük mü?"
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     },
+     {
+      "term": "elif",
+      "kind": "anahtar kelime",
+      "desc": "Önceki koşullar yanlışsa bu koşula bakılır (\"değilse eğer\")."
+     },
+     {
+      "term": "else",
+      "kind": "anahtar kelime",
+      "desc": "Yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d9-t3",
+   "title": "Hazine sandığı",
+   "prompt": "Anahtar varsa **ve** en az 10 altın varsa `Sandık açıldı!`, yoksa `Sandık açılmadı.` yazdır.",
+   "starter": "has_key = True\ngold = 15\n\n# Anahtar varsa VE en az 10 altın varsa \"Sandık açıldı!\"\n# yoksa \"Sandık açılmadı.\"\n",
+   "solution": "has_key = True\ngold = 15\n\nif has_key and gold >= 10:\n    print(\"Sandık açıldı!\")\nelse:\n    print(\"Sandık açılmadı.\")\n",
+   "hints": [
+    "İki koşulu and ile bağla.",
+    "En az 10: gold >= 10"
+   ],
+   "check": {
+    "code_contains": [
+     "and"
+    ],
+    "python": "\ncases = [(True, 15, True), (True, 10, True), (True, 5, False), (False, 50, False)]\nfor key, g, opens in cases:\n    out, _ = _run(_set(_set(_code, \"has_key\", key), \"gold\", g))\n    expected = \"Sandık açıldı!\" if opens else \"Sandık açılmadı.\"\n    assert expected in out, \"has_key=\" + str(key) + \", gold=\" + str(g) + \" iken '\" + expected + \"' yazmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "has_key = True",
+      "notes": [
+       "`has_key` adında bir değişken oluşturuluyor ve içine `True` (mantıksal değer (True/False)) konuyor."
+      ]
+     },
+     {
+      "n": 2,
+      "code": "gold = 15",
+      "notes": [
+       "`gold` adında bir değişken oluşturuluyor ve içine `15` (tam sayı) konuyor."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "if has_key and gold >= 10:",
+      "notes": [
+       "Koşul: `has_key and gold >= 10` doğruysa altındaki girintili satırlar çalışır."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "    print(\"Sandık açıldı!\")",
+      "notes": [
+       "`print(\"Sandık açıldı!\")`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     },
+     {
+      "n": 6,
+      "code": "else:",
+      "notes": [
+       "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+      ]
+     },
+     {
+      "n": 7,
+      "code": "    print(\"Sandık açılmadı.\")",
+      "notes": [
+       "`print(\"Sandık açılmadı.\")`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "has_key",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `True`."
+     },
+     {
+      "term": "gold",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `15`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "True",
+      "kind": "değer",
+      "desc": "Doğru (mantıksal değer)."
+     },
+     {
+      "term": "if",
+      "kind": "anahtar kelime",
+      "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+     },
+     {
+      "term": "and",
+      "kind": "operatör",
+      "desc": "\"ve\": iki koşul da doğruysa True."
+     },
+     {
+      "term": ">=",
+      "kind": "operatör",
+      "desc": "Büyük ya da eşit mi?"
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     },
+     {
+      "term": "else",
+      "kind": "anahtar kelime",
+      "desc": "Yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+     }
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "id": "d9-c",
+  "title": "Oyun modu",
+  "prompt": "Kullanıcının yaşını sor. 13 veya daha büyükse `Macera modu açık!`, değilse `Çocuk modu açık!` yazdır. Cevabı editörün altındaki **Girdi** kutusuna yaz.",
+  "starter": "age = int(input(\"Kaç yaşındasın? \"))\n\n# 13 veya daha büyükse \"Macera modu açık!\", değilse \"Çocuk modu açık!\"\n",
+  "solution": "age = int(input(\"Kaç yaşındasın? \"))\n\nif age >= 13:\n    print(\"Macera modu açık!\")\nelse:\n    print(\"Çocuk modu açık!\")\n",
+  "hints": [
+   "13 veya daha büyük: age >= 13",
+   "if ve else yeterli."
+  ],
+  "check": {
+   "python": "\nfor answer, expected in [(\"15\", \"Macera modu açık!\"), (\"13\", \"Macera modu açık!\"), (\"9\", \"Çocuk modu açık!\")]:\n    out, _ = _run(_code, [answer])\n    assert expected in out, \"Yaş \" + answer + \" iken '\" + expected + \"' yazmalı.\"\n"
+  },
+  "xp": 100,
+  "inputs": [
+   "15"
+  ],
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "age = int(input(\"Kaç yaşındasın? \"))",
+     "notes": [
+      "`age` adında bir değişken oluşturuluyor ve içine `int(input(\"Kaç yaşındasın? \"))` konuyor."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "if age >= 13:",
+     "notes": [
+      "Koşul: `age >= 13` doğruysa altındaki girintili satırlar çalışır."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "    print(\"Macera modu açık!\")",
+     "notes": [
+      "`print(\"Macera modu açık!\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "else:",
+     "notes": [
+      "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "    print(\"Çocuk modu açık!\")",
+     "notes": [
+      "`print(\"Çocuk modu açık!\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "age",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `int(input(\"Kaç yaşındasın? \"))`."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "int()",
+     "kind": "fonksiyon",
+     "desc": "Bir değeri tam sayıya çevirir, örneğin \"42\" yazısını 42 sayısına."
+    },
+    {
+     "term": "input()",
+     "kind": "fonksiyon",
+     "desc": "Kullanıcıdan bir satır yazı ister ve onu metin (str) olarak geri verir."
+    },
+    {
+     "term": "if",
+     "kind": "anahtar kelime",
+     "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+    },
+    {
+     "term": ">=",
+     "kind": "operatör",
+     "desc": "Büyük ya da eşit mi?"
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    },
+    {
+     "term": "else",
+     "kind": "anahtar kelime",
+     "desc": "Yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+    }
+   ]
+  }
+ },
+ "project_task": {
+  "id": "d9-p",
+  "title": "Oyun kuralları",
+  "prompt": "Oyunumuzun kurallarını yazalım. `hero` sözlüğüne bak:\n\n- Can 0 veya altındaysa `Oyun bitti!`\n- Değilse ve altın 100 veya fazlaysa `Kazandın!`\n- İkisi de değilse `Maceraya devam!`",
+  "starter": "hero = {\"name\": \"Piko\", \"hp\": 100, \"gold\": 40}\n\n# Kurallar:\n# can 0 veya altındaysa  -> \"Oyun bitti!\"\n# altın 100 veya fazlaysa -> \"Kazandın!\"\n# yoksa                   -> \"Maceraya devam!\"\n",
+  "solution": "hero = {\"name\": \"Piko\", \"hp\": 100, \"gold\": 40}\n\nif hero[\"hp\"] <= 0:\n    print(\"Oyun bitti!\")\nelif hero[\"gold\"] >= 100:\n    print(\"Kazandın!\")\nelse:\n    print(\"Maceraya devam!\")\n",
+  "hints": [
+   "Can: hero[\"hp\"], altın: hero[\"gold\"]",
+   "Önce canı kontrol et: if hero[\"hp\"] <= 0:"
+  ],
+  "check": {
+   "python": "\ncases = [\n    ({\"name\": \"Piko\", \"hp\": 0, \"gold\": 500}, \"Oyun bitti!\"),\n    ({\"name\": \"Piko\", \"hp\": 50, \"gold\": 100}, \"Kazandın!\"),\n    ({\"name\": \"Piko\", \"hp\": 50, \"gold\": 40}, \"Maceraya devam!\"),\n]\nfor h, expected in cases:\n    out, _ = _run(_set(_code, \"hero\", h))\n    assert expected in out, \"hp=\" + str(h[\"hp\"]) + \", gold=\" + str(h[\"gold\"]) + \" iken '\" + expected + \"' yazmalı.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "hero = {\"name\": \"Piko\", \"hp\": 100, \"gold\": 40}",
+     "notes": [
+      "`hero` adında bir değişken oluşturuluyor ve içine `{\"name\": \"Piko\", \"hp\": 100, \"gold\": 40}` (sözlük (anahtar: değer)) konuyor."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "if hero[\"hp\"] <= 0:",
+     "notes": [
+      "Koşul: `hero[\"hp\"] <= 0` doğruysa altındaki girintili satırlar çalışır."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "    print(\"Oyun bitti!\")",
+     "notes": [
+      "`print(\"Oyun bitti!\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "elif hero[\"gold\"] >= 100:",
+     "notes": [
+      "`elif`: yukarıdaki koşul yanlışsa `hero[\"gold\"] >= 100` koşuluna bakılır."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "    print(\"Kazandın!\")",
+     "notes": [
+      "`print(\"Kazandın!\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 7,
+     "code": "else:",
+     "notes": [
+      "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+     ]
+    },
+    {
+     "n": 8,
+     "code": "    print(\"Maceraya devam!\")",
+     "notes": [
+      "`print(\"Maceraya devam!\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "hero",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"name\": \"Piko\", \"hp\": 100, \"gold\": 40}`."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "if",
+     "kind": "anahtar kelime",
+     "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+    },
+    {
+     "term": "<=",
+     "kind": "operatör",
+     "desc": "Küçük ya da eşit mi?"
+    },
+    {
+     "term": "[ ]",
+     "kind": "seçme",
+     "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    },
+    {
+     "term": "elif",
+     "kind": "anahtar kelime",
+     "desc": "Önceki koşullar yanlışsa bu koşula bakılır (\"değilse eğer\")."
+    },
+    {
+     "term": ">=",
+     "kind": "operatör",
+     "desc": "Büyük ya da eşit mi?"
+    },
+    {
+     "term": "else",
+     "kind": "anahtar kelime",
+     "desc": "Yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+    }
+   ]
+  }
+ },
+ "available": true,
+ "visual_task": {
+  "id": "d9-v",
+  "title": "Can göstergesi",
+  "prompt": "Oyunlarda can kalplerle gösterilir. Sahnede her `H` bir kalp. `can` değişkenine göre:\n\n- 3 veya fazlaysa `HHH`\n- 2 ise `HH`\n- 1 ise `H`\n- 0 veya daha azsa `Oyun bitti!`\n\nyazdır. Kodun farklı can değerleriyle denenecek.",
+  "starter": "can = 3\n\nprint(\"HHH\")\n",
+  "solution": "can = 3\n\nif can >= 3:\n    print(\"HHH\")\nelif can == 2:\n    print(\"HH\")\nelif can == 1:\n    print(\"H\")\nelse:\n    print(\"Oyun bitti!\")\n",
+  "hints": [
+   "if can >= 3: ile başla",
+   "Ardından elif can == 2: ve elif can == 1:",
+   "Geri kalan her şey için else:"
+  ],
+  "check": {
+   "python": "\nfor deger, beklenen in [(3, \"HHH\"), (5, \"HHH\"), (2, \"HH\"), (1, \"H\"), (0, \"Oyun bitti!\"), (-2, \"Oyun bitti!\")]:\n    out, _ = _run(_set(_code, \"can\", deger))\n    assert out.strip() == beklenen, \"can = {} iken çıktı {} olmalı. Senin çıktın: {}\".format(deger, beklenen, out.strip() or \"(boş)\")\n"
+  },
+  "xp": 40,
+  "scene": {
+   "target": [
+    "HHH"
+   ]
+  },
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "can = 3",
+     "notes": [
+      "`can` adında bir değişken oluşturuluyor ve içine `3` (tam sayı) konuyor."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "if can >= 3:",
+     "notes": [
+      "Koşul: `can >= 3` doğruysa altındaki girintili satırlar çalışır."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "    print(\"HHH\")",
+     "notes": [
+      "`print(\"HHH\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "elif can == 2:",
+     "notes": [
+      "`elif`: yukarıdaki koşul yanlışsa `can == 2` koşuluna bakılır."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "    print(\"HH\")",
+     "notes": [
+      "`print(\"HH\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 7,
+     "code": "elif can == 1:",
+     "notes": [
+      "`elif`: yukarıdaki koşul yanlışsa `can == 1` koşuluna bakılır."
+     ]
+    },
+    {
+     "n": 8,
+     "code": "    print(\"H\")",
+     "notes": [
+      "`print(\"H\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 9,
+     "code": "else:",
+     "notes": [
+      "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+     ]
+    },
+    {
+     "n": 10,
+     "code": "    print(\"Oyun bitti!\")",
+     "notes": [
+      "`print(\"Oyun bitti!\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "can",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `3`."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "if",
+     "kind": "anahtar kelime",
+     "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+    },
+    {
+     "term": ">=",
+     "kind": "operatör",
+     "desc": "Büyük ya da eşit mi?"
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    },
+    {
+     "term": "elif",
+     "kind": "anahtar kelime",
+     "desc": "Önceki koşullar yanlışsa bu koşula bakılır (\"değilse eğer\")."
+    },
+    {
+     "term": "==",
+     "kind": "operatör",
+     "desc": "Eşit mi? (True/False)"
+    },
+    {
+     "term": "else",
+     "kind": "anahtar kelime",
+     "desc": "Yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+    }
+   ]
+  }
+ },
+ "tracks": {
+  "veri": {
+   "project_task": {
+    "id": "d9-pv",
+    "title": "Bütçe uyarısı",
+    "prompt": "Programımız bütçe durumunu söylesin:\n\n- `spent`, `budget`'tan büyükse: `Bütçe aşıldı!`\n- Değilse ve `spent`, bütçenin %80'i veya fazlasıysa: `Dikkat: bütçenin %80'i harcandı.`\n- İkisi de değilse: `Bütçe yolunda.`",
+    "starter": "budget = 5000\nspent = 4200\n",
+    "solution": "budget = 5000\nspent = 4200\nif spent > budget:\n    print(\"Bütçe aşıldı!\")\nelif spent >= budget * 0.8:\n    print(\"Dikkat: bütçenin %80'i harcandı.\")\nelse:\n    print(\"Bütçe yolunda.\")\n",
+    "hints": [
+     "Bütçenin %80'i: budget * 0.8",
+     "Sıra önemli: önce aşıldı mı diye bak, sonra %80'e."
+    ],
+    "check": {
+     "python": "\ncases = [(5100, \"Bütçe aşıldı!\"), (4000, \"Dikkat: bütçenin %80'i harcandı.\"), (3999, \"Bütçe yolunda.\"), (5000, \"Dikkat: bütçenin %80'i harcandı.\")]\nfor s, expected in cases:\n    out, _ = _run(_set(_code, \"spent\", s))\n    assert expected in out and out.count(\"\\n\") == 1, \"spent \" + str(s) + \" iken yalnızca '\" + expected + \"' yazmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "budget = 5000",
+       "notes": [
+        "`budget` adında bir değişken oluşturuluyor ve içine `5000` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "spent = 4200",
+       "notes": [
+        "`spent` adında bir değişken oluşturuluyor ve içine `4200` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "if spent > budget:",
+       "notes": [
+        "Koşul: `spent > budget` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "    print(\"Bütçe aşıldı!\")",
+       "notes": [
+        "`print(\"Bütçe aşıldı!\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "elif spent >= budget * 0.8:",
+       "notes": [
+        "`elif`: yukarıdaki koşul yanlışsa `spent >= budget * 0.8` koşuluna bakılır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    print(\"Dikkat: bütçenin %80'i harcandı.\")",
+       "notes": [
+        "`print(\"Dikkat: bütçenin %80'i harcandı.\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "else:",
+       "notes": [
+        "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "    print(\"Bütçe yolunda.\")",
+       "notes": [
+        "`print(\"Bütçe yolunda.\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "budget",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `5000`."
+      },
+      {
+       "term": "spent",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `4200`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": ">",
+       "kind": "operatör",
+       "desc": "Büyük mü?"
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "elif",
+       "kind": "anahtar kelime",
+       "desc": "Önceki koşullar yanlışsa bu koşula bakılır (\"değilse eğer\")."
+      },
+      {
+       "term": ">=",
+       "kind": "operatör",
+       "desc": "Büyük ya da eşit mi?"
+      },
+      {
+       "term": "*",
+       "kind": "operatör",
+       "desc": "Çarpma; metni ya da listeyi tekrarlama (\"*\" * 3 → \"***\")."
+      },
+      {
+       "term": "else",
+       "kind": "anahtar kelime",
+       "desc": "Yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Bütçe uyarısı",
+   "game_role": "Harcama bütçeye yaklaşınca ya da aşınca uyarır."
+  },
+  "otomasyon": {
+   "project_task": {
+    "id": "d9-po",
+    "title": "Akıllı selam",
+    "prompt": "Asistan saate göre selam versin (`hour`, 0-23):\n\n- 12'den küçükse `Günaydın!`\n- 18'den küçükse `İyi günler!`\n- Değilse `İyi akşamlar!`\n\nSonra `pending` (kalan görev) 0 ise `Bugünlük bu kadar, dinlen.`, değilse `3 görev seni bekliyor.` gibi yazdır.",
+    "starter": "hour = 9\npending = 3\n",
+    "solution": "hour = 9\npending = 3\nif hour < 12:\n    print(\"Günaydın!\")\nelif hour < 18:\n    print(\"İyi günler!\")\nelse:\n    print(\"İyi akşamlar!\")\nif pending == 0:\n    print(\"Bugünlük bu kadar, dinlen.\")\nelse:\n    print(f\"{pending} görev seni bekliyor.\")\n",
+    "hints": [
+     "İlk koşul hour < 12, sonra elif hour < 18.",
+     "İkinci bir if bloğu kalan görevlere baksın."
+    ],
+    "check": {
+     "python": "\ncases = [(7, 2, \"Günaydın!\", \"2 görev seni bekliyor.\"), (12, 0, \"İyi günler!\", \"Bugünlük bu kadar, dinlen.\"), (17, 1, \"İyi günler!\", \"1 görev seni bekliyor.\"), (21, 0, \"İyi akşamlar!\", \"Bugünlük bu kadar, dinlen.\")]\nfor h, p, a, b in cases:\n    out, _ = _run(_set(_set(_code, \"hour\", h), \"pending\", p))\n    assert a in out and b in out, \"Saat \" + str(h) + \" ve \" + str(p) + \" görevde '\" + a + \"' ve '\" + b + \"' yazmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "hour = 9",
+       "notes": [
+        "`hour` adında bir değişken oluşturuluyor ve içine `9` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "pending = 3",
+       "notes": [
+        "`pending` adında bir değişken oluşturuluyor ve içine `3` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "if hour < 12:",
+       "notes": [
+        "Koşul: `hour < 12` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "    print(\"Günaydın!\")",
+       "notes": [
+        "`print(\"Günaydın!\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "elif hour < 18:",
+       "notes": [
+        "`elif`: yukarıdaki koşul yanlışsa `hour < 18` koşuluna bakılır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    print(\"İyi günler!\")",
+       "notes": [
+        "`print(\"İyi günler!\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "else:",
+       "notes": [
+        "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "    print(\"İyi akşamlar!\")",
+       "notes": [
+        "`print(\"İyi akşamlar!\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "if pending == 0:",
+       "notes": [
+        "Koşul: `pending == 0` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "    print(\"Bugünlük bu kadar, dinlen.\")",
+       "notes": [
+        "`print(\"Bugünlük bu kadar, dinlen.\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "else:",
+       "notes": [
+        "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "    print(f\"{pending} görev seni bekliyor.\")",
+       "notes": [
+        "`print(f\"{pending} görev seni bekliyor.\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "hour",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `9`."
+      },
+      {
+       "term": "pending",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `3`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "<",
+       "kind": "operatör",
+       "desc": "Küçük mü?"
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "elif",
+       "kind": "anahtar kelime",
+       "desc": "Önceki koşullar yanlışsa bu koşula bakılır (\"değilse eğer\")."
+      },
+      {
+       "term": "else",
+       "kind": "anahtar kelime",
+       "desc": "Yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+      },
+      {
+       "term": "==",
+       "kind": "operatör",
+       "desc": "Eşit mi? (True/False)"
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Akıllı selam",
+   "game_role": "Saate ve kalan işe göre doğru mesajı seçer."
+  },
+  "web": {
+   "project_task": {
+    "id": "d9-pw",
+    "title": "Yayına hazır mı?",
+    "prompt": "Bir yazı ancak kurallara uyarsa yayına girsin. Sırayla kontrol et:\n\n- `title` boşsa (`\"\"`): `Başlık eksik!`\n- Değilse ve `draft` True ise: `Taslak, yayınlanmadı.`\n- Değilse ve `words` 300'den azsa: `Çok kısa: en az 300 kelime olmalı.`\n- Hiçbiri değilse: `Yayına hazır!`\n\nHer durumda yalnızca bir satır yazdır.",
+    "starter": "title = \"Merhaba Dünya\"\ndraft = False\nwords = 450\n",
+    "solution": "title = \"Merhaba Dünya\"\ndraft = False\nwords = 450\nif title == \"\":\n    print(\"Başlık eksik!\")\nelif draft:\n    print(\"Taslak, yayınlanmadı.\")\nelif words < 300:\n    print(\"Çok kısa: en az 300 kelime olmalı.\")\nelse:\n    print(\"Yayına hazır!\")\n",
+    "hints": [
+     "if / elif / elif / else: ilk doğru olan dal çalışır, diğerleri atlanır.",
+     "Boş başlık için title == \"\" ya da not title yazabilirsin."
+    ],
+    "check": {
+     "python": "\ncases = [\n    ({}, \"Yayına hazır!\"),\n    ({\"title\": \"\"}, \"Başlık eksik!\"),\n    ({\"title\": \"\", \"draft\": True, \"words\": 5}, \"Başlık eksik!\"),\n    ({\"draft\": True}, \"Taslak, yayınlanmadı.\"),\n    ({\"draft\": True, \"words\": 10}, \"Taslak, yayınlanmadı.\"),\n    ({\"words\": 299}, \"Çok kısa: en az 300 kelime olmalı.\"),\n    ({\"words\": 300}, \"Yayına hazır!\"),\n]\nfor changes, expected in cases:\n    src = _code\n    for name in changes:\n        src = _set(src, name, changes[name])\n    out, _ = _run(src)\n    assert expected in out and out.count(\"\\n\") == 1, \"Değerler \" + str(changes) + \" iken yalnızca '\" + expected + \"' yazmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "title = \"Merhaba Dünya\"",
+       "notes": [
+        "`title` adında bir değişken oluşturuluyor ve içine `\"Merhaba Dünya\"` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "draft = False",
+       "notes": [
+        "`draft` adında bir değişken oluşturuluyor ve içine `False` (mantıksal değer (True/False)) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "words = 450",
+       "notes": [
+        "`words` adında bir değişken oluşturuluyor ve içine `450` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "if title == \"\":",
+       "notes": [
+        "Koşul: `title == \"\"` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "    print(\"Başlık eksik!\")",
+       "notes": [
+        "`print(\"Başlık eksik!\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "elif draft:",
+       "notes": [
+        "`elif`: yukarıdaki koşul yanlışsa `draft` koşuluna bakılır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "    print(\"Taslak, yayınlanmadı.\")",
+       "notes": [
+        "`print(\"Taslak, yayınlanmadı.\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "elif words < 300:",
+       "notes": [
+        "`elif`: yukarıdaki koşul yanlışsa `words < 300` koşuluna bakılır."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "    print(\"Çok kısa: en az 300 kelime olmalı.\")",
+       "notes": [
+        "`print(\"Çok kısa: en az 300 kelime olmalı.\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "else:",
+       "notes": [
+        "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "    print(\"Yayına hazır!\")",
+       "notes": [
+        "`print(\"Yayına hazır!\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "title",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"Merhaba Dünya\"`."
+      },
+      {
+       "term": "draft",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `False`."
+      },
+      {
+       "term": "words",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `450`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "False",
+       "kind": "değer",
+       "desc": "Yanlış (mantıksal değer)."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "==",
+       "kind": "operatör",
+       "desc": "Eşit mi? (True/False)"
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "elif",
+       "kind": "anahtar kelime",
+       "desc": "Önceki koşullar yanlışsa bu koşula bakılır (\"değilse eğer\")."
+      },
+      {
+       "term": "<",
+       "kind": "operatör",
+       "desc": "Küçük mü?"
+      },
+      {
+       "term": "else",
+       "kind": "anahtar kelime",
+       "desc": "Yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Yayın kuralları",
+   "game_role": "Bir yazının yayına hazır olup olmadığına karar verir."
+  },
+  "bot": {
+   "project_task": {
+    "id": "d9-pb",
+    "title": "Cevap seçimi",
+    "prompt": "Bot artık mesaja bakıp karar versin. `message` içinde:\n\n- `\"merhaba\"` **ya da** `\"selam\"` geçiyorsa: `Merhaba! Nasıl yardımcı olabilirim?`\n- Değilse, `\"hava\"` geçiyorsa: `Bugün hava güneşli.`\n- Değilse, `\"görüşürüz\"` geçiyorsa: `Hoşça kal!`\n- Hiçbiri değilse: `Bunu anlamadım, başka türlü sorar mısın?`\n\nSadece bir cevap yazdırılmalı.",
+    "starter": "message = \"selam, bugün hava nasıl?\"\n",
+    "solution": "message = \"selam, bugün hava nasıl?\"\nif \"merhaba\" in message or \"selam\" in message:\n    print(\"Merhaba! Nasıl yardımcı olabilirim?\")\nelif \"hava\" in message:\n    print(\"Bugün hava güneşli.\")\nelif \"görüşürüz\" in message:\n    print(\"Hoşça kal!\")\nelse:\n    print(\"Bunu anlamadım, başka türlü sorar mısın?\")\n",
+    "hints": [
+     "İlk koşul: if \"merhaba\" in message or \"selam\" in message:",
+     "Sıra önemli: bir koşul doğru olunca alttakilere bakılmaz."
+    ],
+    "check": {
+     "python": "\ngreet = \"Merhaba! Nasıl yardımcı olabilirim?\"\ncases = [(\"selam dostum\", greet), (\"merhaba bot\", greet), (\"yarın hava nasıl\", \"Bugün hava güneşli.\"), (\"hadi görüşürüz\", \"Hoşça kal!\"), (\"pizza sever misin\", \"Bunu anlamadım, başka türlü sorar mısın?\"), (\"selam, bugün hava nasıl?\", greet)]\nfor m, expected in cases:\n    out, _ = _run(_set(_code, \"message\", m))\n    assert expected in out and out.count(\"\\n\") == 1, \"message \\\"\" + m + \"\\\" iken yalnızca '\" + expected + \"' yazmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "message = \"selam, bugün hava nasıl?\"",
+       "notes": [
+        "`message` adında bir değişken oluşturuluyor ve içine `\"selam, bugün hava nasıl?\"` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "if \"merhaba\" in message or \"selam\" in message:",
+       "notes": [
+        "Koşul: `\"merhaba\" in message or \"selam\" in message` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "    print(\"Merhaba! Nasıl yardımcı olabilirim?\")",
+       "notes": [
+        "`print(\"Merhaba! Nasıl yardımcı olabilirim?\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "elif \"hava\" in message:",
+       "notes": [
+        "`elif`: yukarıdaki koşul yanlışsa `\"hava\" in message` koşuluna bakılır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "    print(\"Bugün hava güneşli.\")",
+       "notes": [
+        "`print(\"Bugün hava güneşli.\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "elif \"görüşürüz\" in message:",
+       "notes": [
+        "`elif`: yukarıdaki koşul yanlışsa `\"görüşürüz\" in message` koşuluna bakılır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "    print(\"Hoşça kal!\")",
+       "notes": [
+        "`print(\"Hoşça kal!\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "else:",
+       "notes": [
+        "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "    print(\"Bunu anlamadım, başka türlü sorar mısın?\")",
+       "notes": [
+        "`print(\"Bunu anlamadım, başka türlü sorar mısın?\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "message",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"selam, bugün hava nasıl?\"`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "or",
+       "kind": "operatör",
+       "desc": "\"veya\": koşullardan biri doğruysa True."
+      },
+      {
+       "term": "in",
+       "kind": "operatör",
+       "desc": "İçinde var mı? (listede, metinde, sözlükte)"
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "elif",
+       "kind": "anahtar kelime",
+       "desc": "Önceki koşullar yanlışsa bu koşula bakılır (\"değilse eğer\")."
+      },
+      {
+       "term": "else",
+       "kind": "anahtar kelime",
+       "desc": "Yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Karar verici",
+   "game_role": "Mesaja bakıp hangi cevabı vereceğine karar verir."
+  },
+  "okul": {
+   "project_task": {
+    "id": "d9-pn",
+    "title": "Not derecesi",
+    "prompt": "Programımız notun derecesini söylesin. `grade`'e göre:\n\n- 85 ve üstü: `Derece: Pekiyi`\n- 70 ve üstü: `Derece: İyi`\n- 60 ve üstü: `Derece: Orta`\n- 50 ve üstü: `Derece: Geçer`\n- 50'nin altı: `Derece: Geçmez`\n\nSadece tek bir satır yazdırmalı.",
+    "starter": "grade = 72\n",
+    "solution": "grade = 72\nif grade >= 85:\n    print(\"Derece: Pekiyi\")\nelif grade >= 70:\n    print(\"Derece: İyi\")\nelif grade >= 60:\n    print(\"Derece: Orta\")\nelif grade >= 50:\n    print(\"Derece: Geçer\")\nelse:\n    print(\"Derece: Geçmez\")\n",
+    "hints": [
+     "En yüksek sınırdan başla: if grade >= 85: sonra elif grade >= 70: ...",
+     "Hiçbiri tutmazsa else: Geçmez."
+    ],
+    "check": {
+     "python": "\ncases = [(100, \"Pekiyi\"), (85, \"Pekiyi\"), (84, \"İyi\"), (70, \"İyi\"), (69, \"Orta\"), (60, \"Orta\"), (59, \"Geçer\"), (50, \"Geçer\"), (49, \"Geçmez\"), (0, \"Geçmez\")]\nfor gr, expected in cases:\n    out, _ = _run(_set(_code, \"grade\", gr))\n    assert out.strip() == \"Derece: \" + expected, \"grade \" + str(gr) + \" iken yalnızca 'Derece: \" + expected + \"' yazmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "grade = 72",
+       "notes": [
+        "`grade` adında bir değişken oluşturuluyor ve içine `72` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "if grade >= 85:",
+       "notes": [
+        "Koşul: `grade >= 85` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "    print(\"Derece: Pekiyi\")",
+       "notes": [
+        "`print(\"Derece: Pekiyi\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "elif grade >= 70:",
+       "notes": [
+        "`elif`: yukarıdaki koşul yanlışsa `grade >= 70` koşuluna bakılır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "    print(\"Derece: İyi\")",
+       "notes": [
+        "`print(\"Derece: İyi\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "elif grade >= 60:",
+       "notes": [
+        "`elif`: yukarıdaki koşul yanlışsa `grade >= 60` koşuluna bakılır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "    print(\"Derece: Orta\")",
+       "notes": [
+        "`print(\"Derece: Orta\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "elif grade >= 50:",
+       "notes": [
+        "`elif`: yukarıdaki koşul yanlışsa `grade >= 50` koşuluna bakılır."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "    print(\"Derece: Geçer\")",
+       "notes": [
+        "`print(\"Derece: Geçer\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "else:",
+       "notes": [
+        "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "    print(\"Derece: Geçmez\")",
+       "notes": [
+        "`print(\"Derece: Geçmez\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "grade",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `72`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": ">=",
+       "kind": "operatör",
+       "desc": "Büyük ya da eşit mi?"
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "elif",
+       "kind": "anahtar kelime",
+       "desc": "Önceki koşullar yanlışsa bu koşula bakılır (\"değilse eğer\")."
+      },
+      {
+       "term": "else",
+       "kind": "anahtar kelime",
+       "desc": "Yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Not derecesi",
+   "game_role": "Bir notun karnede hangi dereceye denk geldiğini söyler."
+  }
+ }
+}

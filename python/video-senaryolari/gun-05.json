@@ -1,0 +1,210 @@
+{
+  "kurs": "python",
+  "gun": 5,
+  "baslik": "Listeler",
+  "maskot": "piko",
+  "ozet": "Piko, Veri Ormanı'nda kahramanın çantasını bir listeyle düzenliyor: liste oluşturmak, eleman eklemek, çıkarmak, değiştirmek ve sum, max, sorted ile incelemek.",
+  "hedef_sure_sn": 118,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 12,
+      "anlatim": "Selam, ben Piko! Veri Ormanı'na hoş geldin. Maceraya çıkan her kahramanın bir çantası vardır: kılıç, iksir, harita. Onlarca eşyayı tek tek değişkende tutmak zor olurdu. Çözüm mü? Liste!",
+      "ekran": {
+        "baslik": "Gün 5: Listeler",
+        "gorsel": "gorseller/python/harita/orman.webp"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 13,
+      "anlatim": "Liste, köşeli parantez içinde virgülle ayrılmış değerler. append sona yeni bir eşya ekler. Stringlerdeki gibi indeks sıfırdan başlar, len de kaç eleman olduğunu söyler.",
+      "ekran": {
+        "baslik": "Çanta: liste oluşturmak",
+        "kod": "inventory = [\"kılıç\", \"iksir\"]\ninventory.append(\"harita\")\nprint(inventory)\nprint(\"İlk eşya:\", inventory[0])\nprint(\"Eşya sayısı:\", len(inventory))\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          1,
+          2
+        ],
+        "cikti": "['kılıç', 'iksir', 'harita']\nİlk eşya: kılıç\nEşya sayısı: 3"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true,
+      "yonetmen_notu": "Çantaya kılıç, iksir ve harita simgeleri sırayla düşer."
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "remove bulduğu ilk taşı çantadan atar. in ile bir eşya var mı diye sorarsın. pop ise son elemanı çıkarır ve sana geri verir; onu bir değişkende yakalayabilirsin.",
+      "ekran": {
+        "baslik": "Çıkar ve kontrol et",
+        "kod": "inventory = [\"kılıç\", \"iksir\", \"taş\"]\ninventory.remove(\"taş\")\nprint(inventory)\nprint(\"iksir\" in inventory)\nlast = inventory.pop()\nprint(\"Çıkan:\", last, \"Kalan:\", inventory)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2,
+          5
+        ],
+        "cikti": "['kılıç', 'iksir']\nTrue\nÇıkan: iksir Kalan: ['kılıç']"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 10,
+      "anlatim": "Bir elemanı değiştirmek için sıra numarasını yazıp yeni değeri koyarsın. insert ise istediğin sıraya ekler; sıfır dersen en başa.",
+      "ekran": {
+        "baslik": "Değiştir ve araya ekle",
+        "kod": "inventory = [\"kılıç\", \"iksir\"]\ninventory[1] = \"kalkan\"\ninventory.insert(0, \"harita\")\nprint(inventory)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2,
+          3
+        ],
+        "cikti": "['harita', 'kılıç', 'kalkan']"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "Sayı listelerinde sum toplamı, max en büyüğü, min en küçüğü verir. sorted sıralanmış yeni bir liste döndürür, asıl liste bozulmaz. Dilimleme de stringlerdeki gibi çalışır.",
+      "ekran": {
+        "baslik": "Listeyi incelemek",
+        "kod": "scores = [40, 85, 60, 95]\nprint(sum(scores), max(scores), min(scores))\nprint(sorted(scores))\nprint(scores[0:2])\n",
+        "dil": "python",
+        "cikti": "280 95 40\n[40, 60, 85, 95]\n[40, 85]"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 6,
+      "tur": "hata",
+      "sure_sn": 12,
+      "anlatim": "Üç eşyalı listede üç numaralı eleman yok! Sayma sıfırdan başladığı için son eleman iki numarada. Python IndexError der: bu sıra numarası listenin dışında. Son eleman için eksi bir hep güvenlidir.",
+      "ekran": {
+        "baslik": "IndexError",
+        "kod": "inventory = [\"kılıç\", \"iksir\", \"harita\"]\nprint(inventory[3])\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "IndexError: list index out of range"
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "soru",
+      "sure_sn": 8,
+      "anlatim": "Hadi bir tahmin yap! Bu kod hangi iki sayıyı yazdırır?",
+      "ekran": {
+        "baslik": "Sence ne yazar?",
+        "kod": "nums = [3, 1, 2]\nnums.append(5)\nprint(len(nums), nums[-1])\n",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "cikti",
+      "sure_sn": 8,
+      "anlatim": "Dört ve beş! append beşi sona ekledi, liste dört elemanlı oldu. Eksi bir de son elemanı, yani beşi verdi.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "nums = [3, 1, 2]\nnums.append(5)\nprint(len(nums), nums[-1])\n",
+        "dil": "python",
+        "cikti": "4 5"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "gorev",
+      "sure_sn": 13,
+      "anlatim": "Sıra sende! Çantaya iksir ekleyecek, gereksiz taşı atacak ve skor tablosunu hazır fonksiyonlarla hesaplayacaksın. Sahne görevinde bir odanın ortasına Piko yerleştireceksin. Challenge'da da isimleri alfabetik sıraya dizeceksin.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Çantaya ekle",
+          "Görev 2: Taşı at",
+          "Görev 3: Skor tablosu",
+          "Sahne görevi: Odaya Piko koy",
+          "Challenge: Alfabetik sıralama"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 10,
+      "tur": "ozet",
+      "sure_sn": 7,
+      "anlatim": "Bugün eşyaları bir listede topladık, ekledik, çıkardık ve listeyi hazır fonksiyonlarla inceledik.",
+      "ekran": {
+        "baslik": "Bugün öğrendiklerin",
+        "maddeler": [
+          "Liste: [ ] içinde değerler, indeks 0'dan başlar",
+          "append, insert, remove, pop ile değiştir",
+          "in, len, sum, max, min, sorted ile incele"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "kapanis",
+      "sure_sn": 9,
+      "anlatim": "Çantan artık düzenli! Yarın ormanın ağaçlarında eski kaşiflerin kazıdığı koordinatları bulacağız: kimsenin değiştiremediği mühürlü kutular, yani tuple'lar.",
+      "ekran": {
+        "baslik": "Yarın: Tuple'lar",
+        "gorsel": "gorseller/python/harita/orman.webp"
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

@@ -1,0 +1,2876 @@
+{
+ "day": 30,
+ "title": "Final ve sonrası",
+ "region": "dag",
+ "project_contribution": "Final macerası",
+ "game_role": "Odalar, eşyalar ve kilitli hazine kapısı senin play() fonksiyonunla çalışır.",
+ "xp_complete": 150,
+ "objective": "30 günde öğrendiklerini birleştirip Piko'nun Macerası'nın final sürümünü yazmak",
+ "story": "Python Dağı'nın zirvesindesin! Buradan geriye baktığında yol ne kadar uzun görünüyor: ilk print'ten API yazmaya kadar geldin. Piko çok gururlu. Son bir macera kaldı: bugüne kadar öğrendiğin her şeyi tek bir oyunda birleştirmek.",
+ "sections": [
+  {
+   "title": "30 günde neler öğrendin?",
+   "body": "- **Temeller:** print, değişkenler, operatörler, stringler\n- **Veri yapıları:** liste, tuple, set, sözlük\n- **Akış:** koşullar ve döngüler\n- **Aletler:** fonksiyonlar, modüller, list comprehension, üst düzey fonksiyonlar\n- **Sağlamlık:** hata tipleri, try/except, düzenli ifadeler, dosyalar\n- **Dünya:** paketler, sanal ortam, sınıflar, web kazıma, istatistik, pandas, web, veritabanı, API\n\nBu, gerçek programcıların her gün kullandığı bir alet çantası!"
+  },
+  {
+   "title": "İyi programcı alışkanlıkları",
+   "body": "- **Küçük adımlarla ilerle:** biraz yaz, çalıştır, sonra devam et\n- **İsimlere özen göster:** `x` yerine `score`, `f` yerine `move_player`\n- **Hataları oku:** hata mesajı en iyi öğretmenindir\n- **Tekrar eden kodu fonksiyona çevir**\n- **Takıldığında sor:** arkadaşına, öğretmenine ya da belgelere"
+  },
+  {
+   "title": "Bundan sonra ne yapabilirsin?",
+   "body": "- **Oyun:** `pygame` ile pencereli, grafikli oyunlar\n- **Web:** `Flask` ile kendi siteni yayınla\n- **Veri:** `pandas` ve grafik paketleriyle veri hikâyeleri anlat\n- **Otomasyon:** tekrar eden bilgisayar işlerini Python'a yaptır\n- **Yapay zekâ:** makine öğrenmesinin temelleri de Python ile öğrenilir\n\nKendi bilgisayarına Python kur (python.org) ve bu sitede yazdığın projeleri orada da çalıştır."
+  },
+  {
+   "title": "Final macerası",
+   "body": "Bugünkü proje görevinde oyunun kalbini yazacaksın: odalar arasında dolaşan, eşya toplayan ve anahtarla hazine kapısını açan bir Piko. Sözlükler, döngüler, koşullar ve fonksiyonlar bir arada!\n\nBu parçayı da ekleyince **Proje** sayfasına git ve **Oyunumu oyna**'ya bas. 30 gün boyunca yazdığın bütün parçalar tek bir oyunda birleşir: karşılama ekranın, kahramanının bilgileri, skor hesabın, hareket fonksiyonun, savaş kuralların... Yön tuşlarıyla oynarsın ve hangi parçanın ne yaptığını oyunun günlüğünde görürsün.\n\nGörevleri bitirince 30. günü tamamla ve sertifikanı al. Tebrikler, artık bir Python programcısısın!"
+  }
+ ],
+ "examples": [
+  {
+   "title": "Hepsi bir arada",
+   "code": "class Hero:\n    def __init__(self, name):\n        self.name = name\n        self.bag = set()\n\n    def pick(self, item):\n        self.bag.add(item)\n        return f\"{self.name} {item} aldı.\"\n\npiko = Hero(\"Piko\")\nfor item in [\"harita\", \"anahtar\", \"harita\"]:\n    print(piko.pick(item))\nprint(\"Çanta:\", sorted(piko.bag))\n",
+   "note": ""
+  },
+  {
+   "title": "Kelime sayacı",
+   "code": "text = \"piko kod yazar piko oyun yapar piko mutlu\"\ncounts = {}\nfor word in text.split():\n    counts[word] = counts.get(word, 0) + 1\nfor word, n in sorted(counts.items(), key=lambda p: p[1], reverse=True):\n    print(word, n)\n",
+   "note": ""
+  },
+  {
+   "title": "Oda haritası",
+   "code": "rooms = {\n    \"kamp\": {\"kuzey\": \"orman\"},\n    \"orman\": {\"güney\": \"kamp\", \"doğu\": \"mağara\"},\n    \"mağara\": {\"batı\": \"orman\"},\n}\nplace = \"kamp\"\nfor step in [\"kuzey\", \"doğu\", \"kuzey\"]:\n    if step in rooms[place]:\n        place = rooms[place][step]\n        print(\"Şimdi buradasın:\", place)\n    else:\n        print(\"Oraya gidemezsin!\")\n",
+   "note": ""
+  }
+ ],
+ "tasks": [
+  {
+   "id": "d30-t1",
+   "title": "Sesli harf sayacı",
+   "prompt": "`count_vowels(text)` fonksiyonu yazıdaki Türkçe sesli harflerin (`aeıioöuü`) sayısını döndürsün. Büyük harfler de sayılsın.",
+   "starter": "def count_vowels(text):\n    return 0\n\nprint(count_vowels(\"Piko Python öğreniyor\"))\n",
+   "solution": "def count_vowels(text):\n    vowels = set(\"aeıioöuü\")\n    count = 0\n    for ch in text.replace(\"I\", \"ı\").replace(\"İ\", \"i\").lower():\n        if ch in vowels:\n            count += 1\n    return count\n\nprint(count_vowels(\"Piko Python öğreniyor\"))\n",
+   "hints": [
+    "Sesli harfleri bir set'e koy: set(\"aeıioöuü\")",
+    "Harfleri döngüyle gez ve say.",
+    "Büyük harfler için .lower(), ama Türkçe I ve İ için önce replace kullan."
+   ],
+   "check": {
+    "python": "\nassert count_vowels(\"Piko\") == 2, \"count_vowels('Piko') 2 olmalı.\"\nassert count_vowels(\"öğrenci\") == 3, \"count_vowels('öğrenci') 3 olmalı.\"\nassert count_vowels(\"KALE\") == 2, \"Büyük harfler de sayılmalı.\"\nassert count_vowels(\"xyz\") == 0, \"Sesli harf yoksa 0 olmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "def count_vowels(text):",
+      "notes": [
+       "`count_vowels` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `text`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+      ]
+     },
+     {
+      "n": 2,
+      "code": "    vowels = set(\"aeıioöuü\")",
+      "notes": [
+       "`vowels` adında bir değişken oluşturuluyor ve içine `set(\"aeıioöuü\")` konuyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "    count = 0",
+      "notes": [
+       "`count` adında bir değişken oluşturuluyor ve içine `0` (tam sayı) konuyor."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "    for ch in text.replace(\"I\", \"ı\").replace(\"İ\", \"i\").lower():",
+      "notes": [
+       "Döngü: `text.replace(\"I\", \"ı\").replace(\"İ\", \"i\").lower()` içindeki her eleman sırayla `ch` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "        if ch in vowels:",
+      "notes": [
+       "Koşul: `ch in vowels` doğruysa altındaki girintili satırlar çalışır."
+      ]
+     },
+     {
+      "n": 6,
+      "code": "            count += 1",
+      "notes": [
+       "`count += 1`: `count` değişkeninin değeri güncelleniyor."
+      ]
+     },
+     {
+      "n": 7,
+      "code": "    return count",
+      "notes": [
+       "Fonksiyon `count` değerini geri verir ve burada biter."
+      ]
+     },
+     {
+      "n": 9,
+      "code": "print(count_vowels(\"Piko Python öğreniyor\"))",
+      "notes": [
+       "`print(count_vowels(\"Piko Python öğreniyor\"))`: parantez içindeki değeri ekrana yazdırır.",
+       "`count_vowels(...)`: senin tanımladığın fonksiyonu çağırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "vowels",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `set(\"aeıioöuü\")`."
+     },
+     {
+      "term": "count",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `0`."
+     },
+     {
+      "term": "ch",
+      "kind": "döngü değişkeni",
+      "desc": "Döngünün her turunda `text.replace(\"I\", \"ı\").replace(\"İ\", \"i\").lower()` içindeki sıradaki elemanı tutar."
+     },
+     {
+      "term": "text",
+      "kind": "parametre",
+      "desc": "`count_vowels` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+     },
+     {
+      "term": "def",
+      "kind": "anahtar kelime",
+      "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+     },
+     {
+      "term": "count_vowels()",
+      "kind": "senin fonksiyonun",
+      "desc": "Kodda tanımlanan fonksiyon; parametreleri: `text`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "set()",
+      "kind": "fonksiyon",
+      "desc": "Bir değerden set (tekrarsız küme) oluşturur."
+     },
+     {
+      "term": "for",
+      "kind": "anahtar kelime",
+      "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+     },
+     {
+      "term": ".lower()",
+      "kind": "metot",
+      "desc": "Metni küçük harfe çevirir."
+     },
+     {
+      "term": ".replace()",
+      "kind": "metot",
+      "desc": "Metindeki bir parçayı başkasıyla değiştirir."
+     },
+     {
+      "term": "if",
+      "kind": "anahtar kelime",
+      "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+     },
+     {
+      "term": "in",
+      "kind": "operatör",
+      "desc": "İçinde var mı? (listede, metinde, sözlükte)"
+     },
+     {
+      "term": "+=",
+      "kind": "operatör",
+      "desc": "Değişkenin kendi değerine ekler: x += 1 → x = x + 1."
+     },
+     {
+      "term": "return",
+      "kind": "anahtar kelime",
+      "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d30-t2",
+   "title": "Kelime sayacı",
+   "prompt": "`word_counts(text)` fonksiyonu, yazıdaki her kelimenin kaç kez geçtiğini bir sözlük olarak döndürsün.",
+   "starter": "def word_counts(text):\n    return {}\n\nprint(word_counts(\"piko kod yazar piko oyun yapar\"))\n",
+   "solution": "def word_counts(text):\n    counts = {}\n    for word in text.split():\n        counts[word] = counts.get(word, 0) + 1\n    return counts\n\nprint(word_counts(\"piko kod yazar piko oyun yapar\"))\n",
+   "hints": [
+    "Kelimeler: text.split()",
+    "counts[word] = counts.get(word, 0) + 1"
+   ],
+   "check": {
+    "python": "\nassert word_counts(\"a b a c a\") == {\"a\": 3, \"b\": 1, \"c\": 1}, \"word_counts('a b a c a') {'a': 3, 'b': 1, 'c': 1} olmalı.\"\nassert word_counts(\"\") == {}, \"Boş yazıda boş sözlük dönmeli.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "def word_counts(text):",
+      "notes": [
+       "`word_counts` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `text`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+      ]
+     },
+     {
+      "n": 2,
+      "code": "    counts = {}",
+      "notes": [
+       "`counts` adında bir değişken oluşturuluyor ve içine `{}` (sözlük (anahtar: değer)) konuyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "    for word in text.split():",
+      "notes": [
+       "Döngü: `text.split()` içindeki her eleman sırayla `word` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "        counts[word] = counts.get(word, 0) + 1",
+      "notes": [
+       "`counts[...]` konumundaki değer `counts.get(word, 0) + 1` ile değiştiriliyor."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "    return counts",
+      "notes": [
+       "Fonksiyon `counts` değerini geri verir ve burada biter."
+      ]
+     },
+     {
+      "n": 7,
+      "code": "print(word_counts(\"piko kod yazar piko oyun yapar\"))",
+      "notes": [
+       "`print(word_counts(\"piko kod yazar piko oyun yapar\"))`: parantez içindeki değeri ekrana yazdırır.",
+       "`word_counts(...)`: senin tanımladığın fonksiyonu çağırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "counts",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `{}`."
+     },
+     {
+      "term": "word",
+      "kind": "döngü değişkeni",
+      "desc": "Döngünün her turunda `text.split()` içindeki sıradaki elemanı tutar."
+     },
+     {
+      "term": "text",
+      "kind": "parametre",
+      "desc": "`word_counts` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+     },
+     {
+      "term": "def",
+      "kind": "anahtar kelime",
+      "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+     },
+     {
+      "term": "word_counts()",
+      "kind": "senin fonksiyonun",
+      "desc": "Kodda tanımlanan fonksiyon; parametreleri: `text`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "for",
+      "kind": "anahtar kelime",
+      "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+     },
+     {
+      "term": ".split()",
+      "kind": "metot",
+      "desc": "Metni parçalara böler ve liste yapar (varsayılan: boşluklardan)."
+     },
+     {
+      "term": "+",
+      "kind": "operatör",
+      "desc": "Toplama; metinlerde ve listelerde uç uca ekleme."
+     },
+     {
+      "term": ".get()",
+      "kind": "metot",
+      "desc": "Sözlükten anahtarın değerini alır; anahtar yoksa hata vermez, varsayılanı verir."
+     },
+     {
+      "term": "return",
+      "kind": "anahtar kelime",
+      "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d30-t3",
+   "title": "Sayaç sınıfı",
+   "prompt": "`Counter` sınıfı 0'dan başlasın. `increment()` sayacı 1 artırıp yeni değeri döndürsün, `reset()` sayacı sıfırlasın. Değer `value` özelliğinde dursun.",
+   "starter": "class Counter:\n    pass\n\nc = Counter()\nc.increment()\nprint(c.increment())\n",
+   "solution": "class Counter:\n    def __init__(self):\n        self.value = 0\n\n    def increment(self):\n        self.value += 1\n        return self.value\n\n    def reset(self):\n        self.value = 0\n\nc = Counter()\nc.increment()\nprint(c.increment())\n",
+   "hints": [
+    "__init__ içinde self.value = 0",
+    "increment içinde self.value += 1 ve return self.value"
+   ],
+   "check": {
+    "python": "\nc = Counter()\nassert c.value == 0, \"Sayaç 0'dan başlamalı.\"\nassert c.increment() == 1 and c.increment() == 2, \"increment yeni değeri döndürmeli.\"\nc.reset()\nassert c.value == 0, \"reset sayacı sıfırlamalı.\"\nd = Counter()\nd.increment()\nassert c.value == 0 and d.value == 1, \"Her sayacın kendi değeri olmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "class Counter:",
+      "notes": [
+       "`Counter` adında bir sınıf (nesne kalıbı) tanımlanıyor."
+      ]
+     },
+     {
+      "n": 2,
+      "code": "    def __init__(self):",
+      "notes": [
+       "`__init__`: `Counter` nesnesi oluşturulurken otomatik çalışan hazırlık metodu."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "        self.value = 0",
+      "notes": [
+       "Nesnenin `self.value` özelliğine `0` değeri konuyor."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "    def increment(self):",
+      "notes": [
+       "`increment` adında bir metot (sınıfa ait fonksiyon) tanımlanıyor."
+      ]
+     },
+     {
+      "n": 6,
+      "code": "        self.value += 1",
+      "notes": [
+       "`self.value += 1`: `self.value` değişkeninin değeri güncelleniyor."
+      ]
+     },
+     {
+      "n": 7,
+      "code": "        return self.value",
+      "notes": [
+       "Fonksiyon `self.value` değerini geri verir ve burada biter."
+      ]
+     },
+     {
+      "n": 9,
+      "code": "    def reset(self):",
+      "notes": [
+       "`reset` adında bir metot (sınıfa ait fonksiyon) tanımlanıyor."
+      ]
+     },
+     {
+      "n": 10,
+      "code": "        self.value = 0",
+      "notes": [
+       "Nesnenin `self.value` özelliğine `0` değeri konuyor."
+      ]
+     },
+     {
+      "n": 12,
+      "code": "c = Counter()",
+      "notes": [
+       "`c` adında bir değişken oluşturuluyor ve içine `Counter()` konuyor.",
+       "`Counter(...)`: `Counter` sınıfından yeni bir nesne oluşturur."
+      ]
+     },
+     {
+      "n": 13,
+      "code": "c.increment()",
+      "notes": [
+       "`c.increment()`: `c` üzerinde `increment` metodunu çalıştırır."
+      ]
+     },
+     {
+      "n": 14,
+      "code": "print(c.increment())",
+      "notes": [
+       "`print(c.increment())`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "c",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `Counter()`."
+     },
+     {
+      "term": "class",
+      "kind": "anahtar kelime",
+      "desc": "Yeni bir sınıf (nesne kalıbı) tanımlar."
+     },
+     {
+      "term": "Counter",
+      "kind": "senin sınıfın",
+      "desc": "Kodda tanımlanan sınıf; `Counter(...)` ile yeni nesneler oluşturulur."
+     },
+     {
+      "term": "__init__()",
+      "kind": "metot",
+      "desc": "Sınıftan yeni bir nesne oluşturulurken otomatik çalışan hazırlık metodu."
+     },
+     {
+      "term": "def",
+      "kind": "anahtar kelime",
+      "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "increment()",
+      "kind": "senin metodun",
+      "desc": "`Counter` sınıfının metodu; nesne.increment(...) diye çağrılır."
+     },
+     {
+      "term": "+=",
+      "kind": "operatör",
+      "desc": "Değişkenin kendi değerine ekler: x += 1 → x = x + 1."
+     },
+     {
+      "term": "return",
+      "kind": "anahtar kelime",
+      "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+     },
+     {
+      "term": "self",
+      "kind": "anahtar kelime",
+      "desc": "Sınıfın içinde \"bu nesnenin kendisi\" demektir."
+     },
+     {
+      "term": "reset()",
+      "kind": "senin metodun",
+      "desc": "`Counter` sınıfının metodu; nesne.reset(...) diye çağrılır."
+     },
+     {
+      "term": ".increment()",
+      "kind": "senin metodun",
+      "desc": "Sınıfında tanımladığın `increment` metodunu bu nesne için çalıştırır."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "id": "d30-c",
+  "title": "Komut motoru",
+  "prompt": "Bir kahramanın durumunu komut listesiyle değiştiren `run(commands)` fonksiyonu yaz. Başlangıç: `{\"hp\": 10, \"gold\": 0}`.\n\n- `\"kazı 5\"`: altın 5 artar\n- `\"savaş 3\"`: can 3 azalır\n- `\"iksir\"`: can 5 artar ama 10'u geçemez\n- Başka komutlar görmezden gelinir. Can 0 veya altına inerse kalan komutlar çalıştırılmaz.\n\nFonksiyon son durumu sözlük olarak döndürsün.",
+  "starter": "def run(commands):\n    state = {\"hp\": 10, \"gold\": 0}\n    return state\n\nprint(run([\"kazı 5\", \"savaş 3\", \"iksir\"]))\n",
+  "solution": "def run(commands):\n    state = {\"hp\": 10, \"gold\": 0}\n    for command in commands:\n        parts = command.split()\n        if parts[0] == \"kazı\" and len(parts) == 2:\n            state[\"gold\"] += int(parts[1])\n        elif parts[0] == \"savaş\" and len(parts) == 2:\n            state[\"hp\"] -= int(parts[1])\n        elif parts[0] == \"iksir\":\n            state[\"hp\"] = min(10, state[\"hp\"] + 5)\n        if state[\"hp\"] <= 0:\n            break\n    return state\n\nprint(run([\"kazı 5\", \"savaş 3\", \"iksir\"]))\n",
+  "hints": [
+   "Komutu parçala: parts = command.split()",
+   "İksir için min(10, hp + 5)",
+   "Her komuttan sonra canı kontrol et, 0 veya altındaysa break"
+  ],
+  "check": {
+   "python": "\nassert run([\"kazı 5\", \"savaş 3\", \"iksir\"]) == {\"hp\": 10, \"gold\": 5}, \"İksir canı 10'u geçirmemeli.\"\nassert run([\"savaş 8\", \"iksir\", \"kazı 2\"]) == {\"hp\": 7, \"gold\": 2}, \"savaş 8, iksir, kazı 2 sonrası hp 7, gold 2 olmalı.\"\nassert run([\"savaş 12\", \"kazı 50\", \"iksir\"]) == {\"hp\": -2, \"gold\": 0}, \"Can bitince kalan komutlar çalışmamalı.\"\nassert run([\"dans et\", \"kazı 1\"]) == {\"hp\": 10, \"gold\": 1}, \"Bilinmeyen komutlar görmezden gelinmeli.\"\nassert run([]) == {\"hp\": 10, \"gold\": 0}, \"Komut yoksa başlangıç durumu dönmeli.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "def run(commands):",
+     "notes": [
+      "`run` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `commands`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+     ]
+    },
+    {
+     "n": 2,
+     "code": "    state = {\"hp\": 10, \"gold\": 0}",
+     "notes": [
+      "`state` adında bir değişken oluşturuluyor ve içine `{\"hp\": 10, \"gold\": 0}` (sözlük (anahtar: değer)) konuyor."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "    for command in commands:",
+     "notes": [
+      "Döngü: `commands` içindeki her eleman sırayla `command` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "        parts = command.split()",
+     "notes": [
+      "`parts` adında bir değişken oluşturuluyor ve içine `command.split()` konuyor."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "        if parts[0] == \"kazı\" and len(parts) == 2:",
+     "notes": [
+      "Koşul: `parts[0] == \"kazı\" and len(parts) == 2` doğruysa altındaki girintili satırlar çalışır."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "            state[\"gold\"] += int(parts[1])",
+     "notes": [
+      "`state[...] += int(parts[1])`: `state[...]` değişkeninin değeri güncelleniyor."
+     ]
+    },
+    {
+     "n": 7,
+     "code": "        elif parts[0] == \"savaş\" and len(parts) == 2:",
+     "notes": [
+      "`elif`: yukarıdaki koşul yanlışsa `parts[0] == \"savaş\" and len(parts) == 2` koşuluna bakılır."
+     ]
+    },
+    {
+     "n": 8,
+     "code": "            state[\"hp\"] -= int(parts[1])",
+     "notes": [
+      "`state[...] -= int(parts[1])`: `state[...]` değişkeninin değeri güncelleniyor."
+     ]
+    },
+    {
+     "n": 9,
+     "code": "        elif parts[0] == \"iksir\":",
+     "notes": [
+      "`elif`: yukarıdaki koşul yanlışsa `parts[0] == \"iksir\"` koşuluna bakılır."
+     ]
+    },
+    {
+     "n": 10,
+     "code": "            state[\"hp\"] = min(10, state[\"hp\"] + 5)",
+     "notes": [
+      "`state[...]` konumundaki değer `min(10, state[\"hp\"] + 5)` ile değiştiriliyor."
+     ]
+    },
+    {
+     "n": 11,
+     "code": "        if state[\"hp\"] <= 0:",
+     "notes": [
+      "Koşul: `state[\"hp\"] <= 0` doğruysa altındaki girintili satırlar çalışır."
+     ]
+    },
+    {
+     "n": 12,
+     "code": "            break",
+     "notes": [
+      "`break`: Döngüden hemen çıkar."
+     ]
+    },
+    {
+     "n": 13,
+     "code": "    return state",
+     "notes": [
+      "Fonksiyon `state` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 15,
+     "code": "print(run([\"kazı 5\", \"savaş 3\", \"iksir\"]))",
+     "notes": [
+      "`print(run([\"kazı 5\", \"savaş 3\", \"iksir\"]))`: parantez içindeki değeri ekrana yazdırır.",
+      "`run(...)`: senin tanımladığın fonksiyonu çağırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "state",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"hp\": 10, \"gold\": 0}`."
+    },
+    {
+     "term": "parts",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `command.split()`."
+    },
+    {
+     "term": "command",
+     "kind": "döngü değişkeni",
+     "desc": "Döngünün her turunda `commands` içindeki sıradaki elemanı tutar."
+    },
+    {
+     "term": "commands",
+     "kind": "parametre",
+     "desc": "`run` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+    },
+    {
+     "term": "def",
+     "kind": "anahtar kelime",
+     "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+    },
+    {
+     "term": "run()",
+     "kind": "senin fonksiyonun",
+     "desc": "Kodda tanımlanan fonksiyon; parametreleri: `commands`."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "for",
+     "kind": "anahtar kelime",
+     "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+    },
+    {
+     "term": ".split()",
+     "kind": "metot",
+     "desc": "Metni parçalara böler ve liste yapar (varsayılan: boşluklardan)."
+    },
+    {
+     "term": "if",
+     "kind": "anahtar kelime",
+     "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+    },
+    {
+     "term": "and",
+     "kind": "operatör",
+     "desc": "\"ve\": iki koşul da doğruysa True."
+    },
+    {
+     "term": "==",
+     "kind": "operatör",
+     "desc": "Eşit mi? (True/False)"
+    },
+    {
+     "term": "[ ]",
+     "kind": "seçme",
+     "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+    },
+    {
+     "term": "len()",
+     "kind": "fonksiyon",
+     "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+    },
+    {
+     "term": "+=",
+     "kind": "operatör",
+     "desc": "Değişkenin kendi değerine ekler: x += 1 → x = x + 1."
+    },
+    {
+     "term": "int()",
+     "kind": "fonksiyon",
+     "desc": "Bir değeri tam sayıya çevirir, örneğin \"42\" yazısını 42 sayısına."
+    },
+    {
+     "term": "elif",
+     "kind": "anahtar kelime",
+     "desc": "Önceki koşullar yanlışsa bu koşula bakılır (\"değilse eğer\")."
+    },
+    {
+     "term": "-=",
+     "kind": "operatör",
+     "desc": "Değişkenin değerinden çıkarır: x -= 1 → x = x - 1."
+    },
+    {
+     "term": "min()",
+     "kind": "fonksiyon",
+     "desc": "En küçük değeri verir."
+    },
+    {
+     "term": "+",
+     "kind": "operatör",
+     "desc": "Toplama; metinlerde ve listelerde uç uca ekleme."
+    },
+    {
+     "term": "<=",
+     "kind": "operatör",
+     "desc": "Küçük ya da eşit mi?"
+    },
+    {
+     "term": "break",
+     "kind": "anahtar kelime",
+     "desc": "Döngüden hemen çıkar."
+    },
+    {
+     "term": "return",
+     "kind": "anahtar kelime",
+     "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    }
+   ]
+  }
+ },
+ "project_task": {
+  "id": "d30-p",
+  "title": "Final macerası",
+  "prompt": "Piko'nun Macerası'nın final sürümü! `rooms` sözlüğü odaları, çıkışları ve odadaki eşyayı tutuyor. `play(commands)` fonksiyonu Piko'yu `\"kamp\"`tan başlatsın ve komutları sırayla uygulasın:\n\n- `\"git <yön>\"`: o yönde çıkış varsa oraya git, yoksa `Oraya gidemezsin!` yazdır.\n- `\"al\"`: odada eşya varsa çantaya koy ve odadan kaldır.\n- Piko `\"hazine\"` odasına **anahtarla** girerse `Tebrikler! Hazineyi buldun.` yazdır ve oyunu bitir. Anahtarsız girerse `Kapı kilitli!` yazdır ve olduğu yerde kalsın.\n\nFonksiyon sonunda `(bulunduğu_oda, sıralı_çanta_listesi)` döndürsün.",
+  "starter": "rooms = {\n    \"kamp\": {\"exits\": {\"kuzey\": \"orman\"}, \"item\": None},\n    \"orman\": {\"exits\": {\"güney\": \"kamp\", \"doğu\": \"mağara\", \"kuzey\": \"hazine\"}, \"item\": \"harita\"},\n    \"mağara\": {\"exits\": {\"batı\": \"orman\"}, \"item\": \"anahtar\"},\n    \"hazine\": {\"exits\": {}, \"item\": None},\n}\n\ndef play(commands):\n    place = \"kamp\"\n    bag = set()\n    # Komutları uygula\n    return place, sorted(bag)\n\nprint(play([\"git kuzey\", \"al\", \"git doğu\", \"al\", \"git batı\", \"git kuzey\"]))\n",
+  "solution": "rooms = {\n    \"kamp\": {\"exits\": {\"kuzey\": \"orman\"}, \"item\": None},\n    \"orman\": {\"exits\": {\"güney\": \"kamp\", \"doğu\": \"mağara\", \"kuzey\": \"hazine\"}, \"item\": \"harita\"},\n    \"mağara\": {\"exits\": {\"batı\": \"orman\"}, \"item\": \"anahtar\"},\n    \"hazine\": {\"exits\": {}, \"item\": None},\n}\n\ndef play(commands):\n    place = \"kamp\"\n    bag = set()\n    for command in commands:\n        parts = command.split()\n        if parts[0] == \"git\" and len(parts) == 2:\n            exits = rooms[place][\"exits\"]\n            if parts[1] not in exits:\n                print(\"Oraya gidemezsin!\")\n                continue\n            target = exits[parts[1]]\n            if target == \"hazine\":\n                if \"anahtar\" in bag:\n                    place = target\n                    print(\"Tebrikler! Hazineyi buldun.\")\n                    break\n                print(\"Kapı kilitli!\")\n                continue\n            place = target\n        elif parts[0] == \"al\":\n            item = rooms[place][\"item\"]\n            if item:\n                bag.add(item)\n                rooms[place][\"item\"] = None\n    return place, sorted(bag)\n\nprint(play([\"git kuzey\", \"al\", \"git doğu\", \"al\", \"git batı\", \"git kuzey\"]))\n",
+  "hints": [
+   "Komutu parçala: parts = command.split()",
+   "Çıkışlar: rooms[place][\"exits\"]",
+   "Hazineye girmeden önce \"anahtar\" in bag kontrolü yap.",
+   "Oyun bitince break ile döngüden çık."
+  ],
+  "check": {
+   "python": "\nFRESH = {\n    \"kamp\": {\"exits\": {\"kuzey\": \"orman\"}, \"item\": None},\n    \"orman\": {\"exits\": {\"güney\": \"kamp\", \"doğu\": \"mağara\", \"kuzey\": \"hazine\"}, \"item\": \"harita\"},\n    \"mağara\": {\"exits\": {\"batı\": \"orman\"}, \"item\": \"anahtar\"},\n    \"hazine\": {\"exits\": {}, \"item\": None},\n}\ndef game(cmds):\n    return _code + \"\\nrooms.clear()\\nrooms.update(\" + repr(FRESH) + \")\\nRESULT = play(\" + repr(cmds) + \")\\n\"\n\nout, g = _run(game([\"git kuzey\", \"al\", \"git doğu\", \"al\", \"git batı\", \"git kuzey\", \"git güney\"]))\nassert g[\"RESULT\"] == (\"hazine\", [\"anahtar\", \"harita\"]), \"Anahtarla hazineye girince oyun bitmeli ve ('hazine', ['anahtar', 'harita']) dönmeli.\"\nassert \"Tebrikler! Hazineyi buldun.\" in out, \"Hazine bulununca 'Tebrikler! Hazineyi buldun.' yazmalı.\"\n\nout, g = _run(game([\"git kuzey\", \"git kuzey\", \"git batı\", \"al\"]))\nassert \"Kapı kilitli!\" in out, \"Anahtarsız hazineye girilmeye çalışılınca 'Kapı kilitli!' yazmalı.\"\nassert \"Oraya gidemezsin!\" in out, \"Olmayan yöne gidince 'Oraya gidemezsin!' yazmalı.\"\nassert g[\"RESULT\"] == (\"orman\", [\"harita\"]), \"Kilitli kapıda Piko olduğu yerde kalmalı.\"\n\nout, g = _run(game([\"al\", \"git kuzey\", \"al\", \"al\"]))\nassert g[\"RESULT\"] == (\"orman\", [\"harita\"]), \"Eşya alınınca odadan kalkmalı; boş odada 'al' bir şey yapmamalı.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "rooms = {",
+     "notes": [
+      "`rooms` adında bir değişken oluşturuluyor ve içine `{ \"kamp\": {\"exits\": {\"kuzey\": \"orman\"}, \"item\": None}, \"o...` (sözlük (anahtar: değer)) konuyor."
+     ]
+    },
+    {
+     "n": 2,
+     "code": "    \"kamp\": {\"exits\": {\"kuzey\": \"orman\"}, \"item\": None},",
+     "notes": [
+      "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "    \"orman\": {\"exits\": {\"güney\": \"kamp\", \"doğu\": \"mağara\", \"kuzey\": \"hazine\"}, \"item\": \"harita\"},",
+     "notes": [
+      "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "    \"mağara\": {\"exits\": {\"batı\": \"orman\"}, \"item\": \"anahtar\"},",
+     "notes": [
+      "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "    \"hazine\": {\"exits\": {}, \"item\": None},",
+     "notes": [
+      "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "}",
+     "notes": [
+      "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+     ]
+    },
+    {
+     "n": 8,
+     "code": "def play(commands):",
+     "notes": [
+      "`play` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `commands`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+     ]
+    },
+    {
+     "n": 9,
+     "code": "    place = \"kamp\"",
+     "notes": [
+      "`place` adında bir değişken oluşturuluyor ve içine `\"kamp\"` (metin (str)) konuyor."
+     ]
+    },
+    {
+     "n": 10,
+     "code": "    bag = set()",
+     "notes": [
+      "`bag` adında bir değişken oluşturuluyor ve içine `set()` konuyor."
+     ]
+    },
+    {
+     "n": 11,
+     "code": "    for command in commands:",
+     "notes": [
+      "Döngü: `commands` içindeki her eleman sırayla `command` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+     ]
+    },
+    {
+     "n": 12,
+     "code": "        parts = command.split()",
+     "notes": [
+      "`parts` adında bir değişken oluşturuluyor ve içine `command.split()` konuyor."
+     ]
+    },
+    {
+     "n": 13,
+     "code": "        if parts[0] == \"git\" and len(parts) == 2:",
+     "notes": [
+      "Koşul: `parts[0] == \"git\" and len(parts) == 2` doğruysa altındaki girintili satırlar çalışır."
+     ]
+    },
+    {
+     "n": 14,
+     "code": "            exits = rooms[place][\"exits\"]",
+     "notes": [
+      "`exits` adında bir değişken oluşturuluyor ve içine `rooms[place][\"exits\"]` konuyor."
+     ]
+    },
+    {
+     "n": 15,
+     "code": "            if parts[1] not in exits:",
+     "notes": [
+      "Koşul: `parts[1] not in exits` doğruysa altındaki girintili satırlar çalışır."
+     ]
+    },
+    {
+     "n": 16,
+     "code": "                print(\"Oraya gidemezsin!\")",
+     "notes": [
+      "`print(\"Oraya gidemezsin!\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 17,
+     "code": "                continue",
+     "notes": [
+      "`continue`: Döngünün bu turunu atlar, sıradakine geçer."
+     ]
+    },
+    {
+     "n": 18,
+     "code": "            target = exits[parts[1]]",
+     "notes": [
+      "`target` adında bir değişken oluşturuluyor ve içine `exits[parts[1]]` konuyor."
+     ]
+    },
+    {
+     "n": 19,
+     "code": "            if target == \"hazine\":",
+     "notes": [
+      "Koşul: `target == \"hazine\"` doğruysa altındaki girintili satırlar çalışır."
+     ]
+    },
+    {
+     "n": 20,
+     "code": "                if \"anahtar\" in bag:",
+     "notes": [
+      "Koşul: `\"anahtar\" in bag` doğruysa altındaki girintili satırlar çalışır."
+     ]
+    },
+    {
+     "n": 21,
+     "code": "                    place = target",
+     "notes": [
+      "`place` değişkenine yeni değer veriliyor: `target`."
+     ]
+    },
+    {
+     "n": 22,
+     "code": "                    print(\"Tebrikler! Hazineyi buldun.\")",
+     "notes": [
+      "`print(\"Tebrikler! Hazineyi buldun.\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 23,
+     "code": "                    break",
+     "notes": [
+      "`break`: Döngüden hemen çıkar."
+     ]
+    },
+    {
+     "n": 24,
+     "code": "                print(\"Kapı kilitli!\")",
+     "notes": [
+      "`print(\"Kapı kilitli!\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 25,
+     "code": "                continue",
+     "notes": [
+      "`continue`: Döngünün bu turunu atlar, sıradakine geçer."
+     ]
+    },
+    {
+     "n": 26,
+     "code": "            place = target",
+     "notes": [
+      "`place` değişkenine yeni değer veriliyor: `target`."
+     ]
+    },
+    {
+     "n": 27,
+     "code": "        elif parts[0] == \"al\":",
+     "notes": [
+      "`elif`: yukarıdaki koşul yanlışsa `parts[0] == \"al\"` koşuluna bakılır."
+     ]
+    },
+    {
+     "n": 28,
+     "code": "            item = rooms[place][\"item\"]",
+     "notes": [
+      "`item` adında bir değişken oluşturuluyor ve içine `rooms[place][\"item\"]` konuyor."
+     ]
+    },
+    {
+     "n": 29,
+     "code": "            if item:",
+     "notes": [
+      "Koşul: `item` doğruysa altındaki girintili satırlar çalışır."
+     ]
+    },
+    {
+     "n": 30,
+     "code": "                bag.add(item)",
+     "notes": [
+      "`bag.add(item)`: `bag` üzerinde `add` metodunu çalıştırır. Sete yeni bir eleman ekler."
+     ]
+    },
+    {
+     "n": 31,
+     "code": "                rooms[place][\"item\"] = None",
+     "notes": [
+      "`rooms[...][...]` konumundaki değer `None` ile değiştiriliyor."
+     ]
+    },
+    {
+     "n": 32,
+     "code": "    return place, sorted(bag)",
+     "notes": [
+      "Fonksiyon `place, sorted(bag)` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 34,
+     "code": "print(play([\"git kuzey\", \"al\", \"git doğu\", \"al\", \"git batı\", \"git kuzey\"]))",
+     "notes": [
+      "`print(play([\"git kuzey\", \"al\", \"git doğu\", \"al\", \"git bat...`: parantez içindeki değeri ekrana yazdırır.",
+      "`play(...)`: senin tanımladığın fonksiyonu çağırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "rooms",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `{ \"kamp\": {\"exits\": {\"kuzey\": \"orman\"}, \"item\": None}, \"o...`."
+    },
+    {
+     "term": "place",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `\"kamp\"`."
+    },
+    {
+     "term": "bag",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `set()`."
+    },
+    {
+     "term": "parts",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `command.split()`."
+    },
+    {
+     "term": "exits",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `rooms[place][\"exits\"]`."
+    },
+    {
+     "term": "target",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `exits[parts[1]]`."
+    },
+    {
+     "term": "item",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `rooms[place][\"item\"]`."
+    },
+    {
+     "term": "command",
+     "kind": "döngü değişkeni",
+     "desc": "Döngünün her turunda `commands` içindeki sıradaki elemanı tutar."
+    },
+    {
+     "term": "commands",
+     "kind": "parametre",
+     "desc": "`play` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "None",
+     "kind": "değer",
+     "desc": "\"Hiçbir şey / boş\" anlamına gelen özel değer."
+    },
+    {
+     "term": "def",
+     "kind": "anahtar kelime",
+     "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+    },
+    {
+     "term": "play()",
+     "kind": "senin fonksiyonun",
+     "desc": "Kodda tanımlanan fonksiyon; parametreleri: `commands`."
+    },
+    {
+     "term": "set()",
+     "kind": "fonksiyon",
+     "desc": "Bir değerden set (tekrarsız küme) oluşturur."
+    },
+    {
+     "term": "for",
+     "kind": "anahtar kelime",
+     "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+    },
+    {
+     "term": ".split()",
+     "kind": "metot",
+     "desc": "Metni parçalara böler ve liste yapar (varsayılan: boşluklardan)."
+    },
+    {
+     "term": "if",
+     "kind": "anahtar kelime",
+     "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+    },
+    {
+     "term": "and",
+     "kind": "operatör",
+     "desc": "\"ve\": iki koşul da doğruysa True."
+    },
+    {
+     "term": "==",
+     "kind": "operatör",
+     "desc": "Eşit mi? (True/False)"
+    },
+    {
+     "term": "[ ]",
+     "kind": "seçme",
+     "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+    },
+    {
+     "term": "len()",
+     "kind": "fonksiyon",
+     "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+    },
+    {
+     "term": "not in",
+     "kind": "operatör",
+     "desc": "İçinde yok mu?"
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    },
+    {
+     "term": "continue",
+     "kind": "anahtar kelime",
+     "desc": "Döngünün bu turunu atlar, sıradakine geçer."
+    },
+    {
+     "term": "in",
+     "kind": "operatör",
+     "desc": "İçinde var mı? (listede, metinde, sözlükte)"
+    },
+    {
+     "term": "break",
+     "kind": "anahtar kelime",
+     "desc": "Döngüden hemen çıkar."
+    },
+    {
+     "term": "elif",
+     "kind": "anahtar kelime",
+     "desc": "Önceki koşullar yanlışsa bu koşula bakılır (\"değilse eğer\")."
+    },
+    {
+     "term": ".add()",
+     "kind": "metot",
+     "desc": "Sete yeni bir eleman ekler."
+    },
+    {
+     "term": "return",
+     "kind": "anahtar kelime",
+     "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+    },
+    {
+     "term": "sorted()",
+     "kind": "fonksiyon",
+     "desc": "Sıralanmış yeni bir liste verir; asıl liste değişmez."
+    }
+   ]
+  }
+ },
+ "available": true,
+ "tracks": {
+  "veri": {
+   "project_task": {
+    "id": "d30-pv",
+    "title": "Final: aylık rapor",
+    "prompt": "Harcama Defteri'nin final sürümü! `monthly_report(records, budget)` fonksiyonu `(kategori, tutar)` kayıtlarını ve bütçeyi alsın ve bir **sözlük** döndürsün:\n\n- `\"total\"`: toplam harcama\n- `\"remaining\"`: `budget - total`\n- `\"top_category\"`: toplamı en yüksek kategori (kayıt yoksa `None`)\n- `\"status\"`: toplam bütçeden büyükse `\"aşıldı\"`, değilse `\"yolunda\"`\n\nAyrıca raporu şöyle yazdırsın:\n\n```\nToplam: 2450 TL\nKalan: 2550 TL\nEn çok: kira\nDurum: yolunda\n```",
+    "starter": "def monthly_report(records, budget):\n    pass\n\n\nmonthly_report([(\"kira\", 2000), (\"market\", 450)], 5000)\n",
+    "solution": "def monthly_report(records, budget):\n    totals = {}\n    for category, amount in records:\n        totals[category] = totals.get(category, 0) + amount\n    total = sum(totals.values())\n    top = max(totals, key=totals.get) if totals else None\n    report = {\n        \"total\": total,\n        \"remaining\": budget - total,\n        \"top_category\": top,\n        \"status\": \"aşıldı\" if total > budget else \"yolunda\",\n    }\n    print(f\"Toplam: {total} TL\")\n    print(f\"Kalan: {report['remaining']} TL\")\n    print(f\"En çok: {top}\")\n    print(f\"Durum: {report['status']}\")\n    return report\n\n\nmonthly_report([(\"kira\", 2000), (\"market\", 450)], 5000)\n",
+    "hints": [
+     "Kategorileri toplamak için bir sözlük: totals[category] = totals.get(category, 0) + amount",
+     "En yüksek kategori: max(totals, key=totals.get)"
+    ],
+    "check": {
+     "python": "\nimport contextlib, io\nwith contextlib.redirect_stdout(io.StringIO()):\n    r = monthly_report([(\"market\", 100), (\"kahve\", 30), (\"market\", 50)], 150)\n    r2 = monthly_report([], 100)\nassert isinstance(r, dict), \"monthly_report bir sözlük döndürmeli.\"\nassert r.get(\"total\") == 180 and r.get(\"remaining\") == -30, \"total 180, remaining -30 olmalı.\"\nassert r.get(\"top_category\") == \"market\", \"top_category, toplamı en yüksek kategori olmalı.\"\nassert r.get(\"status\") == \"aşıldı\", \"Toplam bütçeden büyükse status 'aşıldı' olmalı.\"\nassert r2.get(\"total\") == 0 and r2.get(\"top_category\") is None and r2.get(\"status\") == \"yolunda\", \"Kayıt yoksa total 0, top_category None, status 'yolunda'.\"\nout, _ = _run(_code)\nfor line in [\"Toplam: 2450 TL\", \"Kalan: 2550 TL\", \"En çok: kira\", \"Durum: yolunda\"]:\n    assert line in out, \"Rapor '\" + line + \"' gibi satırları yazdırmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "def monthly_report(records, budget):",
+       "notes": [
+        "`monthly_report` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `records`, `budget`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "    totals = {}",
+       "notes": [
+        "`totals` adında bir değişken oluşturuluyor ve içine `{}` (sözlük (anahtar: değer)) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "    for category, amount in records:",
+       "notes": [
+        "Döngü: `records` içindeki her eleman sırayla `category, amount` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "        totals[category] = totals.get(category, 0) + amount",
+       "notes": [
+        "`totals[...]` konumundaki değer `totals.get(category, 0) + amount` ile değiştiriliyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "    total = sum(totals.values())",
+       "notes": [
+        "`total` adında bir değişken oluşturuluyor ve içine `sum(totals.values())` konuyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    top = max(totals, key=totals.get) if totals else None",
+       "notes": [
+        "`top` adında bir değişken oluşturuluyor ve içine `max(totals, key=totals.get) if totals else None` konuyor."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "    report = {",
+       "notes": [
+        "`report` adında bir değişken oluşturuluyor ve içine `{ \"total\": total, \"remaining\": budget - total, \"top_categ...` (sözlük (anahtar: değer)) konuyor."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "        \"total\": total,",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "        \"remaining\": budget - total,",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "        \"top_category\": top,",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "        \"status\": \"aşıldı\" if total > budget else \"yolunda\",",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "    }",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "    print(f\"Toplam: {total} TL\")",
+       "notes": [
+        "`print(f\"Toplam: {total} TL\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 14,
+       "code": "    print(f\"Kalan: {report['remaining']} TL\")",
+       "notes": [
+        "`print(f\"Kalan: {report['remaining']} TL\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 15,
+       "code": "    print(f\"En çok: {top}\")",
+       "notes": [
+        "`print(f\"En çok: {top}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 16,
+       "code": "    print(f\"Durum: {report['status']}\")",
+       "notes": [
+        "`print(f\"Durum: {report['status']}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 17,
+       "code": "    return report",
+       "notes": [
+        "Fonksiyon `report` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 20,
+       "code": "monthly_report([(\"kira\", 2000), (\"market\", 450)], 5000)",
+       "notes": [
+        "`monthly_report([(\"kira\", 2000), (\"market\", 450)], 5000)`: tanımladığın `monthly_report` fonksiyonunu çalıştırır.",
+        "`monthly_report(...)`: senin tanımladığın fonksiyonu çağırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "totals",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `{}`."
+      },
+      {
+       "term": "total",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `sum(totals.values())`."
+      },
+      {
+       "term": "top",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `max(totals, key=totals.get) if totals else None`."
+      },
+      {
+       "term": "report",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `{ \"total\": total, \"remaining\": budget - total, \"top_categ...`."
+      },
+      {
+       "term": "category",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `records` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "amount",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `records` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "records",
+       "kind": "parametre",
+       "desc": "`monthly_report` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "budget",
+       "kind": "parametre",
+       "desc": "`monthly_report` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "monthly_report()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `records`, `budget`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": "+",
+       "kind": "operatör",
+       "desc": "Toplama; metinlerde ve listelerde uç uca ekleme."
+      },
+      {
+       "term": ".get()",
+       "kind": "metot",
+       "desc": "Sözlükten anahtarın değerini alır; anahtar yoksa hata vermez, varsayılanı verir."
+      },
+      {
+       "term": "sum()",
+       "kind": "fonksiyon",
+       "desc": "Listedeki sayıları toplar."
+      },
+      {
+       "term": ".values()",
+       "kind": "metot",
+       "desc": "Sözlüğün değerlerini verir."
+      },
+      {
+       "term": "A if ... else B",
+       "kind": "koşul",
+       "desc": "Tek satırlık koşul: A if koşul else B."
+      },
+      {
+       "term": "max()",
+       "kind": "fonksiyon",
+       "desc": "En büyük değeri verir."
+      },
+      {
+       "term": "None",
+       "kind": "değer",
+       "desc": "\"Hiçbir şey / boş\" anlamına gelen özel değer."
+      },
+      {
+       "term": "-",
+       "kind": "operatör",
+       "desc": "Çıkarma."
+      },
+      {
+       "term": ">",
+       "kind": "operatör",
+       "desc": "Büyük mü?"
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Aylık rapor",
+   "game_role": "Bütün parçaları birleştirip ayın raporunu çıkarır."
+  },
+  "otomasyon": {
+   "project_task": {
+    "id": "d30-po",
+    "title": "Final: asistan komutları",
+    "prompt": "Görev Asistanı'nın final sürümü! `run_assistant(commands)` yazılı komutları sırayla işlesin ve en sonda kalan görevlerin listesini döndürsün:\n\n- `\"ekle <görev>\"`: görevi ekle, `Eklendi: <görev>` yazdır. Zaten varsa `Zaten listede: <görev>`.\n- `\"bitir <görev>\"`: görevi çıkar, `Bitti: <görev>` yazdır. Yoksa `Bulunamadı: <görev>`.\n- `\"liste\"`: kalan görevleri `1. Spor` gibi numaralı yazdır; hiç yoksa `Liste boş`.\n- Başka bir komut: `Anlaşılmadı: <komut>`.",
+    "starter": "def run_assistant(commands):\n    tasks = []\n    return tasks\n\n\nrun_assistant([\"ekle Spor\", \"ekle Rapor yaz\", \"bitir Spor\", \"liste\"])\n",
+    "solution": "def run_assistant(commands):\n    tasks = []\n    for command in commands:\n        if command.startswith(\"ekle \"):\n            title = command[5:]\n            if title in tasks:\n                print(f\"Zaten listede: {title}\")\n            else:\n                tasks.append(title)\n                print(f\"Eklendi: {title}\")\n        elif command.startswith(\"bitir \"):\n            title = command[6:]\n            if title in tasks:\n                tasks.remove(title)\n                print(f\"Bitti: {title}\")\n            else:\n                print(f\"Bulunamadı: {title}\")\n        elif command == \"liste\":\n            if not tasks:\n                print(\"Liste boş\")\n            for number, title in enumerate(tasks, 1):\n                print(f\"{number}. {title}\")\n        else:\n            print(f\"Anlaşılmadı: {command}\")\n    return tasks\n\n\nrun_assistant([\"ekle Spor\", \"ekle Rapor yaz\", \"bitir Spor\", \"liste\"])\n",
+    "hints": [
+     "command.startswith(\"ekle \") ve command[5:] görevin adını verir.",
+     "Numaralı liste için enumerate(tasks, 1)"
+    ],
+    "check": {
+     "python": "\nimport contextlib, io\nbuf = io.StringIO()\nwith contextlib.redirect_stdout(buf):\n    left = run_assistant([\"ekle A\", \"ekle B\", \"ekle A\", \"bitir C\", \"bitir A\", \"liste\", \"uç\", \"bitir B\", \"liste\"])\nout = buf.getvalue()\nassert left == [], \"En sonda kalan görevleri döndürmeli (burada boş liste).\"\nfor line in [\"Eklendi: A\", \"Eklendi: B\", \"Zaten listede: A\", \"Bulunamadı: C\", \"Bitti: A\", \"1. B\", \"Anlaşılmadı: uç\", \"Bitti: B\", \"Liste boş\"]:\n    assert line in out, \"Komutlar işlenirken '\" + line + \"' yazmalı.\"\nwith contextlib.redirect_stdout(io.StringIO()):\n    assert run_assistant([\"ekle X\", \"ekle Y\"]) == [\"X\", \"Y\"], \"Kalan görevler sırasıyla döndürülmeli.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "def run_assistant(commands):",
+       "notes": [
+        "`run_assistant` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `commands`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "    tasks = []",
+       "notes": [
+        "`tasks` adında bir değişken oluşturuluyor ve içine `[]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "    for command in commands:",
+       "notes": [
+        "Döngü: `commands` içindeki her eleman sırayla `command` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "        if command.startswith(\"ekle \"):",
+       "notes": [
+        "Koşul: `command.startswith(\"ekle \")` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "            title = command[5:]",
+       "notes": [
+        "`title` adında bir değişken oluşturuluyor ve içine `command[5:]` konuyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "            if title in tasks:",
+       "notes": [
+        "Koşul: `title in tasks` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "                print(f\"Zaten listede: {title}\")",
+       "notes": [
+        "`print(f\"Zaten listede: {title}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "            else:",
+       "notes": [
+        "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "                tasks.append(title)",
+       "notes": [
+        "`tasks.append(title)`: `tasks` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "                print(f\"Eklendi: {title}\")",
+       "notes": [
+        "`print(f\"Eklendi: {title}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "        elif command.startswith(\"bitir \"):",
+       "notes": [
+        "`elif`: yukarıdaki koşul yanlışsa `command.startswith(\"bitir \")` koşuluna bakılır."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "            title = command[6:]",
+       "notes": [
+        "`title` değişkenine yeni değer veriliyor: `command[6:]`."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "            if title in tasks:",
+       "notes": [
+        "Koşul: `title in tasks` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 14,
+       "code": "                tasks.remove(title)",
+       "notes": [
+        "`tasks.remove(title)`: `tasks` üzerinde `remove` metodunu çalıştırır. Listeden (ya da setten) verilen elemanı çıkarır."
+       ]
+      },
+      {
+       "n": 15,
+       "code": "                print(f\"Bitti: {title}\")",
+       "notes": [
+        "`print(f\"Bitti: {title}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 16,
+       "code": "            else:",
+       "notes": [
+        "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+       ]
+      },
+      {
+       "n": 17,
+       "code": "                print(f\"Bulunamadı: {title}\")",
+       "notes": [
+        "`print(f\"Bulunamadı: {title}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 18,
+       "code": "        elif command == \"liste\":",
+       "notes": [
+        "`elif`: yukarıdaki koşul yanlışsa `command == \"liste\"` koşuluna bakılır."
+       ]
+      },
+      {
+       "n": 19,
+       "code": "            if not tasks:",
+       "notes": [
+        "Koşul: `not tasks` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 20,
+       "code": "                print(\"Liste boş\")",
+       "notes": [
+        "`print(\"Liste boş\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 21,
+       "code": "            for number, title in enumerate(tasks, 1):",
+       "notes": [
+        "Döngü: `enumerate(tasks, 1)` içindeki her eleman sırayla `number, title` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 22,
+       "code": "                print(f\"{number}. {title}\")",
+       "notes": [
+        "`print(f\"{number}. {title}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 23,
+       "code": "        else:",
+       "notes": [
+        "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+       ]
+      },
+      {
+       "n": 24,
+       "code": "            print(f\"Anlaşılmadı: {command}\")",
+       "notes": [
+        "`print(f\"Anlaşılmadı: {command}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 25,
+       "code": "    return tasks",
+       "notes": [
+        "Fonksiyon `tasks` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 28,
+       "code": "run_assistant([\"ekle Spor\", \"ekle Rapor yaz\", \"bitir Spor\", \"liste\"])",
+       "notes": [
+        "`run_assistant([\"ekle Spor\", \"ekle Rapor yaz\", \"bitir Spor...`: tanımladığın `run_assistant` fonksiyonunu çalıştırır.",
+        "`run_assistant(...)`: senin tanımladığın fonksiyonu çağırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "tasks",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[]`."
+      },
+      {
+       "term": "title",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `command[5:]`."
+      },
+      {
+       "term": "command",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `commands` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "number",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `enumerate(tasks, 1)` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "commands",
+       "kind": "parametre",
+       "desc": "`run_assistant` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "run_assistant()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `commands`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": ".startswith()",
+       "kind": "metot",
+       "desc": "Metin verilen yazıyla mı başlıyor? (True/False)"
+      },
+      {
+       "term": "[a:b]",
+       "kind": "seçme",
+       "desc": "Dilimleme: a'dan başlayıp b'ye kadar (b hariç) olan parçayı alır."
+      },
+      {
+       "term": "in",
+       "kind": "operatör",
+       "desc": "İçinde var mı? (listede, metinde, sözlükte)"
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "else",
+       "kind": "anahtar kelime",
+       "desc": "Yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+      },
+      {
+       "term": ".append()",
+       "kind": "metot",
+       "desc": "Listenin sonuna yeni bir eleman ekler."
+      },
+      {
+       "term": "elif",
+       "kind": "anahtar kelime",
+       "desc": "Önceki koşullar yanlışsa bu koşula bakılır (\"değilse eğer\")."
+      },
+      {
+       "term": ".remove()",
+       "kind": "metot",
+       "desc": "Listeden (ya da setten) verilen elemanı çıkarır."
+      },
+      {
+       "term": "==",
+       "kind": "operatör",
+       "desc": "Eşit mi? (True/False)"
+      },
+      {
+       "term": "not",
+       "kind": "operatör",
+       "desc": "Koşulu tersine çevirir (True ↔ False)."
+      },
+      {
+       "term": "enumerate()",
+       "kind": "fonksiyon",
+       "desc": "Listeyi gezerken her elemanın sıra numarasını da verir: (0, ilk), (1, ikinci)..."
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Asistan komutları",
+   "game_role": "Bütün parçaları birleştirip yazılı komutlarla çalışan asistanı çalıştırır."
+  },
+  "web": {
+   "project_task": {
+    "id": "d30-pw",
+    "title": "Final: siteyi oluştur",
+    "prompt": "Kişisel Web Sitem'in final sürümü! `build_site(site_title, posts)` bütün siteyi üretsin. `posts`, sözlüklerden oluşan bir liste (`title`, `text`, `draft`).\n\n- Taslak **olmayan** her yazı için `slug.html` adında bir sayfa: `<h1>başlık</h1><p>metin</p>` (slug: başlığın küçük harfli, boşlukları `-` olan hâli)\n- `index.html`: `<h1>site adı</h1>` ve bir `<ul>` içinde yayındaki her yazı için `<li><a href=\"slug.html\">başlık</a></li>`\n- Fonksiyon **dosya adı -> HTML** sözlüğünü döndürsün ve şu özeti yazdırsın (dosya adları alfabetik):\n\n```\nSite: Kod Günlüğüm\nYayında: 2 yazı, taslak: 1\nDosyalar: index.html, kodla-oyna.html, merhaba-dünya.html\n```",
+    "starter": "def build_site(site_title, posts):\n    pass\n\n\nposts = [\n    {\"title\": \"Merhaba Dünya\", \"text\": \"Bu benim ilk yazım.\", \"draft\": False},\n    {\"title\": \"Kodla Oyna\", \"text\": \"Python ile küçük bir oyun yaptım.\", \"draft\": False},\n    {\"title\": \"Robot Kolu\", \"text\": \"Henüz bitmedi.\", \"draft\": True},\n]\nbuild_site(\"Kod Günlüğüm\", posts)\n",
+    "solution": "def build_site(site_title, posts):\n    files = {}\n    links = \"\"\n    drafts = 0\n    for post in posts:\n        if post[\"draft\"]:\n            drafts += 1\n            continue\n        slug = post[\"title\"].lower().replace(\" \", \"-\")\n        files[slug + \".html\"] = f\"<h1>{post['title']}</h1><p>{post['text']}</p>\"\n        links += f'<li><a href=\"{slug}.html\">{post[\"title\"]}</a></li>'\n    files[\"index.html\"] = f\"<h1>{site_title}</h1><ul>{links}</ul>\"\n    print(f\"Site: {site_title}\")\n    print(f\"Yayında: {len(files) - 1} yazı, taslak: {drafts}\")\n    print(\"Dosyalar: \" + \", \".join(sorted(files)))\n    return files\n\n\nposts = [\n    {\"title\": \"Merhaba Dünya\", \"text\": \"Bu benim ilk yazım.\", \"draft\": False},\n    {\"title\": \"Kodla Oyna\", \"text\": \"Python ile küçük bir oyun yaptım.\", \"draft\": False},\n    {\"title\": \"Robot Kolu\", \"text\": \"Henüz bitmedi.\", \"draft\": True},\n]\nbuild_site(\"Kod Günlüğüm\", posts)\n",
+    "hints": [
+     "Önce boş bir files sözlüğü aç; her yayındaki yazı için files[slug + \".html\"] = ... yaz, bağlantıları da bir yazıda biriktir.",
+     "Taslakları if post[\"draft\"]: ile say ve continue ile atla. Özet için \", \".join(sorted(files))"
+    ],
+    "check": {
+     "python": "\nimport contextlib, io\ntest = [\n    {\"title\": \"Uzay Oyunu\", \"text\": \"Roket!\", \"draft\": False},\n    {\"title\": \"Gizli Proje\", \"text\": \"x\", \"draft\": True},\n    {\"title\": \"Kod Notu\", \"text\": \"print\", \"draft\": False},\n]\nwith contextlib.redirect_stdout(io.StringIO()):\n    r = build_site(\"Oyun Sitem\", test)\n    r2 = build_site(\"Bos\", [])\nassert isinstance(r, dict), \"build_site bir sözlük döndürmeli (dosya adı -> HTML).\"\nassert sorted(r) == [\"index.html\", \"kod-notu.html\", \"uzay-oyunu.html\"], \"Sadece index.html ve yayındaki yazıların slug.html sayfaları olmalı.\"\nassert \"<h1>Uzay Oyunu</h1>\" in r[\"uzay-oyunu.html\"] and \"<p>Roket!</p>\" in r[\"uzay-oyunu.html\"], \"Yazı sayfasında <h1>başlık</h1> ve <p>metin</p> olmalı.\"\nidx = r[\"index.html\"]\nassert \"<h1>Oyun Sitem</h1>\" in idx and \"<ul>\" in idx, \"index.html'de <h1>site adı</h1> ve bir <ul> olmalı.\"\nassert '<li><a href=\"uzay-oyunu.html\">Uzay Oyunu</a></li>' in idx and '<li><a href=\"kod-notu.html\">Kod Notu</a></li>' in idx, \"index.html'de her yazı için <li><a href=\\\"slug.html\\\">başlık</a></li> olmalı.\"\nassert \"Gizli Proje\" not in idx, \"Taslak yazılar index.html'de görünmemeli.\"\nassert list(r2) == [\"index.html\"], \"Yazı yoksa sadece index.html üretilmeli.\"\nout, _ = _run(_code)\nfor line in [\"Site: Kod Günlüğüm\", \"Yayında: 2 yazı, taslak: 1\", \"Dosyalar: index.html, kodla-oyna.html, merhaba-dünya.html\"]:\n    assert line in out, \"Özet '\" + line + \"' gibi satırları yazdırmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "def build_site(site_title, posts):",
+       "notes": [
+        "`build_site` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `site_title`, `posts`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "    files = {}",
+       "notes": [
+        "`files` adında bir değişken oluşturuluyor ve içine `{}` (sözlük (anahtar: değer)) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "    links = \"\"",
+       "notes": [
+        "`links` adında bir değişken oluşturuluyor ve içine `\"\"` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "    drafts = 0",
+       "notes": [
+        "`drafts` adında bir değişken oluşturuluyor ve içine `0` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "    for post in posts:",
+       "notes": [
+        "Döngü: `posts` içindeki her eleman sırayla `post` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "        if post[\"draft\"]:",
+       "notes": [
+        "Koşul: `post[\"draft\"]` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "            drafts += 1",
+       "notes": [
+        "`drafts += 1`: `drafts` değişkeninin değeri güncelleniyor."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "            continue",
+       "notes": [
+        "`continue`: Döngünün bu turunu atlar, sıradakine geçer."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "        slug = post[\"title\"].lower().replace(\" \", \"-\")",
+       "notes": [
+        "`slug` adında bir değişken oluşturuluyor ve içine `post[\"title\"].lower().replace(\" \", \"-\")` konuyor."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "        files[slug + \".html\"] = f\"<h1>{post['title']}</h1><p>{post['text']}</p>\"",
+       "notes": [
+        "`files[...]` konumundaki değer `f\"<h1>{post['title']}</h1><p>{post['text']}</p>\"` ile değiştiriliyor."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "        links += f'<li><a href=\"{slug}.html\">{post[\"title\"]}</a></li>'",
+       "notes": [
+        "`links += f'<li><a href=\"{slug}.html\">{post[\"title\"]}</a></li>'`: `links` değişkeninin değeri güncelleniyor."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "    files[\"index.html\"] = f\"<h1>{site_title}</h1><ul>{links}</ul>\"",
+       "notes": [
+        "`files[...]` konumundaki değer `f\"<h1>{site_title}</h1><ul>{links}</ul>\"` ile değiştiriliyor."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "    print(f\"Site: {site_title}\")",
+       "notes": [
+        "`print(f\"Site: {site_title}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 14,
+       "code": "    print(f\"Yayında: {len(files) - 1} yazı, taslak: {drafts}\")",
+       "notes": [
+        "`print(f\"Yayında: {len(files) - 1} yazı, taslak: {drafts}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 15,
+       "code": "    print(\"Dosyalar: \" + \", \".join(sorted(files)))",
+       "notes": [
+        "`print(\"Dosyalar: \" + \", \".join(sorted(files)))`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 16,
+       "code": "    return files",
+       "notes": [
+        "Fonksiyon `files` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 19,
+       "code": "posts = [",
+       "notes": [
+        "`posts` değişkenine yeni değer veriliyor: `[ {\"title\": \"Merhaba Dünya\", \"text\": \"Bu benim ilk yazım....`."
+       ]
+      },
+      {
+       "n": 20,
+       "code": "    {\"title\": \"Merhaba Dünya\", \"text\": \"Bu benim ilk yazım.\", \"draft\": False},",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 21,
+       "code": "    {\"title\": \"Kodla Oyna\", \"text\": \"Python ile küçük bir oyun yaptım.\", \"draft\": False},",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 22,
+       "code": "    {\"title\": \"Robot Kolu\", \"text\": \"Henüz bitmedi.\", \"draft\": True},",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 23,
+       "code": "]",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 24,
+       "code": "build_site(\"Kod Günlüğüm\", posts)",
+       "notes": [
+        "`build_site(\"Kod Günlüğüm\", posts)`: tanımladığın `build_site` fonksiyonunu çalıştırır.",
+        "`build_site(...)`: senin tanımladığın fonksiyonu çağırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "files",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `{}`."
+      },
+      {
+       "term": "links",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"\"`."
+      },
+      {
+       "term": "drafts",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `0`."
+      },
+      {
+       "term": "slug",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `post[\"title\"].lower().replace(\" \", \"-\")`."
+      },
+      {
+       "term": "post",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `posts` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "site_title",
+       "kind": "parametre",
+       "desc": "`build_site` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "posts",
+       "kind": "parametre",
+       "desc": "`build_site` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "build_site()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `site_title`, `posts`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": "+=",
+       "kind": "operatör",
+       "desc": "Değişkenin kendi değerine ekler: x += 1 → x = x + 1."
+      },
+      {
+       "term": "continue",
+       "kind": "anahtar kelime",
+       "desc": "Döngünün bu turunu atlar, sıradakine geçer."
+      },
+      {
+       "term": ".replace()",
+       "kind": "metot",
+       "desc": "Metindeki bir parçayı başkasıyla değiştirir."
+      },
+      {
+       "term": ".lower()",
+       "kind": "metot",
+       "desc": "Metni küçük harfe çevirir."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "-",
+       "kind": "operatör",
+       "desc": "Çıkarma."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      },
+      {
+       "term": "+",
+       "kind": "operatör",
+       "desc": "Toplama; metinlerde ve listelerde uç uca ekleme."
+      },
+      {
+       "term": ".join()",
+       "kind": "metot",
+       "desc": "Listedeki metinleri aradaki yazıyla birleştirir: \", \".join(liste)"
+      },
+      {
+       "term": "sorted()",
+       "kind": "fonksiyon",
+       "desc": "Sıralanmış yeni bir liste verir; asıl liste değişmez."
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": "False",
+       "kind": "değer",
+       "desc": "Yanlış (mantıksal değer)."
+      },
+      {
+       "term": "True",
+       "kind": "değer",
+       "desc": "Doğru (mantıksal değer)."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Siteyi oluştur",
+   "game_role": "Bütün parçaları birleştirip sitenin tüm sayfalarını üretir."
+  },
+  "bot": {
+   "project_task": {
+    "id": "d30-pb",
+    "title": "Final: sohbet botu",
+    "prompt": "Sohbet Botu'nun final sürümü! `rules` sözlüğünde her niyetin `(anahtar kelimeler, cevap)` ikilisi var. `chat(messages)` bir mesaj listesi alsın, her mesaja cevap versin, konuşmayı yazdırsın ve **cevapların listesini** döndürsün. Her mesaj için:\n\n1. `text`: mesajın temizlenmiş hâli (`strip()` ve `lower()`)\n2. `text` boşsa cevap: `Bir şey yazmadın.`\n3. Mesajda `adım Ece` gibi bir kalıp varsa (`re.search(r\"adım (\\w+)\", message)`; adın büyük harfi kalsın diye asıl mesajda ara): `Memnun oldum, Ece!`\n4. Yoksa `text` içindeki kelimeleri bul (`re.findall(r\"\\w+\", text)` noktalama işaretlerini atar) ve her niyete puan ver: kaç kelime o niyetin anahtar kelimeleri arasında? **En yüksek puanlı** niyetin cevabını seç (eşitlikte önce gelen). Hiçbir niyet puan alamazsa: `Bunu anlamadım.`\n\nHer mesaj için iki satır yazdır:\n\n```\nSen: merhaba\nBot: Merhaba! Ben Bilge.\n```",
+    "starter": "import re\n\nrules = {\n    \"selam\": ([\"merhaba\", \"selam\", \"hey\"], \"Merhaba! Ben Bilge.\"),\n    \"hava\": ([\"hava\", \"yağmur\", \"güneş\"], \"Bugün hava güneşli.\"),\n    \"veda\": ([\"görüşürüz\", \"hoşça\", \"bay\"], \"Görüşürüz!\"),\n}\n\n\ndef chat(messages):\n    replies = []\n    return replies\n\n\nchat([\"merhaba\", \"benim adım Ece\", \"yarın yağmur var mı\", \"görüşürüz\"])\n",
+    "solution": "import re\n\nrules = {\n    \"selam\": ([\"merhaba\", \"selam\", \"hey\"], \"Merhaba! Ben Bilge.\"),\n    \"hava\": ([\"hava\", \"yağmur\", \"güneş\"], \"Bugün hava güneşli.\"),\n    \"veda\": ([\"görüşürüz\", \"hoşça\", \"bay\"], \"Görüşürüz!\"),\n}\n\n\ndef chat(messages):\n    replies = []\n    for message in messages:\n        text = message.strip().lower()\n        name = re.search(r\"adım (\\w+)\", message)\n        if not text:\n            reply = \"Bir şey yazmadın.\"\n        elif name:\n            reply = f\"Memnun oldum, {name.group(1)}!\"\n        else:\n            words = re.findall(r\"\\w+\", text)\n            reply = \"Bunu anlamadım.\"\n            best_score = 0\n            for keywords, answer in rules.values():\n                score = len([w for w in words if w in keywords])\n                if score > best_score:\n                    best_score = score\n                    reply = answer\n        print(f\"Sen: {message}\")\n        print(f\"Bot: {reply}\")\n        replies.append(reply)\n    return replies\n\n\nchat([\"merhaba\", \"benim adım Ece\", \"yarın yağmur var mı\", \"görüşürüz\"])\n",
+    "hints": [
+     "Her niyetin puanı: len([w for w in words if w in keywords])",
+     "En iyiyi bulmak için best_score = 0 ile başla; daha büyük bir puan görünce hem best_score'u hem cevabı güncelle."
+    ],
+    "check": {
+     "python": "\nimport contextlib, io\nbuf = io.StringIO()\nwith contextlib.redirect_stdout(buf):\n    r = chat([\"  MERHABA \", \"yarın hava yağmur mu\", \"benim adım Ece\", \"   \", \"bugün ne yesek\", \"tamam görüşürüz!\", \"merhaba, yağmur ve güneş var mı\"])\n    empty = chat([])\nout = buf.getvalue()\nassert isinstance(r, list) and len(r) == 7, \"chat, her mesaj için bir cevap içeren bir liste döndürmeli.\"\nassert r[0] == \"Merhaba! Ben Bilge.\", \"\\\"  MERHABA \\\" temizlenip selam niyeti bulunmalı.\"\nassert r[1] == \"Bugün hava güneşli.\", \"\\\"yarın hava yağmur mu\\\" hava niyetine gitmeli.\"\nassert r[2] == \"Memnun oldum, Ece!\", \"\\\"adım Ece\\\" görünce \\\"Memnun oldum, Ece!\\\" demeli.\"\nassert r[3] == \"Bir şey yazmadın.\", \"Boş mesajda \\\"Bir şey yazmadın.\\\" demeli.\"\nassert r[4] == \"Bunu anlamadım.\", \"Hiçbir niyet puan almazsa \\\"Bunu anlamadım.\\\" demeli.\"\nassert r[5] == \"Görüşürüz!\", \"Noktalamaya rağmen \\\"görüşürüz!\\\" veda niyetine gitmeli: re.findall ile kelimeleri bul.\"\nassert r[6] == \"Bugün hava güneşli.\", \"En yüksek puanlı niyet seçilmeli: \\\"merhaba, yağmur ve güneş var mı\\\" mesajında hava 2, selam 1 puan alır.\"\nassert empty == [], \"Boş liste için boş liste döndürmeli.\"\nassert \"Sen: benim adım Ece\" in out and \"Bot: Memnun oldum, Ece!\" in out, \"Her mesaj için 'Sen: ...' ve 'Bot: ...' satırlarını yazdır.\"\n_, g = _run(_set(_code, \"rules\", {\"spor\": ([\"maç\", \"futbol\"], \"Maç akşam sekizde!\")}))\nwith contextlib.redirect_stdout(io.StringIO()):\n    r = g[\"chat\"]([\"bu akşam maç var mı\", \"merhaba\"])\nassert r == [\"Maç akşam sekizde!\", \"Bunu anlamadım.\"], \"Cevaplar rules sözlüğünden gelmeli (kuralları elle yazma).\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "import re",
+       "notes": [
+        "`re` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "rules = {",
+       "notes": [
+        "`rules` adında bir değişken oluşturuluyor ve içine `{ \"selam\": ([\"merhaba\", \"selam\", \"hey\"], \"Merhaba! Ben Bi...` (sözlük (anahtar: değer)) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "    \"selam\": ([\"merhaba\", \"selam\", \"hey\"], \"Merhaba! Ben Bilge.\"),",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "    \"hava\": ([\"hava\", \"yağmur\", \"güneş\"], \"Bugün hava güneşli.\"),",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    \"veda\": ([\"görüşürüz\", \"hoşça\", \"bay\"], \"Görüşürüz!\"),",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "}",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "def chat(messages):",
+       "notes": [
+        "`chat` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `messages`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "    replies = []",
+       "notes": [
+        "`replies` adında bir değişken oluşturuluyor ve içine `[]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "    for message in messages:",
+       "notes": [
+        "Döngü: `messages` içindeki her eleman sırayla `message` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "        text = message.strip().lower()",
+       "notes": [
+        "`text` adında bir değişken oluşturuluyor ve içine `message.strip().lower()` konuyor."
+       ]
+      },
+      {
+       "n": 14,
+       "code": "        name = re.search(r\"adım (\\w+)\", message)",
+       "notes": [
+        "`name` adında bir değişken oluşturuluyor ve içine `re.search(r\"adım (\\w+)\", message)` konuyor."
+       ]
+      },
+      {
+       "n": 15,
+       "code": "        if not text:",
+       "notes": [
+        "Koşul: `not text` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 16,
+       "code": "            reply = \"Bir şey yazmadın.\"",
+       "notes": [
+        "`reply` adında bir değişken oluşturuluyor ve içine `\"Bir şey yazmadın.\"` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 17,
+       "code": "        elif name:",
+       "notes": [
+        "`elif`: yukarıdaki koşul yanlışsa `name` koşuluna bakılır."
+       ]
+      },
+      {
+       "n": 18,
+       "code": "            reply = f\"Memnun oldum, {name.group(1)}!\"",
+       "notes": [
+        "`reply` değişkenine yeni değer veriliyor: `f\"Memnun oldum, {name.group(1)}!\"`."
+       ]
+      },
+      {
+       "n": 19,
+       "code": "        else:",
+       "notes": [
+        "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+       ]
+      },
+      {
+       "n": 20,
+       "code": "            words = re.findall(r\"\\w+\", text)",
+       "notes": [
+        "`words` adında bir değişken oluşturuluyor ve içine `re.findall(r\"\\w+\", text)` konuyor."
+       ]
+      },
+      {
+       "n": 21,
+       "code": "            reply = \"Bunu anlamadım.\"",
+       "notes": [
+        "`reply` değişkenine yeni değer veriliyor: `\"Bunu anlamadım.\"`."
+       ]
+      },
+      {
+       "n": 22,
+       "code": "            best_score = 0",
+       "notes": [
+        "`best_score` adında bir değişken oluşturuluyor ve içine `0` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 23,
+       "code": "            for keywords, answer in rules.values():",
+       "notes": [
+        "Döngü: `rules.values()` içindeki her eleman sırayla `keywords, answer` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 24,
+       "code": "                score = len([w for w in words if w in keywords])",
+       "notes": [
+        "`score` adında bir değişken oluşturuluyor ve içine `len([w for w in words if w in keywords])` konuyor.",
+        "Tek satırda döngüyle yeni bir liste/dizi üretiliyor."
+       ]
+      },
+      {
+       "n": 25,
+       "code": "                if score > best_score:",
+       "notes": [
+        "Koşul: `score > best_score` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 26,
+       "code": "                    best_score = score",
+       "notes": [
+        "`best_score` değişkenine yeni değer veriliyor: `score`."
+       ]
+      },
+      {
+       "n": 27,
+       "code": "                    reply = answer",
+       "notes": [
+        "`reply` değişkenine yeni değer veriliyor: `answer`."
+       ]
+      },
+      {
+       "n": 28,
+       "code": "        print(f\"Sen: {message}\")",
+       "notes": [
+        "`print(f\"Sen: {message}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 29,
+       "code": "        print(f\"Bot: {reply}\")",
+       "notes": [
+        "`print(f\"Bot: {reply}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 30,
+       "code": "        replies.append(reply)",
+       "notes": [
+        "`replies.append(reply)`: `replies` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 31,
+       "code": "    return replies",
+       "notes": [
+        "Fonksiyon `replies` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 34,
+       "code": "chat([\"merhaba\", \"benim adım Ece\", \"yarın yağmur var mı\", \"görüşürüz\"])",
+       "notes": [
+        "`chat([\"merhaba\", \"benim adım Ece\", \"yarın yağmur var mı\",...`: tanımladığın `chat` fonksiyonunu çalıştırır.",
+        "`chat(...)`: senin tanımladığın fonksiyonu çağırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "rules",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `{ \"selam\": ([\"merhaba\", \"selam\", \"hey\"], \"Merhaba! Ben Bi...`."
+      },
+      {
+       "term": "replies",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[]`."
+      },
+      {
+       "term": "text",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `message.strip().lower()`."
+      },
+      {
+       "term": "name",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `re.search(r\"adım (\\w+)\", message)`."
+      },
+      {
+       "term": "reply",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"Bir şey yazmadın.\"`."
+      },
+      {
+       "term": "words",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `re.findall(r\"\\w+\", text)`."
+      },
+      {
+       "term": "best_score",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `0`."
+      },
+      {
+       "term": "score",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `len([w for w in words if w in keywords])`."
+      },
+      {
+       "term": "message",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `messages` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "keywords",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `rules.values()` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "answer",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `rules.values()` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "messages",
+       "kind": "parametre",
+       "desc": "`chat` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "re",
+       "kind": "modül",
+       "desc": "Düzenli ifadeler: metinde kalıp arama."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "chat()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `messages`."
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": ".lower()",
+       "kind": "metot",
+       "desc": "Metni küçük harfe çevirir."
+      },
+      {
+       "term": ".strip()",
+       "kind": "metot",
+       "desc": "Metnin başındaki ve sonundaki boşlukları siler."
+      },
+      {
+       "term": ".search()",
+       "kind": "metot",
+       "desc": "Metinde kalıba uyan ilk yeri arar (re)."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "not",
+       "kind": "operatör",
+       "desc": "Koşulu tersine çevirir (True ↔ False)."
+      },
+      {
+       "term": "elif",
+       "kind": "anahtar kelime",
+       "desc": "Önceki koşullar yanlışsa bu koşula bakılır (\"değilse eğer\")."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": ".group()",
+       "kind": "metot",
+       "desc": "Bulunan eşleşmenin (ya da parantezli grubun) yazısını verir."
+      },
+      {
+       "term": "else",
+       "kind": "anahtar kelime",
+       "desc": "Yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+      },
+      {
+       "term": ".findall()",
+       "kind": "metot",
+       "desc": "Metinde kalıba uyan bütün parçaları liste olarak verir (re)."
+      },
+      {
+       "term": ".values()",
+       "kind": "metot",
+       "desc": "Sözlüğün değerlerini verir."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      },
+      {
+       "term": "[... for ... in ...]",
+       "kind": "liste üreteci",
+       "desc": "Liste üreteci: [ifade for x in liste if koşul] ile tek satırda yeni liste."
+      },
+      {
+       "term": "in",
+       "kind": "operatör",
+       "desc": "İçinde var mı? (listede, metinde, sözlükte)"
+      },
+      {
+       "term": ">",
+       "kind": "operatör",
+       "desc": "Büyük mü?"
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": ".append()",
+       "kind": "metot",
+       "desc": "Listenin sonuna yeni bir eleman ekler."
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Sohbet botu",
+   "game_role": "Bütün parçaları birleştirip bir konuşmadaki bütün mesajlara cevap verir."
+  },
+  "okul": {
+   "project_task": {
+    "id": "d30-pn",
+    "title": "Final: dönem karnesi",
+    "prompt": "Okul Not Defteri'nin final sürümü! `report_card(records)` fonksiyonu `(ders, not, haftalık_saat)` kayıtlarını alsın ve bir **sözlük** döndürsün:\n\n- `\"average\"`: **ağırlıklı** ortalama: her not kendi haftalık saatiyle çarpılır, toplam saate bölünür (`sum(not * saat) / sum(saat)`), 2 basamağa yuvarlanır. Kayıt yoksa `0`.\n- `\"passed\"`: notu 50 veya üstü olan derslerin adları (liste)\n- `\"failed\"`: notu 50'nin altındaki derslerin adları (liste)\n- `\"best\"`: notu en yüksek ders (kayıt yoksa `None`)\n- `\"status\"`: kalınan ders varsa `\"kaldı\"`, yoksa `\"geçti\"`\n\nAyrıca karneyi şöyle yazdırsın:\n\n```\nAğırlıklı ortalama: 79.0\nGeçilen ders: 3\nKalan ders: 0\nEn iyi ders: Tarih\nDurum: geçti\n```",
+    "starter": "def report_card(records):\n    pass\n\n\nreport_card([(\"Matematik\", 80, 6), (\"Fizik\", 65, 2), (\"Tarih\", 90, 2)])\n",
+    "solution": "def report_card(records):\n    total_points = 0\n    total_hours = 0\n    passed = []\n    failed = []\n    best = None\n    best_grade = -1\n    for lesson, grade, hours in records:\n        total_points += grade * hours\n        total_hours += hours\n        if grade >= 50:\n            passed.append(lesson)\n        else:\n            failed.append(lesson)\n        if grade > best_grade:\n            best = lesson\n            best_grade = grade\n    average = round(total_points / total_hours, 2) if total_hours else 0\n    report = {\n        \"average\": average,\n        \"passed\": passed,\n        \"failed\": failed,\n        \"best\": best,\n        \"status\": \"kaldı\" if failed else \"geçti\",\n    }\n    print(f\"Ağırlıklı ortalama: {average}\")\n    print(f\"Geçilen ders: {len(passed)}\")\n    print(f\"Kalan ders: {len(failed)}\")\n    print(f\"En iyi ders: {best}\")\n    print(f\"Durum: {report['status']}\")\n    return report\n\n\nreport_card([(\"Matematik\", 80, 6), (\"Fizik\", 65, 2), (\"Tarih\", 90, 2)])\n",
+    "hints": [
+     "Döngüde iki toplam tut: total_points += grade * hours ve total_hours += hours",
+     "En iyi ders için şimdiye kadarki en yüksek notu bir değişkende tut ya da max(records, key=lambda r: r[1]) kullan."
+    ],
+    "check": {
+     "python": "\nimport contextlib, io\nwith contextlib.redirect_stdout(io.StringIO()):\n    r = report_card([(\"Matematik\", 40, 4), (\"Tarih\", 90, 2), (\"Müzik\", 70, 1)])\n    r2 = report_card([])\n    r3 = report_card([(\"Kimya\", 50, 3)])\nassert isinstance(r, dict), \"report_card bir sözlük döndürmeli.\"\nassert r.get(\"average\") == 58.57, \"average ağırlıklı olmalı: (40*4 + 90*2 + 70*1) / 7 = 58.57\"\nassert r.get(\"passed\") == [\"Tarih\", \"Müzik\"] and r.get(\"failed\") == [\"Matematik\"], \"passed ve failed, derslerin adlarını sırasıyla içermeli.\"\nassert r.get(\"best\") == \"Tarih\", \"best, notu en yüksek ders olmalı.\"\nassert r.get(\"status\") == \"kaldı\", \"Kalınan ders varsa status 'kaldı' olmalı.\"\nassert r2.get(\"average\") == 0 and r2.get(\"best\") is None and r2.get(\"passed\") == [] and r2.get(\"failed\") == [], \"Kayıt yoksa average 0, best None, listeler boş olmalı.\"\nassert r3.get(\"status\") == \"geçti\" and r3.get(\"average\") == 50, \"Kalınan ders yoksa status 'geçti' olmalı.\"\nout, _ = _run(_code)\nfor line in [\"Ağırlıklı ortalama: 79.0\", \"Geçilen ders: 3\", \"Kalan ders: 0\", \"En iyi ders: Tarih\", \"Durum: geçti\"]:\n    assert line in out, \"Karne '\" + line + \"' gibi satırları yazdırmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "def report_card(records):",
+       "notes": [
+        "`report_card` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `records`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "    total_points = 0",
+       "notes": [
+        "`total_points` adında bir değişken oluşturuluyor ve içine `0` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "    total_hours = 0",
+       "notes": [
+        "`total_hours` adında bir değişken oluşturuluyor ve içine `0` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "    passed = []",
+       "notes": [
+        "`passed` adında bir değişken oluşturuluyor ve içine `[]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "    failed = []",
+       "notes": [
+        "`failed` adında bir değişken oluşturuluyor ve içine `[]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    best = None",
+       "notes": [
+        "`best` adında bir değişken oluşturuluyor ve içine `None` (None (boş)) konuyor."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "    best_grade = -1",
+       "notes": [
+        "`best_grade` adında bir değişken oluşturuluyor ve içine `-1` konuyor."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "    for lesson, grade, hours in records:",
+       "notes": [
+        "Döngü: `records` içindeki her eleman sırayla `lesson, grade, hours` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "        total_points += grade * hours",
+       "notes": [
+        "`total_points += grade * hours`: `total_points` değişkeninin değeri güncelleniyor."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "        total_hours += hours",
+       "notes": [
+        "`total_hours += hours`: `total_hours` değişkeninin değeri güncelleniyor."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "        if grade >= 50:",
+       "notes": [
+        "Koşul: `grade >= 50` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "            passed.append(lesson)",
+       "notes": [
+        "`passed.append(lesson)`: `passed` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "        else:",
+       "notes": [
+        "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+       ]
+      },
+      {
+       "n": 14,
+       "code": "            failed.append(lesson)",
+       "notes": [
+        "`failed.append(lesson)`: `failed` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 15,
+       "code": "        if grade > best_grade:",
+       "notes": [
+        "Koşul: `grade > best_grade` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 16,
+       "code": "            best = lesson",
+       "notes": [
+        "`best` değişkenine yeni değer veriliyor: `lesson`."
+       ]
+      },
+      {
+       "n": 17,
+       "code": "            best_grade = grade",
+       "notes": [
+        "`best_grade` değişkenine yeni değer veriliyor: `grade`."
+       ]
+      },
+      {
+       "n": 18,
+       "code": "    average = round(total_points / total_hours, 2) if total_hours else 0",
+       "notes": [
+        "`average` adında bir değişken oluşturuluyor ve içine `round(total_points / total_hours, 2) if total_hours else 0` konuyor."
+       ]
+      },
+      {
+       "n": 19,
+       "code": "    report = {",
+       "notes": [
+        "`report` adında bir değişken oluşturuluyor ve içine `{ \"average\": average, \"passed\": passed, \"failed\": failed,...` (sözlük (anahtar: değer)) konuyor."
+       ]
+      },
+      {
+       "n": 20,
+       "code": "        \"average\": average,",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 21,
+       "code": "        \"passed\": passed,",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 22,
+       "code": "        \"failed\": failed,",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 23,
+       "code": "        \"best\": best,",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 24,
+       "code": "        \"status\": \"kaldı\" if failed else \"geçti\",",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 25,
+       "code": "    }",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 26,
+       "code": "    print(f\"Ağırlıklı ortalama: {average}\")",
+       "notes": [
+        "`print(f\"Ağırlıklı ortalama: {average}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 27,
+       "code": "    print(f\"Geçilen ders: {len(passed)}\")",
+       "notes": [
+        "`print(f\"Geçilen ders: {len(passed)}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 28,
+       "code": "    print(f\"Kalan ders: {len(failed)}\")",
+       "notes": [
+        "`print(f\"Kalan ders: {len(failed)}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 29,
+       "code": "    print(f\"En iyi ders: {best}\")",
+       "notes": [
+        "`print(f\"En iyi ders: {best}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 30,
+       "code": "    print(f\"Durum: {report['status']}\")",
+       "notes": [
+        "`print(f\"Durum: {report['status']}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 31,
+       "code": "    return report",
+       "notes": [
+        "Fonksiyon `report` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 34,
+       "code": "report_card([(\"Matematik\", 80, 6), (\"Fizik\", 65, 2), (\"Tarih\", 90, 2)])",
+       "notes": [
+        "`report_card([(\"Matematik\", 80, 6), (\"Fizik\", 65, 2), (\"Ta...`: tanımladığın `report_card` fonksiyonunu çalıştırır.",
+        "`report_card(...)`: senin tanımladığın fonksiyonu çağırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "total_points",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `0`."
+      },
+      {
+       "term": "total_hours",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `0`."
+      },
+      {
+       "term": "passed",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[]`."
+      },
+      {
+       "term": "failed",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[]`."
+      },
+      {
+       "term": "best",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `None`."
+      },
+      {
+       "term": "best_grade",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `-1`."
+      },
+      {
+       "term": "average",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `round(total_points / total_hours, 2) if total_hours else 0`."
+      },
+      {
+       "term": "report",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `{ \"average\": average, \"passed\": passed, \"failed\": failed,...`."
+      },
+      {
+       "term": "lesson",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `records` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "grade",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `records` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "hours",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `records` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "records",
+       "kind": "parametre",
+       "desc": "`report_card` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "report_card()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `records`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "None",
+       "kind": "değer",
+       "desc": "\"Hiçbir şey / boş\" anlamına gelen özel değer."
+      },
+      {
+       "term": "-",
+       "kind": "operatör",
+       "desc": "Sayının önündeki eksi işareti."
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": "+=",
+       "kind": "operatör",
+       "desc": "Değişkenin kendi değerine ekler: x += 1 → x = x + 1."
+      },
+      {
+       "term": "*",
+       "kind": "operatör",
+       "desc": "Çarpma; metni ya da listeyi tekrarlama (\"*\" * 3 → \"***\")."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": ">=",
+       "kind": "operatör",
+       "desc": "Büyük ya da eşit mi?"
+      },
+      {
+       "term": ".append()",
+       "kind": "metot",
+       "desc": "Listenin sonuna yeni bir eleman ekler."
+      },
+      {
+       "term": "else",
+       "kind": "anahtar kelime",
+       "desc": "Yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+      },
+      {
+       "term": ">",
+       "kind": "operatör",
+       "desc": "Büyük mü?"
+      },
+      {
+       "term": "A if ... else B",
+       "kind": "koşul",
+       "desc": "Tek satırlık koşul: A if koşul else B."
+      },
+      {
+       "term": "round()",
+       "kind": "fonksiyon",
+       "desc": "Sayıyı yuvarlar. round(3.14159, 2) → 3.14"
+      },
+      {
+       "term": "/",
+       "kind": "operatör",
+       "desc": "Bölme; sonuç her zaman ondalıklı sayıdır."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Dönem karnesi",
+   "game_role": "Bütün parçaları birleştirip dönem sonu karnesini çıkarır."
+  }
+ }
+}

@@ -1,0 +1,215 @@
+{
+  "kurs": "python",
+  "gun": 9,
+  "baslik": "Koşullar",
+  "maskot": "piko",
+  "ozet": "Piko, Mantık Kalesi'nin kapısında programa karar vermeyi öğretiyor: if, elif, else, girinti kuralları ve koşulları and, or, in ile birleştirmek.",
+  "hedef_sure_sn": 124,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 12,
+      "anlatim": "Selam, ben Piko! Mantık Kalesi'ne vardık. Kalenin kapısı sadece anahtarı olanlara açılır! Oyunlarda her şey kurallarla çalışır: can biterse oyun biter. Bugün bu kuralları Python'a yazıyoruz.",
+      "ekran": {
+        "baslik": "Gün 9: Koşullar",
+        "gorsel": "gorseller/python/harita/kale.webp"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "yonetmen_notu": "Kalenin büyük kapısına yakınlaşma; kilidin üstünde bir anahtar deliği."
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "if, eğer demek. Koşul True ise altındaki satır çalışır. else ise değilse demek. İki şeye dikkat: satır sonundaki iki nokta ve dört boşluk girinti. Anahtar yoksa ne olurdu? Kapı kilitli kalırdı.",
+      "ekran": {
+        "baslik": "if ve else",
+        "kod": "has_key = True\nif has_key:\n    print(\"Kapı açıldı!\")\nelse:\n    print(\"Kapı kilitli.\")\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2,
+          4
+        ],
+        "cikti": "Kapı açıldı!"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "Birden fazla durum varsa elif kullanırız: değilse eğer. Python yukarıdan aşağı bakar ve ilk doğru olan bloğu çalıştırır. Kırk beş, yetmişten büyük değil ama otuzdan büyük.",
+      "ekran": {
+        "baslik": "elif: değilse eğer",
+        "kod": "hp = 45\nif hp > 70:\n    print(\"Güçlüsün\")\nelif hp > 30:\n    print(\"Dikkatli ol\")\nelse:\n    print(\"İksir iç!\")\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          4,
+          5
+        ],
+        "cikti": "Dikkatli ol"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "anlatim",
+      "sure_sn": 10,
+      "anlatim": "Girinti Python için çok önemli. Hangi satırların if'e ait olduğunu boşluklara bakarak anlar. Editörde iki nokta yazıp Enter'a basınca girinti kendiliğinden gelir.",
+      "ekran": {
+        "baslik": "Blok kuralları",
+        "maddeler": [
+          "Koşul satırı : ile biter",
+          "Blok 4 boşluk içeride",
+          "İlk doğru olan blok çalışır, gerisi atlanır"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "Koşulları and, or ve not ile birleştirebilirsin. Burada ikisi de doğru olmalı: yaş on üç ya da daha büyük ve yirmiden küçük. Girdi kutusuna farklı yaşlar yazıp dene.",
+      "ekran": {
+        "baslik": "Koşulları birleştir",
+        "kod": "age = int(input(\"Kaç yaşındasın? \"))\nif age >= 13 and age < 20:\n    print(\"Sen bir gençsin!\")\nelse:\n    print(\"Yaşın:\", age)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "Kaç yaşındasın? 15\nSen bir gençsin!"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": false,
+      "yonetmen_notu": "Girdi kutusuna 15 yazılır."
+    },
+    {
+      "no": 6,
+      "tur": "hata",
+      "sure_sn": 12,
+      "anlatim": "İki noktayı unutmak en sık hata. Python SyntaxError diyor ve ne beklediğini bile söylüyor: iki nokta! Girintiyi unutursan da IndentationError alırsın.",
+      "ekran": {
+        "baslik": "Unutulan iki nokta",
+        "kod": "hp = 45\nif hp > 30\n    print(\"Dikkatli ol\")\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "SyntaxError: expected ':'"
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "soru",
+      "sure_sn": 9,
+      "anlatim": "Listelerle de koşul yazabilirsin. Çantada anahtar yok ama kılıç var. Sence bu kod ne yazdırır?",
+      "ekran": {
+        "baslik": "Sence ne yazar?",
+        "kod": "inventory = [\"kılıç\", \"iksir\"]\nif \"anahtar\" in inventory:\n    print(\"Kapıyı aç\")\nelif \"kılıç\" in inventory:\n    print(\"Savaşa hazır\")\nelse:\n    print(\"Eli boş\")\n",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "cikti",
+      "sure_sn": 10,
+      "anlatim": "Savaşa hazır! İlk koşul yanlıştı, çünkü anahtar yok. İkinci koşul doğru çıktı ve Python else'e hiç bakmadı.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "inventory = [\"kılıç\", \"iksir\"]\nif \"anahtar\" in inventory:\n    print(\"Kapıyı aç\")\nelif \"kılıç\" in inventory:\n    print(\"Savaşa hazır\")\nelse:\n    print(\"Eli boş\")\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          4,
+          5
+        ],
+        "cikti": "Savaşa hazır"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "gorev",
+      "sure_sn": 13,
+      "anlatim": "Görevlerde kalenin kapısını açacak, bir can göstergesi kuracak ve hazine sandığı için iki koşulu birleştireceksin. Sahne görevinde can, kalplerle görünecek. Challenge'da da yaşa göre oyun modu seçeceksin.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Kalenin kapısı",
+          "Görev 2: Can göstergesi",
+          "Görev 3: Hazine sandığı",
+          "Sahne görevi: Can göstergesi",
+          "Challenge: Oyun modu"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 10,
+      "tur": "ozet",
+      "sure_sn": 8,
+      "anlatim": "Bugün programımıza karar vermeyi öğrettik. Artık kurallara göre farklı yollar seçebiliyor, tıpkı bir oyun gibi.",
+      "ekran": {
+        "baslik": "Bugün öğrendiklerin",
+        "maddeler": [
+          "if, elif, else: ilk doğru olan blok çalışır",
+          "Satır sonunda :, blok 4 boşluk içeride",
+          "and, or, not ve in ile koşul birleştir"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "kapanis",
+      "sure_sn": 8,
+      "anlatim": "Kalenin kapısı açıldı! Yarın kalenin yüz basamaklı kulesine tırmanacağız. Tekrar eden işleri bilgisayara yaptıran döngüleri öğreneceğiz.",
+      "ekran": {
+        "baslik": "Yarın: Döngüler",
+        "gorsel": "gorseller/python/harita/kale.webp"
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

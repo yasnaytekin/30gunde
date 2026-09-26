@@ -1,0 +1,252 @@
+{
+  "kurs": "javascript",
+  "gun": 26,
+  "baslik": "fetch ve API",
+  "maskot": "kodi",
+  "ozet": "Kodi, Async İstasyonu'nun anteniyle API kavramını, fetch ve res.json ile JSON veri almayı, res.ok ve durum kodlarını, sorgu metnini ve yükleniyor, başarılı, hata durumlarını anlatıyor.",
+  "hedef_sure_sn": 176,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 12,
+      "anlatim": "Selam, ben Kodi! Async İstasyonu'nun dev anteni açıldı! Artık uzaktaki sunuculardan veri isteyebiliriz. Peki bir sunucuya nasıl soru sorulur? Bugün fetch ile API'lerle konuşuyoruz!",
+      "ekran": {
+        "baslik": "Gün 26: fetch ve API",
+        "gorsel": "gorseller/javascript/bolgeler/istasyon.webp"
+      },
+      "maskot": {
+        "poz": "el-sallama",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 2,
+      "tur": "anlatim",
+      "sure_sn": 15,
+      "anlatim": "API, bir programın başka programlara açtığı kapıdır. Belli bir adrese istek gönderirsin, sunucu sana veri döndürür. Hava durumu uygulaması sıcaklığı böyle alır. Cevap çoğu zaman JSON biçimindedir.",
+      "ekran": {
+        "baslik": "API nedir?",
+        "maddeler": [
+          "İstek: /demo-api/sehirler",
+          "Cevap: JSON",
+          "Kursun deneme API'si: şehirler, sorular, seviyeler, görevler"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sol"
+      },
+      "yonetmen_notu": "Antenden sunucuya giden bir istek oku, geri dönen bir JSON paketi animasyonu."
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 18,
+      "anlatim": "fetch isteği gönderir ve bir Promise döndürür; await ile cevabı bekleriz. Gelen cevap bir zarf gibidir. İçindeki veriyi okumak için bir kez daha bekleriz: res.json. İki await var, çünkü önce başlık, sonra gövde gelir.",
+      "ekran": {
+        "baslik": "fetch ve res.json()",
+        "kod": "async function loadCities() {\n  const res = await fetch(\"/demo-api/sehirler\");\n  const cities = await res.json();\n  console.log(cities.length, \"şehir geldi\");\n}\nloadCities();\n",
+        "vurgu_satirlari": [
+          2,
+          3
+        ],
+        "cikti": "8 şehir geldi",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 17,
+      "anlatim": "Gelen veriyi sayfaya dökmek, dün ve önceki günlerde öğrendiklerimizin birleşimi. Her şehir için bir liste elemanı oluşturuyoruz. Sonunda kaç şehir geldiğini yazıyoruz.",
+      "ekran": {
+        "baslik": "Veriyi sayfada göster",
+        "kod": "const res = await fetch(\"/demo-api/sehirler\");\nconst cities = await res.json();\nfor (const city of cities) {\n  const li = document.createElement(\"li\");\n  li.textContent = `${city.ad}: ${city.sicaklik}°C`;\n  list.append(li);\n}\ninfo.textContent = `${cities.length} şehir geldi.`;\n",
+        "vurgu_satirlari": [
+          3,
+          4,
+          5,
+          6
+        ],
+        "cikti": "Önce \"Yükleniyor...\", sonra şehirler listesi ve \"8 şehir geldi.\"",
+        "html": "<p id=\"info\">Yükleniyor...</p>\n<ul id=\"list\"></ul>",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sol"
+      },
+      "calistir": false
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 18,
+      "anlatim": "Her cevabın bir durum kodu vardır: 200 tamam, 404 bulunamadı, 500 sunucuda sorun. res.ok, kod 200 ile 299 arasındaysa true olur. Bağlantı hiç kurulamazsa fetch gerçekten hata fırlatır; onu try ve catch yakalar.",
+      "ekran": {
+        "baslik": "res.ok ve durum kodları",
+        "kod": "try {\n  const res = await fetch(\"/demo-api/hata\");\n  if (!res.ok) {\n    info.textContent = `Hata! Durum kodu: ${res.status}`;\n    return;\n  }\n  // başarılı: veriyi göster\n} catch (err) {\n  info.textContent = \"Bağlantı kurulamadı.\";\n}\n",
+        "vurgu_satirlari": [
+          3,
+          4,
+          8
+        ],
+        "cikti": "Hata! Durum kodu: 500",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 6,
+      "tur": "hata",
+      "sure_sn": 14,
+      "anlatim": "Sık hata: fetch'in 404'te ya da 500'de hata fırlatacağını sanmak. Fırlatmaz! res.ok'u kontrol etmezsen hata sayfasını veri sanıp okumaya çalışırsın.",
+      "ekran": {
+        "baslik": "Sık hata: res.ok'u kontrol etmemek",
+        "kod": "const res = await fetch(\"/demo-api/yanlis-adres\"); // 404\nconst data = await res.json(); // hata yok sandın!\ninfo.textContent = `${data.length} kayıt`;\n",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "Liste yerine anlamsız bir sonuç ya da beklenmedik bir hata çıkar.",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 7,
+      "tur": "kod",
+      "sure_sn": 15,
+      "anlatim": "Adresin sonuna soru işareti, anahtar ve değer ekleyerek süzülmüş veri isteyebilirsin. Değerde boşluk ya da Türkçe harf varsa encodeURIComponent onu adrese uygun hale getirir.",
+      "ekran": {
+        "baslik": "Sorgu metni",
+        "kod": "const region = \"İç Anadolu\";\nconst url = `/demo-api/sehirler?bolge=${encodeURIComponent(region)}`;\nconsole.log(url);\n",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "/demo-api/sehirler?bolge=%C4%B0%C3%A7%20Anadolu",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "anlatim",
+      "sure_sn": 13,
+      "anlatim": "İyi bir sayfa kullanıcıyı bekletirken bilgilendirir. Her istekte üç durumu düşün: yükleniyor, başarılı ve hata. Sayfayı asla boş bırakma!",
+      "ekran": {
+        "baslik": "Üç durum",
+        "maddeler": [
+          "Yükleniyor: istekten önce \"Yükleniyor...\"",
+          "Başarılı: veriyi göster",
+          "Hata: anlaşılır bir mesaj"
+        ]
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 9,
+      "tur": "soru",
+      "sure_sn": 9,
+      "anlatim": "Soru zamanı! Sunucu 404 döndürdü. Sence fetch hata fırlatır mı, yoksa res.ok false mu olur?",
+      "ekran": {
+        "baslik": "Sence hangisi?",
+        "maddeler": [
+          "A) fetch hata fırlatır, catch çalışır",
+          "B) res.ok false olur, res.status 404"
+        ]
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 10,
+      "tur": "cikti",
+      "sure_sn": 9,
+      "anlatim": "Cevap B! fetch cevabı aldığı sürece hata fırlatmaz. 404 de bir cevaptır; bu yüzden res.ok'u kendin kontrol edersin.",
+      "ekran": {
+        "baslik": "Cevap: B",
+        "kod": "console.log(res.ok, res.status);\n",
+        "cikti": "false 404",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 11,
+      "tur": "gorev",
+      "sure_sn": 13,
+      "anlatim": "Görev zamanı! Deneme API'sinden şehir listesini çekeceksin, düğmelerle bölgeye göre süzeceksin ve yükleniyor, başarılı, hata durumlarının hepsini gösteren bir fonksiyon yazacaksın.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Şehir listesi",
+          "Görev 2: Bölge filtresi",
+          "Görev 3: Yükleniyor ve hata"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 12,
+      "tur": "ozet",
+      "sure_sn": 12,
+      "anlatim": "Özetleyelim: fetch ile iste, await res.json ile oku. res.ok'u kontrol et, bağlantı hatasını try ve catch ile yakala. Kullanıcıya her zaman durumu göster.",
+      "ekran": {
+        "baslik": "Özet",
+        "maddeler": [
+          "await fetch(url) → await res.json()",
+          "if (!res.ok) … res.status  ·  try/catch",
+          "Yükleniyor → başarılı / hata"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 13,
+      "tur": "kapanis",
+      "sure_sn": 11,
+      "anlatim": "Antenin çalışıyor, kaptan! Yarın istasyonun son durağında bir gemi fabrikası kuracağız: sınıflar ve modüller. Görüşürüz!",
+      "ekran": {
+        "baslik": "Yarın: Sınıflar ve modüller",
+        "gorsel": "gorseller/javascript/arka-plan/bg-space-wide.webp"
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

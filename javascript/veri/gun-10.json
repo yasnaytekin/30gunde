@@ -1,0 +1,213 @@
+{
+ "day": 10,
+ "title": "Nesneler",
+ "region": "nebula",
+ "xp_complete": 150,
+ "objective": "Nesne oluşturmak, özelliklerini okuyup değiştirmek, metot yazmak ve nesne dizileriyle çalışmak",
+ "story": "Nebuladaki bir uzay istasyonuna yanaştık. Görevli geminin kimlik kartını istiyor: adı, hızı, yakıtı, mürettebatı... Birbirine ait bu bilgileri tek bir pakette tutmanın yolu **nesne (object)**.",
+ "sections": [
+  {
+   "title": "Nesne: anahtar ve değer",
+   "body": "Nesne süslü parantezle yazılır; içinde `anahtar: değer` çiftleri vardır. Değerlere **nokta** ya da **köşeli parantez** ile ulaşırsın:\n\n```js\nconst ship = {\n  name: \"Kartal\",\n  speed: 40000,\n  crew: [\"Deniz\", \"Ada\"],\n};\n\nconsole.log(ship.name);        // Kartal\nconsole.log(ship[\"speed\"]);    // 40000\nconst key = \"crew\";\nconsole.log(ship[key]);        // ['Deniz', 'Ada']\n\nship.speed = 45000;            // değiştir\nship.color = \"gümüş\";          // yeni anahtar ekle\ndelete ship.color;             // anahtarı sil\n```\n\nAnahtar bir değişkenin içindeyse köşeli parantez şarttır: `ship[key]`. Olmayan bir anahtarı okursan `undefined` gelir. Python bildiysen: nesne, sözlüğe (dict) benzer."
+  },
+  {
+   "title": "Metotlar ve this",
+   "body": "Nesnenin içindeki fonksiyonlara **metot** denir. Metodun içinde `this`, metodu çağıran nesnenin kendisidir:\n\n```js\nconst rocket = {\n  name: \"Kartal\",\n  fuel: 50,\n  refuel(amount) {\n    this.fuel += amount;\n    return this.fuel;\n  },\n};\n\nconsole.log(rocket.refuel(20));  // 70\n```\n\n`rocket.refuel(...)` çağrısında `this` = `rocket`. Metotları `refuel(amount) { ... }` biçiminde yaz; ok fonksiyonunun kendi `this`'i olmadığı için metot olarak kullanma."
+  },
+  {
+   "title": "Nesneleri dolaşmak",
+   "body": "| Yazım | Ne verir |\n| --- | --- |\n| `Object.keys(ship)` | Anahtarlar dizisi: `['name', 'speed']` |\n| `Object.values(ship)` | Değerler dizisi: `['Kartal', 40000]` |\n| `Object.entries(ship)` | Çiftler dizisi: `[['name', 'Kartal'], ['speed', 40000]]` |\n\n`for...in` bir nesnenin anahtarlarını sırayla dolaşır:\n\n```js\nfor (const key in ship) {\n  console.log(key, \"→\", ship[key]);\n}\n```\n\nKarıştırma: diziler için `for...of`, nesnenin anahtarları için `for...in`."
+  },
+  {
+   "title": "Nesne dizileri ve parçalama",
+   "body": "Gerçek programlarda çoğu zaman **nesnelerden oluşan diziler** kullanılır. **Parçalama (destructuring)** ile bir nesnenin anahtarlarını tek satırda değişkenlere alabilirsin:\n\n```js\nconst crew = [\n  { name: \"Deniz\", role: \"pilot\" },\n  { name: \"Ada\", role: \"mühendis\" },\n];\n\nfor (const member of crew) {\n  const { name, role } = member;   // parçalama\n  console.log(name, \"-\", role);\n}\n\n// Döngü başında da parçalanabilir:\nfor (const { name } of crew) {\n  console.log(name);\n}\n```\n\nTersi de kolay: değişken adı anahtarla aynıysa kısaca yazabilirsin. `const title = \"Ödev\";` varken `{ title }` yazmak `{ title: title }` demektir."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Gemi kartı",
+   "code": "const ship = { name: \"Kartal\", speed: 40000, fuel: 80 };\nconsole.log(ship.name);\nship.fuel -= 20;\nship.color = \"gümüş\";\nconsole.log(ship);\nfor (const key in ship) {\n  console.log(key, \"→\", ship[key]);\n}\nconsole.log(Object.keys(ship));\n",
+   "note": "const nesnenin içi değişebilir; sadece ship başka bir nesneye bağlanamaz."
+  },
+  {
+   "title": "Mürettebat listesi",
+   "code": "const crew = [\n  { name: \"Deniz\", role: \"pilot\", hours: 120 },\n  { name: \"Ada\", role: \"mühendis\", hours: 95 },\n];\n\nlet total = 0;\nfor (const { name, role, hours } of crew) {\n  console.log(`${name} (${role}): ${hours} saat`);\n  total += hours;\n}\nconsole.log(\"Toplam uçuş:\", total, \"saat\");\n",
+   "note": "Döngü başında { name, role, hours } yazarak her nesneyi parçaladık."
+  }
+ ],
+ "tasks": [
+  {
+   "id": "js-d10-t1",
+   "title": "Gezegen kartı",
+   "prompt": "1. `planet` adında bir nesne oluştur: `name` `\"Mars\"`, `moons` `2`, `color` `\"kızıl\"`.\n2. Nesneyi oluşturduktan **sonra** nokta ile yeni bir anahtar ekle: `visited` `true`.\n3. Nokta ile değerleri okuyarak şu satırı yazdır: `Mars: 2 uydu, kızıl`",
+   "starter": "// 1) planet nesnesini oluştur\n\n// 2) visited anahtarını ekle\n\n// 3) bilgi satırını yazdır\n",
+   "solution": "// 1) planet nesnesini oluştur\nconst planet = {\n  name: \"Mars\",\n  moons: 2,\n  color: \"kızıl\",\n};\n\n// 2) visited anahtarını ekle\nplanet.visited = true;\n\n// 3) bilgi satırını yazdır\nconsole.log(`${planet.name}: ${planet.moons} uydu, ${planet.color}`);\n",
+   "hints": [
+    "const planet = { name: \"Mars\", moons: 2, color: \"kızıl\" };",
+    "planet.visited = true;",
+    "Şablon metinde ${planet.name} gibi değerleri kullan."
+   ],
+   "check": {
+    "code_contains": [
+     "planet.visited"
+    ],
+    "js": "assert(planet.name === \"Mars\" && planet.moons === 2 && planet.color === \"kızıl\", \"planet'in name 'Mars', moons 2, color 'kızıl' olmalı.\");\nassert(planet.visited === true && /planet\\.visited\\s*=\\s*true/.test(_code), \"visited'ı nesneyi oluşturduktan sonra planet.visited = true; ile ekle.\");\nassert(_lines.includes(\"Mars: 2 uydu, kızıl\"), \"Çıktıda 'Mars: 2 uydu, kızıl' görünmeli.\");\nassert(!/Mars: 2/.test(_code), \"Satırı elle yazma; değerleri nesneden oku.\");"
+   },
+   "xp": 50
+  },
+  {
+   "id": "js-d10-t2",
+   "title": "Bilgi okuyucu",
+   "prompt": "`ship` nesnesiyle çalış:\n\n- `value`: `field` değişkenindeki anahtarın değeri. Köşeli parantez kullan: `ship[field]`\n- `keyCount`: nesnede kaç anahtar var? (`Object.keys`)\n- Bir `for...in` döngüsüyle her anahtarı ve değerini `anahtar: değer` biçiminde yazdır (`name: Kartal` gibi).",
+   "starter": "const ship = { name: \"Kartal\", speed: 40000, fuel: 80 };\nconst field = \"speed\";\n\n// value, keyCount ve for...in döngüsü\n\n",
+   "solution": "const ship = { name: \"Kartal\", speed: 40000, fuel: 80 };\nconst field = \"speed\";\n\n// value, keyCount ve for...in döngüsü\nconst value = ship[field];\nconst keyCount = Object.keys(ship).length;\nfor (const key in ship) {\n  console.log(`${key}: ${ship[key]}`);\n}\n",
+   "hints": [
+    "const value = ship[field];",
+    "Object.keys(ship) bir dizi verir; uzunluğu .length",
+    "for (const key in ship) { console.log(`${key}: ${ship[key]}`); } gibi"
+   ],
+   "check": {
+    "code_contains": [
+     "Object.keys",
+     "for"
+    ],
+    "js": "assert(value === 40000 && /ship\\s*\\[\\s*field\\s*\\]/.test(_code), \"value'yu ship[field] ile al; 40000 olmalı.\");\nassert(keyCount === 3 && /Object\\.keys\\s*\\(\\s*ship\\s*\\)/.test(_code), \"keyCount'u Object.keys(ship) ile bul; 3 olmalı.\");\nassert(/for\\s*\\(\\s*(const|let)\\s+\\w+\\s+in\\s/.test(_code), \"for...in döngüsü kullanmalısın: for (const key in ship)\");\nassert(_lines.includes(\"name: Kartal\") && _lines.includes(\"speed: 40000\") && _lines.includes(\"fuel: 80\"), \"Çıktıda 'name: Kartal', 'speed: 40000' ve 'fuel: 80' satırları görünmeli.\");"
+   },
+   "xp": 50
+  },
+  {
+   "id": "js-d10-t3",
+   "title": "Roket metotları",
+   "prompt": "`rocket` nesnesine iki metot ekle:\n\n- `refuel(amount)`: `this.fuel`'e `amount` eklesin ama yakıt **100'ü geçmesin**; yeni yakıtı döndürsün.\n- `status()`: `Kartal: yakıt 80` biçiminde metin döndürsün (ad ve yakıt `this` ile okunmalı).",
+   "starter": "const rocket = {\n  name: \"Kartal\",\n  fuel: 50,\n  // refuel(amount) ve status() metotlarını ekle\n};\n\nconsole.log(rocket.refuel(30));\nconsole.log(rocket.status());\n",
+   "solution": "const rocket = {\n  name: \"Kartal\",\n  fuel: 50,\n  // refuel(amount) ve status() metotlarını ekle\n  refuel(amount) {\n    this.fuel = Math.min(this.fuel + amount, 100);\n    return this.fuel;\n  },\n  status() {\n    return `${this.name}: yakıt ${this.fuel}`;\n  },\n};\n\nconsole.log(rocket.refuel(30));\nconsole.log(rocket.status());\n",
+   "hints": [
+    "Metot yazımı: refuel(amount) { ... }, (araya virgül koymayı unutma)",
+    "this.fuel = Math.min(this.fuel + amount, 100);",
+    "status() { return `${this.name}: yakıt ${this.fuel}`; }"
+   ],
+   "check": {
+    "code_contains": [
+     "this",
+     "return"
+    ],
+    "js": "assert(_lines.includes(\"Kartal: yakıt 80\"), \"Çıktıda 'Kartal: yakıt 80' görünmeli.\");\nconst before = rocket.fuel;\nassert(rocket.refuel(10) === Math.min(before + 10, 100) && rocket.fuel === Math.min(before + 10, 100), \"refuel(amount) yakıtı artırıp yeni değeri döndürmeli.\");\nassert(rocket.refuel(500) === 100 && rocket.fuel === 100, \"Yakıt 100'ü geçmemeli.\");\nrocket.name = \"Şahin\";\nrocket.fuel = 42;\nassert(rocket.status() === \"Şahin: yakıt 42\", \"status() adı ve yakıtı this ile okumalı ('Şahin: yakıt 42' gibi).\");"
+   },
+   "xp": 50
+  }
+ ],
+ "challenge": {
+  "id": "js-d10-c",
+  "title": "Mürettebat raporu",
+  "prompt": "`crewReport(list)` fonksiyonu bir mürettebat dizisi alsın ve şu nesneyi döndürsün:\n\n- `totalHours`: herkesin uçuş saatlerinin toplamı\n- `pilots`: rolü `\"pilot\"` olanların adları (dizi)\n- `veteran`: en çok uçuş saati olan kişinin adı\n\nDöngüde **parçalama** kullan: `for (const { name, role, hours } of list)`. Kontrol, fonksiyonunu başka bir mürettebatla da çağıracak.",
+  "starter": "const crew = [\n  { name: \"Deniz\", role: \"pilot\", hours: 120 },\n  { name: \"Ada\", role: \"mühendis\", hours: 95 },\n  { name: \"Can\", role: \"doktor\", hours: 60 },\n  { name: \"Ece\", role: \"pilot\", hours: 150 },\n];\n\nfunction crewReport(list) {\n  // ...\n}\n\nconsole.log(crewReport(crew));\n",
+  "solution": "const crew = [\n  { name: \"Deniz\", role: \"pilot\", hours: 120 },\n  { name: \"Ada\", role: \"mühendis\", hours: 95 },\n  { name: \"Can\", role: \"doktor\", hours: 60 },\n  { name: \"Ece\", role: \"pilot\", hours: 150 },\n];\n\nfunction crewReport(list) {\n  let totalHours = 0;\n  const pilots = [];\n  let veteran = \"\";\n  let maxHours = -1;\n  for (const { name, role, hours } of list) {\n    totalHours += hours;\n    if (role === \"pilot\") {\n      pilots.push(name);\n    }\n    if (hours > maxHours) {\n      maxHours = hours;\n      veteran = name;\n    }\n  }\n  return { totalHours, pilots, veteran };\n}\n\nconsole.log(crewReport(crew));\n",
+  "hints": [
+   "Döngüden önce: let totalHours = 0; const pilots = []; let veteran = \"\"; let maxHours = -1;",
+   "Daha büyük saat görünce maxHours ve veteran'ı güncelle.",
+   "Kısa yazım: return { totalHours, pilots, veteran };"
+  ],
+  "check": {
+   "code_contains": [
+    "for",
+    "return"
+   ],
+   "js": "assert(/(const|let)\\s*\\{[^}]+\\}\\s*(of|=)/.test(_code), \"Parçalama kullan: for (const { name, role, hours } of list)\");\nconst r = crewReport(crew);\nassert(r && r.totalHours === 425, \"crewReport(crew).totalHours 425 olmalı.\");\nassert(same(r.pilots, [\"Deniz\", \"Ece\"]), \"crewReport(crew).pilots ['Deniz', 'Ece'] olmalı.\");\nassert(r.veteran === \"Ece\", \"crewReport(crew).veteran 'Ece' olmalı.\");\nconst r2 = crewReport([{ name: \"Mert\", role: \"mühendis\", hours: 10 }, { name: \"Su\", role: \"pilot\", hours: 30 }, { name: \"Efe\", role: \"pilot\", hours: 5 }]);\nassert(r2.totalHours === 45 && same(r2.pilots, [\"Su\", \"Efe\"]) && r2.veteran === \"Su\", \"crewReport başka bir mürettebatla da doğru çalışmalı.\");"
+  },
+  "xp": 75
+ },
+ "project_contribution": "Oyuncu nesnesi",
+ "project_task": {
+  "id": "js-d10-p",
+  "title": "Oyuncu nesnesi",
+  "prompt": "Oyuncunun bütün bilgilerini tek bir `player` nesnesinde toplayalım. Başlangıç bilgileri hazır; şu üç metodu ekle:\n\n- `collectStar()`: `stars`'ı 1 artırsın, yeni yıldız sayısını döndürsün.\n- `hit()`: `lives`'ı 1 azaltsın ama **0'ın altına düşürmesin**; kalan canı döndürsün.\n- `status()`: `Kartal | Yıldız: 2 | Can: 2` biçiminde metin döndürsün (`this` ile).\n\nAlttaki hazır satırlar oyuncuya 2 yıldız toplatıp 1 kez vuruluyor ve durumu yazdırıyor.",
+  "starter": "const player = {\n  name: \"Kartal\",\n  lives: 3,\n  stars: 0,\n  inventory: [\"kalkan\"],\n  // collectStar(), hit() ve status() metotlarını ekle\n};\n\nplayer.collectStar();\nplayer.collectStar();\nplayer.hit();\nconsole.log(player.status());\n",
+  "solution": "const player = {\n  name: \"Kartal\",\n  lives: 3,\n  stars: 0,\n  inventory: [\"kalkan\"],\n  collectStar() {\n    this.stars++;\n    return this.stars;\n  },\n  hit() {\n    if (this.lives > 0) {\n      this.lives--;\n    }\n    return this.lives;\n  },\n  status() {\n    return `${this.name} | Yıldız: ${this.stars} | Can: ${this.lives}`;\n  },\n};\n\nplayer.collectStar();\nplayer.collectStar();\nplayer.hit();\nconsole.log(player.status());\n",
+  "hints": [
+   "collectStar() { this.stars++; return this.stars; },",
+   "hit() içinde: if (this.lives > 0) { this.lives--; }",
+   "status() { return `${this.name} | Yıldız: ${this.stars} | Can: ${this.lives}`; }"
+  ],
+  "check": {
+   "code_contains": [
+    "this",
+    "return"
+   ],
+   "js": "assert(typeof player.name === \"string\" && player.name.trim() !== \"\" && Array.isArray(player.inventory), \"player'ın name ve inventory bilgileri korunmalı.\");\nassert(_lines.includes(`${player.name} | Yıldız: 2 | Can: 2`), `Çıktıda '${player.name} | Yıldız: 2 | Can: 2' görünmeli.`);\nconst s = player.stars;\nassert(player.collectStar() === s + 1 && player.stars === s + 1, \"collectStar() yıldızı 1 artırıp yeni sayıyı döndürmeli.\");\nplayer.lives = 2;\nassert(player.hit() === 1 && player.lives === 1, \"hit() canı 1 azaltıp kalan canı döndürmeli.\");\nplayer.hit();\nplayer.hit();\nassert(player.lives === 0 && player.hit() === 0, \"Can 0'ın altına düşmemeli.\");\nplayer.name = \"Nova\";\nplayer.stars = 7;\nassert(player.status() === \"Nova | Yıldız: 7 | Can: 0\", \"status() bilgileri this ile okumalı ('Nova | Yıldız: 7 | Can: 0' gibi).\");"
+  },
+  "xp": 100
+ },
+ "tracks": {
+  "js-web": {
+   "project_contribution": "Profil nesnesi",
+   "project_task": {
+    "id": "js-d10-pw",
+    "title": "Profil nesnesi",
+    "prompt": "Sitenin \"Hakkımda\" bölümü bir `profile` nesnesinden beslensin. Nesnede `name` (adın), `age` (yaşın, sayı), `hobbies` (hobilerin, dizi) ve şu iki metot olsun:\n\n- `addHobby(hobby)`: hobiyi `hobbies`'e eklesin, yeni hobi sayısını döndürsün.\n- `intro()`: şu biçimde bir metin döndürsün (bilgiler `this` ile okunsun, hobiler `join(\", \")` ile):\n\n```\nBen Deniz, 12 yaşındayım. Hobilerim: kodlama, satranç, astronomi.\n```\n\nSonra `addHobby(\"astronomi\")` çağır ve `intro()` sonucunu yazdır.",
+    "starter": "const profile = {\n  // name, age, hobbies, addHobby ve intro\n};\n\n// astronomi hobisini ekle ve tanıtımı yazdır\n",
+    "solution": "const profile = {\n  name: \"Deniz\",\n  age: 12,\n  hobbies: [\"kodlama\", \"satranç\"],\n  addHobby(hobby) {\n    this.hobbies.push(hobby);\n    return this.hobbies.length;\n  },\n  intro() {\n    return `Ben ${this.name}, ${this.age} yaşındayım. Hobilerim: ${this.hobbies.join(\", \")}.`;\n  },\n};\n\n// astronomi hobisini ekle ve tanıtımı yazdır\nprofile.addHobby(\"astronomi\");\nconsole.log(profile.intro());\n",
+    "hints": [
+     "addHobby(hobby) { this.hobbies.push(hobby); return this.hobbies.length; },",
+     "Şablon metinde ${this.hobbies.join(\", \")} kullan.",
+     "profile.addHobby(\"astronomi\"); console.log(profile.intro());"
+    ],
+    "check": {
+     "code_contains": [
+      "this",
+      "join",
+      "push"
+     ],
+     "js": "assert(typeof profile.name === \"string\" && profile.name.trim() !== \"\" && typeof profile.age === \"number\", \"profile'da name (metin) ve age (sayı) olmalı.\");\nassert(Array.isArray(profile.hobbies) && profile.hobbies.includes(\"astronomi\"), \"hobbies bir dizi olmalı ve addHobby(\\\"astronomi\\\") ile astronomi eklenmeli.\");\nassert(_lines.includes(profile.intro()) && /^Ben .+, \\d+ yaşındayım\\. Hobilerim: .*astronomi\\.$/.test(profile.intro()), \"intro() sonucunu yazdırmalısın: 'Ben ..., ... yaşındayım. Hobilerim: ..., astronomi.'\");\nconst n = profile.hobbies.length;\nassert(profile.addHobby(\"yüzme\") === n + 1 && profile.hobbies[n] === \"yüzme\", \"addHobby hobiyi sona eklemeli ve yeni hobi sayısını döndürmeli.\");\nprofile.name = \"Ada\";\nprofile.age = 13;\nprofile.hobbies = [\"resim\", \"müzik\"];\nassert(profile.intro() === \"Ben Ada, 13 yaşındayım. Hobilerim: resim, müzik.\", \"intro() bilgileri this ile okumalı ('Ben Ada, 13 yaşındayım. Hobilerim: resim, müzik.' gibi).\");"
+    },
+    "xp": 100
+   }
+  },
+  "js-app": {
+   "project_contribution": "Görev nesnesi",
+   "project_task": {
+    "id": "js-d10-pa",
+    "title": "Görev nesnesi",
+    "prompt": "Görevler artık birer nesne! `makeTask(title, minutes)` fonksiyonu yeni bir görev nesnesi döndürsün: `{ title, minutes, done: false }`. `minutes` verilmezse **25** olsun.\n\nHazır satırlar iki görev ekleyip ilkini bitiriyor. Sonra `for...of` ile görevleri dolaşıp (istersen parçalayarak) şu biçimde yazdır:\n\n```\n[x] Matematik ödevi (40 dk)\n[ ] Kitap okuma (25 dk)\n```",
+    "starter": "// makeTask fonksiyonunu yaz\n\nconst tasks = [];\ntasks.push(makeTask(\"Matematik ödevi\", 40));\ntasks.push(makeTask(\"Kitap okuma\"));\ntasks[0].done = true;\n\n// Görevleri for...of ile yazdır\n",
+    "solution": "// makeTask fonksiyonunu yaz\nfunction makeTask(title, minutes = 25) {\n  return { title, minutes, done: false };\n}\n\nconst tasks = [];\ntasks.push(makeTask(\"Matematik ödevi\", 40));\ntasks.push(makeTask(\"Kitap okuma\"));\ntasks[0].done = true;\n\n// Görevleri for...of ile yazdır\nfor (const { title, minutes, done } of tasks) {\n  const box = done ? \"[x]\" : \"[ ]\";\n  console.log(`${box} ${title} (${minutes} dk)`);\n}\n",
+    "hints": [
+     "function makeTask(title, minutes = 25) { return { title, minutes, done: false }; }",
+     "for (const { title, minutes, done } of tasks) { ... }",
+     "const box = done ? \"[x]\" : \"[ ]\";"
+    ],
+    "check": {
+     "code_contains": [
+      "return",
+      "for"
+     ],
+     "js": "const t = makeTask(\"Deneme\", 15);\nassert(t && t.title === \"Deneme\" && t.minutes === 15 && t.done === false, \"makeTask(\\\"Deneme\\\", 15) { title: 'Deneme', minutes: 15, done: false } döndürmeli.\");\nassert(makeTask(\"Tekrar\").minutes === 25, \"minutes verilmezse 25 olmalı.\");\nassert(makeTask(\"A\") !== makeTask(\"A\"), \"makeTask her çağrıda yeni bir nesne döndürmeli.\");\nassert(tasks.length === 2 && tasks[0].done === true && tasks[1].done === false, \"tasks'ta iki görev olmalı; ilki bitmiş, ikincisi bitmemiş.\");\nassert(_lines.join(\"|\") === \"[x] Matematik ödevi (40 dk)|[ ] Kitap okuma (25 dk)\", \"Çıktı '[x] Matematik ödevi (40 dk)' ve '[ ] Kitap okuma (25 dk)' olmalı.\");\nassert((_code.match(/console\\.log/g) || []).length <= 2 && !/Kitap okuma \\(/.test(_code), \"Satırları elle yazma; for...of döngüsü kullan.\");"
+    },
+    "xp": 100
+   }
+  },
+  "js-quiz": {
+   "project_contribution": "Soru nesnesi",
+   "project_task": {
+    "id": "js-d10-pq",
+    "title": "Soru nesnesi",
+    "prompt": "Bir sorunun bütün bilgileri artık tek nesnede: metni, seçenekleri, doğru seçeneğin sırası (`correct`, 0'dan başlar) ve puanı. İki metot ekle:\n\n- `check(index)`: `index` doğru seçeneğin sırasıysa `true`, değilse `false` döndürsün.\n- `score(index)`: cevap doğruysa `this.points`, yanlışsa `0` döndürsün (içeride `this.check` kullanabilirsin).\n\nSonra soruyu yazdır ve seçenekleri bir döngüyle `1) Mars` biçiminde numaralandır:\n\n```\nGüneş sistemindeki en büyük gezegen hangisidir?\n1) Mars\n2) Jüpiter\n3) Venüs\n```",
+    "starter": "const question = {\n  text: \"Güneş sistemindeki en büyük gezegen hangisidir?\",\n  options: [\"Mars\", \"Jüpiter\", \"Venüs\"],\n  correct: 1,\n  points: 10,\n  // check(index) ve score(index) metotlarını ekle\n};\n\n// Soruyu ve seçenekleri yazdır\n\nconsole.log(\"Kazanılan puan:\", question.score(1));\n",
+    "solution": "const question = {\n  text: \"Güneş sistemindeki en büyük gezegen hangisidir?\",\n  options: [\"Mars\", \"Jüpiter\", \"Venüs\"],\n  correct: 1,\n  points: 10,\n  check(index) {\n    return index === this.correct;\n  },\n  score(index) {\n    return this.check(index) ? this.points : 0;\n  },\n};\n\n// Soruyu ve seçenekleri yazdır\nconsole.log(question.text);\nfor (let i = 0; i < question.options.length; i++) {\n  console.log(`${i + 1}) ${question.options[i]}`);\n}\n\nconsole.log(\"Kazanılan puan:\", question.score(1));\n",
+    "hints": [
+     "check(index) { return index === this.correct; },",
+     "score(index) { return this.check(index) ? this.points : 0; }",
+     "Seçenekler için for (let i = 0; i < question.options.length; i++) ve numara i + 1"
+    ],
+    "check": {
+     "code_contains": [
+      "this",
+      "return"
+     ],
+     "js": "assert(_lines[0] === \"Güneş sistemindeki en büyük gezegen hangisidir?\", \"İlk satır sorunun metni olmalı.\");\nassert(_lines[1] === \"1) Mars\" && _lines[2] === \"2) Jüpiter\" && _lines[3] === \"3) Venüs\", \"Seçenekler '1) Mars', '2) Jüpiter', '3) Venüs' olarak yazılmalı.\");\nassert(_lines.includes(\"Kazanılan puan: 10\"), \"Çıktıda 'Kazanılan puan: 10' görünmeli.\");\nassert((_code.match(/console\\.log/g) || []).length <= 3, \"Her seçenek için ayrı console.log yazma; döngü kullan.\");\nassert(question.check(1) === true && question.check(0) === false && question.check(2) === false, \"check(1) true, check(0) ve check(2) false döndürmeli.\");\nquestion.correct = 2;\nquestion.points = 25;\nassert(question.check(2) === true && question.check(1) === false, \"check() doğru sırayı this.correct'ten okumalı.\");\nassert(question.score(2) === 25 && question.score(0) === 0, \"score(index) doğruysa this.points, yanlışsa 0 döndürmeli.\");"
+    },
+    "xp": 100
+   }
+  }
+ },
+ "available": true
+}

@@ -1,0 +1,210 @@
+{
+  "kurs": "python",
+  "gun": 6,
+  "baslik": "Tuple'lar",
+  "maskot": "piko",
+  "ozet": "Piko, Veri Ormanı'ndaki mühürlü koordinatlar üzerinden tuple'ları anlatıyor: oluşturmak, neden değiştirilemediğini görmek, listeye çevirmek, açmak ve tek elemanlı tuple tuzağı.",
+  "hedef_sure_sn": 124,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 12,
+      "anlatim": "Selam, ben Piko! Veri Ormanı'nın ağaçlarına eski kaşifler işaretler kazımış: üç virgül beş, sekiz virgül iki. Bunlar gizli yerlerin koordinatları ve kimse onları değiştiremez. Bugün mühürlü kutuları, yani tuple'ları açıyoruz!",
+      "ekran": {
+        "baslik": "Gün 6: Tuple'lar",
+        "gorsel": "gorseller/python/harita/orman.webp"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "yonetmen_notu": "Ağaç kabuklarında (3, 5) ve (8, 2) işaretleri parlar."
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "Tuple listeye çok benzer ama parantezle yazılır. Elemanlara yine sıra numarasıyla ulaşırsın, len de çalışır. Peki farkı ne? Bir kez oluşturulduktan sonra değiştirilemez.",
+      "ekran": {
+        "baslik": "Tuple nedir?",
+        "kod": "colors = (\"mavi\", \"sarı\", \"yeşil\")\nprint(colors[0])\nprint(colors[-1])\nprint(len(colors))\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          1
+        ],
+        "cikti": "mavi\nyeşil\n3"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 3,
+      "tur": "hata",
+      "sure_sn": 14,
+      "anlatim": "Mührü kırmayı deneyelim. Python TypeError veriyor: tuple eleman değiştirmeye izin vermez. Bu bir özellik! Haritadaki koordinatlar, haftanın günleri gibi hiç değişmemesi gereken bilgileri kazara bozmamızı engeller.",
+      "ekran": {
+        "baslik": "Mühür kırılmaz",
+        "kod": "colors = (\"mavi\", \"sarı\", \"yeşil\")\ncolors[0] = \"kırmızı\"\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "TypeError: 'tuple' object does not support item assignment"
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "Yine de değiştirmen gerekirse bir yolu var. list ile kilidi açarsın, listeyi değiştirirsin, sonra tuple ile yeniden mühürlersin. Yani tuple'ı değiştirmenin tek yolu yeni bir tuple yapmak.",
+      "ekran": {
+        "baslik": "Kilidi aç, değiştir, kilitle",
+        "kod": "colors = (\"mavi\", \"sarı\")\nitems = list(colors)\nitems.append(\"yeşil\")\ncolors = tuple(items)\nprint(colors)\nprint(type(colors))\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2,
+          4
+        ],
+        "cikti": "('mavi', 'sarı', 'yeşil')\n<class 'tuple'>"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "Tuple'daki değerleri tek satırda ayrı değişkenlere dağıtabilirsin. Buna açma denir. Soldaki iki isim, sağdaki iki değeri sırayla alır: x üç, y beş olur.",
+      "ekran": {
+        "baslik": "Tuple açmak",
+        "kod": "pos = (3, 5)\nx, y = pos\nprint(\"x =\", x)\nprint(\"y =\", y)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "x = 3\ny = 5"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "Tuple'ların faydalı aletleri de var. in var mı diye sorar, index kaçıncı sırada olduğunu söyler. İki tuple'ı artıyla toplarsan yepyeni bir tuple elde edersin.",
+      "ekran": {
+        "baslik": "Faydalı işlemler",
+        "kod": "colors = (\"mavi\", \"sarı\", \"yeşil\")\nprint(\"sarı\" in colors)\nprint(colors.index(\"sarı\"))\nprint((1, 2) + (3, 4))\n",
+        "dil": "python",
+        "cikti": "True\n1\n(1, 2, 3, 4)"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "soru",
+      "sure_sn": 10,
+      "anlatim": "Şimdi küçük bir tuzak! İki değişken de parantezli bir beş gibi duruyor. Sence ikisinin tipi aynı mı?",
+      "ekran": {
+        "baslik": "Sence ne yazar?",
+        "kod": "a = (5)\nb = (5,)\nprint(type(a))\nprint(type(b))\n",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "cikti",
+      "sure_sn": 10,
+      "anlatim": "Aynı değil! Virgül olmayınca Python onu parantez içindeki sıradan bir sayı sanar. Tek elemanlı tuple yazarken virgülü unutma.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "a = (5)\nb = (5,)\nprint(type(a))\nprint(type(b))\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "<class 'int'>\n<class 'tuple'>"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "gorev",
+      "sure_sn": 14,
+      "anlatim": "Görev zamanı! Bir konumu iki değişkene açacak, renk paletinin ilk ve son rengini bulacak ve mühürlü bir çantaya yeni eşya ekleyeceksin. Challenge'da iki değişkeni üçüncü bir değişken kullanmadan yer değiştireceksin.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Konumu aç",
+          "Görev 2: Renk paleti",
+          "Görev 3: Yeni eşya ekle",
+          "Challenge: Yer değiştir"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 10,
+      "tur": "ozet",
+      "sure_sn": 6,
+      "anlatim": "Bugün mühürlü kutuları açtık, içlerindekileri dağıttık ve virgül tuzağını öğrendik.",
+      "ekran": {
+        "baslik": "Bugün öğrendiklerin",
+        "maddeler": [
+          "Tuple: ( ) ile yazılır, değiştirilemez",
+          "list() ile aç, tuple() ile yeniden mühürle",
+          "x, y = pos ile aç; tek eleman için (5,)"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "kapanis",
+      "sure_sn": 8,
+      "anlatim": "Koordinatlar güvende! Yarın ormanda aynı yerlerden defalarca geçeceğiz ve tekrarları kendiliğinden atan set'lerle tanışacağız.",
+      "ekran": {
+        "baslik": "Yarın: Set'ler",
+        "gorsel": "gorseller/python/harita/orman.webp"
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

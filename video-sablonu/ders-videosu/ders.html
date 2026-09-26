@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>Ders videosu</title>
+<style>
+@font-face { font-family: "Head"; src: local("Poppins Bold"), local("Poppins-Bold"); font-weight: 700; }
+@font-face { font-family: "Body"; src: local("Poppins Medium"), local("Poppins-Medium"), local("Poppins"); font-weight: 500; }
+:root { --W: 1920px; --H: 1080px; }
+* { box-sizing: border-box; }
+html, body { margin: 0; width: var(--W); height: var(--H); overflow: hidden; }
+body { font-family: "Body", "Poppins", system-ui, sans-serif; font-weight: 500; }
+#stage { position: relative; width: var(--W); height: var(--H); overflow: hidden; }
+.bg { position: absolute; inset: 0; background-size: cover; background-position: center; }
+.theme-python { --ink: #13233F; --ink2: #4A5B7A; --accent: #2F6DB5; --accent2: #FFC83D; --panel: #FFFFFF; --line: #D8E3F3; color: var(--ink); }
+.theme-python .bg { background: radial-gradient(1200px 700px at 85% -10%, #FFE9A8 0, transparent 60%), radial-gradient(900px 600px at -10% 100%, #CFE3FF 0, transparent 60%), #F4F8FF; }
+.theme-javascript { --ink: #EEF1FF; --ink2: #A9B2D9; --accent: #F7DF1E; --accent2: #4FE3F0; --panel: #141C45; --line: #2A3670; color: var(--ink); }
+.theme-javascript .bg { background: linear-gradient(rgba(11,16,38,.55), rgba(11,16,38,.55)), var(--space) center / cover, #0B1026; }
+.top { position: absolute; left: 64px; top: 40px; display: flex; align-items: center; gap: 16px; font-family: "Head"; font-size: 30px; }
+.top img { width: 56px; height: 56px; border-radius: 14px; }
+.top .day { color: var(--accent); }
+.theme-python .top .day { color: var(--accent); }
+.scene { position: absolute; inset: 0; opacity: 0; }
+.h1 { font-family: "Head", "Poppins", sans-serif; font-weight: 700; line-height: 1.12; letter-spacing: -.01em; }
+.title-big { position: absolute; left: 120px; top: 300px; width: 1050px; font-size: 92px; }
+.title-big small { display: block; font-size: 38px; color: var(--accent); margin-bottom: 14px; }
+.theme-python .title-big small { color: var(--accent); }
+.heading { position: absolute; left: 120px; top: 150px; width: 1180px; font-size: 62px; }
+.bullets { position: absolute; left: 120px; top: 300px; width: 1100px; margin: 0; padding: 0; list-style: none; }
+.bullets li { font-size: 44px; line-height: 1.3; margin: 0 0 30px; padding-left: 64px; position: relative; }
+.bullets li::before { content: ""; position: absolute; left: 8px; top: 18px; width: 26px; height: 26px; border-radius: 8px; background: var(--accent); }
+.theme-python .bullets li::before { background: var(--accent2); box-shadow: inset 0 0 0 4px #E0A800; }
+.code { position: absolute; left: 120px; top: 270px; width: 1180px; background: #0E1430; border-radius: 26px; box-shadow: 0 30px 80px rgba(8,18,40,.35); overflow: hidden; border: 1px solid rgba(255,255,255,.08); }
+.code .bar { height: 54px; display: flex; align-items: center; gap: 12px; padding: 0 22px; background: rgba(255,255,255,.05); color: #8FA4C4; font-size: 24px; }
+.code .bar i { width: 16px; height: 16px; border-radius: 50%; display: inline-block; }
+.code pre { margin: 0; padding: 26px 30px 30px 0; font: 34px/1.5 "DejaVu Sans Mono", ui-monospace, Menlo, Consolas, monospace; color: #E9ECFF; white-space: pre; }
+.code .ln { display: block; padding-left: 30px; border-left: 6px solid transparent; }
+.code .ln.hl { background: rgba(247,223,30,.12); border-left-color: #F7DF1E; }
+.code .n { display: inline-block; width: 44px; color: #4A5A86; user-select: none; }
+.caret { display: inline-block; width: 3px; height: 1.1em; background: #F7DF1E; vertical-align: -0.15em; margin-left: 2px; }
+.t-k { color: #C792EA; } .t-s { color: #C3E88D; } .t-c { color: #6C7AA6; font-style: italic; } .t-n { color: #F78C6C; } .t-f { color: #82AAFF; }
+.out { position: absolute; left: 120px; width: 1180px; background: var(--panel); border-radius: 22px; border: 2px solid var(--line); padding: 22px 30px; box-shadow: 0 20px 50px rgba(8,18,40,.18); }
+.out b { display: block; font-family: "Head"; font-size: 24px; color: var(--ink2); margin-bottom: 8px; text-transform: uppercase; letter-spacing: .08em; }
+.out pre { margin: 0; font: 34px/1.45 "DejaVu Sans Mono", ui-monospace, monospace; white-space: pre-wrap; color: var(--ink); }
+.picture { position: absolute; right: 90px; top: 150px; width: 820px; height: 720px; display: grid; place-items: center; }
+.picture.with-m { right: 470px; width: 600px; }
+.scene.has-pic .title-big, .scene.has-pic .heading, .scene.has-pic .bullets { width: 700px; }
+body.v .scene.has-pic .title-big, body.v .scene.has-pic .heading, body.v .scene.has-pic .bullets { width: 940px; }
+body.v .picture.with-m { left: 60px; width: 700px; }
+.picture img { max-width: 100%; max-height: 100%; filter: drop-shadow(0 30px 60px rgba(0,0,0,.35)); }
+.mascot { position: absolute; bottom: 150px; height: 560px; filter: drop-shadow(0 24px 40px rgba(0,0,0,.3)); }
+.mascot.sag { right: 90px; } .mascot.sol { left: 60px; } .mascot.orta { left: 50%; margin-left: -200px; }
+.mascot.alt-sag { right: 60px; bottom: 150px; height: 380px; } .mascot.alt-sol { left: 60px; bottom: 150px; height: 380px; }
+.scene.m-sol .heading, .scene.m-sol .bullets, .scene.m-sol .code, .scene.m-sol .out, .scene.m-sol .title-big { left: 560px; width: 1240px; }
+.sub { position: absolute; left: 50%; bottom: 44px; transform: translateX(-50%); max-width: 1500px; padding: 16px 30px; border-radius: 18px; background: rgba(8,12,30,.78); color: #fff; font-size: 34px; line-height: 1.35; text-align: center; }
+.tag { position: absolute; left: 120px; top: 150px; font-family: "Head"; font-size: 28px; padding: 8px 22px; border-radius: 999px; background: var(--accent); color: #0B1026; }
+/* dikey (9:16) */
+body.v { --W: 1080px; --H: 1920px; }
+body.v .top { left: 48px; top: 48px; font-size: 32px; }
+body.v .title-big { left: 70px; top: 360px; width: 940px; font-size: 84px; }
+body.v .heading { left: 70px; top: 190px; width: 940px; font-size: 56px; }
+body.v .bullets { left: 70px; top: 380px; width: 940px; }
+body.v .code, body.v .out { left: 50px; width: 980px; }
+body.v .code { top: 360px; }
+body.v .picture { left: 90px; right: auto; top: 640px; width: 900px; height: 640px; }
+body.v .mascot { height: 460px; bottom: 300px; }
+body.v .mascot.sol, body.v .mascot.alt-sol { left: auto; right: 40px; }
+body.v .scene.m-sol .heading, body.v .scene.m-sol .bullets, body.v .scene.m-sol .title-big { left: 70px; width: 940px; }
+body.v .scene.m-sol .code, body.v .scene.m-sol .out { left: 50px; width: 980px; }
+body.v .sub { bottom: 90px; max-width: 980px; font-size: 38px; }
+</style>
+</head>
+<body>
+<div id="stage"><div class="bg"></div><div class="top"><img id="logo" alt=""><span id="course"></span><span class="day" id="dayname"></span></div></div>
+<script>
+const S = __SENARYO__;
+const ROOT = "__ROOT__";   // repo köküne göreli yol
+const V = new URLSearchParams(location.search).get("o") === "v";
+if (V) document.body.classList.add("v");
+const JS = S.kurs === "javascript";
+const MK = JS ? "kodi-javascript" : "piko-python";
+const stage = document.getElementById("stage");
+stage.classList.add("theme-" + S.kurs);
+stage.style.setProperty("--space", `url(${ROOT}gorseller/javascript/arka-plan/${V ? "bg-space.webp" : "bg-space-wide.webp"})`);
+document.getElementById("logo").src = ROOT + (JS ? "gorseller/javascript/simgeler/favicon-96.png" : "gorseller/python/logo-128.png");
+document.getElementById("course").textContent = JS ? "30 Günde JavaScript" : "30 Günde Python";
+document.getElementById("dayname").textContent = `· Gün ${S.gun}`;
+
+const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+const KW = JS
+  ? /\b(const|let|var|function|return|if|else|for|while|of|in|new|class|extends|async|await|try|catch|finally|throw|switch|case|break|continue|default|true|false|null|undefined|this|typeof|import|export|from)\b/
+  : /\b(def|return|if|elif|else|for|while|in|not|and|or|import|from|as|class|try|except|finally|raise|with|True|False|None|lambda|pass|break|continue|global|is)\b/;
+const KWFULL = new RegExp("^(?:" + KW.source + ")$");
+const isKw = (t) => KWFULL.test(t);
+function highlight(line) {
+  const re = JS
+    ? /(\/\/.*$)|("(?:\\.|[^"])*"|'(?:\\.|[^'])*'|`(?:\\.|[^`])*`)|(\b\d+(?:\.\d+)?\b)|([A-Za-z_$][\w$]*)(?=\s*\()|([A-Za-z_$][\w$]*)/g
+    : /(#.*$)|(f?"(?:\\.|[^"])*"|f?'(?:\\.|[^'])*')|(\b\d+(?:\.\d+)?\b)|([A-Za-z_]\w*)(?=\s*\()|([A-Za-z_]\w*)/g;
+  let out = "", last = 0, m;
+  while ((m = re.exec(line))) {
+    out += esc(line.slice(last, m.index));
+    const [t] = m;
+    if (m[1]) out += `<span class="t-c">${esc(t)}</span>`;
+    else if (m[2]) out += `<span class="t-s">${esc(t)}</span>`;
+    else if (m[3]) out += `<span class="t-n">${esc(t)}</span>`;
+    else if (isKw(t)) out += `<span class="t-k">${esc(t)}</span>`;
+    else if (m[4]) out += `<span class="t-f">${esc(t)}</span>`;
+    else out += esc(t);
+    last = m.index + t.length;
+  }
+  return out + esc(line.slice(last));
+}
+
+// Sahnelerin zaman çizelgesi
+let t0 = 0;
+const scenes = S.sahneler.map((s) => { const o = { ...s, start: t0, end: t0 + s.sure_sn }; t0 += s.sure_sn; return o; });
+window.DURATION = t0;
+
+const mascotSrc = (poz) => `${ROOT}maskotlar/${MK}/pozlar/${poz}.png`;
+for (const s of scenes) {
+  const e = s.ekran || {};
+  const m = s.maskot || {};
+  const pos = m.konum || "yok";
+  const el = document.createElement("div");
+  el.className = "scene" + (pos === "sol" || pos === "alt-sol" ? " m-sol" : "") + (e.gorsel && !e.kod ? " has-pic" : "");
+  let html = "";
+  const big = s.tur === "acilis" || s.tur === "kapanis";
+  if (big) html += `<div class="title-big h1"><small>${esc(s.tur === "acilis" ? `Gün ${S.gun}` : "Görüşmek üzere")}</small>${esc(String(e.baslik || S.baslik).replace(/^Gün\s*\d+\s*[:·-]\s*/, ""))}</div>`;
+  else if (e.baslik) html += `<div class="heading h1">${esc(e.baslik)}</div>`;
+  const hasCode = !!e.kod;
+  if (e.maddeler && e.maddeler.length) {
+    const top = big ? 640 : 300;
+    html += `<ul class="bullets" style="top:${V ? top + 80 : top}px">${e.maddeler.map((b, i) => `<li data-i="${i}">${esc(b)}</li>`).join("")}</ul>`;
+  }
+  if (hasCode) {
+    const lines = e.kod.replace(/\n$/, "").split("\n");
+    const hl = new Set(e.vurgu_satirlari || []);
+    html += `<div class="code"><div class="bar"><i style="background:#E8574A"></i><i style="background:#FFC83D"></i><i style="background:#2E9E62"></i><span style="margin-left:12px">${JS ? "kod.js" : "kod.py"}</span></div><pre>${lines.map((l, i) => `<span class="ln" data-hl="${hl.has(i + 1) ? 1 : 0}"><span class="n">${i + 1}</span><span class="src" data-src="${esc(l)}"></span></span>`).join("")}</pre></div>`;
+  }
+  if (e.cikti) html += `<div class="out"><b>${s.tur === "hata" ? "Hata" : "Çıktı"}</b><pre>${esc(e.cikti)}</pre></div>`;
+  if (e.gorsel && !hasCode) html += `<div class="picture${pos === "sag" || pos === "alt-sag" ? " with-m" : ""}"><img src="${ROOT}${e.gorsel}" alt=""></div>`;
+  if (pos !== "yok" && m.poz) html += `<img class="mascot ${pos}" src="${mascotSrc(m.poz)}" alt="">`;
+  html += `<div class="sub"></div>`;
+  el.innerHTML = html;
+  stage.append(el);
+  s.el = el;
+  // altyazı: cümlelere böl, sürelerini uzunluğa göre dağıt
+  // cümle sonu: . ! ? … ardından boşluk (console.log gibi noktalar bölünmez); uzun cümleler virgülden ikiye
+  let parts = (s.anlatim || "").split(/(?<=[.!?…])\s+/).filter(Boolean);
+  parts = parts.flatMap((p) => { if (p.length <= 110) return [p]; const i = p.indexOf(", ", Math.floor(p.length / 2) - 25); return i > 0 ? [p.slice(0, i + 1), p.slice(i + 2)] : [p]; });
+  if (!parts.length) parts = [s.anlatim || ""];
+  const total = parts.reduce((a, p) => a + p.length, 0) || 1;
+  let acc = 0;
+  s.subs = parts.map((p) => { const a = acc / total; acc += p.length; return { text: p.trim(), a, b: acc / total }; });
+  s.codeLines = hasCode ? [...el.querySelectorAll(".src")] : [];
+  s.codeLen = s.codeLines.reduce((a, x) => a + x.dataset.src.length, 0);
+}
+
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const ease = (x) => 1 - Math.pow(1 - clamp(x), 3);
+
+window.renderAt = function (t) {
+  for (const s of scenes) {
+    const d = s.end - s.start;
+    const local = t - s.start;
+    const visible = t >= s.start - 0.001 && t < s.end + 0.4;
+    if (!visible) { s.el.style.opacity = 0; continue; }
+    const fadeIn = clamp(local / 0.4);
+    const fadeOut = clamp((s.end + 0.4 - t) / 0.4);
+    s.el.style.opacity = Math.min(fadeIn, t < s.end ? 1 : fadeOut);
+    const p = clamp(local / d);
+    // başlık ve maddeler
+    const head = s.el.querySelector(".heading, .title-big");
+    if (head) head.style.transform = `translateY(${(1 - ease(local / 0.6)) * 30}px)`;
+    s.el.querySelectorAll(".bullets li").forEach((li, i, all) => {
+      const at = 0.08 + (i / Math.max(all.length, 1)) * 0.6;
+      const k = ease((p - at) / 0.08);
+      li.style.opacity = k; li.style.transform = `translateX(${(1 - k) * 40}px)`;
+    });
+    // kod: yazılma animasyonu (%5 → %45), sonra vurgu
+    if (s.codeLines.length) {
+      const typed = Math.floor(clamp((p - 0.05) / 0.4) * s.codeLen);
+      let left = typed;
+      s.codeLines.forEach((x, i) => {
+        const src = x.dataset.src;
+        const n = Math.max(0, Math.min(src.length, left));
+        left -= src.length;
+        const caret = n < src.length && n > 0 || (left <= 0 && left > -1 && typed < s.codeLen && n === src.length);
+        x.innerHTML = highlight(src.slice(0, n)) + (caret && typed < s.codeLen ? '<span class="caret"></span>' : "");
+        const ln = x.parentElement;
+        ln.classList.toggle("hl", ln.dataset.hl === "1" && p > 0.5);
+      });
+      const code = s.el.querySelector(".code");
+      const out = s.el.querySelector(".out");
+      if (out) {
+        out.style.top = (code.offsetTop + code.offsetHeight + 30) + "px";
+        const k = ease((p - 0.5) / 0.1);
+        out.style.opacity = k; out.style.transform = `translateY(${(1 - k) * 20}px)`;
+      }
+    } else {
+      const out = s.el.querySelector(".out");
+      if (out) { out.style.top = (V ? 420 : 300) + "px"; out.style.opacity = ease((p - 0.1) / 0.1); }
+    }
+    // görsel: yavaş yakınlaşma
+    const pic = s.el.querySelector(".picture img");
+    if (pic) pic.style.transform = `scale(${1 + 0.06 * p}) translateY(${Math.sin(t * 1.2) * 6}px)`;
+    // maskot: girişte kayar, sonra hafifçe süzülür
+    const m = s.el.querySelector(".mascot");
+    if (m) {
+      const k = ease(local / 0.5);
+      const dir = m.classList.contains("sol") || m.classList.contains("alt-sol") ? -1 : 1;
+      m.style.transform = `translate(${(1 - k) * 120 * dir}px, ${Math.sin(t * 2.2) * 8}px)`;
+      m.style.opacity = k;
+    }
+    // altyazı
+    const sub = s.subs.find((x) => p >= x.a && p < x.b) || s.subs[s.subs.length - 1];
+    const subEl = s.el.querySelector(".sub");
+    subEl.textContent = sub ? sub.text : "";
+    subEl.style.display = window.SUBTITLES === false || !subEl.textContent ? "none" : "block";
+  }
+};
+window.ready = Promise.all([...document.images].map((im) => im.decode().catch(() => {}))).then(() => document.fonts.ready).then(() => { window.renderAt(0); return true; });
+</script>
+</body>
+</html>

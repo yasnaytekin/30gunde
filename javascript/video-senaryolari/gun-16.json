@@ -1,0 +1,222 @@
+{
+  "kurs": "javascript",
+  "gun": 16,
+  "baslik": "Formlar",
+  "maskot": "kodi",
+  "ozet": "Kodi, DOM Gezegeni'nin son durağında pilot kayıt formu üzerinden submit olayını, preventDefault'u, value, checked ve Number ile değer okumayı ve hataları sayfada göstermeyi anlatıyor.",
+  "hedef_sure_sn": 150,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 12,
+      "anlatim": "Selam, ben Kodi! DOM Gezegeni'nin son durağına geldik. Kontrol kulesi, uçuşa çıkacak her pilotun bilgilerini istiyor. Peki bir formdaki yazıyı JavaScript nasıl okur? Bugün formları öğreniyoruz!",
+      "ekran": {
+        "baslik": "Gün 16: Formlar",
+        "gorsel": "gorseller/javascript/bolgeler/dom.webp"
+      },
+      "maskot": {
+        "poz": "el-sallama",
+        "konum": "sag"
+      },
+      "yonetmen_notu": "DOM Gezegeni görseli yavaşça yakınlaşır; başlık üstten kayarak gelir."
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 17,
+      "anlatim": "Form gönderilince submit olayı olur ve tarayıcı normalde sayfayı yeniler. Yazdığın her şey kaybolur! e.preventDefault bunu durdurur. Olayı düğmeye değil forma bağla; böylece Enter tuşu da çalışır.",
+      "ekran": {
+        "baslik": "submit ve preventDefault",
+        "kod": "const form = document.querySelector(\"#pilot-form\");\nform.addEventListener(\"submit\", (e) => {\n  e.preventDefault(); // sayfa yenilenmesin\n  console.log(\"Form gönderildi!\");\n});\n",
+        "vurgu_satirlari": [
+          2,
+          3
+        ],
+        "cikti": "Sayfa yenilenmez; konsolda: Form gönderildi!",
+        "html": "<form id=\"pilot-form\"><input placeholder=\"Pilot adı\"> <button>Kaydet</button></form>",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 17,
+      "anlatim": "Kutudaki yazı value özelliğindedir ve her zaman metindir, içine sayı yazılsa bile. Number ile sayıya çeviririz. Sayı olmayan metin NaN verir, boş metin ise sıfır! trim de baştaki ve sondaki boşlukları siler.",
+      "ekran": {
+        "baslik": "value her zaman metindir",
+        "kod": "const raw = \"150\"; // kutudan gelen değer\nconsole.log(typeof raw);\nconsole.log(Number(raw) + 1);\nconsole.log(Number(\"abc\"));\nconsole.log(Number(\"\"));\nconsole.log(\"  Ada \".trim());\n",
+        "vurgu_satirlari": [
+          3,
+          4,
+          5
+        ],
+        "cikti": "string\n151\nNaN\n0\nAda",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true,
+      "yonetmen_notu": "Konsolda 'değer kutudan gelmiş gibi' açıklaması için küçük bir input kutusu animasyonu gösterilebilir."
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "Onay kutusunda önemli olan yazı değil, işaretli olup olmadığıdır: checked bize true ya da false verir. Seçim listesinde value, seçili seçeneğin değeridir. Onu da Number ile sayıya çeviriyoruz.",
+      "ekran": {
+        "baslik": "checked ve select",
+        "kod": "form.addEventListener(\"submit\", (e) => {\n  e.preventDefault();\n  const shield = document.querySelector(\"#shield\").checked;\n  const speed = Number(document.querySelector(\"#speed\").value);\n  info.textContent = `Kalkan ${shield ? \"açık\" : \"kapalı\"}, hız ${speed * 100} km/sn`;\n});\n",
+        "vurgu_satirlari": [
+          3,
+          4
+        ],
+        "cikti": "Kalkan açık, hız 300 km/sn",
+        "html": "<form id=\"f\"><label><input type=\"checkbox\" id=\"shield\"> Kalkan açık</label>\n<select id=\"speed\"><option value=\"1\">Yavaş</option><option value=\"2\">Normal</option><option value=\"3\">Hızlı</option></select> <button>Uygula</button></form>\n<p id=\"info\"></p>",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      },
+      "calistir": false
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 18,
+      "anlatim": "Formu kabul etmeden önce değerleri kontrol etmeye doğrulama denir. Ad boşsa mesajı sayfanın içine yazıyoruz ve return ile hemen çıkıyoruz. Her şey yolundaysa pilotu karşılayıp form.reset ile kutuları boşaltıyoruz.",
+      "ekran": {
+        "baslik": "Doğrulama ve sıfırlama",
+        "kod": "form.addEventListener(\"submit\", (e) => {\n  e.preventDefault();\n  const name = document.querySelector(\"#name\").value.trim();\n  if (name === \"\") {\n    info.textContent = \"Adını yazmayı unuttun!\";\n    return;\n  }\n  info.textContent = `Hoş geldin, Kaptan ${name}!`;\n  form.reset();\n});\n",
+        "vurgu_satirlari": [
+          4,
+          5,
+          6,
+          9
+        ],
+        "cikti": "Kutu boşsa: Adını yazmayı unuttun!\n\"Ada\" yazılırsa: Hoş geldin, Kaptan Ada! (kutu boşalır)",
+        "html": "<form id=\"f\"><input id=\"name\" placeholder=\"Adın\"> <button>Kaydet</button></form>\n<p id=\"info\">Adını yaz, sonra Kaydet düğmesine bas.</p>",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 6,
+      "tur": "hata",
+      "sure_sn": 14,
+      "anlatim": "En sık hata: kutudaki sayıyı Number'a çevirmeyi unutmak. Metne sayı eklersen JavaScript toplamaz, yan yana yapıştırır. Hata mesajı bile çıkmaz, sonuç sessizce yanlış olur!",
+      "ekran": {
+        "baslik": "Sık hata: Number'ı unutmak",
+        "kod": "const fuel = document.querySelector(\"#fuel\").value; // \"150\"\ninfo.textContent = fuel + 50;\n",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "15050   (beklenen: 200)",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 7,
+      "tur": "soru",
+      "sure_sn": 9,
+      "anlatim": "Şimdi sıra sende! Biri metin, biri sayı. Sence bu iki satır ne yazdırır? Videoyu durdur ve düşün.",
+      "ekran": {
+        "baslik": "Sence ne yazar?",
+        "kod": "const a = \"20\";\nconst b = Number(\"20\");\nconsole.log(a + 5);\nconsole.log(b + 5);\n",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 8,
+      "tur": "cikti",
+      "sure_sn": 10,
+      "anlatim": "Cevap: ilki 205, ikincisi 25! a bir metin olduğu için beş yanına yapıştırıldı. b ise gerçek bir sayı, bu yüzden toplandı.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "const a = \"20\";\nconst b = Number(\"20\");\nconsole.log(a + 5);\nconsole.log(b + 5);\n",
+        "vurgu_satirlari": [
+          3,
+          4
+        ],
+        "cikti": "205\n25",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "gorev",
+      "sure_sn": 14,
+      "anlatim": "Görev zamanı! Önce bir görev kaydı formu yapacaksın. Sonra depo sayısıyla yakıt hesaplayan bir form. Son görevde ise onay kutusu işaretli değilse kalkışa izin vermeyeceksin.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Görev kaydı",
+          "Görev 2: Yakıt hesaplayıcı",
+          "Görev 3: Kalkış onayı"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 10,
+      "tur": "ozet",
+      "sure_sn": 12,
+      "anlatim": "Özetleyelim: submit olayını forma bağla ve preventDefault çağır. value her zaman metindir, sayıya Number ile çevir. Hataları sayfada göster ve return ile çık.",
+      "ekran": {
+        "baslik": "Özet",
+        "maddeler": [
+          "submit + e.preventDefault()",
+          "value metindir → Number(), trim(); checked → true/false",
+          "Doğrula, hatayı sayfada göster, return ile çık"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "kapanis",
+      "sure_sn": 11,
+      "anlatim": "Harika iş, pilot! DOM Gezegeni'ni tamamladın. Yarın Olay Kuşağı'na giriyoruz: gemini klavyeyle yöneteceksin, üstüne bir de bip sesi ekleyeceğiz. Görüşürüz!",
+      "ekran": {
+        "baslik": "Yarın: Klavye ve ses",
+        "gorsel": "gorseller/javascript/bolgeler/kusak.webp"
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

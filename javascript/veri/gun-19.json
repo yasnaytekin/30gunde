@@ -1,0 +1,239 @@
+{
+ "day": 19,
+ "title": "CSS'i kodla kontrol etmek",
+ "region": "kusak",
+ "xp_complete": 150,
+ "objective": "style, classList, CSS değişkenleri ve data-* özellikleriyle görünüşü JavaScript'ten değiştirmek",
+ "story": "Gemin artık hareket ediyor ve zamanı ölçüyor; şimdi sıra görünüşte! Bugün JavaScript ile **CSS'i kontrol edip** temalar, efektler ve renk seçiciler yapacaksın.",
+ "sections": [
+  {
+   "title": "element.style: tek tek özellikler",
+   "body": "Her elemanın bir `style` nesnesi var. CSS'teki tireli adlar burada **camelCase** yazılır (`background-color` → `backgroundColor`) ve değerler metindir; birimi unutma:\n\n```js\nconst box = document.querySelector(\"#box\");\nbox.style.backgroundColor = \"#f7df1e\";\nbox.style.width = \"150px\"; // 150 değil, \"150px\"\n```\n\n`box.style` yalnızca elemanın üstüne yazılanı gösterir. CSS kurallarından gelen son hâli görmek için `getComputedStyle(box).width` kullanılır."
+  },
+  {
+   "title": "classList ile durumlar",
+   "body": "Çok sayıda stili tek tek yazmak yerine görünüşü CSS'te bir **sınıfa** yaz, JavaScript'te yalnızca sınıfı ekle ya da çıkar:\n\n```\n.shield.active { border-color: #26c6da; background: #e0f7fa; }\n```\n\n```js\nshield.classList.add(\"active\");      // ekle\nshield.classList.remove(\"active\");   // çıkar\nshield.classList.toggle(\"active\");   // varsa çıkar, yoksa ekle\nshield.classList.contains(\"active\"); // true / false\nbtn.classList.toggle(\"active\", color === \"#f7df1e\"); // koşul doğruysa ekle, değilse çıkar\n```"
+  },
+  {
+   "title": "CSS değişkenleri",
+   "body": "CSS'te `--` ile başlayan adlar **değişkendir**. Bir kez tanımlanır, `var(...)` ile her yerde kullanılır:\n\n```\n:root { --accent: #f7df1e; }\nh2 { border-bottom: 4px solid var(--accent); }\nbutton.active { outline: 3px solid var(--accent); }\n```\n\nJavaScript'le tek satırda değiştirirsin; değişkeni kullanan **her şey** birden güncellenir:\n\n```js\nconst root = document.documentElement; // :root yani <html>\nroot.style.setProperty(\"--accent\", \"#b388ff\");\nconst now = getComputedStyle(root).getPropertyValue(\"--accent\").trim();\n```"
+  },
+  {
+   "title": "data-* özellikleri",
+   "body": "HTML'de `data-` ile başlayan özellikler, elemana kendi bilgini eklemenin yoludur. JavaScript'te `dataset` ile okunur ve yazılır:\n\n```js\n// <button data-color=\"#e53935\">Kızıl</button>\nbtn.dataset.color;              // \"#e53935\"\ndocument.body.dataset.mode = \"gece\"; // <body data-mode=\"gece\">\n```\n\nCSS de bu özelliklere göre seçim yapabilir: `body[data-mode=\"gece\"] #panel { ... }`. Böylece bir değer değişince bütün görünüş değişir."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Gece modu",
+   "code": "const btn = document.querySelector(\"#toggle\");\nbtn.addEventListener(\"click\", () => {\n  document.body.classList.toggle(\"night\");\n  const night = document.body.classList.contains(\"night\");\n  btn.textContent = night ? \"Gündüz modu\" : \"Gece modu\";\n});\n",
+   "note": "Bütün renkler CSS'te; JavaScript yalnızca sınıfı değiştiriyor.",
+   "mode": "page",
+   "html": "<div id=\"card\"><h3>Kaptan Günlüğü</h3><p>Bugün Olay Kuşağı gezildi.</p></div>\n<button id=\"toggle\">Gece modu</button>\n",
+   "css": "#card{padding:10px;border-radius:8px;background:#fff8d6;margin-bottom:8px}body.night{background:#0b1026;color:#eef1ff}body.night #card{background:#1c2340}"
+  },
+  {
+   "title": "Boyut kaydırıcısı",
+   "code": "const slider = document.querySelector(\"#size\");\nslider.addEventListener(\"input\", () => {\n  const value = slider.value + \"px\";\n  document.documentElement.style.setProperty(\"--size\", value);\n  document.querySelector(\"#label\").textContent = value;\n});\n",
+   "note": "Kaydırıcıyı oynat: yıldızın boyutu CSS değişkeniyle değişiyor.",
+   "mode": "page",
+   "html": "<input type=\"range\" id=\"size\" min=\"20\" max=\"120\" value=\"60\"> <span id=\"label\">60px</span>\n<div id=\"star\"></div>\n",
+   "css": ":root{--size:60px}#star{width:var(--size);height:var(--size);background:#f7df1e;clip-path:polygon(50% 0,61% 35%,98% 35%,68% 57%,79% 91%,50% 70%,21% 91%,32% 57%,2% 35%,39% 35%)}"
+  }
+ ],
+ "tasks": [
+  {
+   "id": "js-d19-t1",
+   "title": "Kutuyu boya",
+   "prompt": "`#paint` düğmesine tıklanınca `#box` kutusunun `style`'ını değiştir:\n\n- arka plan rengi `#f7df1e` olsun (`backgroundColor`),\n- genişliği `150px` olsun.",
+   "starter": "const box = document.querySelector(\"#box\");\n\n// #paint tıklanınca box.style ile boya\n\n",
+   "solution": "const box = document.querySelector(\"#box\");\n\n// #paint tıklanınca box.style ile boya\ndocument.querySelector(\"#paint\").addEventListener(\"click\", () => {\n  box.style.backgroundColor = \"#f7df1e\";\n  box.style.width = \"150px\";\n});\n",
+   "hints": [
+    "box.style.backgroundColor = \"#f7df1e\";",
+    "Birimi unutma: box.style.width = \"150px\";"
+   ],
+   "check": {
+    "code_contains": [
+     "style.backgroundColor",
+     "style.width"
+    ],
+    "js": "assert(getComputedStyle($(\"#box\")).backgroundColor === \"rgb(204, 204, 204)\", \"Tıklamadan önce kutu gri kalmalı.\");\nclick(\"#paint\");\nassert(getComputedStyle($(\"#box\")).backgroundColor === \"rgb(247, 223, 30)\", \"Tıklayınca kutunun arka planı #f7df1e olmalı.\");\nassert(getComputedStyle($(\"#box\")).width === \"150px\", \"Tıklayınca kutunun genişliği 150px olmalı.\");"
+   },
+   "xp": 50,
+   "mode": "page",
+   "html": "<div id=\"box\">Kargo</div>\n<button id=\"paint\">Boya</button>\n",
+   "css": "#box{width:80px;height:50px;background:#ccc;display:grid;place-items:center;margin-bottom:8px}"
+  },
+  {
+   "id": "js-d19-t2",
+   "title": "Kalkan",
+   "prompt": "`#shield-btn` her tıklandığında `#shield`'daki `active` sınıfını aç/kapat (`classList.toggle`).\n\n`#status` kalkan açıkken `Kalkan: AÇIK`, kapalıyken `Kalkan: KAPALI` yazsın (durumu `classList.contains` ile öğren).",
+   "starter": "const shield = document.querySelector(\"#shield\");\n\n// tıklanınca active sınıfını aç/kapat ve #status'u güncelle\n\n",
+   "solution": "const shield = document.querySelector(\"#shield\");\n\n// tıklanınca active sınıfını aç/kapat ve #status'u güncelle\ndocument.querySelector(\"#shield-btn\").addEventListener(\"click\", () => {\n  shield.classList.toggle(\"active\");\n  const on = shield.classList.contains(\"active\");\n  document.querySelector(\"#status\").textContent = on ? \"Kalkan: AÇIK\" : \"Kalkan: KAPALI\";\n});\n",
+   "hints": [
+    "shield.classList.toggle(\"active\");",
+    "const on = shield.classList.contains(\"active\");"
+   ],
+   "check": {
+    "code_contains": [
+     "classList.toggle",
+     "classList.contains"
+    ],
+    "js": "click(\"#shield-btn\");\nassert($(\"#shield\").classList.contains(\"active\"), \"İlk tıklamada #shield'a active sınıfı eklenmeli.\");\nassert($(\"#status\").textContent === \"Kalkan: AÇIK\", \"Kalkan açıkken #status 'Kalkan: AÇIK' olmalı.\");\nassert(getComputedStyle($(\"#shield\")).borderTopColor === \"rgb(38, 198, 218)\", \"active sınıfıyla kalkanın kenarı turkuaz olmalı (CSS hazır).\");\nclick(\"#shield-btn\");\nassert(!$(\"#shield\").classList.contains(\"active\") && $(\"#status\").textContent === \"Kalkan: KAPALI\", \"İkinci tıklamada sınıf kalkmalı ve 'Kalkan: KAPALI' yazmalı.\");"
+   },
+   "xp": 50,
+   "mode": "page",
+   "html": "<div id=\"shield\">Kalkan</div>\n<button id=\"shield-btn\">Kalkanı aç/kapat</button>\n<p id=\"status\">Kalkan: KAPALI</p>\n",
+   "css": "#shield{padding:10px;border:3px solid #999;border-radius:8px;margin-bottom:8px}#shield.active{border-color:#26c6da;background:#e0f7fa}"
+  },
+  {
+   "id": "js-d19-t3",
+   "title": "Gezegen rengi",
+   "prompt": "Gezegenin rengi CSS değişkeni `--planet`'ten geliyor. `data-color` özelliği olan her düğmeye tıklanınca:\n\n- `document.documentElement.style.setProperty(\"--planet\", ...)` ile rengi düğmenin `dataset.color` değeri yap,\n- `#current`'e değişkenin yeni değerini `Renk: #1e88e5` biçiminde yaz (`getComputedStyle(...).getPropertyValue(\"--planet\")` ile oku, `trim()` et).",
+   "starter": "const root = document.documentElement;\nconst colorButtons = document.querySelectorAll(\"[data-color]\");\n\n// her düğmeye click dinleyicisi ekle\n\n",
+   "solution": "const root = document.documentElement;\nconst colorButtons = document.querySelectorAll(\"[data-color]\");\n\n// her düğmeye click dinleyicisi ekle\ncolorButtons.forEach((btn) => {\n  btn.addEventListener(\"click\", () => {\n    root.style.setProperty(\"--planet\", btn.dataset.color);\n    const value = getComputedStyle(root).getPropertyValue(\"--planet\").trim();\n    document.querySelector(\"#current\").textContent = `Renk: ${value}`;\n  });\n});\n",
+   "hints": [
+    "root.style.setProperty(\"--planet\", btn.dataset.color);",
+    "getComputedStyle(root).getPropertyValue(\"--planet\").trim()"
+   ],
+   "check": {
+    "code_contains": [
+     "setProperty",
+     "dataset",
+     "getPropertyValue"
+    ],
+    "js": "const btns = $$(\"[data-color]\");\nconst planetVar = () => getComputedStyle(document.documentElement).getPropertyValue(\"--planet\").trim();\nclick(btns[1]);\nassert(planetVar() === \"#1e88e5\", \"Mavi düğmesine tıklayınca --planet '#1e88e5' olmalı.\");\nassert(getComputedStyle($(\"#planet\")).backgroundColor === \"rgb(30, 136, 229)\", \"Gezegen maviye dönmeli (CSS değişkeni sayesinde).\");\nassert($(\"#current\").textContent === \"Renk: #1e88e5\", \"#current 'Renk: #1e88e5' olmalı.\");\nclick(btns[2]);\nassert(planetVar() === \"#43a047\" && $(\"#current\").textContent === \"Renk: #43a047\", \"Yeşil düğmesi --planet'i '#43a047' yapmalı; renk düğmenin data-color'ından gelmeli.\");"
+   },
+   "xp": 50,
+   "mode": "page",
+   "html": "<div id=\"planet\"></div>\n<button data-color=\"#e53935\">Kızıl</button> <button data-color=\"#1e88e5\">Mavi</button> <button data-color=\"#43a047\">Yeşil</button>\n<p id=\"current\">Renk: #f7df1e</p>\n",
+   "css": ":root{--planet:#f7df1e}#planet{width:60px;height:60px;border-radius:50%;background:var(--planet);margin-bottom:8px}"
+  }
+ ],
+ "challenge": {
+  "id": "js-d19-c",
+  "title": "Panel modu",
+  "prompt": "`setMode(mode)` fonksiyonunu yaz:\n\n- `document.body.dataset.mode`'u `mode` yapsın (CSS panelin rengini buna göre değiştiriyor),\n- `data-mode`'u `mode`'a eşit olan düğmeye `selected` sınıfını eklesin, diğerlerinden kaldırsın,\n- `#mode-label`'a `Mod: gece` biçiminde yazsın.\n\nHer `[data-mode]` düğmesi tıklanınca kendi moduyla `setMode` çağırsın. Sayfa açılınca `setMode(\"gunduz\")` çalışsın.",
+  "starter": "const modeButtons = document.querySelectorAll(\"[data-mode]\");\n\nfunction setMode(mode) {\n  // body.dataset.mode, selected sınıfı, #mode-label\n}\n\n// düğmeleri dinle ve başlangıç modunu ayarla\n\n",
+  "solution": "const modeButtons = document.querySelectorAll(\"[data-mode]\");\n\nfunction setMode(mode) {\n  // body.dataset.mode, selected sınıfı, #mode-label\n  document.body.dataset.mode = mode;\n  modeButtons.forEach((btn) => {\n    btn.classList.toggle(\"selected\", btn.dataset.mode === mode);\n  });\n  document.querySelector(\"#mode-label\").textContent = `Mod: ${mode}`;\n}\n\n// düğmeleri dinle ve başlangıç modunu ayarla\nmodeButtons.forEach((btn) => {\n  btn.addEventListener(\"click\", () => setMode(btn.dataset.mode));\n});\nsetMode(\"gunduz\");\n",
+  "hints": [
+   "document.body.dataset.mode = mode;",
+   "btn.classList.toggle(\"selected\", btn.dataset.mode === mode);"
+  ],
+  "check": {
+   "code_contains": [
+    "dataset",
+    "classList"
+   ],
+   "js": "const btns = $$(\"button[data-mode]\");\nconst panelBg = () => getComputedStyle($(\"#panel\")).backgroundColor;\nconst selected = () => btns.filter((b) => b.classList.contains(\"selected\")).map((b) => b.dataset.mode).join(\",\");\nassert(document.body.dataset.mode === \"gunduz\" && selected() === \"gunduz\", \"Açılışta mod 'gunduz' olmalı ve yalnızca Gündüz düğmesi selected olmalı.\");\nassert($(\"#mode-label\").textContent === \"Mod: gunduz\", \"Açılışta #mode-label 'Mod: gunduz' olmalı.\");\nclick(btns[1]);\nassert(document.body.dataset.mode === \"gece\" && panelBg() === \"rgb(11, 16, 38)\", \"Gece düğmesi body'nin data-mode'unu 'gece' yapmalı (panel koyulaşır).\");\nassert(selected() === \"gece\" && $(\"#mode-label\").textContent === \"Mod: gece\", \"Yalnızca Gece düğmesi selected olmalı ve 'Mod: gece' yazmalı.\");\nclick(btns[2]);\nassert(panelBg() === \"rgb(198, 40, 40)\" && selected() === \"alarm\", \"Alarm düğmesi paneli kırmızı yapmalı ve selected olmalı.\");\nsetMode(\"gunduz\");\nassert(panelBg() === \"rgb(255, 248, 214)\" && selected() === \"gunduz\", \"setMode('gunduz') her şeyi gündüze döndürmeli.\");"
+  },
+  "xp": 75,
+  "mode": "page",
+  "html": "<div id=\"panel\">Kontrol paneli</div>\n<button data-mode=\"gunduz\">Gündüz</button> <button data-mode=\"gece\">Gece</button> <button data-mode=\"alarm\">Alarm</button>\n<p id=\"mode-label\"></p>\n",
+  "css": "#panel{padding:12px;border-radius:8px;background:#fff8d6;color:#1b1f33;margin-bottom:8px}body[data-mode=\"gece\"] #panel{background:#0b1026;color:#eef1ff}body[data-mode=\"alarm\"] #panel{background:#c62828;color:#fff}button.selected{outline:3px solid #f7df1e}"
+ },
+ "project_contribution": "Tema ve efektler",
+ "project_task": {
+  "id": "js-d19-p",
+  "title": "Tema ve efektler",
+  "prompt": "Oyuna renk ve efekt ekleyelim. Geminin rengi CSS değişkeni `--ship-color`'dan geliyor.\n\n- `setShipColor(color)`: `--ship-color`'ı `color` yapsın (`document.documentElement.style.setProperty`).\n- `#colors` içindeki her `[data-color]` düğmesi tıklanınca kendi `dataset.color` değeriyle `setShipColor` çağırsın.\n- `flashHit()`: gemi vurulunca oyun alanı (`#field`) kızarsın: `hit` sınıfını eklesin ve **150 ms sonra** kaldırsın (`setTimeout`).",
+  "starter": "const field = document.querySelector(\"#field\");\n\nfunction setShipColor(color) {\n  // --ship-color değişkenini değiştir\n}\n\nfunction flashHit() {\n  // hit sınıfını ekle, 150 ms sonra kaldır\n}\n\n// renk düğmelerini dinle\n\n",
+  "solution": "const field = document.querySelector(\"#field\");\n\nfunction setShipColor(color) {\n  // --ship-color değişkenini değiştir\n  document.documentElement.style.setProperty(\"--ship-color\", color);\n}\n\nfunction flashHit() {\n  // hit sınıfını ekle, 150 ms sonra kaldır\n  field.classList.add(\"hit\");\n  setTimeout(() => {\n    field.classList.remove(\"hit\");\n  }, 150);\n}\n\n// renk düğmelerini dinle\ndocument.querySelectorAll(\"#colors [data-color]\").forEach((btn) => {\n  btn.addEventListener(\"click\", () => setShipColor(btn.dataset.color));\n});\n",
+  "hints": [
+   "document.documentElement.style.setProperty(\"--ship-color\", color);",
+   "field.classList.add(\"hit\"); setTimeout(() => field.classList.remove(\"hit\"), 150);"
+  ],
+  "check": {
+   "code_contains": [
+    "setProperty",
+    "classList",
+    "setTimeout"
+   ],
+   "js": "const shipVar = () => getComputedStyle(document.documentElement).getPropertyValue(\"--ship-color\").trim();\nclick($$(\"#colors [data-color]\")[1]);\nassert(shipVar() === \"#4dd0e1\", \"Turkuaz düğmesi --ship-color'ı '#4dd0e1' yapmalı.\");\nassert(getComputedStyle($(\"#ship\")).backgroundColor === \"rgb(77, 208, 225)\", \"Gemi turkuaza dönmeli.\");\nsetShipColor(\"#ff6b6b\");\nassert(getComputedStyle($(\"#ship\")).backgroundColor === \"rgb(255, 107, 107)\", \"setShipColor('#ff6b6b') gemiyi kırmızı yapmalı.\");\nassert(!$(\"#field\").classList.contains(\"hit\"), \"Başta #field'da hit sınıfı olmamalı.\");\nflashHit();\nassert($(\"#field\").classList.contains(\"hit\"), \"flashHit() #field'a hit sınıfını eklemeli.\");\nawait sleep(350);\nassert(!$(\"#field\").classList.contains(\"hit\"), \"hit sınıfı 150 ms sonra kaldırılmalı.\");"
+  },
+  "xp": 100,
+  "mode": "page",
+  "html": "<h2 id=\"title\">Yıldız Avcısı</h2>\n<form id=\"pilot-form\"><input id=\"pilot-name\" placeholder=\"Pilot adı\" autocomplete=\"off\"> <button>Başla</button></form>\n<p id=\"info\">Pilot adını yaz ve başla.</p>\n<p id=\"hud\">Skor: <span id=\"score\">0</span> · Süre: <span id=\"time\">10</span> · En yüksek: <span id=\"best\">0</span></p>\n<div id=\"field\"><div id=\"ship\"></div></div>\n<div id=\"colors\"><button data-color=\"#f7df1e\">Sarı</button> <button data-color=\"#4dd0e1\">Turkuaz</button> <button data-color=\"#ff6b6b\">Kırmızı</button></div>\n",
+  "css": ":root{--ship-color:#f7df1e}#title{margin:0 0 6px;color:#0b1026}#info.error{color:#c0392b;font-weight:600}#hud{margin:4px 0}#field{position:relative;width:300px;height:70px;background:#0b1026;border-radius:8px;overflow:hidden}#field.hit{background:#8e1b2b}#ship{position:absolute;left:0;bottom:10px;width:30px;height:30px;border-radius:50% 50% 6px 6px;background:var(--ship-color)}#colors{margin-top:8px}"
+ },
+ "tracks": {
+  "js-web": {
+   "project_contribution": "Tema rengi",
+   "project_task": {
+    "id": "js-d19-pw",
+    "title": "Tema rengi",
+    "prompt": "Ziyaretçi sitenin vurgu rengini seçebilsin. Başlığın alt çizgisi CSS değişkeni `--accent`'ten geliyor.\n\n`setAccent(color)` fonksiyonunu yaz:\n\n- `--accent`'i `color` yapsın,\n- `#accents` içinde `data-accent`'i `color`'a eşit olan düğmeye `active` sınıfını eklesin, diğerlerinden kaldırsın.\n\nHer `[data-accent]` düğmesi tıklanınca kendi rengiyle `setAccent` çağırsın.",
+    "starter": "const accentButtons = document.querySelectorAll(\"#accents [data-accent]\");\n\nfunction setAccent(color) {\n  // --accent ve active sınıfı\n}\n\n// düğmeleri dinle\n\n",
+    "solution": "const accentButtons = document.querySelectorAll(\"#accents [data-accent]\");\n\nfunction setAccent(color) {\n  // --accent ve active sınıfı\n  document.documentElement.style.setProperty(\"--accent\", color);\n  accentButtons.forEach((btn) => {\n    btn.classList.toggle(\"active\", btn.dataset.accent === color);\n  });\n}\n\n// düğmeleri dinle\naccentButtons.forEach((btn) => {\n  btn.addEventListener(\"click\", () => setAccent(btn.dataset.accent));\n});\n",
+    "hints": [
+     "document.documentElement.style.setProperty(\"--accent\", color);",
+     "btn.classList.toggle(\"active\", btn.dataset.accent === color);"
+    ],
+    "check": {
+     "code_contains": [
+      "setProperty",
+      "dataset",
+      "classList"
+     ],
+     "js": "const btns = $$(\"#accents [data-accent]\");\nconst accent = () => getComputedStyle(document.documentElement).getPropertyValue(\"--accent\").trim();\nconst active = () => btns.filter((b) => b.classList.contains(\"active\")).map((b) => b.dataset.accent).join(\",\");\nclick(btns[2]);\nassert(accent() === \"#b388ff\", \"Mor düğmesi --accent'i '#b388ff' yapmalı.\");\nassert(getComputedStyle($(\"#site-title\")).borderBottomColor === \"rgb(179, 136, 255)\", \"Başlığın alt çizgisi mor olmalı (CSS değişkeni sayesinde).\");\nassert(active() === \"#b388ff\", \"Yalnızca Mor düğmesi active olmalı.\");\nclick(btns[1]);\nassert(accent() === \"#26c6da\" && active() === \"#26c6da\", \"Turkuaz düğmesi rengi değiştirmeli ve active sınıfı ona geçmeli.\");\nsetAccent(\"#ff7043\");\nassert(accent() === \"#ff7043\", \"setAccent('#ff7043') --accent'i '#ff7043' yapmalı.\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<header id=\"top\"><h2 id=\"site-title\">Deniz Yıldız</h2> <input id=\"search\" placeholder=\"Sitede ara ( / )\" autocomplete=\"off\"> <span id=\"clock\">--:--:--</span></header>\n<nav id=\"accents\"><button data-accent=\"#f7df1e\">Sarı</button> <button data-accent=\"#26c6da\">Turkuaz</button> <button data-accent=\"#b388ff\">Mor</button> <button id=\"theme-btn\">Tema değiştir</button></nav>\n<form id=\"contact\"><input id=\"c-name\" placeholder=\"Adın\" autocomplete=\"off\"> <input id=\"c-email\" placeholder=\"E-posta adresin\" autocomplete=\"off\"> <button>Gönder</button></form>\n<p id=\"form-msg\"></p>\n",
+    "css": ":root{--accent:#f7df1e}body.dark{background:#0b1026;color:#eef1ff}#site-title{display:inline-block;margin:0 8px 6px 0;border-bottom:4px solid var(--accent)}#clock{font-family:monospace;margin-left:8px}nav{margin:6px 0}nav button.active{outline:3px solid var(--accent)}#contact input{margin:4px 4px 4px 0}#form-msg.error{color:#c0392b;font-weight:600}"
+   }
+  },
+  "js-app": {
+   "project_contribution": "Tamamlanan görevler",
+   "project_task": {
+    "id": "js-d19-pa",
+    "title": "Tamamlanan görevler",
+    "prompt": "Görevlere tıklayınca tamamlandı olarak işaretlensin ve ilerleme çubuğu dolsun.\n\n- `addTask` içinde her `li`'ye tıklanınca `done` sınıfı aç/kapansın ve `updateProgress()` çağrılsın.\n- `updateProgress()`: biten (`li.done`) ve toplam görev sayısını bulsun, `#progress-text`'e `1 / 3` yazsın ve yüzdeyi (`Math.round`) `#progress` elemanında `--progress` değişkenine `33%` biçiminde koysun (`style.setProperty`). Görev yoksa yüzde 0 olsun.",
+    "starter": "const list = document.querySelector(\"#task-list\");\n\nfunction updateProgress() {\n  // biten / toplam → #progress-text ve --progress\n}\n\nfunction addTask(text) {\n  const li = document.createElement(\"li\");\n  li.textContent = text;\n  // tıklanınca done sınıfını aç/kapat ve ilerlemeyi güncelle\n  list.append(li);\n  updateProgress();\n}\n\naddTask(\"Matematik ödevi\");\naddTask(\"Fizik tekrarı\");\naddTask(\"İngilizce kelimeler\");\n",
+    "solution": "const list = document.querySelector(\"#task-list\");\n\nfunction updateProgress() {\n  // biten / toplam → #progress-text ve --progress\n  const total = list.querySelectorAll(\"li\").length;\n  const done = list.querySelectorAll(\"li.done\").length;\n  const percent = total === 0 ? 0 : Math.round((done / total) * 100);\n  document.querySelector(\"#progress\").style.setProperty(\"--progress\", percent + \"%\");\n  document.querySelector(\"#progress-text\").textContent = `${done} / ${total}`;\n}\n\nfunction addTask(text) {\n  const li = document.createElement(\"li\");\n  li.textContent = text;\n  // tıklanınca done sınıfını aç/kapat ve ilerlemeyi güncelle\n  li.addEventListener(\"click\", () => {\n    li.classList.toggle(\"done\");\n    updateProgress();\n  });\n  list.append(li);\n  updateProgress();\n}\n\naddTask(\"Matematik ödevi\");\naddTask(\"Fizik tekrarı\");\naddTask(\"İngilizce kelimeler\");\n",
+    "hints": [
+     "list.querySelectorAll(\"li.done\").length biten görev sayısıdır.",
+     "document.querySelector(\"#progress\").style.setProperty(\"--progress\", percent + \"%\");"
+    ],
+    "check": {
+     "code_contains": [
+      "classList.toggle",
+      "setProperty",
+      "Math.round"
+     ],
+     "js": "const progressVar = () => $(\"#progress\").style.getPropertyValue(\"--progress\").trim();\nconst items = () => $$(\"#task-list li\");\nassert($(\"#progress-text\").textContent === \"0 / 3\", \"Başta #progress-text '0 / 3' olmalı.\");\nclick(items()[0]);\nassert(items()[0].classList.contains(\"done\"), \"Göreve tıklayınca done sınıfı eklenmeli.\");\nassert($(\"#progress-text\").textContent === \"1 / 3\" && progressVar() === \"33%\", \"1 görev bitince '1 / 3' yazmalı ve --progress '33%' olmalı.\");\nconst width = parseFloat(getComputedStyle($(\"#progress-bar\")).width);\nassert(width > 60 && width < 72, \"İlerleme çubuğu --progress ile dolmalı (200px'in %33'ü).\");\nclick(items()[2]);\nassert($(\"#progress-text\").textContent === \"2 / 3\" && progressVar() === \"67%\", \"2 görev bitince '2 / 3' ve '67%' olmalı.\");\nclick(items()[0]);\nassert(!items()[0].classList.contains(\"done\") && $(\"#progress-text\").textContent === \"1 / 3\" && progressVar() === \"33%\", \"Aynı göreve tekrar tıklayınca done kalkmalı ve ilerleme azalmalı.\");\naddTask(\"Kitap okuma\");\nassert($(\"#progress-text\").textContent === \"1 / 4\" && progressVar() === \"25%\", \"Yeni görev eklenince '1 / 4' ve '25%' olmalı.\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<h2 id=\"app-title\">Çalışma Asistanım</h2>\n<form id=\"task-form\"><input id=\"task-input\" placeholder=\"Yeni görev\" autocomplete=\"off\"> <button>Ekle</button></form>\n<p id=\"task-msg\"></p>\n<ul id=\"task-list\"></ul>\n<div id=\"progress\"><div id=\"progress-bar\"></div></div> <span id=\"progress-text\">0 / 0</span>\n<p id=\"focus\"><strong id=\"focus-time\">25:00</strong> <button id=\"focus-start\">Başlat</button> <button id=\"focus-pause\">Duraklat</button> <span id=\"focus-msg\"></span></p>\n",
+    "css": "#app-title{margin:0 0 6px}#task-msg.error{color:#c0392b;font-weight:600}#task-list li{cursor:pointer;padding:2px 0}#task-list li.done{text-decoration:line-through;opacity:.55}#progress{display:inline-block;vertical-align:middle;width:200px;height:10px;background:#e3e6f0;border-radius:5px;overflow:hidden}#progress-bar{width:var(--progress,0%);height:100%;background:#43a047}#focus-time{font-family:monospace;font-size:20px}"
+   }
+  },
+  "js-quiz": {
+   "project_contribution": "Doğru ve yanlış renkleri",
+   "project_task": {
+    "id": "js-d19-pq",
+    "title": "Doğru ve yanlış renkleri",
+    "prompt": "Cevap verilince seçenekler renklensin (CSS hazır: `.correct` yeşil, `.wrong` kırmızı).\n\n- `answer(index)` içinde doğru seçeneğin düğmesine (`buttons[question.correct]`) **her zaman** `correct` sınıfını ekle. Cevap yanlışsa seçilen düğmeye `wrong` sınıfını da ekle.\n- `resetOptions()`: bütün düğmelerden `correct` ve `wrong` sınıflarını kaldırsın, `answered`'ı `false` yapsın ve `#feedback`'i boşaltsın.",
+    "starter": "const question = { text: \"Ay, hangi gezegenin uydusudur?\", options: [\"Mars\", \"Dünya\", \"Jüpiter\"], correct: 1 };\nconst buttons = document.querySelectorAll(\".option\");\nconst feedback = document.querySelector(\"#feedback\");\nlet score = 0;\nlet answered = false;\n\nfunction answer(index) {\n  if (answered) return;\n  answered = true;\n  // doğru düğmeye correct, yanlış seçilene wrong\n  if (index === question.correct) {\n    score += 10;\n    document.querySelector(\"#score\").textContent = score;\n    feedback.textContent = \"Doğru!\";\n  } else {\n    feedback.textContent = `Yanlış! Doğru cevap: ${question.options[question.correct]}`;\n  }\n}\n\nfunction resetOptions() {\n  // sınıfları kaldır, answered = false, #feedback boş\n}\n\nbuttons.forEach((btn, i) => btn.addEventListener(\"click\", () => answer(i)));\n",
+    "solution": "const question = { text: \"Ay, hangi gezegenin uydusudur?\", options: [\"Mars\", \"Dünya\", \"Jüpiter\"], correct: 1 };\nconst buttons = document.querySelectorAll(\".option\");\nconst feedback = document.querySelector(\"#feedback\");\nlet score = 0;\nlet answered = false;\n\nfunction answer(index) {\n  if (answered) return;\n  answered = true;\n  // doğru düğmeye correct, yanlış seçilene wrong\n  buttons[question.correct].classList.add(\"correct\");\n  if (index === question.correct) {\n    score += 10;\n    document.querySelector(\"#score\").textContent = score;\n    feedback.textContent = \"Doğru!\";\n  } else {\n    buttons[index].classList.add(\"wrong\");\n    feedback.textContent = `Yanlış! Doğru cevap: ${question.options[question.correct]}`;\n  }\n}\n\nfunction resetOptions() {\n  // sınıfları kaldır, answered = false, #feedback boş\n  buttons.forEach((btn) => btn.classList.remove(\"correct\", \"wrong\"));\n  answered = false;\n  feedback.textContent = \"\";\n}\n\nbuttons.forEach((btn, i) => btn.addEventListener(\"click\", () => answer(i)));\n",
+    "hints": [
+     "buttons[question.correct].classList.add(\"correct\");",
+     "classList.remove(\"correct\", \"wrong\") iki sınıfı birden kaldırır."
+    ],
+    "check": {
+     "code_contains": [
+      "classList.add",
+      "classList.remove"
+     ],
+     "js": "const b = $$(\".option\");\nconst cls = () => b.map((x) => (x.classList.contains(\"correct\") ? \"c\" : \"\") + (x.classList.contains(\"wrong\") ? \"w\" : \"\") || \"-\").join(\",\");\nanswer(0);\nassert(cls() === \"w,c,-\", \"Mars'ı (0) seçince Mars wrong, Dünya correct olmalı; Jüpiter'e dokunulmamalı.\");\nassert(getComputedStyle(b[1]).backgroundColor === \"rgb(46, 125, 50)\" && getComputedStyle(b[0]).backgroundColor === \"rgb(198, 40, 40)\", \"Doğru seçenek yeşil, yanlış seçilen kırmızı görünmeli (CSS hazır).\");\nresetOptions();\nassert(cls() === \"-,-,-\" && answered === false && $(\"#feedback\").textContent === \"\", \"resetOptions() sınıfları kaldırmalı, answered'ı false yapmalı ve #feedback'i boşaltmalı.\");\nanswer(1);\nassert(cls() === \"-,c,-\", \"Doğru cevapta yalnızca doğru düğme correct olmalı, wrong olmamalı.\");\nresetOptions();\nquestion.correct = 2;\nanswer(0);\nassert(cls() === \"w,-,c\", \"Doğru düğme question.correct'ten bulunmalı (elle 1 yazma).\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<h2 id=\"quiz-title\">Bilgi Yarışması</h2>\n<form id=\"player-form\"><input id=\"player-name\" placeholder=\"Yarışmacı adı\" autocomplete=\"off\"> <button>Katıl</button></form>\n<p id=\"welcome\"></p>\n<p id=\"question\">Ay, hangi gezegenin uydusudur?</p>\n<div id=\"options\"><button class=\"option\">1) Mars</button> <button class=\"option\">2) Dünya</button> <button class=\"option\">3) Jüpiter</button></div>\n<p id=\"feedback\"></p>\n<p id=\"status\">Puan: <span id=\"score\">0</span> · Süre: <span id=\"time\">10</span> · Rekor: <span id=\"best\">0</span></p>\n",
+    "css": "#quiz-title{margin:0 0 6px}#welcome.error{color:#c0392b;font-weight:600}.option{margin:2px;padding:6px 10px;border:1px solid #9aa3c0;border-radius:6px;background:#f4f6fb;color:#1b1f33}.option.correct{background:#2e7d32;color:#fff}.option.wrong{background:#c62828;color:#fff}"
+   }
+  }
+ },
+ "available": true
+}

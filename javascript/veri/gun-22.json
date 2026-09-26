@@ -1,0 +1,241 @@
+{
+ "day": 22,
+ "title": "Animasyon",
+ "region": "piksel",
+ "xp_complete": 150,
+ "objective": "requestAnimationFrame ile animasyon döngüsü kurmak, update ve draw'u ayırmak, hız ve sekme hesaplamak",
+ "story": "Piksel Gezegeni'nde resimler kıpırdamaya başladı! Çizgi filmler gibi oyunlar da saniyede onlarca resmi art arda çizer. Bugün bir **animasyon döngüsü** kuracak ve gemini hareket ettireceksin.",
+ "sections": [
+  {
+   "title": "Animasyon nasıl çalışır?",
+   "body": "Ekrandaki her hareket aslında hızla değişen resimlerdir. Her **karede** (frame) üç şey olur:\n\n1. Nesnelerin yerini biraz değiştir.\n2. Eski resmi sil.\n3. Yeni resmi çiz.\n\nTarayıcı bunun için bize `requestAnimationFrame` (kısaca rAF) verir. Anlamı: \"bir sonraki resmi çizmeden hemen önce bu fonksiyonu çalıştır\". Fonksiyon her seferinde kendini yeniden isterse tarayıcıyı dondurmayan bir döngü olur (genellikle saniyede 60 kare):\n\n```js\nfunction loop() {\n  update();                    // hesapla\n  draw();                      // çiz\n  requestAnimationFrame(loop); // bir sonraki kareyi iste\n}\nrequestAnimationFrame(loop);\n```\n\n`while (true)` ile animasyon yapılmaz: tarayıcı çizim yapmaya fırsat bulamaz ve sayfa donar."
+  },
+  {
+   "title": "update ve draw'u ayır",
+   "body": "İyi bir alışkanlık: **hesaplamayı** ve **çizimi** ayrı fonksiyonlarda tut.\n\n```js\nconst ball = { x: 20, y: 60, r: 10, vx: 2 };\n\nfunction update() {\n  ball.x += ball.vx;  // yalnızca sayıları değiştirir\n}\n\nfunction draw() {\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  ctx.beginPath();\n  ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);\n  ctx.fill();         // yalnızca çizer\n}\n```\n\nBöylece `update()`'i tek başına çağırıp sonucunu kontrol edebilir, oyunu durdurduğunda yalnızca `draw()` çağırabilirsin. Bu kurstaki kontroller de fonksiyonlarını tek tek çağırarak sınar."
+  },
+  {
+   "title": "Hız ve kenardan sekme",
+   "body": "**Hız** (`vx`, `vy`), her karede konumun ne kadar değişeceğidir. `vx = 3` ise nesne her karede 3 piksel sağa gider, `vx = -3` ise sola.\n\nKenara çarpınca geri dönmesi için hızın işaretini çeviririz:\n\n```js\nif (ball.x + ball.r > canvas.width || ball.x - ball.r < 0) {\n  ball.vx = -ball.vx;\n}\n```\n\nNesne kenarın biraz dışına taştıysa onu kenara geri koymak (**sınırlamak**) da iyi olur. `Math.max` ve `Math.min` bunun kısa yoludur: `x = Math.max(0, Math.min(x, canvas.width - w));`"
+  },
+  {
+   "title": "Zaman farkı (delta) ve durdurmak",
+   "body": "Bazı ekranlar saniyede 60, bazıları 120 kare çizer. Hızı \"kare başına\" yazarsan oyun hızlı ekranda iki kat hızlı oynar! Çözüm: hızı **saniye başına** yaz ve iki kare arasında geçen süreyle (`dt`) çarp. rAF, fonksiyona milisaniye cinsinden zamanı verir:\n\n```js\nlet last = 0;\nfunction loop(time) {\n  if (!last) last = time;            // ilk kare\n  const dt = (time - last) / 1000;   // saniye\n  last = time;\n  rocket.x += rocket.speed * dt;     // speed: piksel/saniye\n  draw();\n  frameId = requestAnimationFrame(loop);\n}\n```\n\n`requestAnimationFrame` bir numara döndürür. `cancelAnimationFrame(frameId)` bu numaralı kareyi iptal eder ve döngü durur."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Kayan kare",
+   "code": "const canvas = document.querySelector(\"#c\");\nconst ctx = canvas.getContext(\"2d\");\nconst box = { x: 0, y: 50, size: 20, vx: 2 };\n\nfunction update() {\n  box.x += box.vx;\n  if (box.x > canvas.width) box.x = -box.size; // sağdan çıkınca soldan gir\n}\n\nfunction draw() {\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  ctx.fillStyle = \"#4fc3f7\";\n  ctx.fillRect(box.x, box.y, box.size, box.size);\n}\n\nfunction loop() {\n  update();\n  draw();\n  requestAnimationFrame(loop);\n}\nrequestAnimationFrame(loop);\n",
+   "note": "vx'i 5 yap: kare daha hızlı kayar. Negatif yaparsan ne olur?",
+   "mode": "page",
+   "html": "<canvas id=\"c\" width=\"200\" height=\"120\"></canvas>",
+   "css": "canvas{background:#e8ebf3;border-radius:8px;max-width:100%;display:block}"
+  },
+  {
+   "title": "Seken top",
+   "code": "const canvas = document.querySelector(\"#c\");\nconst ctx = canvas.getContext(\"2d\");\nconst ball = { x: 50, y: 40, r: 10, vx: 2.5, vy: 1.5 };\n\nfunction update() {\n  ball.x += ball.vx;\n  ball.y += ball.vy;\n  if (ball.x + ball.r > canvas.width || ball.x - ball.r < 0) ball.vx = -ball.vx;\n  if (ball.y + ball.r > canvas.height || ball.y - ball.r < 0) ball.vy = -ball.vy;\n}\n\nfunction draw() {\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  ctx.beginPath();\n  ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);\n  ctx.fillStyle = \"#ff9800\";\n  ctx.fill();\n}\n\nfunction loop() {\n  update();\n  draw();\n  requestAnimationFrame(loop);\n}\nrequestAnimationFrame(loop);\n",
+   "note": "draw içindeki clearRect satırını silersen top arkasında iz bırakır.",
+   "mode": "page",
+   "html": "<canvas id=\"c\" width=\"200\" height=\"120\"></canvas>",
+   "css": "canvas{background:#e8ebf3;border-radius:8px;max-width:100%;display:block}"
+  }
+ ],
+ "tasks": [
+  {
+   "id": "js-d22-t1",
+   "title": "İlk hareket",
+   "prompt": "Döngü hazır; sen iki fonksiyonu yaz:\n\n- `update()`: `box.x`'e `box.vx` eklesin.\n- `draw()`: tuvali `clearRect` ile silip kutuyu mavi (`#4fc3f7`), `size` × `size` boyutunda bir kare olarak `(box.x, box.y)` noktasına çizsin.",
+   "starter": "const canvas = document.querySelector(\"#c\");\nconst ctx = canvas.getContext(\"2d\");\nconst box = { x: 10, y: 50, size: 20, vx: 1 };\n\nfunction update() {\n  // box.x'i vx kadar artır\n}\n\nfunction draw() {\n  // temizle ve kutuyu çiz\n}\n\nfunction loop() {\n  update();\n  draw();\n  requestAnimationFrame(loop);\n}\nrequestAnimationFrame(loop);\n\n",
+   "solution": "const canvas = document.querySelector(\"#c\");\nconst ctx = canvas.getContext(\"2d\");\nconst box = { x: 10, y: 50, size: 20, vx: 1 };\n\nfunction update() {\n  // box.x'i vx kadar artır\n  box.x += box.vx;\n}\n\nfunction draw() {\n  // temizle ve kutuyu çiz\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  ctx.fillStyle = \"#4fc3f7\";\n  ctx.fillRect(box.x, box.y, box.size, box.size);\n}\n\nfunction loop() {\n  update();\n  draw();\n  requestAnimationFrame(loop);\n}\nrequestAnimationFrame(loop);\n\n",
+   "hints": [
+    "box.x += box.vx;",
+    "draw: ctx.clearRect(0, 0, canvas.width, canvas.height); sonra fillStyle ve fillRect(box.x, box.y, box.size, box.size)"
+   ],
+   "check": {
+    "code_contains": [
+     "box.vx",
+     "clearRect",
+     "fillRect"
+    ],
+    "js": "const colorIs = (sel, x, y, hex) => { const p = pixel(sel, x, y); const n = parseInt(hex.slice(1), 16); return p[3] === 255 && p[0] === (n >> 16) && p[1] === ((n >> 8) & 255) && p[2] === (n & 255); };\nconst isEmpty = (sel, x, y) => pixel(sel, x, y)[3] === 0;\nbox.x = 10;\nbox.vx = 3;\nupdate();\nassert(box.x === 13, \"update() box.x'e box.vx eklemeli (10 + 3 = 13).\");\nbox.vx = 5;\nupdate();\nassert(box.x === 18, \"update() her çağrıda o anki vx kadar ilerletmeli.\");\nbox.x = 50;\ndraw();\nassert(colorIs(\"#c\", 60, 60, \"#4fc3f7\"), \"draw() kutuyu (box.x, box.y) noktasına mavi (#4fc3f7) bir kare olarak çizmeli.\");\nbox.x = 120;\ndraw();\nassert(isEmpty(\"#c\", 60, 60), \"draw() önce tuvali clearRect ile silmeli; kutunun eski yeri boş kalmalı.\");\nassert(colorIs(\"#c\", 130, 60, \"#4fc3f7\"), \"Kutu yeni yerinde çizilmeli.\");"
+   },
+   "xp": 50,
+   "mode": "page",
+   "html": "<canvas id=\"c\" width=\"200\" height=\"120\"></canvas>",
+   "css": "canvas{background:#e8ebf3;border-radius:8px;max-width:100%;display:block}"
+  },
+  {
+   "id": "js-d22-t2",
+   "title": "Duvardan sek",
+   "prompt": "Top dört duvardan da seksin. `update()` içinde konum zaten değişiyor; altına şunları ekle:\n\n- Top sağ ya da sol kenarı geçtiyse (`ball.x + ball.r > canvas.width` veya `ball.x - ball.r < 0`) `vx`'in işaretini çevir.\n- Üst ya da alt kenar için aynısını `vy` ve `canvas.height` ile yap.",
+   "starter": "const canvas = document.querySelector(\"#c\");\nconst ctx = canvas.getContext(\"2d\");\nconst ball = { x: 100, y: 60, r: 10, vx: 3, vy: 2 };\n\nfunction update() {\n  ball.x += ball.vx;\n  ball.y += ball.vy;\n  // kenarlardan sek\n}\n\nfunction draw() {\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  ctx.beginPath();\n  ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);\n  ctx.fillStyle = \"#ff9800\";\n  ctx.fill();\n}\n\n\nfunction loop() {\n  update();\n  draw();\n  requestAnimationFrame(loop);\n}\nrequestAnimationFrame(loop);\n\n",
+   "solution": "const canvas = document.querySelector(\"#c\");\nconst ctx = canvas.getContext(\"2d\");\nconst ball = { x: 100, y: 60, r: 10, vx: 3, vy: 2 };\n\nfunction update() {\n  ball.x += ball.vx;\n  ball.y += ball.vy;\n  // kenarlardan sek\n  if (ball.x + ball.r > canvas.width || ball.x - ball.r < 0) {\n    ball.vx = -ball.vx;\n  }\n  if (ball.y + ball.r > canvas.height || ball.y - ball.r < 0) {\n    ball.vy = -ball.vy;\n  }\n}\n\nfunction draw() {\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  ctx.beginPath();\n  ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);\n  ctx.fillStyle = \"#ff9800\";\n  ctx.fill();\n}\n\n\nfunction loop() {\n  update();\n  draw();\n  requestAnimationFrame(loop);\n}\nrequestAnimationFrame(loop);\n\n",
+   "hints": [
+    "if (ball.x + ball.r > canvas.width || ball.x - ball.r < 0) { ball.vx = -ball.vx; }",
+    "Aynısını y, vy ve canvas.height ile yaz."
+   ],
+   "check": {
+    "code_contains": [
+     "canvas.width",
+     "canvas.height"
+    ],
+    "js": "Object.assign(ball, { x: 100, y: 60, vx: 3, vy: 2 });\nupdate();\nassert(ball.x === 103 && ball.y === 62 && ball.vx === 3 && ball.vy === 2, \"Ortadayken top yalnızca ilerlemeli, hız değişmemeli.\");\nObject.assign(ball, { x: 189, y: 60, vx: 3, vy: 2 });\nupdate();\nassert(ball.vx === -3, \"Top sağ kenarı geçince vx'in işareti çevrilmeli (3 → -3).\");\nObject.assign(ball, { x: 12, y: 60, vx: -3, vy: 2 });\nupdate();\nassert(ball.vx === 3, \"Top sol kenarı geçince vx'in işareti çevrilmeli (-3 → 3).\");\nObject.assign(ball, { x: 100, y: 108, vx: 3, vy: 4 });\nupdate();\nassert(ball.vy === -4 && ball.vx === 3, \"Top alt kenarı geçince yalnızca vy'nin işareti çevrilmeli.\");\nObject.assign(ball, { x: 100, y: 11, vx: 3, vy: -2 });\nupdate();\nassert(ball.vy === 2, \"Top üst kenarı geçince vy'nin işareti çevrilmeli.\");"
+   },
+   "xp": 50,
+   "mode": "page",
+   "html": "<canvas id=\"c\" width=\"200\" height=\"120\"></canvas>",
+   "css": "canvas{background:#e8ebf3;border-radius:8px;max-width:100%;display:block}"
+  },
+  {
+   "id": "js-d22-t3",
+   "title": "Saniyede 120 piksel",
+   "prompt": "Roketin hızı artık **saniye başına** piksel: `speed: 120`.\n\n- `update(dt)` fonksiyonunu yaz: `dt` saniye cinsinden geçen süre; roket `speed * dt` kadar ilerlesin.\n- `loop(time)` içinde `dt`'yi hesapla: `(time - last) / 1000`. Sonra `last = time` yap ve `update(dt)`'yi çağır.",
+   "starter": "const canvas = document.querySelector(\"#c\");\nconst ctx = canvas.getContext(\"2d\");\nconst rocket = { x: 0, y: 50, speed: 120 };\nlet last = 0;\n\nfunction update(dt) {\n  // speed * dt kadar ilerle\n}\n\nfunction draw() {\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  ctx.fillStyle = \"#e53935\";\n  ctx.fillRect(rocket.x, rocket.y, 24, 12);\n}\n\nfunction loop(time) {\n  if (!last) last = time;\n  // dt'yi hesapla, last'ı güncelle, update(dt) çağır\n  if (rocket.x > canvas.width) rocket.x = -24;\n  draw();\n  requestAnimationFrame(loop);\n}\nrequestAnimationFrame(loop);\n",
+   "solution": "const canvas = document.querySelector(\"#c\");\nconst ctx = canvas.getContext(\"2d\");\nconst rocket = { x: 0, y: 50, speed: 120 };\nlet last = 0;\n\nfunction update(dt) {\n  // speed * dt kadar ilerle\n  rocket.x += rocket.speed * dt;\n}\n\nfunction draw() {\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  ctx.fillStyle = \"#e53935\";\n  ctx.fillRect(rocket.x, rocket.y, 24, 12);\n}\n\nfunction loop(time) {\n  if (!last) last = time;\n  // dt'yi hesapla, last'ı güncelle, update(dt) çağır\n  const dt = (time - last) / 1000;\n  last = time;\n  update(dt);\n  if (rocket.x > canvas.width) rocket.x = -24;\n  draw();\n  requestAnimationFrame(loop);\n}\nrequestAnimationFrame(loop);\n",
+   "hints": [
+    "rocket.x += rocket.speed * dt;",
+    "const dt = (time - last) / 1000; last = time; update(dt);"
+   ],
+   "check": {
+    "code_contains": [
+     "dt",
+     "1000"
+    ],
+    "js": "rocket.x = 0;\nrocket.speed = 120;\nupdate(0.5);\nassert(rocket.x === 60, \"update(0.5): yarım saniyede 120 * 0.5 = 60 piksel ilerlemeli.\");\nupdate(0.25);\nassert(rocket.x === 90, \"update(0.25): 30 piksel daha ilerlemeli (toplam 90).\");\nrocket.x = 0;\nrocket.speed = 40;\nupdate(2);\nassert(rocket.x === 80, \"Hız rocket.speed'den gelmeli: 40 * 2 = 80.\");\nassert(/update\\s*\\(\\s*dt\\s*\\)/.test(_code.split(\"function loop\")[1] || \"\"), \"loop içinde dt'yi hesaplayıp update(dt) çağır.\");"
+   },
+   "xp": 50,
+   "mode": "page",
+   "html": "<canvas id=\"c\" width=\"200\" height=\"120\"></canvas>",
+   "css": "canvas{background:#e8ebf3;border-radius:8px;max-width:100%;display:block}"
+  }
+ ],
+ "challenge": {
+  "id": "js-d22-c",
+  "title": "Durdur / Başlat",
+  "prompt": "Düğmeyle animasyonu durdur ve yeniden başlat. `requestAnimationFrame`'in döndürdüğü numara `frameId`'de saklanıyor.\n\n- `running` true iken düğmeye tıklanırsa: `cancelAnimationFrame(frameId)` ile durdur, `running = false` yap, düğmenin metni `Başlat` olsun.\n- `running` false iken tıklanırsa: `running = true` yap, döngüyü `requestAnimationFrame(loop)` ile yeniden başlat, düğmenin metni `Durdur` olsun.",
+  "starter": "const canvas = document.querySelector(\"#c\");\nconst ctx = canvas.getContext(\"2d\");\nconst btn = document.querySelector(\"#toggle\");\nlet angle = 0;\nlet running = true;\nlet frameId = 0;\n\nfunction draw() {\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  const x = 100 + Math.cos(angle) * 40;\n  const y = 60 + Math.sin(angle) * 40;\n  ctx.beginPath();\n  ctx.arc(x, y, 8, 0, Math.PI * 2);\n  ctx.fillStyle = \"#4fc3f7\";\n  ctx.fill();\n}\n\nfunction loop() {\n  angle += 0.05;\n  draw();\n  frameId = requestAnimationFrame(loop);\n}\nframeId = requestAnimationFrame(loop);\n\nbtn.addEventListener(\"click\", () => {\n  // running'e göre durdur ya da başlat\n});\n",
+  "solution": "const canvas = document.querySelector(\"#c\");\nconst ctx = canvas.getContext(\"2d\");\nconst btn = document.querySelector(\"#toggle\");\nlet angle = 0;\nlet running = true;\nlet frameId = 0;\n\nfunction draw() {\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  const x = 100 + Math.cos(angle) * 40;\n  const y = 60 + Math.sin(angle) * 40;\n  ctx.beginPath();\n  ctx.arc(x, y, 8, 0, Math.PI * 2);\n  ctx.fillStyle = \"#4fc3f7\";\n  ctx.fill();\n}\n\nfunction loop() {\n  angle += 0.05;\n  draw();\n  frameId = requestAnimationFrame(loop);\n}\nframeId = requestAnimationFrame(loop);\n\nbtn.addEventListener(\"click\", () => {\n  // running'e göre durdur ya da başlat\n  if (running) {\n    cancelAnimationFrame(frameId);\n    running = false;\n    btn.textContent = \"Başlat\";\n  } else {\n    running = true;\n    frameId = requestAnimationFrame(loop);\n    btn.textContent = \"Durdur\";\n  }\n});\n",
+  "hints": [
+   "if (running) { ... } else { ... }",
+   "Durdurmak: cancelAnimationFrame(frameId);",
+   "Başlatmak: frameId = requestAnimationFrame(loop);"
+  ],
+  "check": {
+   "code_contains": [
+    "cancelAnimationFrame",
+    "requestAnimationFrame"
+   ],
+   "js": "assert(running === true, \"Başlangıçta running true olmalı.\");\nclick(\"#toggle\");\nassert(running === false && $(\"#toggle\").textContent.trim() === \"Başlat\", \"İlk tıklamada running false olmalı ve düğme 'Başlat' yazmalı.\");\nconst before = angle;\nawait sleep(120);\nassert(angle === before, \"Durunca animasyon gerçekten durmalı: cancelAnimationFrame(frameId) kullan.\");\nclick(\"#toggle\");\nassert(running === true && $(\"#toggle\").textContent.trim() === \"Durdur\", \"İkinci tıklamada running true olmalı ve düğme 'Durdur' yazmalı.\");"
+  },
+  "xp": 75,
+  "mode": "page",
+  "html": "<canvas id=\"c\" width=\"200\" height=\"120\"></canvas>\n<p><button id=\"toggle\">Durdur</button></p>\n",
+  "css": "canvas{background:#e8ebf3;border-radius:8px;max-width:100%;display:block}"
+ },
+ "project_contribution": "Gemi hareketi",
+ "project_task": {
+  "id": "js-d22-p",
+  "title": "Gemi hareketi",
+  "prompt": "Gemi artık kendi kendine yatay gidip gelsin.\n\n- `update()`: `ship.x`'e `ship.vx` ekle. Gemi sol kenarı geçerse (`ship.x < 0`) onu `0`'a koy; sağ kenarı geçerse (`ship.x + ship.w > canvas.width`) `canvas.width - ship.w`'ye koy. İki durumda da `vx`'in işaretini çevir.\n- `draw()` hazır: zemini, gemiyi ve yıldızları çiziyor.\n- `loop()`: `update()` ve `draw()`'u çağırıp kendini `requestAnimationFrame` ile yeniden istesin. Döngüyü başlatmayı unutma.",
+  "starter": "const canvas = document.querySelector(\"#game\");\nconst ctx = canvas.getContext(\"2d\");\n\nconst ship = { x: 20, y: 150, w: 30, h: 20, vx: 3 };\nconst stars = [\n  { x: 120, y: 40 },\n  { x: 200, y: 60 },\n  { x: 260, y: 110 },\n];\n\nfunction draw() {\n  ctx.fillStyle = \"#0b1026\";\n  ctx.fillRect(0, 0, canvas.width, canvas.height);\n  ctx.fillStyle = \"#4fc3f7\";\n  ctx.fillRect(ship.x, ship.y, ship.w, ship.h);\n  ctx.fillStyle = \"#f7df1e\";\n  for (const star of stars) {\n    ctx.beginPath();\n    ctx.arc(star.x, star.y, 6, 0, Math.PI * 2);\n    ctx.fill();\n  }\n}\n\nfunction update() {\n  // ilerle, kenarda dur ve geri dön\n}\n\n// loop fonksiyonunu yaz ve başlat\n\ndraw();\n",
+  "solution": "const canvas = document.querySelector(\"#game\");\nconst ctx = canvas.getContext(\"2d\");\n\nconst ship = { x: 20, y: 150, w: 30, h: 20, vx: 3 };\nconst stars = [\n  { x: 120, y: 40 },\n  { x: 200, y: 60 },\n  { x: 260, y: 110 },\n];\n\nfunction draw() {\n  ctx.fillStyle = \"#0b1026\";\n  ctx.fillRect(0, 0, canvas.width, canvas.height);\n  ctx.fillStyle = \"#4fc3f7\";\n  ctx.fillRect(ship.x, ship.y, ship.w, ship.h);\n  ctx.fillStyle = \"#f7df1e\";\n  for (const star of stars) {\n    ctx.beginPath();\n    ctx.arc(star.x, star.y, 6, 0, Math.PI * 2);\n    ctx.fill();\n  }\n}\n\nfunction update() {\n  // ilerle, kenarda dur ve geri dön\n  ship.x += ship.vx;\n  if (ship.x < 0) {\n    ship.x = 0;\n    ship.vx = -ship.vx;\n  } else if (ship.x + ship.w > canvas.width) {\n    ship.x = canvas.width - ship.w;\n    ship.vx = -ship.vx;\n  }\n}\n\n// loop fonksiyonunu yaz ve başlat\nfunction loop() {\n  update();\n  draw();\n  requestAnimationFrame(loop);\n}\nrequestAnimationFrame(loop);\n\ndraw();\n",
+  "hints": [
+   "ship.x += ship.vx;",
+   "if (ship.x + ship.w > canvas.width) { ship.x = canvas.width - ship.w; ship.vx = -ship.vx; }",
+   "function loop() { update(); draw(); requestAnimationFrame(loop); }"
+  ],
+  "check": {
+   "code_contains": [
+    "ship.vx",
+    "requestAnimationFrame"
+   ],
+   "js": "const colorIs = (sel, x, y, hex) => { const p = pixel(sel, x, y); const n = parseInt(hex.slice(1), 16); return p[3] === 255 && p[0] === (n >> 16) && p[1] === ((n >> 8) & 255) && p[2] === (n & 255); };\nconst isEmpty = (sel, x, y) => pixel(sel, x, y)[3] === 0;\nObject.assign(ship, { x: 100, vx: 3 });\nupdate();\nassert(ship.x === 103 && ship.vx === 3, \"update() ship.x'e ship.vx eklemeli (100 + 3 = 103).\");\nObject.assign(ship, { x: 268, vx: 4 });\nupdate();\nassert(ship.x === 270, \"Sağ kenarı geçen gemi canvas.width - ship.w noktasına (270) konmalı.\");\nassert(ship.vx === -4, \"Sağ kenarda vx'in işareti çevrilmeli (4 → -4).\");\nObject.assign(ship, { x: 2, vx: -5 });\nupdate();\nassert(ship.x === 0 && ship.vx === 5, \"Sol kenarı geçen gemi 0'a konmalı ve vx'in işareti çevrilmeli.\");\nassert(typeof loop === \"function\", \"loop adında bir fonksiyon yazmalısın.\");\nship.x = 200;\ndraw();\nassert(colorIs(\"#game\", 215, 160, \"#4fc3f7\"), \"draw() gemiyi yeni yerinde çizmeli.\");"
+  },
+  "xp": 100,
+  "mode": "page",
+  "html": "<canvas id=\"game\" width=\"300\" height=\"200\"></canvas>\n<p id=\"info\">Skor: 0</p>\n",
+  "css": "canvas{background:#0b1026;display:block;max-width:100%;border-radius:8px}#info{font-weight:600;margin:8px 0 0}"
+ },
+ "tracks": {
+  "js-web": {
+   "project_contribution": "Kayan duyuru",
+   "project_task": {
+    "id": "js-d22-pw",
+    "title": "Kayan duyuru bandı",
+    "prompt": "Sitenin üstünde sağdan sola kayan bir duyuru bandı olsun. `step()` fonksiyonunu yaz:\n\n- `offset`'i `speed` kadar azalt.\n- `offset`, `-200`'den küçük olursa `300` yap (yazı sağdan yeniden girsin).\n- `#ticker`'ın `style.transform` değerini `translateX(...px)` yap; `...` yerine `offset` gelsin.\n\nSonra `loop()` ile `step()`'i her karede çağır (`requestAnimationFrame`).",
+    "starter": "const ticker = document.querySelector(\"#ticker\");\nlet offset = 300;\nlet speed = 1;\n\nfunction step() {\n  // offset'i azalt, gerekirse başa sar, transform'u ayarla\n}\n\n// loop: step() ve requestAnimationFrame\n\n",
+    "solution": "const ticker = document.querySelector(\"#ticker\");\nlet offset = 300;\nlet speed = 1;\n\nfunction step() {\n  // offset'i azalt, gerekirse başa sar, transform'u ayarla\n  offset -= speed;\n  if (offset < -200) offset = 300;\n  ticker.style.transform = `translateX(${offset}px)`;\n}\n\n// loop: step() ve requestAnimationFrame\nfunction loop() {\n  step();\n  requestAnimationFrame(loop);\n}\nrequestAnimationFrame(loop);\n",
+    "hints": [
+     "offset -= speed;",
+     "if (offset < -200) offset = 300;",
+     "ticker.style.transform = `translateX(${offset}px)`;"
+    ],
+    "check": {
+     "code_contains": [
+      "translateX",
+      "requestAnimationFrame"
+     ],
+     "js": "const pos = () => {\n  const m = /translateX\\(\\s*(-?[\\d.]+)px\\s*\\)/.exec($(\"#ticker\").style.transform);\n  return m ? Number(m[1]) : NaN;\n};\noffset = 100;\nspeed = 2;\nstep();\nassert(offset === 98, \"step() offset'i speed kadar azaltmalı (100 - 2 = 98).\");\nassert(pos() === 98, \"#ticker'ın style.transform değeri 'translateX(98px)' olmalı.\");\nspeed = 5;\noffset = -198;\nstep();\nassert(offset === 300 && pos() === 300, \"offset -200'den küçük olunca 300'e dönmeli ve transform da güncellenmeli.\");\noffset = 0;\nstep();\nassert(offset === -5 && pos() === -5, \"Hız speed değişkeninden gelmeli.\");\nassert(typeof loop === \"function\", \"loop adında bir fonksiyon yazmalısın.\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<header><h1 id=\"site-title\">Ada'nın Sitesi</h1><nav><a href=\"#\">Ana sayfa</a> · <a href=\"#\">Galeri</a> · <a href=\"#\">İletişim</a></nav></header>\n<div id=\"ticker-box\"><p id=\"ticker\">Yeni yazım yayında: Döngüler neden harika?</p></div>\n",
+    "css": "header{border-bottom:3px solid #7e57c2;margin-bottom:10px;padding-bottom:4px}#site-title{margin:0;color:#4a2f8a;font-size:22px}nav a{color:#7e57c2}#ticker-box{overflow:hidden;background:#1b1f33;color:#fff;border-radius:6px;height:34px;position:relative}#ticker{position:absolute;left:0;top:6px;margin:0;white-space:nowrap}"
+   }
+  },
+  "js-app": {
+   "project_contribution": "İlerleme çubuğu animasyonu",
+   "project_task": {
+    "id": "js-d22-pa",
+    "title": "Yumuşak ilerleme çubuğu",
+    "prompt": "Hedef yüzdesi değişince çubuk birden zıplamasın, yavaşça ilerlesin. `step()` fonksiyonunu yaz:\n\n- `progress`, `target`'tan küçükse `2` artsın, büyükse `2` azalsın; ama `target`'ı **geçmesin**, tam `target`'ta dursun.\n- `#bar`'ın genişliğini `progress + \"%\"` yap ve `#percent`'e `%42` biçiminde yaz.\n\n`animateTo(value)` fonksiyonunu da yaz: `target = value` yapsın ve `progress` hedefe varana kadar `step()`'i her karede çağıran bir döngü başlatsın (`requestAnimationFrame`).",
+    "starter": "const bar = document.querySelector(\"#bar\");\nconst percent = document.querySelector(\"#percent\");\nlet progress = 0;\nlet target = 0;\n\nfunction step() {\n  // progress'i hedefe doğru 2 yaklaştır, çubuğu ve yazıyı güncelle\n}\n\nfunction animateTo(value) {\n  // target'ı ayarla, döngüyü başlat\n}\n\nanimateTo(60);\n",
+    "solution": "const bar = document.querySelector(\"#bar\");\nconst percent = document.querySelector(\"#percent\");\nlet progress = 0;\nlet target = 0;\n\nfunction step() {\n  // progress'i hedefe doğru 2 yaklaştır, çubuğu ve yazıyı güncelle\n  if (progress < target) {\n    progress = Math.min(progress + 2, target);\n  } else if (progress > target) {\n    progress = Math.max(progress - 2, target);\n  }\n  bar.style.width = progress + \"%\";\n  percent.textContent = \"%\" + progress;\n}\n\nfunction animateTo(value) {\n  // target'ı ayarla, döngüyü başlat\n  target = value;\n  function tick() {\n    step();\n    if (progress !== target) requestAnimationFrame(tick);\n  }\n  requestAnimationFrame(tick);\n}\n\nanimateTo(60);\n",
+    "hints": [
+     "Artarken hedefi geçmemek için: progress = Math.min(progress + 2, target);",
+     "Azalırken: progress = Math.max(progress - 2, target);",
+     "animateTo içinde step() çağıran küçük bir tick fonksiyonu yaz ve requestAnimationFrame(tick) ile başlat."
+    ],
+    "check": {
+     "code_contains": [
+      "requestAnimationFrame",
+      "style.width"
+     ],
+     "js": "progress = 0;\ntarget = 5;\nstep();\nassert(progress === 2, \"step() progress'i 2 artırmalı (0 → 2).\");\nstep();\nstep();\nassert(progress === 5, \"progress hedefi geçmemeli: 4'ten sonra tam 5'te durmalı.\");\nstep();\nassert(progress === 5, \"Hedefe varınca progress değişmemeli.\");\nassert($(\"#bar\").style.width === \"5%\", \"#bar'ın genişliği '5%' olmalı.\");\nassert($(\"#percent\").textContent.trim() === \"%5\", \"#percent '%5' yazmalı.\");\nprogress = 50;\ntarget = 47;\nstep();\nassert(progress === 48, \"progress hedeften büyükse 2 azalmalı (50 → 48).\");\nstep();\nassert(progress === 47, \"Azalırken de hedefte durmalı (47).\");\nanimateTo(10);\nassert(target === 10, \"animateTo(value) target'ı value yapmalı.\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<h2 class=\"app-title\">Çalışma Asistanım</h2>\n<p>Bugünkü hedef</p>\n<div id=\"track\"><div id=\"bar\"></div></div>\n<p id=\"percent\">%0</p>\n",
+    "css": ".app-title{margin:0 0 8px;color:#2e7d32}#track{background:#e0e0e0;border-radius:8px;height:18px;overflow:hidden}#bar{background:#4caf50;height:100%;width:0}"
+   }
+  },
+  "js-quiz": {
+   "project_contribution": "Süre çubuğu",
+   "project_task": {
+    "id": "js-d22-pq",
+    "title": "Süre çubuğu",
+    "prompt": "Her soru için 10 saniye var; süre azaldıkça çubuk daralsın. Döngü hazır, `step(dt)` fonksiyonunu yaz (`dt`: geçen süre, saniye):\n\n- `timeLeft`'ten `dt` çıkar; `0`'ın altına inmesin.\n- `#time-bar`'ın genişliği kalan sürenin yüzdesi olsun: `timeLeft * 100 / TOTAL` ve sonuna `%`.\n- `#info`'ya `Süre: 7 sn` yaz (saniyeyi yukarı yuvarla: `Math.ceil`).\n- Süre `0` olunca `#info` `Süre doldu!` yazsın ve çubuğa `empty` sınıfı eklensin.",
+    "starter": "const TOTAL = 10;\nlet timeLeft = 10;\nconst bar = document.querySelector(\"#time-bar\");\nconst info = document.querySelector(\"#info\");\n\nfunction step(dt) {\n  // süreyi azalt, çubuğu ve yazıyı güncelle\n}\n\nlet last = 0;\nfunction loop(time) {\n  if (!last) last = time;\n  step((time - last) / 1000);\n  last = time;\n  if (timeLeft > 0) requestAnimationFrame(loop);\n}\nrequestAnimationFrame(loop);\n",
+    "solution": "const TOTAL = 10;\nlet timeLeft = 10;\nconst bar = document.querySelector(\"#time-bar\");\nconst info = document.querySelector(\"#info\");\n\nfunction step(dt) {\n  // süreyi azalt, çubuğu ve yazıyı güncelle\n  timeLeft = Math.max(0, timeLeft - dt);\n  bar.style.width = timeLeft * 100 / TOTAL + \"%\";\n  if (timeLeft === 0) {\n    info.textContent = \"Süre doldu!\";\n    bar.classList.add(\"empty\");\n  } else {\n    info.textContent = `Süre: ${Math.ceil(timeLeft)} sn`;\n  }\n}\n\nlet last = 0;\nfunction loop(time) {\n  if (!last) last = time;\n  step((time - last) / 1000);\n  last = time;\n  if (timeLeft > 0) requestAnimationFrame(loop);\n}\nrequestAnimationFrame(loop);\n",
+    "hints": [
+     "timeLeft = Math.max(0, timeLeft - dt);",
+     "bar.style.width = timeLeft * 100 / TOTAL + \"%\";",
+     "if (timeLeft === 0) { ... } else { info.textContent = `Süre: ${Math.ceil(timeLeft)} sn`; }"
+    ],
+    "check": {
+     "code_contains": [
+      "Math.ceil",
+      "style.width"
+     ],
+     "js": "const width = () => parseFloat($(\"#time-bar\").style.width);\ntimeLeft = 10;\nstep(2.5);\nassert(timeLeft === 7.5, \"step(2.5) timeLeft'i 2.5 azaltmalı (10 → 7.5).\");\nassert(Math.abs(width() - 75) < 0.01 && /%$/.test($(\"#time-bar\").style.width), \"Çubuğun genişliği '75%' olmalı.\");\nassert($(\"#info\").textContent.trim() === \"Süre: 8 sn\", \"#info 'Süre: 8 sn' yazmalı (7.5 yukarı yuvarlanır).\");\nstep(0.5);\nassert(Math.abs(width() - 70) < 0.01 && $(\"#info\").textContent.trim() === \"Süre: 7 sn\", \"7 saniye kalınca çubuk '70%' ve yazı 'Süre: 7 sn' olmalı.\");\nstep(20);\nassert(timeLeft === 0, \"Süre 0'ın altına inmemeli.\");\nassert(width() === 0, \"Süre bitince çubuğun genişliği 0% olmalı.\");\nassert($(\"#info\").textContent.trim() === \"Süre doldu!\", \"Süre bitince #info 'Süre doldu!' yazmalı.\");\nassert($(\"#time-bar\").classList.contains(\"empty\"), \"Süre bitince çubuğa empty sınıfı eklenmeli.\");\n$(\"#time-bar\").classList.remove(\"empty\");\ntimeLeft = 4;\nstep(1);\nassert(Math.abs(width() - 30) < 0.01 && !$(\"#time-bar\").classList.contains(\"empty\"), \"Süre bitmeden empty sınıfı eklenmemeli; genişlik timeLeft * 100 / TOTAL olmalı.\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<h2 class=\"quiz-title\">Bilgi Yarışması</h2>\n<p id=\"question\">Ay, hangi gezegenin uydusudur?</p>\n<div id=\"timer\"><div id=\"time-bar\"></div></div>\n<p id=\"info\">Süre: 10 sn</p>\n",
+    "css": ".quiz-title{margin:0 0 8px;color:#5e35b1}#timer{background:#eee;height:14px;border-radius:7px;overflow:hidden}#time-bar{background:#7e57c2;height:100%;width:100%}#time-bar.empty{background:#e53935}"
+   }
+  }
+ },
+ "available": true
+}

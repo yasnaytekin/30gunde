@@ -1,0 +1,182 @@
+{
+  "kurs": "javascript",
+  "gun": 5,
+  "baslik": "Koşullar",
+  "maskot": "kodi",
+  "ozet": "Döngü Ayı'na yaklaşırken koda karar verme yeteneği kazandırıyoruz: if, else if, else, üçlü operatör, switch ve doğru-yanlış sayılan değerler.",
+  "hedef_sure_sn": 150,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 10,
+      "anlatim": "Selam, ben Kodi! Döngü Ayı'na yaklaşıyoruz. Uzayda her an bir karar gerekir: yakıt azsa uyar, hava kötüyse bekle. Peki kodumuz nasıl karar verecek?",
+      "ekran": {
+        "baslik": "Gün 5: Koşullar",
+        "gorsel": "gorseller/javascript/bolgeler/ay.webp"
+      },
+      "maskot": { "poz": "el-sallama", "konum": "sag" },
+      "yonetmen_notu": "Döngü Ayı ekranın ortasında büyüyerek yaklaşır."
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 15,
+      "anlatim": "if, yani eğer: parantezdeki koşul doğruysa süslü parantezin içi çalışır. else, yani değilse: koşul yanlışsa bu kısım çalışır. Yakıt 15, yirmiden az, o yüzden uyarı geldi.",
+      "ekran": {
+        "baslik": "if ve else",
+        "kod": "const fuel = 15;\nif (fuel < 20) {\n  console.log(\"Uyarı: yakıt az!\");\n} else {\n  console.log(\"Yakıt yeterli.\");\n}\n",
+        "dil": "js",
+        "vurgu_satirlari": [2, 4],
+        "cikti": "Uyarı: yakıt az!"
+      },
+      "maskot": { "poz": "isaret", "konum": "alt-sag" },
+      "calistir": true,
+      "yonetmen_notu": "İçeri yazılmış satırlar hafifçe parlar: iki boşluk girinti."
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 15,
+      "anlatim": "Daha fazla seçenek için else if kullanırız. Koşullar yukarıdan aşağı sınanır, ilk doğru olan çalışır ve gerisine bakılmaz. Hız 70, yüzü geçmiyor ama elliyi geçiyor.",
+      "ekran": {
+        "baslik": "else if: birden fazla seçenek",
+        "kod": "const speed = 70;\nif (speed > 100) {\n  console.log(\"Çok hızlı!\");\n} else if (speed > 50) {\n  console.log(\"İyi hız.\");\n} else {\n  console.log(\"Yavaş.\");\n}\n",
+        "dil": "js",
+        "vurgu_satirlari": [4, 5],
+        "cikti": "İyi hız."
+      },
+      "maskot": { "poz": "isaret", "konum": "alt-sag" },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 13,
+      "anlatim": "İki seçenekten birini seçmenin kısa yolu üçlü operatör: koşul, soru işareti, doğruysa değer, iki nokta, yanlışsa değer. Can kalmadığı için oyun bitti.",
+      "ekran": {
+        "baslik": "Üçlü operatör: koşul ? a : b",
+        "kod": "const lives = 0;\nconst message = lives > 0 ? \"Devam!\" : \"Oyun bitti\";\nconsole.log(message);\n",
+        "dil": "js",
+        "vurgu_satirlari": [2],
+        "cikti": "Oyun bitti"
+      },
+      "maskot": { "poz": "konusma", "konum": "alt-sag" },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "Bir değeri birçok seçenekle karşılaştırırken switch düzenli görünür. Eşleşen case çalışır, hiçbiri eşleşmezse default. break'i unutma, yoksa alttaki seçenek de çalışır!",
+      "ekran": {
+        "baslik": "switch",
+        "kod": "const planet = \"Mars\";\nlet info;\nswitch (planet) {\n  case \"Mars\":\n    info = \"Kızıl gezegen\";\n    break;\n  default:\n    info = \"Bilinmiyor\";\n}\nconsole.log(info);\n",
+        "dil": "js",
+        "vurgu_satirlari": [4, 6, 7],
+        "cikti": "Kızıl gezegen"
+      },
+      "maskot": { "poz": "isaret", "konum": "alt-sag" },
+      "calistir": true
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "if içine her değer yazılabilir. Sıfır, boş metin, null, undefined ve NaN yanlış sayılır, geri kalan her şey doğru. Pilot adı boş olduğu için else çalıştı.",
+      "ekran": {
+        "baslik": "Doğru ve yanlış sayılan değerler",
+        "kod": "const pilot = \"\";\nif (pilot) {\n  console.log(\"Hoş geldin,\", pilot);\n} else {\n  console.log(\"Pilot adı boş!\");\n}\n",
+        "dil": "js",
+        "vurgu_satirlari": [1, 2],
+        "cikti": "Pilot adı boş!",
+        "maddeler": ["Yanlış sayılanlar: 0, \"\", null, undefined, NaN"]
+      },
+      "maskot": { "poz": "konusma", "konum": "alt-sag" },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "hata",
+      "sure_sn": 15,
+      "anlatim": "Sık yapılan hata: if içinde tek eşittir yazmak. Tek eşittir karşılaştırmaz, değer atar! fuel const olduğu için hata aldık; let olsaydı yakıt sessizce sıfırlanırdı. Karşılaştırmada hep üç eşittir.",
+      "ekran": {
+        "baslik": "= ile === aynı değil",
+        "kod": "const fuel = 50;\nif (fuel = 0) {\n  console.log(\"Yakıt bitti!\");\n}\n",
+        "dil": "js",
+        "vurgu_satirlari": [2],
+        "cikti": "TypeError: Assignment to constant variable."
+      },
+      "maskot": { "poz": "sasirma", "konum": "sag" },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "soru",
+      "sure_sn": 10,
+      "anlatim": "Skor 90. İki koşul da doğru gibi görünüyor. Sence hangi mesaj yazılır? Durdur ve düşün.",
+      "ekran": {
+        "baslik": "Sence ne yazdırır?",
+        "kod": "const score = 90;\nif (score > 50) {\n  console.log(\"Geçti\");\n} else if (score > 80) {\n  console.log(\"Harika\");\n} else {\n  console.log(\"Tekrar dene\");\n}\n",
+        "dil": "js"
+      },
+      "maskot": { "poz": "dusunme", "konum": "sag" }
+    },
+    {
+      "no": 9,
+      "tur": "cikti",
+      "sure_sn": 10,
+      "anlatim": "Cevap Geçti! İlk koşul doğru olduğu için orada durduk, Harika satırına hiç bakılmadı. Koşulların sırası çok önemli.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "const score = 90;\nif (score > 50) {\n  console.log(\"Geçti\");\n} else if (score > 80) {\n  console.log(\"Harika\");\n} else {\n  console.log(\"Tekrar dene\");\n}\n",
+        "dil": "js",
+        "vurgu_satirlari": [2, 3],
+        "cikti": "Geçti"
+      },
+      "maskot": { "poz": "mutlu", "konum": "sag" },
+      "calistir": true
+    },
+    {
+      "no": 10,
+      "tur": "gorev",
+      "sure_sn": 12,
+      "anlatim": "Görevlerin: oksijen azalınca alarm ver, puana göre harf notu hesapla ve üçlü operatörle kokpitin gece mi gündüz mü olduğuna karar ver.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Oksijen alarmı",
+          "Görev 2: Not hesaplayıcı",
+          "Görev 3: Gece mi gündüz mü?"
+        ]
+      },
+      "maskot": { "poz": "isaret", "konum": "sol" }
+    },
+    {
+      "no": 11,
+      "tur": "ozet",
+      "sure_sn": 11,
+      "anlatim": "Özet: if ve else ile karar verir, else if ile seçenek eklersin. Kısa kararlar için üçlü operatör, çok seçenek için switch var.",
+      "ekran": {
+        "baslik": "Özet",
+        "maddeler": [
+          "if / else if / else: ilk doğru koşul çalışır",
+          "koşul ? a : b ile kısa karar",
+          "switch'te break'i unutma"
+        ]
+      },
+      "maskot": { "poz": "on", "konum": "sag" }
+    },
+    {
+      "no": 12,
+      "tur": "kapanis",
+      "sure_sn": 10,
+      "anlatim": "Artık kodun karar verebiliyor, bravo! Yarın kargo bölmesini dolduruyoruz. Onlarca eşyayı tek bir listede tutmayı öğreneceğiz: diziler.",
+      "ekran": {
+        "baslik": "Yarın: Diziler",
+        "gorsel": "maskotlar/kodi-javascript/kahraman.png"
+      },
+      "maskot": { "poz": "tebrik", "konum": "sag" }
+    }
+  ]
+}

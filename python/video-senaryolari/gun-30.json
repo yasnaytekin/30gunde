@@ -1,0 +1,246 @@
+{
+  "kurs": "python",
+  "gun": 30,
+  "baslik": "Final ve sonrası",
+  "maskot": "piko",
+  "ozet": "Piko, Python Dağı'nın zirvesinde 30 günlük yolculuğu bölge bölge özetliyor, öğrenilenleri tek bir oyunda birleştiriyor, final görevlerini tanıtıyor ve kursu kutlamayla kapatıyor.",
+  "hedef_sure_sn": 172,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 14,
+      "anlatim": "Selam, ben Piko! Başardın, Python Dağı'nın zirvesindeyiz! Buradan geriye bak: ilk print'ten kendi API'ne kadar uzun bir yol yürüdün. Ben çok gururluyum. Son bir macera kaldı: her şeyi tek bir oyunda birleştirmek!",
+      "ekran": {
+        "baslik": "Gün 30: Final ve sonrası",
+        "maddeler": [
+          "Python Dağı: zirve",
+          "Hepsini birleştirme zamanı"
+        ]
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "sag"
+      },
+      "yonetmen_notu": "Arka plan: Python Dağı bölge görseli (gorseller/python/harita/dag.webp). Dosya repoda henüz yok; eklenince ekran.gorsel alanına yazılmalı. Kamera zirveden aşağı, 30 günlük yola doğru döner; konfeti."
+    },
+    {
+      "no": 2,
+      "tur": "anlatim",
+      "sure_sn": 17,
+      "anlatim": "Hadi yolu hatırlayalım. Başlangıç Kampı'nda print ve değişkenleri, Köy'de operatör ve stringleri öğrendin. Veri Ormanı'nda liste, tuple, set ve sözlük, Mantık Kalesi'nde koşul ve döngüler. Alet Atölyesi'nde de fonksiyonlar ve modüller vardı.",
+      "ekran": {
+        "baslik": "Yolun ilk yarısı",
+        "maddeler": [
+          "Kamp: print, değişkenler",
+          "Köy: operatörler, stringler",
+          "Orman: liste, tuple, set, sözlük",
+          "Kale: koşullar, döngüler",
+          "Atölye: fonksiyonlar, modüller, lambda, hatalar"
+        ],
+        "gorsel": "gorseller/python/harita/kamp.webp"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sol"
+      },
+      "yonetmen_notu": "Harita bölgeleri sırayla parlar: kamp, köy, orman, kale, atölye."
+    },
+    {
+      "no": 3,
+      "tur": "anlatim",
+      "sure_sn": 16,
+      "anlatim": "Keşif Adası'nda tarihleri, try except'i, düzenli ifadeleri ve dosyaları öğrendin. Bilgi Limanı'nda sınıflar, web kazıma, NumPy ve pandas. Python Dağı'nda da web, veritabanı ve API. Bu, gerçek programcıların alet çantası!",
+      "ekran": {
+        "baslik": "Yolun ikinci yarısı",
+        "maddeler": [
+          "Ada: tarih, try/except, regex, dosyalar, pip",
+          "Liman: sınıflar, web kazıma, venv, NumPy, pandas",
+          "Dağ: web, MongoDB, API kullanmak ve yapmak"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "yonetmen_notu": "Ada, liman ve dağ bölgeleri parlar; görseller eklenince buraya konmalı."
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "İşte hepsi bir arada: bir sınıf, tekrarsız eşyalar için bir set, bir döngü ve f-string. Harita iki kez alındı ama set sayesinde çantada bir tane var. sorted da çantayı alfabetik diziyor.",
+      "ekran": {
+        "baslik": "Hepsi bir arada",
+        "kod": "class Hero:\n    def __init__(self, name):\n        self.name = name\n        self.bag = set()\n\n    def pick(self, item):\n        self.bag.add(item)\n        return f\"{self.name} {item} aldı.\"\n\npiko = Hero(\"Piko\")\nfor item in [\"harita\", \"anahtar\", \"harita\"]:\n    print(piko.pick(item))\nprint(\"Çanta:\", sorted(piko.bag))\n",
+        "vurgu_satirlari": [
+          4,
+          7,
+          13
+        ],
+        "dil": "python",
+        "cikti": "Piko harita aldı.\nPiko anahtar aldı.\nPiko harita aldı.\nÇanta: ['anahtar', 'harita']"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "soru",
+      "sure_sn": 12,
+      "anlatim": "Final macerasının kalbi bir oda haritası: iç içe sözlükler. Piko kamptan başlıyor ve kuzey, doğu, kuzey yönlerine gitmeye çalışıyor. Sence nerede durur?",
+      "ekran": {
+        "baslik": "Sence ne yazdırır?",
+        "kod": "rooms = {\n    \"kamp\": {\"kuzey\": \"orman\"},\n    \"orman\": {\"güney\": \"kamp\", \"doğu\": \"mağara\"},\n    \"mağara\": {\"batı\": \"orman\"},\n}\nplace = \"kamp\"\nfor step in [\"kuzey\", \"doğu\", \"kuzey\"]:\n    if step in rooms[place]:\n        place = rooms[place][step]\n        print(\"Şimdi buradasın:\", place)\n    else:\n        print(\"Oraya gidemezsin!\")\n",
+        "vurgu_satirlari": [
+          7,
+          8
+        ],
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 6,
+      "tur": "cikti",
+      "sure_sn": 12,
+      "anlatim": "Önce ormana, sonra mağaraya gitti. Mağaranın kuzeyinde çıkış yok, o yüzden Oraya gidemezsin dedi. Sözlük, döngü ve koşul el ele!",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "rooms = {\n    \"kamp\": {\"kuzey\": \"orman\"},\n    \"orman\": {\"güney\": \"kamp\", \"doğu\": \"mağara\"},\n    \"mağara\": {\"batı\": \"orman\"},\n}\nplace = \"kamp\"\nfor step in [\"kuzey\", \"doğu\", \"kuzey\"]:\n    if step in rooms[place]:\n        place = rooms[place][step]\n        print(\"Şimdi buradasın:\", place)\n    else:\n        print(\"Oraya gidemezsin!\")\n",
+        "dil": "python",
+        "cikti": "Şimdi buradasın: orman\nŞimdi buradasın: mağara\nOraya gidemezsin!"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "hata",
+      "sure_sn": 11,
+      "anlatim": "En iyi öğretmenin hâlâ hata mesajları. Burada score yerine scroe yazdım, Python NameError veriyor ve hangi ismi tanımadığını söylüyor. Hatayı oku, düzelt, devam et!",
+      "ekran": {
+        "baslik": "Hataları oku",
+        "kod": "score = 100\nprint(scroe)\n",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "NameError: name 'scroe' is not defined. Did you mean: 'score'?",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "anlatim",
+      "sure_sn": 14,
+      "anlatim": "Bundan sonra da işine yarayacak alışkanlıklar: küçük adımlarla ilerle, anlamlı isimler seç, tekrar eden kodu fonksiyona çevir ve takıldığında sormaktan çekinme.",
+      "ekran": {
+        "baslik": "İyi programcı alışkanlıkları",
+        "maddeler": [
+          "Küçük adımlarla ilerle",
+          "x yerine score, f yerine move_player",
+          "Hata mesajlarını oku",
+          "Tekrar eden kodu fonksiyona çevir",
+          "Takıldığında sor"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 9,
+      "tur": "anlatim",
+      "sure_sn": 16,
+      "anlatim": "Peki şimdi ne olacak? pygame ile grafikli oyunlar, Flask ile kendi siten, pandas ile veri hikâyeleri, sıkıcı işleri yapan otomasyonlar, hatta yapay zekâ. Kendi bilgisayarına Python kur ve projelerini orada da çalıştır.",
+      "ekran": {
+        "baslik": "Bundan sonra ne yapabilirsin?",
+        "maddeler": [
+          "Oyun: pygame",
+          "Web: Flask",
+          "Veri: pandas ve grafikler",
+          "Otomasyon",
+          "Yapay zekâ",
+          "Python kur: python.org"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 10,
+      "tur": "gorev",
+      "sure_sn": 16,
+      "anlatim": "Son görevlerde sesli harf sayacı, kelime sayacı ve bir sayaç sınıfı yazacaksın. Final projesinde Piko odalar arasında dolaşıp eşya toplayacak ve anahtarla hazine kapısını açacak. Sonra Proje sayfasında Oyunumu oyna'ya bas!",
+      "ekran": {
+        "baslik": "Son görevler",
+        "maddeler": [
+          "Görev 1: Sesli harf sayacı",
+          "Görev 2: Kelime sayacı",
+          "Görev 3: Sayaç sınıfı",
+          "Challenge: Komut motoru",
+          "Proje: Final macerası",
+          "Sonra: Oyunumu oyna ve sertifikanı al"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "ozet",
+      "sure_sn": 12,
+      "anlatim": "Otuz günün özeti: temelleri kurdun, verini düzenledin, programına karar verdirdin ve onu gerçek dünyaya bağladın.",
+      "ekran": {
+        "baslik": "30 günün özeti",
+        "maddeler": [
+          "Temeller ve veri yapıları",
+          "Koşullar, döngüler, fonksiyonlar, sınıflar",
+          "Dosyalar, paketler, veri, web ve API"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 12,
+      "tur": "kapanis",
+      "sure_sn": 16,
+      "anlatim": "İşte bu kadar! Otuz günü bitirdin ve artık bir Python programcısısın. Tüm parçaların tek bir oyunda birleşti. Seninle bu yolu yürümek harikaydı. Sertifikanı al, kodlamaya devam et ve yeni maceralarda görüşmek üzere!",
+      "ekran": {
+        "baslik": "Tebrikler, Python programcısı!",
+        "maddeler": [
+          "30 gün tamam",
+          "Final projesi rozeti"
+        ],
+        "gorsel": "gorseller/python/rozetler/final-projesi.webp"
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      },
+      "yonetmen_notu": "Final projesi rozeti ortada parlar, konfeti yağar, Piko el sallayarak kutlar."
+    }
+  ]
+}

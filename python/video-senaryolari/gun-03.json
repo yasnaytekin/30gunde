@@ -1,0 +1,238 @@
+{
+  "kurs": "python",
+  "gun": 3,
+  "baslik": "Operatörler",
+  "maskot": "piko",
+  "ozet": "Piko, Python Köyü'nün pazarında bölmenin üç halini, işlem önceliğini, += kısayolunu, karşılaştırma ve mantık operatörlerini anlatıyor.",
+  "hedef_sure_sn": 137,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 12,
+      "anlatim": "Selam, ben Piko! Python Köyü'ne hoş geldin. Oyunlarda her şey sayılarla döner: skor, can, altın. Bugün köyün pazarında hesapları sen yapacaksın. İlk soru: yedi elmayı iki kişiye nasıl bölersin?",
+      "ekran": {
+        "baslik": "Gün 3: Operatörler",
+        "gorsel": "gorseller/python/harita/koy.webp"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "Bölmenin üç hali var. Tek eğik çizgi sonucu ondalıklı verir. Çift eğik çizgi tam bölmedir, yüzde işareti ise kalanı verir. Yani herkese üç elma düşer, bir tane artar.",
+      "ekran": {
+        "baslik": "Bölmenin üç hali",
+        "kod": "print(7 / 2)\nprint(7 // 2)\nprint(7 % 2)\nprint(2 ** 10)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2,
+          3
+        ],
+        "cikti": "3.5\n3\n1\n1024"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true,
+      "yonetmen_notu": "Yedi elma iki sepete dağılır, bir elma ortada kalır."
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "Python matematikteki sırayı izler: önce parantez, sonra üs, sonra çarpma ve bölme, en son toplama ve çıkarma. Parantez ekleyince sonuç on dörtten yirmiye çıkıyor.",
+      "ekran": {
+        "baslik": "İşlem önceliği",
+        "kod": "print(2 + 3 * 4)\nprint((2 + 3) * 4)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "14\n20"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "Skor eşittir skor artı on yazmak yerine kısaca artı eşittir yazabilirsin. Aynı hile eksi, çarpı ve bölü için de çalışır. Skor önce yirmi oluyor, sonra ikiyle çarpılıyor.",
+      "ekran": {
+        "baslik": "Kısayollar: += ve *=",
+        "kod": "score = 0\nscore += 10\nscore += 10\nscore *= 2\nprint(\"Skor:\", score)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2,
+          4
+        ],
+        "cikti": "Skor: 40"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "İki değeri karşılaştırınca Python True ya da False der. Dikkat: tek eşittir kutuya değer koyar, çift eşittir soru sorar. Ünlem eşittir de eşit değil mi diye sorar.",
+      "ekran": {
+        "baslik": "Karşılaştırma operatörleri",
+        "kod": "hp = 40\ngold = 120\nprint(hp > 50)\nprint(gold >= 100)\nprint(hp == 40)\nprint(hp != 40)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          5,
+          6
+        ],
+        "cikti": "False\nTrue\nTrue\nFalse"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "Soruları birleştirmek için mantık operatörleri var. and ikisi de doğruysa, or en az biri doğruysa True verir. not ise cevabı tersine çevirir.",
+      "ekran": {
+        "baslik": "and, or, not",
+        "kod": "hp = 40\ngold = 120\nprint(hp > 20 and gold > 100)\nprint(hp > 50 or gold > 100)\nprint(not hp > 50)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          3,
+          4,
+          5
+        ],
+        "cikti": "True\nTrue\nTrue"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "hata",
+      "sure_sn": 12,
+      "anlatim": "Bu hata mesaj bile vermez, o yüzden sinsidir! Python'da ondalık için nokta kullanılır. Virgül koyarsan Python iki ayrı sayı görür: üç ve altı yazar. Üç buçuk için 3.5 yaz.",
+      "ekran": {
+        "baslik": "Virgül değil, nokta!",
+        "kod": "print(3,5 + 1)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          1
+        ],
+        "cikti": "3 6"
+      },
+      "maskot": {
+        "poz": "uzgun",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 8,
+      "tur": "soru",
+      "sure_sn": 8,
+      "anlatim": "Şimdi sen söyle: dokuz çift bir sayı mı? Sence bu kod ne yazdırır?",
+      "ekran": {
+        "baslik": "Sence ne yazar?",
+        "kod": "x = 9\nprint(x % 2 == 0)\n",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "cikti",
+      "sure_sn": 10,
+      "anlatim": "False! Dokuzun ikiye bölümünden kalan bir. Bir, sıfıra eşit olmadığı için cevap False; yani dokuz tek sayı. Yüzde işareti çift ve tek bulmanın en kolay yolu.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "x = 9\nprint(x % 2 == 0)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "False"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 10,
+      "tur": "gorev",
+      "sure_sn": 14,
+      "anlatim": "Pazar senin! On yedi dilim pizzayı beş arkadaşa paylaştıracak, kahramanına can iksiri içirecek ve üç skorun ortalamasını bulacaksın. Challenge'da saniyeleri saate ve dakikaya çevireceksin. İpucu: bölmenin üç halini hatırla.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Pizza paylaşımı",
+          "Görev 2: Can iksiri",
+          "Görev 3: Ortalama",
+          "Sahne görevi: Eşit sıralar",
+          "Challenge: Saniye çevirici"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "ozet",
+      "sure_sn": 8,
+      "anlatim": "Bugün bölmenin üç halini, kısayolları ve Python'a doğru mu yanlış mı diye soru sormayı öğrendik.",
+      "ekran": {
+        "baslik": "Bugün öğrendiklerin",
+        "maddeler": [
+          "/ ondalıklı, // tam bölme, % kalan",
+          "+= ile kısa güncelleme; parantez önceliği değiştirir",
+          "Karşılaştırma ve and, or, not: True ya da False"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 12,
+      "tur": "kapanis",
+      "sure_sn": 9,
+      "anlatim": "Artık pazarın hesap ustası sensin! Yarın köyde kalıyoruz ama bu kez yazılarla oynayacağız: stringleri birleştirecek, parçalayacak ve süsleyeceğiz.",
+      "ekran": {
+        "baslik": "Yarın: Stringler",
+        "gorsel": "gorseller/python/harita/koy.webp"
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

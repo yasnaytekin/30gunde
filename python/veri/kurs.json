@@ -1,0 +1,122 @@
+{
+ "version": 4,
+ "lang": "tr",
+ "regions": [
+  {
+   "id": "kamp",
+   "name": "Başlangıç Kampı",
+   "icon": "tent",
+   "days": [
+    1,
+    2
+   ]
+  },
+  {
+   "id": "koy",
+   "name": "Python Köyü",
+   "icon": "house",
+   "days": [
+    3,
+    4
+   ]
+  },
+  {
+   "id": "orman",
+   "name": "Veri Ormanı",
+   "icon": "trees",
+   "days": [
+    5,
+    6,
+    7,
+    8
+   ]
+  },
+  {
+   "id": "kale",
+   "name": "Mantık Kalesi",
+   "icon": "castle",
+   "days": [
+    9,
+    10
+   ]
+  },
+  {
+   "id": "atolye",
+   "name": "Alet Atölyesi",
+   "icon": "wrench",
+   "days": [
+    11,
+    12,
+    13,
+    14,
+    15
+   ]
+  },
+  {
+   "id": "ada",
+   "name": "Keşif Adası",
+   "icon": "compass",
+   "days": [
+    16,
+    17,
+    18,
+    19,
+    20
+   ]
+  },
+  {
+   "id": "liman",
+   "name": "Bilgi Limanı",
+   "icon": "anchor",
+   "days": [
+    21,
+    22,
+    23,
+    24,
+    25
+   ]
+  },
+  {
+   "id": "dag",
+   "name": "Python Dağı",
+   "icon": "mountain",
+   "days": [
+    26,
+    27,
+    28,
+    29,
+    30
+   ]
+  }
+ ],
+ "tracks": {
+  "veri": {
+   "name": "Harcama Defteri",
+   "kind": "Veri analizi",
+   "desc": "Harcamalarını kaydeden, bütçeni izleyen ve aylık rapor çıkaran kendi veri analizi programın."
+  },
+  "otomasyon": {
+   "name": "Görev Asistanı",
+   "kind": "Otomasyon",
+   "desc": "Görevlerini düzenleyen, hatırlatan, dosyalara kaydeden ve tekrar eden işleri senin yerine yapan kendi asistan programın."
+  },
+  "web": {
+   "name": "Kişisel Web Sitem",
+   "kind": "Web",
+   "desc": "Yazılarını HTML sayfalarına çeviren, menüsünü kuran, ziyaretçilerini sayan ve siteni yayına hazırlayan kendi site üreticin."
+  },
+  "bot": {
+   "name": "Sohbet Botu",
+   "kind": "Yapay zekâya giriş",
+   "desc": "Mesajları anlayan, kurallara göre cevap veren ve konuşmaları hatırlayan kendi sohbet botun."
+  },
+  "okul": {
+   "name": "Okul Not Defteri",
+   "kind": "Okul",
+   "desc": "Derslerini, notlarını, ödevlerini ve sınav tarihlerini takip eden, ortalamanı hesaplayıp karneni çıkaran kendi okul programın."
+  }
+ },
+ "course": "python",
+ "name": "30 Günde Python",
+ "mascot": "Piko"
+}

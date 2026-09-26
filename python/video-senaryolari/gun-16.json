@@ -1,0 +1,255 @@
+{
+  "kurs": "python",
+  "gun": 16,
+  "baslik": "Tarih ve saat",
+  "maskot": "piko",
+  "ozet": "Piko, Keşif Adası'ndaki güneş saatinin önünde datetime modülünü anlatıyor: tarih oluşturmak, strftime ile biçimlendirmek ve tarihler arasında gün hesabı yapmak.",
+  "hedef_sure_sn": 157,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 13,
+      "anlatim": "Selam, ben Piko! Keşif Adası'na ayak bastık. Adanın ortasında dev bir güneş saati var ve üstünde şöyle yazıyor: Zamanı okuyan, adanın sırrını çözer. Oyunlardaki günlük seriler nasıl sayılıyor dersin? Bugün Python'la zamanı okuyoruz!",
+      "ekran": {
+        "baslik": "Gün 16: Tarih ve saat",
+        "maddeler": [
+          "Keşif Adası",
+          "datetime modülü"
+        ]
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "yonetmen_notu": "Arka plan: Keşif Adası bölge görseli (gorseller/python/harita/ada.webp). Dosya repoda henüz yok; eklenince ekran.gorsel alanına yazılmalı. Güneş saatinin gölgesi yavaşça döner."
+    },
+    {
+      "no": 2,
+      "tur": "anlatim",
+      "sure_sn": 12,
+      "anlatim": "Tarih ve saat için datetime modülünü kullanırız. Üç parçası işimizi görür: date bir tarih tutar, datetime tarih ve saati birlikte tutar, timedelta ise iki an arasındaki süredir.",
+      "ekran": {
+        "baslik": "datetime modülü",
+        "kod": "from datetime import date, datetime, timedelta\n\ntoday = date.today()      # bugünün tarihi\nnow = datetime.now()      # şu anki tarih ve saat\n",
+        "vurgu_satirlari": [
+          1
+        ],
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 3,
+      "tur": "anlatim",
+      "sure_sn": 9,
+      "anlatim": "Dikkat: date.today her gün başka sonuç verir. O yüzden örneklerde sabit tarihler kullanacağız, çıktılar hep aynı kalsın.",
+      "ekran": {
+        "baslik": "Neden sabit tarih?",
+        "maddeler": [
+          "date.today() her gün değişir",
+          "Örneklerde sabit tarih: date(2026, 9, 23)"
+        ]
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "Bir tarih oluşturmak için sırayla yıl, ay ve gün yazıyorum. Sonra year, month ve day ile tarihin parçalarını tek tek alıyorum. Son satırda strftime tarihi tanıdık biçimde yazıya çeviriyor.",
+      "ekran": {
+        "baslik": "Tarihin parçaları",
+        "kod": "from datetime import date\n\nd = date(2026, 9, 23)\nprint(\"Yıl:\", d.year)\nprint(\"Ay:\", d.month)\nprint(\"Gün:\", d.day)\nprint(d.strftime(\"%d.%m.%Y\"))\n",
+        "vurgu_satirlari": [
+          3,
+          7
+        ],
+        "dil": "python",
+        "cikti": "Yıl: 2026\nAy: 9\nGün: 23\n23.09.2026"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "anlatim",
+      "sure_sn": 14,
+      "anlatim": "strftime içindeki yüzde işaretli harfler birer yer tutucu: yüzde d gün, yüzde m ay, büyük Y dört haneli yıl. Tersini strptime yapar: yazıyı okuyup ondan gerçek bir tarih üretir.",
+      "ekran": {
+        "baslik": "Biçimlendirmek: strftime ve strptime",
+        "maddeler": [
+          "%d gün, %m ay, %Y yıl",
+          "%H saat, %M dakika"
+        ],
+        "kod": "from datetime import datetime\n\nt = datetime.strptime(\"23.09.2026\", \"%d.%m.%Y\")\nprint(t)\nprint(t.strftime(\"%d/%m/%Y\"))\n",
+        "vurgu_satirlari": [
+          3
+        ],
+        "dil": "python",
+        "cikti": "2026-09-23 00:00:00\n23/09/2026"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "Şimdi hesap zamanı. Yeni yıl tarihinden bugünü çıkarınca aradaki süreyi buluyorum. Sonundaki .days bu süreyi gün sayısına çeviriyor. Tam yüz gün varmış!",
+      "ekran": {
+        "baslik": "Kaç gün kaldı?",
+        "kod": "from datetime import date\n\ntoday = date(2026, 9, 23)\nnew_year = date(2027, 1, 1)\nleft = (new_year - today).days\nprint(f\"Yeni yıla {left} gün var.\")\n",
+        "vurgu_satirlari": [
+          5
+        ],
+        "dil": "python",
+        "cikti": "Yeni yıla 100 gün var."
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "Bir tarihe gün eklemek için timedelta kullanıyorum. Döngü her turda yedi, on dört ve yirmi bir gün ekliyor. Ay bitince Python kendisi bir sonraki aya geçiyor.",
+      "ekran": {
+        "baslik": "Bir hafta sonra",
+        "kod": "from datetime import date, timedelta\n\nstart = date(2026, 9, 23)\nfor week in range(1, 4):\n    later = start + timedelta(days=7 * week)\n    print(f\"{week}. hafta:\", later.strftime(\"%d.%m.%Y\"))\n",
+        "vurgu_satirlari": [
+          5
+        ],
+        "dil": "python",
+        "cikti": "1. hafta: 30.09.2026\n2. hafta: 07.10.2026\n3. hafta: 14.10.2026"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "hata",
+      "sure_sn": 12,
+      "anlatim": "En sık hata, takvimde olmayan bir tarih yazmak. Şubat otuz diye bir gün yok! Python da ValueError verip, gün bu ay için aralık dışında diyor.",
+      "ekran": {
+        "baslik": "Sık hata: olmayan tarih",
+        "kod": "from datetime import date\n\nd = date(2026, 2, 30)\n",
+        "vurgu_satirlari": [
+          3
+        ],
+        "cikti": "ValueError: day is out of range for month",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "soru",
+      "sure_sn": 9,
+      "anlatim": "Şimdi sıra sende. İki tarihi çıkarıyorum ama .days yazmayı unuttum. Sence bu kod ne yazdırır?",
+      "ekran": {
+        "baslik": "Sence ne yazdırır?",
+        "kod": "from datetime import date\n\nprint(date(2026, 9, 30) - date(2026, 9, 1))\n",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 10,
+      "tur": "cikti",
+      "sure_sn": 10,
+      "anlatim": "Sonuç bir sayı değil, bir süre nesnesi: yirmi dokuz gün ve sıfır saat. Sadece gün sayısı lazımsa sonuna .days eklemeyi unutma.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "from datetime import date\n\nprint(date(2026, 9, 30) - date(2026, 9, 1))\n",
+        "dil": "python",
+        "cikti": "29 days, 0:00:00"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 11,
+      "tur": "gorev",
+      "sure_sn": 13,
+      "anlatim": "Görev zamanı! Önce bir tarihi gün, ay, yıl biçiminde yazdıracaksın. Sonra doğum gününe kaç gün kaldığını bulacaksın, en son da bir tarihe hafta ekleyeceksin. Projede de günlük seri sistemini kuruyorsun.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Tarihi biçimle",
+          "Görev 2: Kaç gün kaldı?",
+          "Görev 3: Bir hafta sonra",
+          "Challenge: Haftanın günü",
+          "Proje: Günlük seri"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 12,
+      "tur": "ozet",
+      "sure_sn": 11,
+      "anlatim": "Kısaca: date ile tarih kur, strftime ile güzelce yaz, iki tarihi çıkarıp timedelta ile hesap yap.",
+      "ekran": {
+        "baslik": "Bugün öğrendiklerin",
+        "maddeler": [
+          "date(yıl, ay, gün) ile tarih oluştur",
+          "strftime ile yazıya, strptime ile tarihe çevir",
+          "Tarih farkı .days, gün eklemek timedelta"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 13,
+      "tur": "kapanis",
+      "sure_sn": 12,
+      "anlatim": "Harikaydın! Yarın adanın çürük köprülerinden geçeceğiz. Program hata verince çökmek yerine ipe tutunmayı, yani try ve except ile hata yönetimini öğreneceğiz. Görüşürüz!",
+      "ekran": {
+        "baslik": "Yarın: Hata yönetimi",
+        "maddeler": [
+          "try, except, else, finally",
+          "raise ile kendi hatan"
+        ]
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

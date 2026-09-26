@@ -1,0 +1,253 @@
+{
+  "kurs": "javascript",
+  "gun": 23,
+  "baslik": "Oyun döngüsü",
+  "maskot": "kodi",
+  "ozet": "Kodi, Piksel Gezegeni'nin son durağında oyunun durumunu tek nesnede tutmayı, güncelle-çarpış-çiz sırasını, AABB dikdörtgen çarpışmasını, filter ile yıldız toplamayı ve newGame ile yeniden başlatmayı anlatıyor.",
+  "hedef_sure_sn": 175,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 12,
+      "anlatim": "Selam, ben Kodi! Piksel Gezegeni'nin son durağındayız. Çizmeyi ve hareket ettirmeyi öğrendin. Peki gemi bir yıldıza değdiğini nereden bilir? Bugün gerçek bir oyun döngüsü kuruyoruz!",
+      "ekran": {
+        "baslik": "Gün 23: Oyun döngüsü",
+        "gorsel": "gorseller/javascript/bolgeler/piksel.webp"
+      },
+      "maskot": {
+        "poz": "el-sallama",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 15,
+      "anlatim": "Oyunda o anki her şey, yani oyuncunun yeri, yıldızlar, skor ve oyun bitti mi, duruma dahildir. Hepsini tek bir nesnede tutarsak kaydetmek, yeniden başlatmak ve hata aramak kolaylaşır.",
+      "ekran": {
+        "baslik": "Oyunun durumu tek yerde",
+        "kod": "const game = {\n  player: { x: 20, y: 150, w: 30, h: 20 },\n  stars: [{ x: 120, y: 40, w: 12, h: 12 }],\n  score: 0,\n  over: false,\n};\n",
+        "vurgu_satirlari": [
+          1,
+          4,
+          5
+        ],
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "Her karede aynı sıra izlenir: önce hareket, sonra çarpışma, en son çizim. Oyun bitince update ve collide durur ama draw son hali göstermeye devam eder.",
+      "ekran": {
+        "baslik": "Güncelle, çarpış, çiz",
+        "kod": "function step() {\n  if (!game.over) {\n    update();   // her şeyi hareket ettir\n    collide();  // çarpışmalar, puan\n  }\n  draw();       // durumu ekrana çiz\n}\n",
+        "vurgu_satirlari": [
+          2,
+          3,
+          4,
+          6
+        ],
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      },
+      "calistir": false
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 19,
+      "anlatim": "İki dikdörtgen hem yatayda hem dikeyde üst üste biniyorsa çarpışır. Bunu dört koşulla yazarız. Biri bile yanlışsa aralarında boşluk vardır. Kenar kenara değmek çarpışma sayılmaz. Buna AABB testi denir.",
+      "ekran": {
+        "baslik": "Dikdörtgen çarpışması (AABB)",
+        "kod": "function hits(a, b) {\n  return a.x < b.x + b.w && a.x + a.w > b.x &&\n         a.y < b.y + b.h && a.y + a.h > b.y;\n}\nconst ship = { x: 0, y: 0, w: 20, h: 20 };\nconsole.log(hits(ship, { x: 10, y: 10, w: 20, h: 20 }));\nconsole.log(hits(ship, { x: 20, y: 0, w: 20, h: 20 }));\n",
+        "vurgu_satirlari": [
+          2,
+          3
+        ],
+        "cikti": "true\nfalse",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true,
+      "yonetmen_notu": "İki kutu önce üst üste, sonra kenar kenara gösterilir; kesişen alan sarıyla boyanır."
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 17,
+      "anlatim": "Değen yıldızları çıkarmanın güvenli yolu filter. Önce kaç yıldız olduğunu saklarız; farkı skora ekleriz. Yıldız kalmayınca oyun biter.",
+      "ekran": {
+        "baslik": "Yıldız toplamak",
+        "kod": "const before = game.stars.length;\ngame.stars = game.stars.filter((s) => !hits(game.player, s));\ngame.score += before - game.stars.length;\nif (game.stars.length === 0) game.over = true;\n",
+        "vurgu_satirlari": [
+          2,
+          3,
+          4
+        ],
+        "cikti": "Gemi yıldıza değince yıldız kaybolur, skor 1 artar.",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sol"
+      },
+      "calistir": false
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 15,
+      "anlatim": "Yeniden başlatmak için durumu sıfırdan kuran bir fonksiyon yazarız. Her çağrıda yepyeni bir nesne ve yepyeni bir dizi üretir. Böylece toplanan yıldızlar geri gelir.",
+      "ekran": {
+        "baslik": "Yeniden başla: newGame",
+        "kod": "function newGame() {\n  return { score: 0, over: false, stars: [{ x: 50, y: 20, w: 10, h: 10 }] };\n}\nlet game = newGame();\ngame.stars = []; game.score = 1; game.over = true;\ngame = newGame();\nconsole.log(game.score, game.over, game.stars.length);\n",
+        "vurgu_satirlari": [
+          2,
+          6
+        ],
+        "cikti": "0 false 1",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "cikti",
+      "sure_sn": 13,
+      "anlatim": "Hepsini birleştirince mini bir oyun çıkıyor: ok tuşlarıyla gemiyi yönet, yıldızları topla. Hepsi bitince tebrik mesajı gelir, R ile yeniden başlarsın.",
+      "ekran": {
+        "baslik": "Mini oyun: yıldız topla",
+        "cikti": "Skor: 0 → Skor: 1 → Skor: 2 → Tebrikler! Yeniden başlamak için R tuşu",
+        "html": "<canvas id=\"c\" width=\"240\" height=\"100\"></canvas>\n<p id=\"info\"></p>"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sol"
+      },
+      "yonetmen_notu": "Mini oyunun kısa bir ekran kaydı: mavi gemi üç sarı yıldızı toplar."
+    },
+    {
+      "no": 8,
+      "tur": "hata",
+      "sure_sn": 14,
+      "anlatim": "Sık hata: yeniden başlatırken yalnızca skoru ve over'ı sıfırlamak. Yıldız dizisi hâlâ boş! Oyun baştan başlar ama ekranda toplanacak tek bir yıldız bile kalmaz.",
+      "ekran": {
+        "baslik": "Sık hata: durumu yarım sıfırlamak",
+        "kod": "let game = { score: 3, over: true, stars: [] }; // hepsi toplandı\nfunction restart() {\n  game.score = 0;\n  game.over = false; // ya yıldızlar?\n}\nrestart();\nconsole.log(game.stars.length);\n",
+        "vurgu_satirlari": [
+          4
+        ],
+        "cikti": "0   (yıldızlar geri gelmedi)",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "uzgun",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 9,
+      "tur": "soru",
+      "sure_sn": 9,
+      "anlatim": "Soru zamanı! Gemi sıfırdan başlıyor ve 20 genişliğinde. Meteor ise 25'te. Sence çarpışırlar mı?",
+      "ekran": {
+        "baslik": "Sence ne yazar?",
+        "kod": "const ship = { x: 0, y: 0, w: 20, h: 20 };\nconst rock = { x: 25, y: 5, w: 10, h: 10 };\nconsole.log(hits(ship, rock));\n",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 10,
+      "tur": "cikti",
+      "sure_sn": 9,
+      "anlatim": "Cevap false! Geminin sağ kenarı 20'de bitiyor, meteor 25'te başlıyor. Arada beş piksellik boşluk var.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "function hits(a, b) {\n  return a.x < b.x + b.w && a.x + a.w > b.x &&\n         a.y < b.y + b.h && a.y + a.h > b.y;\n}\nconst ship = { x: 0, y: 0, w: 20, h: 20 };\nconst rock = { x: 25, y: 5, w: 10, h: 10 };\nconsole.log(hits(ship, rock));\n",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "false",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 11,
+      "tur": "gorev",
+      "sure_sn": 12,
+      "anlatim": "Görev zamanı! Önce iki dikdörtgenin çarpışıp çarpışmadığını söyleyen fonksiyonu yazacaksın. Sonra can götüren meteorlar, en sonda da bir yeniden başla düğmesi.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Çarpışıyor mu?",
+          "Görev 2: Meteor çarpınca",
+          "Görev 3: Yeniden başla"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 12,
+      "tur": "ozet",
+      "sure_sn": 12,
+      "anlatim": "Özetleyelim: durumu tek nesnede tut. Her karede güncelle, çarpışmaya bak, çiz. Dört koşullu hits ile çarpışmayı bul, filter ile topla ve newGame ile yeniden başla.",
+      "ekran": {
+        "baslik": "Özet",
+        "maddeler": [
+          "game = { player, stars, score, over }",
+          "update → collide → draw",
+          "hits(a, b): 4 koşul  ·  filter ile topla  ·  newGame()"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 13,
+      "tur": "kapanis",
+      "sure_sn": 12,
+      "anlatim": "Tebrikler, Piksel Gezegeni'ni tamamladın ve ilk oyun döngünü kurdun! Yarın Async İstasyonu'na yanaşıyoruz. İlk konu: hatalar ve hata ayıklama. Görüşürüz!",
+      "ekran": {
+        "baslik": "Yarın: Hatalar ve hata ayıklama",
+        "gorsel": "gorseller/javascript/bolgeler/istasyon.webp"
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

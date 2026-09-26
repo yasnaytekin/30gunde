@@ -1,0 +1,206 @@
+{
+ "day": 4,
+ "title": "Metinlerle çalışmak",
+ "region": "kalkis",
+ "xp_complete": 150,
+ "objective": "Şablon metinlerle mesaj oluşturmak ve metin metotlarını kullanmak",
+ "story": "Roket, uzaydaki istasyonlarla mesajlaşacak. Mesajları birleştirmek, büyük harfe çevirmek, içinde bir kelime aramak gerekecek. Bugün **metinlerin (string)** ustası oluyoruz.",
+ "sections": [
+  {
+   "title": "Şablon metin: ters tırnak ve ${ }",
+   "body": "Metinleri `+` ile birleştirebilirsin ama **şablon metin** çok daha rahattır. Şablon metin tırnak yerine **ters tırnakla** yazılır, değişkenler `${...}` içine konur:\n\n```js\nconst pilot = \"Deniz\";\nconst planet = \"Mars\";\nconsole.log(`Merhaba ${pilot}, hedef: ${planet}!`);\n// Merhaba Deniz, hedef: Mars!\n```\n\n`${...}` içine işlem de yazabilirsin: `${3 + 4}` yazılan yerde çıktıda `7` görünür."
+  },
+  {
+   "title": "Uzunluk ve harfler",
+   "body": "- `text.length` metnin kaç karakter olduğunu verir.\n- `text[0]` ilk karakteri verir; sayma **0'dan** başlar.\n\n```js\nconst word = \"roket\";\nconsole.log(word.length);  // 5\nconsole.log(word[0]);      // r\n```"
+  },
+  {
+   "title": "Metin metotları",
+   "body": "| Metot | Ne yapar | Örnek → Sonuç |\n| --- | --- | --- |\n| `toUpperCase()` | Büyük harf | `\"nova\".toUpperCase()` → `\"NOVA\"` |\n| `toLowerCase()` | Küçük harf | `\"NOVA\".toLowerCase()` → `\"nova\"` |\n| `includes(x)` | İçinde x var mı? | `\"Ay ışığı\".includes(\"Ay\")` → `true` |\n| `slice(a, b)` | a'dan b'ye kadar parça | `\"yıldız\".slice(0, 3)` → `\"yıl\"` |\n| `trim()` | Baştaki/sondaki boşlukları siler | `\"  hey \".trim()` → `\"hey\"` |\n| `replace(a, b)` | a'yı b ile değiştirir | `\"Ay\".replace(\"Ay\", \"Mars\")` → `\"Mars\"` |\n\nMetotlar metni değiştirmez, **yeni** bir metin verir: sonucu bir değişkene koymalısın."
+  },
+  {
+   "title": "Türkçe harfler için bir ipucu",
+   "body": "`\"istanbul\".toUpperCase()` sonucu `\"ISTANBUL\"` olur: noktasız I! Türkçe kurallarıyla çevirmek için `toLocaleUpperCase(\"tr\")` kullan:\n\n```js\nconsole.log(\"istanbul\".toLocaleUpperCase(\"tr\"));  // İSTANBUL\nconsole.log(\"IŞIK\".toLocaleLowerCase(\"tr\"));      // ışık\n```"
+  }
+ ],
+ "examples": [
+  {
+   "title": "Şablon metin",
+   "code": "const ship = \"Kartal\";\nconst speed = 40000;\nconsole.log(`${ship} saatte ${speed} km hızla gidiyor.`);\n",
+   "note": "Ters tırnak klavyede genellikle Tab'ın üstünde ya da AltGr + , tuşlarındadır; editörün tuş çubuğunda da var."
+  },
+  {
+   "title": "Metin metotları",
+   "code": "const message = \"  Acil: Yakıt Azaldı  \";\nconst clean = message.trim();\nconsole.log(clean.toUpperCase());\nconsole.log(clean.includes(\"Yakıt\"));\nconsole.log(clean.length);\n",
+   "note": ""
+  }
+ ],
+ "tasks": [
+  {
+   "id": "js-d4-t1",
+   "title": "Karşılama mesajı",
+   "prompt": "`greeting` değişkenine şablon metinle `Hoş geldin Deniz, hedef: Mars!` yaz. İsim ve gezegen değişkenlerden (`${...}`) gelsin, sonra yazdır.",
+   "starter": "const pilot = \"Deniz\";\nconst planet = \"Mars\";\n\n// greeting'i şablon metinle oluştur\n\nconsole.log(greeting);\n",
+   "solution": "const pilot = \"Deniz\";\nconst planet = \"Mars\";\n\n// greeting'i şablon metinle oluştur\nconst greeting = `Hoş geldin ${pilot}, hedef: ${planet}!`;\n\nconsole.log(greeting);\n",
+   "hints": [
+    "Ters tırnak ` ile başla ve bitir.",
+    "const greeting = `Hoş geldin ${pilot}, hedef: ${planet}!`;"
+   ],
+   "check": {
+    "code_contains": [
+     "`",
+     "${pilot}",
+     "${planet}"
+    ],
+    "js": "assert(greeting === \"Hoş geldin Deniz, hedef: Mars!\", \"greeting tam olarak 'Hoş geldin Deniz, hedef: Mars!' olmalı.\");"
+   },
+   "xp": 50
+  },
+  {
+   "id": "js-d4-t2",
+   "title": "Çağrı kodu",
+   "prompt": "Her geminin bir çağrı kodu var: adın **büyük harfle** yazılışı, bir tire ve adın **harf sayısı**. `name` \"nova\" ise `callSign` `NOVA-4` olmalı.",
+   "starter": "const name = \"nova\";\n\n// callSign'ı oluştur\n\nconsole.log(callSign);\n",
+   "solution": "const name = \"nova\";\n\n// callSign'ı oluştur\nconst callSign = `${name.toUpperCase()}-${name.length}`;\n\nconsole.log(callSign);\n",
+   "hints": [
+    "name.toUpperCase() ve name.length kullan.",
+    "const callSign = `${name.toUpperCase()}-${name.length}`;"
+   ],
+   "check": {
+    "code_contains": [
+     "toUpperCase",
+     "length"
+    ],
+    "js": "assert(callSign === \"NOVA-4\", \"callSign 'NOVA-4' olmalı.\");\nassert(!/[\"'`]NOVA/.test(_code), \"NOVA'yı elle yazma; toUpperCase kullan.\");"
+   },
+   "xp": 50
+  },
+  {
+   "id": "js-d4-t3",
+   "title": "Mesaj tarayıcı",
+   "prompt": "Gelen mesajı incele:\n\n- `isUrgent`: mesajda `\"Acil\"` kelimesi geçiyor mu? (`includes`)\n- `title`: mesajın ilk 11 karakteri (`slice`), yani `\"Acil durum:\"`",
+   "starter": "const message = \"Acil durum: yakıt azaldı\";\n\n// isUrgent ve title'ı oluştur\n\nconsole.log(isUrgent);\nconsole.log(title);\n",
+   "solution": "const message = \"Acil durum: yakıt azaldı\";\n\n// isUrgent ve title'ı oluştur\nconst isUrgent = message.includes(\"Acil\");\nconst title = message.slice(0, 11);\n\nconsole.log(isUrgent);\nconsole.log(title);\n",
+   "hints": [
+    "message.includes(\"Acil\") true ya da false verir.",
+    "message.slice(0, 11) ilk 11 karakteri verir."
+   ],
+   "check": {
+    "code_contains": [
+     "includes",
+     "slice"
+    ],
+    "js": "assert(isUrgent === true, \"isUrgent true olmalı.\");\nassert(title === \"Acil durum:\", \"title 'Acil durum:' olmalı.\");"
+   },
+   "xp": 50
+  }
+ ],
+ "challenge": {
+  "id": "js-d4-c",
+  "title": "Tersten okunuş",
+  "prompt": "`reversed` değişkeni `word`'ün tersten yazılışı olsun ve `isPalindrome` kelimenin tersten de aynı okunup okunmadığını söylesin. \"radar\" tersten de \"radar\"dır!\n\nİpucu: `word.split(\"\")` harfleri bir listeye ayırır, `.reverse()` listeyi ters çevirir, `.join(\"\")` yeniden birleştirir. Listeleri ileride detaylı göreceğiz.",
+  "starter": "const word = \"radar\";\n\n// reversed ve isPalindrome\n\nconsole.log(reversed, isPalindrome);\n",
+  "solution": "const word = \"radar\";\n\n// reversed ve isPalindrome\nconst reversed = word.split(\"\").reverse().join(\"\");\nconst isPalindrome = word === reversed;\n\nconsole.log(reversed, isPalindrome);\n",
+  "hints": [
+   "Metotlar zincirlenebilir: word.split(\"\").reverse().join(\"\")",
+   "const isPalindrome = word === reversed;"
+  ],
+  "check": {
+   "code_contains": [
+    "reverse"
+   ],
+   "js": "assert(reversed === \"radar\", \"reversed 'radar' olmalı.\");\nassert(isPalindrome === true, \"isPalindrome true olmalı.\");"
+  },
+  "xp": 75
+ },
+ "project_contribution": "Durum çubuğu",
+ "project_task": {
+  "id": "js-d4-p",
+  "title": "Durum çubuğu",
+  "prompt": "Oyunun üstünde bir durum çubuğu olacak. Şablon metinle `status` değişkenini oluştur:\n\n- Geminin adı **büyük harfle**\n- Yıldız sayısı `/10` ile (kaç yıldızdan kaçı toplandı)\n- Can sayısı\n\n`shipName` \"Kartal\" ise beklenen: `KARTAL | Yıldız: 3/10 | Can: 2`",
+  "starter": "const shipName = \"Kartal\";\nlet stars = 3;\nlet lives = 2;\n\n// status'u şablon metinle oluştur\n\nconsole.log(status);\n",
+  "solution": "const shipName = \"Kartal\";\nlet stars = 3;\nlet lives = 2;\n\n// status'u şablon metinle oluştur\nconst status = `${shipName.toLocaleUpperCase(\"tr\")} | Yıldız: ${stars}/10 | Can: ${lives}`;\n\nconsole.log(status);\n",
+  "hints": [
+   "Büyük harf için toLocaleUpperCase(\"tr\") Türkçe harfleri de doğru çevirir.",
+   "const status = `${...} | Yıldız: ${stars}/10 | Can: ${lives}`;"
+  ],
+  "check": {
+   "code_contains": [
+    "`",
+    "${"
+   ],
+   "js": "const upper = shipName.toLocaleUpperCase(\"tr\");\nassert(status === `${upper} | Yıldız: ${stars}/10 | Can: ${lives}` || status === `${shipName.toUpperCase()} | Yıldız: ${stars}/10 | Can: ${lives}`, `status '${upper} | Yıldız: ${stars}/10 | Can: ${lives}' olmalı.`);\nassert(_lines.includes(status), \"status'u yazdırmalısın.\");"
+  },
+  "xp": 100
+ },
+ "tracks": {
+  "js-web": {
+   "project_contribution": "Menü etiketi",
+   "project_task": {
+    "id": "js-d4-pw",
+    "title": "Menü etiketi",
+    "prompt": "Menüdeki bağlantı adı kullanıcıdan düzensiz geldi: `\"  hakkımda \"`.\n\n- `label`: boşlukları temizlenmiş ve **ilk harfi büyük** hali: `\"Hakkımda\"`\n- Sonra şunu yazdır: `Menü: Hakkımda (8 harf)` (harf sayısı `label.length`'ten gelsin)",
+    "starter": "const raw = \"  hakkımda \";\n\n// label'ı oluştur\n\n// Menü satırını yazdır\n",
+    "solution": "const raw = \"  hakkımda \";\n\n// label'ı oluştur\nconst clean = raw.trim();\nconst label = clean[0].toLocaleUpperCase(\"tr\") + clean.slice(1);\n\n// Menü satırını yazdır\nconsole.log(`Menü: ${label} (${label.length} harf)`);\n",
+    "hints": [
+     "Önce trim() ile boşlukları sil.",
+     "İlk harf: clean[0].toLocaleUpperCase(\"tr\"), gerisi: clean.slice(1)"
+    ],
+    "check": {
+     "code_contains": [
+      "trim",
+      "slice"
+     ],
+     "js": "assert(label === \"Hakkımda\", \"label 'Hakkımda' olmalı.\");\nassert(_lines.includes(\"Menü: Hakkımda (8 harf)\"), \"Çıktıda 'Menü: Hakkımda (8 harf)' görünmeli.\");"
+    },
+    "xp": 100
+   }
+  },
+  "js-app": {
+   "project_contribution": "Görev satırı",
+   "project_task": {
+    "id": "js-d4-pa",
+    "title": "Görev satırı",
+    "prompt": "Görevler listede büyük harfle ve başında bir onay kutusuyla görünecek.\n\n- `line`: `[ ] ` ve ardından görevin **Türkçe kurallarıyla büyük harfli** hali: `[ ] FİZİK TEKRARI`\n- `isLong`: görevin uzunluğu 10 karakterden fazla mı?",
+    "starter": "const task = \"fizik tekrarı\";\n\n// line ve isLong\n\nconsole.log(line);\nconsole.log(\"Uzun görev:\", isLong);\n",
+    "solution": "const task = \"fizik tekrarı\";\n\n// line ve isLong\nconst line = `[ ] ${task.toLocaleUpperCase(\"tr\")}`;\nconst isLong = task.length > 10;\n\nconsole.log(line);\nconsole.log(\"Uzun görev:\", isLong);\n",
+    "hints": [
+     "toUpperCase \"i\" harfini \"I\" yapar; Türkçe için toLocaleUpperCase(\"tr\") kullan.",
+     "const isLong = task.length > 10;"
+    ],
+    "check": {
+     "code_contains": [
+      "toLocaleUpperCase",
+      "length"
+     ],
+     "js": "assert(line === \"[ ] FİZİK TEKRARI\", \"line '[ ] FİZİK TEKRARI' olmalı (noktalı İ'lere dikkat).\");\nassert(isLong === true, \"isLong true olmalı.\");"
+    },
+    "xp": 100
+   }
+  },
+  "js-quiz": {
+   "project_contribution": "Cevap karşılaştırma",
+   "project_task": {
+    "id": "js-d4-pq",
+    "title": "Cevabı düzenle",
+    "prompt": "Yarışmacılar cevabı farklı yazabilir: `\"  PASİFİK \"`. Karşılaştırmadan önce düzenleyelim:\n\n- `normalized`: boşlukları silinmiş ve **Türkçe kurallarıyla küçük harfli** cevap\n- `isCorrect`: `normalized` ile `\"pasifik\"` aynı mı?",
+    "starter": "const userAnswer = \"  PASİFİK \";\n\n// normalized ve isCorrect\n\nconsole.log(normalized, isCorrect);\n",
+    "solution": "const userAnswer = \"  PASİFİK \";\n\n// normalized ve isCorrect\nconst normalized = userAnswer.trim().toLocaleLowerCase(\"tr\");\nconst isCorrect = normalized === \"pasifik\";\n\nconsole.log(normalized, isCorrect);\n",
+    "hints": [
+     "Metotları zincirleyebilirsin: userAnswer.trim().toLocaleLowerCase(\"tr\")",
+     "const isCorrect = normalized === \"pasifik\";"
+    ],
+    "check": {
+     "code_contains": [
+      "trim",
+      "toLocaleLowerCase",
+      "==="
+     ],
+     "js": "assert(normalized === \"pasifik\", \"normalized 'pasifik' olmalı.\");\nassert(isCorrect === true, \"isCorrect true olmalı.\");"
+    },
+    "xp": 100
+   }
+  }
+ },
+ "available": true
+}

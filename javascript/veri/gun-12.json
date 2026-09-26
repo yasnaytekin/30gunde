@@ -1,0 +1,215 @@
+{
+ "day": 12,
+ "title": "Set, Map ve JSON",
+ "region": "nebula",
+ "xp_complete": 150,
+ "objective": "Set ile tekrarları ayıklamak, Map ile anahtar-değer tutmak, spread ile kopyalamak ve veriyi JSON'a çevirmek",
+ "story": "Nebulanın ucundaki bir istasyona kenetlendin. İstasyon bilgisayarı verileri saklamak ve başka gemilere göndermek için ortak bir dil kullanıyor: **JSON**. Ayrıca bugün **Set** ve **Map** adlı iki yeni kutu tanıyacaksın.",
+ "sections": [
+  {
+   "title": "Set: tekrarsız kutu",
+   "body": "`Set` her değeri **yalnızca bir kez** tutan bir koleksiyondur. Aynı değeri ikinci kez eklersen görmezden gelir:\n\n```js\nconst visited = new Set();\nvisited.add(\"Mars\");\nvisited.add(\"Venüs\");\nvisited.add(\"Mars\");              // zaten var, eklenmez\nconsole.log(visited.size);        // 2\nconsole.log(visited.has(\"Mars\")); // true\nvisited.delete(\"Venüs\");\n```\n\nEn sık kullanımı: bir diziden tekrarları atmak. `new Set(dizi)` tekrarları siler, `[...set]` onu yeniden diziye çevirir:\n\n```js\nconst logs = [\"Mars\", \"Ay\", \"Mars\", \"Ay\", \"Venüs\"];\nconst unique = [...new Set(logs)]; // ['Mars', 'Ay', 'Venüs']\n```"
+  },
+  {
+   "title": "Map: anahtar → değer",
+   "body": "`Map` de nesne gibi anahtar-değer çiftleri tutar ama kendi metotlarıyla çalışır: `set`, `get`, `has`, `delete` ve `size`.\n\n```js\nconst cargo = new Map();\ncargo.set(\"su\", 40);\ncargo.set(\"yakıt\", 25);\nconsole.log(cargo.get(\"su\")); // 40\nconsole.log(cargo.size);      // 2\ncargo.set(\"su\", 35);          // aynı anahtar: değeri günceller\n\nfor (const [item, amount] of cargo) {\n  console.log(item, amount);\n}\n```\n\nNe zaman hangisi? Alanları belli bir şey (oyuncu, gemi) için **nesne**; sürekli eklenip silinen, sayılan şeyler (kelime sayacı, envanter adetleri) için **Map** rahattır."
+  },
+  {
+   "title": "Spread (...): aç ve kopyala",
+   "body": "Üç nokta `...` bir diziyi ya da nesneyi **açıp** içindekileri başka bir yere döker. Böylece kopya çıkarabilir, birleştirebilirsin:\n\n```js\nconst crew = [\"Ada\", \"Can\"];\nconst bigger = [...crew, \"Ece\"];     // ['Ada', 'Can', 'Ece']\n\nconst ship = { name: \"Kartal\", fuel: 50 };\nconst full = { ...ship, fuel: 100 }; // fuel'in üzerine yazıldı\nconsole.log(ship.fuel, full.fuel);   // 50 100\n```\n\nNeden kopya? `const b = a;` yazınca yeni bir dizi oluşmaz: `a` ile `b` **aynı** diziyi gösterir, birini değiştirirsen öbürü de değişir. `[...a]` ise yeni bir dizi verir."
+  },
+  {
+   "title": "JSON: verinin ortak dili",
+   "body": "**JSON** (JavaScript Object Notation), veriyi **metne** çevirmenin standart yoludur. Programlar veriyi kaydederken ya da internetten gönderirken JSON kullanır; bir API'den gelen veri neredeyse her zaman JSON'dır.\n\n```js\nconst player = { name: \"Ada\", level: 3, items: [\"kalkan\", \"lazer\"] };\n\nconst text = JSON.stringify(player);\nconsole.log(text); // {\"name\":\"Ada\",\"level\":3,\"items\":[\"kalkan\",\"lazer\"]}\n\nconst pretty = JSON.stringify(player, null, 2); // 2 boşluk girintili, okunaklı\nconst back = JSON.parse(text);                  // metinden yeniden nesne\nconsole.log(back.items[1]);                     // lazer\n```\n\n- `JSON.stringify(veri)`: nesne ya da dizi → metin. `JSON.stringify(veri, null, 2)` satırlara bölüp girintili yazar.\n- `JSON.parse(metin)`: metin → nesne ya da dizi.\n- JSON'da anahtarlar ve metinler **çift tırnaklı** yazılır. Fonksiyonlar ve `undefined` JSON'a girmez.\n- Bozuk bir metni `JSON.parse` ile çözmeye çalışırsan `SyntaxError` alırsın.\n\nİleride `localStorage` ile kayıt yaparken ve `fetch` ile sunucudan veri alırken hep JSON kullanacaksın."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Tekrarsız ziyaretler",
+   "code": "const logs = [\"Mars\", \"Ay\", \"Mars\", \"Venüs\", \"Ay\", \"Mars\"];\n\nconst planets = new Set(logs);\nconsole.log(planets);\nconsole.log(\"Farklı gezegen:\", planets.size);\n\nconst visits = new Map();\nfor (const p of logs) {\n  visits.set(p, (visits.get(p) || 0) + 1);\n}\nconsole.log(visits);\nconsole.log(\"Mars ziyareti:\", visits.get(\"Mars\"));\n",
+   "note": "visits.get(p) || 0: gezegen henüz yoksa 0'dan başla."
+  },
+  {
+   "title": "JSON'a çevir, geri al",
+   "code": "const save = { pilot: \"Ada\", level: 3, items: [\"kalkan\", \"lazer\"] };\n\nconst text = JSON.stringify(save, null, 2);\nconsole.log(text);\nconsole.log(typeof text);\n\nconst loaded = JSON.parse(text);\nconst next = { ...loaded, level: loaded.level + 1 };\nconsole.log(loaded.level, \"→\", next.level);\n",
+   "note": "stringify'daki 2'yi silip tekrar çalıştır: metin tek satıra iner."
+  }
+ ],
+ "tasks": [
+  {
+   "id": "js-d12-t1",
+   "title": "Tekrarsız yıldızlar",
+   "prompt": "Seyir defterinde bazı yıldızlar birden çok kez yazılmış. `Set` ve spread (`...`) kullanarak tekrarsız bir `unique` **dizisi** oluştur.\n\nSonra `unique.length` ile `4 farklı yıldız` yazdır (sayıyı elle yazma).",
+   "starter": "const visited = [\"Vega\", \"Sirius\", \"Vega\", \"Altair\", \"Sirius\", \"Deneb\"];\n\n// unique dizisini oluştur\n\n// kaç farklı yıldız olduğunu yazdır\n\n",
+   "solution": "const visited = [\"Vega\", \"Sirius\", \"Vega\", \"Altair\", \"Sirius\", \"Deneb\"];\n\n// unique dizisini oluştur\nconst unique = [...new Set(visited)];\n\n// kaç farklı yıldız olduğunu yazdır\nconsole.log(`${unique.length} farklı yıldız`);\n",
+   "hints": [
+    "new Set(visited) tekrarları atar.",
+    "[...new Set(visited)] onu diziye çevirir.",
+    "console.log(`${unique.length} farklı yıldız`);"
+   ],
+   "check": {
+    "code_contains": [
+     "new Set",
+     "..."
+    ],
+    "js": "assert(Array.isArray(unique), \"unique bir dizi olmalı: [...new Set(visited)]\");\nassert(same(unique, [\"Vega\", \"Sirius\", \"Altair\", \"Deneb\"]), \"unique ['Vega', 'Sirius', 'Altair', 'Deneb'] olmalı.\");\nassert(_code.includes(\"new Set\"), \"Tekrarları Set ile at.\");\nassert(_lines.includes(\"4 farklı yıldız\"), \"Çıktıda '4 farklı yıldız' görünmeli.\");\nassert(!/[\"'`]4 farklı/.test(_code), \"Sayıyı elle yazma; unique.length kullan.\");"
+   },
+   "xp": 50
+  },
+  {
+   "id": "js-d12-t2",
+   "title": "Kargo haritası",
+   "prompt": "`cargo` bir `Map`. Şunları yap:\n\n1. `\"yemek\"` → `15` ve `\"oksijen\"` → `30` ekle.\n2. `\"su\"` miktarını `35` yap.\n3. `for...of` ile bütün miktarları `total`'a topla.",
+   "starter": "const cargo = new Map();\ncargo.set(\"su\", 40);\ncargo.set(\"yakıt\", 25);\n\n// 1) yemek ve oksijen ekle  2) suyu 35 yap\n\nlet total = 0;\n// 3) for...of ile bütün miktarları topla\n\nconsole.log(cargo);\nconsole.log(\"Toplam yük:\", total);\n",
+   "solution": "const cargo = new Map();\ncargo.set(\"su\", 40);\ncargo.set(\"yakıt\", 25);\n\n// 1) yemek ve oksijen ekle  2) suyu 35 yap\ncargo.set(\"yemek\", 15);\ncargo.set(\"oksijen\", 30);\ncargo.set(\"su\", 35);\n\nlet total = 0;\n// 3) for...of ile bütün miktarları topla\nfor (const [item, amount] of cargo) {\n  total += amount;\n}\n\nconsole.log(cargo);\nconsole.log(\"Toplam yük:\", total);\n",
+   "hints": [
+    "cargo.set(\"yemek\", 15);",
+    "Aynı anahtarla set: değeri günceller.",
+    "for (const [item, amount] of cargo) { total += amount; }"
+   ],
+   "check": {
+    "code_contains": [
+     "cargo.set",
+     "for"
+    ],
+    "js": "assert(cargo instanceof Map, \"cargo bir Map olarak kalmalı.\");\nassert(cargo.get(\"yemek\") === 15 && cargo.get(\"oksijen\") === 30, \"yemek 15, oksijen 30 olmalı.\");\nassert(cargo.get(\"su\") === 35, \"su 35 olmalı (aynı anahtarla set).\");\nassert(cargo.size === 4, \"cargo'da 4 kalem olmalı.\");\nassert(total === 105, \"total 105 olmalı (35 + 25 + 15 + 30).\");\nassert(!/\\b105\\b/.test(_code), \"Toplamı elle yazma; for...of ile topla.\");"
+   },
+   "xp": 50
+  },
+  {
+   "id": "js-d12-t3",
+   "title": "Seyir defteri",
+   "prompt": "Seyir defterini JSON'a çevirip geri al:\n\n1. `text`: `log`'un JSON metni (`JSON.stringify`).\n2. `loaded`: `text`'ten geri çevrilen nesne (`JSON.parse`).\n3. `nextDay`: `loaded`'ın spread ile kopyası, ama `day` değeri `13`. `loaded` değişmesin.",
+   "starter": "const log = { ship: \"Kartal\", day: 12, planets: [\"Mars\", \"Ay\"] };\n\n// text, loaded, nextDay\n\nconsole.log(text);\nconsole.log(nextDay);\n",
+   "solution": "const log = { ship: \"Kartal\", day: 12, planets: [\"Mars\", \"Ay\"] };\n\n// text, loaded, nextDay\nconst text = JSON.stringify(log);\nconst loaded = JSON.parse(text);\nconst nextDay = { ...loaded, day: 13 };\n\nconsole.log(text);\nconsole.log(nextDay);\n",
+   "hints": [
+    "const text = JSON.stringify(log);",
+    "const loaded = JSON.parse(text);",
+    "const nextDay = { ...loaded, day: 13 };"
+   ],
+   "check": {
+    "code_contains": [
+     "JSON.stringify",
+     "JSON.parse",
+     "..."
+    ],
+    "js": "assert(typeof text === \"string\", \"text bir metin olmalı: JSON.stringify(log)\");\nassert(same(JSON.parse(text), log), \"text, log nesnesinin JSON hâli olmalı.\");\nassert(loaded && typeof loaded === \"object\" && loaded !== log && same(loaded, log), \"loaded, text'ten JSON.parse ile üretilmeli.\");\nassert(nextDay && nextDay.day === 13 && nextDay.ship === \"Kartal\" && same(nextDay.planets, [\"Mars\", \"Ay\"]), \"nextDay loaded'ın kopyası olmalı, day 13.\");\nassert(loaded.day === 12, \"loaded değişmemeli; spread ile yeni nesne oluştur.\");\nassert(_code.includes(\"...\"), \"Kopyayı spread (...) ile oluştur.\");"
+   },
+   "xp": 50
+  }
+ ],
+ "challenge": {
+  "id": "js-d12-c",
+  "title": "Sinyal sayacı",
+  "prompt": "İki fonksiyon yaz:\n\n- `countWords(list)`: her kelimenin kaç kez geçtiğini tutan bir `Map` döndürsün (ör. `\"bip\"` → `3`).\n- `mostCommon(list)`: en çok geçen kelimeyi döndürsün (`countWords`'ü kullanabilirsin).",
+  "starter": "const signals = [\"bip\", \"vuu\", \"bip\", \"tık\", \"bip\", \"vuu\"];\n\nfunction countWords(list) {\n  const counts = new Map();\n  // her kelimeyi say\n  return counts;\n}\n\nfunction mostCommon(list) {\n  // en çok geçen kelime\n}\n\nconsole.log(countWords(signals));\nconsole.log(\"En sık:\", mostCommon(signals));\n",
+  "solution": "const signals = [\"bip\", \"vuu\", \"bip\", \"tık\", \"bip\", \"vuu\"];\n\nfunction countWords(list) {\n  const counts = new Map();\n  // her kelimeyi say\n  for (const word of list) {\n    counts.set(word, (counts.get(word) || 0) + 1);\n  }\n  return counts;\n}\n\nfunction mostCommon(list) {\n  // en çok geçen kelime\n  let best = null;\n  let bestCount = 0;\n  for (const [word, count] of countWords(list)) {\n    if (count > bestCount) {\n      best = word;\n      bestCount = count;\n    }\n  }\n  return best;\n}\n\nconsole.log(countWords(signals));\nconsole.log(\"En sık:\", mostCommon(signals));\n",
+  "hints": [
+   "counts.set(word, (counts.get(word) || 0) + 1);",
+   "Map'i for (const [word, count] of ...) ile gez.",
+   "En büyüğü bulmak için bestCount değişkeni tut."
+  ],
+  "check": {
+   "code_contains": [
+    "counts.set",
+    "counts.get"
+   ],
+   "js": "const m = countWords(signals);\nassert(m instanceof Map, \"countWords bir Map döndürmeli.\");\nassert(m.get(\"bip\") === 3 && m.get(\"vuu\") === 2 && m.get(\"tık\") === 1 && m.size === 3, \"bip 3, vuu 2, tık 1 olmalı.\");\nconst m2 = countWords([\"a\", \"a\"]);\nassert(m2.get(\"a\") === 2 && m2.size === 1, \"countWords başka listelerle de çalışmalı.\");\nassert(mostCommon(signals) === \"bip\", \"mostCommon(signals) 'bip' olmalı.\");\nassert(mostCommon([\"x\", \"y\", \"y\", \"z\"]) === \"y\", \"mostCommon başka listelerde de en sık kelimeyi bulmalı.\");"
+  },
+  "xp": 75
+ },
+ "project_contribution": "Kayıt dosyası",
+ "project_task": {
+  "id": "js-d12-p",
+  "title": "Kayıt dosyası",
+  "prompt": "Oyunun kayıt dosyasını hazırla:\n\n- `saveGame(p)`: oyuncunun kopyasını alsın, envanterdeki **tekrarları** `Set` ile atsın ve 2 boşluk girintili JSON metni döndürsün. Asıl oyuncu nesnesi değişmesin.\n- `loadGame(text)`: JSON metnini yeniden nesneye çevirip döndürsün.",
+  "starter": "const player = {\n  name: \"Ada\",\n  level: 3,\n  score: 450,\n  inventory: [\"kalkan\", \"lazer\", \"lazer\", \"harita\"],\n};\n\nfunction saveGame(p) {\n  // kopya + tekrarsız envanter, sonra JSON.stringify(..., null, 2)\n}\n\nfunction loadGame(text) {\n  // JSON.parse\n}\n\nconst file = saveGame(player);\nconsole.log(file);\nconsole.log(loadGame(file));\n",
+  "solution": "const player = {\n  name: \"Ada\",\n  level: 3,\n  score: 450,\n  inventory: [\"kalkan\", \"lazer\", \"lazer\", \"harita\"],\n};\n\nfunction saveGame(p) {\n  // kopya + tekrarsız envanter, sonra JSON.stringify(..., null, 2)\n  const clean = { ...p, inventory: [...new Set(p.inventory)] };\n  return JSON.stringify(clean, null, 2);\n}\n\nfunction loadGame(text) {\n  // JSON.parse\n  return JSON.parse(text);\n}\n\nconst file = saveGame(player);\nconsole.log(file);\nconsole.log(loadGame(file));\n",
+  "hints": [
+   "const clean = { ...p, inventory: [...new Set(p.inventory)] };",
+   "return JSON.stringify(clean, null, 2);",
+   "return JSON.parse(text);"
+  ],
+  "check": {
+   "code_contains": [
+    "JSON.stringify",
+    "JSON.parse",
+    "new Set"
+   ],
+   "js": "const file = saveGame(player);\nassert(typeof file === \"string\", \"saveGame bir metin (JSON) döndürmeli.\");\nassert(file.includes(\"\\n  \\\"\"), \"JSON metni 2 boşluk girintili olmalı: JSON.stringify(veri, null, 2)\");\nconst game = loadGame(file);\nassert(game && game.name === \"Ada\" && game.level === 3 && game.score === 450, \"loadGame metni yeniden nesneye çevirmeli.\");\nassert(same(game.inventory, [\"kalkan\", \"lazer\", \"harita\"]), \"Kayıtta envanter tekrarsız olmalı: ['kalkan', 'lazer', 'harita']\");\nassert(player.inventory.length === 4, \"Asıl player nesnesi değişmemeli; spread ile kopyasını al.\");\nconst other = loadGame(saveGame({ name: \"Can\", level: 1, score: 0, inventory: [\"iksir\", \"iksir\"] }));\nassert(other.name === \"Can\" && same(other.inventory, [\"iksir\"]), \"Fonksiyonlar başka oyuncularla da çalışmalı.\");"
+  },
+  "xp": 100
+ },
+ "tracks": {
+  "js-web": {
+   "project_contribution": "Ayarlar dosyası",
+   "project_task": {
+    "id": "js-d12-pw",
+    "title": "Ayarlar dosyası",
+    "prompt": "Siten ziyaretçinin ayarlarını JSON olarak saklayacak:\n\n- `loadSettings(text)`: JSON metnini çözsün ve `defaults` ile birleştirsin: `{ ...defaults, ...kayıtlı }`. Metinde olmayan ayarlar varsayılandan gelsin. `defaults` değişmesin.\n- `saveSettings(settings)`: ayarları JSON metnine çevirip döndürsün.",
+    "starter": "const defaults = { theme: \"light\", fontSize: 16, lang: \"tr\" };\nconst savedText = '{\"theme\":\"dark\",\"fontSize\":18}';\n\nfunction loadSettings(text) {\n  // JSON'u çöz, varsayılanlarla birleştir\n}\n\nfunction saveSettings(settings) {\n  // JSON metnine çevir\n}\n\nconst settings = loadSettings(savedText);\nconsole.log(settings);\nconsole.log(saveSettings(settings));\n",
+    "solution": "const defaults = { theme: \"light\", fontSize: 16, lang: \"tr\" };\nconst savedText = '{\"theme\":\"dark\",\"fontSize\":18}';\n\nfunction loadSettings(text) {\n  // JSON'u çöz, varsayılanlarla birleştir\n  return { ...defaults, ...JSON.parse(text) };\n}\n\nfunction saveSettings(settings) {\n  // JSON metnine çevir\n  return JSON.stringify(settings);\n}\n\nconst settings = loadSettings(savedText);\nconsole.log(settings);\nconsole.log(saveSettings(settings));\n",
+    "hints": [
+     "JSON.parse(text) kayıtlı ayarları nesneye çevirir.",
+     "return { ...defaults, ...JSON.parse(text) };",
+     "Sonra gelen spread öncekinin üzerine yazar."
+    ],
+    "check": {
+     "code_contains": [
+      "JSON.parse",
+      "JSON.stringify",
+      "..."
+     ],
+     "js": "const s = loadSettings(savedText);\nassert(s && s.theme === \"dark\" && s.fontSize === 18 && s.lang === \"tr\", \"loadSettings(savedText) { theme: 'dark', fontSize: 18, lang: 'tr' } olmalı.\");\nconst s2 = loadSettings('{\"lang\":\"en\"}');\nassert(s2.theme === \"light\" && s2.fontSize === 16 && s2.lang === \"en\", \"Kayıtta olmayan ayarlar defaults'tan gelmeli.\");\nassert(defaults.theme === \"light\" && defaults.lang === \"tr\", \"defaults nesnesi değişmemeli; spread ile yeni nesne oluştur.\");\nconst text = saveSettings(s);\nassert(typeof text === \"string\" && same(JSON.parse(text), s), \"saveSettings ayarları JSON metnine çevirmeli.\");"
+    },
+    "xp": 100
+   }
+  },
+  "js-app": {
+   "project_contribution": "Görevleri kaydet ve yükle",
+   "project_task": {
+    "id": "js-d12-pa",
+    "title": "Kaydet ve yükle",
+    "prompt": "Asistan görev listesini kaydedip geri yükleyebilsin:\n\n- `saveTasks(list)`: diziyi JSON metnine çevirip döndürsün.\n- `loadTasks(text)`: metin boşsa (`\"\"` ya da `null`) boş dizi `[]`, değilse `JSON.parse` sonucunu döndürsün.",
+    "starter": "const tasks = [\n  { title: \"Matematik ödevi\", done: true },\n  { title: \"Fizik tekrarı\", done: false },\n];\n\nfunction saveTasks(list) {\n  // JSON metnine çevir\n}\n\nfunction loadTasks(text) {\n  // boşsa [], değilse JSON.parse\n}\n\nconst saved = saveTasks(tasks);\nconsole.log(saved);\nconsole.log(loadTasks(saved));\nconsole.log(loadTasks(\"\"));\n",
+    "solution": "const tasks = [\n  { title: \"Matematik ödevi\", done: true },\n  { title: \"Fizik tekrarı\", done: false },\n];\n\nfunction saveTasks(list) {\n  // JSON metnine çevir\n  return JSON.stringify(list);\n}\n\nfunction loadTasks(text) {\n  // boşsa [], değilse JSON.parse\n  if (!text) return [];\n  return JSON.parse(text);\n}\n\nconst saved = saveTasks(tasks);\nconsole.log(saved);\nconsole.log(loadTasks(saved));\nconsole.log(loadTasks(\"\"));\n",
+    "hints": [
+     "return JSON.stringify(list);",
+     "Boş metin ve null yanlış sayılır: if (!text) return [];"
+    ],
+    "check": {
+     "code_contains": [
+      "JSON.stringify",
+      "JSON.parse"
+     ],
+     "js": "const saved = saveTasks(tasks);\nassert(typeof saved === \"string\", \"saveTasks bir metin döndürmeli.\");\nconst back = loadTasks(saved);\nassert(Array.isArray(back) && back !== tasks && same(back, tasks), \"loadTasks(saveTasks(tasks)) aynı görevleri (yeni bir dizi olarak) vermeli.\");\nassert(Array.isArray(loadTasks(\"\")) && loadTasks(\"\").length === 0, \"loadTasks(\\\"\\\") boş dizi döndürmeli.\");\nassert(Array.isArray(loadTasks(null)) && loadTasks(null).length === 0, \"loadTasks(null) boş dizi döndürmeli.\");\nassert(same(loadTasks('[{\"title\":\"X\",\"done\":false}]'), [{ title: \"X\", done: false }]), \"loadTasks verilen JSON metnini çözmeli.\");"
+    },
+    "xp": 100
+   }
+  },
+  "js-quiz": {
+   "project_contribution": "Soru paketi",
+   "project_task": {
+    "id": "js-d12-pq",
+    "title": "Soru paketi",
+    "prompt": "Soru paketleri JSON metni olarak geliyor. İki fonksiyon yaz:\n\n- `describePack(text)`: `\"Gezegenler: 3 soru\"` biçiminde paketin adını ve soru sayısını döndürsün.\n- `correctAnswers(text)`: her sorunun doğru seçeneğinin **metnini** dizi olarak döndürsün (`answer` doğru seçeneğin sırası). `map` kullan.",
+    "starter": "const packText = '{\"name\":\"Gezegenler\",\"questions\":[' +\n  '{\"text\":\"Kızıl gezegen hangisi?\",\"options\":[\"Mars\",\"Venüs\",\"Merkür\"],\"answer\":0},' +\n  '{\"text\":\"En büyük gezegen hangisi?\",\"options\":[\"Satürn\",\"Jüpiter\",\"Neptün\"],\"answer\":1},' +\n  '{\"text\":\"Halkalı gezegen hangisi?\",\"options\":[\"Uranüs\",\"Mars\",\"Satürn\"],\"answer\":2}]}';\n\nfunction describePack(text) {\n  // JSON.parse ile paketi aç\n}\n\nfunction correctAnswers(text) {\n  // her sorunun doğru seçeneği\n}\n\nconsole.log(describePack(packText));\nconsole.log(correctAnswers(packText));\n",
+    "solution": "const packText = '{\"name\":\"Gezegenler\",\"questions\":[' +\n  '{\"text\":\"Kızıl gezegen hangisi?\",\"options\":[\"Mars\",\"Venüs\",\"Merkür\"],\"answer\":0},' +\n  '{\"text\":\"En büyük gezegen hangisi?\",\"options\":[\"Satürn\",\"Jüpiter\",\"Neptün\"],\"answer\":1},' +\n  '{\"text\":\"Halkalı gezegen hangisi?\",\"options\":[\"Uranüs\",\"Mars\",\"Satürn\"],\"answer\":2}]}';\n\nfunction describePack(text) {\n  // JSON.parse ile paketi aç\n  const pack = JSON.parse(text);\n  return `${pack.name}: ${pack.questions.length} soru`;\n}\n\nfunction correctAnswers(text) {\n  // her sorunun doğru seçeneği\n  const pack = JSON.parse(text);\n  return pack.questions.map((q) => q.options[q.answer]);\n}\n\nconsole.log(describePack(packText));\nconsole.log(correctAnswers(packText));\n",
+    "hints": [
+     "const pack = JSON.parse(text);",
+     "pack.questions.length soru sayısını verir.",
+     "pack.questions.map((q) => q.options[q.answer])"
+    ],
+    "check": {
+     "code_contains": [
+      "JSON.parse",
+      "map"
+     ],
+     "js": "assert(describePack(packText) === \"Gezegenler: 3 soru\", \"describePack(packText) 'Gezegenler: 3 soru' döndürmeli.\");\nassert(same(correctAnswers(packText), [\"Mars\", \"Jüpiter\", \"Satürn\"]), \"correctAnswers(packText) ['Mars', 'Jüpiter', 'Satürn'] döndürmeli.\");\nconst other = JSON.stringify({ name: \"Hayvanlar\", questions: [{ text: \"En büyük hayvan?\", options: [\"Fil\", \"Mavi balina\"], answer: 1 }] });\nassert(describePack(other) === \"Hayvanlar: 1 soru\", \"describePack başka paketlerle de çalışmalı.\");\nassert(same(correctAnswers(other), [\"Mavi balina\"]), \"correctAnswers başka paketlerle de çalışmalı.\");"
+    },
+    "xp": 100
+   }
+  }
+ },
+ "available": true
+}

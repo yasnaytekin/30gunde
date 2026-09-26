@@ -1,0 +1,217 @@
+{
+  "kurs": "python",
+  "gun": 24,
+  "baslik": "İstatistik ve NumPy",
+  "maskot": "piko",
+  "ozet": "Piko, Bilgi Limanı'nın kayıt ofisinde statistics modülüyle ortalama, ortanca ve tepe değeri; NumPy dizileriyle toplu işlem ve koşulla seçimi anlatıyor.",
+  "hedef_sure_sn": 143,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 14,
+      "anlatim": "Selam, ben Piko! Bilgi Limanı'nın kayıt ofisinde yüzlerce geminin varış süresi yazılı. Liman başkanı soruyor: Gemiler ortalama kaç saatte geliyor, en sık hangi süre görülüyor? Bugün Python'la sayıları konuşturacağız!",
+      "ekran": {
+        "baslik": "Gün 24: İstatistik ve NumPy",
+        "maddeler": [
+          "Bilgi Limanı",
+          "statistics ve NumPy"
+        ]
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      },
+      "yonetmen_notu": "Arka plan: Bilgi Limanı bölge görseli (gorseller/python/harita/liman.webp). Dosya repoda henüz yok; eklenince ekran.gorsel alanına yazılmalı. Kayıt ofisinde üst üste yığılmış defterler, sayılar havada uçuşur."
+    },
+    {
+      "no": 2,
+      "tur": "anlatim",
+      "sure_sn": 17,
+      "anlatim": "Dört temel ölçü var. Ortalama: hepsini topla, sayısına böl. Ortanca: sıralayınca tam ortadaki değer. Tepe değer: en sık görülen. Standart sapma ise sayıların ortalamadan ne kadar uzağa dağıldığını söyler.",
+      "ekran": {
+        "baslik": "Temel ölçüler",
+        "maddeler": [
+          "Ortalama (mean)",
+          "Ortanca (median)",
+          "Tepe değer (mode)",
+          "Standart sapma (stdev)"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "statistics modülü Python'la birlikte gelir ve bu ölçüleri hazır hesaplar. Bak, on iki saatlik tek bir geç gemi ortalamayı altıya çekti ama ortanca beşte kaldı. Ortanca uç değerlerden pek etkilenmez.",
+      "ekran": {
+        "baslik": "Varış süreleri: statistics",
+        "kod": "import statistics\n\ntimes = [3, 5, 5, 6, 12]\nprint(\"Ortalama:\", statistics.mean(times))\nprint(\"Ortanca:\", statistics.median(times))\nprint(\"En sık:\", statistics.mode(times))\nprint(\"Sapma:\", round(statistics.stdev(times), 2))\n",
+        "vurgu_satirlari": [
+          4,
+          5,
+          6
+        ],
+        "dil": "python",
+        "cikti": "Ortalama: 6.2\nOrtanca: 5\nEn sık: 5\nSapma: 3.42"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "anlatim",
+      "sure_sn": 11,
+      "anlatim": "NumPy, bilim insanlarının en sevdiği paket. array yapısı listeye benzer ama bir işlemi tüm elemanlara birden uygular.",
+      "ekran": {
+        "baslik": "NumPy dizileri",
+        "maddeler": [
+          "import numpy as np",
+          "np.array([10, 20, 30])",
+          "İşlem tüm elemanlara birden"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 5,
+      "tur": "soru",
+      "sure_sn": 10,
+      "anlatim": "Aynı listeyi bir kez olduğu gibi, bir kez de NumPy dizisi yapıp iki ile çarpıyorum. Sence iki satırda ne görürüz?",
+      "ekran": {
+        "baslik": "Sence ne yazdırır?",
+        "kod": "import numpy as np\n\nnums = [10, 20, 30]\nprint(\"Liste * 2:\", nums * 2)\nprint(\"Dizi * 2:\", np.array(nums) * 2)\n",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 6,
+      "tur": "cikti",
+      "sure_sn": 12,
+      "anlatim": "Aynı işlem, çok farklı sonuç! Liste iki kez yan yana eklendi. Dizi ise her elemanı iki katına çıkardı. Dizinin virgülsüz yazıldığına da dikkat et.",
+      "ekran": {
+        "baslik": "Cevap: liste mi dizi mi?",
+        "kod": "import numpy as np\n\nnums = [10, 20, 30]\nprint(\"Liste * 2:\", nums * 2)\nprint(\"Dizi * 2:\", np.array(nums) * 2)\n",
+        "dil": "python",
+        "cikti": "Liste * 2: [10, 20, 30, 10, 20, 30]\nDizi * 2: [20 40 60]"
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sol"
+      },
+      "calistir": true,
+      "yonetmen_notu": "Kod numpy paketini kullanır; doğrulayıcının Python ortamında kurulu olmalı."
+    },
+    {
+      "no": 7,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "Dizilerde köşeli parantezin içine koşul yazarak seçim yapabilirsin. Elli ve üstü olanlar süzülüyor. Koşulun sonucunu sum ile toplarsan kaç kişinin geçtiğini bulursun. mean de ortalamayı veriyor.",
+      "ekran": {
+        "baslik": "Koşulla seçmek",
+        "kod": "import numpy as np\n\nscores = np.array([45, 90, 12, 77, 60])\nprint(\"Geçenler:\", scores[scores >= 50])\nprint(\"Kaç kişi:\", (scores >= 50).sum())\nprint(\"Ortalama:\", scores.mean())\n",
+        "vurgu_satirlari": [
+          4,
+          5
+        ],
+        "dil": "python",
+        "cikti": "Geçenler: [90 77 60]\nKaç kişi: 3\nOrtalama: 56.8"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true,
+      "yonetmen_notu": "Kod numpy paketini kullanır; doğrulayıcının Python ortamında kurulu olmalı."
+    },
+    {
+      "no": 8,
+      "tur": "hata",
+      "sure_sn": 11,
+      "anlatim": "Sık hata: boş bir listenin ortalamasını istemek. Hiç sayı yoksa ortalama da olmaz, Python StatisticsError verir. Hesaplamadan önce listenin boş olmadığına bak.",
+      "ekran": {
+        "baslik": "Sık hata: boş liste",
+        "kod": "import statistics\n\nscores = []\nprint(statistics.mean(scores))\n",
+        "vurgu_satirlari": [
+          4
+        ],
+        "cikti": "statistics.StatisticsError: mean requires at least one data point",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "uzgun",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "gorev",
+      "sure_sn": 13,
+      "anlatim": "Görevlerde ortalama ve ortancayı hesaplayacak, en sık gelen zarı bulacak ve döngü kullanmadan skorları iki katına çıkaracaksın. Projede de oyuncuların oyun sürelerini özetliyorsun.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Ortalama ve ortanca",
+          "Görev 2: En sık zar",
+          "Görev 3: NumPy ile iki katı",
+          "Challenge: Kaç kişi geçti?",
+          "Proje: Oyun istatistikleri"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 10,
+      "tur": "ozet",
+      "sure_sn": 11,
+      "anlatim": "Özetle: statistics ile ölçüleri hesapla, NumPy ile tüm diziye birden işlem yap, koşulla da süz.",
+      "ekran": {
+        "baslik": "Bugün öğrendiklerin",
+        "maddeler": [
+          "mean, median, mode, stdev",
+          "np.array: işlem tüm elemanlara",
+          "dizi[koşul] ile seçim"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "kapanis",
+      "sure_sn": 12,
+      "anlatim": "Sayılar konuştu, harikasın! Yarın bu sayıları tablolara dizeceğiz. pandas ile satır ve sütunları filtreleyip özetlemeyi öğreneceğiz. Görüşürüz!",
+      "ekran": {
+        "baslik": "Yarın: Pandas",
+        "maddeler": [
+          "DataFrame",
+          "Filtrele ve özetle"
+        ]
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

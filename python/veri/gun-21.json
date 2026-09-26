@@ -1,0 +1,2161 @@
+{
+ "day": 21,
+ "title": "Sınıflar ve nesneler",
+ "region": "liman",
+ "project_contribution": "Karakter sınıfları",
+ "game_role": "Yarasa savaşları senin Character sınıfınla yapılır.",
+ "xp_complete": 150,
+ "objective": "class ile kendi veri tiplerini oluşturmak: __init__, self, metotlar ve kalıtım",
+ "story": "Bilgi Limanı'na vardık! Limandaki tersanede gemiler tek bir çizime göre yapılıyor. Çizim bir kez hazırlanıyor, ondan istediğin kadar gemi üretiliyor ve her geminin kendi adı, kendi yükü oluyor. Python'da çizime **sınıf** (class), üretilen gemilere **nesne** (object) diyoruz.",
+ "sections": [
+  {
+   "title": "Sınıf ve nesne",
+   "body": "Sınıf bir kalıptır; nesne o kalıptan yapılan şeydir. Aslında şimdiye kadar hep nesne kullandın: `\"Piko\"` bir `str` nesnesi, `[1, 2]` bir `list` nesnesi.\n\n```python\nclass Pet:\n    pass\n\ntost = Pet()\nprint(type(tost))   # <class '__main__.Pet'>\n```\n\nSınıf isimleri genellikle büyük harfle başlar: `Pet`, `Hero`, `Ship`."
+  },
+  {
+   "title": "__init__ ve self",
+   "body": "`__init__` nesne oluşturulurken **otomatik** çalışan özel bir metottur. `self`, o anda oluşturulan nesnenin kendisidir:\n\n```python\nclass Pet:\n    def __init__(self, name):\n        self.name = name\n        self.happiness = 50\n\ntost = Pet(\"Tost\")\nprint(tost.name)        # Tost\nprint(tost.happiness)   # 50\n```\n\n`self.name` gibi değişkenlere **özellik** (attribute) denir. Her nesnenin kendi özellikleri vardır."
+  },
+  {
+   "title": "Metotlar",
+   "body": "Sınıfın içindeki fonksiyonlara **metot** denir. İlk parametreleri her zaman `self`'tir:\n\n```python\nclass Pet:\n    def __init__(self, name):\n        self.name = name\n        self.happiness = 50\n\n    def feed(self):\n        self.happiness += 10\n\ntost = Pet(\"Tost\")\ntost.feed()\nprint(tost.happiness)   # 60\n```"
+  },
+  {
+   "title": "Kalıtım",
+   "body": "Bir sınıf başka bir sınıfın her şeyini **miras alabilir** ve üstüne yenilerini ekleyebilir:\n\n```python\nclass Hero:\n    def __init__(self, name):\n        self.name = name\n\nclass Wizard(Hero):\n    def cast(self):\n        return f\"{self.name} büyü yaptı!\"\n\nw = Wizard(\"Merlin\")\nprint(w.cast())\n```\n\n`Wizard`, `Hero`'nun `__init__` metodunu kendiliğinden kullanır. Kendi `__init__` metodunu yazarsan, üst sınıfınkini `super().__init__(name)` ile çağırabilirsin."
+  }
+ ],
+ "examples": [
+  {
+   "title": "İlk sınıf",
+   "code": "class Pet:\n    def __init__(self, name):\n        self.name = name\n        self.happiness = 50\n\n    def feed(self):\n        self.happiness += 10\n\ntost = Pet(\"Tost\")\nmisket = Pet(\"Misket\")\ntost.feed()\ntost.feed()\nprint(tost.name, tost.happiness)\nprint(misket.name, misket.happiness)\n",
+   "note": "İki nesne aynı kalıptan çıktı ama mutlulukları farklı."
+  },
+  {
+   "title": "Kendini tanıtan nesne",
+   "code": "class Ship:\n    def __init__(self, name, cargo):\n        self.name = name\n        self.cargo = cargo\n\n    def __str__(self):\n        return f\"{self.name} gemisi, yük: {self.cargo}\"\n\nprint(Ship(\"Martı\", 12))\n",
+   "note": "__str__ metodu, print() nesneyi yazdırırken ne görüneceğini belirler."
+  },
+  {
+   "title": "Kalıtım",
+   "code": "class Hero:\n    def __init__(self, name):\n        self.name = name\n        self.hp = 100\n\nclass Wizard(Hero):\n    def __init__(self, name):\n        super().__init__(name)\n        self.mana = 30\n\n    def cast(self):\n        self.mana -= 10\n        return f\"{self.name} büyü yaptı, mana {self.mana}\"\n\nw = Wizard(\"Merlin\")\nprint(w.hp)\nprint(w.cast())\n",
+   "note": ""
+  }
+ ],
+ "tasks": [
+  {
+   "id": "d21-t1",
+   "title": "Evcil hayvan",
+   "prompt": "`Pet` sınıfı `name` alsın ve `happiness` 50 ile başlasın. `feed()` metodu mutluluğu 10 artırsın.",
+   "starter": "class Pet:\n    def __init__(self, name):\n        pass\n\n    def feed(self):\n        pass\n\ntost = Pet(\"Tost\")\ntost.feed()\nprint(tost.name, tost.happiness)\n",
+   "solution": "class Pet:\n    def __init__(self, name):\n        self.name = name\n        self.happiness = 50\n\n    def feed(self):\n        self.happiness += 10\n\ntost = Pet(\"Tost\")\ntost.feed()\nprint(tost.name, tost.happiness)\n",
+   "hints": [
+    "__init__ içinde: self.name = name ve self.happiness = 50",
+    "feed içinde: self.happiness += 10"
+   ],
+   "check": {
+    "python": "\np = Pet(\"Misket\")\nassert p.name == \"Misket\", \"Pet('Misket').name 'Misket' olmalı: self.name = name\"\nassert p.happiness == 50, \"happiness 50 ile başlamalı.\"\np.feed(); p.feed()\nassert p.happiness == 70, \"İki kez feed() sonrası happiness 70 olmalı.\"\nq = Pet(\"Tost\")\nassert q.happiness == 50, \"Her nesnenin kendi mutluluğu olmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "class Pet:",
+      "notes": [
+       "`Pet` adında bir sınıf (nesne kalıbı) tanımlanıyor."
+      ]
+     },
+     {
+      "n": 2,
+      "code": "    def __init__(self, name):",
+      "notes": [
+       "`__init__`: `Pet` nesnesi oluşturulurken otomatik çalışan hazırlık metodu. Aldığı değerler: `name`."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "        self.name = name",
+      "notes": [
+       "Nesnenin `self.name` özelliğine `name` değeri konuyor."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "        self.happiness = 50",
+      "notes": [
+       "Nesnenin `self.happiness` özelliğine `50` değeri konuyor."
+      ]
+     },
+     {
+      "n": 6,
+      "code": "    def feed(self):",
+      "notes": [
+       "`feed` adında bir metot (sınıfa ait fonksiyon) tanımlanıyor."
+      ]
+     },
+     {
+      "n": 7,
+      "code": "        self.happiness += 10",
+      "notes": [
+       "`self.happiness += 10`: `self.happiness` değişkeninin değeri güncelleniyor."
+      ]
+     },
+     {
+      "n": 9,
+      "code": "tost = Pet(\"Tost\")",
+      "notes": [
+       "`tost` adında bir değişken oluşturuluyor ve içine `Pet(\"Tost\")` konuyor.",
+       "`Pet(...)`: `Pet` sınıfından yeni bir nesne oluşturur."
+      ]
+     },
+     {
+      "n": 10,
+      "code": "tost.feed()",
+      "notes": [
+       "`tost.feed()`: `tost` üzerinde `feed` metodunu çalıştırır. Ayrıştırıcıya okunacak HTML'i verir."
+      ]
+     },
+     {
+      "n": 11,
+      "code": "print(tost.name, tost.happiness)",
+      "notes": [
+       "`print(tost.name, tost.happiness)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "tost",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `Pet(\"Tost\")`."
+     },
+     {
+      "term": "name",
+      "kind": "parametre",
+      "desc": "`__init__` çağrılırken verilen değer bu isimle kullanılır."
+     },
+     {
+      "term": "class",
+      "kind": "anahtar kelime",
+      "desc": "Yeni bir sınıf (nesne kalıbı) tanımlar."
+     },
+     {
+      "term": "Pet",
+      "kind": "senin sınıfın",
+      "desc": "Kodda tanımlanan sınıf; `Pet(...)` ile yeni nesneler oluşturulur."
+     },
+     {
+      "term": "__init__()",
+      "kind": "metot",
+      "desc": "Sınıftan yeni bir nesne oluşturulurken otomatik çalışan hazırlık metodu."
+     },
+     {
+      "term": "def",
+      "kind": "anahtar kelime",
+      "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "feed()",
+      "kind": "senin metodun",
+      "desc": "`Pet` sınıfının metodu; nesne.feed(...) diye çağrılır."
+     },
+     {
+      "term": "+=",
+      "kind": "operatör",
+      "desc": "Değişkenin kendi değerine ekler: x += 1 → x = x + 1."
+     },
+     {
+      "term": ".feed()",
+      "kind": "senin metodun",
+      "desc": "Sınıfında tanımladığın `feed` metodunu bu nesne için çalıştırır."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d21-t2",
+   "title": "Cüzdan",
+   "prompt": "`Wallet` sınıfında `balance` 0 ile başlasın. `add(amount)` parayı eklesin. `spend(amount)` yeterli para varsa harcayıp `True`, yoksa hiçbir şey değiştirmeden `False` döndürsün.",
+   "starter": "class Wallet:\n    def __init__(self):\n        self.balance = 0\n\n    def add(self, amount):\n        pass\n\n    def spend(self, amount):\n        pass\n\nw = Wallet()\nw.add(30)\nprint(w.spend(20), w.balance)\n",
+   "solution": "class Wallet:\n    def __init__(self):\n        self.balance = 0\n\n    def add(self, amount):\n        self.balance += amount\n\n    def spend(self, amount):\n        if amount > self.balance:\n            return False\n        self.balance -= amount\n        return True\n\nw = Wallet()\nw.add(30)\nprint(w.spend(20), w.balance)\n",
+   "hints": [
+    "add içinde: self.balance += amount",
+    "spend içinde önce yeterli para var mı bak: if amount > self.balance: return False"
+   ],
+   "check": {
+    "python": "\nw = Wallet()\nassert w.balance == 0, \"balance 0 ile başlamalı.\"\nw.add(50)\nassert w.balance == 50, \"add(50) sonrası balance 50 olmalı.\"\nassert w.spend(30) is True and w.balance == 20, \"spend(30) True döndürmeli ve balance 20 olmalı.\"\nassert w.spend(25) is False and w.balance == 20, \"Yeterli para yoksa False döndürmeli ve balance değişmemeli.\"\nassert w.spend(20) is True and w.balance == 0, \"Tam bakiye kadar harcanabilmeli.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "class Wallet:",
+      "notes": [
+       "`Wallet` adında bir sınıf (nesne kalıbı) tanımlanıyor."
+      ]
+     },
+     {
+      "n": 2,
+      "code": "    def __init__(self):",
+      "notes": [
+       "`__init__`: `Wallet` nesnesi oluşturulurken otomatik çalışan hazırlık metodu."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "        self.balance = 0",
+      "notes": [
+       "Nesnenin `self.balance` özelliğine `0` değeri konuyor."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "    def add(self, amount):",
+      "notes": [
+       "`add` adında bir metot (sınıfa ait fonksiyon) tanımlanıyor. Aldığı değerler: `amount`."
+      ]
+     },
+     {
+      "n": 6,
+      "code": "        self.balance += amount",
+      "notes": [
+       "`self.balance += amount`: `self.balance` değişkeninin değeri güncelleniyor."
+      ]
+     },
+     {
+      "n": 8,
+      "code": "    def spend(self, amount):",
+      "notes": [
+       "`spend` adında bir metot (sınıfa ait fonksiyon) tanımlanıyor. Aldığı değerler: `amount`."
+      ]
+     },
+     {
+      "n": 9,
+      "code": "        if amount > self.balance:",
+      "notes": [
+       "Koşul: `amount > self.balance` doğruysa altındaki girintili satırlar çalışır."
+      ]
+     },
+     {
+      "n": 10,
+      "code": "            return False",
+      "notes": [
+       "Fonksiyon `False` değerini geri verir ve burada biter."
+      ]
+     },
+     {
+      "n": 11,
+      "code": "        self.balance -= amount",
+      "notes": [
+       "`self.balance -= amount`: `self.balance` değişkeninin değeri güncelleniyor."
+      ]
+     },
+     {
+      "n": 12,
+      "code": "        return True",
+      "notes": [
+       "Fonksiyon `True` değerini geri verir ve burada biter."
+      ]
+     },
+     {
+      "n": 14,
+      "code": "w = Wallet()",
+      "notes": [
+       "`w` adında bir değişken oluşturuluyor ve içine `Wallet()` konuyor.",
+       "`Wallet(...)`: `Wallet` sınıfından yeni bir nesne oluşturur."
+      ]
+     },
+     {
+      "n": 15,
+      "code": "w.add(30)",
+      "notes": [
+       "`w.add(30)`: `w` üzerinde `add` metodunu çalıştırır. Sete yeni bir eleman ekler."
+      ]
+     },
+     {
+      "n": 16,
+      "code": "print(w.spend(20), w.balance)",
+      "notes": [
+       "`print(w.spend(20), w.balance)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "w",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `Wallet()`."
+     },
+     {
+      "term": "amount",
+      "kind": "parametre",
+      "desc": "`add` çağrılırken verilen değer bu isimle kullanılır."
+     },
+     {
+      "term": "class",
+      "kind": "anahtar kelime",
+      "desc": "Yeni bir sınıf (nesne kalıbı) tanımlar."
+     },
+     {
+      "term": "Wallet",
+      "kind": "senin sınıfın",
+      "desc": "Kodda tanımlanan sınıf; `Wallet(...)` ile yeni nesneler oluşturulur."
+     },
+     {
+      "term": "__init__()",
+      "kind": "metot",
+      "desc": "Sınıftan yeni bir nesne oluşturulurken otomatik çalışan hazırlık metodu."
+     },
+     {
+      "term": "def",
+      "kind": "anahtar kelime",
+      "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "add()",
+      "kind": "senin metodun",
+      "desc": "`Wallet` sınıfının metodu; nesne.add(...) diye çağrılır."
+     },
+     {
+      "term": "+=",
+      "kind": "operatör",
+      "desc": "Değişkenin kendi değerine ekler: x += 1 → x = x + 1."
+     },
+     {
+      "term": "spend()",
+      "kind": "senin metodun",
+      "desc": "`Wallet` sınıfının metodu; nesne.spend(...) diye çağrılır."
+     },
+     {
+      "term": "if",
+      "kind": "anahtar kelime",
+      "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+     },
+     {
+      "term": ">",
+      "kind": "operatör",
+      "desc": "Büyük mü?"
+     },
+     {
+      "term": "self",
+      "kind": "anahtar kelime",
+      "desc": "Sınıfın içinde \"bu nesnenin kendisi\" demektir."
+     },
+     {
+      "term": "return",
+      "kind": "anahtar kelime",
+      "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+     },
+     {
+      "term": "False",
+      "kind": "değer",
+      "desc": "Yanlış (mantıksal değer)."
+     },
+     {
+      "term": "-=",
+      "kind": "operatör",
+      "desc": "Değişkenin değerinden çıkarır: x -= 1 → x = x - 1."
+     },
+     {
+      "term": "True",
+      "kind": "değer",
+      "desc": "Doğru (mantıksal değer)."
+     },
+     {
+      "term": ".add()",
+      "kind": "senin metodun",
+      "desc": "Sınıfında tanımladığın `add` metodunu bu nesne için çalıştırır."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     },
+     {
+      "term": ".spend()",
+      "kind": "senin metodun",
+      "desc": "Sınıfında tanımladığın `spend` metodunu bu nesne için çalıştırır."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d21-t3",
+   "title": "Kendini tanıt",
+   "prompt": "`Hero` sınıfına `introduce()` metodu ekle. `Ben Piko, canım 100!` gibi bir yazı **döndürsün**.",
+   "starter": "class Hero:\n    def __init__(self, name, hp):\n        self.name = name\n        self.hp = hp\n\nh = Hero(\"Piko\", 100)\nprint(h.introduce())\n",
+   "solution": "class Hero:\n    def __init__(self, name, hp):\n        self.name = name\n        self.hp = hp\n\n    def introduce(self):\n        return f\"Ben {self.name}, canım {self.hp}!\"\n\nh = Hero(\"Piko\", 100)\nprint(h.introduce())\n",
+   "hints": [
+    "Metodun ilk parametresi self olmalı: def introduce(self):",
+    "return f\"Ben {self.name}, canım {self.hp}!\""
+   ],
+   "check": {
+    "python": "\nassert Hero(\"Ece\", 42).introduce() == \"Ben Ece, canım 42!\", \"Hero('Ece', 42).introduce() 'Ben Ece, canım 42!' döndürmeli.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "class Hero:",
+      "notes": [
+       "`Hero` adında bir sınıf (nesne kalıbı) tanımlanıyor."
+      ]
+     },
+     {
+      "n": 2,
+      "code": "    def __init__(self, name, hp):",
+      "notes": [
+       "`__init__`: `Hero` nesnesi oluşturulurken otomatik çalışan hazırlık metodu. Aldığı değerler: `name`, `hp`."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "        self.name = name",
+      "notes": [
+       "Nesnenin `self.name` özelliğine `name` değeri konuyor."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "        self.hp = hp",
+      "notes": [
+       "Nesnenin `self.hp` özelliğine `hp` değeri konuyor."
+      ]
+     },
+     {
+      "n": 6,
+      "code": "    def introduce(self):",
+      "notes": [
+       "`introduce` adında bir metot (sınıfa ait fonksiyon) tanımlanıyor."
+      ]
+     },
+     {
+      "n": 7,
+      "code": "        return f\"Ben {self.name}, canım {self.hp}!\"",
+      "notes": [
+       "Fonksiyon `f\"Ben {self.name}, canım {self.hp}!\"` değerini geri verir ve burada biter."
+      ]
+     },
+     {
+      "n": 9,
+      "code": "h = Hero(\"Piko\", 100)",
+      "notes": [
+       "`h` adında bir değişken oluşturuluyor ve içine `Hero(\"Piko\", 100)` konuyor.",
+       "`Hero(...)`: `Hero` sınıfından yeni bir nesne oluşturur."
+      ]
+     },
+     {
+      "n": 10,
+      "code": "print(h.introduce())",
+      "notes": [
+       "`print(h.introduce())`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "h",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `Hero(\"Piko\", 100)`."
+     },
+     {
+      "term": "name",
+      "kind": "parametre",
+      "desc": "`__init__` çağrılırken verilen değer bu isimle kullanılır."
+     },
+     {
+      "term": "hp",
+      "kind": "parametre",
+      "desc": "`__init__` çağrılırken verilen değer bu isimle kullanılır."
+     },
+     {
+      "term": "class",
+      "kind": "anahtar kelime",
+      "desc": "Yeni bir sınıf (nesne kalıbı) tanımlar."
+     },
+     {
+      "term": "Hero",
+      "kind": "senin sınıfın",
+      "desc": "Kodda tanımlanan sınıf; `Hero(...)` ile yeni nesneler oluşturulur."
+     },
+     {
+      "term": "__init__()",
+      "kind": "metot",
+      "desc": "Sınıftan yeni bir nesne oluşturulurken otomatik çalışan hazırlık metodu."
+     },
+     {
+      "term": "def",
+      "kind": "anahtar kelime",
+      "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "introduce()",
+      "kind": "senin metodun",
+      "desc": "`Hero` sınıfının metodu; nesne.introduce(...) diye çağrılır."
+     },
+     {
+      "term": "return",
+      "kind": "anahtar kelime",
+      "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+     },
+     {
+      "term": "f\"...{}\"",
+      "kind": "metin",
+      "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+     },
+     {
+      "term": "self",
+      "kind": "anahtar kelime",
+      "desc": "Sınıfın içinde \"bu nesnenin kendisi\" demektir."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     },
+     {
+      "term": ".introduce()",
+      "kind": "senin metodun",
+      "desc": "Sınıfında tanımladığın `introduce` metodunu bu nesne için çalıştırır."
+     }
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "id": "d21-c",
+  "title": "Büyücü",
+  "prompt": "`Hero`'dan kalıtım alan `Wizard` sınıfı yaz. Büyücünün `mana`'sı 30 ile başlasın. `cast()` metodu yeterli mana varsa 10 mana harcayıp `True`, yoksa `False` döndürsün.",
+  "starter": "class Hero:\n    def __init__(self, name):\n        self.name = name\n        self.hp = 100\n\n# Wizard sınıfını yaz\n\nw = Wizard(\"Merlin\")\nprint(w.cast(), w.mana)\n",
+  "solution": "class Hero:\n    def __init__(self, name):\n        self.name = name\n        self.hp = 100\n\nclass Wizard(Hero):\n    def __init__(self, name):\n        super().__init__(name)\n        self.mana = 30\n\n    def cast(self):\n        if self.mana < 10:\n            return False\n        self.mana -= 10\n        return True\n\nw = Wizard(\"Merlin\")\nprint(w.cast(), w.mana)\n",
+  "hints": [
+   "class Wizard(Hero):",
+   "Kendi __init__ içinde önce super().__init__(name) çağır, sonra self.mana = 30"
+  ],
+  "check": {
+   "python": "\nw = Wizard(\"Gandalf\")\nassert isinstance(w, Hero), \"Wizard, Hero'dan kalıtım almalı: class Wizard(Hero):\"\nassert w.name == \"Gandalf\" and w.hp == 100, \"Wizard, Hero'nun özelliklerini (name, hp) taşımalı.\"\nassert w.mana == 30, \"mana 30 ile başlamalı.\"\nassert [w.cast(), w.cast(), w.cast(), w.cast()] == [True, True, True, False], \"30 mana ile 3 büyü yapılabilmeli, 4.'sü False olmalı.\"\nassert w.mana == 0, \"Üç büyüden sonra mana 0 olmalı.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "class Hero:",
+     "notes": [
+      "`Hero` adında bir sınıf (nesne kalıbı) tanımlanıyor."
+     ]
+    },
+    {
+     "n": 2,
+     "code": "    def __init__(self, name):",
+     "notes": [
+      "`__init__`: `Hero` nesnesi oluşturulurken otomatik çalışan hazırlık metodu. Aldığı değerler: `name`."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "        self.name = name",
+     "notes": [
+      "Nesnenin `self.name` özelliğine `name` değeri konuyor."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "        self.hp = 100",
+     "notes": [
+      "Nesnenin `self.hp` özelliğine `100` değeri konuyor."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "class Wizard(Hero):",
+     "notes": [
+      "`Wizard` adında bir sınıf (nesne kalıbı) tanımlanıyor. `Hero` sınıfının özelliklerini miras alıyor."
+     ]
+    },
+    {
+     "n": 7,
+     "code": "    def __init__(self, name):",
+     "notes": [
+      "`__init__`: `Wizard` nesnesi oluşturulurken otomatik çalışan hazırlık metodu. Aldığı değerler: `name`."
+     ]
+    },
+    {
+     "n": 8,
+     "code": "        super().__init__(name)",
+     "notes": [
+      "`super().__init__(name)`: `super()` üzerinde `__init__` metodunu çalıştırır. Sınıftan yeni bir nesne oluşturulurken otomatik çalışan hazırlık metodu."
+     ]
+    },
+    {
+     "n": 9,
+     "code": "        self.mana = 30",
+     "notes": [
+      "Nesnenin `self.mana` özelliğine `30` değeri konuyor."
+     ]
+    },
+    {
+     "n": 11,
+     "code": "    def cast(self):",
+     "notes": [
+      "`cast` adında bir metot (sınıfa ait fonksiyon) tanımlanıyor."
+     ]
+    },
+    {
+     "n": 12,
+     "code": "        if self.mana < 10:",
+     "notes": [
+      "Koşul: `self.mana < 10` doğruysa altındaki girintili satırlar çalışır."
+     ]
+    },
+    {
+     "n": 13,
+     "code": "            return False",
+     "notes": [
+      "Fonksiyon `False` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 14,
+     "code": "        self.mana -= 10",
+     "notes": [
+      "`self.mana -= 10`: `self.mana` değişkeninin değeri güncelleniyor."
+     ]
+    },
+    {
+     "n": 15,
+     "code": "        return True",
+     "notes": [
+      "Fonksiyon `True` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 17,
+     "code": "w = Wizard(\"Merlin\")",
+     "notes": [
+      "`w` adında bir değişken oluşturuluyor ve içine `Wizard(\"Merlin\")` konuyor.",
+      "`Wizard(...)`: `Wizard` sınıfından yeni bir nesne oluşturur."
+     ]
+    },
+    {
+     "n": 18,
+     "code": "print(w.cast(), w.mana)",
+     "notes": [
+      "`print(w.cast(), w.mana)`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "w",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `Wizard(\"Merlin\")`."
+    },
+    {
+     "term": "name",
+     "kind": "parametre",
+     "desc": "`__init__` çağrılırken verilen değer bu isimle kullanılır."
+    },
+    {
+     "term": "class",
+     "kind": "anahtar kelime",
+     "desc": "Yeni bir sınıf (nesne kalıbı) tanımlar."
+    },
+    {
+     "term": "Hero",
+     "kind": "senin sınıfın",
+     "desc": "Kodda tanımlanan sınıf; `Hero(...)` ile yeni nesneler oluşturulur."
+    },
+    {
+     "term": "__init__()",
+     "kind": "metot",
+     "desc": "Sınıftan yeni bir nesne oluşturulurken otomatik çalışan hazırlık metodu."
+    },
+    {
+     "term": "def",
+     "kind": "anahtar kelime",
+     "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "Wizard",
+     "kind": "senin sınıfın",
+     "desc": "Kodda tanımlanan sınıf; `Wizard(...)` ile yeni nesneler oluşturulur."
+    },
+    {
+     "term": ".__init__()",
+     "kind": "senin metodun",
+     "desc": "Sınıfında tanımladığın `__init__` metodunu bu nesne için çalıştırır."
+    },
+    {
+     "term": "super()",
+     "kind": "fonksiyon",
+     "desc": "Üst sınıfın (miras alınan sınıfın) metodlarına ulaşmayı sağlar."
+    },
+    {
+     "term": "cast()",
+     "kind": "senin metodun",
+     "desc": "`Wizard` sınıfının metodu; nesne.cast(...) diye çağrılır."
+    },
+    {
+     "term": "if",
+     "kind": "anahtar kelime",
+     "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+    },
+    {
+     "term": "<",
+     "kind": "operatör",
+     "desc": "Küçük mü?"
+    },
+    {
+     "term": "self",
+     "kind": "anahtar kelime",
+     "desc": "Sınıfın içinde \"bu nesnenin kendisi\" demektir."
+    },
+    {
+     "term": "return",
+     "kind": "anahtar kelime",
+     "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+    },
+    {
+     "term": "False",
+     "kind": "değer",
+     "desc": "Yanlış (mantıksal değer)."
+    },
+    {
+     "term": "-=",
+     "kind": "operatör",
+     "desc": "Değişkenin değerinden çıkarır: x -= 1 → x = x - 1."
+    },
+    {
+     "term": "True",
+     "kind": "değer",
+     "desc": "Doğru (mantıksal değer)."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    },
+    {
+     "term": ".cast()",
+     "kind": "senin metodun",
+     "desc": "Sınıfında tanımladığın `cast` metodunu bu nesne için çalıştırır."
+    }
+   ]
+  }
+ },
+ "project_task": {
+  "id": "d21-p",
+  "title": "Karakter sınıfları",
+  "prompt": "Maceranın karakterlerini sınıflarla yazalım. `Character` sınıfı `name`, `hp` ve `power` alsın:\n\n- `attack(other)`: diğer karakterin canını kendi gücü kadar azaltsın.\n- `is_alive()`: can 0'dan büyükse `True` döndürsün.",
+  "starter": "class Character:\n    def __init__(self, name, hp, power):\n        pass\n\n    def attack(self, other):\n        pass\n\n    def is_alive(self):\n        pass\n\npiko = Character(\"Piko\", 30, 8)\nbat = Character(\"Yarasa\", 12, 3)\npiko.attack(bat)\nprint(bat.hp, bat.is_alive())\n",
+  "solution": "class Character:\n    def __init__(self, name, hp, power):\n        self.name = name\n        self.hp = hp\n        self.power = power\n\n    def attack(self, other):\n        other.hp -= self.power\n\n    def is_alive(self):\n        return self.hp > 0\n\npiko = Character(\"Piko\", 30, 8)\nbat = Character(\"Yarasa\", 12, 3)\npiko.attack(bat)\nprint(bat.hp, bat.is_alive())\n",
+  "hints": [
+   "__init__ içinde üç özelliği de self'e kaydet.",
+   "attack içinde: other.hp -= self.power",
+   "is_alive içinde: return self.hp > 0"
+  ],
+  "check": {
+   "python": "\na = Character(\"Piko\", 30, 8)\nb = Character(\"Yarasa\", 12, 5)\nassert (a.name, a.hp, a.power) == (\"Piko\", 30, 8), \"name, hp ve power özelliklerini kaydetmelisin.\"\na.attack(b)\nassert b.hp == 4 and a.hp == 30, \"Piko saldırınca sadece Yarasa'nın canı 8 azalmalı.\"\nassert b.is_alive() is True, \"Canı 4 olan karakter hayatta olmalı.\"\nb.attack(a)\nassert a.hp == 25, \"Yarasa saldırınca Piko'nun canı 5 azalmalı.\"\na.attack(b)\nassert b.is_alive() is False, \"Canı 0 veya altındaki karakter için is_alive() False olmalı.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "class Character:",
+     "notes": [
+      "`Character` adında bir sınıf (nesne kalıbı) tanımlanıyor."
+     ]
+    },
+    {
+     "n": 2,
+     "code": "    def __init__(self, name, hp, power):",
+     "notes": [
+      "`__init__`: `Character` nesnesi oluşturulurken otomatik çalışan hazırlık metodu. Aldığı değerler: `name`, `hp`, `power`."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "        self.name = name",
+     "notes": [
+      "Nesnenin `self.name` özelliğine `name` değeri konuyor."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "        self.hp = hp",
+     "notes": [
+      "Nesnenin `self.hp` özelliğine `hp` değeri konuyor."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "        self.power = power",
+     "notes": [
+      "Nesnenin `self.power` özelliğine `power` değeri konuyor."
+     ]
+    },
+    {
+     "n": 7,
+     "code": "    def attack(self, other):",
+     "notes": [
+      "`attack` adında bir metot (sınıfa ait fonksiyon) tanımlanıyor. Aldığı değerler: `other`."
+     ]
+    },
+    {
+     "n": 8,
+     "code": "        other.hp -= self.power",
+     "notes": [
+      "`other.hp -= self.power`: `other.hp` değişkeninin değeri güncelleniyor."
+     ]
+    },
+    {
+     "n": 10,
+     "code": "    def is_alive(self):",
+     "notes": [
+      "`is_alive` adında bir metot (sınıfa ait fonksiyon) tanımlanıyor."
+     ]
+    },
+    {
+     "n": 11,
+     "code": "        return self.hp > 0",
+     "notes": [
+      "Fonksiyon `self.hp > 0` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 13,
+     "code": "piko = Character(\"Piko\", 30, 8)",
+     "notes": [
+      "`piko` adında bir değişken oluşturuluyor ve içine `Character(\"Piko\", 30, 8)` konuyor.",
+      "`Character(...)`: `Character` sınıfından yeni bir nesne oluşturur."
+     ]
+    },
+    {
+     "n": 14,
+     "code": "bat = Character(\"Yarasa\", 12, 3)",
+     "notes": [
+      "`bat` adında bir değişken oluşturuluyor ve içine `Character(\"Yarasa\", 12, 3)` konuyor.",
+      "`Character(...)`: `Character` sınıfından yeni bir nesne oluşturur."
+     ]
+    },
+    {
+     "n": 15,
+     "code": "piko.attack(bat)",
+     "notes": [
+      "`piko.attack(bat)`: `piko` üzerinde `attack` metodunu çalıştırır."
+     ]
+    },
+    {
+     "n": 16,
+     "code": "print(bat.hp, bat.is_alive())",
+     "notes": [
+      "`print(bat.hp, bat.is_alive())`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "piko",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `Character(\"Piko\", 30, 8)`."
+    },
+    {
+     "term": "bat",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `Character(\"Yarasa\", 12, 3)`."
+    },
+    {
+     "term": "name",
+     "kind": "parametre",
+     "desc": "`__init__` çağrılırken verilen değer bu isimle kullanılır."
+    },
+    {
+     "term": "hp",
+     "kind": "parametre",
+     "desc": "`__init__` çağrılırken verilen değer bu isimle kullanılır."
+    },
+    {
+     "term": "power",
+     "kind": "parametre",
+     "desc": "`__init__` çağrılırken verilen değer bu isimle kullanılır."
+    },
+    {
+     "term": "other",
+     "kind": "parametre",
+     "desc": "`attack` çağrılırken verilen değer bu isimle kullanılır."
+    },
+    {
+     "term": "class",
+     "kind": "anahtar kelime",
+     "desc": "Yeni bir sınıf (nesne kalıbı) tanımlar."
+    },
+    {
+     "term": "Character",
+     "kind": "senin sınıfın",
+     "desc": "Kodda tanımlanan sınıf; `Character(...)` ile yeni nesneler oluşturulur."
+    },
+    {
+     "term": "__init__()",
+     "kind": "metot",
+     "desc": "Sınıftan yeni bir nesne oluşturulurken otomatik çalışan hazırlık metodu."
+    },
+    {
+     "term": "def",
+     "kind": "anahtar kelime",
+     "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "attack()",
+     "kind": "senin metodun",
+     "desc": "`Character` sınıfının metodu; nesne.attack(...) diye çağrılır."
+    },
+    {
+     "term": "-=",
+     "kind": "operatör",
+     "desc": "Değişkenin değerinden çıkarır: x -= 1 → x = x - 1."
+    },
+    {
+     "term": "self",
+     "kind": "anahtar kelime",
+     "desc": "Sınıfın içinde \"bu nesnenin kendisi\" demektir."
+    },
+    {
+     "term": "is_alive()",
+     "kind": "senin metodun",
+     "desc": "`Character` sınıfının metodu; nesne.is_alive(...) diye çağrılır."
+    },
+    {
+     "term": "return",
+     "kind": "anahtar kelime",
+     "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+    },
+    {
+     "term": ">",
+     "kind": "operatör",
+     "desc": "Büyük mü?"
+    },
+    {
+     "term": ".attack()",
+     "kind": "senin metodun",
+     "desc": "Sınıfında tanımladığın `attack` metodunu bu nesne için çalıştırır."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    },
+    {
+     "term": ".is_alive()",
+     "kind": "senin metodun",
+     "desc": "Sınıfında tanımladığın `is_alive` metodunu bu nesne için çalıştırır."
+    }
+   ]
+  }
+ },
+ "available": true,
+ "tracks": {
+  "veri": {
+   "project_task": {
+    "id": "d21-pv",
+    "title": "Budget sınıfı",
+    "prompt": "Defteri bir sınıfla yazalım. `Budget` sınıfı `limit` alsın ve boş bir `expenses` listesiyle başlasın:\n\n- `add(category, amount)`: `(category, amount)` tuple'ını listeye eklesin.\n- `total()`: harcamaların toplamını döndürsün.\n- `remaining()`: `limit - total()` döndürsün.",
+    "starter": "class Budget:\n    def __init__(self, limit):\n        pass\n",
+    "solution": "class Budget:\n    def __init__(self, limit):\n        self.limit = limit\n        self.expenses = []\n\n    def add(self, category, amount):\n        self.expenses.append((category, amount))\n\n    def total(self):\n        return sum(amount for category, amount in self.expenses)\n\n    def remaining(self):\n        return self.limit - self.total()\n",
+    "hints": [
+     "__init__ içinde self.limit = limit ve self.expenses = []",
+     "total içinde: sum(amount for category, amount in self.expenses)"
+    ],
+    "check": {
+     "python": "\nb = Budget(1000)\nassert b.limit == 1000 and b.expenses == [], \"Budget(1000): limit 1000, expenses boş liste olmalı.\"\nb.add(\"market\", 120)\nb.add(\"kahve\", 30)\nassert b.expenses == [(\"market\", 120), (\"kahve\", 30)], \"add() (kategori, tutar) tuple'ını eklemeli.\"\nassert b.total() == 150, \"total() 150 döndürmeli.\"\nassert b.remaining() == 850, \"remaining() limit - total() döndürmeli.\"\nb2 = Budget(10)\nassert b2.expenses == [], \"Her Budget'ın kendi listesi olmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "class Budget:",
+       "notes": [
+        "`Budget` adında bir sınıf (nesne kalıbı) tanımlanıyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "    def __init__(self, limit):",
+       "notes": [
+        "`__init__`: `Budget` nesnesi oluşturulurken otomatik çalışan hazırlık metodu. Aldığı değerler: `limit`."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "        self.limit = limit",
+       "notes": [
+        "Nesnenin `self.limit` özelliğine `limit` değeri konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "        self.expenses = []",
+       "notes": [
+        "Nesnenin `self.expenses` özelliğine `[]` değeri konuyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    def add(self, category, amount):",
+       "notes": [
+        "`add` adında bir metot (sınıfa ait fonksiyon) tanımlanıyor. Aldığı değerler: `category`, `amount`."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "        self.expenses.append((category, amount))",
+       "notes": [
+        "`self.expenses.append((category, amount))`: `self.expenses` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "    def total(self):",
+       "notes": [
+        "`total` adında bir metot (sınıfa ait fonksiyon) tanımlanıyor."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "        return sum(amount for category, amount in self.expenses)",
+       "notes": [
+        "Fonksiyon `sum(amount for category, amount in self.expenses)` değerini geri verir ve burada biter.",
+        "Tek satırda döngüyle yeni bir liste/dizi üretiliyor."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "    def remaining(self):",
+       "notes": [
+        "`remaining` adında bir metot (sınıfa ait fonksiyon) tanımlanıyor."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "        return self.limit - self.total()",
+       "notes": [
+        "Fonksiyon `self.limit - self.total()` değerini geri verir ve burada biter."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "limit",
+       "kind": "parametre",
+       "desc": "`__init__` çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "category",
+       "kind": "parametre",
+       "desc": "`add` çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "amount",
+       "kind": "parametre",
+       "desc": "`add` çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "class",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir sınıf (nesne kalıbı) tanımlar."
+      },
+      {
+       "term": "Budget",
+       "kind": "senin sınıfın",
+       "desc": "Kodda tanımlanan sınıf; `Budget(...)` ile yeni nesneler oluşturulur."
+      },
+      {
+       "term": "__init__()",
+       "kind": "metot",
+       "desc": "Sınıftan yeni bir nesne oluşturulurken otomatik çalışan hazırlık metodu."
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "add()",
+       "kind": "senin metodun",
+       "desc": "`Budget` sınıfının metodu; nesne.add(...) diye çağrılır."
+      },
+      {
+       "term": ".append()",
+       "kind": "metot",
+       "desc": "Listenin sonuna yeni bir eleman ekler."
+      },
+      {
+       "term": "self",
+       "kind": "anahtar kelime",
+       "desc": "Sınıfın içinde \"bu nesnenin kendisi\" demektir."
+      },
+      {
+       "term": "total()",
+       "kind": "senin metodun",
+       "desc": "`Budget` sınıfının metodu; nesne.total(...) diye çağrılır."
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": "sum()",
+       "kind": "fonksiyon",
+       "desc": "Listedeki sayıları toplar."
+      },
+      {
+       "term": "[... for ... in ...]",
+       "kind": "liste üreteci",
+       "desc": "Liste üreteci: [ifade for x in liste if koşul] ile tek satırda yeni liste."
+      },
+      {
+       "term": "remaining()",
+       "kind": "senin metodun",
+       "desc": "`Budget` sınıfının metodu; nesne.remaining(...) diye çağrılır."
+      },
+      {
+       "term": "-",
+       "kind": "operatör",
+       "desc": "Çıkarma."
+      },
+      {
+       "term": ".total()",
+       "kind": "senin metodun",
+       "desc": "Sınıfında tanımladığın `total` metodunu bu nesne için çalıştırır."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Bütçe sınıfı",
+   "game_role": "Harcamaları ve bütçeyi tek bir nesnede yönetir."
+  },
+  "otomasyon": {
+   "project_task": {
+    "id": "d21-po",
+    "title": "Task ve TaskList",
+    "prompt": "Görevleri sınıflarla yazalım:\n\n- `Task(title, priority=2)`: `title`, `priority` ve `False` ile başlayan `done` özellikleri olsun. `complete()` metodu `done`'ı `True` yapsın.\n- `TaskList`: boş bir `tasks` listesiyle başlasın. `add(task)` görevi eklesin, `pending()` bitmemiş görevlerin **başlıklarını** liste olarak döndürsün.",
+    "starter": "class Task:\n    pass\n\n\nclass TaskList:\n    pass\n",
+    "solution": "class Task:\n    def __init__(self, title, priority=2):\n        self.title = title\n        self.priority = priority\n        self.done = False\n\n    def complete(self):\n        self.done = True\n\n\nclass TaskList:\n    def __init__(self):\n        self.tasks = []\n\n    def add(self, task):\n        self.tasks.append(task)\n\n    def pending(self):\n        return [t.title for t in self.tasks if not t.done]\n",
+    "hints": [
+     "def __init__(self, title, priority=2): varsayılan değer verir.",
+     "pending içinde: [t.title for t in self.tasks if not t.done]"
+    ],
+    "check": {
+     "python": "\na = Task(\"Rapor\", 1)\nb = Task(\"Spor\")\nassert (a.title, a.priority, a.done) == (\"Rapor\", 1, False), \"Task: title, priority ve done=False olmalı.\"\nassert b.priority == 2, \"priority verilmezse 2 olmalı.\"\na.complete()\nassert a.done is True, \"complete() done'ı True yapmalı.\"\nl = TaskList()\nassert l.tasks == [], \"TaskList boş listeyle başlamalı.\"\nl.add(a)\nl.add(b)\nassert l.pending() == [\"Spor\"], \"pending() bitmemiş görevlerin başlıklarını döndürmeli.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "class Task:",
+       "notes": [
+        "`Task` adında bir sınıf (nesne kalıbı) tanımlanıyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "    def __init__(self, title, priority=2):",
+       "notes": [
+        "`__init__`: `Task` nesnesi oluşturulurken otomatik çalışan hazırlık metodu. Aldığı değerler: `title`, `priority`."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "        self.title = title",
+       "notes": [
+        "Nesnenin `self.title` özelliğine `title` değeri konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "        self.priority = priority",
+       "notes": [
+        "Nesnenin `self.priority` özelliğine `priority` değeri konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "        self.done = False",
+       "notes": [
+        "Nesnenin `self.done` özelliğine `False` değeri konuyor."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "    def complete(self):",
+       "notes": [
+        "`complete` adında bir metot (sınıfa ait fonksiyon) tanımlanıyor."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "        self.done = True",
+       "notes": [
+        "Nesnenin `self.done` özelliğine `True` değeri konuyor."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "class TaskList:",
+       "notes": [
+        "`TaskList` adında bir sınıf (nesne kalıbı) tanımlanıyor."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "    def __init__(self):",
+       "notes": [
+        "`__init__`: `TaskList` nesnesi oluşturulurken otomatik çalışan hazırlık metodu."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "        self.tasks = []",
+       "notes": [
+        "Nesnenin `self.tasks` özelliğine `[]` değeri konuyor."
+       ]
+      },
+      {
+       "n": 15,
+       "code": "    def add(self, task):",
+       "notes": [
+        "`add` adında bir metot (sınıfa ait fonksiyon) tanımlanıyor. Aldığı değerler: `task`."
+       ]
+      },
+      {
+       "n": 16,
+       "code": "        self.tasks.append(task)",
+       "notes": [
+        "`self.tasks.append(task)`: `self.tasks` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 18,
+       "code": "    def pending(self):",
+       "notes": [
+        "`pending` adında bir metot (sınıfa ait fonksiyon) tanımlanıyor."
+       ]
+      },
+      {
+       "n": 19,
+       "code": "        return [t.title for t in self.tasks if not t.done]",
+       "notes": [
+        "Fonksiyon `[t.title for t in self.tasks if not t.done]` değerini geri verir ve burada biter.",
+        "Tek satırda döngüyle yeni bir liste/dizi üretiliyor."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "title",
+       "kind": "parametre",
+       "desc": "`__init__` çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "priority",
+       "kind": "parametre",
+       "desc": "`__init__` çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "task",
+       "kind": "parametre",
+       "desc": "`add` çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "class",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir sınıf (nesne kalıbı) tanımlar."
+      },
+      {
+       "term": "Task",
+       "kind": "senin sınıfın",
+       "desc": "Kodda tanımlanan sınıf; `Task(...)` ile yeni nesneler oluşturulur."
+      },
+      {
+       "term": "__init__()",
+       "kind": "metot",
+       "desc": "Sınıftan yeni bir nesne oluşturulurken otomatik çalışan hazırlık metodu."
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "False",
+       "kind": "değer",
+       "desc": "Yanlış (mantıksal değer)."
+      },
+      {
+       "term": "complete()",
+       "kind": "senin metodun",
+       "desc": "`Task` sınıfının metodu; nesne.complete(...) diye çağrılır."
+      },
+      {
+       "term": "True",
+       "kind": "değer",
+       "desc": "Doğru (mantıksal değer)."
+      },
+      {
+       "term": "TaskList",
+       "kind": "senin sınıfın",
+       "desc": "Kodda tanımlanan sınıf; `TaskList(...)` ile yeni nesneler oluşturulur."
+      },
+      {
+       "term": "add()",
+       "kind": "senin metodun",
+       "desc": "`TaskList` sınıfının metodu; nesne.add(...) diye çağrılır."
+      },
+      {
+       "term": ".append()",
+       "kind": "metot",
+       "desc": "Listenin sonuna yeni bir eleman ekler."
+      },
+      {
+       "term": "self",
+       "kind": "anahtar kelime",
+       "desc": "Sınıfın içinde \"bu nesnenin kendisi\" demektir."
+      },
+      {
+       "term": "pending()",
+       "kind": "senin metodun",
+       "desc": "`TaskList` sınıfının metodu; nesne.pending(...) diye çağrılır."
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": "[... for ... in ...]",
+       "kind": "liste üreteci",
+       "desc": "Liste üreteci: [ifade for x in liste if koşul] ile tek satırda yeni liste."
+      },
+      {
+       "term": "not",
+       "kind": "operatör",
+       "desc": "Koşulu tersine çevirir (True ↔ False)."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Görev sınıfları",
+   "game_role": "Görevleri ve görev listesini nesnelerle yönetir."
+  },
+  "web": {
+   "project_task": {
+    "id": "d21-pw",
+    "title": "Post ve Site sınıfları",
+    "prompt": "Sitenin iki sınıfını yazalım:\n\n- `Post(title, text)`: `title`, `text` ve `slug` (başlığın küçük harfli, boşlukları `-` olan hâli) özellikleri olsun. `word_count()` metodu yazının kelime sayısını döndürsün.\n- `Site(title)`: `title` ve boş bir `posts` listesiyle başlasın. `add(post)` bir yazıyı listeye eklesin, `total_words()` bütün yazıların kelime sayılarının toplamını döndürsün.",
+    "starter": "class Post:\n    def __init__(self, title, text):\n        pass\n\n\nclass Site:\n    def __init__(self, title):\n        pass\n",
+    "solution": "class Post:\n    def __init__(self, title, text):\n        self.title = title\n        self.text = text\n        self.slug = title.lower().replace(\" \", \"-\")\n\n    def word_count(self):\n        return len(self.text.split())\n\n\nclass Site:\n    def __init__(self, title):\n        self.title = title\n        self.posts = []\n\n    def add(self, post):\n        self.posts.append(post)\n\n    def total_words(self):\n        return sum(post.word_count() for post in self.posts)\n",
+    "hints": [
+     "Post'un __init__'inde: self.slug = title.lower().replace(\" \", \"-\")",
+     "total_words içinde: sum(post.word_count() for post in self.posts)"
+    ],
+    "check": {
+     "python": "\np = Post(\"Merhaba Dünya\", \"bu benim ilk yazım\")\nassert p.title == \"Merhaba Dünya\" and p.text == \"bu benim ilk yazım\", \"Post, title ve text özelliklerini saklamalı.\"\nassert p.slug == \"merhaba-dünya\", \"slug, başlığın küçük harfli ve - ile birleştirilmiş hâli olmalı.\"\nassert p.word_count() == 4, \"word_count() yazının kelime sayısını döndürmeli.\"\ns = Site(\"Kod Günlüğüm\")\nassert s.title == \"Kod Günlüğüm\" and s.posts == [], \"Site(title): title saklanmalı, posts boş liste olmalı.\"\ns.add(p)\ns.add(Post(\"Kodla Oyna\", \"oyun yazmak çok eğlenceli\"))\nassert len(s.posts) == 2, \"add() yazıyı posts listesine eklemeli.\"\nassert s.total_words() == 8, \"total_words() bütün yazıların kelime sayılarının toplamını döndürmeli.\"\nassert Site(\"X\").posts == [], \"Her Site'ın kendi listesi olmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "class Post:",
+       "notes": [
+        "`Post` adında bir sınıf (nesne kalıbı) tanımlanıyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "    def __init__(self, title, text):",
+       "notes": [
+        "`__init__`: `Post` nesnesi oluşturulurken otomatik çalışan hazırlık metodu. Aldığı değerler: `title`, `text`."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "        self.title = title",
+       "notes": [
+        "Nesnenin `self.title` özelliğine `title` değeri konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "        self.text = text",
+       "notes": [
+        "Nesnenin `self.text` özelliğine `text` değeri konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "        self.slug = title.lower().replace(\" \", \"-\")",
+       "notes": [
+        "Nesnenin `self.slug` özelliğine `title.lower().replace(\" \", \"-\")` değeri konuyor."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "    def word_count(self):",
+       "notes": [
+        "`word_count` adında bir metot (sınıfa ait fonksiyon) tanımlanıyor."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "        return len(self.text.split())",
+       "notes": [
+        "Fonksiyon `len(self.text.split())` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "class Site:",
+       "notes": [
+        "`Site` adında bir sınıf (nesne kalıbı) tanımlanıyor."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "    def __init__(self, title):",
+       "notes": [
+        "`__init__`: `Site` nesnesi oluşturulurken otomatik çalışan hazırlık metodu. Aldığı değerler: `title`."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "        self.title = title",
+       "notes": [
+        "Nesnenin `self.title` özelliğine `title` değeri konuyor."
+       ]
+      },
+      {
+       "n": 14,
+       "code": "        self.posts = []",
+       "notes": [
+        "Nesnenin `self.posts` özelliğine `[]` değeri konuyor."
+       ]
+      },
+      {
+       "n": 16,
+       "code": "    def add(self, post):",
+       "notes": [
+        "`add` adında bir metot (sınıfa ait fonksiyon) tanımlanıyor. Aldığı değerler: `post`."
+       ]
+      },
+      {
+       "n": 17,
+       "code": "        self.posts.append(post)",
+       "notes": [
+        "`self.posts.append(post)`: `self.posts` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 19,
+       "code": "    def total_words(self):",
+       "notes": [
+        "`total_words` adında bir metot (sınıfa ait fonksiyon) tanımlanıyor."
+       ]
+      },
+      {
+       "n": 20,
+       "code": "        return sum(post.word_count() for post in self.posts)",
+       "notes": [
+        "Fonksiyon `sum(post.word_count() for post in self.posts)` değerini geri verir ve burada biter.",
+        "Tek satırda döngüyle yeni bir liste/dizi üretiliyor."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "title",
+       "kind": "parametre",
+       "desc": "`__init__` çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "text",
+       "kind": "parametre",
+       "desc": "`__init__` çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "post",
+       "kind": "parametre",
+       "desc": "`add` çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "class",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir sınıf (nesne kalıbı) tanımlar."
+      },
+      {
+       "term": "Post",
+       "kind": "senin sınıfın",
+       "desc": "Kodda tanımlanan sınıf; `Post(...)` ile yeni nesneler oluşturulur."
+      },
+      {
+       "term": "__init__()",
+       "kind": "metot",
+       "desc": "Sınıftan yeni bir nesne oluşturulurken otomatik çalışan hazırlık metodu."
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": ".replace()",
+       "kind": "metot",
+       "desc": "Metindeki bir parçayı başkasıyla değiştirir."
+      },
+      {
+       "term": ".lower()",
+       "kind": "metot",
+       "desc": "Metni küçük harfe çevirir."
+      },
+      {
+       "term": "word_count()",
+       "kind": "senin metodun",
+       "desc": "`Post` sınıfının metodu; nesne.word_count(...) diye çağrılır."
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      },
+      {
+       "term": ".split()",
+       "kind": "metot",
+       "desc": "Metni parçalara böler ve liste yapar (varsayılan: boşluklardan)."
+      },
+      {
+       "term": "self",
+       "kind": "anahtar kelime",
+       "desc": "Sınıfın içinde \"bu nesnenin kendisi\" demektir."
+      },
+      {
+       "term": "Site",
+       "kind": "senin sınıfın",
+       "desc": "Kodda tanımlanan sınıf; `Site(...)` ile yeni nesneler oluşturulur."
+      },
+      {
+       "term": "add()",
+       "kind": "senin metodun",
+       "desc": "`Site` sınıfının metodu; nesne.add(...) diye çağrılır."
+      },
+      {
+       "term": ".append()",
+       "kind": "metot",
+       "desc": "Listenin sonuna yeni bir eleman ekler."
+      },
+      {
+       "term": "total_words()",
+       "kind": "senin metodun",
+       "desc": "`Site` sınıfının metodu; nesne.total_words(...) diye çağrılır."
+      },
+      {
+       "term": "sum()",
+       "kind": "fonksiyon",
+       "desc": "Listedeki sayıları toplar."
+      },
+      {
+       "term": "[... for ... in ...]",
+       "kind": "liste üreteci",
+       "desc": "Liste üreteci: [ifade for x in liste if koşul] ile tek satırda yeni liste."
+      },
+      {
+       "term": ".word_count()",
+       "kind": "senin metodun",
+       "desc": "Sınıfında tanımladığın `word_count` metodunu bu nesne için çalıştırır."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Post ve Site sınıfları",
+   "game_role": "Yazıları ve siteyi nesne olarak yönetir."
+  },
+  "bot": {
+   "project_task": {
+    "id": "d21-pb",
+    "title": "Bot ve Message",
+    "prompt": "Botu sınıflarla yazalım:\n\n- `Message(sender, text)`: `sender` ve `text` özellikleri olsun. `show()` metodu `\"Bilge: Merhaba!\"` gibi `gönderen: metin` yazısını döndürsün.\n- `Bot(name)`: `name`, boş bir `replies` sözlüğü ve boş bir `history` listesiyle başlasın.\n  - `learn(keyword, reply)`: sözlüğe `keyword -> reply` eklesin.\n  - `answer(text)`: `text` içinde geçen ilk anahtar kelimenin cevabını, hiçbiri geçmiyorsa `\"Bunu henüz bilmiyorum.\"` döndürsün. Ayrıca `history` listesine önce `Message(\"Sen\", text)`, sonra `Message(name, cevap)` eklesin.",
+    "starter": "class Message:\n    pass\n\n\nclass Bot:\n    pass\n",
+    "solution": "class Message:\n    def __init__(self, sender, text):\n        self.sender = sender\n        self.text = text\n\n    def show(self):\n        return f\"{self.sender}: {self.text}\"\n\n\nclass Bot:\n    def __init__(self, name):\n        self.name = name\n        self.replies = {}\n        self.history = []\n\n    def learn(self, keyword, reply):\n        self.replies[keyword] = reply\n\n    def answer(self, text):\n        reply = \"Bunu henüz bilmiyorum.\"\n        for keyword in self.replies:\n            if keyword in text:\n                reply = self.replies[keyword]\n                break\n        self.history.append(Message(\"Sen\", text))\n        self.history.append(Message(self.name, reply))\n        return reply\n",
+    "hints": [
+     "Bot'un __init__'inde: self.name = name, self.replies = {}, self.history = []",
+     "answer içinde for keyword in self.replies: ile anahtar kelimelere bak, sonra iki Message ekle."
+    ],
+    "check": {
+     "python": "\ntry:\n    m = Message(\"Sen\", \"selam\")\n    b = Bot(\"Bilge\")\nexcept TypeError:\n    raise AssertionError(\"Message(sender, text) ve Bot(name) için __init__ metotlarını yaz.\")\nassert m.sender == \"Sen\" and m.text == \"selam\", \"Message(sender, text) iki özelliği saklamalı.\"\nassert m.show() == \"Sen: selam\", \"show() \\\"Sen: selam\\\" gibi bir yazı döndürmeli.\"\nassert b.name == \"Bilge\" and b.replies == {} and b.history == [], \"Bot(\\\"Bilge\\\"): name, boş replies sözlüğü ve boş history listesi olmalı.\"\nb.learn(\"hava\", \"Bugün hava güneşli.\")\nb.learn(\"saat\", \"Saate bakayım...\")\nassert b.replies == {\"hava\": \"Bugün hava güneşli.\", \"saat\": \"Saate bakayım...\"}, \"learn() sözlüğe anahtar kelimeyi ve cevabı eklemeli.\"\nassert b.answer(\"yarın hava nasıl\") == \"Bugün hava güneşli.\", \"answer() mesajdaki anahtar kelimenin cevabını döndürmeli.\"\nassert b.answer(\"pizza sever misin\") == \"Bunu henüz bilmiyorum.\", \"Anahtar kelime yoksa \\\"Bunu henüz bilmiyorum.\\\" döndürmeli.\"\nassert len(b.history) == 4 and all(isinstance(x, Message) for x in b.history), \"Her answer() çağrısı history'ye iki Message eklemeli.\"\nassert b.history[0].show() == \"Sen: yarın hava nasıl\" and b.history[1].show() == \"Bilge: Bugün hava güneşli.\", \"Önce kullanıcının mesajı, sonra botun cevabı eklenmeli.\"\nassert Bot(\"Robo\").history == [], \"Her botun kendi history listesi olmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "class Message:",
+       "notes": [
+        "`Message` adında bir sınıf (nesne kalıbı) tanımlanıyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "    def __init__(self, sender, text):",
+       "notes": [
+        "`__init__`: `Message` nesnesi oluşturulurken otomatik çalışan hazırlık metodu. Aldığı değerler: `sender`, `text`."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "        self.sender = sender",
+       "notes": [
+        "Nesnenin `self.sender` özelliğine `sender` değeri konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "        self.text = text",
+       "notes": [
+        "Nesnenin `self.text` özelliğine `text` değeri konuyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    def show(self):",
+       "notes": [
+        "`show` adında bir metot (sınıfa ait fonksiyon) tanımlanıyor."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "        return f\"{self.sender}: {self.text}\"",
+       "notes": [
+        "Fonksiyon `f\"{self.sender}: {self.text}\"` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "class Bot:",
+       "notes": [
+        "`Bot` adında bir sınıf (nesne kalıbı) tanımlanıyor."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "    def __init__(self, name):",
+       "notes": [
+        "`__init__`: `Bot` nesnesi oluşturulurken otomatik çalışan hazırlık metodu. Aldığı değerler: `name`."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "        self.name = name",
+       "notes": [
+        "Nesnenin `self.name` özelliğine `name` değeri konuyor."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "        self.replies = {}",
+       "notes": [
+        "Nesnenin `self.replies` özelliğine `{}` değeri konuyor."
+       ]
+      },
+      {
+       "n": 14,
+       "code": "        self.history = []",
+       "notes": [
+        "Nesnenin `self.history` özelliğine `[]` değeri konuyor."
+       ]
+      },
+      {
+       "n": 16,
+       "code": "    def learn(self, keyword, reply):",
+       "notes": [
+        "`learn` adında bir metot (sınıfa ait fonksiyon) tanımlanıyor. Aldığı değerler: `keyword`, `reply`."
+       ]
+      },
+      {
+       "n": 17,
+       "code": "        self.replies[keyword] = reply",
+       "notes": [
+        "`self.replies[...]` konumundaki değer `reply` ile değiştiriliyor."
+       ]
+      },
+      {
+       "n": 19,
+       "code": "    def answer(self, text):",
+       "notes": [
+        "`answer` adında bir metot (sınıfa ait fonksiyon) tanımlanıyor. Aldığı değerler: `text`."
+       ]
+      },
+      {
+       "n": 20,
+       "code": "        reply = \"Bunu henüz bilmiyorum.\"",
+       "notes": [
+        "`reply` adında bir değişken oluşturuluyor ve içine `\"Bunu henüz bilmiyorum.\"` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 21,
+       "code": "        for keyword in self.replies:",
+       "notes": [
+        "Döngü: `self.replies` içindeki her eleman sırayla `keyword` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 22,
+       "code": "            if keyword in text:",
+       "notes": [
+        "Koşul: `keyword in text` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 23,
+       "code": "                reply = self.replies[keyword]",
+       "notes": [
+        "`reply` değişkenine yeni değer veriliyor: `self.replies[keyword]`."
+       ]
+      },
+      {
+       "n": 24,
+       "code": "                break",
+       "notes": [
+        "`break`: Döngüden hemen çıkar."
+       ]
+      },
+      {
+       "n": 25,
+       "code": "        self.history.append(Message(\"Sen\", text))",
+       "notes": [
+        "`self.history.append(Message(\"Sen\", text))`: `self.history` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler.",
+        "`Message(...)`: `Message` sınıfından yeni bir nesne oluşturur."
+       ]
+      },
+      {
+       "n": 26,
+       "code": "        self.history.append(Message(self.name, reply))",
+       "notes": [
+        "`self.history.append(Message(self.name, reply))`: `self.history` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler.",
+        "`Message(...)`: `Message` sınıfından yeni bir nesne oluşturur."
+       ]
+      },
+      {
+       "n": 27,
+       "code": "        return reply",
+       "notes": [
+        "Fonksiyon `reply` değerini geri verir ve burada biter."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "sender",
+       "kind": "parametre",
+       "desc": "`__init__` çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "text",
+       "kind": "parametre",
+       "desc": "`__init__` çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "name",
+       "kind": "parametre",
+       "desc": "`__init__` çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "keyword",
+       "kind": "parametre",
+       "desc": "`learn` çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "reply",
+       "kind": "parametre",
+       "desc": "`learn` çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "class",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir sınıf (nesne kalıbı) tanımlar."
+      },
+      {
+       "term": "Message",
+       "kind": "senin sınıfın",
+       "desc": "Kodda tanımlanan sınıf; `Message(...)` ile yeni nesneler oluşturulur."
+      },
+      {
+       "term": "__init__()",
+       "kind": "metot",
+       "desc": "Sınıftan yeni bir nesne oluşturulurken otomatik çalışan hazırlık metodu."
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "show()",
+       "kind": "senin metodun",
+       "desc": "`Message` sınıfının metodu; nesne.show(...) diye çağrılır."
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "self",
+       "kind": "anahtar kelime",
+       "desc": "Sınıfın içinde \"bu nesnenin kendisi\" demektir."
+      },
+      {
+       "term": "Bot",
+       "kind": "senin sınıfın",
+       "desc": "Kodda tanımlanan sınıf; `Bot(...)` ile yeni nesneler oluşturulur."
+      },
+      {
+       "term": "learn()",
+       "kind": "senin metodun",
+       "desc": "`Bot` sınıfının metodu; nesne.learn(...) diye çağrılır."
+      },
+      {
+       "term": "answer()",
+       "kind": "senin metodun",
+       "desc": "`Bot` sınıfının metodu; nesne.answer(...) diye çağrılır."
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "in",
+       "kind": "operatör",
+       "desc": "İçinde var mı? (listede, metinde, sözlükte)"
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": "break",
+       "kind": "anahtar kelime",
+       "desc": "Döngüden hemen çıkar."
+      },
+      {
+       "term": ".append()",
+       "kind": "metot",
+       "desc": "Listenin sonuna yeni bir eleman ekler."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Bot sınıfı",
+   "game_role": "Botu ve mesajları nesnelerle yönetir; bot yeni cevaplar öğrenebilir."
+  },
+  "okul": {
+   "project_task": {
+    "id": "d21-pn",
+    "title": "Course sınıfı",
+    "prompt": "Dersleri bir sınıfla yazalım. `Course(name, hours)` bir ders adı ve haftalık ders saati alsın ve boş bir `grades` listesiyle başlasın:\n\n- `add_grade(grade)`: notu listeye eklesin.\n- `average()`: notların ortalamasını 2 basamağa yuvarlayıp döndürsün; hiç not yoksa `0`.\n- `passed()`: ortalama 50 veya üstüyse `True` döndürsün.",
+    "starter": "class Course:\n    def __init__(self, name, hours):\n        pass\n",
+    "solution": "class Course:\n    def __init__(self, name, hours):\n        self.name = name\n        self.hours = hours\n        self.grades = []\n\n    def add_grade(self, grade):\n        self.grades.append(grade)\n\n    def average(self):\n        if len(self.grades) == 0:\n            return 0\n        return round(sum(self.grades) / len(self.grades), 2)\n\n    def passed(self):\n        return self.average() >= 50\n",
+    "hints": [
+     "__init__ içinde self.name = name, self.hours = hours ve self.grades = []",
+     "passed içinde: return self.average() >= 50"
+    ],
+    "check": {
+     "python": "\nc = Course(\"Matematik\", 6)\nassert getattr(c, \"name\", None) == \"Matematik\" and getattr(c, \"hours\", None) == 6 and getattr(c, \"grades\", None) == [],\"Course(\\\"Matematik\\\", 6): name, hours ve boş grades listesi olmalı.\"\nassert c.average() == 0, \"Hiç not yokken average() 0 döndürmeli.\"\nc.add_grade(40)\nc.add_grade(65)\nassert c.grades == [40, 65], \"add_grade() notu listeye eklemeli.\"\nassert c.average() == 52.5 and c.passed() is True, \"40 ve 65 ile ortalama 52.5, passed() True olmalı.\"\nc.add_grade(30)\nassert c.average() == 45.0 and c.passed() is False, \"30 da eklenince ortalama 45.0, passed() False olmalı.\"\nc2 = Course(\"Fizik\", 2)\nassert c2.grades == [], \"Her Course'un kendi listesi olmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "class Course:",
+       "notes": [
+        "`Course` adında bir sınıf (nesne kalıbı) tanımlanıyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "    def __init__(self, name, hours):",
+       "notes": [
+        "`__init__`: `Course` nesnesi oluşturulurken otomatik çalışan hazırlık metodu. Aldığı değerler: `name`, `hours`."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "        self.name = name",
+       "notes": [
+        "Nesnenin `self.name` özelliğine `name` değeri konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "        self.hours = hours",
+       "notes": [
+        "Nesnenin `self.hours` özelliğine `hours` değeri konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "        self.grades = []",
+       "notes": [
+        "Nesnenin `self.grades` özelliğine `[]` değeri konuyor."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "    def add_grade(self, grade):",
+       "notes": [
+        "`add_grade` adında bir metot (sınıfa ait fonksiyon) tanımlanıyor. Aldığı değerler: `grade`."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "        self.grades.append(grade)",
+       "notes": [
+        "`self.grades.append(grade)`: `self.grades` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "    def average(self):",
+       "notes": [
+        "`average` adında bir metot (sınıfa ait fonksiyon) tanımlanıyor."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "        if len(self.grades) == 0:",
+       "notes": [
+        "Koşul: `len(self.grades) == 0` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "            return 0",
+       "notes": [
+        "Fonksiyon `0` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "        return round(sum(self.grades) / len(self.grades), 2)",
+       "notes": [
+        "Fonksiyon `round(sum(self.grades) / len(self.grades), 2)` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 15,
+       "code": "    def passed(self):",
+       "notes": [
+        "`passed` adında bir metot (sınıfa ait fonksiyon) tanımlanıyor."
+       ]
+      },
+      {
+       "n": 16,
+       "code": "        return self.average() >= 50",
+       "notes": [
+        "Fonksiyon `self.average() >= 50` değerini geri verir ve burada biter."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "name",
+       "kind": "parametre",
+       "desc": "`__init__` çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "hours",
+       "kind": "parametre",
+       "desc": "`__init__` çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "grade",
+       "kind": "parametre",
+       "desc": "`add_grade` çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "class",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir sınıf (nesne kalıbı) tanımlar."
+      },
+      {
+       "term": "Course",
+       "kind": "senin sınıfın",
+       "desc": "Kodda tanımlanan sınıf; `Course(...)` ile yeni nesneler oluşturulur."
+      },
+      {
+       "term": "__init__()",
+       "kind": "metot",
+       "desc": "Sınıftan yeni bir nesne oluşturulurken otomatik çalışan hazırlık metodu."
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "add_grade()",
+       "kind": "senin metodun",
+       "desc": "`Course` sınıfının metodu; nesne.add_grade(...) diye çağrılır."
+      },
+      {
+       "term": ".append()",
+       "kind": "metot",
+       "desc": "Listenin sonuna yeni bir eleman ekler."
+      },
+      {
+       "term": "self",
+       "kind": "anahtar kelime",
+       "desc": "Sınıfın içinde \"bu nesnenin kendisi\" demektir."
+      },
+      {
+       "term": "average()",
+       "kind": "senin metodun",
+       "desc": "`Course` sınıfının metodu; nesne.average(...) diye çağrılır."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "==",
+       "kind": "operatör",
+       "desc": "Eşit mi? (True/False)"
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": "round()",
+       "kind": "fonksiyon",
+       "desc": "Sayıyı yuvarlar. round(3.14159, 2) → 3.14"
+      },
+      {
+       "term": "/",
+       "kind": "operatör",
+       "desc": "Bölme; sonuç her zaman ondalıklı sayıdır."
+      },
+      {
+       "term": "sum()",
+       "kind": "fonksiyon",
+       "desc": "Listedeki sayıları toplar."
+      },
+      {
+       "term": "passed()",
+       "kind": "senin metodun",
+       "desc": "`Course` sınıfının metodu; nesne.passed(...) diye çağrılır."
+      },
+      {
+       "term": ">=",
+       "kind": "operatör",
+       "desc": "Büyük ya da eşit mi?"
+      },
+      {
+       "term": ".average()",
+       "kind": "senin metodun",
+       "desc": "Sınıfında tanımladığın `average` metodunu bu nesne için çalıştırır."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Ders sınıfı",
+   "game_role": "Her dersi adı, haftalık saati ve notlarıyla bir nesnede tutar."
+  }
+ }
+}

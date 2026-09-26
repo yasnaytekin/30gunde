@@ -1,0 +1,196 @@
+{
+  "kurs": "javascript",
+  "gun": 7,
+  "baslik": "Döngüler",
+  "maskot": "kodi",
+  "ozet": "Döngü Ayı'nın yörüngesinde işleri tekrarlatıyoruz: for, while ve for...of döngüleri, döngüyle toplam biriktirmek, break ve continue.",
+  "hedef_sure_sn": 155,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 10,
+      "anlatim": "Selam, ben Kodi! Döngü Ayı'nın yörüngesine girdik. Burada her şey tekrar eder: tur, tur, bir tur daha. Aynı komutu yüz kez yazar mısın? Ben yazmam!",
+      "ekran": {
+        "baslik": "Gün 7: Döngüler",
+        "gorsel": "gorseller/javascript/bolgeler/ay.webp"
+      },
+      "maskot": { "poz": "el-sallama", "konum": "sag" },
+      "yonetmen_notu": "Roket Ay'ın etrafında tur atar."
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "for bir işi belirli sayıda tekrarlar. Parantezde üç parça var: başlangıç bir kez çalışır, koşul her turdan önce sınanır, i artı artı de her turun sonunda sayacı artırır.",
+      "ekran": {
+        "baslik": "for döngüsü",
+        "kod": "for (let i = 1; i <= 3; i++) {\n  console.log(\"Tur\", i);\n}\n",
+        "dil": "js",
+        "vurgu_satirlari": [1],
+        "cikti": "Tur 1\nTur 2\nTur 3"
+      },
+      "maskot": { "poz": "isaret", "konum": "alt-sag" },
+      "calistir": true,
+      "yonetmen_notu": "Birinci satırdaki üç parça sırayla farklı renklerle vurgulanır."
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 15,
+      "anlatim": "while, koşul doğru olduğu sürece tekrar eder. Kaç tur süreceğini bilmediğimizde işe yarar. Koşul turdan önce sınandığı için yakıt 10 iken bir tur daha atıldı ve eksiye düştü.",
+      "ekran": {
+        "baslik": "while döngüsü",
+        "kod": "let fuel = 100;\nwhile (fuel > 0) {\n  fuel -= 30;\n  console.log(\"Kalan yakıt:\", fuel);\n}\n",
+        "dil": "js",
+        "vurgu_satirlari": [2, 3],
+        "cikti": "Kalan yakıt: 70\nKalan yakıt: 40\nKalan yakıt: 10\nKalan yakıt: -20"
+      },
+      "maskot": { "poz": "konusma", "konum": "alt-sag" },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "Bir dizinin her elemanına bakmanın en kolay yolu for of. Her turda sıradaki gezegen planet değişkenine gelir.",
+      "ekran": {
+        "baslik": "for...of ile dizi dolaşmak",
+        "kod": "const planets = [\"Merkür\", \"Venüs\", \"Dünya\"];\nfor (const planet of planets) {\n  console.log(planet);\n}\n",
+        "dil": "js",
+        "vurgu_satirlari": [2],
+        "cikti": "Merkür\nVenüs\nDünya"
+      },
+      "maskot": { "poz": "isaret", "konum": "alt-sag" },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "Sıra numarası da lazımsa klasik for kullan. i sıfırdan başlar ve length'e kadar gider; ekrana yazarken bir ekliyoruz.",
+      "ekran": {
+        "baslik": "İndeksle dolaşmak",
+        "kod": "const planets = [\"Merkür\", \"Venüs\", \"Dünya\"];\nfor (let i = 0; i < planets.length; i++) {\n  console.log(i + 1, planets[i]);\n}\n",
+        "dil": "js",
+        "vurgu_satirlari": [2, 3],
+        "cikti": "1 Merkür\n2 Venüs\n3 Dünya"
+      },
+      "maskot": { "poz": "isaret", "konum": "alt-sag" },
+      "calistir": true
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "Toplam biriktirmek için döngüden önce sıfırla başlayan bir değişken açarız. Her turda depodaki yakıtı ona ekleriz. Üç depo, toplam yüz litre!",
+      "ekran": {
+        "baslik": "Toplam biriktirmek",
+        "kod": "const tanks = [40, 25, 35];\nlet total = 0;\nfor (const tank of tanks) {\n  total += tank;\n}\nconsole.log(total);\n",
+        "dil": "js",
+        "vurgu_satirlari": [2, 4],
+        "cikti": "100"
+      },
+      "maskot": { "poz": "mutlu", "konum": "alt-sag" },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "continue bu turu atlar ve sonrakine geçer, break ise döngüyü hemen bitirir. Üç atlandı, beşte de döngü durdu.",
+      "ekran": {
+        "baslik": "break ve continue",
+        "kod": "for (let i = 1; i <= 6; i++) {\n  if (i === 3) {\n    continue;\n  }\n  if (i === 5) {\n    break;\n  }\n  console.log(i);\n}\n",
+        "dil": "js",
+        "vurgu_satirlari": [3, 6],
+        "cikti": "1\n2\n4"
+      },
+      "maskot": { "poz": "konusma", "konum": "alt-sag" },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "hata",
+      "sure_sn": 14,
+      "anlatim": "En tehlikeli hata: sonsuz döngü! Burada yakıt hiç azalmıyor, koşul hep doğru kalıyor ve program donuyor. Döngünün içinde koşulu değiştiren bir şey mutlaka olmalı.",
+      "ekran": {
+        "baslik": "Sonsuz döngü",
+        "kod": "let fuel = 100;\nwhile (fuel > 0) {\n  console.log(\"Kalan yakıt:\", fuel);\n}\n",
+        "dil": "js",
+        "vurgu_satirlari": [2],
+        "cikti": "Kalan yakıt: 100\nKalan yakıt: 100\nKalan yakıt: 100\n... (hiç bitmez, program donar)"
+      },
+      "maskot": { "poz": "sasirma", "konum": "sag" },
+      "calistir": false,
+      "yonetmen_notu": "Çıktı alanı durmadan akar, sonra ekran kırmızı bir 'donmuş' efektiyle kesilir."
+    },
+    {
+      "no": 9,
+      "tur": "soru",
+      "sure_sn": 9,
+      "anlatim": "Her turda iki yıldız topluyoruz. Döngü kaç tur döner ve sonunda kaç yıldızımız olur?",
+      "ekran": {
+        "baslik": "Sence ne yazdırır?",
+        "kod": "let stars = 0;\nfor (let i = 0; i < 4; i++) {\n  stars += 2;\n}\nconsole.log(stars);\n",
+        "dil": "js"
+      },
+      "maskot": { "poz": "dusunme", "konum": "sag" }
+    },
+    {
+      "no": 10,
+      "tur": "cikti",
+      "sure_sn": 9,
+      "anlatim": "Sekiz yıldız! i sıfır, bir, iki ve üç için dört tur döndü; her turda iki eklendi.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "let stars = 0;\nfor (let i = 0; i < 4; i++) {\n  stars += 2;\n}\nconsole.log(stars);\n",
+        "dil": "js",
+        "cikti": "8"
+      },
+      "maskot": { "poz": "mutlu", "konum": "sag" },
+      "calistir": true
+    },
+    {
+      "no": 11,
+      "tur": "gorev",
+      "sure_sn": 12,
+      "anlatim": "Görevlerin: tek bir console.log ile ondan geriye say, yakıt depolarını döngüyle topla ve while ile kaç yörünge turu atabileceğini bul.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Geri sayım",
+          "Görev 2: Yakıt depoları",
+          "Görev 3: Yörünge turları"
+        ]
+      },
+      "maskot": { "poz": "isaret", "konum": "sol" }
+    },
+    {
+      "no": 12,
+      "tur": "ozet",
+      "sure_sn": 11,
+      "anlatim": "Özet: for belirli sayıda tekrarlar, while koşul doğru oldukça. for of diziyi dolaşır. Biriktireceğin değişkeni döngüden önce aç.",
+      "ekran": {
+        "baslik": "Özet",
+        "maddeler": [
+          "for: başlangıç; koşul; artış",
+          "while: koşulu içeride değiştir",
+          "for...of, biriktirme, break ve continue"
+        ]
+      },
+      "maskot": { "poz": "on", "konum": "sag" }
+    },
+    {
+      "no": 13,
+      "tur": "kapanis",
+      "sure_sn": 10,
+      "anlatim": "Yörünge turları tamam, tebrikler! Yarın sık kullandığımız komutları bir ada paketleyip istediğimiz kadar çağıracağız: fonksiyonlar.",
+      "ekran": {
+        "baslik": "Yarın: Fonksiyonlar",
+        "gorsel": "maskotlar/kodi-javascript/kahraman.png"
+      },
+      "maskot": { "poz": "tebrik", "konum": "sag" }
+    }
+  ]
+}

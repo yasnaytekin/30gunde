@@ -1,0 +1,1270 @@
+{
+ "day": 18,
+ "title": "Düzenli ifadeler",
+ "region": "ada",
+ "project_contribution": "Komut çözücü",
+ "game_role": "\"git kuzey 3\" gibi yazılı komutları senin çözücün anlar.",
+ "xp_complete": 150,
+ "objective": "re modülüyle metinlerde desen aramak, bulmak ve değiştirmek",
+ "story": "Adanın mağarasında duvarlar yazılarla dolu. Bir yerlerde gizli sayılar, şifreler ve komutlar saklı. Tek tek okumak günler sürer! Neyse ki Python'ın bir büyüteci var: **düzenli ifadeler** (regex). Bir desen tarif ediyorsun, Python onu metnin içinde buluyor.",
+ "sections": [
+  {
+   "title": "Desen nedir?",
+   "body": "Düzenli ifade, aradığın şeyin **tarifidir**. \"İçinde e harfi olan kelime\" ya da \"yan yana rakamlar\" gibi. Python'da `re` modülüyle kullanılır:\n\n```python\nimport re\ntext = \"Piko 3 elma ve 12 altın buldu\"\nprint(re.findall(r\"\\d+\", text))   # ['3', '12']\n```\n\nDesenlerin başına `r` koyarız (`r\"...\"`). Böylece ters eğik çizgiler doğru okunur."
+  },
+  {
+   "title": "Özel karakterler",
+   "body": "- `\\d` bir rakam, `\\w` bir harf, rakam ya da alt çizgi, `\\s` bir boşluk\n- `.` herhangi bir karakter\n- `+` bir ya da daha fazla, `*` sıfır ya da daha fazla, `?` olabilir de olmayabilir de\n- `{3}` tam 3 tane, `{2,4}` 2 ile 4 arası\n- `[aeı]` köşeli parantezdekilerden biri, `[0-9]` 0 ile 9 arası\n- `^` başlangıç, `$` son"
+  },
+  {
+   "title": "Dört temel fonksiyon",
+   "body": "- `re.findall(desen, metin)` eşleşen tüm parçaları liste olarak verir\n- `re.search(desen, metin)` ilk eşleşmeyi bulur, yoksa `None` verir\n- `re.fullmatch(desen, metin)` metnin **tamamı** desene uyuyor mu?\n- `re.sub(desen, yeni, metin)` eşleşenleri değiştirir\n\n```python\nprint(re.sub(r\"\\d\", \"*\", \"Şifre 4821\"))   # Şifre ****\n```"
+  },
+  {
+   "title": "Gruplar",
+   "body": "Parantezler deseni parçalara ayırır. Eşleşmeden sonra her parçayı `group()` ile alırsın:\n\n```python\nm = re.search(r\"(\\w+) (\\d+) altın\", \"Ece 45 altın buldu\")\nif m:\n    print(m.group(1))   # Ece\n    print(m.group(2))   # 45\n```"
+  }
+ ],
+ "examples": [
+  {
+   "title": "Sayıları bul",
+   "code": "import re\n\ntext = \"Piko 3 elma, 12 altın ve 7 iksir buldu\"\nprint(re.findall(r\"\\d+\", text))\nprint(re.findall(r\"\\d\", text))\n",
+   "note": "\\d+ ile \\d arasındaki farka dikkat et."
+  },
+  {
+   "title": "Ara ve değiştir",
+   "code": "import re\n\nmsg = \"Şifrem 4821, telefonum 05321234567\"\nprint(re.search(r\"\\d{4}\", msg).group())\nprint(re.sub(r\"\\d\", \"*\", msg))\n",
+   "note": ""
+  },
+  {
+   "title": "Gruplarla parçala",
+   "code": "import re\n\nfor line in [\"Ece 45 altın\", \"Can 7 altın\", \"yanlış satır\"]:\n    m = re.search(r\"(\\w+) (\\d+) altın\", line)\n    if m:\n        print(m.group(1), \"->\", int(m.group(2)))\n    else:\n        print(\"Eşleşme yok:\", line)\n",
+   "note": ""
+  }
+ ],
+ "tasks": [
+  {
+   "id": "d18-t1",
+   "title": "Sayıları topla",
+   "prompt": "`text` içindeki tüm sayıları `re.findall` ile bul ve `numbers` listesine koy. Sonra sayıların toplamını `total` olarak hesapla.",
+   "starter": "import re\n\ntext = \"Piko 3 elma, 12 altın ve 7 iksir buldu\"\n\nnumbers = []\ntotal = 0\n\nprint(numbers, total)\n",
+   "solution": "import re\n\ntext = \"Piko 3 elma, 12 altın ve 7 iksir buldu\"\n\nnumbers = re.findall(r\"\\d+\", text)\ntotal = sum([int(n) for n in numbers])\n\nprint(numbers, total)\n",
+   "hints": [
+    "Desen: r\"\\d+\" (bir veya daha fazla rakam)",
+    "findall yazı listesi verir; toplamak için int() ile çevir."
+   ],
+   "check": {
+    "code_contains": [
+     "findall"
+    ],
+    "python": "\n_, g = _run(_set(_code, \"text\", \"10 kuş, 250 yaprak, 1 ağaç\"))\nassert g.get(\"numbers\") == [\"10\", \"250\", \"1\"], \"numbers, metindeki sayıları içermeli: re.findall(r'\\\\d+', text)\"\nassert g.get(\"total\") == 261, \"total, sayıların toplamı olmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "import re",
+      "notes": [
+       "`re` modülü programa ekleniyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "text = \"Piko 3 elma, 12 altın ve 7 iksir buldu\"",
+      "notes": [
+       "`text` adında bir değişken oluşturuluyor ve içine `\"Piko 3 elma, 12 altın ve 7 iksir buldu\"` (metin (str)) konuyor."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "numbers = re.findall(r\"\\d+\", text)",
+      "notes": [
+       "`numbers` adında bir değişken oluşturuluyor ve içine `re.findall(r\"\\d+\", text)` konuyor."
+      ]
+     },
+     {
+      "n": 6,
+      "code": "total = sum([int(n) for n in numbers])",
+      "notes": [
+       "`total` adında bir değişken oluşturuluyor ve içine `sum([int(n) for n in numbers])` konuyor.",
+       "Tek satırda döngüyle yeni bir liste/dizi üretiliyor."
+      ]
+     },
+     {
+      "n": 8,
+      "code": "print(numbers, total)",
+      "notes": [
+       "`print(numbers, total)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "text",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `\"Piko 3 elma, 12 altın ve 7 iksir buldu\"`."
+     },
+     {
+      "term": "numbers",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `re.findall(r\"\\d+\", text)`."
+     },
+     {
+      "term": "total",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `sum([int(n) for n in numbers])`."
+     },
+     {
+      "term": "import",
+      "kind": "anahtar kelime",
+      "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+     },
+     {
+      "term": "re",
+      "kind": "modül",
+      "desc": "Düzenli ifadeler: metinde kalıp arama."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": ".findall()",
+      "kind": "metot",
+      "desc": "Metinde kalıba uyan bütün parçaları liste olarak verir (re)."
+     },
+     {
+      "term": "sum()",
+      "kind": "fonksiyon",
+      "desc": "Listedeki sayıları toplar."
+     },
+     {
+      "term": "[... for ... in ...]",
+      "kind": "liste üreteci",
+      "desc": "Liste üreteci: [ifade for x in liste if koşul] ile tek satırda yeni liste."
+     },
+     {
+      "term": "int()",
+      "kind": "fonksiyon",
+      "desc": "Bir değeri tam sayıya çevirir, örneğin \"42\" yazısını 42 sayısına."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d18-t2",
+   "title": "E-posta var mı?",
+   "prompt": "`text` içinde bir e-posta adresi varsa `has_email` True, yoksa False olsun. Basit bir desen yeterli: harfler, `@`, harfler, nokta, harfler.",
+   "starter": "import re\n\ntext = \"Bana piko@ornek.com adresinden yaz\"\n\nhas_email = False\n\nprint(has_email)\n",
+   "solution": "import re\n\ntext = \"Bana piko@ornek.com adresinden yaz\"\n\nhas_email = re.search(r\"\\w+@\\w+\\.\\w+\", text) is not None\n\nprint(has_email)\n",
+   "hints": [
+    "Desen: r\"\\w+@\\w+\\.\\w+\"",
+    "re.search bulamazsa None verir: ... is not None"
+   ],
+   "check": {
+    "code_contains": [
+     "re."
+    ],
+    "python": "\n_, g = _run(_set(_code, \"text\", \"Adresim ece@okul.org\"))\nassert g.get(\"has_email\") is True, \"E-posta olan metinde has_email True olmalı.\"\n_, g = _run(_set(_code, \"text\", \"Burada adres yok @ sadece işaret\"))\nassert g.get(\"has_email\") is False, \"E-posta olmayan metinde has_email False olmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "import re",
+      "notes": [
+       "`re` modülü programa ekleniyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "text = \"Bana piko@ornek.com adresinden yaz\"",
+      "notes": [
+       "`text` adında bir değişken oluşturuluyor ve içine `\"Bana piko@ornek.com adresinden yaz\"` (metin (str)) konuyor."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "has_email = re.search(r\"\\w+@\\w+\\.\\w+\", text) is not None",
+      "notes": [
+       "`has_email` adında bir değişken oluşturuluyor ve içine `re.search(r\"\\w+@\\w+\\.\\w+\", text) is not None` konuyor."
+      ]
+     },
+     {
+      "n": 7,
+      "code": "print(has_email)",
+      "notes": [
+       "`print(has_email)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "text",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `\"Bana piko@ornek.com adresinden yaz\"`."
+     },
+     {
+      "term": "has_email",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `re.search(r\"\\w+@\\w+\\.\\w+\", text) is not None`."
+     },
+     {
+      "term": "import",
+      "kind": "anahtar kelime",
+      "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+     },
+     {
+      "term": "re",
+      "kind": "modül",
+      "desc": "Düzenli ifadeler: metinde kalıp arama."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "is not",
+      "kind": "operatör",
+      "desc": "Aynı nesne değil mi? (x is not None: x boş değil mi?)"
+     },
+     {
+      "term": ".search()",
+      "kind": "metot",
+      "desc": "Metinde kalıba uyan ilk yeri arar (re)."
+     },
+     {
+      "term": "None",
+      "kind": "değer",
+      "desc": "\"Hiçbir şey / boş\" anlamına gelen özel değer."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d18-t3",
+   "title": "Şifreyi gizle",
+   "prompt": "`re.sub` kullanarak `text` içindeki tüm rakamları `*` ile değiştir ve `hidden` değişkenine koy.",
+   "starter": "import re\n\ntext = \"Kasanın şifresi 4821\"\n\nhidden = text\n\nprint(hidden)\n",
+   "solution": "import re\n\ntext = \"Kasanın şifresi 4821\"\n\nhidden = re.sub(r\"\\d\", \"*\", text)\n\nprint(hidden)\n",
+   "hints": [
+    "re.sub(r\"\\d\", \"*\", text)"
+   ],
+   "check": {
+    "code_contains": [
+     "re.sub"
+    ],
+    "python": "\n_, g = _run(_set(_code, \"text\", \"Kod 12 ve 7\"))\nassert g.get(\"hidden\") == \"Kod ** ve *\", \"Her rakam tek bir * olmalı: re.sub(r'\\\\d', '*', text)\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "import re",
+      "notes": [
+       "`re` modülü programa ekleniyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "text = \"Kasanın şifresi 4821\"",
+      "notes": [
+       "`text` adında bir değişken oluşturuluyor ve içine `\"Kasanın şifresi 4821\"` (metin (str)) konuyor."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "hidden = re.sub(r\"\\d\", \"*\", text)",
+      "notes": [
+       "`hidden` adında bir değişken oluşturuluyor ve içine `re.sub(r\"\\d\", \"*\", text)` konuyor."
+      ]
+     },
+     {
+      "n": 7,
+      "code": "print(hidden)",
+      "notes": [
+       "`print(hidden)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "text",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `\"Kasanın şifresi 4821\"`."
+     },
+     {
+      "term": "hidden",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `re.sub(r\"\\d\", \"*\", text)`."
+     },
+     {
+      "term": "import",
+      "kind": "anahtar kelime",
+      "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+     },
+     {
+      "term": "re",
+      "kind": "modül",
+      "desc": "Düzenli ifadeler: metinde kalıp arama."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": ".sub()",
+      "kind": "metot",
+      "desc": "Kalıba uyan parçaları başka bir şeyle değiştirir (re)."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "id": "d18-c",
+  "title": "Telefon numarası",
+  "prompt": "`is_phone(text)` fonksiyonu, metin tam olarak `05` ile başlayan **11 haneli** bir numaraysa True, değilse False döndürsün.",
+  "starter": "import re\n\ndef is_phone(text):\n    return False\n\nprint(is_phone(\"05321234567\"))\n",
+  "solution": "import re\n\ndef is_phone(text):\n    return re.fullmatch(r\"05\\d{9}\", text) is not None\n\nprint(is_phone(\"05321234567\"))\n",
+  "hints": [
+   "05'ten sonra 9 rakam daha gelmeli: \\d{9}",
+   "Metnin tamamı uymalı: re.fullmatch"
+  ],
+  "check": {
+   "python": "\nassert is_phone(\"05321234567\") is True, \"05321234567 geçerli bir numara.\"\nassert is_phone(\"0532123456\") is False, \"10 haneli numara geçersiz olmalı.\"\nassert is_phone(\"053212345678\") is False, \"12 haneli numara geçersiz olmalı.\"\nassert is_phone(\"15321234567\") is False, \"05 ile başlamayan numara geçersiz olmalı.\"\nassert is_phone(\"0532abc4567\") is False, \"İçinde harf olan numara geçersiz olmalı.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "import re",
+     "notes": [
+      "`re` modülü programa ekleniyor."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "def is_phone(text):",
+     "notes": [
+      "`is_phone` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `text`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "    return re.fullmatch(r\"05\\d{9}\", text) is not None",
+     "notes": [
+      "Fonksiyon `re.fullmatch(r\"05\\d{9}\", text) is not None` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "print(is_phone(\"05321234567\"))",
+     "notes": [
+      "`print(is_phone(\"05321234567\"))`: parantez içindeki değeri ekrana yazdırır.",
+      "`is_phone(...)`: senin tanımladığın fonksiyonu çağırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "text",
+     "kind": "parametre",
+     "desc": "`is_phone` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+    },
+    {
+     "term": "import",
+     "kind": "anahtar kelime",
+     "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+    },
+    {
+     "term": "re",
+     "kind": "modül",
+     "desc": "Düzenli ifadeler: metinde kalıp arama."
+    },
+    {
+     "term": "def",
+     "kind": "anahtar kelime",
+     "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+    },
+    {
+     "term": "is_phone()",
+     "kind": "senin fonksiyonun",
+     "desc": "Kodda tanımlanan fonksiyon; parametreleri: `text`."
+    },
+    {
+     "term": "return",
+     "kind": "anahtar kelime",
+     "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+    },
+    {
+     "term": "is not",
+     "kind": "operatör",
+     "desc": "Aynı nesne değil mi? (x is not None: x boş değil mi?)"
+    },
+    {
+     "term": ".fullmatch()",
+     "kind": "metot",
+     "desc": "Metnin tamamı kalıba uyuyor mu diye bakar (re)."
+    },
+    {
+     "term": "None",
+     "kind": "değer",
+     "desc": "\"Hiçbir şey / boş\" anlamına gelen özel değer."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    }
+   ]
+  }
+ },
+ "project_task": {
+  "id": "d18-p",
+  "title": "Komut çözücü",
+  "prompt": "Oyuncu komutları yazıyla veriyor: `git kuzey 3` gibi. `parse(command)` fonksiyonu:\n\n- Komut `git` ile başlıyor, ardından bir yön (`kuzey`, `güney`, `doğu`, `batı`) ve bir sayı geliyorsa `(\"kuzey\", 3)` tuple'ını döndürsün (sayı int olsun).\n- Uymuyorsa `None` döndürsün.",
+  "starter": "import re\n\ndef parse(command):\n    return None\n\nprint(parse(\"git kuzey 3\"))\nprint(parse(\"uç gökyüzü\"))\n",
+  "solution": "import re\n\ndef parse(command):\n    m = re.fullmatch(r\"git (kuzey|güney|doğu|batı) (\\d+)\", command)\n    if m:\n        return (m.group(1), int(m.group(2)))\n    return None\n\nprint(parse(\"git kuzey 3\"))\nprint(parse(\"uç gökyüzü\"))\n",
+  "hints": [
+   "Seçenekler için | kullan: (kuzey|güney|doğu|batı)",
+   "Sayı grubu: (\\d+)",
+   "m.group(1) yön, int(m.group(2)) adım sayısı"
+  ],
+  "check": {
+   "python": "\nassert parse(\"git kuzey 3\") == (\"kuzey\", 3), \"parse('git kuzey 3') ('kuzey', 3) döndürmeli.\"\nassert parse(\"git batı 12\") == (\"batı\", 12), \"Sayı birden fazla basamaklı olabilir ve int olmalı.\"\nassert parse(\"git yukarı 3\") is None, \"Bilinmeyen yönde None döndürmeli.\"\nassert parse(\"koş doğu 2\") is None, \"git ile başlamayan komutta None döndürmeli.\"\nassert parse(\"git doğu\") is None, \"Sayı yoksa None döndürmeli.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "import re",
+     "notes": [
+      "`re` modülü programa ekleniyor."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "def parse(command):",
+     "notes": [
+      "`parse` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `command`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "    m = re.fullmatch(r\"git (kuzey|güney|doğu|batı) (\\d+)\", command)",
+     "notes": [
+      "`m` adında bir değişken oluşturuluyor ve içine `re.fullmatch(r\"git (kuzey|güney|doğu|batı) (\\d+)\", command)` konuyor."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "    if m:",
+     "notes": [
+      "Koşul: `m` doğruysa altındaki girintili satırlar çalışır."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "        return (m.group(1), int(m.group(2)))",
+     "notes": [
+      "Fonksiyon `(m.group(1), int(m.group(2)))` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 7,
+     "code": "    return None",
+     "notes": [
+      "Fonksiyon `None` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 9,
+     "code": "print(parse(\"git kuzey 3\"))",
+     "notes": [
+      "`print(parse(\"git kuzey 3\"))`: parantez içindeki değeri ekrana yazdırır.",
+      "`parse(...)`: senin tanımladığın fonksiyonu çağırır."
+     ]
+    },
+    {
+     "n": 10,
+     "code": "print(parse(\"uç gökyüzü\"))",
+     "notes": [
+      "`print(parse(\"uç gökyüzü\"))`: parantez içindeki değeri ekrana yazdırır.",
+      "`parse(...)`: senin tanımladığın fonksiyonu çağırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "m",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `re.fullmatch(r\"git (kuzey|güney|doğu|batı) (\\d+)\", command)`."
+    },
+    {
+     "term": "command",
+     "kind": "parametre",
+     "desc": "`parse` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+    },
+    {
+     "term": "import",
+     "kind": "anahtar kelime",
+     "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+    },
+    {
+     "term": "re",
+     "kind": "modül",
+     "desc": "Düzenli ifadeler: metinde kalıp arama."
+    },
+    {
+     "term": "def",
+     "kind": "anahtar kelime",
+     "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+    },
+    {
+     "term": "parse()",
+     "kind": "senin fonksiyonun",
+     "desc": "Kodda tanımlanan fonksiyon; parametreleri: `command`."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": ".fullmatch()",
+     "kind": "metot",
+     "desc": "Metnin tamamı kalıba uyuyor mu diye bakar (re)."
+    },
+    {
+     "term": "if",
+     "kind": "anahtar kelime",
+     "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+    },
+    {
+     "term": "return",
+     "kind": "anahtar kelime",
+     "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+    },
+    {
+     "term": ".group()",
+     "kind": "metot",
+     "desc": "Bulunan eşleşmenin (ya da parantezli grubun) yazısını verir."
+    },
+    {
+     "term": "int()",
+     "kind": "fonksiyon",
+     "desc": "Bir değeri tam sayıya çevirir, örneğin \"42\" yazısını 42 sayısına."
+    },
+    {
+     "term": "None",
+     "kind": "değer",
+     "desc": "\"Hiçbir şey / boş\" anlamına gelen özel değer."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    }
+   ]
+  }
+ },
+ "available": true,
+ "tracks": {
+  "veri": {
+   "project_task": {
+    "id": "d18-pv",
+    "title": "Banka SMS'i okuyucu",
+    "prompt": "Bankadan gelen SMS'ler şöyle: `Kartinizdan 245,90 TL harcama yapildi. Yer: MIGROS`\n\n`parse_sms(text)` fonksiyonu `re` modülüyle:\n\n- Tutarı ve yeri bulup `(245.9, \"MIGROS\")` tuple'ını döndürsün (tutar float olsun; virgülü noktaya çevir).\n- SMS bu kalıba uymuyorsa `None` döndürsün.",
+    "starter": "import re\n\n\ndef parse_sms(text):\n    pass\n",
+    "solution": "import re\n\n\ndef parse_sms(text):\n    match = re.search(r\"(\\d+,\\d+) TL harcama yapildi\\. Yer: (\\w+)\", text)\n    if match is None:\n        return None\n    amount = float(match.group(1).replace(\",\", \".\"))\n    return (amount, match.group(2))\n",
+    "hints": [
+     "Tutar deseni: (\\d+,\\d+)  Yer deseni: (\\w+)",
+     "match.group(1) ilk parantezi verir; replace(\",\", \".\") ile float'a çevrilebilir yap."
+    ],
+    "check": {
+     "python": "\nassert parse_sms(\"Kartinizdan 245,90 TL harcama yapildi. Yer: MIGROS\") == (245.9, \"MIGROS\"), \"Örnek SMS için (245.9, 'MIGROS') döndürmeli.\"\nassert parse_sms(\"Kartinizdan 12,50 TL harcama yapildi. Yer: KAFE\") == (12.5, \"KAFE\"), \"Başka bir tutar ve yerle de çalışmalı.\"\nassert parse_sms(\"Hesabiniza 500,00 TL yatti\") is None, \"Kalıba uymayan SMS için None döndürmeli.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "import re",
+       "notes": [
+        "`re` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "def parse_sms(text):",
+       "notes": [
+        "`parse_sms` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `text`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "    match = re.search(r\"(\\d+,\\d+) TL harcama yapildi\\. Yer: (\\w+)\", text)",
+       "notes": [
+        "`match` adında bir değişken oluşturuluyor ve içine `re.search(r\"(\\d+,\\d+) TL harcama yapildi\\. Yer: (\\w+)\", t...` konuyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    if match is None:",
+       "notes": [
+        "Koşul: `match is None` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "        return None",
+       "notes": [
+        "Fonksiyon `None` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "    amount = float(match.group(1).replace(\",\", \".\"))",
+       "notes": [
+        "`amount` adında bir değişken oluşturuluyor ve içine `float(match.group(1).replace(\",\", \".\"))` konuyor."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "    return (amount, match.group(2))",
+       "notes": [
+        "Fonksiyon `(amount, match.group(2))` değerini geri verir ve burada biter."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "match",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `re.search(r\"(\\d+,\\d+) TL harcama yapildi\\. Yer: (\\w+)\", t...`."
+      },
+      {
+       "term": "amount",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `float(match.group(1).replace(\",\", \".\"))`."
+      },
+      {
+       "term": "text",
+       "kind": "parametre",
+       "desc": "`parse_sms` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "re",
+       "kind": "modül",
+       "desc": "Düzenli ifadeler: metinde kalıp arama."
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "parse_sms()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `text`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": ".search()",
+       "kind": "metot",
+       "desc": "Metinde kalıba uyan ilk yeri arar (re)."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "is",
+       "kind": "operatör",
+       "desc": "Aynı nesne mi? (genelde None ile kullanılır)"
+      },
+      {
+       "term": "None",
+       "kind": "değer",
+       "desc": "\"Hiçbir şey / boş\" anlamına gelen özel değer."
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": "float()",
+       "kind": "fonksiyon",
+       "desc": "Bir değeri ondalıklı sayıya çevirir."
+      },
+      {
+       "term": ".replace()",
+       "kind": "metot",
+       "desc": "Metindeki bir parçayı başkasıyla değiştirir."
+      },
+      {
+       "term": ".group()",
+       "kind": "metot",
+       "desc": "Bulunan eşleşmenin (ya da parantezli grubun) yazısını verir."
+      }
+     ]
+    }
+   },
+   "project_contribution": "SMS okuyucu",
+   "game_role": "Banka SMS'lerinden tutarı ve yeri otomatik çıkarır."
+  },
+  "otomasyon": {
+   "project_task": {
+    "id": "d18-po",
+    "title": "Mesajdan bilgi çıkarma",
+    "prompt": "Gelen mesajlardaki önemli bilgileri asistan bulsun. `re` modülüyle:\n\n- `find_emails(text)`: metindeki e-posta adreslerini liste olarak döndürsün.\n- `find_times(text)`: `14:30` gibi saatleri liste olarak döndürsün.",
+    "starter": "import re\n\n\ndef find_emails(text):\n    pass\n\n\ndef find_times(text):\n    pass\n",
+    "solution": "import re\n\n\ndef find_emails(text):\n    return re.findall(r\"[\\w.]+@[\\w.]+\\.\\w+\", text)\n\n\ndef find_times(text):\n    return re.findall(r\"\\d{1,2}:\\d{2}\", text)\n",
+    "hints": [
+     "re.findall(desen, metin) bütün eşleşmeleri liste olarak verir.",
+     "Saat deseni: \\d{1,2}:\\d{2}"
+    ],
+    "check": {
+     "python": "\nmsg = \"Toplantı 14:30'da, sunum 9:05'te. Soruların için ece@okul.edu.tr ya da can.demir@mail.com adresine yaz.\"\nassert find_emails(msg) == [\"ece@okul.edu.tr\", \"can.demir@mail.com\"], \"find_emails iki adresi de bulmalı.\"\nassert find_times(msg) == [\"14:30\", \"9:05\"], \"find_times iki saati de bulmalı.\"\nassert find_emails(\"adres yok\") == [] and find_times(\"saat yok\") == [], \"Bulamazsa boş liste döndürmeli.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "import re",
+       "notes": [
+        "`re` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "def find_emails(text):",
+       "notes": [
+        "`find_emails` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `text`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "    return re.findall(r\"[\\w.]+@[\\w.]+\\.\\w+\", text)",
+       "notes": [
+        "Fonksiyon `re.findall(r\"[\\w.]+@[\\w.]+\\.\\w+\", text)` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "def find_times(text):",
+       "notes": [
+        "`find_times` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `text`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "    return re.findall(r\"\\d{1,2}:\\d{2}\", text)",
+       "notes": [
+        "Fonksiyon `re.findall(r\"\\d{1,2}:\\d{2}\", text)` değerini geri verir ve burada biter."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "text",
+       "kind": "parametre",
+       "desc": "`find_emails` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "re",
+       "kind": "modül",
+       "desc": "Düzenli ifadeler: metinde kalıp arama."
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "find_emails()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `text`."
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": ".findall()",
+       "kind": "metot",
+       "desc": "Metinde kalıba uyan bütün parçaları liste olarak verir (re)."
+      },
+      {
+       "term": "find_times()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `text`."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Mesaj okuyucu",
+   "game_role": "Mesajların içindeki e-posta adreslerini ve saatleri otomatik bulur."
+  },
+  "web": {
+   "project_task": {
+    "id": "d18-pw",
+    "title": "Bağlantılar ve e-postalar",
+    "prompt": "Yazılarındaki bağlantıları ve e-posta adreslerini `re` modülüyle yakalayalım:\n\n- `find_links(text)`: metindeki `http://` veya `https://` ile başlayan adresleri liste olarak döndürsün (`re.findall`). Adreslerden sonra hep bir boşluk ya da metnin sonu geliyor.\n- `hide_emails(text)`: spam botları görmesin diye metindeki e-posta adreslerini `[gizli]` ile değiştirip yeni metni döndürsün (`re.sub`). E-postalar `ad@site.com` ya da `ad.soyad@site.org` gibi.",
+    "starter": "import re\n\n\ndef find_links(text):\n    pass\n\n\ndef hide_emails(text):\n    pass\n",
+    "solution": "import re\n\n\ndef find_links(text):\n    return re.findall(r\"https?://\\S+\", text)\n\n\ndef hide_emails(text):\n    return re.sub(r\"[\\w.]+@\\w+\\.\\w+\", \"[gizli]\", text)\n",
+    "hints": [
+     "Bağlantı deseni: r\"https?://\\S+\" (s? isteğe bağlı s, \\S boşluk olmayan karakter)",
+     "E-posta deseni: r\"[\\w.]+@\\w+\\.\\w+\""
+    ],
+    "check": {
+     "python": "\ntext = \"Projem https://github.com/ece ve blogum http://ece.dev/blog burada\"\nassert find_links(text) == [\"https://github.com/ece\", \"http://ece.dev/blog\"], \"find_links iki bağlantıyı da (http ve https) bulmalı.\"\nassert find_links(\"Bağlantı yok\") == [], \"Bağlantı yoksa boş liste döndürmeli.\"\nassert hide_emails(\"Bana yaz: ece@ornek.com ya da can.kaya@site.org\") == \"Bana yaz: [gizli] ya da [gizli]\", \"hide_emails iki e-postayı da [gizli] yapmalı.\"\nassert hide_emails(\"E-posta yok\") == \"E-posta yok\", \"E-posta yoksa metin aynı kalmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "import re",
+       "notes": [
+        "`re` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "def find_links(text):",
+       "notes": [
+        "`find_links` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `text`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "    return re.findall(r\"https?://\\S+\", text)",
+       "notes": [
+        "Fonksiyon `re.findall(r\"https?://\\S+\", text)` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "def hide_emails(text):",
+       "notes": [
+        "`hide_emails` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `text`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "    return re.sub(r\"[\\w.]+@\\w+\\.\\w+\", \"[gizli]\", text)",
+       "notes": [
+        "Fonksiyon `re.sub(r\"[\\w.]+@\\w+\\.\\w+\", \"[gizli]\", text)` değerini geri verir ve burada biter."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "text",
+       "kind": "parametre",
+       "desc": "`find_links` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "re",
+       "kind": "modül",
+       "desc": "Düzenli ifadeler: metinde kalıp arama."
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "find_links()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `text`."
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": ".findall()",
+       "kind": "metot",
+       "desc": "Metinde kalıba uyan bütün parçaları liste olarak verir (re)."
+      },
+      {
+       "term": "hide_emails()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `text`."
+      },
+      {
+       "term": ".sub()",
+       "kind": "metot",
+       "desc": "Kalıba uyan parçaları başka bir şeyle değiştirir (re)."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Bağlantı ve e-posta bulucu",
+   "game_role": "Yazılardaki bağlantıları bulur, e-posta adreslerini spam botlarından gizler."
+  },
+  "bot": {
+   "project_task": {
+    "id": "d18-pb",
+    "title": "Ad, sayı ve e-posta",
+    "prompt": "Akıllı asistanlar mesajdaki önemli bilgileri yakalar. `analyze(message)` `re` modülüyle bir **sözlük** döndürsün:\n\n- `\"name\"`: mesajda `adım Ece` gibi bir kalıp varsa ad (`re.search` ve bir grup: `adım (\\w+)`), yoksa `None`\n- `\"numbers\"`: mesajdaki bütün sayılar, **int** olarak bir liste (`re.findall`)\n- `\"email\"`: mesajdaki e-posta adresi, yoksa `None`\n\nÖrnek: `\"Merhaba, benim adım Ece. 2 bilet istiyorum, mailim ece@okul.com\"` için sonuç:\n\n```\n{'name': 'Ece', 'numbers': [2], 'email': 'ece@okul.com'}\n```",
+    "starter": "import re\n\n\ndef analyze(message):\n    pass\n",
+    "solution": "import re\n\n\ndef analyze(message):\n    name = re.search(r\"adım (\\w+)\", message)\n    email = re.search(r\"[\\w.]+@[\\w.]+\\w\", message)\n    numbers = [int(n) for n in re.findall(r\"\\d+\", message)]\n    return {\n        \"name\": name.group(1) if name else None,\n        \"numbers\": numbers,\n        \"email\": email.group() if email else None,\n    }\n",
+    "hints": [
+     "Ad için re.search(r\"adım (\\w+)\", message) ve .group(1); sayılar için re.findall(r\"\\d+\", message)",
+     "E-posta deseni: [\\w.]+@[\\w.]+\\w  (bulamazsa re.search None döndürür)"
+    ],
+    "check": {
+     "python": "\nr = analyze(\"Merhaba, benim adım Ece. 2 bilet istiyorum, mailim ece@okul.com\")\nassert isinstance(r, dict), \"analyze bir sözlük döndürmeli.\"\nassert r.get(\"name\") == \"Ece\", \"\\\"adım Ece\\\" kalıbından adı bulmalı.\"\nassert r.get(\"numbers\") == [2], \"numbers, sayıların int listesi olmalı: [2]\"\nassert r.get(\"email\") == \"ece@okul.com\", \"email, mesajdaki e-posta adresi olmalı.\"\nr = analyze(\"adım Can, 3 kişiyiz, saat 19 için masa ayır: can@mail.com\")\nassert r.get(\"name\") == \"Can\" and r.get(\"numbers\") == [3, 19] and r.get(\"email\") == \"can@mail.com\", \"Başka bir mesajda da ad, sayılar ve e-posta bulunmalı.\"\nassert analyze(\"selam\") == {\"name\": None, \"numbers\": [], \"email\": None}, \"Hiçbir şey bulamazsa name ve email None, numbers boş liste olmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "import re",
+       "notes": [
+        "`re` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "def analyze(message):",
+       "notes": [
+        "`analyze` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `message`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "    name = re.search(r\"adım (\\w+)\", message)",
+       "notes": [
+        "`name` adında bir değişken oluşturuluyor ve içine `re.search(r\"adım (\\w+)\", message)` konuyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    email = re.search(r\"[\\w.]+@[\\w.]+\\w\", message)",
+       "notes": [
+        "`email` adında bir değişken oluşturuluyor ve içine `re.search(r\"[\\w.]+@[\\w.]+\\w\", message)` konuyor."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "    numbers = [int(n) for n in re.findall(r\"\\d+\", message)]",
+       "notes": [
+        "`numbers` adında bir değişken oluşturuluyor ve içine `[int(n) for n in re.findall(r\"\\d+\", message)]` (liste üreteciyle kurulan liste) konuyor.",
+        "Tek satırda döngüyle yeni bir liste/dizi üretiliyor."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "    return {",
+       "notes": [
+        "Fonksiyon `{ \"name\": name.group(1) if name else None, \"numbers\": num...` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "        \"name\": name.group(1) if name else None,",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "        \"numbers\": numbers,",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "        \"email\": email.group() if email else None,",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "    }",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "name",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `re.search(r\"adım (\\w+)\", message)`."
+      },
+      {
+       "term": "email",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `re.search(r\"[\\w.]+@[\\w.]+\\w\", message)`."
+      },
+      {
+       "term": "numbers",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[int(n) for n in re.findall(r\"\\d+\", message)]`."
+      },
+      {
+       "term": "message",
+       "kind": "parametre",
+       "desc": "`analyze` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "re",
+       "kind": "modül",
+       "desc": "Düzenli ifadeler: metinde kalıp arama."
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "analyze()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `message`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": ".search()",
+       "kind": "metot",
+       "desc": "Metinde kalıba uyan ilk yeri arar (re)."
+      },
+      {
+       "term": "[... for ... in ...]",
+       "kind": "liste üreteci",
+       "desc": "Liste üreteci: [ifade for x in liste if koşul] ile tek satırda yeni liste."
+      },
+      {
+       "term": "int()",
+       "kind": "fonksiyon",
+       "desc": "Bir değeri tam sayıya çevirir, örneğin \"42\" yazısını 42 sayısına."
+      },
+      {
+       "term": ".findall()",
+       "kind": "metot",
+       "desc": "Metinde kalıba uyan bütün parçaları liste olarak verir (re)."
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": "A if ... else B",
+       "kind": "koşul",
+       "desc": "Tek satırlık koşul: A if koşul else B."
+      },
+      {
+       "term": ".group()",
+       "kind": "metot",
+       "desc": "Bulunan eşleşmenin (ya da parantezli grubun) yazısını verir."
+      },
+      {
+       "term": "None",
+       "kind": "değer",
+       "desc": "\"Hiçbir şey / boş\" anlamına gelen özel değer."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Bilgi yakalayıcı",
+   "game_role": "Mesajın içinden kullanıcının adını, sayıları ve e-posta adresini bulur."
+  },
+  "okul": {
+   "project_task": {
+    "id": "d18-pn",
+    "title": "Not mesajı okuyucu",
+    "prompt": "Okul sisteminden şöyle mesajlar geliyor: `Sınav sonuçların: Matematik: 85, Fizik: 70, Tarih: 90`\n\n`parse_grades(text)` fonksiyonu `re` modülüyle mesajdaki tüm `Ders: not` parçalarını bulsun ve bir sözlük döndürsün: `{\"Matematik\": 85, \"Fizik\": 70, \"Tarih\": 90}` (notlar tam sayı). Mesajda hiç not yoksa boş sözlük `{}` döndürsün.",
+    "starter": "import re\n\n\ndef parse_grades(text):\n    pass\n",
+    "solution": "import re\n\n\ndef parse_grades(text):\n    grades = {}\n    for lesson, grade in re.findall(r\"(\\w+): (\\d+)\", text):\n        grades[lesson] = int(grade)\n    return grades\n",
+    "hints": [
+     "Desen: (\\w+): (\\d+) iki grup yakalar: ders ve not.",
+     "Desende iki grup varsa re.findall (ders, not) ikililerinden bir liste verir."
+    ],
+    "check": {
+     "python": "\nassert parse_grades(\"Sınav sonuçların: Matematik: 85, Fizik: 70, Tarih: 90\") == {\"Matematik\": 85, \"Fizik\": 70, \"Tarih\": 90}, \"Örnek mesaj için üç dersin notunu sözlükte döndürmeli (notlar int).\"\nassert parse_grades(\"Sonuçlar -> Kimya: 100; Müzik: 45 (tebrikler)\") == {\"Kimya\": 100, \"Müzik\": 45}, \"Başka bir mesajla da çalışmalı.\"\nassert parse_grades(\"Henüz not girilmedi\") == {}, \"Hiç not yoksa boş sözlük döndürmeli.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "import re",
+       "notes": [
+        "`re` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "def parse_grades(text):",
+       "notes": [
+        "`parse_grades` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `text`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "    grades = {}",
+       "notes": [
+        "`grades` adında bir değişken oluşturuluyor ve içine `{}` (sözlük (anahtar: değer)) konuyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    for lesson, grade in re.findall(r\"(\\w+): (\\d+)\", text):",
+       "notes": [
+        "Döngü: `re.findall(r\"(\\w+): (\\d+)\", text)` içindeki her eleman sırayla `lesson, grade` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "        grades[lesson] = int(grade)",
+       "notes": [
+        "`grades[...]` konumundaki değer `int(grade)` ile değiştiriliyor."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "    return grades",
+       "notes": [
+        "Fonksiyon `grades` değerini geri verir ve burada biter."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "grades",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `{}`."
+      },
+      {
+       "term": "lesson",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `re.findall(r\"(\\w+): (\\d+)\", text)` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "grade",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `re.findall(r\"(\\w+): (\\d+)\", text)` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "text",
+       "kind": "parametre",
+       "desc": "`parse_grades` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "re",
+       "kind": "modül",
+       "desc": "Düzenli ifadeler: metinde kalıp arama."
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "parse_grades()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `text`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": ".findall()",
+       "kind": "metot",
+       "desc": "Metinde kalıba uyan bütün parçaları liste olarak verir (re)."
+      },
+      {
+       "term": "int()",
+       "kind": "fonksiyon",
+       "desc": "Bir değeri tam sayıya çevirir, örneğin \"42\" yazısını 42 sayısına."
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Not mesajı okuyucu",
+   "game_role": "Okuldan gelen mesajlardan ders notlarını otomatik çıkarır."
+  }
+ }
+}

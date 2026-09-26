@@ -1,0 +1,223 @@
+{
+  "kurs": "python",
+  "gun": 28,
+  "baslik": "API kullanmak",
+  "maskot": "piko",
+  "ozet": "Piko, Python Dağı'ndaki kamp evinin telsiziyle API kavramını; JSON cevaplarını json.loads ile açmayı, json.dumps ile göndermeyi, durum kodlarını ve iç içe veriyi anlatıyor.",
+  "hedef_sure_sn": 146,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 14,
+      "anlatim": "Selam, ben Piko! Python Dağı'nın yarısındaki kamp evinde bir telsiz var. Hava istasyonunu arıyorum: Zirvede hava nasıl? İstasyon kısa ve düzenli bir cevap veriyor. Programlar da birbiriyle böyle konuşur. Bu kurallara API denir!",
+      "ekran": {
+        "baslik": "Gün 28: API kullanmak",
+        "maddeler": [
+          "Python Dağı",
+          "API, JSON, durum kodları"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "yonetmen_notu": "Arka plan: Python Dağı bölge görseli (gorseller/python/harita/dag.webp). Dosya repoda henüz yok; eklenince ekran.gorsel alanına yazılmalı. Kamp evinde cızırdayan bir telsiz, uzakta bir hava istasyonu."
+    },
+    {
+      "no": 2,
+      "tur": "anlatim",
+      "sure_sn": 14,
+      "anlatim": "API, bir programın başka bir programdan bilgi istemesinin kurallarıdır. Restoranı düşün: mutfağa girmezsin, garsona sipariş verirsin, garson yemeği getirir. API o garsondur.",
+      "ekran": {
+        "baslik": "API nedir?",
+        "maddeler": [
+          "Sen → garson (API) → mutfak (sunucu)",
+          "Hava durumu, döviz kuru, oyun skorları"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "API'ler çoğunlukla JSON ile cevap verir. JSON bir sözlüğe benzer ama aslında bir yazıdır. json.loads onu gerçek bir sözlüğe çeviriyor. JSON'daki küçük harfli true da Python'da büyük harfli True oluyor.",
+      "ekran": {
+        "baslik": "JSON'u aç: json.loads",
+        "kod": "import json\n\nresponse = '{\"sehir\": \"İzmir\", \"derece\": 27, \"gunesli\": true}'\ndata = json.loads(response)\nprint(type(data))\nprint(f\"{data['sehir']}: {data['derece']} derece\")\nprint(\"Güneşli mi?\", data[\"gunesli\"])\n",
+        "vurgu_satirlari": [
+          4,
+          7
+        ],
+        "dil": "python",
+        "cikti": "<class 'dict'>\nİzmir: 27 derece\nGüneşli mi? True"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "Tersi de var: json.dumps sözlüğü JSON yazısına çevirir, API'ye veri gönderirken lazım olur. İlk satırda ö harfi bir kaçış koduna dönüştü. ensure_ascii False dersen Türkçe harfler olduğu gibi kalır.",
+      "ekran": {
+        "baslik": "Sözlükten JSON: json.dumps",
+        "kod": "import json\n\norder = {\"urun\": \"fener\", \"adet\": 2, \"ödendi\": False}\nprint(json.dumps(order))\nprint(json.dumps(order, ensure_ascii=False))\n",
+        "vurgu_satirlari": [
+          4,
+          5
+        ],
+        "dil": "python",
+        "cikti": "{\"urun\": \"fener\", \"adet\": 2, \"\\u00f6dendi\": false}\n{\"urun\": \"fener\", \"adet\": 2, \"ödendi\": false}"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "anlatim",
+      "sure_sn": 16,
+      "anlatim": "Kendi bilgisayarında internetten veri almak için requests paketi kullanılır. Önce durum koduna bakarsın: iki yüz ise her şey yolunda, cevabı json ile açarsın. Değilse hatayı gösterirsin. Bu sitede internete çıkamadığımız için cevaplar hazır gelecek.",
+      "ekran": {
+        "baslik": "requests ile istek (kendi bilgisayarında)",
+        "kod": "import requests\n\nr = requests.get(\"https://api.ornek.com/hava?sehir=izmir\")\nif r.status_code == 200:\n    data = r.json()\n    print(data[\"derece\"])\nelse:\n    print(\"Hata:\", r.status_code)\n",
+        "vurgu_satirlari": [
+          4
+        ],
+        "cikti": "27",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": false,
+      "yonetmen_notu": "İnternet gerektirdiği için çalıştırılmaz; çıktı örnek API cevabına göre beklenen değerdir."
+    },
+    {
+      "no": 6,
+      "tur": "soru",
+      "sure_sn": 11,
+      "anlatim": "Gerçek cevaplar çoğu zaman iç içedir: sözlüğün içinde liste, listenin içinde sözlük. Sence bu satır hangi sayıyı yazdırır?",
+      "ekran": {
+        "baslik": "Sence ne yazdırır?",
+        "kod": "import json\n\nresponse = '{\"sehir\": \"Van\", \"gunler\": [{\"gun\": \"Pzt\", \"derece\": 18}, {\"gun\": \"Sal\", \"derece\": 21}]}'\ndata = json.loads(response)\nprint(data[\"gunler\"][1][\"derece\"])\n",
+        "vurgu_satirlari": [
+          5
+        ],
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 7,
+      "tur": "cikti",
+      "sure_sn": 12,
+      "anlatim": "Yirmi bir! Adım adım indik: önce günler listesi, sonra bir numaralı eleman, yani salı, en son da derece. Sayma sıfırdan başlıyor, unutma.",
+      "ekran": {
+        "baslik": "Cevap: adım adım in",
+        "kod": "import json\n\nresponse = '{\"sehir\": \"Van\", \"gunler\": [{\"gun\": \"Pzt\", \"derece\": 18}, {\"gun\": \"Sal\", \"derece\": 21}]}'\ndata = json.loads(response)\nprint(data[\"gunler\"][1][\"derece\"])\n",
+        "maddeler": [
+          "data[\"gunler\"] → liste",
+          "[1] → Salı",
+          "[\"derece\"] → 21"
+        ],
+        "dil": "python",
+        "cikti": "21"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "hata",
+      "sure_sn": 12,
+      "anlatim": "Sık hata: JSON yazısını açmadan sözlük gibi kullanmak. response hâlâ bir yazı ve yazıya anahtarla ulaşamazsın, TypeError alırsın. Önce json.loads ile aç!",
+      "ekran": {
+        "baslik": "Sık hata: açılmamış JSON",
+        "kod": "response = '{\"sehir\": \"İzmir\", \"derece\": 27}'\nprint(response[\"derece\"])\n",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "TypeError: string indices must be integers, not 'str'",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "gorev",
+      "sure_sn": 13,
+      "anlatim": "Görevlerde hava durumu cevabını açacak, bir ülke listesinden isimleri toplayacak ve durum koduna göre doğru mesajı yazdıracaksın. Projede de görev servisinden açık görevleri çekiyorsun.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Hava durumu",
+          "Görev 2: Ülke listesi",
+          "Görev 3: Durum kontrolü",
+          "Challenge: Sipariş gönder",
+          "Proje: Görev servisi"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 10,
+      "tur": "ozet",
+      "sure_sn": 11,
+      "anlatim": "Özetle: API programların konuşma kuralıdır. Cevabı json.loads ile aç, durum kodunu kontrol et, iç içe veride adım adım in.",
+      "ekran": {
+        "baslik": "Bugün öğrendiklerin",
+        "maddeler": [
+          "API = programlar arası garson",
+          "json.loads ve json.dumps",
+          "Önce status_code, sonra veri"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "kapanis",
+      "sure_sn": 13,
+      "anlatim": "Telsizi ustaca kullandın! Yarın rolleri değiştiriyoruz: soruları cevaplayan istasyon biz olacağız. GET, POST, PUT ve DELETE ile kendi API'mizi yazacağız. Görüşürüz!",
+      "ekran": {
+        "baslik": "Yarın: API yapmak",
+        "maddeler": [
+          "Kendi API'n",
+          "GET, POST, PUT, DELETE"
+        ]
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

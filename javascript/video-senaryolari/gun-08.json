@@ -1,0 +1,165 @@
+{
+  "kurs": "javascript",
+  "gun": 8,
+  "baslik": "Fonksiyonlar",
+  "maskot": "kodi",
+  "ozet": "Döngü Ayı'ndan ayrılmadan komutları fonksiyonlara paketliyoruz: tanımlamak ve çağırmak, parametreler, return ile sonuç döndürmek ve varsayılan parametre.",
+  "hedef_sure_sn": 145,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 11,
+      "anlatim": "Selam, ben Kodi! Döngü Ayı'ndaki son günümüz. Ayrılmadan önce roketine yeni bir yetenek kazandırıyoruz: komutları bir ad altında paketleyip istediğin kadar çağırmak.",
+      "ekran": {
+        "baslik": "Gün 8: Fonksiyonlar",
+        "gorsel": "gorseller/javascript/bolgeler/ay.webp"
+      },
+      "maskot": { "poz": "el-sallama", "konum": "sag" }
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 15,
+      "anlatim": "function kelimesiyle bir fonksiyon tanımlarız. Ama tanımlamak onu çalıştırmaz! Adını parantezle yazıp çağırınca çalışır. İki kez çağırdık, iki kez geri sayım yaptı.",
+      "ekran": {
+        "baslik": "Tanımlamak ve çağırmak",
+        "kod": "function countdown() {\n  console.log(\"3... 2... 1...\");\n  console.log(\"Ateşle!\");\n}\n\ncountdown();\ncountdown();\n",
+        "dil": "js",
+        "vurgu_satirlari": [1, 6, 7],
+        "cikti": "3... 2... 1...\nAteşle!\n3... 2... 1...\nAteşle!"
+      },
+      "maskot": { "poz": "isaret", "konum": "alt-sag" },
+      "calistir": true
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "Parantezin içine parametre yazarsak fonksiyon her seferinde farklı değerle çalışır. Çağırırken verdiğimiz değerler sırayla name ve planet'e yerleşir.",
+      "ekran": {
+        "baslik": "Parametreler",
+        "kod": "function greet(name, planet) {\n  console.log(`Merhaba ${name}, ${planet}'a hoş geldin!`);\n}\n\ngreet(\"Deniz\", \"Mars\");\ngreet(\"Ada\", \"Ay\");\n",
+        "dil": "js",
+        "vurgu_satirlari": [1, 5],
+        "cikti": "Merhaba Deniz, Mars'a hoş geldin!\nMerhaba Ada, Ay'a hoş geldin!"
+      },
+      "maskot": { "poz": "konusma", "konum": "alt-sag" },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "return, sonucu çağrıldığı yere geri verir. Sonucu bir değişkene koyup başka hesapta kullanabiliriz. return çalışınca fonksiyon hemen biter, altındaki satırlar çalışmaz.",
+      "ekran": {
+        "baslik": "return: sonucu geri vermek",
+        "kod": "function travelTime(distance, speed) {\n  return distance / speed;\n}\n\nconst hours = travelTime(384400, 40000);\nconsole.log(Math.round(hours));\n",
+        "dil": "js",
+        "vurgu_satirlari": [2, 5],
+        "cikti": "10"
+      },
+      "maskot": { "poz": "isaret", "konum": "alt-sag" },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "Bir parametre verilmezse kullanılacak değeri eşittirle yazabiliriz. Kartal'a yakıt vermedik, varsayılan yüz kullanıldı. Şahin'e ise altmış verdik.",
+      "ekran": {
+        "baslik": "Varsayılan parametre",
+        "kod": "function launch(ship, fuel = 100) {\n  return `${ship} ${fuel} litre yakıtla kalkıyor.`;\n}\n\nconsole.log(launch(\"Kartal\"));\nconsole.log(launch(\"Şahin\", 60));\n",
+        "dil": "js",
+        "vurgu_satirlari": [1],
+        "cikti": "Kartal 100 litre yakıtla kalkıyor.\nŞahin 60 litre yakıtla kalkıyor."
+      },
+      "maskot": { "poz": "konusma", "konum": "alt-sag" },
+      "calistir": true
+    },
+    {
+      "no": 6,
+      "tur": "hata",
+      "sure_sn": 15,
+      "anlatim": "Çok sık yapılan hata: return yerine console.log yazmak. Fonksiyon ekrana 10 yazdı ama sonucu geri vermedi. Bu yüzden result undefined oldu. Sonuç lazımsa return kullan!",
+      "ekran": {
+        "baslik": "console.log, return değildir",
+        "kod": "function double(n) {\n  console.log(n * 2);\n}\n\nconst result = double(5);\nconsole.log(\"Sonuç:\", result);\n",
+        "dil": "js",
+        "vurgu_satirlari": [2, 6],
+        "cikti": "10\nSonuç: undefined"
+      },
+      "maskot": { "poz": "uzgun", "konum": "sag" },
+      "calistir": false
+    },
+    {
+      "no": 7,
+      "tur": "soru",
+      "sure_sn": 10,
+      "anlatim": "welcome fonksiyonunu iki kez çağırıyoruz, ikincisinde hiç ad vermeden. Sence ikinci satırda ne yazar?",
+      "ekran": {
+        "baslik": "Sence ne yazdırır?",
+        "kod": "function welcome(name = \"Kaptan\") {\n  return `Hoş geldin, ${name}!`;\n}\n\nconsole.log(welcome(\"Deniz\"));\nconsole.log(welcome());\n",
+        "dil": "js"
+      },
+      "maskot": { "poz": "dusunme", "konum": "sag" }
+    },
+    {
+      "no": 8,
+      "tur": "cikti",
+      "sure_sn": 9,
+      "anlatim": "İkinci çağrıda ad verilmediği için varsayılan değer, yani Kaptan kullanıldı. Hoş geldin, Kaptan!",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "function welcome(name = \"Kaptan\") {\n  return `Hoş geldin, ${name}!`;\n}\n\nconsole.log(welcome(\"Deniz\"));\nconsole.log(welcome());\n",
+        "dil": "js",
+        "vurgu_satirlari": [6],
+        "cikti": "Hoş geldin, Deniz!\nHoş geldin, Kaptan!"
+      },
+      "maskot": { "poz": "mutlu", "konum": "sag" },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "gorev",
+      "sure_sn": 12,
+      "anlatim": "Görevlerin: güneş panelinin alanını döndüren bir fonksiyon yaz, yakıt durumunu metinle anlatan bir gösterge yap ve varsayılan geri sayımlı bir kalkış mesajı hazırla.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Alan hesaplayıcı",
+          "Görev 2: Yakıt göstergesi",
+          "Görev 3: Kalkış mesajı"
+        ]
+      },
+      "maskot": { "poz": "isaret", "konum": "sol" }
+    },
+    {
+      "no": 10,
+      "tur": "ozet",
+      "sure_sn": 11,
+      "anlatim": "Özet: fonksiyonu tanımla, sonra çağır. Parametrelerle farklı değerler ver, return ile sonucu geri al. İyi bir fonksiyon tek bir iş yapar.",
+      "ekran": {
+        "baslik": "Özet",
+        "maddeler": [
+          "function ad() { ... } ve ad() ile çağır",
+          "Parametreler ve varsayılan değerler",
+          "return sonucu geri verir, fonksiyonu bitirir"
+        ]
+      },
+      "maskot": { "poz": "on", "konum": "sag" }
+    },
+    {
+      "no": 11,
+      "tur": "kapanis",
+      "sure_sn": 11,
+      "anlatim": "Döngü Ayı'nı tamamladın, bravo! Yarın Fonksiyon Nebulası'na dalıyoruz. Ok fonksiyonlarını ve bir şeyleri hatırlayan fonksiyonları keşfedeceğiz.",
+      "ekran": {
+        "baslik": "Yarın: Ok fonksiyonları ve kapsam",
+        "gorsel": "gorseller/javascript/bolgeler/nebula.webp"
+      },
+      "maskot": { "poz": "tebrik", "konum": "sag" },
+      "yonetmen_notu": "Roket Ay'dan uzaklaşır, renkli nebula görünür."
+    }
+  ]
+}

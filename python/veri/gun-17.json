@@ -1,0 +1,1532 @@
+{
+ "day": 17,
+ "title": "Hata yönetimi",
+ "region": "ada",
+ "project_contribution": "Sağlam komutlar",
+ "game_role": "Anlaşılmayan yazılı komutları senin kodun yakalar.",
+ "xp_complete": 150,
+ "objective": "try, except, else ve finally ile hataları yakalamak; raise ile kendi hatanı oluşturmak",
+ "story": "Keşif Adası'nda köprüler çürük olabilir. Akıllı bir kaşif her adımda düşmemek için bir ip bağlar. Python'da da bu ip var: bir hata olursa program çökmek yerine ipe tutunur ve ne yapacağını bilir. Bugün **hata yönetimini** öğreniyoruz.",
+ "sections": [
+  {
+   "title": "try ve except",
+   "body": "Hata çıkabilecek kodu `try` içine, hata olursa ne yapılacağını `except` içine yazarız:\n\n```python\ntext = \"on iki\"\ntry:\n    age = int(text)\n    print(\"Yaşın:\", age)\nexcept ValueError:\n    print(\"Lütfen rakamla yaz.\")\n```\n\nHata olursa program çökmez; `except` bloğu çalışır ve devam eder."
+  },
+  {
+   "title": "Hangi hatayı yakalıyorsun?",
+   "body": "`except` yanına hata tipini yaz. Farklı hatalar için farklı cevaplar verebilirsin:\n\n```python\ntry:\n    result = 10 / int(text)\nexcept ValueError:\n    print(\"Sayı değil!\")\nexcept ZeroDivisionError:\n    print(\"Sıfıra bölünmez!\")\n```\n\nHata mesajını görmek istersen: `except ValueError as err: print(err)`\n\nSadece `except:` yazıp her hatayı yakalamak kolaydır ama gerçek hataları gizler. Beklediğin hatayı yaz."
+  },
+  {
+   "title": "else ve finally",
+   "body": "- `else`: hiç hata olmazsa çalışır\n- `finally`: hata olsa da olmasa da **her zaman** çalışır\n\n```python\ntry:\n    n = int(\"5\")\nexcept ValueError:\n    print(\"Hata!\")\nelse:\n    print(\"Başarılı:\", n)\nfinally:\n    print(\"Kontrol bitti.\")\n```"
+  },
+  {
+   "title": "raise: kendi hatanı fırlat",
+   "body": "Bazen yanlış bir değer gelince **bilerek** hata vermek isteriz:\n\n```python\ndef set_hp(value):\n    if value < 0:\n        raise ValueError(\"Can negatif olamaz\")\n    return value\n```\n\nBöylece hata erken, anlaşılır bir mesajla yakalanır."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Çökmeyen program",
+   "code": "answers = [\"12\", \"on iki\", \"7\"]\nfor text in answers:\n    try:\n        age = int(text)\n        print(\"Yaş:\", age)\n    except ValueError:\n        print(f\"'{text}' bir sayı değil.\")\n",
+   "note": ""
+  },
+  {
+   "title": "İki hata tipi",
+   "code": "for text in [\"5\", \"0\", \"beş\"]:\n    try:\n        print(100 / int(text))\n    except ValueError:\n        print(\"Sayı değil!\")\n    except ZeroDivisionError:\n        print(\"Sıfıra bölünmez!\")\n",
+   "note": ""
+  },
+  {
+   "title": "raise ve yakalama",
+   "code": "def set_hp(value):\n    if value < 0:\n        raise ValueError(\"Can negatif olamaz\")\n    return value\n\ntry:\n    set_hp(-5)\nexcept ValueError as err:\n    print(\"Yakalandı:\", err)\nfinally:\n    print(\"Kontrol bitti.\")\n",
+   "note": ""
+  }
+ ],
+ "tasks": [
+  {
+   "id": "d17-t1",
+   "title": "Güvenli sayı",
+   "prompt": "`text` sayıya çevrilebiliyorsa iki katını yazdır. Çevrilemiyorsa program çökmesin, `Bu bir sayı değil!` yazsın.",
+   "starter": "text = \"abc\"\n\nnumber = int(text)\nprint(number * 2)\n",
+   "solution": "text = \"abc\"\n\ntry:\n    number = int(text)\n    print(number * 2)\nexcept ValueError:\n    print(\"Bu bir sayı değil!\")\n",
+   "hints": [
+    "int(text) satırını try: bloğunun içine al.",
+    "except ValueError: altına mesajı yaz."
+   ],
+   "check": {
+    "code_contains": [
+     "try",
+     "except"
+    ],
+    "python": "\nout, _ = _run(_set(_code, \"text\", \"21\"))\nassert \"42\" in out, \"text '21' iken 42 yazmalı.\"\nout, _ = _run(_set(_code, \"text\", \"yirmi\"))\nassert \"Bu bir sayı değil!\" in out, \"Sayı olmayan yazıda 'Bu bir sayı değil!' yazmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "text = \"abc\"",
+      "notes": [
+       "`text` adında bir değişken oluşturuluyor ve içine `\"abc\"` (metin (str)) konuyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "try:",
+      "notes": [
+       "`try`: altındaki kod denenir; hata çıkarsa program çökmez, `except` kısmı çalışır."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "    number = int(text)",
+      "notes": [
+       "`number` adında bir değişken oluşturuluyor ve içine `int(text)` konuyor."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "    print(number * 2)",
+      "notes": [
+       "`print(number * 2)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     },
+     {
+      "n": 6,
+      "code": "except ValueError:",
+      "notes": [
+       "`except ValueError`: bu hata olursa aşağıdaki satırlar çalışır."
+      ]
+     },
+     {
+      "n": 7,
+      "code": "    print(\"Bu bir sayı değil!\")",
+      "notes": [
+       "`print(\"Bu bir sayı değil!\")`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "text",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `\"abc\"`."
+     },
+     {
+      "term": "number",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `int(text)`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "try",
+      "kind": "anahtar kelime",
+      "desc": "Hata çıkabilecek kodu dener; hata çıkarsa except bloğu çalışır."
+     },
+     {
+      "term": "int()",
+      "kind": "fonksiyon",
+      "desc": "Bir değeri tam sayıya çevirir, örneğin \"42\" yazısını 42 sayısına."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     },
+     {
+      "term": "*",
+      "kind": "operatör",
+      "desc": "Çarpma; metni ya da listeyi tekrarlama (\"*\" * 3 → \"***\")."
+     },
+     {
+      "term": "except",
+      "kind": "anahtar kelime",
+      "desc": "try içinde hata olursa burası çalışır; program çökmez."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d17-t2",
+   "title": "Güvenli bölme",
+   "prompt": "`safe_divide(a, b)` bölmenin sonucunu döndürsün. `b` sıfırsa hata vermek yerine `None` döndürsün. `if` değil, `try` kullan.",
+   "starter": "def safe_divide(a, b):\n    return a / b\n\nprint(safe_divide(10, 2))\nprint(safe_divide(10, 0))\n",
+   "solution": "def safe_divide(a, b):\n    try:\n        return a / b\n    except ZeroDivisionError:\n        return None\n\nprint(safe_divide(10, 2))\nprint(safe_divide(10, 0))\n",
+   "hints": [
+    "try: return a / b",
+    "except ZeroDivisionError: return None"
+   ],
+   "check": {
+    "code_contains": [
+     "try",
+     "ZeroDivisionError"
+    ],
+    "python": "\nassert safe_divide(10, 2) == 5, \"safe_divide(10, 2) 5 döndürmeli.\"\nassert safe_divide(1, 0) is None, \"safe_divide(1, 0) None döndürmeli.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "def safe_divide(a, b):",
+      "notes": [
+       "`safe_divide` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `a`, `b`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+      ]
+     },
+     {
+      "n": 2,
+      "code": "    try:",
+      "notes": [
+       "`try`: altındaki kod denenir; hata çıkarsa program çökmez, `except` kısmı çalışır."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "        return a / b",
+      "notes": [
+       "Fonksiyon `a / b` değerini geri verir ve burada biter."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "    except ZeroDivisionError:",
+      "notes": [
+       "`except ZeroDivisionError`: bu hata olursa aşağıdaki satırlar çalışır."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "        return None",
+      "notes": [
+       "Fonksiyon `None` değerini geri verir ve burada biter."
+      ]
+     },
+     {
+      "n": 7,
+      "code": "print(safe_divide(10, 2))",
+      "notes": [
+       "`print(safe_divide(10, 2))`: parantez içindeki değeri ekrana yazdırır.",
+       "`safe_divide(...)`: senin tanımladığın fonksiyonu çağırır."
+      ]
+     },
+     {
+      "n": 8,
+      "code": "print(safe_divide(10, 0))",
+      "notes": [
+       "`print(safe_divide(10, 0))`: parantez içindeki değeri ekrana yazdırır.",
+       "`safe_divide(...)`: senin tanımladığın fonksiyonu çağırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "a",
+      "kind": "parametre",
+      "desc": "`safe_divide` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+     },
+     {
+      "term": "b",
+      "kind": "parametre",
+      "desc": "`safe_divide` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+     },
+     {
+      "term": "def",
+      "kind": "anahtar kelime",
+      "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+     },
+     {
+      "term": "safe_divide()",
+      "kind": "senin fonksiyonun",
+      "desc": "Kodda tanımlanan fonksiyon; parametreleri: `a`, `b`."
+     },
+     {
+      "term": "try",
+      "kind": "anahtar kelime",
+      "desc": "Hata çıkabilecek kodu dener; hata çıkarsa except bloğu çalışır."
+     },
+     {
+      "term": "return",
+      "kind": "anahtar kelime",
+      "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+     },
+     {
+      "term": "/",
+      "kind": "operatör",
+      "desc": "Bölme; sonuç her zaman ondalıklı sayıdır."
+     },
+     {
+      "term": "except",
+      "kind": "anahtar kelime",
+      "desc": "try içinde hata olursa burası çalışır; program çökmez."
+     },
+     {
+      "term": "None",
+      "kind": "değer",
+      "desc": "\"Hiçbir şey / boş\" anlamına gelen özel değer."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d17-t3",
+   "title": "Yaşını sor",
+   "prompt": "Kullanıcıdan yaşını iste. Rakamla yazarsa `Yaşın: 12`, yazamazsa `Lütfen rakamla yaz.` göster. Girdi kutusuna farklı cevaplar yazıp dene.",
+   "starter": "age = int(input(\"Kaç yaşındasın? \"))\nprint(\"Yaşın:\", age)\n",
+   "solution": "try:\n    age = int(input(\"Kaç yaşındasın? \"))\n    print(\"Yaşın:\", age)\nexcept ValueError:\n    print(\"Lütfen rakamla yaz.\")\n",
+   "hints": [
+    "input satırını try içine al.",
+    "except ValueError: ile yakala."
+   ],
+   "check": {
+    "python": "\nout, _ = _run(_code, [\"12\"])\nassert \"Yaşın: 12\" in out, \"Cevap '12' iken 'Yaşın: 12' yazmalı.\"\nout, _ = _run(_code, [\"on iki\"])\nassert \"Lütfen rakamla yaz.\" in out, \"Cevap 'on iki' iken 'Lütfen rakamla yaz.' yazmalı.\"\n"
+   },
+   "xp": 50,
+   "inputs": [
+    "on iki"
+   ],
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "try:",
+      "notes": [
+       "`try`: altındaki kod denenir; hata çıkarsa program çökmez, `except` kısmı çalışır."
+      ]
+     },
+     {
+      "n": 2,
+      "code": "    age = int(input(\"Kaç yaşındasın? \"))",
+      "notes": [
+       "`age` adında bir değişken oluşturuluyor ve içine `int(input(\"Kaç yaşındasın? \"))` konuyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "    print(\"Yaşın:\", age)",
+      "notes": [
+       "`print(\"Yaşın:\", age)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "except ValueError:",
+      "notes": [
+       "`except ValueError`: bu hata olursa aşağıdaki satırlar çalışır."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "    print(\"Lütfen rakamla yaz.\")",
+      "notes": [
+       "`print(\"Lütfen rakamla yaz.\")`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "age",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `int(input(\"Kaç yaşındasın? \"))`."
+     },
+     {
+      "term": "try",
+      "kind": "anahtar kelime",
+      "desc": "Hata çıkabilecek kodu dener; hata çıkarsa except bloğu çalışır."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "int()",
+      "kind": "fonksiyon",
+      "desc": "Bir değeri tam sayıya çevirir, örneğin \"42\" yazısını 42 sayısına."
+     },
+     {
+      "term": "input()",
+      "kind": "fonksiyon",
+      "desc": "Kullanıcıdan bir satır yazı ister ve onu metin (str) olarak geri verir."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     },
+     {
+      "term": "except",
+      "kind": "anahtar kelime",
+      "desc": "try içinde hata olursa burası çalışır; program çökmez."
+     }
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "id": "d17-c",
+  "title": "raise ile koru",
+  "prompt": "`set_level(level)` 1 ile 10 arasındaki seviyeleri döndürsün. Bunun dışındaki bir değer gelirse `ValueError` fırlatsın.",
+  "starter": "def set_level(level):\n    return level\n\nprint(set_level(3))\n",
+  "solution": "def set_level(level):\n    if level < 1 or level > 10:\n        raise ValueError(\"Seviye 1 ile 10 arasında olmalı\")\n    return level\n\nprint(set_level(3))\n",
+  "hints": [
+   "if level < 1 or level > 10:",
+   "raise ValueError(\"...\")"
+  ],
+  "check": {
+   "code_contains": [
+    "raise"
+   ],
+   "python": "\nassert set_level(1) == 1 and set_level(10) == 10, \"1 ve 10 geçerli seviyeler.\"\nfor bad in (0, 11, -3):\n    try:\n        set_level(bad)\n    except ValueError:\n        pass\n    else:\n        raise AssertionError(\"set_level(\" + str(bad) + \") ValueError fırlatmalı.\")\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "def set_level(level):",
+     "notes": [
+      "`set_level` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `level`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+     ]
+    },
+    {
+     "n": 2,
+     "code": "    if level < 1 or level > 10:",
+     "notes": [
+      "Koşul: `level < 1 or level > 10` doğruysa altındaki girintili satırlar çalışır."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "        raise ValueError(\"Seviye 1 ile 10 arasında olmalı\")",
+     "notes": [
+      "`raise ValueError(\"Seviye 1 ile 10 arasında olmalı\")`: bilerek hata oluşturur."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "    return level",
+     "notes": [
+      "Fonksiyon `level` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "print(set_level(3))",
+     "notes": [
+      "`print(set_level(3))`: parantez içindeki değeri ekrana yazdırır.",
+      "`set_level(...)`: senin tanımladığın fonksiyonu çağırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "level",
+     "kind": "parametre",
+     "desc": "`set_level` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+    },
+    {
+     "term": "def",
+     "kind": "anahtar kelime",
+     "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+    },
+    {
+     "term": "set_level()",
+     "kind": "senin fonksiyonun",
+     "desc": "Kodda tanımlanan fonksiyon; parametreleri: `level`."
+    },
+    {
+     "term": "if",
+     "kind": "anahtar kelime",
+     "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+    },
+    {
+     "term": "or",
+     "kind": "operatör",
+     "desc": "\"veya\": koşullardan biri doğruysa True."
+    },
+    {
+     "term": "<",
+     "kind": "operatör",
+     "desc": "Küçük mü?"
+    },
+    {
+     "term": ">",
+     "kind": "operatör",
+     "desc": "Büyük mü?"
+    },
+    {
+     "term": "raise",
+     "kind": "anahtar kelime",
+     "desc": "Bilerek bir hata oluşturur."
+    },
+    {
+     "term": "ValueError()",
+     "kind": "fonksiyon",
+     "desc": "Değer uygun olmadığında oluşan hata türü."
+    },
+    {
+     "term": "return",
+     "kind": "anahtar kelime",
+     "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    }
+   ]
+  }
+ },
+ "project_task": {
+  "id": "d17-p",
+  "title": "Sağlam komutlar",
+  "prompt": "Oyuncu kaç adım gideceğini yazıyor ama bazen harf yazıyor. `commands` listesindeki her komutu sayıya çevirmeye çalış:\n\n- Sayıysa `moved`'a ekle.\n- Değilse `'iki' anlaşılmadı` yazdır ve devam et.\n- En sonda `Toplam adım: 8` yazdır.",
+  "starter": "commands = [\"3\", \"iki\", \"5\", \"hop\"]\nmoved = 0\n\n# Her komutu dene\n\nprint(f\"Toplam adım: {moved}\")\n",
+  "solution": "commands = [\"3\", \"iki\", \"5\", \"hop\"]\nmoved = 0\n\nfor c in commands:\n    try:\n        moved += int(c)\n    except ValueError:\n        print(f\"'{c}' anlaşılmadı\")\n\nprint(f\"Toplam adım: {moved}\")\n",
+  "hints": [
+   "for c in commands: içinde try kullan.",
+   "except ValueError: içinde mesajı yazdır."
+  ],
+  "check": {
+   "code_contains": [
+    "try",
+    "except"
+   ],
+   "python": "\nout, g = _run(_set(_code, \"commands\", [\"10\", \"x\", \"2\", \"üç\"]))\nassert g.get(\"moved\") == 12, \"moved sadece sayı olan komutların toplamı olmalı.\"\nassert \"'x' anlaşılmadı\" in out and \"'üç' anlaşılmadı\" in out, \"Sayı olmayan her komut için '... anlaşılmadı' yazmalı.\"\nassert \"Toplam adım: 12\" in out, \"En sonda toplam adımı yazmalı.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "commands = [\"3\", \"iki\", \"5\", \"hop\"]",
+     "notes": [
+      "`commands` adında bir değişken oluşturuluyor ve içine `[\"3\", \"iki\", \"5\", \"hop\"]` (liste) konuyor."
+     ]
+    },
+    {
+     "n": 2,
+     "code": "moved = 0",
+     "notes": [
+      "`moved` adında bir değişken oluşturuluyor ve içine `0` (tam sayı) konuyor."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "for c in commands:",
+     "notes": [
+      "Döngü: `commands` içindeki her eleman sırayla `c` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "    try:",
+     "notes": [
+      "`try`: altındaki kod denenir; hata çıkarsa program çökmez, `except` kısmı çalışır."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "        moved += int(c)",
+     "notes": [
+      "`moved += int(c)`: `moved` değişkeninin değeri güncelleniyor."
+     ]
+    },
+    {
+     "n": 7,
+     "code": "    except ValueError:",
+     "notes": [
+      "`except ValueError`: bu hata olursa aşağıdaki satırlar çalışır."
+     ]
+    },
+    {
+     "n": 8,
+     "code": "        print(f\"'{c}' anlaşılmadı\")",
+     "notes": [
+      "`print(f\"'{c}' anlaşılmadı\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 10,
+     "code": "print(f\"Toplam adım: {moved}\")",
+     "notes": [
+      "`print(f\"Toplam adım: {moved}\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "commands",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `[\"3\", \"iki\", \"5\", \"hop\"]`."
+    },
+    {
+     "term": "moved",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `0`."
+    },
+    {
+     "term": "c",
+     "kind": "döngü değişkeni",
+     "desc": "Döngünün her turunda `commands` içindeki sıradaki elemanı tutar."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "for",
+     "kind": "anahtar kelime",
+     "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+    },
+    {
+     "term": "try",
+     "kind": "anahtar kelime",
+     "desc": "Hata çıkabilecek kodu dener; hata çıkarsa except bloğu çalışır."
+    },
+    {
+     "term": "+=",
+     "kind": "operatör",
+     "desc": "Değişkenin kendi değerine ekler: x += 1 → x = x + 1."
+    },
+    {
+     "term": "int()",
+     "kind": "fonksiyon",
+     "desc": "Bir değeri tam sayıya çevirir, örneğin \"42\" yazısını 42 sayısına."
+    },
+    {
+     "term": "except",
+     "kind": "anahtar kelime",
+     "desc": "try içinde hata olursa burası çalışır; program çökmez."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    },
+    {
+     "term": "f\"...{}\"",
+     "kind": "metin",
+     "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+    }
+   ]
+  }
+ },
+ "available": true,
+ "tracks": {
+  "veri": {
+   "project_task": {
+    "id": "d17-pv",
+    "title": "Güvenli tutar girişi",
+    "prompt": "Tutarlar bir formdan yazı olarak geliyor ve bazıları hatalı. `entries` listesindeki her girişi `float()` ile sayıya çevirmeye çalış:\n\n- Çevrilebiliyorsa `total`'a ekle.\n- Çevrilemiyorsa `'abc' geçersiz` yazdır ve devam et.\n- En sonda `Toplam: 165.5` yazdır.",
+    "starter": "entries = [\"120\", \"abc\", \"45.5\", \"\"]\ntotal = 0\n",
+    "solution": "entries = [\"120\", \"abc\", \"45.5\", \"\"]\ntotal = 0\nfor entry in entries:\n    try:\n        total += float(entry)\n    except ValueError:\n        print(f\"'{entry}' geçersiz\")\nprint(\"Toplam:\", total)\n",
+    "hints": [
+     "Çevirme işini try: bloğuna koy.",
+     "float(\"abc\") ValueError verir: except ValueError:"
+    ],
+    "check": {
+     "code_contains": [
+      "try",
+      "except"
+     ],
+     "python": "\nout, g = _run(_set(_code, \"entries\", [\"10\", \"x\", \"2.5\", \"on\"]))\nassert g.get(\"total\") == 12.5, \"total sadece sayıya çevrilebilen girişlerin toplamı olmalı.\"\nassert \"'x' geçersiz\" in out and \"'on' geçersiz\" in out, \"Geçersiz her giriş için 'x' geçersiz gibi yazmalı.\"\nassert \"Toplam: 12.5\" in out, \"En sonda toplamı yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "entries = [\"120\", \"abc\", \"45.5\", \"\"]",
+       "notes": [
+        "`entries` adında bir değişken oluşturuluyor ve içine `[\"120\", \"abc\", \"45.5\", \"\"]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "total = 0",
+       "notes": [
+        "`total` adında bir değişken oluşturuluyor ve içine `0` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "for entry in entries:",
+       "notes": [
+        "Döngü: `entries` içindeki her eleman sırayla `entry` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "    try:",
+       "notes": [
+        "`try`: altındaki kod denenir; hata çıkarsa program çökmez, `except` kısmı çalışır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "        total += float(entry)",
+       "notes": [
+        "`total += float(entry)`: `total` değişkeninin değeri güncelleniyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    except ValueError:",
+       "notes": [
+        "`except ValueError`: bu hata olursa aşağıdaki satırlar çalışır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "        print(f\"'{entry}' geçersiz\")",
+       "notes": [
+        "`print(f\"'{entry}' geçersiz\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "print(\"Toplam:\", total)",
+       "notes": [
+        "`print(\"Toplam:\", total)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "entries",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[\"120\", \"abc\", \"45.5\", \"\"]`."
+      },
+      {
+       "term": "total",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `0`."
+      },
+      {
+       "term": "entry",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `entries` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": "try",
+       "kind": "anahtar kelime",
+       "desc": "Hata çıkabilecek kodu dener; hata çıkarsa except bloğu çalışır."
+      },
+      {
+       "term": "+=",
+       "kind": "operatör",
+       "desc": "Değişkenin kendi değerine ekler: x += 1 → x = x + 1."
+      },
+      {
+       "term": "float()",
+       "kind": "fonksiyon",
+       "desc": "Bir değeri ondalıklı sayıya çevirir."
+      },
+      {
+       "term": "except",
+       "kind": "anahtar kelime",
+       "desc": "try içinde hata olursa burası çalışır; program çökmez."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Güvenli giriş",
+   "game_role": "Yanlış yazılmış tutarları atlayıp doğru olanları toplar."
+  },
+  "otomasyon": {
+   "project_task": {
+    "id": "d17-po",
+    "title": "Saatleri güvenle okuma",
+    "prompt": "Hatırlatma saatleri `\"09:30\"` gibi yazı olarak geliyor ama bazıları hatalı. `times` listesindeki her birini `split(\":\")` ve `int()` ile `(saat, dakika)` tuple'ına çevirmeye çalış:\n\n- Çevrilebilirse `parsed` listesine ekle.\n- Çevrilemezse (`ValueError`) `'öğlen' geçersiz saat` yazdır ve devam et.\n- En sonda `2 saat okundu` gibi yazdır.",
+    "starter": "times = [\"09:30\", \"öğlen\", \"17:45\", \"yarın\"]\nparsed = []\n",
+    "solution": "times = [\"09:30\", \"öğlen\", \"17:45\", \"yarın\"]\nparsed = []\nfor text in times:\n    try:\n        hour, minute = text.split(\":\")\n        parsed.append((int(hour), int(minute)))\n    except ValueError:\n        print(f\"'{text}' geçersiz saat\")\nprint(f\"{len(parsed)} saat okundu\")\n",
+    "hints": [
+     "\"09:30\".split(\":\") -> [\"09\", \"30\"]",
+     "\"öğlen\".split(\":\") tek parça verir; iki değişkene açarken ValueError olur."
+    ],
+    "check": {
+     "code_contains": [
+      "try",
+      "except"
+     ],
+     "python": "\nout, g = _run(_set(_code, \"times\", [\"8:05\", \"x\", \"12:aa\", \"23:59\"]))\nassert g.get(\"parsed\") == [(8, 5), (23, 59)], \"parsed sadece doğru saatleri (saat, dakika) olarak içermeli.\"\nassert \"'x' geçersiz saat\" in out and \"'12:aa' geçersiz saat\" in out, \"Her hatalı saat için 'x' geçersiz saat yazmalı.\"\nassert \"2 saat okundu\" in out, \"En sonda kaç saat okunduğunu yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "times = [\"09:30\", \"öğlen\", \"17:45\", \"yarın\"]",
+       "notes": [
+        "`times` adında bir değişken oluşturuluyor ve içine `[\"09:30\", \"öğlen\", \"17:45\", \"yarın\"]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "parsed = []",
+       "notes": [
+        "`parsed` adında bir değişken oluşturuluyor ve içine `[]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "for text in times:",
+       "notes": [
+        "Döngü: `times` içindeki her eleman sırayla `text` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "    try:",
+       "notes": [
+        "`try`: altındaki kod denenir; hata çıkarsa program çökmez, `except` kısmı çalışır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "        hour, minute = text.split(\":\")",
+       "notes": [
+        "`hour, minute`: sağdaki değerler sırayla bu değişkenlere dağıtılıyor (açma / unpacking)."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "        parsed.append((int(hour), int(minute)))",
+       "notes": [
+        "`parsed.append((int(hour), int(minute)))`: `parsed` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "    except ValueError:",
+       "notes": [
+        "`except ValueError`: bu hata olursa aşağıdaki satırlar çalışır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "        print(f\"'{text}' geçersiz saat\")",
+       "notes": [
+        "`print(f\"'{text}' geçersiz saat\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "print(f\"{len(parsed)} saat okundu\")",
+       "notes": [
+        "`print(f\"{len(parsed)} saat okundu\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "times",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[\"09:30\", \"öğlen\", \"17:45\", \"yarın\"]`."
+      },
+      {
+       "term": "parsed",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[]`."
+      },
+      {
+       "term": "hour",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `text.split(\":\")`."
+      },
+      {
+       "term": "minute",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `text.split(\":\")`."
+      },
+      {
+       "term": "text",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `times` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": "try",
+       "kind": "anahtar kelime",
+       "desc": "Hata çıkabilecek kodu dener; hata çıkarsa except bloğu çalışır."
+      },
+      {
+       "term": ".split()",
+       "kind": "metot",
+       "desc": "Metni parçalara böler ve liste yapar (varsayılan: boşluklardan)."
+      },
+      {
+       "term": ".append()",
+       "kind": "metot",
+       "desc": "Listenin sonuna yeni bir eleman ekler."
+      },
+      {
+       "term": "int()",
+       "kind": "fonksiyon",
+       "desc": "Bir değeri tam sayıya çevirir, örneğin \"42\" yazısını 42 sayısına."
+      },
+      {
+       "term": "except",
+       "kind": "anahtar kelime",
+       "desc": "try içinde hata olursa burası çalışır; program çökmez."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Güvenli saat okuma",
+   "game_role": "Yanlış yazılmış saatleri atlayıp doğrularını anlar."
+  },
+  "web": {
+   "project_task": {
+    "id": "d17-pw",
+    "title": "Güvenli yazı girişi",
+    "prompt": "Yazılar bir formdan geliyor ve bazıları hatalı. `forms` listesindeki her form için `(form[\"title\"], int(form[\"words\"]))` tuple'ını `posts` listesine eklemeye çalış:\n\n- Başlık yoksa `KeyError` olur: `Başlık eksik, atlandı` yazdır.\n- Kelime sayısı sayı değilse `ValueError` olur: `Geçersiz kelime sayısı: çok` gibi yazdır.\n- En sonda `2 yazı eklendi` gibi yazdır.",
+    "starter": "forms = [{\"title\": \"Merhaba Dünya\", \"words\": \"350\"}, {\"title\": \"Kodla Oyna\", \"words\": \"çok\"}, {\"words\": \"120\"}, {\"title\": \"Kısa Not\", \"words\": \"90\"}]\nposts = []\n",
+    "solution": "forms = [{\"title\": \"Merhaba Dünya\", \"words\": \"350\"}, {\"title\": \"Kodla Oyna\", \"words\": \"çok\"}, {\"words\": \"120\"}, {\"title\": \"Kısa Not\", \"words\": \"90\"}]\nposts = []\nfor form in forms:\n    try:\n        posts.append((form[\"title\"], int(form[\"words\"])))\n    except KeyError:\n        print(\"Başlık eksik, atlandı\")\n    except ValueError:\n        print(f\"Geçersiz kelime sayısı: {form['words']}\")\nprint(f\"{len(posts)} yazı eklendi\")\n",
+    "hints": [
+     "Eklemeyi try: bloğuna koy; altına iki ayrı except yaz.",
+     "except KeyError: ve except ValueError: farklı hataları ayrı yakalar."
+    ],
+    "check": {
+     "code_contains": [
+      "try",
+      "except",
+      "KeyError",
+      "ValueError"
+     ],
+     "python": "\ntest = [{\"title\": \"A\", \"words\": \"5\"}, {\"words\": \"x\"}, {\"title\": \"B\", \"words\": \"on\"}, {\"title\": \"C\", \"words\": \"7\"}]\nout, g = _run(_set(_code, \"forms\", test))\nassert g.get(\"posts\") == [(\"A\", 5), (\"C\", 7)], \"posts'a sadece başlığı olan ve kelime sayısı sayıya çevrilebilen formlar (başlık, sayı) olarak eklenmeli.\"\nassert \"Başlık eksik, atlandı\" in out, \"Başlığı olmayan form için 'Başlık eksik, atlandı' yazmalı.\"\nassert \"Geçersiz kelime sayısı: on\" in out, \"Kelime sayısı sayı olmayan form için 'Geçersiz kelime sayısı: on' gibi yazmalı.\"\nassert \"2 yazı eklendi\" in out, \"En sonda kaç yazı eklendiğini yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "forms = [{\"title\": \"Merhaba Dünya\", \"words\": \"350\"}, {\"title\": \"Kodla Oyna\", \"words\": \"çok\"}, {\"words\": \"120\"}, {\"title\": \"Kısa Not\", \"words\": \"90\"}]",
+       "notes": [
+        "`forms` adında bir değişken oluşturuluyor ve içine `[{\"title\": \"Merhaba Dünya\", \"words\": \"350\"}, {\"title\": \"K...` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "posts = []",
+       "notes": [
+        "`posts` adında bir değişken oluşturuluyor ve içine `[]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "for form in forms:",
+       "notes": [
+        "Döngü: `forms` içindeki her eleman sırayla `form` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "    try:",
+       "notes": [
+        "`try`: altındaki kod denenir; hata çıkarsa program çökmez, `except` kısmı çalışır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "        posts.append((form[\"title\"], int(form[\"words\"])))",
+       "notes": [
+        "`posts.append((form[\"title\"], int(form[\"words\"])))`: `posts` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    except KeyError:",
+       "notes": [
+        "`except KeyError`: bu hata olursa aşağıdaki satırlar çalışır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "        print(\"Başlık eksik, atlandı\")",
+       "notes": [
+        "`print(\"Başlık eksik, atlandı\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "    except ValueError:",
+       "notes": [
+        "`except ValueError`: bu hata olursa aşağıdaki satırlar çalışır."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "        print(f\"Geçersiz kelime sayısı: {form['words']}\")",
+       "notes": [
+        "`print(f\"Geçersiz kelime sayısı: {form['words']}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "print(f\"{len(posts)} yazı eklendi\")",
+       "notes": [
+        "`print(f\"{len(posts)} yazı eklendi\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "forms",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[{\"title\": \"Merhaba Dünya\", \"words\": \"350\"}, {\"title\": \"K...`."
+      },
+      {
+       "term": "posts",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[]`."
+      },
+      {
+       "term": "form",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `forms` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": "try",
+       "kind": "anahtar kelime",
+       "desc": "Hata çıkabilecek kodu dener; hata çıkarsa except bloğu çalışır."
+      },
+      {
+       "term": ".append()",
+       "kind": "metot",
+       "desc": "Listenin sonuna yeni bir eleman ekler."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": "int()",
+       "kind": "fonksiyon",
+       "desc": "Bir değeri tam sayıya çevirir, örneğin \"42\" yazısını 42 sayısına."
+      },
+      {
+       "term": "except",
+       "kind": "anahtar kelime",
+       "desc": "try içinde hata olursa burası çalışır; program çökmez."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Güvenli yazı girişi",
+   "game_role": "Formdan gelen hatalı yazı bilgilerini atlayıp doğru olanları ekler."
+  },
+  "bot": {
+   "project_task": {
+    "id": "d17-pb",
+    "title": "Hesap yeteneği",
+    "prompt": "Botumuza hesap yapmayı öğretelim: kullanıcı `\"12 / 4\"` gibi bir bölme yazıyor. `calc(message)`:\n\n- Mesajı `\"/\"` işaretinden böl (`message.split(\"/\")`), iki parçayı `float()` ile sayıya çevir ve birinciyi ikinciye böl. `Sonuç: 3.0` döndür.\n- Parçalar sayıya çevrilemezse (`ValueError`): `Sayıları anlayamadım.`\n- İkinci sayı 0 ise (`ZeroDivisionError`): `Sıfıra bölemem!`\n\nSonra `messages` listesindeki her mesaj için `calc`'ın cevabını yazdır.",
+    "starter": "messages = [\"12 / 4\", \"5 / 0\", \"on / 2\"]\n\n\ndef calc(message):\n    pass\n",
+    "solution": "messages = [\"12 / 4\", \"5 / 0\", \"on / 2\"]\n\n\ndef calc(message):\n    parts = message.split(\"/\")\n    try:\n        result = float(parts[0]) / float(parts[1])\n    except ValueError:\n        return \"Sayıları anlayamadım.\"\n    except ZeroDivisionError:\n        return \"Sıfıra bölemem!\"\n    return f\"Sonuç: {result}\"\n\n\nfor message in messages:\n    print(calc(message))\n",
+    "hints": [
+     "Çevirme ve bölme işini try: bloğuna koy.",
+     "Her hata tipi için ayrı bir except yazabilirsin: except ValueError: ve except ZeroDivisionError:"
+    ],
+    "check": {
+     "code_contains": [
+      "try",
+      "except"
+     ],
+     "python": "\nassert calc(\"12 / 4\") == \"Sonuç: 3.0\", \"calc(\\\"12 / 4\\\") \\\"Sonuç: 3.0\\\" döndürmeli.\"\nassert calc(\"7/2\") == \"Sonuç: 3.5\", \"calc(\\\"7/2\\\") \\\"Sonuç: 3.5\\\" döndürmeli.\"\nassert calc(\"5 / 0\") == \"Sıfıra bölemem!\", \"0'a bölmede ZeroDivisionError'u yakalayıp \\\"Sıfıra bölemem!\\\" döndürmeli.\"\nassert calc(\"on / 2\") == \"Sayıları anlayamadım.\" and calc(\"3 / x\") == \"Sayıları anlayamadım.\", \"Sayı olmayan parçada ValueError'u yakalayıp \\\"Sayıları anlayamadım.\\\" döndürmeli.\"\nout, _ = _run(_set(_code, \"messages\", [\"9 / 3\", \"1 / 0\"]))\nassert \"Sonuç: 3.0\" in out and \"Sıfıra bölemem!\" in out, \"messages listesindeki her mesajın cevabını yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "messages = [\"12 / 4\", \"5 / 0\", \"on / 2\"]",
+       "notes": [
+        "`messages` adında bir değişken oluşturuluyor ve içine `[\"12 / 4\", \"5 / 0\", \"on / 2\"]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "def calc(message):",
+       "notes": [
+        "`calc` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `message`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "    parts = message.split(\"/\")",
+       "notes": [
+        "`parts` adında bir değişken oluşturuluyor ve içine `message.split(\"/\")` konuyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    try:",
+       "notes": [
+        "`try`: altındaki kod denenir; hata çıkarsa program çökmez, `except` kısmı çalışır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "        result = float(parts[0]) / float(parts[1])",
+       "notes": [
+        "`result` adında bir değişken oluşturuluyor ve içine `float(parts[0]) / float(parts[1])` konuyor."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "    except ValueError:",
+       "notes": [
+        "`except ValueError`: bu hata olursa aşağıdaki satırlar çalışır."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "        return \"Sayıları anlayamadım.\"",
+       "notes": [
+        "Fonksiyon `\"Sayıları anlayamadım.\"` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "    except ZeroDivisionError:",
+       "notes": [
+        "`except ZeroDivisionError`: bu hata olursa aşağıdaki satırlar çalışır."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "        return \"Sıfıra bölemem!\"",
+       "notes": [
+        "Fonksiyon `\"Sıfıra bölemem!\"` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "    return f\"Sonuç: {result}\"",
+       "notes": [
+        "Fonksiyon `f\"Sonuç: {result}\"` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 15,
+       "code": "for message in messages:",
+       "notes": [
+        "Döngü: `messages` içindeki her eleman sırayla `message` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 16,
+       "code": "    print(calc(message))",
+       "notes": [
+        "`print(calc(message))`: parantez içindeki değeri ekrana yazdırır.",
+        "`calc(...)`: senin tanımladığın fonksiyonu çağırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "messages",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[\"12 / 4\", \"5 / 0\", \"on / 2\"]`."
+      },
+      {
+       "term": "parts",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `message.split(\"/\")`."
+      },
+      {
+       "term": "result",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `float(parts[0]) / float(parts[1])`."
+      },
+      {
+       "term": "message",
+       "kind": "parametre",
+       "desc": "`calc` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "calc()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `message`."
+      },
+      {
+       "term": ".split()",
+       "kind": "metot",
+       "desc": "Metni parçalara böler ve liste yapar (varsayılan: boşluklardan)."
+      },
+      {
+       "term": "try",
+       "kind": "anahtar kelime",
+       "desc": "Hata çıkabilecek kodu dener; hata çıkarsa except bloğu çalışır."
+      },
+      {
+       "term": "/",
+       "kind": "operatör",
+       "desc": "Bölme; sonuç her zaman ondalıklı sayıdır."
+      },
+      {
+       "term": "float()",
+       "kind": "fonksiyon",
+       "desc": "Bir değeri ondalıklı sayıya çevirir."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": "except",
+       "kind": "anahtar kelime",
+       "desc": "try içinde hata olursa burası çalışır; program çökmez."
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Güvenli hesap",
+   "game_role": "Kullanıcının yazdığı bölme işlemini hataya düşmeden hesaplar."
+  },
+  "okul": {
+   "project_task": {
+    "id": "d17-pn",
+    "title": "Güvenli not girişi",
+    "prompt": "Notlar bir formdan yazı olarak geliyor ve bazıları hatalı.\n\n- `parse_grade(text)`: yazıyı `int()` ile sayıya çevirsin. Not 0'dan küçük ya da 100'den büyükse `raise ValueError(...)` ile hata fırlatsın. Geçerliyse notu döndürsün.\n- `entries` listesindeki her girişi `parse_grade` ile çevirmeye çalış: geçerliyse `grades`'e ekle, `ValueError` olursa `'yüz' geçersiz` yazdır ve devam et.\n- En sonda `Geçerli notlar: [85, 70]` yazdır.",
+    "starter": "def parse_grade(text):\n    pass\n\n\nentries = [\"85\", \"yüz\", \"70\", \"120\", \"\"]\ngrades = []\n",
+    "solution": "def parse_grade(text):\n    grade = int(text)\n    if grade < 0 or grade > 100:\n        raise ValueError(\"not 0 ile 100 arasında olmalı\")\n    return grade\n\n\nentries = [\"85\", \"yüz\", \"70\", \"120\", \"\"]\ngrades = []\nfor entry in entries:\n    try:\n        grades.append(parse_grade(entry))\n    except ValueError:\n        print(f\"'{entry}' geçersiz\")\nprint(\"Geçerli notlar:\", grades)\n",
+    "hints": [
+     "int(\"yüz\") zaten ValueError verir; 0-100 dışı için if ... raise ValueError(\"...\") yaz.",
+     "Döngüde çevirme işini try: bloğuna koy, except ValueError: ile yakala."
+    ],
+    "check": {
+     "code_contains": [
+      "try",
+      "except",
+      "raise"
+     ],
+     "python": "\nassert parse_grade(\"55\") == 55, \"parse_grade(\\\"55\\\") 55 döndürmeli.\"\nassert parse_grade(\"0\") == 0 and parse_grade(\"100\") == 100, \"0 ve 100 geçerli notlar.\"\nfor bad in [\"abc\", \"101\", \"-5\"]:\n    try:\n        parse_grade(bad)\n    except ValueError:\n        pass\n    else:\n        raise AssertionError(\"parse_grade('\" + bad + \"') ValueError fırlatmalı.\")\nout, g = _run(_set(_code, \"entries\", [\"10\", \"x\", \"200\", \"100\"]))\nassert g.get(\"grades\") == [10, 100], \"grades sadece geçerli notları içermeli.\"\nassert \"'x' geçersiz\" in out and \"'200' geçersiz\" in out, \"Geçersiz her giriş için 'x' geçersiz gibi yazmalı.\"\nassert \"Geçerli notlar: [10, 100]\" in out, \"En sonda geçerli notları yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "def parse_grade(text):",
+       "notes": [
+        "`parse_grade` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `text`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "    grade = int(text)",
+       "notes": [
+        "`grade` adında bir değişken oluşturuluyor ve içine `int(text)` konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "    if grade < 0 or grade > 100:",
+       "notes": [
+        "Koşul: `grade < 0 or grade > 100` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "        raise ValueError(\"not 0 ile 100 arasında olmalı\")",
+       "notes": [
+        "`raise ValueError(\"not 0 ile 100 arasında olmalı\")`: bilerek hata oluşturur."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "    return grade",
+       "notes": [
+        "Fonksiyon `grade` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "entries = [\"85\", \"yüz\", \"70\", \"120\", \"\"]",
+       "notes": [
+        "`entries` adında bir değişken oluşturuluyor ve içine `[\"85\", \"yüz\", \"70\", \"120\", \"\"]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "grades = []",
+       "notes": [
+        "`grades` adında bir değişken oluşturuluyor ve içine `[]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "for entry in entries:",
+       "notes": [
+        "Döngü: `entries` içindeki her eleman sırayla `entry` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "    try:",
+       "notes": [
+        "`try`: altındaki kod denenir; hata çıkarsa program çökmez, `except` kısmı çalışır."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "        grades.append(parse_grade(entry))",
+       "notes": [
+        "`grades.append(parse_grade(entry))`: `grades` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler.",
+        "`parse_grade(...)`: senin tanımladığın fonksiyonu çağırır."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "    except ValueError:",
+       "notes": [
+        "`except ValueError`: bu hata olursa aşağıdaki satırlar çalışır."
+       ]
+      },
+      {
+       "n": 14,
+       "code": "        print(f\"'{entry}' geçersiz\")",
+       "notes": [
+        "`print(f\"'{entry}' geçersiz\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 15,
+       "code": "print(\"Geçerli notlar:\", grades)",
+       "notes": [
+        "`print(\"Geçerli notlar:\", grades)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "grade",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `int(text)`."
+      },
+      {
+       "term": "entries",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[\"85\", \"yüz\", \"70\", \"120\", \"\"]`."
+      },
+      {
+       "term": "grades",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[]`."
+      },
+      {
+       "term": "entry",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `entries` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "text",
+       "kind": "parametre",
+       "desc": "`parse_grade` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "parse_grade()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `text`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "int()",
+       "kind": "fonksiyon",
+       "desc": "Bir değeri tam sayıya çevirir, örneğin \"42\" yazısını 42 sayısına."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "or",
+       "kind": "operatör",
+       "desc": "\"veya\": koşullardan biri doğruysa True."
+      },
+      {
+       "term": "<",
+       "kind": "operatör",
+       "desc": "Küçük mü?"
+      },
+      {
+       "term": ">",
+       "kind": "operatör",
+       "desc": "Büyük mü?"
+      },
+      {
+       "term": "raise",
+       "kind": "anahtar kelime",
+       "desc": "Bilerek bir hata oluşturur."
+      },
+      {
+       "term": "ValueError()",
+       "kind": "fonksiyon",
+       "desc": "Değer uygun olmadığında oluşan hata türü."
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": "try",
+       "kind": "anahtar kelime",
+       "desc": "Hata çıkabilecek kodu dener; hata çıkarsa except bloğu çalışır."
+      },
+      {
+       "term": ".append()",
+       "kind": "metot",
+       "desc": "Listenin sonuna yeni bir eleman ekler."
+      },
+      {
+       "term": "except",
+       "kind": "anahtar kelime",
+       "desc": "try içinde hata olursa burası çalışır; program çökmez."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Güvenli not girişi",
+   "game_role": "Yanlış yazılmış ya da 0-100 dışındaki notları reddeder."
+  }
+ }
+}

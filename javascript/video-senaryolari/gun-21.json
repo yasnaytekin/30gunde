@@ -1,0 +1,259 @@
+{
+  "kurs": "javascript",
+  "gun": 21,
+  "baslik": "Canvas ile çizim",
+  "maskot": "kodi",
+  "ozet": "Kodi, Piksel Gezegeni'nde canvas ve 2d çizim bağlamını, koordinat sistemini, dikdörtgen, daire, çizgi ve yazı çizmeyi ve bir diziden döngüyle resim çizmeyi anlatıyor.",
+  "hedef_sure_sn": 172,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 12,
+      "anlatim": "Selam, ben Kodi! Piksel Gezegeni'ne indik. Burada her şey minicik renkli noktalardan, yani piksellerden oluşuyor. Kodla resim çizebilir miyiz? Bugün canvas ile çizim yapıyoruz!",
+      "ekran": {
+        "baslik": "Gün 21: Canvas ile çizim",
+        "gorsel": "gorseller/javascript/bolgeler/piksel.webp"
+      },
+      "maskot": {
+        "poz": "el-sallama",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 15,
+      "anlatim": "canvas etiketi boş bir resim tuvalidir. Üzerine çizmek için ondan bir fırça isteriz: getContext iki d. ctx artık bütün çizim komutlarını bilen nesnedir.",
+      "ekran": {
+        "baslik": "Tuval ve fırça",
+        "kod": "const canvas = document.querySelector(\"#game\");\nconst ctx = canvas.getContext(\"2d\");\nconsole.log(canvas.width, canvas.height);\n",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "300 200",
+        "html": "<canvas id=\"game\" width=\"300\" height=\"200\"></canvas>",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 3,
+      "tur": "anlatim",
+      "sure_sn": 15,
+      "anlatim": "Tuvalde her noktanın bir x, y adresi var. Sol üst köşe sıfır, sıfırdır. x sağa gittikçe, y ise aşağı gittikçe büyür. Yani bir şeyi yukarı taşımak için y'yi azaltırsın!",
+      "ekran": {
+        "baslik": "Koordinatlar: y aşağı doğru büyür",
+        "maddeler": [
+          "Sol üst köşe: (0, 0)",
+          "Sağ üst köşe: (300, 0)",
+          "Sol alt köşe: (0, 200)",
+          "Orta: (150, 100)"
+        ]
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sol"
+      },
+      "yonetmen_notu": "Tuvalin üstünde x ve y okları çizilir; y okunun aşağıyı gösterdiği vurgulanır."
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 17,
+      "anlatim": "Önce rengi seç, sonra çiz. fillRect dolu bir dikdörtgen çizer: x, y, genişlik, yükseklik. strokeRect içi boş bir çerçeve, clearRect ise silgi. x, y noktası dikdörtgenin sol üst köşesidir.",
+      "ekran": {
+        "baslik": "Dikdörtgen, çerçeve, silgi",
+        "kod": "ctx.fillStyle = \"#0b1026\";       // dolgu rengi\nctx.fillRect(0, 0, 300, 200);    // x, y, genişlik, yükseklik\nctx.strokeStyle = \"#f7df1e\";     // çizgi rengi\nctx.lineWidth = 3;\nctx.strokeRect(20, 20, 60, 40);  // içi boş çerçeve\n",
+        "vurgu_satirlari": [
+          1,
+          2,
+          5
+        ],
+        "cikti": "Lacivert bir zemin ve sol üstte sarı çerçeveli bir kutu.",
+        "html": "<canvas id=\"game\" width=\"300\" height=\"200\"></canvas>",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 17,
+      "anlatim": "Daireler bir yol olarak çizilir: beginPath ile başla, arc ile şekli tarif et, fill ile doldur. arc'ın son iki değeri tam bir tur demek. Yazı için de font ve fillText var.",
+      "ekran": {
+        "baslik": "Daire ve yazı",
+        "kod": "ctx.beginPath();\nctx.arc(150, 100, 30, 0, Math.PI * 2); // merkez, yarıçap, tam tur\nctx.fillStyle = \"#ff9800\";\nctx.fill();\nctx.fillStyle = \"white\";\nctx.font = \"16px sans-serif\";\nctx.fillText(\"Yıldız Avcısı\", 10, 20);\n",
+        "vurgu_satirlari": [
+          1,
+          2,
+          4
+        ],
+        "cikti": "Tuvalin ortasında turuncu bir gezegen, sol üstte beyaz \"Yıldız Avcısı\" yazısı.",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      },
+      "calistir": false
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "Çizgi de bir yoldur. moveTo kalemi bir noktaya koyar, lineTo oraya kadar çizgiyi tarif eder, stroke da çizer.",
+      "ekran": {
+        "baslik": "Çizgi",
+        "kod": "ctx.beginPath();\nctx.moveTo(10, 190);  // kalemi buraya koy\nctx.lineTo(290, 190); // buraya kadar çiz\nctx.strokeStyle = \"white\";\nctx.stroke();\n",
+        "vurgu_satirlari": [
+          2,
+          3,
+          5
+        ],
+        "cikti": "Tuvalin altında soldan sağa beyaz bir yer çizgisi.",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 7,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "Asıl güç, resmi veriden çizmek. Dizideki her yıldız için aynı komutu döngüyle çalıştırıyoruz. Diziye yeni bir yıldız eklersen resim de değişir!",
+      "ekran": {
+        "baslik": "Veriden çizim",
+        "kod": "const stars = [{ x: 40, y: 30 }, { x: 120, y: 80 }, { x: 250, y: 50 }];\nctx.fillStyle = \"#f7df1e\";\nfor (const star of stars) {\n  ctx.fillRect(star.x, star.y, 6, 6);\n}\n",
+        "vurgu_satirlari": [
+          3,
+          4
+        ],
+        "cikti": "Lacivert gökyüzünde üç küçük sarı yıldız.",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 8,
+      "tur": "hata",
+      "sure_sn": 14,
+      "anlatim": "Sık hata: rengi çizdikten sonra seçmek. fillStyle yalnızca kendisinden sonraki çizimleri etkiler. Bu kutu kırmızı değil, önceki renkte çizilir. Hata mesajı da çıkmaz!",
+      "ekran": {
+        "baslik": "Sık hata: sıra önemli",
+        "kod": "ctx.fillRect(20, 30, 60, 40);\nctx.fillStyle = \"#e53935\"; // çok geç!\n",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "Kutu kırmızı değil, varsayılan siyah renkte çizilir.",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "uzgun",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 9,
+      "tur": "soru",
+      "sure_sn": 12,
+      "anlatim": "Soru zamanı! Tuval 300'e 200. Roket şu an 60, 80 noktasında. Onu yukarı taşımak için x'i mi, y'yi mi değiştirirsin; artırarak mı, azaltarak mı?",
+      "ekran": {
+        "baslik": "Sence hangisi?",
+        "maddeler": [
+          "A) x'i artır",
+          "B) x'i azalt",
+          "C) y'yi artır",
+          "D) y'yi azalt"
+        ]
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 10,
+      "tur": "cikti",
+      "sure_sn": 8,
+      "anlatim": "Cevap D: y'yi azalt! Tuvalde y aşağı doğru büyür, bu yüzden yukarı çıkmak için küçültürüz.",
+      "ekran": {
+        "baslik": "Cevap: D",
+        "kod": "ctx.fillRect(60, 40, 16, 50); // y: 80 → 40, roket yukarıda\n",
+        "cikti": "Roket tuvalde daha yukarıda çizilir.",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 11,
+      "tur": "gorev",
+      "sure_sn": 12,
+      "anlatim": "Görevlerin hazır! Tuvalin tamamını boyayıp üstüne bir kutu koyacaksın, turuncu bir gezegen çizeceksin ve yıldızları bir diziden çizen bir fonksiyon yazacaksın.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Uzay zemini",
+          "Görev 2: Turuncu gezegen",
+          "Görev 3: Yıldızları diziden çiz"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 12,
+      "tur": "ozet",
+      "sure_sn": 12,
+      "anlatim": "Özetleyelim: getContext ile fırçayı al. Sol üst köşe sıfır, sıfır ve y aşağı doğru büyür. Önce rengi seç, sonra çiz; resmi diziden döngüyle çiz.",
+      "ekran": {
+        "baslik": "Özet",
+        "maddeler": [
+          "canvas.getContext(\"2d\")",
+          "(0, 0) sol üst; y aşağı büyür",
+          "fillRect, arc + fill, moveTo/lineTo + stroke, döngüyle çizim"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 13,
+      "tur": "kapanis",
+      "sure_sn": 10,
+      "anlatim": "Harika bir ilk resim! Ama şimdilik her şey yerinde duruyor. Yarın tuvaldeki gemiyi hareket ettireceğiz: animasyon! Görüşürüz!",
+      "ekran": {
+        "baslik": "Yarın: Animasyon",
+        "gorsel": "gorseller/javascript/arka-plan/bg-space-wide.webp"
+      },
+      "maskot": {
+        "poz": "el-sallama",
+        "konum": "orta"
+      }
+    }
+  ]
+}

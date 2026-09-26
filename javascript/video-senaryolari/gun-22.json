@@ -1,0 +1,252 @@
+{
+  "kurs": "javascript",
+  "gun": 22,
+  "baslik": "Animasyon",
+  "maskot": "kodi",
+  "ozet": "Kodi, Piksel Gezegeni'nde requestAnimationFrame ile animasyon döngüsü kurmayı, update ve draw'u ayırmayı, hız ve kenardan sekme hesaplamayı ve zaman farkıyla (dt) her ekranda aynı hızda hareket etmeyi anlatıyor.",
+  "hedef_sure_sn": 173,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 12,
+      "anlatim": "Selam, ben Kodi! Piksel Gezegeni'nde resimler kıpırdamaya başladı! Çizgi filmler gibi oyunlar da saniyede onlarca resmi art arda çizer. Bugün bir animasyon döngüsü kuruyoruz!",
+      "ekran": {
+        "baslik": "Gün 22: Animasyon",
+        "gorsel": "gorseller/javascript/bolgeler/piksel.webp"
+      },
+      "maskot": {
+        "poz": "el-sallama",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 2,
+      "tur": "anlatim",
+      "sure_sn": 14,
+      "anlatim": "Ekrandaki her hareket aslında hızla değişen resimlerdir. Her karede üç şey olur: nesnelerin yerini biraz değiştir, eski resmi sil, yeni resmi çiz. Sonra tekrar!",
+      "ekran": {
+        "baslik": "Animasyon nasıl çalışır?",
+        "maddeler": [
+          "1. Yeri biraz değiştir",
+          "2. Eski resmi sil",
+          "3. Yeni resmi çiz"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sol"
+      },
+      "yonetmen_notu": "Üç adım bir çark gibi dönerek gösterilir; her turda gemi biraz ilerler."
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 17,
+      "anlatim": "Tarayıcı bunun için bize requestAnimationFrame verir: bir sonraki resmi çizmeden hemen önce bu fonksiyonu çalıştır. Fonksiyon kendini yeniden isteyince saniyede yaklaşık 60 karelik bir döngü olur.",
+      "ekran": {
+        "baslik": "requestAnimationFrame",
+        "kod": "function loop() {\n  update();                    // hesapla\n  draw();                      // çiz\n  requestAnimationFrame(loop); // bir sonraki kareyi iste\n}\nrequestAnimationFrame(loop);\n",
+        "vurgu_satirlari": [
+          4,
+          6
+        ],
+        "cikti": "loop saniyede yaklaşık 60 kez çalışır, sayfa donmaz.",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "İyi bir alışkanlık: hesaplamayı ve çizimi ayır. update yalnızca sayıları değiştirir, draw yalnızca çizer. Böylece update'i tek başına çağırıp sonucunu kontrol edebilirsin.",
+      "ekran": {
+        "baslik": "update ve draw'u ayır",
+        "kod": "const ball = { x: 20, y: 60, r: 10, vx: 2 };\nfunction update() {\n  ball.x += ball.vx; // yalnızca sayıları değiştirir\n}\nupdate();\nupdate();\nupdate();\nconsole.log(ball.x);\n",
+        "vurgu_satirlari": [
+          3,
+          8
+        ],
+        "cikti": "26",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 18,
+      "anlatim": "Hız, her karede konumun ne kadar değişeceğidir. Kenara çarpınca geri dönmesi için hızın işaretini çeviririz. Burada top 195'te, sağ kenarı geçiyor ve hızı eksi üçe dönüyor.",
+      "ekran": {
+        "baslik": "Hız ve kenardan sekme",
+        "kod": "const canvas = { width: 200 };\nconst ball = { x: 195, r: 10, vx: 3 };\nball.x += ball.vx;\nif (ball.x + ball.r > canvas.width || ball.x - ball.r < 0) {\n  ball.vx = -ball.vx;\n}\nconsole.log(ball.x, ball.vx);\n",
+        "vurgu_satirlari": [
+          4,
+          5
+        ],
+        "cikti": "198 -3",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      },
+      "calistir": true,
+      "yonetmen_notu": "Yanda tuval üzerinde topun sağ duvara çarpıp geri döndüğü kısa bir animasyon."
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 17,
+      "anlatim": "Bazı ekranlar saniyede 60, bazıları 120 kare çizer. Hızı saniye başına yazıp iki kare arasında geçen süreyle çarparsak oyun her ekranda aynı hızda oynar. Bu süreye dt diyoruz.",
+      "ekran": {
+        "baslik": "Zaman farkı: dt",
+        "kod": "const rocket = { x: 0, speed: 120 }; // piksel/saniye\nlet last = 1000;\nconst time = 1250;                   // rAF'ın verdiği zaman (ms)\nconst dt = (time - last) / 1000;     // saniye\nrocket.x += rocket.speed * dt;\nconsole.log(dt, rocket.x);\n",
+        "vurgu_satirlari": [
+          4,
+          5
+        ],
+        "cikti": "0.25 30",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "Gerçek döngüde zamanı rAF kendisi verir. requestAnimationFrame bir numara da döndürür; cancelAnimationFrame o numarayı alınca döngü durur.",
+      "ekran": {
+        "baslik": "Döngüde dt ve durdurmak",
+        "kod": "function loop(time) {\n  if (!last) last = time;          // ilk kare\n  const dt = (time - last) / 1000;\n  last = time;\n  update(dt);\n  draw();\n  frameId = requestAnimationFrame(loop);\n}\n// durdurmak için: cancelAnimationFrame(frameId);\n",
+        "vurgu_satirlari": [
+          3,
+          7,
+          9
+        ],
+        "cikti": "Roket her ekranda saniyede 120 piksel ilerler.",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      },
+      "calistir": false
+    },
+    {
+      "no": 8,
+      "tur": "hata",
+      "sure_sn": 13,
+      "anlatim": "Sık hata: draw içinde eski resmi silmeyi unutmak. O zaman her kare bir öncekinin üstüne çizilir ve top arkasında uzun bir iz bırakır!",
+      "ekran": {
+        "baslik": "Sık hata: clearRect'i unutmak",
+        "kod": "function draw() {\n  // ctx.clearRect(0, 0, canvas.width, canvas.height); unutuldu!\n  ctx.beginPath();\n  ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);\n  ctx.fill();\n}\n",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "Top hareket ederken arkasında kalın bir turuncu şerit kalır.",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 9,
+      "tur": "soru",
+      "sure_sn": 9,
+      "anlatim": "Soru zamanı! Kutu 10'da, hızı eksi 4. update iki kez çalışırsa sence x kaç olur?",
+      "ekran": {
+        "baslik": "Sence ne yazar?",
+        "kod": "const box = { x: 10, vx: -4 };\nfunction update() { box.x += box.vx; }\nupdate();\nupdate();\nconsole.log(box.x);\n",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 10,
+      "tur": "cikti",
+      "sure_sn": 8,
+      "anlatim": "Cevap 2! Hız eksi olunca kutu her karede 4 piksel sola gider: 10, 6, sonra 2.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "const box = { x: 10, vx: -4 };\nfunction update() { box.x += box.vx; }\nupdate();\nupdate();\nconsole.log(box.x);\n",
+        "cikti": "2",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 11,
+      "tur": "gorev",
+      "sure_sn": 12,
+      "anlatim": "Görev zamanı! Önce kayan bir kutu için update ve draw yazacaksın. Sonra dört duvardan seken bir top, en sonda da saniyede 120 piksel giden bir roket.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: İlk hareket",
+          "Görev 2: Duvardan sek",
+          "Görev 3: Saniyede 120 piksel"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 12,
+      "tur": "ozet",
+      "sure_sn": 12,
+      "anlatim": "Özetleyelim: requestAnimationFrame ile döngü kur, update ile hesapla, draw ile sil ve çiz. Kenarda hızın işaretini çevir, hızı dt ile çarp.",
+      "ekran": {
+        "baslik": "Özet",
+        "maddeler": [
+          "requestAnimationFrame(loop): her karede yeniden",
+          "update hesaplar, draw siler ve çizer",
+          "Sekme: vx = -vx  ·  Zaman: x += speed * dt"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 13,
+      "tur": "kapanis",
+      "sure_sn": 11,
+      "anlatim": "Gemin artık uçuyor! Yarın Piksel Gezegeni'nin son durağında her şeyi birleştiriyoruz: çarpışmalar, skor ve oyun bitti. Gerçek bir oyun döngüsü! Görüşürüz!",
+      "ekran": {
+        "baslik": "Yarın: Oyun döngüsü",
+        "gorsel": "gorseller/javascript/arka-plan/bg-space-wide.webp"
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

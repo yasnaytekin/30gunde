@@ -1,0 +1,1456 @@
+{
+ "day": 10,
+ "title": "Döngüler",
+ "region": "kale",
+ "project_contribution": "Oyun turları",
+ "game_role": "Yarasayla karşılaşınca savaş turları senin döngünle geçer.",
+ "xp_complete": 150,
+ "objective": "while ve for döngüleriyle tekrar eden işleri otomatik yapmak",
+ "story": "Mantık Kalesi'nin kulesinde 100 basamak var. Her basamak için ayrı ayrı `print` yazmak zorunda olsaydık parmaklarımız yorulurdu! Bilgisayarlar tekrar eden işleri hiç sıkılmadan yapar. Bugün **döngüleri** öğreniyoruz.",
+ "sections": [
+  {
+   "title": "while: koşul doğru oldukça",
+   "body": "`while` döngüsü, koşulu `True` olduğu sürece içindeki kodu tekrar tekrar çalıştırır:\n\n```python\ncount = 3\nwhile count > 0:\n    print(count)\n    count -= 1\nprint(\"Başla!\")\n```\n\nDöngünün içinde koşulu değiştirmeyi unutma. `count -= 1` olmasaydı döngü hiç bitmezdi. Buna **sonsuz döngü** denir; bu sitede 6 saniye sonra durdurulur."
+  },
+  {
+   "title": "for ve range()",
+   "body": "Bir şeyi belli sayıda tekrarlamak için `for` ve `range()` kullanılır:\n\n- `range(5)` 0, 1, 2, 3, 4\n- `range(1, 6)` 1, 2, 3, 4, 5 (son sayı dahil değil)\n- `range(0, 10, 2)` 0, 2, 4, 6, 8 (ikişer ikişer)\n\n```python\nfor i in range(1, 4):\n    print(\"Tur\", i)\n```"
+  },
+  {
+   "title": "Koleksiyonlarda gezinmek",
+   "body": "`for` bir listenin, tuple'ın, set'in, hatta bir yazının her elemanını sırayla verir:\n\n```python\nbag = [\"kılıç\", \"iksir\", \"harita\"]\nfor item in bag:\n    print(\"Çantada:\", item)\n```\n\nSözlükte gezinirken `for key, value in hero.items():` kullanabilirsin. Sıra numarası da lazımsa `enumerate()` işe yarar: `for i, item in enumerate(bag, 1):`"
+  },
+  {
+   "title": "break ve continue",
+   "body": "- `break` döngüden hemen çıkar\n- `continue` bu turu atlar ve sıradakine geçer\n\n```python\nfor n in range(1, 10):\n    if n == 5:\n        break\n    if n % 2 == 0:\n        continue\n    print(n)   # 1 ve 3\n```"
+  }
+ ],
+ "examples": [
+  {
+   "title": "Geri sayım",
+   "code": "count = 5\nwhile count > 0:\n    print(count)\n    count -= 1\nprint(\"Kalk!\")\n",
+   "note": ""
+  },
+  {
+   "title": "Toplama makinesi",
+   "code": "total = 0\nfor n in range(1, 101):\n    total += n\nprint(\"1'den 100'e toplam:\", total)\n",
+   "note": "Bu işlemi elle yapmak ne kadar sürerdi?"
+  },
+  {
+   "title": "Çantayı say",
+   "code": "bag = [\"kılıç\", \"iksir\", \"harita\", \"anahtar\"]\nfor i, item in enumerate(bag, 1):\n    print(f\"{i}. {item}\")\n    if item == \"harita\":\n        print(\"Harita bulundu, aramayı bırakıyorum.\")\n        break\n",
+   "note": ""
+  }
+ ],
+ "tasks": [
+  {
+   "id": "d10-t1",
+   "title": "Geri sayım",
+   "prompt": "`while` döngüsüyle `count`'tan 1'e kadar geri say, en sonda `Başla!` yazdır.",
+   "starter": "count = 5\n\n# while ile geri say, sonra \"Başla!\" yazdır\n",
+   "solution": "count = 5\n\nwhile count > 0:\n    print(count)\n    count -= 1\n\nprint(\"Başla!\")\n",
+   "hints": [
+    "while count > 0: ile başla.",
+    "Döngünün içinde count -= 1 yazmayı unutma."
+   ],
+   "check": {
+    "code_contains": [
+     "while"
+    ],
+    "python": "\nout, _ = _run(_set(_code, \"count\", 3))\nlines = [l.strip() for l in out.strip().splitlines()]\nassert lines == [\"3\", \"2\", \"1\", \"Başla!\"], \"count 3 iken çıktı 3, 2, 1, Başla! olmalı (her biri ayrı satırda).\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "count = 5",
+      "notes": [
+       "`count` adında bir değişken oluşturuluyor ve içine `5` (tam sayı) konuyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "while count > 0:",
+      "notes": [
+       "Döngü: `count > 0` doğru olduğu sürece girintili satırlar tekrar tekrar çalışır."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "    print(count)",
+      "notes": [
+       "`print(count)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "    count -= 1",
+      "notes": [
+       "`count -= 1`: `count` değişkeninin değeri güncelleniyor."
+      ]
+     },
+     {
+      "n": 7,
+      "code": "print(\"Başla!\")",
+      "notes": [
+       "`print(\"Başla!\")`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "count",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `5`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "while",
+      "kind": "anahtar kelime",
+      "desc": "Koşul doğru olduğu sürece altındaki satırları tekrarlar."
+     },
+     {
+      "term": ">",
+      "kind": "operatör",
+      "desc": "Büyük mü?"
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     },
+     {
+      "term": "-=",
+      "kind": "operatör",
+      "desc": "Değişkenin değerinden çıkarır: x -= 1 → x = x - 1."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d10-t2",
+   "title": "Çarpım tablosu",
+   "prompt": "`n` sayısının çarpım tablosunu 1'den 10'a kadar yazdır. Her satır şöyle olmalı: `7 x 3 = 21`",
+   "starter": "n = 7\n\n# for ve range ile n'nin çarpım tablosunu yazdır\n",
+   "solution": "n = 7\n\nfor i in range(1, 11):\n    print(f\"{n} x {i} = {n * i}\")\n",
+   "hints": [
+    "range(1, 11) sana 1'den 10'a kadar sayıları verir.",
+    "print(f\"{n} x {i} = {n * i}\")"
+   ],
+   "check": {
+    "code_contains": [
+     "for"
+    ],
+    "python": "\nout, _ = _run(_set(_code, \"n\", 3))\nfor i in range(1, 11):\n    assert f\"3 x {i} = {3 * i}\" in out, f\"n = 3 iken '3 x {i} = {3 * i}' satırı olmalı.\"\nassert \"3 x 11\" not in out and \"3 x 0 \" not in out, \"Tablo 1'den 10'a kadar olmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "n = 7",
+      "notes": [
+       "`n` adında bir değişken oluşturuluyor ve içine `7` (tam sayı) konuyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "for i in range(1, 11):",
+      "notes": [
+       "Döngü: `range(1, 11)` içindeki her eleman sırayla `i` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "    print(f\"{n} x {i} = {n * i}\")",
+      "notes": [
+       "`print(f\"{n} x {i} = {n * i}\")`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "n",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `7`."
+     },
+     {
+      "term": "i",
+      "kind": "döngü değişkeni",
+      "desc": "Döngünün her turunda `range(1, 11)` içindeki sıradaki elemanı tutar."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "for",
+      "kind": "anahtar kelime",
+      "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+     },
+     {
+      "term": "range()",
+      "kind": "fonksiyon",
+      "desc": "Sayı dizisi üretir: range(5) → 0, 1, 2, 3, 4. Son sayı dahil değildir."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     },
+     {
+      "term": "f\"...{}\"",
+      "kind": "metin",
+      "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+     },
+     {
+      "term": "*",
+      "kind": "operatör",
+      "desc": "Çarpma; metni ya da listeyi tekrarlama (\"*\" * 3 → \"***\")."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d10-t3",
+   "title": "Altınları topla",
+   "prompt": "`for` döngüsüyle `coins` listesindeki altınları topla ve `total` değişkenine yaz. Bu sefer `sum()` kullanmak yok!",
+   "starter": "coins = [5, 10, 3, 7]\ntotal = 0\n\n# for ile coins'i dolaş ve total'a ekle\n\nprint(\"Toplam altın:\", total)\n",
+   "solution": "coins = [5, 10, 3, 7]\ntotal = 0\n\nfor c in coins:\n    total += c\n\nprint(\"Toplam altın:\", total)\n",
+   "hints": [
+    "for c in coins: yazıp içinde total += c yap."
+   ],
+   "check": {
+    "code_contains": [
+     "for"
+    ],
+    "python": "\nassert \"sum(\" not in _code, \"Bu görevde sum() yerine for döngüsü kullan.\"\n_, g = _run(_set(_code, \"coins\", [1, 2, 3, 40]))\nassert g.get(\"total\") == 46, \"total, coins'teki sayıların toplamı olmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "coins = [5, 10, 3, 7]",
+      "notes": [
+       "`coins` adında bir değişken oluşturuluyor ve içine `[5, 10, 3, 7]` (liste) konuyor."
+      ]
+     },
+     {
+      "n": 2,
+      "code": "total = 0",
+      "notes": [
+       "`total` adında bir değişken oluşturuluyor ve içine `0` (tam sayı) konuyor."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "for c in coins:",
+      "notes": [
+       "Döngü: `coins` içindeki her eleman sırayla `c` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "    total += c",
+      "notes": [
+       "`total += c`: `total` değişkeninin değeri güncelleniyor."
+      ]
+     },
+     {
+      "n": 7,
+      "code": "print(\"Toplam altın:\", total)",
+      "notes": [
+       "`print(\"Toplam altın:\", total)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "coins",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `[5, 10, 3, 7]`."
+     },
+     {
+      "term": "total",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `0`."
+     },
+     {
+      "term": "c",
+      "kind": "döngü değişkeni",
+      "desc": "Döngünün her turunda `coins` içindeki sıradaki elemanı tutar."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "for",
+      "kind": "anahtar kelime",
+      "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+     },
+     {
+      "term": "+=",
+      "kind": "operatör",
+      "desc": "Değişkenin kendi değerine ekler: x += 1 → x = x + 1."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "id": "d10-c",
+  "title": "PiKo sayıları",
+  "prompt": "1'den `n`'ye kadar sayıları yazdır. Ama sayı 3'e bölünüyorsa `Pi`, 5'e bölünüyorsa `Ko`, ikisine de bölünüyorsa `PiKo` yaz.",
+  "starter": "n = 15\n\n# 1'den n'ye kadar: 3'e bölünürse Pi, 5'e Ko, ikisine PiKo\n",
+  "solution": "n = 15\n\nfor i in range(1, n + 1):\n    if i % 15 == 0:\n        print(\"PiKo\")\n    elif i % 3 == 0:\n        print(\"Pi\")\n    elif i % 5 == 0:\n        print(\"Ko\")\n    else:\n        print(i)\n",
+  "hints": [
+   "Bölünüyor mu diye % ile kalana bak: i % 3 == 0",
+   "İkisine de bölünme durumunu en önce kontrol et."
+  ],
+  "check": {
+   "python": "\ndef expected(n):\n    res = []\n    for i in range(1, n + 1):\n        res.append(\"PiKo\" if i % 15 == 0 else \"Pi\" if i % 3 == 0 else \"Ko\" if i % 5 == 0 else str(i))\n    return res\nfor n in (15, 31):\n    out, _ = _run(_set(_code, \"n\", n))\n    lines = [l.strip() for l in out.strip().splitlines()]\n    assert lines == expected(n), \"n = \" + str(n) + \" iken çıktı doğru değil. 15, 30 gibi sayılarda PiKo yazmalı.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "n = 15",
+     "notes": [
+      "`n` adında bir değişken oluşturuluyor ve içine `15` (tam sayı) konuyor."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "for i in range(1, n + 1):",
+     "notes": [
+      "Döngü: `range(1, n + 1)` içindeki her eleman sırayla `i` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "    if i % 15 == 0:",
+     "notes": [
+      "Koşul: `i % 15 == 0` doğruysa altındaki girintili satırlar çalışır."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "        print(\"PiKo\")",
+     "notes": [
+      "`print(\"PiKo\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "    elif i % 3 == 0:",
+     "notes": [
+      "`elif`: yukarıdaki koşul yanlışsa `i % 3 == 0` koşuluna bakılır."
+     ]
+    },
+    {
+     "n": 7,
+     "code": "        print(\"Pi\")",
+     "notes": [
+      "`print(\"Pi\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 8,
+     "code": "    elif i % 5 == 0:",
+     "notes": [
+      "`elif`: yukarıdaki koşul yanlışsa `i % 5 == 0` koşuluna bakılır."
+     ]
+    },
+    {
+     "n": 9,
+     "code": "        print(\"Ko\")",
+     "notes": [
+      "`print(\"Ko\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 10,
+     "code": "    else:",
+     "notes": [
+      "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+     ]
+    },
+    {
+     "n": 11,
+     "code": "        print(i)",
+     "notes": [
+      "`print(i)`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "n",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `15`."
+    },
+    {
+     "term": "i",
+     "kind": "döngü değişkeni",
+     "desc": "Döngünün her turunda `range(1, n + 1)` içindeki sıradaki elemanı tutar."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "for",
+     "kind": "anahtar kelime",
+     "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+    },
+    {
+     "term": "range()",
+     "kind": "fonksiyon",
+     "desc": "Sayı dizisi üretir: range(5) → 0, 1, 2, 3, 4. Son sayı dahil değildir."
+    },
+    {
+     "term": "+",
+     "kind": "operatör",
+     "desc": "Toplama; metinlerde ve listelerde uç uca ekleme."
+    },
+    {
+     "term": "if",
+     "kind": "anahtar kelime",
+     "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+    },
+    {
+     "term": "==",
+     "kind": "operatör",
+     "desc": "Eşit mi? (True/False)"
+    },
+    {
+     "term": "%",
+     "kind": "operatör",
+     "desc": "Mod: bölümden kalan (7 % 2 → 1)."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    },
+    {
+     "term": "elif",
+     "kind": "anahtar kelime",
+     "desc": "Önceki koşullar yanlışsa bu koşula bakılır (\"değilse eğer\")."
+    },
+    {
+     "term": "else",
+     "kind": "anahtar kelime",
+     "desc": "Yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+    }
+   ]
+  }
+ },
+ "project_task": {
+  "id": "d10-p",
+  "title": "Oyun turları",
+  "prompt": "Piko'nun canı `hp`. Düşman her turda `attacks` listesindeki kadar hasar veriyor.\n\n- Her tur için canı azalt ve `Tur 1: can 22` gibi yazdır.\n- Can 0 veya altına düşerse `Piko yoruldu, oyun bitti!` yazdır ve döngüden çık.\n- Tüm turlar bittiğinde can hâlâ 0'dan büyükse `Piko hayatta kaldı!` yazdır.",
+  "starter": "hp = 30\nattacks = [8, 5, 12, 9]\n\n# Her saldırıda canı azalt ve turu yazdır\n",
+  "solution": "hp = 30\nattacks = [8, 5, 12, 9]\n\nfor turn, damage in enumerate(attacks, 1):\n    hp -= damage\n    print(f\"Tur {turn}: can {hp}\")\n    if hp <= 0:\n        print(\"Piko yoruldu, oyun bitti!\")\n        break\n\nif hp > 0:\n    print(\"Piko hayatta kaldı!\")\n",
+  "hints": [
+   "enumerate(attacks, 1) sana tur numarasını ve hasarı birlikte verir.",
+   "Can 0 veya altına inince break ile çık.",
+   "Döngüden sonra if hp > 0: ile kontrol et."
+  ],
+  "check": {
+   "python": "\nout, _ = _run(_set(_set(_code, \"hp\", 20), \"attacks\", [5, 5, 5]))\nassert \"Tur 1: can 15\" in out and \"Tur 3: can 5\" in out, \"Her turda 'Tur 1: can 15' gibi yazmalı.\"\nassert \"Piko hayatta kaldı!\" in out and \"oyun bitti\" not in out, \"Can bitmezse 'Piko hayatta kaldı!' yazmalı.\"\nout, _ = _run(_set(_set(_code, \"hp\", 10), \"attacks\", [4, 7, 3]))\nassert \"Tur 2: can -1\" in out, \"Canı her turda azaltmalısın.\"\nassert \"Piko yoruldu, oyun bitti!\" in out, \"Can 0 veya altına inince 'Piko yoruldu, oyun bitti!' yazmalı.\"\nassert \"Tur 3\" not in out, \"Oyun bitince döngüden break ile çıkmalısın.\"\nassert \"hayatta kaldı\" not in out, \"Oyun bittiyse 'Piko hayatta kaldı!' yazmamalı.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "hp = 30",
+     "notes": [
+      "`hp` adında bir değişken oluşturuluyor ve içine `30` (tam sayı) konuyor."
+     ]
+    },
+    {
+     "n": 2,
+     "code": "attacks = [8, 5, 12, 9]",
+     "notes": [
+      "`attacks` adında bir değişken oluşturuluyor ve içine `[8, 5, 12, 9]` (liste) konuyor."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "for turn, damage in enumerate(attacks, 1):",
+     "notes": [
+      "Döngü: `enumerate(attacks, 1)` içindeki her eleman sırayla `turn, damage` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "    hp -= damage",
+     "notes": [
+      "`hp -= damage`: `hp` değişkeninin değeri güncelleniyor."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "    print(f\"Tur {turn}: can {hp}\")",
+     "notes": [
+      "`print(f\"Tur {turn}: can {hp}\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 7,
+     "code": "    if hp <= 0:",
+     "notes": [
+      "Koşul: `hp <= 0` doğruysa altındaki girintili satırlar çalışır."
+     ]
+    },
+    {
+     "n": 8,
+     "code": "        print(\"Piko yoruldu, oyun bitti!\")",
+     "notes": [
+      "`print(\"Piko yoruldu, oyun bitti!\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 9,
+     "code": "        break",
+     "notes": [
+      "`break`: Döngüden hemen çıkar."
+     ]
+    },
+    {
+     "n": 11,
+     "code": "if hp > 0:",
+     "notes": [
+      "Koşul: `hp > 0` doğruysa altındaki girintili satırlar çalışır."
+     ]
+    },
+    {
+     "n": 12,
+     "code": "    print(\"Piko hayatta kaldı!\")",
+     "notes": [
+      "`print(\"Piko hayatta kaldı!\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "hp",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `30`."
+    },
+    {
+     "term": "attacks",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `[8, 5, 12, 9]`."
+    },
+    {
+     "term": "turn",
+     "kind": "döngü değişkeni",
+     "desc": "Döngünün her turunda `enumerate(attacks, 1)` içindeki sıradaki elemanı tutar."
+    },
+    {
+     "term": "damage",
+     "kind": "döngü değişkeni",
+     "desc": "Döngünün her turunda `enumerate(attacks, 1)` içindeki sıradaki elemanı tutar."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "for",
+     "kind": "anahtar kelime",
+     "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+    },
+    {
+     "term": "enumerate()",
+     "kind": "fonksiyon",
+     "desc": "Listeyi gezerken her elemanın sıra numarasını da verir: (0, ilk), (1, ikinci)..."
+    },
+    {
+     "term": "-=",
+     "kind": "operatör",
+     "desc": "Değişkenin değerinden çıkarır: x -= 1 → x = x - 1."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    },
+    {
+     "term": "f\"...{}\"",
+     "kind": "metin",
+     "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+    },
+    {
+     "term": "if",
+     "kind": "anahtar kelime",
+     "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+    },
+    {
+     "term": "<=",
+     "kind": "operatör",
+     "desc": "Küçük ya da eşit mi?"
+    },
+    {
+     "term": "break",
+     "kind": "anahtar kelime",
+     "desc": "Döngüden hemen çıkar."
+    },
+    {
+     "term": ">",
+     "kind": "operatör",
+     "desc": "Büyük mü?"
+    }
+   ]
+  }
+ },
+ "available": true,
+ "visual_task": {
+  "id": "d10-v",
+  "title": "Piko piramidi",
+  "prompt": "Bir `for` döngüsüyle Piko piramidi kur: 1. satırda 1 Piko, 2. satırda 2 Piko... `kat` kadar satır olsun.\n\n`kat = 6` yazınca piramit 6 kat olmalı!",
+  "starter": "kat = 4\n\n",
+  "solution": "kat = 4\n\nfor i in range(1, kat + 1):\n    print(\"*\" * i)\n",
+  "hints": [
+   "for i in range(1, kat + 1):",
+   "Döngünün içinde print(\"*\" * i)"
+  ],
+  "check": {
+   "code_contains": [
+    "for"
+   ],
+   "python": "\ndef _satirlar(text):\n    return [l.rstrip() for l in text.strip(\"\\n\").split(\"\\n\")] if text.strip() else []\n\nassert _satirlar(_output) == [\"*\" * i for i in range(1, 5)], \"kat = 4 iken 4 satır olmalı: *, **, ***, ****\"\nout, _ = _run(_set(_code, \"kat\", 6))\nassert _satirlar(out) == [\"*\" * i for i in range(1, 7)], \"kat = 6 iken piramit 6 satır olmalı.\"\n"
+  },
+  "xp": 40,
+  "scene": {
+   "target": [
+    "*",
+    "**",
+    "***",
+    "****"
+   ]
+  },
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "kat = 4",
+     "notes": [
+      "`kat` adında bir değişken oluşturuluyor ve içine `4` (tam sayı) konuyor."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "for i in range(1, kat + 1):",
+     "notes": [
+      "Döngü: `range(1, kat + 1)` içindeki her eleman sırayla `i` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "    print(\"*\" * i)",
+     "notes": [
+      "`print(\"*\" * i)`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "kat",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `4`."
+    },
+    {
+     "term": "i",
+     "kind": "döngü değişkeni",
+     "desc": "Döngünün her turunda `range(1, kat + 1)` içindeki sıradaki elemanı tutar."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "for",
+     "kind": "anahtar kelime",
+     "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+    },
+    {
+     "term": "range()",
+     "kind": "fonksiyon",
+     "desc": "Sayı dizisi üretir: range(5) → 0, 1, 2, 3, 4. Son sayı dahil değildir."
+    },
+    {
+     "term": "+",
+     "kind": "operatör",
+     "desc": "Toplama; metinlerde ve listelerde uç uca ekleme."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    },
+    {
+     "term": "*",
+     "kind": "operatör",
+     "desc": "Çarpma; metni ya da listeyi tekrarlama (\"*\" * 3 → \"***\")."
+    }
+   ]
+  }
+ },
+ "tracks": {
+  "veri": {
+   "project_task": {
+    "id": "d10-pv",
+    "title": "Harcama dökümü",
+    "prompt": "`amounts` listesindeki harcamaları bir döngüyle yazdıralım:\n\n```\n1. harcama: 120 TL\n2. harcama: 45 TL\n3. harcama: 300 TL\nToplam: 465 TL\n```\n\nToplamı döngü içinde `total` değişkenine ekleyerek hesapla (`sum()` kullanmadan).",
+    "starter": "amounts = [120, 45, 300]\ntotal = 0\n",
+    "solution": "amounts = [120, 45, 300]\ntotal = 0\nnumber = 1\nfor amount in amounts:\n    print(f\"{number}. harcama: {amount} TL\")\n    total += amount\n    number += 1\nprint(f\"Toplam: {total} TL\")\n",
+    "hints": [
+     "for amount in amounts: ile her harcamayı sırayla al.",
+     "Sıra numarası için ayrı bir sayaç tutabilirsin: number += 1"
+    ],
+    "check": {
+     "python": "\nassert \"sum(\" not in _code, \"Toplamı döngüde kendin hesapla, sum() kullanma.\"\nout, g = _run(_set(_code, \"amounts\", [10, 20, 5, 7]))\nfor line in [\"1. harcama: 10 TL\", \"4. harcama: 7 TL\", \"Toplam: 42 TL\"]:\n    assert line in out, \"amounts [10, 20, 5, 7] iken '\" + line + \"' yazmalı.\"\nassert g[\"total\"] == 42, \"total döngüde toplanmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "amounts = [120, 45, 300]",
+       "notes": [
+        "`amounts` adında bir değişken oluşturuluyor ve içine `[120, 45, 300]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "total = 0",
+       "notes": [
+        "`total` adında bir değişken oluşturuluyor ve içine `0` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "number = 1",
+       "notes": [
+        "`number` adında bir değişken oluşturuluyor ve içine `1` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "for amount in amounts:",
+       "notes": [
+        "Döngü: `amounts` içindeki her eleman sırayla `amount` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "    print(f\"{number}. harcama: {amount} TL\")",
+       "notes": [
+        "`print(f\"{number}. harcama: {amount} TL\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    total += amount",
+       "notes": [
+        "`total += amount`: `total` değişkeninin değeri güncelleniyor."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "    number += 1",
+       "notes": [
+        "`number += 1`: `number` değişkeninin değeri güncelleniyor."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "print(f\"Toplam: {total} TL\")",
+       "notes": [
+        "`print(f\"Toplam: {total} TL\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "amounts",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[120, 45, 300]`."
+      },
+      {
+       "term": "total",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `0`."
+      },
+      {
+       "term": "number",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `1`."
+      },
+      {
+       "term": "amount",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `amounts` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "+=",
+       "kind": "operatör",
+       "desc": "Değişkenin kendi değerine ekler: x += 1 → x = x + 1."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Harcama dökümü",
+   "game_role": "Harcamaları numaralı liste hâlinde yazar ve toplar."
+  },
+  "otomasyon": {
+   "project_task": {
+    "id": "d10-po",
+    "title": "Yapılacaklar listesi",
+    "prompt": "Görevler `(başlık, bitti_mi)` ikilileri. Bir döngüyle şöyle bir liste yazdır:\n\n```\n[x] Kahve\n[ ] Rapor yaz\n[ ] Spor\n1/3 tamamlandı\n```\n\nBitenleri döngüde `done_count` değişkeninde say.",
+    "starter": "tasks = [(\"Kahve\", True), (\"Rapor yaz\", False), (\"Spor\", False)]\ndone_count = 0\n",
+    "solution": "tasks = [(\"Kahve\", True), (\"Rapor yaz\", False), (\"Spor\", False)]\ndone_count = 0\nfor title, done in tasks:\n    if done:\n        print(f\"[x] {title}\")\n        done_count += 1\n    else:\n        print(f\"[ ] {title}\")\nprint(f\"{done_count}/{len(tasks)} tamamlandı\")\n",
+    "hints": [
+     "for title, done in tasks: ikiliyi açar.",
+     "Bitenler için done_count += 1"
+    ],
+    "check": {
+     "python": "\nout, g = _run(_set(_code, \"tasks\", [(\"A\", False), (\"B\", True), (\"C\", True), (\"D\", False)]))\nfor line in [\"[ ] A\", \"[x] B\", \"[x] C\", \"[ ] D\", \"2/4 tamamlandı\"]:\n    assert line in out, \"'\" + line + \"' satırı yazılmalı.\"\nassert g[\"done_count\"] == 2, \"done_count bitmiş görevleri saymalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "tasks = [(\"Kahve\", True), (\"Rapor yaz\", False), (\"Spor\", False)]",
+       "notes": [
+        "`tasks` adında bir değişken oluşturuluyor ve içine `[(\"Kahve\", True), (\"Rapor yaz\", False), (\"Spor\", False)]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "done_count = 0",
+       "notes": [
+        "`done_count` adında bir değişken oluşturuluyor ve içine `0` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "for title, done in tasks:",
+       "notes": [
+        "Döngü: `tasks` içindeki her eleman sırayla `title, done` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "    if done:",
+       "notes": [
+        "Koşul: `done` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "        print(f\"[x] {title}\")",
+       "notes": [
+        "`print(f\"[x] {title}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "        done_count += 1",
+       "notes": [
+        "`done_count += 1`: `done_count` değişkeninin değeri güncelleniyor."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "    else:",
+       "notes": [
+        "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "        print(f\"[ ] {title}\")",
+       "notes": [
+        "`print(f\"[ ] {title}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "print(f\"{done_count}/{len(tasks)} tamamlandı\")",
+       "notes": [
+        "`print(f\"{done_count}/{len(tasks)} tamamlandı\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "tasks",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[(\"Kahve\", True), (\"Rapor yaz\", False), (\"Spor\", False)]`."
+      },
+      {
+       "term": "done_count",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `0`."
+      },
+      {
+       "term": "title",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `tasks` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "done",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `tasks` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "True",
+       "kind": "değer",
+       "desc": "Doğru (mantıksal değer)."
+      },
+      {
+       "term": "False",
+       "kind": "değer",
+       "desc": "Yanlış (mantıksal değer)."
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "+=",
+       "kind": "operatör",
+       "desc": "Değişkenin kendi değerine ekler: x += 1 → x = x + 1."
+      },
+      {
+       "term": "else",
+       "kind": "anahtar kelime",
+       "desc": "Yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Yapılacaklar listesi",
+   "game_role": "Görevleri işaret kutulu bir liste olarak yazar."
+  },
+  "web": {
+   "project_task": {
+    "id": "d10-pw",
+    "title": "Menü çubuğu",
+    "prompt": "Her sayfanın üstünde bir menü olacak. `menu` listesindeki her `(ad, dosya)` için bir döngüyle bir satır yazdır. Şu anki sayfa (`current`) bağlantı olmasın, kalın (`<b>`) yazılsın. Menüyü `<nav>` ve `</nav>` satırları arasına al:\n\n```\n<nav>\n<a href=\"index.html\">Ana Sayfa</a>\n<b>Blog</b>\n<a href=\"hakkimda.html\">Hakkımda</a>\n</nav>\n```",
+    "starter": "menu = [(\"Ana Sayfa\", \"index.html\"), (\"Blog\", \"blog.html\"), (\"Hakkımda\", \"hakkimda.html\")]\ncurrent = \"blog.html\"\n",
+    "solution": "menu = [(\"Ana Sayfa\", \"index.html\"), (\"Blog\", \"blog.html\"), (\"Hakkımda\", \"hakkimda.html\")]\ncurrent = \"blog.html\"\nprint(\"<nav>\")\nfor name, file in menu:\n    if file == current:\n        print(f\"<b>{name}</b>\")\n    else:\n        print(f'<a href=\"{file}\">{name}</a>')\nprint(\"</nav>\")\n",
+    "hints": [
+     "for name, file in menu: her tuple'ı iki değişkene açar.",
+     "Döngünün içinde if file == current: ile şu anki sayfayı ayır."
+    ],
+    "check": {
+     "code_contains": [
+      "for "
+     ],
+     "python": "\ntest = [(\"A\", \"a.html\"), (\"B\", \"b.html\"), (\"C\", \"c.html\")]\nout, _ = _run(_set(_set(_code, \"menu\", test), \"current\", \"c.html\"))\nlines = [l.strip() for l in out.strip().splitlines()]\nexpected = [\"<nav>\", '<a href=\"a.html\">A</a>', '<a href=\"b.html\">B</a>', \"<b>C</b>\", \"</nav>\"]\nassert lines == expected, \"menu başka sayfalarla ve current 'c.html' iken çıktı şu satırlar olmalı: \" + \" / \".join(expected)\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "menu = [(\"Ana Sayfa\", \"index.html\"), (\"Blog\", \"blog.html\"), (\"Hakkımda\", \"hakkimda.html\")]",
+       "notes": [
+        "`menu` adında bir değişken oluşturuluyor ve içine `[(\"Ana Sayfa\", \"index.html\"), (\"Blog\", \"blog.html\"), (\"Ha...` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "current = \"blog.html\"",
+       "notes": [
+        "`current` adında bir değişken oluşturuluyor ve içine `\"blog.html\"` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "print(\"<nav>\")",
+       "notes": [
+        "`print(\"<nav>\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "for name, file in menu:",
+       "notes": [
+        "Döngü: `menu` içindeki her eleman sırayla `name, file` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "    if file == current:",
+       "notes": [
+        "Koşul: `file == current` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "        print(f\"<b>{name}</b>\")",
+       "notes": [
+        "`print(f\"<b>{name}</b>\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "    else:",
+       "notes": [
+        "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "        print(f'<a href=\"{file}\">{name}</a>')",
+       "notes": [
+        "`print(f'<a href=\"{file}\">{name}</a>')`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "print(\"</nav>\")",
+       "notes": [
+        "`print(\"</nav>\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "menu",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[(\"Ana Sayfa\", \"index.html\"), (\"Blog\", \"blog.html\"), (\"Ha...`."
+      },
+      {
+       "term": "current",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"blog.html\"`."
+      },
+      {
+       "term": "name",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `menu` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "file",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `menu` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "==",
+       "kind": "operatör",
+       "desc": "Eşit mi? (True/False)"
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "else",
+       "kind": "anahtar kelime",
+       "desc": "Yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Menü",
+   "game_role": "Her sayfanın üstündeki menüyü döngüyle yazar; bulunulan sayfayı kalın gösterir."
+  },
+  "bot": {
+   "project_task": {
+    "id": "d10-pb",
+    "title": "Sohbet döngüsü",
+    "prompt": "Konuşmadaki mesajlar `conversation` listesinde. Bir `for` döngüsüyle her mesajı `Sen: merhaba` gibi yazdır ve `count` ile say.\n\nMesaj `\"görüşürüz\"` olunca `Bot: Hoşça kal! 3 mesaj konuştuk.` yazdır ve döngüyü **durdur** (`break`); sonraki mesajlar yazılmasın.\n\n```\nSen: merhaba\nSen: hava nasıl\nSen: görüşürüz\nBot: Hoşça kal! 3 mesaj konuştuk.\n```",
+    "starter": "conversation = [\"merhaba\", \"hava nasıl\", \"görüşürüz\", \"orada mısın?\"]\ncount = 0\n",
+    "solution": "conversation = [\"merhaba\", \"hava nasıl\", \"görüşürüz\", \"orada mısın?\"]\ncount = 0\nfor message in conversation:\n    print(f\"Sen: {message}\")\n    count += 1\n    if message == \"görüşürüz\":\n        print(f\"Bot: Hoşça kal! {count} mesaj konuştuk.\")\n        break\n",
+    "hints": [
+     "for message in conversation: her mesajı sırayla verir.",
+     "Veda mesajını yazdırdıktan sonra break ile döngüden çık."
+    ],
+    "check": {
+     "python": "\nout, g = _run(_set(_code, \"conversation\", [\"a\", \"b\", \"c\", \"görüşürüz\", \"d\"]))\nfor line in [\"Sen: a\", \"Sen: c\", \"Sen: görüşürüz\", \"Bot: Hoşça kal! 4 mesaj konuştuk.\"]:\n    assert line in out, \"conversation [\\\"a\\\", \\\"b\\\", \\\"c\\\", \\\"görüşürüz\\\", \\\"d\\\"] iken '\" + line + \"' yazmalı.\"\nassert \"Sen: d\" not in out, \"\\\"görüşürüz\\\"den sonra break ile döngüyü durdur.\"\nassert g[\"count\"] == 4, \"count, döngüde işlenen mesajları saymalı.\"\nout, g = _run(_set(_code, \"conversation\", [\"x\", \"y\"]))\nassert \"Sen: y\" in out and \"Hoşça kal\" not in out and g[\"count\"] == 2, \"Veda yoksa sadece mesajları yazıp saymalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "conversation = [\"merhaba\", \"hava nasıl\", \"görüşürüz\", \"orada mısın?\"]",
+       "notes": [
+        "`conversation` adında bir değişken oluşturuluyor ve içine `[\"merhaba\", \"hava nasıl\", \"görüşürüz\", \"orada mısın?\"]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "count = 0",
+       "notes": [
+        "`count` adında bir değişken oluşturuluyor ve içine `0` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "for message in conversation:",
+       "notes": [
+        "Döngü: `conversation` içindeki her eleman sırayla `message` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "    print(f\"Sen: {message}\")",
+       "notes": [
+        "`print(f\"Sen: {message}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "    count += 1",
+       "notes": [
+        "`count += 1`: `count` değişkeninin değeri güncelleniyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    if message == \"görüşürüz\":",
+       "notes": [
+        "Koşul: `message == \"görüşürüz\"` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "        print(f\"Bot: Hoşça kal! {count} mesaj konuştuk.\")",
+       "notes": [
+        "`print(f\"Bot: Hoşça kal! {count} mesaj konuştuk.\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "        break",
+       "notes": [
+        "`break`: Döngüden hemen çıkar."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "conversation",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[\"merhaba\", \"hava nasıl\", \"görüşürüz\", \"orada mısın?\"]`."
+      },
+      {
+       "term": "count",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `0`."
+      },
+      {
+       "term": "message",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `conversation` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "+=",
+       "kind": "operatör",
+       "desc": "Değişkenin kendi değerine ekler: x += 1 → x = x + 1."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "==",
+       "kind": "operatör",
+       "desc": "Eşit mi? (True/False)"
+      },
+      {
+       "term": "break",
+       "kind": "anahtar kelime",
+       "desc": "Döngüden hemen çıkar."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Sohbet akışı",
+   "game_role": "Konuşmadaki mesajları sırayla işler, veda edilince durur."
+  },
+  "okul": {
+   "project_task": {
+    "id": "d10-pn",
+    "title": "Sınav dökümü",
+    "prompt": "`grades` listesindeki sınav notlarını bir döngüyle yazdıralım. 50 ve üstü `geçti`, altı `kaldı`:\n\n```\n1. sınav: 85 - geçti\n2. sınav: 42 - kaldı\n3. sınav: 70 - geçti\n4. sınav: 55 - geçti\nGeçilen: 3/4\n```\n\nGeçilen sınav sayısını döngü içinde `passed_count` değişkeninde say.",
+    "starter": "grades = [85, 42, 70, 55]\npassed_count = 0\n",
+    "solution": "grades = [85, 42, 70, 55]\npassed_count = 0\nnumber = 1\nfor grade in grades:\n    if grade >= 50:\n        print(f\"{number}. sınav: {grade} - geçti\")\n        passed_count += 1\n    else:\n        print(f\"{number}. sınav: {grade} - kaldı\")\n    number += 1\nprint(f\"Geçilen: {passed_count}/{len(grades)}\")\n",
+    "hints": [
+     "for grade in grades: ile her notu sırayla al; içinde if grade >= 50:",
+     "Sıra numarası için ayrı bir sayaç tut: number += 1"
+    ],
+    "check": {
+     "python": "\nout, g = _run(_set(_code, \"grades\", [49, 50, 10]))\nfor line in [\"1. sınav: 49 - kaldı\", \"2. sınav: 50 - geçti\", \"3. sınav: 10 - kaldı\", \"Geçilen: 1/3\"]:\n    assert line in out, \"grades [49, 50, 10] iken '\" + line + \"' yazmalı.\"\nassert g[\"passed_count\"] == 1, \"passed_count döngüde geçilen sınavları saymalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "grades = [85, 42, 70, 55]",
+       "notes": [
+        "`grades` adında bir değişken oluşturuluyor ve içine `[85, 42, 70, 55]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "passed_count = 0",
+       "notes": [
+        "`passed_count` adında bir değişken oluşturuluyor ve içine `0` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "number = 1",
+       "notes": [
+        "`number` adında bir değişken oluşturuluyor ve içine `1` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "for grade in grades:",
+       "notes": [
+        "Döngü: `grades` içindeki her eleman sırayla `grade` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "    if grade >= 50:",
+       "notes": [
+        "Koşul: `grade >= 50` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "        print(f\"{number}. sınav: {grade} - geçti\")",
+       "notes": [
+        "`print(f\"{number}. sınav: {grade} - geçti\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "        passed_count += 1",
+       "notes": [
+        "`passed_count += 1`: `passed_count` değişkeninin değeri güncelleniyor."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "    else:",
+       "notes": [
+        "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "        print(f\"{number}. sınav: {grade} - kaldı\")",
+       "notes": [
+        "`print(f\"{number}. sınav: {grade} - kaldı\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "    number += 1",
+       "notes": [
+        "`number += 1`: `number` değişkeninin değeri güncelleniyor."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "print(f\"Geçilen: {passed_count}/{len(grades)}\")",
+       "notes": [
+        "`print(f\"Geçilen: {passed_count}/{len(grades)}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "grades",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[85, 42, 70, 55]`."
+      },
+      {
+       "term": "passed_count",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `0`."
+      },
+      {
+       "term": "number",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `1`."
+      },
+      {
+       "term": "grade",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `grades` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": ">=",
+       "kind": "operatör",
+       "desc": "Büyük ya da eşit mi?"
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "+=",
+       "kind": "operatör",
+       "desc": "Değişkenin kendi değerine ekler: x += 1 → x = x + 1."
+      },
+      {
+       "term": "else",
+       "kind": "anahtar kelime",
+       "desc": "Yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Sınav dökümü",
+   "game_role": "Sınav notlarını numaralı yazar ve kaç tanesinin geçtiğini sayar."
+  }
+ }
+}

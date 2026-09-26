@@ -1,0 +1,204 @@
+{
+  "kurs": "javascript",
+  "gun": 15,
+  "baslik": "Eleman oluşturmak",
+  "maskot": "kodi",
+  "ozet": "DOM Gezegeni'nde inşaat zamanı: createElement ile yeni eleman oluşturmak, append ve prepend ile eklemek, silmek, bir diziden render() ile liste çizmek ve dataset ile bilgi saklamak.",
+  "hedef_sure_sn": 170,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 11,
+      "anlatim": "Selam, ben Kodi! DOM Gezegeni'nde inşaat zamanı! Şimdiye kadar sayfada var olan elemanları değiştirdik. Peki hiç olmayan bir elemanı nasıl yaratırız?",
+      "ekran": {
+        "baslik": "Gün 15: Eleman oluşturmak",
+        "gorsel": "gorseller/javascript/bolgeler/dom.webp"
+      },
+      "maskot": { "poz": "el-sallama", "konum": "sag" },
+      "yonetmen_notu": "Gezegen yüzeyinde küçük vinçler yeni blokları yerine koyar."
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 15,
+      "anlatim": "Yeni bir eleman üç adımda eklenir: oluştur, doldur, ekle. createElement elemanı yalnızca bellekte yaratır; append ile bir yere eklemeden sayfada görünmez.",
+      "ekran": {
+        "baslik": "Oluştur, doldur, ekle",
+        "kod": "const list = document.querySelector(\"#cargo\");\nconst li = document.createElement(\"li\");\nli.textContent = \"Yakıt hücresi\";\nli.classList.add(\"item\");\nlist.append(li);\n",
+        "dil": "js",
+        "vurgu_satirlari": [2, 3, 5],
+        "html": "<ul id=\"cargo\"></ul>",
+        "cikti": "Boş listede bir madde belirir: Yakıt hücresi"
+      },
+      "maskot": { "poz": "isaret", "konum": "alt-sag" },
+      "calistir": false
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "Döngüyle bir diziden bütün listeyi kurabiliriz. append sona ekler, prepend ise başa. Güneş'i en son oluşturduk ama prepend sayesinde listenin en başına geçti.",
+      "ekran": {
+        "baslik": "append ve prepend",
+        "kod": "const planets = [\"Merkür\", \"Venüs\", \"Mars\"];\nconst list = document.querySelector(\"#list\");\nfor (const name of planets) {\n  const li = document.createElement(\"li\");\n  li.textContent = name;\n  list.append(li);\n}\nconst sun = document.createElement(\"li\");\nsun.textContent = \"Güneş (merkez)\";\nlist.prepend(sun);\nconsole.log(\"Eleman sayısı:\", list.children.length);\n",
+        "dil": "js",
+        "vurgu_satirlari": [6, 10],
+        "html": "<ul id=\"list\"></ul>",
+        "cikti": "Sayfadaki liste: Güneş (merkez), Merkür, Venüs, Mars\nÇıktı alanında: Eleman sayısı: 4"
+      },
+      "maskot": { "poz": "konusma", "konum": "alt-sag" },
+      "calistir": false
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "remove bir elemanı sayfadan siler. Bir kutunun içini tamamen boşaltmak için içeriğini boş metin yapmak yeter.",
+      "ekran": {
+        "baslik": "Silmek ve temizlemek",
+        "kod": "document.querySelector(\"#old\").remove();\ndocument.querySelector(\"#list\").textContent = \"\";\n",
+        "dil": "js",
+        "vurgu_satirlari": [1, 2],
+        "html": "<p id=\"old\">Eski mesaj</p>\n<ul id=\"list\">\n  <li>Ay</li>\n  <li>Mars</li>\n</ul>",
+        "cikti": "\"Eski mesaj\" paragrafı sayfadan kalkar, liste tamamen boşalır."
+      },
+      "maskot": { "poz": "isaret", "konum": "alt-sag" },
+      "calistir": false
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 18,
+      "anlatim": "Asıl güç burada: veriyi dizide tutup ekranı diziden çizmek. render fonksiyonu listeyi önce temizler, sonra diziden baştan kurar. Kural basit: önce veriyi değiştir, sonra render çağır.",
+      "ekran": {
+        "baslik": "Diziden liste: render()",
+        "kod": "const items = [\"Oksijen\", \"Su\", \"Yakıt\"];\nconst list = document.querySelector(\"#list\");\nfunction render() {\n  list.textContent = \"\";\n  for (const item of items) {\n    const li = document.createElement(\"li\");\n    li.textContent = item;\n    list.append(li);\n  }\n}\nrender();\nitems.push(\"Kalkan\");\nrender();\n",
+        "dil": "js",
+        "vurgu_satirlari": [4, 12, 13],
+        "html": "<ul id=\"list\"></ul>",
+        "cikti": "Sayfada dört maddelik liste, her biri bir kez: Oksijen, Su, Yakıt, Kalkan"
+      },
+      "maskot": { "poz": "mutlu", "konum": "alt-sag" },
+      "calistir": false,
+      "yonetmen_notu": "Solda dizi, sağda liste; dizi değişince ok çizilir ve liste yeniden kurulur."
+    },
+    {
+      "no": 6,
+      "tur": "hata",
+      "sure_sn": 15,
+      "anlatim": "Temizlemeyi unutursak ne olur? Hata mesajı çıkmaz ama her render eski listenin altına her şeyi bir kez daha ekler. Oksijen ve Su iki kez göründü! render'ın ilk işi temizlemek.",
+      "ekran": {
+        "baslik": "Temizlemeyi unutmak",
+        "kod": "const items = [\"Oksijen\", \"Su\"];\nconst list = document.querySelector(\"#list\");\nfunction render() {\n  for (const item of items) {\n    const li = document.createElement(\"li\");\n    li.textContent = item;\n    list.append(li);\n  }\n}\nrender();\nitems.push(\"Yakıt\");\nrender();\n",
+        "dil": "js",
+        "vurgu_satirlari": [3, 4],
+        "html": "<ul id=\"list\"></ul>",
+        "cikti": "Sayfadaki liste: Oksijen, Su, Oksijen, Su, Yakıt"
+      },
+      "maskot": { "poz": "uzgun", "konum": "sag" },
+      "calistir": false
+    },
+    {
+      "no": 7,
+      "tur": "kod",
+      "sure_sn": 15,
+      "anlatim": "Bir elemanda kendi bilgini data ile başlayan niteliklerde saklayabilirsin. JavaScript'te bunlara dataset ile ulaşılır. Tireli adlar camelCase olur. Dikkat: değer her zaman metindir!",
+      "ekran": {
+        "baslik": "dataset: data-* nitelikleri",
+        "kod": "const li = document.createElement(\"li\");\nli.dataset.id = 7;\nli.dataset.maxSpeed = 900;\nconsole.log(li.dataset.id, typeof li.dataset.id);\nconsole.log(li.outerHTML);\n",
+        "dil": "js",
+        "vurgu_satirlari": [2, 3, 4],
+        "cikti": "Çıktı alanında:\n7 string\n<li data-id=\"7\" data-max-speed=\"900\"></li>"
+      },
+      "maskot": { "poz": "konusma", "konum": "alt-sag" },
+      "calistir": false
+    },
+    {
+      "no": 8,
+      "tur": "kod",
+      "sure_sn": 17,
+      "anlatim": "dataset ve olay yetkilendirme birlikte çok güçlü. render her Sil düğmesine sıra numarasını data-index olarak yazdı. Listeye tek dinleyici koyduk: tıklanan düğmenin sırasını okuyup diziden siliyor, sonra yeniden çiziyoruz.",
+      "ekran": {
+        "baslik": "Tıklananı silmek",
+        "kod": "list.addEventListener(\"click\", (e) => {\n  if (e.target.tagName !== \"BUTTON\") return;\n  stars.splice(Number(e.target.dataset.index), 1);\n  render();\n});\n",
+        "dil": "js",
+        "vurgu_satirlari": [3, 4],
+        "html": "<ul id=\"list\">\n  <li>Vega <button data-index=\"0\">Sil</button></li>\n  <li>Sirius <button data-index=\"1\">Sil</button></li>\n</ul>",
+        "cikti": "Sirius'un yanındaki Sil düğmesine tıklanınca Sirius diziden çıkar ve liste yeniden çizilir: yalnızca Vega kalır."
+      },
+      "maskot": { "poz": "isaret", "konum": "alt-sag" },
+      "calistir": false
+    },
+    {
+      "no": 9,
+      "tur": "soru",
+      "sure_sn": 11,
+      "anlatim": "Döngü üç yıldız oluşturuyor ama her birini prepend ile ekliyor. Sence liste hangi sırayla görünür?",
+      "ekran": {
+        "baslik": "Sence sayfada ne görünür?",
+        "kod": "const list = document.querySelector(\"#list\");\nfor (let i = 1; i <= 3; i++) {\n  const li = document.createElement(\"li\");\n  li.textContent = \"Yıldız \" + i;\n  list.prepend(li);\n}\n",
+        "dil": "js",
+        "html": "<ul id=\"list\"></ul>"
+      },
+      "maskot": { "poz": "dusunme", "konum": "sag" }
+    },
+    {
+      "no": 10,
+      "tur": "cikti",
+      "sure_sn": 10,
+      "anlatim": "Tersten! Her yeni yıldız başa eklendiği için en son oluşturulan Yıldız 3 en üstte duruyor.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "const list = document.querySelector(\"#list\");\nfor (let i = 1; i <= 3; i++) {\n  const li = document.createElement(\"li\");\n  li.textContent = \"Yıldız \" + i;\n  list.prepend(li);\n}\n",
+        "dil": "js",
+        "vurgu_satirlari": [5],
+        "html": "<ul id=\"list\"></ul>",
+        "cikti": "Sayfadaki liste: Yıldız 3, Yıldız 2, Yıldız 1"
+      },
+      "maskot": { "poz": "mutlu", "konum": "sag" },
+      "calistir": false
+    },
+    {
+      "no": 11,
+      "tur": "gorev",
+      "sure_sn": 12,
+      "anlatim": "Görevlerin: yük listesine kodla ilk elemanları ekle, diziden listeyi çizen bir render yaz ve her yüke kimlik etiketi takıp tıklananı bul.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: İlk elemanlar",
+          "Görev 2: Diziden liste",
+          "Görev 3: Kimlik etiketleri"
+        ]
+      },
+      "maskot": { "poz": "isaret", "konum": "sol" }
+    },
+    {
+      "no": 12,
+      "tur": "ozet",
+      "sure_sn": 11,
+      "anlatim": "Özet: oluştur, doldur, ekle. Veriyi dizide tut, render ile önce temizle sonra çiz. Elemana bilgi saklamak için dataset kullan.",
+      "ekran": {
+        "baslik": "Özet",
+        "maddeler": [
+          "createElement, append, prepend, remove",
+          "render(): temizle, diziden baştan çiz",
+          "dataset: data-* değerleri metindir"
+        ]
+      },
+      "maskot": { "poz": "on", "konum": "sag" }
+    },
+    {
+      "no": 13,
+      "tur": "kapanis",
+      "sure_sn": 10,
+      "anlatim": "İnşaat tamam, harika iş çıkardın! Yarın pilotlardan bilgi alacağız: formlardan değer okuyup doğrulamayı ve hataları sayfada göstermeyi öğreneceğiz.",
+      "ekran": {
+        "baslik": "Yarın: Formlar",
+        "gorsel": "maskotlar/kodi-javascript/kahraman.png"
+      },
+      "maskot": { "poz": "tebrik", "konum": "sag" }
+    }
+  ]
+}

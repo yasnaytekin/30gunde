@@ -1,0 +1,215 @@
+{
+ "day": 6,
+ "title": "Diziler",
+ "region": "ay",
+ "xp_complete": 150,
+ "objective": "Dizi oluşturmak, elemanlara indeksle ulaşmak, eleman eklemek, çıkarmak ve aramak",
+ "story": "Roketin kargo bölmesi doluyor: yakıt hücreleri, kalkanlar, haritalar... Her birine ayrı bir değişken açmak yerine hepsini tek bir listede tutacağız. Bu listenin adı **dizi (array)**.",
+ "sections": [
+  {
+   "title": "Dizi: sıralı bir liste",
+   "body": "Birçok değeri tek bir değişkende, sırayla tutmak için **dizi** kullanılır. Dizi köşeli parantezle yazılır, elemanlar virgülle ayrılır:\n\n```js\nconst planets = [\"Merkür\", \"Venüs\", \"Dünya\"];\nconsole.log(planets[0]);                   // Merkür\nconsole.log(planets.length);               // 3\nconsole.log(planets[planets.length - 1]);  // Dünya (son eleman)\n```\n\nMetinlerde olduğu gibi sayma **0'dan** başlar: ilk eleman `[0]`, son eleman `[length - 1]`. Python bildiysen: dizi, Python'daki listeye çok benzer."
+  },
+  {
+   "title": "Eleman eklemek ve çıkarmak",
+   "body": "Bir elemanı değiştirmek için sırasına yeni değer ver: `planets[1] = \"Mars\";`. Eklemek ve çıkarmak için dört metot var:\n\n| Metot | Ne yapar | Örnek |\n| --- | --- | --- |\n| `push(x)` | Sona ekler | `cargo.push(\"su\")` |\n| `pop()` | Sondakini çıkarır ve verir | `const last = cargo.pop()` |\n| `unshift(x)` | Başa ekler | `cargo.unshift(\"harita\")` |\n| `shift()` | Baştakini çıkarır ve verir | `const first = cargo.shift()` |\n\n`const` ile oluşturduğun diziye yine de eleman ekleyip çıkarabilirsin. `const` yalnızca değişkenin **başka bir diziye** bağlanmasını engeller."
+  },
+  {
+   "title": "Aramak: includes ve indexOf",
+   "body": "```js\nconst crew = [\"Deniz\", \"Ada\", \"Can\"];\nconsole.log(crew.includes(\"Ada\"));   // true\nconsole.log(crew.indexOf(\"Can\"));    // 2\nconsole.log(crew.indexOf(\"Mert\"));   // -1\n```\n\n- `includes(x)`: dizide x var mı? `true` ya da `false` verir.\n- `indexOf(x)`: x **kaçıncı sırada**? Bulamazsa `-1` verir."
+  },
+  {
+   "title": "slice, splice ve join",
+   "body": "```js\nconst route = [\"Dünya\", \"Ay\", \"Mars\", \"Jüpiter\"];\nconsole.log(route.slice(1, 3));   // ['Ay', 'Mars']\nroute.splice(1, 1);               // 1. sıradan 1 eleman sil\nroute.splice(1, 0, \"Venüs\");      // 1. sıraya ekle, hiç silme\nconsole.log(route.join(\" → \"));   // Dünya → Venüs → Mars → Jüpiter\n```\n\n- `slice(a, b)` diziyi **değiştirmez**; a'dan b'ye kadar (b hariç) bir kopya verir.\n- `splice(sıra, kaç)` diziyi **değiştirir**: o sıradan başlayarak siler. `splice(sıra, 0, yeni)` araya ekler.\n- `join(ayraç)` bütün elemanları aralarına ayracı koyarak tek bir metinde birleştirir."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Kargo listesi",
+   "code": "const cargo = [\"yakıt\", \"kalkan\"];\ncargo.push(\"harita\");\nconsole.log(cargo);\nconsole.log(\"Eşya sayısı:\", cargo.length);\nconsole.log(\"Son eklenen:\", cargo[cargo.length - 1]);\n",
+   "note": "push diziyi yerinde değiştirir; yeni bir dizi oluşturmaz."
+  },
+  {
+   "title": "Arama ve birleştirme",
+   "code": "const crew = [\"Deniz\", \"Ada\", \"Can\", \"Ece\"];\nconsole.log(crew.includes(\"Can\"));\nconsole.log(crew.indexOf(\"Ece\"));\nconsole.log(crew.indexOf(\"Mert\"));\nconsole.log(crew.slice(1, 3));\nconsole.log(crew.join(\" - \"));\n",
+   "note": "indexOf bulamadığında -1 verir."
+  }
+ ],
+ "tasks": [
+  {
+   "id": "js-d6-t1",
+   "title": "Gezegen listesi",
+   "prompt": "`planets` dizisinden şu değişkenleri oluştur:\n\n- `first`: ilk eleman\n- `last`: son eleman. `\"Mars\"` yazma; `planets.length - 1` sırasını kullan.\n- `count`: dizide kaç eleman olduğu",
+   "starter": "const planets = [\"Merkür\", \"Venüs\", \"Dünya\", \"Mars\"];\n\n// first, last ve count'u oluştur\n\nconsole.log(first, last, count);\n",
+   "solution": "const planets = [\"Merkür\", \"Venüs\", \"Dünya\", \"Mars\"];\n\n// first, last ve count'u oluştur\nconst first = planets[0];\nconst last = planets[planets.length - 1];\nconst count = planets.length;\n\nconsole.log(first, last, count);\n",
+   "hints": [
+    "İlk eleman: planets[0]",
+    "Son eleman: planets[planets.length - 1]",
+    "Eleman sayısı: planets.length"
+   ],
+   "check": {
+    "code_contains": [
+     "length"
+    ],
+    "js": "assert(first === \"Merkür\", \"first 'Merkür' olmalı.\");\nassert(last === \"Mars\", \"last 'Mars' olmalı.\");\nassert(count === 4, \"count 4 olmalı.\");\nassert(/length\\s*-\\s*1/.test(_code), \"Son elemana planets[planets.length - 1] ile ulaş.\");\nassert((_code.match(/[\"'`]Mars[\"'`]/g) || []).length === 1, \"\\\"Mars\\\" metnini ikinci kez yazma; diziden al.\");"
+   },
+   "xp": 50
+  },
+  {
+   "id": "js-d6-t2",
+   "title": "Kargo yükleme",
+   "prompt": "Kargo listesini düzenle. Dizinin ilk satırını değiştirme; sadece metotları kullan:\n\n1. Sondaki `\"çöp\"` elemanını `pop` ile çıkar.\n2. Sona `\"kalkan\"` ekle (`push`).\n3. Başa `\"harita\"` ekle (`unshift`).\n\nSonunda `cargo` şöyle olmalı: `['harita', 'yakıt', 'su', 'kalkan']`",
+   "starter": "const cargo = [\"yakıt\", \"su\", \"çöp\"];\n\n// pop, push ve unshift ile düzenle\n\nconsole.log(cargo);\n",
+   "solution": "const cargo = [\"yakıt\", \"su\", \"çöp\"];\n\n// pop, push ve unshift ile düzenle\ncargo.pop();\ncargo.push(\"kalkan\");\ncargo.unshift(\"harita\");\n\nconsole.log(cargo);\n",
+   "hints": [
+    "cargo.pop(); sondaki elemanı çıkarır.",
+    "cargo.push(\"kalkan\"); ve cargo.unshift(\"harita\");"
+   ],
+   "check": {
+    "code_contains": [
+     "pop",
+     "push",
+     "unshift"
+    ],
+    "js": "assert(/cargo\\s*=\\s*\\[\\s*[\"'`]yakıt[\"'`]\\s*,\\s*[\"'`]su[\"'`]\\s*,\\s*[\"'`]çöp[\"'`]\\s*\\]/.test(_code), \"Dizinin ilk satırını değiştirme: const cargo = [\\\"yakıt\\\", \\\"su\\\", \\\"çöp\\\"];\");\nassert(same(cargo, [\"harita\", \"yakıt\", \"su\", \"kalkan\"]), \"cargo sonunda ['harita', 'yakıt', 'su', 'kalkan'] olmalı.\");\nassert(/\\.pop\\s*\\(/.test(_code) && /\\.push\\s*\\(/.test(_code) && /\\.unshift\\s*\\(/.test(_code), \"pop, push ve unshift metotlarını kullanmalısın.\");"
+   },
+   "xp": 50
+  },
+  {
+   "id": "js-d6-t3",
+   "title": "Mürettebat araması",
+   "prompt": "Mürettebat listesinde arama yap:\n\n- `hasCan`: listede `\"Can\"` var mı? (`includes`)\n- `adaIndex`: `\"Ada\"` kaçıncı sırada? (`indexOf`)\n- `mertIndex`: `\"Mert\"` kaçıncı sırada? (listede yok, bakalım ne olacak)",
+   "starter": "const crew = [\"Deniz\", \"Ada\", \"Can\", \"Ece\"];\n\n// hasCan, adaIndex ve mertIndex\n\nconsole.log(hasCan, adaIndex, mertIndex);\n",
+   "solution": "const crew = [\"Deniz\", \"Ada\", \"Can\", \"Ece\"];\n\n// hasCan, adaIndex ve mertIndex\nconst hasCan = crew.includes(\"Can\");\nconst adaIndex = crew.indexOf(\"Ada\");\nconst mertIndex = crew.indexOf(\"Mert\");\n\nconsole.log(hasCan, adaIndex, mertIndex);\n",
+   "hints": [
+    "crew.includes(\"Can\") true ya da false verir.",
+    "crew.indexOf(\"Ada\") sırayı verir; bulamazsa -1."
+   ],
+   "check": {
+    "code_contains": [
+     "includes",
+     "indexOf"
+    ],
+    "js": "assert(hasCan === true, \"hasCan true olmalı.\");\nassert(adaIndex === 1, \"adaIndex 1 olmalı (sayma 0'dan başlar).\");\nassert(mertIndex === -1, \"mertIndex -1 olmalı: indexOf bulamayınca -1 verir.\");\nassert((_code.match(/indexOf\\s*\\(/g) || []).length >= 2, \"adaIndex ve mertIndex'i indexOf ile bul; sayıları elle yazma.\");"
+   },
+   "xp": 50
+  }
+ ],
+ "challenge": {
+  "id": "js-d6-c",
+  "title": "Rotaya durak ekle",
+  "prompt": "Roketin rotasını düzenle:\n\n1. `splice` ile `\"Mars\"` ve `\"Jüpiter\"` arasına `\"Asteroit Kuşağı\"` ekle (dizinin ilk satırını değiştirme).\n2. `firstStops`: rotanın ilk iki durağı (`slice`).\n3. `routeText`: bütün duraklar, aralarında ` → ` olacak şekilde (`join`).\n\nBeklenen `routeText`: `Dünya → Ay → Mars → Asteroit Kuşağı → Jüpiter`",
+  "starter": "const route = [\"Dünya\", \"Ay\", \"Mars\", \"Jüpiter\"];\n\n// 1) splice ile ekle\n// 2) firstStops\n// 3) routeText\n\nconsole.log(firstStops);\nconsole.log(routeText);\n",
+  "solution": "const route = [\"Dünya\", \"Ay\", \"Mars\", \"Jüpiter\"];\n\n// 1) splice ile ekle\nroute.splice(3, 0, \"Asteroit Kuşağı\");\n// 2) firstStops\nconst firstStops = route.slice(0, 2);\n// 3) routeText\nconst routeText = route.join(\" → \");\n\nconsole.log(firstStops);\nconsole.log(routeText);\n",
+  "hints": [
+   "Jüpiter 3. sırada; oraya ekleyince Jüpiter bir sağa kayar: route.splice(3, 0, \"Asteroit Kuşağı\")",
+   "route.slice(0, 2) ilk iki elemanı verir.",
+   "route.join(\" → \")"
+  ],
+  "check": {
+   "code_contains": [
+    "splice",
+    "slice",
+    "join"
+   ],
+   "js": "assert(!/[\"'`]Mars[\"'`]\\s*,\\s*[\"'`]Asteroit/.test(_code), \"Dizinin ilk satırını değiştirme; yeni durağı splice ile ekle.\");\nassert(same(route, [\"Dünya\", \"Ay\", \"Mars\", \"Asteroit Kuşağı\", \"Jüpiter\"]), \"route sonunda ['Dünya', 'Ay', 'Mars', 'Asteroit Kuşağı', 'Jüpiter'] olmalı.\");\nassert(same(firstStops, [\"Dünya\", \"Ay\"]), \"firstStops ['Dünya', 'Ay'] olmalı.\");\nassert(routeText === \"Dünya → Ay → Mars → Asteroit Kuşağı → Jüpiter\", \"routeText 'Dünya → Ay → Mars → Asteroit Kuşağı → Jüpiter' olmalı.\");\nassert(/\\.splice\\s*\\(/.test(_code) && /\\.join\\s*\\(/.test(_code), \"splice ve join kullanmalısın.\");"
+  },
+  "xp": 75
+ },
+ "project_contribution": "Envanter listesi",
+ "project_task": {
+  "id": "js-d6-p",
+  "title": "Envanter listesi",
+  "prompt": "**Yıldız Avcısı** gemisinin bir envanteri olsun. `inventory` dizisiyle:\n\n1. Gemi bir `\"yakıt hücresi\"` buldu: sona ekle.\n2. `\"lazer\"` bozuldu: `indexOf` ile sırasını bul, `splice` ile çıkar.\n3. `hasShield`: envanterde `\"kalkan\"` var mı?\n4. Şu satırı yazdır (eşyalar `join`, sayı `length` ile gelsin):\n\n```\nEnvanter: kalkan, yakıt hücresi (2 eşya)\n```",
+  "starter": "const inventory = [\"kalkan\", \"lazer\"];\n\n// 1) yakıt hücresi ekle\n// 2) lazeri çıkar\n// 3) hasShield\n// 4) Envanter satırını yazdır\n",
+  "solution": "const inventory = [\"kalkan\", \"lazer\"];\n\n// 1) yakıt hücresi ekle\ninventory.push(\"yakıt hücresi\");\n// 2) lazeri çıkar\nconst laserIndex = inventory.indexOf(\"lazer\");\ninventory.splice(laserIndex, 1);\n// 3) hasShield\nconst hasShield = inventory.includes(\"kalkan\");\n// 4) Envanter satırını yazdır\nconsole.log(`Envanter: ${inventory.join(\", \")} (${inventory.length} eşya)`);\n",
+  "hints": [
+   "inventory.push(\"yakıt hücresi\");",
+   "const laserIndex = inventory.indexOf(\"lazer\"); sonra inventory.splice(laserIndex, 1);",
+   "Şablon metin içinde ${inventory.join(\", \")} ve ${inventory.length} kullan."
+  ],
+  "check": {
+   "code_contains": [
+    "push",
+    "indexOf",
+    "splice",
+    "join"
+   ],
+   "js": "assert(same(inventory, [\"kalkan\", \"yakıt hücresi\"]), \"inventory sonunda ['kalkan', 'yakıt hücresi'] olmalı.\");\nassert(hasShield === true, \"hasShield true olmalı.\");\nassert(/\\.splice\\s*\\(/.test(_code), \"Lazeri splice ile çıkarmalısın.\");\nassert(_lines.includes(\"Envanter: kalkan, yakıt hücresi (2 eşya)\"), \"Çıktıda 'Envanter: kalkan, yakıt hücresi (2 eşya)' görünmeli.\");\nassert(!/kalkan, yakıt/.test(_code) && !/\\(2 eşya/.test(_code), \"Satırı elle yazma; join ve length kullan.\");"
+  },
+  "xp": 100
+ },
+ "tracks": {
+  "js-web": {
+   "project_contribution": "Menü dizisi",
+   "project_task": {
+    "id": "js-d6-pw",
+    "title": "Menü dizisi",
+    "prompt": "Sitenin menüsünü bir dizide tutalım:\n\n1. `menu` dizisinin sonuna `\"İletişim\"` ekle.\n2. `menuCount`: menüde kaç bağlantı var?\n3. `hasBlog`: menüde `\"Blog\"` var mı?\n4. `menuText`: bağlantılar aralarında ` | ` olacak şekilde birleşsin ve yazdır.\n\nBeklenen çıktı: `Ana Sayfa | Hakkımda | Projeler | İletişim`",
+    "starter": "const menu = [\"Ana Sayfa\", \"Hakkımda\", \"Projeler\"];\n\n// 1) İletişim'i ekle\n// 2) menuCount\n// 3) hasBlog\n// 4) menuText'i oluştur ve yazdır\n",
+    "solution": "const menu = [\"Ana Sayfa\", \"Hakkımda\", \"Projeler\"];\n\n// 1) İletişim'i ekle\nmenu.push(\"İletişim\");\n// 2) menuCount\nconst menuCount = menu.length;\n// 3) hasBlog\nconst hasBlog = menu.includes(\"Blog\");\n// 4) menuText'i oluştur ve yazdır\nconst menuText = menu.join(\" | \");\nconsole.log(menuText);\n",
+    "hints": [
+     "menu.push(\"İletişim\");",
+     "menu.includes(\"Blog\") true ya da false verir.",
+     "menu.join(\" | \")"
+    ],
+    "check": {
+     "code_contains": [
+      "push",
+      "includes",
+      "join"
+     ],
+     "js": "assert(same(menu, [\"Ana Sayfa\", \"Hakkımda\", \"Projeler\", \"İletişim\"]), \"menu sonunda ['Ana Sayfa', 'Hakkımda', 'Projeler', 'İletişim'] olmalı.\");\nassert(menuCount === 4, \"menuCount 4 olmalı.\");\nassert(hasBlog === false, \"hasBlog false olmalı (menüde Blog yok).\");\nassert(menuText === \"Ana Sayfa | Hakkımda | Projeler | İletişim\", \"menuText 'Ana Sayfa | Hakkımda | Projeler | İletişim' olmalı.\");\nassert(_lines.includes(menuText), \"menuText'i yazdırmalısın.\");\nassert(!/Ana Sayfa \\|/.test(_code), \"Menü metnini elle yazma; join kullan.\");"
+    },
+    "xp": 100
+   }
+  },
+  "js-app": {
+   "project_contribution": "Görev dizisi",
+   "project_task": {
+    "id": "js-d6-pa",
+    "title": "Görev dizisi",
+    "prompt": "Asistanın görevlerini bir dizide tutalım:\n\n1. Sona `\"İngilizce kelime\"` görevini ekle.\n2. İlk görev bitti: `shift` ile çıkar ve `finished` değişkenine koy.\n3. Şu iki satırı yazdır (görev adı `finished`'dan, sayı `tasks.length`'ten gelsin):\n\n```\nTamamlandı: Matematik ödevi\nKalan görev: 2\n```",
+    "starter": "const tasks = [\"Matematik ödevi\", \"Kitap okuma\"];\n\n// 1) yeni görevi ekle\n// 2) finished\n// 3) iki satırı yazdır\n",
+    "solution": "const tasks = [\"Matematik ödevi\", \"Kitap okuma\"];\n\n// 1) yeni görevi ekle\ntasks.push(\"İngilizce kelime\");\n// 2) finished\nconst finished = tasks.shift();\n// 3) iki satırı yazdır\nconsole.log(\"Tamamlandı:\", finished);\nconsole.log(\"Kalan görev:\", tasks.length);\n",
+    "hints": [
+     "tasks.push(\"İngilizce kelime\");",
+     "shift() çıkardığı elemanı verir: const finished = tasks.shift();"
+    ],
+    "check": {
+     "code_contains": [
+      "push",
+      "shift",
+      "length"
+     ],
+     "js": "assert(finished === \"Matematik ödevi\", \"finished 'Matematik ödevi' olmalı.\");\nassert(same(tasks, [\"Kitap okuma\", \"İngilizce kelime\"]), \"tasks sonunda ['Kitap okuma', 'İngilizce kelime'] olmalı.\");\nassert(_lines.includes(\"Tamamlandı: Matematik ödevi\") && _lines.includes(\"Kalan görev: 2\"), \"Çıktıda 'Tamamlandı: Matematik ödevi' ve 'Kalan görev: 2' görünmeli.\");\nassert(!/Tamamlandı: Matematik/.test(_code) && !/[\"'`]Kalan görev: ?2/.test(_code), \"Satırları elle yazma; finished ve tasks.length kullan.\");"
+    },
+    "xp": 100
+   }
+  },
+  "js-quiz": {
+   "project_contribution": "Soru dizisi",
+   "project_task": {
+    "id": "js-d6-pq",
+    "title": "Soru dizisi",
+    "prompt": "Sorular ve cevaplar iki dizide duruyor; aynı sıradaki soru ile cevap birbirine ait.\n\n1. Üçüncü soruyu ekle: `\"Kızıl gezegen olarak bilinen gezegen hangisidir?\"`, cevabı `\"Mars\"`.\n2. `total`: kaç soru var?\n3. Son soruyu ve cevabını yazdır. Sıra numarası ve metinler dizilerden gelsin (3 sayısını elle yazma):\n\n```\nSoru 3: Kızıl gezegen olarak bilinen gezegen hangisidir?\nCevap: Mars\n```",
+    "starter": "const questions = [\"Ay, hangi gezegenin uydusudur?\", \"Güneş sistemindeki en büyük gezegen hangisidir?\"];\nconst answers = [\"Dünya\", \"Jüpiter\"];\n\n// 1) üçüncü soru ve cevabını ekle\n// 2) total\n// 3) son soruyu ve cevabını yazdır\n",
+    "solution": "const questions = [\"Ay, hangi gezegenin uydusudur?\", \"Güneş sistemindeki en büyük gezegen hangisidir?\"];\nconst answers = [\"Dünya\", \"Jüpiter\"];\n\n// 1) üçüncü soru ve cevabını ekle\nquestions.push(\"Kızıl gezegen olarak bilinen gezegen hangisidir?\");\nanswers.push(\"Mars\");\n// 2) total\nconst total = questions.length;\n// 3) son soruyu ve cevabını yazdır\nconsole.log(`Soru ${total}: ${questions[total - 1]}`);\nconsole.log(`Cevap: ${answers[total - 1]}`);\n",
+    "hints": [
+     "Soruyu questions'a, cevabı answers'a push ile ekle.",
+     "Son eleman: questions[total - 1]",
+     "Şablon metin: Soru ${total}: ..."
+    ],
+    "check": {
+     "code_contains": [
+      "push",
+      "length"
+     ],
+     "js": "assert(questions.length === 3 && answers.length === 3, \"Her iki dizide de 3 eleman olmalı.\");\nassert(questions[2] === \"Kızıl gezegen olarak bilinen gezegen hangisidir?\" && answers[2] === \"Mars\", \"Üçüncü soru ve cevabı (Mars) dizilerin sonuna eklenmeli.\");\nassert(total === 3, \"total 3 olmalı.\");\nassert(_lines.includes(\"Soru 3: Kızıl gezegen olarak bilinen gezegen hangisidir?\"), \"Çıktıda 'Soru 3: Kızıl gezegen olarak bilinen gezegen hangisidir?' görünmeli.\");\nassert(_lines.includes(\"Cevap: Mars\"), \"Çıktıda 'Cevap: Mars' görünmeli.\");\nassert(!/Soru 3/.test(_code) && !/Cevap: Mars/.test(_code), \"Satırları elle yazma; sayı total'dan, metinler dizilerden gelsin.\");"
+    },
+    "xp": 100
+   }
+  }
+ },
+ "available": true
+}

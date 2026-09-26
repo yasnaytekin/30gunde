@@ -1,0 +1,1752 @@
+{
+ "day": 25,
+ "title": "Pandas",
+ "region": "liman",
+ "project_contribution": "Skor analizi",
+ "game_role": "Skor analizin bu sürümde oyunda kullanılmıyor.",
+ "xp_complete": 150,
+ "objective": "pandas ile tablo verisi oluşturmak, incelemek, filtrelemek ve özetlemek",
+ "story": "Liman başkanının masasında dev bir defter var: her satırda bir gemi, her sütunda bir bilgi. Satır satır okumak yerine \"en çok yük taşıyan kim?\" diye sorup anında cevap almak istiyor. Bugün tablolar için süper güçlü bir alet olan **pandas** ile tanışıyoruz.",
+ "sections": [
+  {
+   "title": "DataFrame: Python'da tablo",
+   "body": "pandas'ın kalbi **DataFrame** denen tablodur. Bir sözlükten kolayca oluşturulur; anahtarlar sütun adları, listeler sütunların değerleri olur:\n\n```python\nimport pandas as pd\n\ndata = {\"isim\": [\"Piko\", \"Ece\", \"Can\"], \"skor\": [300, 250, 120]}\ndf = pd.DataFrame(data)\nprint(df)\n```\n\nİlk çalıştırmada pandas yükleneceği için biraz bekleyebilirsin."
+  },
+  {
+   "title": "Tabloyu tanımak",
+   "body": "- `df.head()` ilk 5 satır\n- `df.shape` (satır sayısı, sütun sayısı)\n- `df.columns` sütun adları\n- `df.describe()` sayısal sütunların özeti\n\nTek bir sütun `df[\"skor\"]` şeklinde alınır. Buna **Series** denir ve `.mean()`, `.max()`, `.sum()` gibi metotları vardır."
+  },
+  {
+   "title": "Filtrelemek ve sıralamak",
+   "body": "```python\nwinners = df[df[\"skor\"] >= 200]           # koşula uyan satırlar\ntop = df.sort_values(\"skor\", ascending=False)\nbest = top.iloc[0][\"isim\"]                # ilk satırın isim hücresi\nnames = df[\"isim\"].tolist()               # sütunu listeye çevir\n```\n\nYeni sütun eklemek de kolay: `df[\"bonus\"] = df[\"skor\"] * 2`"
+  },
+  {
+   "title": "CSV ve gruplama",
+   "body": "Gerçek veriler çoğu zaman **CSV** dosyasında gelir: virgülle ayrılmış satırlar. `pd.read_csv(\"dosya.csv\")` onu tabloya çevirir. Elimizde yazı olarak varsa `io.StringIO` ile dosya gibi okutabiliriz.\n\nAynı değere sahip satırları toplamak için `groupby` kullanılır:\n\n```python\ntotals = df.groupby(\"oyuncu\")[\"skor\"].sum()\nprint(totals.idxmax())   # toplamı en yüksek oyuncu\n```"
+  }
+ ],
+ "examples": [
+  {
+   "title": "İlk tablo",
+   "code": "import pandas as pd\n\ndata = {\"isim\": [\"Piko\", \"Ece\", \"Can\"], \"skor\": [300, 250, 120]}\ndf = pd.DataFrame(data)\nprint(df)\nprint(\"Boyut:\", df.shape)\nprint(\"Ortalama skor:\", df[\"skor\"].mean())\n",
+   "note": ""
+  },
+  {
+   "title": "Filtre ve sıralama",
+   "code": "import pandas as pd\n\ndf = pd.DataFrame({\"isim\": [\"Piko\", \"Ece\", \"Can\", \"Ada\"], \"skor\": [300, 250, 120, 280]})\nprint(df[df[\"skor\"] >= 250])\nprint(df.sort_values(\"skor\", ascending=False)[\"isim\"].tolist())\n",
+   "note": ""
+  },
+  {
+   "title": "CSV ve gruplama",
+   "code": "import io\nimport pandas as pd\n\ncsv = \"\"\"oyuncu,skor\nPiko,50\nEce,70\nPiko,40\nEce,10\n\"\"\"\ndf = pd.read_csv(io.StringIO(csv))\ntotals = df.groupby(\"oyuncu\")[\"skor\"].sum()\nprint(totals)\nprint(\"Kazanan:\", totals.idxmax())\n",
+   "note": ""
+  }
+ ],
+ "tasks": [
+  {
+   "id": "d25-t1",
+   "title": "İlk tablom",
+   "prompt": "`data` sözlüğünden `df` adında bir DataFrame oluştur. Sonra satır sayısını `rows` değişkenine koy.",
+   "starter": "import pandas as pd\n\ndata = {\"gemi\": [\"Martı\", \"Yunus\", \"Kartal\"], \"yük\": [12, 30, 7]}\n\ndf = None\nrows = 0\n\nprint(df)\nprint(\"Satır:\", rows)\n",
+   "solution": "import pandas as pd\n\ndata = {\"gemi\": [\"Martı\", \"Yunus\", \"Kartal\"], \"yük\": [12, 30, 7]}\n\ndf = pd.DataFrame(data)\nrows = df.shape[0]\n\nprint(df)\nprint(\"Satır:\", rows)\n",
+   "hints": [
+    "df = pd.DataFrame(data)",
+    "df.shape (satır, sütun) verir; satır sayısı df.shape[0] ya da len(df)"
+   ],
+   "check": {
+    "python": "\n_, g = _run(_set(_code, \"data\", {\"gemi\": [\"A\", \"B\", \"C\", \"D\"], \"yük\": [1, 2, 3, 4]}))\nd = g.get(\"df\")\nassert d is not None and type(d).__name__ == \"DataFrame\", \"df bir DataFrame olmalı: pd.DataFrame(data)\"\nassert list(d.columns) == [\"gemi\", \"yük\"], \"df'in sütunları data'nın anahtarları olmalı.\"\nassert int(g.get(\"rows\")) == 4, \"rows, tablodaki satır sayısı olmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "import pandas as pd",
+      "notes": [
+       "`pandas` modülü programa ekleniyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "data = {\"gemi\": [\"Martı\", \"Yunus\", \"Kartal\"], \"yük\": [12, 30, 7]}",
+      "notes": [
+       "`data` adında bir değişken oluşturuluyor ve içine `{\"gemi\": [\"Martı\", \"Yunus\", \"Kartal\"], \"yük\": [12, 30, 7]}` (sözlük (anahtar: değer)) konuyor."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "df = pd.DataFrame(data)",
+      "notes": [
+       "`df` adında bir değişken oluşturuluyor ve içine `pd.DataFrame(data)` konuyor."
+      ]
+     },
+     {
+      "n": 6,
+      "code": "rows = df.shape[0]",
+      "notes": [
+       "`rows` adında bir değişken oluşturuluyor ve içine `df.shape[0]` konuyor."
+      ]
+     },
+     {
+      "n": 8,
+      "code": "print(df)",
+      "notes": [
+       "`print(df)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     },
+     {
+      "n": 9,
+      "code": "print(\"Satır:\", rows)",
+      "notes": [
+       "`print(\"Satır:\", rows)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "data",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"gemi\": [\"Martı\", \"Yunus\", \"Kartal\"], \"yük\": [12, 30, 7]}`."
+     },
+     {
+      "term": "df",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `pd.DataFrame(data)`."
+     },
+     {
+      "term": "rows",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `df.shape[0]`."
+     },
+     {
+      "term": "import",
+      "kind": "anahtar kelime",
+      "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+     },
+     {
+      "term": "pandas",
+      "kind": "modül",
+      "desc": "Tablo (satır-sütun) verisiyle çalışma kütüphanesi."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": ".DataFrame()",
+      "kind": "metot",
+      "desc": "Pandas tablosu (satır ve sütunlar) oluşturur."
+     },
+     {
+      "term": "[ ]",
+      "kind": "seçme",
+      "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d25-t2",
+   "title": "Ortalama yük",
+   "prompt": "`df` tablosundaki `yük` sütununun ortalamasını `avg` değişkenine koy.",
+   "starter": "import pandas as pd\n\ndata = {\"gemi\": [\"Martı\", \"Yunus\", \"Kartal\"], \"yük\": [12, 30, 6]}\ndf = pd.DataFrame(data)\n\navg = 0\n\nprint(\"Ortalama yük:\", avg)\n",
+   "solution": "import pandas as pd\n\ndata = {\"gemi\": [\"Martı\", \"Yunus\", \"Kartal\"], \"yük\": [12, 30, 6]}\ndf = pd.DataFrame(data)\n\navg = df[\"yük\"].mean()\n\nprint(\"Ortalama yük:\", avg)\n",
+   "hints": [
+    "Sütun: df[\"yük\"]",
+    "Ortalama: .mean()"
+   ],
+   "check": {
+    "python": "\n_, g = _run(_set(_code, \"data\", {\"gemi\": [\"A\", \"B\"], \"yük\": [5, 20]}))\nassert float(g.get(\"avg\")) == 12.5, \"yük [5, 20] iken avg 12.5 olmalı: df['yük'].mean()\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "import pandas as pd",
+      "notes": [
+       "`pandas` modülü programa ekleniyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "data = {\"gemi\": [\"Martı\", \"Yunus\", \"Kartal\"], \"yük\": [12, 30, 6]}",
+      "notes": [
+       "`data` adında bir değişken oluşturuluyor ve içine `{\"gemi\": [\"Martı\", \"Yunus\", \"Kartal\"], \"yük\": [12, 30, 6]}` (sözlük (anahtar: değer)) konuyor."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "df = pd.DataFrame(data)",
+      "notes": [
+       "`df` adında bir değişken oluşturuluyor ve içine `pd.DataFrame(data)` konuyor."
+      ]
+     },
+     {
+      "n": 6,
+      "code": "avg = df[\"yük\"].mean()",
+      "notes": [
+       "`avg` adında bir değişken oluşturuluyor ve içine `df[\"yük\"].mean()` konuyor."
+      ]
+     },
+     {
+      "n": 8,
+      "code": "print(\"Ortalama yük:\", avg)",
+      "notes": [
+       "`print(\"Ortalama yük:\", avg)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "data",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"gemi\": [\"Martı\", \"Yunus\", \"Kartal\"], \"yük\": [12, 30, 6]}`."
+     },
+     {
+      "term": "df",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `pd.DataFrame(data)`."
+     },
+     {
+      "term": "avg",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `df[\"yük\"].mean()`."
+     },
+     {
+      "term": "import",
+      "kind": "anahtar kelime",
+      "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+     },
+     {
+      "term": "pandas",
+      "kind": "modül",
+      "desc": "Tablo (satır-sütun) verisiyle çalışma kütüphanesi."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": ".DataFrame()",
+      "kind": "metot",
+      "desc": "Pandas tablosu (satır ve sütunlar) oluşturur."
+     },
+     {
+      "term": ".mean()",
+      "kind": "metot",
+      "desc": "Ortalamayı hesaplar."
+     },
+     {
+      "term": "[ ]",
+      "kind": "seçme",
+      "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d25-t3",
+   "title": "Ağır gemiler",
+   "prompt": "Yükü 10 veya daha fazla olan gemilerin isimlerini **liste** olarak `heavy` değişkenine koy.",
+   "starter": "import pandas as pd\n\ndata = {\"gemi\": [\"Martı\", \"Yunus\", \"Kartal\", \"Balina\"], \"yük\": [12, 30, 7, 10]}\ndf = pd.DataFrame(data)\n\nheavy = []\n\nprint(heavy)\n",
+   "solution": "import pandas as pd\n\ndata = {\"gemi\": [\"Martı\", \"Yunus\", \"Kartal\", \"Balina\"], \"yük\": [12, 30, 7, 10]}\ndf = pd.DataFrame(data)\n\nheavy = df[df[\"yük\"] >= 10][\"gemi\"].tolist()\n\nprint(heavy)\n",
+   "hints": [
+    "Önce satırları filtrele: df[df[\"yük\"] >= 10]",
+    "Sonra gemi sütununu listeye çevir: [\"gemi\"].tolist()"
+   ],
+   "check": {
+    "python": "\n_, g = _run(_set(_code, \"data\", {\"gemi\": [\"A\", \"B\", \"C\"], \"yük\": [9, 10, 50]}))\nassert g.get(\"heavy\") == [\"B\", \"C\"], \"heavy, yükü 10 ve üstü gemilerin isim listesi olmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "import pandas as pd",
+      "notes": [
+       "`pandas` modülü programa ekleniyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "data = {\"gemi\": [\"Martı\", \"Yunus\", \"Kartal\", \"Balina\"], \"yük\": [12, 30, 7, 10]}",
+      "notes": [
+       "`data` adında bir değişken oluşturuluyor ve içine `{\"gemi\": [\"Martı\", \"Yunus\", \"Kartal\", \"Balina\"], \"yük\": [...` (sözlük (anahtar: değer)) konuyor."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "df = pd.DataFrame(data)",
+      "notes": [
+       "`df` adında bir değişken oluşturuluyor ve içine `pd.DataFrame(data)` konuyor."
+      ]
+     },
+     {
+      "n": 6,
+      "code": "heavy = df[df[\"yük\"] >= 10][\"gemi\"].tolist()",
+      "notes": [
+       "`heavy` adında bir değişken oluşturuluyor ve içine `df[df[\"yük\"] >= 10][\"gemi\"].tolist()` konuyor."
+      ]
+     },
+     {
+      "n": 8,
+      "code": "print(heavy)",
+      "notes": [
+       "`print(heavy)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "data",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"gemi\": [\"Martı\", \"Yunus\", \"Kartal\", \"Balina\"], \"yük\": [...`."
+     },
+     {
+      "term": "df",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `pd.DataFrame(data)`."
+     },
+     {
+      "term": "heavy",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `df[df[\"yük\"] >= 10][\"gemi\"].tolist()`."
+     },
+     {
+      "term": "import",
+      "kind": "anahtar kelime",
+      "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+     },
+     {
+      "term": "pandas",
+      "kind": "modül",
+      "desc": "Tablo (satır-sütun) verisiyle çalışma kütüphanesi."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": ".DataFrame()",
+      "kind": "metot",
+      "desc": "Pandas tablosu (satır ve sütunlar) oluşturur."
+     },
+     {
+      "term": ".tolist()",
+      "kind": "metot",
+      "desc": "Diziyi normal Python listesine çevirir."
+     },
+     {
+      "term": "[ ]",
+      "kind": "seçme",
+      "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+     },
+     {
+      "term": ">=",
+      "kind": "operatör",
+      "desc": "Büyük ya da eşit mi?"
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "id": "d25-c",
+  "title": "En iyi oyuncu",
+  "prompt": "Tabloyu `skor`'a göre büyükten küçüğe sırala ve en yüksek skorlu oyuncunun ismini `best` değişkenine koy.",
+  "starter": "import pandas as pd\n\ndata = {\"isim\": [\"Ali\", \"Piko\", \"Ece\"], \"skor\": [120, 300, 250]}\ndf = pd.DataFrame(data)\n\nbest = \"\"\n\nprint(\"En iyi:\", best)\n",
+  "solution": "import pandas as pd\n\ndata = {\"isim\": [\"Ali\", \"Piko\", \"Ece\"], \"skor\": [120, 300, 250]}\ndf = pd.DataFrame(data)\n\ntop = df.sort_values(\"skor\", ascending=False)\nbest = top.iloc[0][\"isim\"]\n\nprint(\"En iyi:\", best)\n",
+  "hints": [
+   "df.sort_values(\"skor\", ascending=False)",
+   "İlk satırın ismi: top.iloc[0][\"isim\"]"
+  ],
+  "check": {
+   "code_contains": [
+    "sort_values"
+   ],
+   "python": "\n_, g = _run(_set(_code, \"data\", {\"isim\": [\"X\", \"Y\", \"Z\"], \"skor\": [5, 1, 9]}))\nassert g.get(\"best\") == \"Z\", \"best, en yüksek skorlu oyuncunun ismi olmalı.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "import pandas as pd",
+     "notes": [
+      "`pandas` modülü programa ekleniyor."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "data = {\"isim\": [\"Ali\", \"Piko\", \"Ece\"], \"skor\": [120, 300, 250]}",
+     "notes": [
+      "`data` adında bir değişken oluşturuluyor ve içine `{\"isim\": [\"Ali\", \"Piko\", \"Ece\"], \"skor\": [120, 300, 250]}` (sözlük (anahtar: değer)) konuyor."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "df = pd.DataFrame(data)",
+     "notes": [
+      "`df` adında bir değişken oluşturuluyor ve içine `pd.DataFrame(data)` konuyor."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "top = df.sort_values(\"skor\", ascending=False)",
+     "notes": [
+      "`top` adında bir değişken oluşturuluyor ve içine `df.sort_values(\"skor\", ascending=False)` konuyor."
+     ]
+    },
+    {
+     "n": 7,
+     "code": "best = top.iloc[0][\"isim\"]",
+     "notes": [
+      "`best` adında bir değişken oluşturuluyor ve içine `top.iloc[0][\"isim\"]` konuyor."
+     ]
+    },
+    {
+     "n": 9,
+     "code": "print(\"En iyi:\", best)",
+     "notes": [
+      "`print(\"En iyi:\", best)`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "data",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"isim\": [\"Ali\", \"Piko\", \"Ece\"], \"skor\": [120, 300, 250]}`."
+    },
+    {
+     "term": "df",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `pd.DataFrame(data)`."
+    },
+    {
+     "term": "top",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `df.sort_values(\"skor\", ascending=False)`."
+    },
+    {
+     "term": "best",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `top.iloc[0][\"isim\"]`."
+    },
+    {
+     "term": "import",
+     "kind": "anahtar kelime",
+     "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+    },
+    {
+     "term": "pandas",
+     "kind": "modül",
+     "desc": "Tablo (satır-sütun) verisiyle çalışma kütüphanesi."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": ".DataFrame()",
+     "kind": "metot",
+     "desc": "Pandas tablosu (satır ve sütunlar) oluşturur."
+    },
+    {
+     "term": ".sort_values()",
+     "kind": "metot",
+     "desc": "Tabloyu bir sütuna göre sıralar."
+    },
+    {
+     "term": "False",
+     "kind": "değer",
+     "desc": "Yanlış (mantıksal değer)."
+    },
+    {
+     "term": "[ ]",
+     "kind": "seçme",
+     "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    }
+   ]
+  }
+ },
+ "project_task": {
+  "id": "d25-p",
+  "title": "Skor analizi",
+  "prompt": "Piko'nun Macerası'nda oynanan oyunların skorları CSV olarak geldi. Aynı oyuncu birden çok kez oynamış olabilir.\n\n- CSV'yi `df` tablosuna oku.\n- `totals`: her oyuncunun toplam skoru (`groupby`)\n- `winner`: toplamı en yüksek oyuncu\n- `Kazanan: Ece` gibi yazdır.",
+  "starter": "import io\nimport pandas as pd\n\ncsv = \"\"\"oyuncu,skor\nPiko,50\nEce,70\nPiko,40\nEce,30\nCan,80\n\"\"\"\n\ndf = None\ntotals = None\nwinner = \"\"\n\nprint(f\"Kazanan: {winner}\")\n",
+  "solution": "import io\nimport pandas as pd\n\ncsv = \"\"\"oyuncu,skor\nPiko,50\nEce,70\nPiko,40\nEce,30\nCan,80\n\"\"\"\n\ndf = pd.read_csv(io.StringIO(csv))\ntotals = df.groupby(\"oyuncu\")[\"skor\"].sum()\nwinner = totals.idxmax()\n\nprint(f\"Kazanan: {winner}\")\n",
+  "hints": [
+   "pd.read_csv(io.StringIO(csv))",
+   "df.groupby(\"oyuncu\")[\"skor\"].sum()",
+   "En büyük toplamın sahibi: totals.idxmax()"
+  ],
+  "check": {
+   "python": "\ntest = \"oyuncu,skor\\nAda,10\\nEfe,15\\nAda,10\\nDeniz,19\\n\"\nout, g = _run(_set(_code, \"csv\", test))\nt = g.get(\"totals\")\nassert t is not None and int(t[\"Ada\"]) == 20 and int(t[\"Efe\"]) == 15, \"totals, her oyuncunun toplam skoru olmalı: groupby ve sum\"\nassert g.get(\"winner\") == \"Ada\", \"winner, toplamı en yüksek oyuncu olmalı.\"\nassert \"Kazanan: Ada\" in out, \"Kazananı yazdırmalısın.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "import io",
+     "notes": [
+      "`io` modülü programa ekleniyor."
+     ]
+    },
+    {
+     "n": 2,
+     "code": "import pandas as pd",
+     "notes": [
+      "`pandas` modülü programa ekleniyor."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "csv = \"\"\"oyuncu,skor",
+     "notes": [
+      "`csv` adında bir değişken oluşturuluyor ve içine `\"\"\"oyuncu,skor Piko,50 Ece,70 Piko,40 Ece,30 Can,80 \"\"\"` (metin (str)) konuyor."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "Piko,50",
+     "notes": [
+      "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "Ece,70",
+     "notes": [
+      "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+     ]
+    },
+    {
+     "n": 7,
+     "code": "Piko,40",
+     "notes": [
+      "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+     ]
+    },
+    {
+     "n": 8,
+     "code": "Ece,30",
+     "notes": [
+      "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+     ]
+    },
+    {
+     "n": 9,
+     "code": "Can,80",
+     "notes": [
+      "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+     ]
+    },
+    {
+     "n": 10,
+     "code": "\"\"\"",
+     "notes": [
+      "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+     ]
+    },
+    {
+     "n": 12,
+     "code": "df = pd.read_csv(io.StringIO(csv))",
+     "notes": [
+      "`df` adında bir değişken oluşturuluyor ve içine `pd.read_csv(io.StringIO(csv))` konuyor."
+     ]
+    },
+    {
+     "n": 13,
+     "code": "totals = df.groupby(\"oyuncu\")[\"skor\"].sum()",
+     "notes": [
+      "`totals` adında bir değişken oluşturuluyor ve içine `df.groupby(\"oyuncu\")[\"skor\"].sum()` konuyor."
+     ]
+    },
+    {
+     "n": 14,
+     "code": "winner = totals.idxmax()",
+     "notes": [
+      "`winner` adında bir değişken oluşturuluyor ve içine `totals.idxmax()` konuyor."
+     ]
+    },
+    {
+     "n": 16,
+     "code": "print(f\"Kazanan: {winner}\")",
+     "notes": [
+      "`print(f\"Kazanan: {winner}\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "csv",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `\"\"\"oyuncu,skor Piko,50 Ece,70 Piko,40 Ece,30 Can,80 \"\"\"`."
+    },
+    {
+     "term": "df",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `pd.read_csv(io.StringIO(csv))`."
+    },
+    {
+     "term": "totals",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `df.groupby(\"oyuncu\")[\"skor\"].sum()`."
+    },
+    {
+     "term": "winner",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `totals.idxmax()`."
+    },
+    {
+     "term": "import",
+     "kind": "anahtar kelime",
+     "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+    },
+    {
+     "term": "io",
+     "kind": "modül",
+     "desc": "Girdi/çıktı araçları."
+    },
+    {
+     "term": "pandas",
+     "kind": "modül",
+     "desc": "Tablo (satır-sütun) verisiyle çalışma kütüphanesi."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": ".read_csv()",
+     "kind": "metot",
+     "desc": "CSV verisini pandas tablosuna okur."
+    },
+    {
+     "term": ".StringIO()",
+     "kind": "metot",
+     "desc": "Bir metni dosyaymış gibi kullanmayı sağlar."
+    },
+    {
+     "term": ".sum()",
+     "kind": "metot",
+     "desc": "`df.groupby(\"oyuncu\")[\"skor\"]` nesnesinin `sum` metodunu çağırır."
+    },
+    {
+     "term": "[ ]",
+     "kind": "seçme",
+     "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+    },
+    {
+     "term": ".groupby()",
+     "kind": "metot",
+     "desc": "Tabloyu bir sütuna göre gruplar."
+    },
+    {
+     "term": ".idxmax()",
+     "kind": "metot",
+     "desc": "En büyük değerin bulunduğu satırı verir."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    },
+    {
+     "term": "f\"...{}\"",
+     "kind": "metin",
+     "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+    }
+   ]
+  }
+ },
+ "available": true,
+ "tracks": {
+  "veri": {
+   "project_task": {
+    "id": "d25-pv",
+    "title": "Kategori analizi",
+    "prompt": "Bankadan indirdiğin harcamalar CSV olarak `csv` değişkeninde (`kategori,tutar`). Aynı kategoride birden çok harcama olabilir.\n\n- CSV'yi `df` tablosuna oku (`pd.read_csv(io.StringIO(csv))`).\n- `by_category`: her kategorinin toplam harcaması (`groupby` ve `sum`)\n- `top`: toplamı en yüksek kategori (`idxmax()`)\n- `En çok harcama: market` gibi yazdır.",
+    "starter": "import io\nimport pandas as pd\n\ncsv = \"\"\"kategori,tutar\nmarket,120\nkahve,35\nmarket,300\nulaşım,150\n\"\"\"\n",
+    "solution": "import io\nimport pandas as pd\n\ncsv = \"\"\"kategori,tutar\nmarket,120\nkahve,35\nmarket,300\nulaşım,150\n\"\"\"\ndf = pd.read_csv(io.StringIO(csv))\nby_category = df.groupby(\"kategori\")[\"tutar\"].sum()\ntop = by_category.idxmax()\nprint(by_category)\nprint(\"En çok harcama:\", top)\n",
+    "hints": [
+     "df.groupby(\"kategori\")[\"tutar\"].sum()",
+     "by_category.idxmax() en büyük değerin etiketini verir."
+    ],
+    "check": {
+     "python": "\ntest = \"kategori,tutar\\nkira,100\\nkahve,15\\nkahve,10\\noyun,99\\n\"\nout, g = _run(_set(_code, \"csv\", test))\nt = g.get(\"by_category\")\nassert t is not None and int(t[\"kahve\"]) == 25 and int(t[\"kira\"]) == 100, \"by_category, her kategorinin toplamı olmalı: groupby ve sum\"\nassert g.get(\"top\") == \"kira\", \"top, toplamı en yüksek kategori olmalı.\"\nassert \"En çok harcama: kira\" in out, \"'En çok harcama: kira' gibi yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "import io",
+       "notes": [
+        "`io` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "import pandas as pd",
+       "notes": [
+        "`pandas` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "csv = \"\"\"kategori,tutar",
+       "notes": [
+        "`csv` adında bir değişken oluşturuluyor ve içine `\"\"\"kategori,tutar market,120 kahve,35 market,300 ulaşım,1...` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "market,120",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "kahve,35",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "market,300",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "ulaşım,150",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "\"\"\"",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "df = pd.read_csv(io.StringIO(csv))",
+       "notes": [
+        "`df` adında bir değişken oluşturuluyor ve içine `pd.read_csv(io.StringIO(csv))` konuyor."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "by_category = df.groupby(\"kategori\")[\"tutar\"].sum()",
+       "notes": [
+        "`by_category` adında bir değişken oluşturuluyor ve içine `df.groupby(\"kategori\")[\"tutar\"].sum()` konuyor."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "top = by_category.idxmax()",
+       "notes": [
+        "`top` adında bir değişken oluşturuluyor ve içine `by_category.idxmax()` konuyor."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "print(by_category)",
+       "notes": [
+        "`print(by_category)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 14,
+       "code": "print(\"En çok harcama:\", top)",
+       "notes": [
+        "`print(\"En çok harcama:\", top)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "csv",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"\"\"kategori,tutar market,120 kahve,35 market,300 ulaşım,1...`."
+      },
+      {
+       "term": "df",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `pd.read_csv(io.StringIO(csv))`."
+      },
+      {
+       "term": "by_category",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `df.groupby(\"kategori\")[\"tutar\"].sum()`."
+      },
+      {
+       "term": "top",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `by_category.idxmax()`."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "io",
+       "kind": "modül",
+       "desc": "Girdi/çıktı araçları."
+      },
+      {
+       "term": "pandas",
+       "kind": "modül",
+       "desc": "Tablo (satır-sütun) verisiyle çalışma kütüphanesi."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": ".read_csv()",
+       "kind": "metot",
+       "desc": "CSV verisini pandas tablosuna okur."
+      },
+      {
+       "term": ".StringIO()",
+       "kind": "metot",
+       "desc": "Bir metni dosyaymış gibi kullanmayı sağlar."
+      },
+      {
+       "term": ".sum()",
+       "kind": "metot",
+       "desc": "`df.groupby(\"kategori\")[\"tutar\"]` nesnesinin `sum` metodunu çağırır."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": ".groupby()",
+       "kind": "metot",
+       "desc": "Tabloyu bir sütuna göre gruplar."
+      },
+      {
+       "term": ".idxmax()",
+       "kind": "metot",
+       "desc": "En büyük değerin bulunduğu satırı verir."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Kategori analizi",
+   "game_role": "Aylık harcamaları pandas ile kategorilere göre özetler."
+  },
+  "otomasyon": {
+   "project_task": {
+    "id": "d25-po",
+    "title": "Kim ne kadar çalıştı?",
+    "prompt": "Bir proje ekibinin görev kayıtları CSV olarak `csv` değişkeninde (`kisi,gorev,sure`).\n\n- CSV'yi `df` tablosuna oku.\n- `per_person`: her kişinin toplam süresi (`groupby` ve `sum`)\n- `busiest`: en çok çalışan kişi (`idxmax()`)\n- `En yoğun: Ece` gibi yazdır.",
+    "starter": "import io\nimport pandas as pd\n\ncsv = \"\"\"kisi,gorev,sure\nEce,rapor,90\nCan,sunum,60\nEce,e-posta,20\nCan,toplantı,30\n\"\"\"\n",
+    "solution": "import io\nimport pandas as pd\n\ncsv = \"\"\"kisi,gorev,sure\nEce,rapor,90\nCan,sunum,60\nEce,e-posta,20\nCan,toplantı,30\n\"\"\"\ndf = pd.read_csv(io.StringIO(csv))\nper_person = df.groupby(\"kisi\")[\"sure\"].sum()\nbusiest = per_person.idxmax()\nprint(per_person)\nprint(\"En yoğun:\", busiest)\n",
+    "hints": [
+     "pd.read_csv(io.StringIO(csv))",
+     "df.groupby(\"kisi\")[\"sure\"].sum() ve .idxmax()"
+    ],
+    "check": {
+     "python": "\ntest = \"kisi,gorev,sure\\nAda,a,10\\nEfe,b,15\\nAda,c,10\\nDeniz,d,19\\n\"\nout, g = _run(_set(_code, \"csv\", test))\nt = g.get(\"per_person\")\nassert t is not None and int(t[\"Ada\"]) == 20 and int(t[\"Efe\"]) == 15, \"per_person her kişinin toplam süresi olmalı.\"\nassert g.get(\"busiest\") == \"Ada\", \"busiest en çok çalışan kişi olmalı.\"\nassert \"En yoğun: Ada\" in out, \"'En yoğun: Ada' gibi yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "import io",
+       "notes": [
+        "`io` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "import pandas as pd",
+       "notes": [
+        "`pandas` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "csv = \"\"\"kisi,gorev,sure",
+       "notes": [
+        "`csv` adında bir değişken oluşturuluyor ve içine `\"\"\"kisi,gorev,sure Ece,rapor,90 Can,sunum,60 Ece,e-posta,...` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "Ece,rapor,90",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "Can,sunum,60",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "Ece,e-posta,20",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "Can,toplantı,30",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "\"\"\"",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "df = pd.read_csv(io.StringIO(csv))",
+       "notes": [
+        "`df` adında bir değişken oluşturuluyor ve içine `pd.read_csv(io.StringIO(csv))` konuyor."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "per_person = df.groupby(\"kisi\")[\"sure\"].sum()",
+       "notes": [
+        "`per_person` adında bir değişken oluşturuluyor ve içine `df.groupby(\"kisi\")[\"sure\"].sum()` konuyor."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "busiest = per_person.idxmax()",
+       "notes": [
+        "`busiest` adında bir değişken oluşturuluyor ve içine `per_person.idxmax()` konuyor."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "print(per_person)",
+       "notes": [
+        "`print(per_person)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 14,
+       "code": "print(\"En yoğun:\", busiest)",
+       "notes": [
+        "`print(\"En yoğun:\", busiest)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "csv",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"\"\"kisi,gorev,sure Ece,rapor,90 Can,sunum,60 Ece,e-posta,...`."
+      },
+      {
+       "term": "df",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `pd.read_csv(io.StringIO(csv))`."
+      },
+      {
+       "term": "per_person",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `df.groupby(\"kisi\")[\"sure\"].sum()`."
+      },
+      {
+       "term": "busiest",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `per_person.idxmax()`."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "io",
+       "kind": "modül",
+       "desc": "Girdi/çıktı araçları."
+      },
+      {
+       "term": "pandas",
+       "kind": "modül",
+       "desc": "Tablo (satır-sütun) verisiyle çalışma kütüphanesi."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": ".read_csv()",
+       "kind": "metot",
+       "desc": "CSV verisini pandas tablosuna okur."
+      },
+      {
+       "term": ".StringIO()",
+       "kind": "metot",
+       "desc": "Bir metni dosyaymış gibi kullanmayı sağlar."
+      },
+      {
+       "term": ".sum()",
+       "kind": "metot",
+       "desc": "`df.groupby(\"kisi\")[\"sure\"]` nesnesinin `sum` metodunu çağırır."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": ".groupby()",
+       "kind": "metot",
+       "desc": "Tabloyu bir sütuna göre gruplar."
+      },
+      {
+       "term": ".idxmax()",
+       "kind": "metot",
+       "desc": "En büyük değerin bulunduğu satırı verir."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      }
+     ]
+    }
+   },
+   "project_contribution": "İş yükü analizi",
+   "game_role": "Görev kayıtlarını pandas ile kişilere göre özetler."
+  },
+  "web": {
+   "project_task": {
+    "id": "d25-pw",
+    "title": "Popüler sayfalar",
+    "prompt": "Sitenin ziyaret kayıtları CSV olarak `csv` değişkeninde (`sayfa,goruntulenme`). Aynı sayfa birden çok kez geçebilir.\n\n- CSV'yi `df` tablosuna oku (`pd.read_csv(io.StringIO(csv))`).\n- `total_views`: toplam görüntülenme (tam sayı: `int(...)`)\n- `by_page`: her sayfanın toplam görüntülenmesi (`groupby` ve `sum`)\n- `popular`: en çok görüntülenen sayfa (`idxmax()`)\n\nSonra şöyle yazdır:\n\n```\nToplam görüntülenme: 475\nEn popüler sayfa: /blog.html\n```",
+    "starter": "import io\nimport pandas as pd\n\ncsv = \"\"\"sayfa,goruntulenme\n/index.html,120\n/blog.html,80\n/index.html,95\n/hakkimda.html,30\n/blog.html,150\n\"\"\"\n",
+    "solution": "import io\nimport pandas as pd\n\ncsv = \"\"\"sayfa,goruntulenme\n/index.html,120\n/blog.html,80\n/index.html,95\n/hakkimda.html,30\n/blog.html,150\n\"\"\"\ndf = pd.read_csv(io.StringIO(csv))\ntotal_views = int(df[\"goruntulenme\"].sum())\nby_page = df.groupby(\"sayfa\")[\"goruntulenme\"].sum()\npopular = by_page.idxmax()\nprint(\"Toplam görüntülenme:\", total_views)\nprint(\"En popüler sayfa:\", popular)\n",
+    "hints": [
+     "df[\"goruntulenme\"].sum() bütün sütunu toplar.",
+     "df.groupby(\"sayfa\")[\"goruntulenme\"].sum() ve by_page.idxmax()"
+    ],
+    "check": {
+     "python": "\ntest = \"sayfa,goruntulenme\\n/a.html,10\\n/b.html,40\\n/a.html,35\\n/c.html,5\\n\"\nout, g = _run(_set(_code, \"csv\", test))\nassert g.get(\"total_views\") == 90, \"total_views, bütün görüntülenmelerin toplamı olmalı.\"\nt = g.get(\"by_page\")\nassert t is not None and int(t[\"/a.html\"]) == 45 and int(t[\"/b.html\"]) == 40, \"by_page, her sayfanın toplamı olmalı: groupby ve sum\"\nassert g.get(\"popular\") == \"/a.html\", \"popular, toplamı en yüksek sayfa olmalı: idxmax()\"\nassert \"Toplam görüntülenme: 90\" in out and \"En popüler sayfa: /a.html\" in out, \"İki satırı da yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "import io",
+       "notes": [
+        "`io` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "import pandas as pd",
+       "notes": [
+        "`pandas` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "csv = \"\"\"sayfa,goruntulenme",
+       "notes": [
+        "`csv` adında bir değişken oluşturuluyor ve içine `\"\"\"sayfa,goruntulenme /index.html,120 /blog.html,80 /inde...` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "/index.html,120",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "/blog.html,80",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "/index.html,95",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "/hakkimda.html,30",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "/blog.html,150",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "\"\"\"",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "df = pd.read_csv(io.StringIO(csv))",
+       "notes": [
+        "`df` adında bir değişken oluşturuluyor ve içine `pd.read_csv(io.StringIO(csv))` konuyor."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "total_views = int(df[\"goruntulenme\"].sum())",
+       "notes": [
+        "`total_views` adında bir değişken oluşturuluyor ve içine `int(df[\"goruntulenme\"].sum())` konuyor."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "by_page = df.groupby(\"sayfa\")[\"goruntulenme\"].sum()",
+       "notes": [
+        "`by_page` adında bir değişken oluşturuluyor ve içine `df.groupby(\"sayfa\")[\"goruntulenme\"].sum()` konuyor."
+       ]
+      },
+      {
+       "n": 14,
+       "code": "popular = by_page.idxmax()",
+       "notes": [
+        "`popular` adında bir değişken oluşturuluyor ve içine `by_page.idxmax()` konuyor."
+       ]
+      },
+      {
+       "n": 15,
+       "code": "print(\"Toplam görüntülenme:\", total_views)",
+       "notes": [
+        "`print(\"Toplam görüntülenme:\", total_views)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 16,
+       "code": "print(\"En popüler sayfa:\", popular)",
+       "notes": [
+        "`print(\"En popüler sayfa:\", popular)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "csv",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"\"\"sayfa,goruntulenme /index.html,120 /blog.html,80 /inde...`."
+      },
+      {
+       "term": "df",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `pd.read_csv(io.StringIO(csv))`."
+      },
+      {
+       "term": "total_views",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `int(df[\"goruntulenme\"].sum())`."
+      },
+      {
+       "term": "by_page",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `df.groupby(\"sayfa\")[\"goruntulenme\"].sum()`."
+      },
+      {
+       "term": "popular",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `by_page.idxmax()`."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "io",
+       "kind": "modül",
+       "desc": "Girdi/çıktı araçları."
+      },
+      {
+       "term": "pandas",
+       "kind": "modül",
+       "desc": "Tablo (satır-sütun) verisiyle çalışma kütüphanesi."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": ".read_csv()",
+       "kind": "metot",
+       "desc": "CSV verisini pandas tablosuna okur."
+      },
+      {
+       "term": ".StringIO()",
+       "kind": "metot",
+       "desc": "Bir metni dosyaymış gibi kullanmayı sağlar."
+      },
+      {
+       "term": "int()",
+       "kind": "fonksiyon",
+       "desc": "Bir değeri tam sayıya çevirir, örneğin \"42\" yazısını 42 sayısına."
+      },
+      {
+       "term": ".sum()",
+       "kind": "metot",
+       "desc": "`df[\"goruntulenme\"]` nesnesinin `sum` metodunu çağırır."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": ".groupby()",
+       "kind": "metot",
+       "desc": "Tabloyu bir sütuna göre gruplar."
+      },
+      {
+       "term": ".idxmax()",
+       "kind": "metot",
+       "desc": "En büyük değerin bulunduğu satırı verir."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Sayfa analizi",
+   "game_role": "Sayfa görüntülenmelerini pandas ile özetler, en popüler sayfayı bulur."
+  },
+  "bot": {
+   "project_task": {
+    "id": "d25-pb",
+    "title": "Sohbet kaydı analizi",
+    "prompt": "Kullanıcılar botun her cevabına 1-5 arası puan verdi. Kayıtlar CSV olarak `csv` değişkeninde (`niyet,puan`).\n\n- CSV'yi `df` tablosuna oku (`pd.read_csv(io.StringIO(csv))`).\n- `by_intent`: her niyetin ortalama puanı (`groupby` ve `mean`)\n- `worst`: ortalaması en düşük niyet (`idxmin()`, `idxmax()`'ın tersi)\n- `low_count`: puanı 2 veya daha düşük kaç cevap var (tabloyu filtreleyip `len()`)\n\nSonra şöyle yazdır:\n\n```\nEn zayıf niyet: hava\nDüşük puanlı cevap: 2\n```",
+    "starter": "import io\nimport pandas as pd\n\ncsv = \"\"\"niyet,puan\nselam,5\nhava,2\nselam,4\nhava,3\nsaat,4\nsaat,2\n\"\"\"\n",
+    "solution": "import io\nimport pandas as pd\n\ncsv = \"\"\"niyet,puan\nselam,5\nhava,2\nselam,4\nhava,3\nsaat,4\nsaat,2\n\"\"\"\ndf = pd.read_csv(io.StringIO(csv))\nby_intent = df.groupby(\"niyet\")[\"puan\"].mean()\nworst = by_intent.idxmin()\nlow_count = len(df[df[\"puan\"] <= 2])\nprint(by_intent)\nprint(\"En zayıf niyet:\", worst)\nprint(\"Düşük puanlı cevap:\", low_count)\n",
+    "hints": [
+     "df.groupby(\"niyet\")[\"puan\"].mean() ve by_intent.idxmin()",
+     "df[df[\"puan\"] <= 2] sadece düşük puanlı satırları seçer."
+    ],
+    "check": {
+     "python": "\ntest = \"niyet,puan\\nveda,5\\nşaka,1\\nşaka,2\\nveda,3\\n\"\nout, g = _run(_set(_code, \"csv\", test))\nt = g.get(\"by_intent\")\nassert t is not None and float(t[\"şaka\"]) == 1.5 and float(t[\"veda\"]) == 4.0, \"by_intent, her niyetin ortalama puanı olmalı: groupby ve mean\"\nassert g.get(\"worst\") == \"şaka\", \"worst, ortalaması en düşük niyet olmalı: idxmin()\"\nassert g.get(\"low_count\") == 2, \"low_count, puanı 2 veya daha düşük olan satırların sayısı olmalı.\"\nassert \"En zayıf niyet: şaka\" in out and \"Düşük puanlı cevap: 2\" in out, \"İki satırı da yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "import io",
+       "notes": [
+        "`io` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "import pandas as pd",
+       "notes": [
+        "`pandas` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "csv = \"\"\"niyet,puan",
+       "notes": [
+        "`csv` adında bir değişken oluşturuluyor ve içine `\"\"\"niyet,puan selam,5 hava,2 selam,4 hava,3 saat,4 saat,2...` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "selam,5",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "hava,2",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "selam,4",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "hava,3",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "saat,4",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "saat,2",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "\"\"\"",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "df = pd.read_csv(io.StringIO(csv))",
+       "notes": [
+        "`df` adında bir değişken oluşturuluyor ve içine `pd.read_csv(io.StringIO(csv))` konuyor."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "by_intent = df.groupby(\"niyet\")[\"puan\"].mean()",
+       "notes": [
+        "`by_intent` adında bir değişken oluşturuluyor ve içine `df.groupby(\"niyet\")[\"puan\"].mean()` konuyor."
+       ]
+      },
+      {
+       "n": 14,
+       "code": "worst = by_intent.idxmin()",
+       "notes": [
+        "`worst` adında bir değişken oluşturuluyor ve içine `by_intent.idxmin()` konuyor."
+       ]
+      },
+      {
+       "n": 15,
+       "code": "low_count = len(df[df[\"puan\"] <= 2])",
+       "notes": [
+        "`low_count` adında bir değişken oluşturuluyor ve içine `len(df[df[\"puan\"] <= 2])` konuyor."
+       ]
+      },
+      {
+       "n": 16,
+       "code": "print(by_intent)",
+       "notes": [
+        "`print(by_intent)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 17,
+       "code": "print(\"En zayıf niyet:\", worst)",
+       "notes": [
+        "`print(\"En zayıf niyet:\", worst)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 18,
+       "code": "print(\"Düşük puanlı cevap:\", low_count)",
+       "notes": [
+        "`print(\"Düşük puanlı cevap:\", low_count)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "csv",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"\"\"niyet,puan selam,5 hava,2 selam,4 hava,3 saat,4 saat,2...`."
+      },
+      {
+       "term": "df",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `pd.read_csv(io.StringIO(csv))`."
+      },
+      {
+       "term": "by_intent",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `df.groupby(\"niyet\")[\"puan\"].mean()`."
+      },
+      {
+       "term": "worst",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `by_intent.idxmin()`."
+      },
+      {
+       "term": "low_count",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `len(df[df[\"puan\"] <= 2])`."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "io",
+       "kind": "modül",
+       "desc": "Girdi/çıktı araçları."
+      },
+      {
+       "term": "pandas",
+       "kind": "modül",
+       "desc": "Tablo (satır-sütun) verisiyle çalışma kütüphanesi."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": ".read_csv()",
+       "kind": "metot",
+       "desc": "CSV verisini pandas tablosuna okur."
+      },
+      {
+       "term": ".StringIO()",
+       "kind": "metot",
+       "desc": "Bir metni dosyaymış gibi kullanmayı sağlar."
+      },
+      {
+       "term": ".mean()",
+       "kind": "metot",
+       "desc": "Ortalamayı hesaplar."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": ".groupby()",
+       "kind": "metot",
+       "desc": "Tabloyu bir sütuna göre gruplar."
+      },
+      {
+       "term": ".idxmin()",
+       "kind": "metot",
+       "desc": "`by_intent` nesnesinin `idxmin` metodunu çağırır."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      },
+      {
+       "term": "<=",
+       "kind": "operatör",
+       "desc": "Küçük ya da eşit mi?"
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Memnuniyet analizi",
+   "game_role": "Kullanıcıların cevaplara verdiği puanları pandas ile niyetlere göre özetler."
+  },
+  "okul": {
+   "project_task": {
+    "id": "d25-pn",
+    "title": "Sınav sonuçları analizi",
+    "prompt": "Dönemin sınav sonuçları CSV olarak `csv` değişkeninde (`ders,sinav,puan`). Her dersten birden çok sınav var.\n\n- CSV'yi `df` tablosuna oku (`pd.read_csv(io.StringIO(csv))`).\n- `averages`: her dersin ortalama puanı (`groupby` ve `mean`)\n- `weakest`: ortalaması en düşük ders (`idxmin()`)\n- `low_count`: puanı 50'nin altında olan sınav sayısı (filtreleyip `len`)\n- `Daha çok çalış: Fizik` ve `50 altı sınav: 1` yazdır.",
+    "starter": "import io\nimport pandas as pd\n\ncsv = \"\"\"ders,sinav,puan\nMatematik,1,80\nFizik,1,55\nMatematik,2,90\nFizik,2,45\nTarih,1,75\n\"\"\"\n",
+    "solution": "import io\nimport pandas as pd\n\ncsv = \"\"\"ders,sinav,puan\nMatematik,1,80\nFizik,1,55\nMatematik,2,90\nFizik,2,45\nTarih,1,75\n\"\"\"\ndf = pd.read_csv(io.StringIO(csv))\naverages = df.groupby(\"ders\")[\"puan\"].mean()\nweakest = averages.idxmin()\nlow_count = len(df[df[\"puan\"] < 50])\nprint(averages)\nprint(\"Daha çok çalış:\", weakest)\nprint(\"50 altı sınav:\", low_count)\n",
+    "hints": [
+     "df.groupby(\"ders\")[\"puan\"].mean() ve .idxmin()",
+     "df[df[\"puan\"] < 50] sadece 50 altı satırları verir."
+    ],
+    "check": {
+     "python": "\ntest = \"ders,sinav,puan\\nA,1,40\\nB,1,90\\nA,2,60\\nB,2,70\\nC,1,49\\n\"\nout, g = _run(_set(_code, \"csv\", test))\nt = g.get(\"averages\")\nassert t is not None and float(t[\"A\"]) == 50 and float(t[\"B\"]) == 80, \"averages, her dersin ortalama puanı olmalı: groupby ve mean\"\nassert g.get(\"weakest\") == \"C\", \"weakest, ortalaması en düşük ders olmalı: idxmin()\"\nassert g.get(\"low_count\") == 2, \"low_count, puanı 50'nin altındaki sınav sayısı olmalı.\"\nassert \"Daha çok çalış: C\" in out and \"50 altı sınav: 2\" in out, \"'Daha çok çalış: C' ve '50 altı sınav: 2' gibi yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "import io",
+       "notes": [
+        "`io` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "import pandas as pd",
+       "notes": [
+        "`pandas` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "csv = \"\"\"ders,sinav,puan",
+       "notes": [
+        "`csv` adında bir değişken oluşturuluyor ve içine `\"\"\"ders,sinav,puan Matematik,1,80 Fizik,1,55 Matematik,2,...` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "Matematik,1,80",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "Fizik,1,55",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "Matematik,2,90",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "Fizik,2,45",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "Tarih,1,75",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "\"\"\"",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "df = pd.read_csv(io.StringIO(csv))",
+       "notes": [
+        "`df` adında bir değişken oluşturuluyor ve içine `pd.read_csv(io.StringIO(csv))` konuyor."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "averages = df.groupby(\"ders\")[\"puan\"].mean()",
+       "notes": [
+        "`averages` adında bir değişken oluşturuluyor ve içine `df.groupby(\"ders\")[\"puan\"].mean()` konuyor."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "weakest = averages.idxmin()",
+       "notes": [
+        "`weakest` adında bir değişken oluşturuluyor ve içine `averages.idxmin()` konuyor."
+       ]
+      },
+      {
+       "n": 14,
+       "code": "low_count = len(df[df[\"puan\"] < 50])",
+       "notes": [
+        "`low_count` adında bir değişken oluşturuluyor ve içine `len(df[df[\"puan\"] < 50])` konuyor."
+       ]
+      },
+      {
+       "n": 15,
+       "code": "print(averages)",
+       "notes": [
+        "`print(averages)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 16,
+       "code": "print(\"Daha çok çalış:\", weakest)",
+       "notes": [
+        "`print(\"Daha çok çalış:\", weakest)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 17,
+       "code": "print(\"50 altı sınav:\", low_count)",
+       "notes": [
+        "`print(\"50 altı sınav:\", low_count)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "csv",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"\"\"ders,sinav,puan Matematik,1,80 Fizik,1,55 Matematik,2,...`."
+      },
+      {
+       "term": "df",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `pd.read_csv(io.StringIO(csv))`."
+      },
+      {
+       "term": "averages",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `df.groupby(\"ders\")[\"puan\"].mean()`."
+      },
+      {
+       "term": "weakest",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `averages.idxmin()`."
+      },
+      {
+       "term": "low_count",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `len(df[df[\"puan\"] < 50])`."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "io",
+       "kind": "modül",
+       "desc": "Girdi/çıktı araçları."
+      },
+      {
+       "term": "pandas",
+       "kind": "modül",
+       "desc": "Tablo (satır-sütun) verisiyle çalışma kütüphanesi."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": ".read_csv()",
+       "kind": "metot",
+       "desc": "CSV verisini pandas tablosuna okur."
+      },
+      {
+       "term": ".StringIO()",
+       "kind": "metot",
+       "desc": "Bir metni dosyaymış gibi kullanmayı sağlar."
+      },
+      {
+       "term": ".mean()",
+       "kind": "metot",
+       "desc": "Ortalamayı hesaplar."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": ".groupby()",
+       "kind": "metot",
+       "desc": "Tabloyu bir sütuna göre gruplar."
+      },
+      {
+       "term": ".idxmin()",
+       "kind": "metot",
+       "desc": "`averages` nesnesinin `idxmin` metodunu çağırır."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      },
+      {
+       "term": "<",
+       "kind": "operatör",
+       "desc": "Küçük mü?"
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Sınav analizi",
+   "game_role": "Dönemin tüm sınav sonuçlarını pandas ile derslere göre özetler."
+  }
+ }
+}

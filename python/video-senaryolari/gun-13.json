@@ -1,0 +1,210 @@
+{
+  "kurs": "python",
+  "gun": 13,
+  "baslik": "List comprehension",
+  "maskot": "piko",
+  "ozet": "Piko, atölyenin sihirli kalıbıyla list comprehension'ı anlatıyor: tek satırda liste üretmek, if ile süzmek, if-else ile dönüştürmek ve lambda ile isimsiz mini fonksiyonlar.",
+  "hedef_sure_sn": 116,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 12,
+      "anlatim": "Selam, ben Piko! Atölyenin köşesinde sihirli bir kalıp var: bir tarafından malzemeleri atıyorsun, öbür tarafından hazır ürünler çıkıyor. Python'da buna list comprehension denir. Dört satırlık döngüleri tek satıra sığdırır!",
+      "ekran": {
+        "baslik": "Gün 13: List comprehension",
+        "gorsel": "gorseller/python/harita/atolye.webp"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "yonetmen_notu": "Kalıba sayılar girer, iki katı büyümüş halleri çıkar."
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "Bir listeden yeni liste yapmanın uzun yolu: boş liste, döngü, append. Kısa yolu tek satır! Şöyle oku: nums'taki her n için n çarpı onu al. İki yol da aynı sonucu veriyor.",
+      "ekran": {
+        "baslik": "Uzun yol, kısa yol",
+        "kod": "nums = [1, 2, 3, 4, 5]\n\ntens = []\nfor n in nums:\n    tens.append(n * 10)\nprint(tens)\n\nprint([n * 10 for n in nums])\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          8
+        ],
+        "cikti": "[10, 20, 30, 40, 50]\n[10, 20, 30, 40, 50]"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 9,
+      "anlatim": "Sona bir if eklersen sadece istediğin elemanları alırsın. Kalıp, altmışın altındaki skorları süzgeçten geçirmiyor.",
+      "ekran": {
+        "baslik": "if ile süz",
+        "kod": "scores = [45, 90, 12, 77, 100, 63]\npassed = [s for s in scores if s >= 60]\nprint(\"Geçenler:\", passed)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "Geçenler: [90, 77, 100, 63]"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "Her eleman için iki sonuçtan birini seçmek istersen if ve else başa yazılır. Süzmek için if sonda, dönüştürmek için if else başta. Bunu aklında tut!",
+      "ekran": {
+        "baslik": "if ve else ile dönüştür",
+        "kod": "scores = [45, 90, 12, 77]\nprint([\"geçti\" if s >= 60 else \"kaldı\" for s in scores])\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "['kaldı', 'geçti', 'kaldı', 'geçti']"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 13,
+      "anlatim": "Tek satırlık küçük fonksiyonları lambda ile yazabilirsin. İki noktanın solu parametre, sağı döndürülen sonuç. Aynı kalıp fikri sözlükte de çalışır: süslü parantezle bir kareler sözlüğü!",
+      "ekran": {
+        "baslik": "lambda: isimsiz mini fonksiyon",
+        "kod": "square = lambda x: x * x\nadd = lambda a, b: a + b\nprint(square(6))\nprint(add(2, 3))\nprint({n: square(n) for n in range(1, 5)})\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          1,
+          2
+        ],
+        "cikti": "36\n5\n{1: 1, 2: 4, 3: 9, 4: 16}"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 6,
+      "tur": "hata",
+      "sure_sn": 10,
+      "anlatim": "else'i sona koyarsan Python SyntaxError verir. Hatırla: sadece if varsa sona, if ile else birlikteyse başa yazılır.",
+      "ekran": {
+        "baslik": "else yanlış yerde",
+        "kod": "nums = [1, 2, 3]\nprint([n for n in nums if n > 1 else 0])\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "SyntaxError: invalid syntax"
+      },
+      "maskot": {
+        "poz": "uzgun",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "soru",
+      "sure_sn": 8,
+      "anlatim": "Bu kalıp hem süzüyor hem dönüştürüyor. Sence ekrana hangi liste çıkar?",
+      "ekran": {
+        "baslik": "Sence ne yazar?",
+        "kod": "words = [\"kılıç\", \"iksir\", \"ok\"]\nprint([len(w) for w in words if len(w) > 2])\n",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "cikti",
+      "sure_sn": 10,
+      "anlatim": "Beş ve beş! Ok kelimesi iki harfli olduğu için süzgeçte kaldı. Kalan iki kelimenin yerine de uzunlukları yazıldı.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "words = [\"kılıç\", \"iksir\", \"ok\"]\nprint([len(w) for w in words if len(w) > 2])\n",
+        "dil": "python",
+        "cikti": "[5, 5]"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "gorev",
+      "sure_sn": 11,
+      "anlatim": "Görevlerde sayıların iki katını, isimlerin büyük harfli halini ve sadece değerli ganimetleri tek satırda üreteceksin. Challenge'da bir lambda yazıp kareler listesi hazırlayacaksın.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: İki katı",
+          "Görev 2: Büyük harfle",
+          "Görev 3: Değerli ganimet",
+          "Challenge: lambda ile"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 10,
+      "tur": "ozet",
+      "sure_sn": 7,
+      "anlatim": "Bugün uzun döngüleri tek satırlık kalıplara çevirdik ve isimsiz mini fonksiyonlarla tanıştık.",
+      "ekran": {
+        "baslik": "Bugün öğrendiklerin",
+        "maddeler": [
+          "[ifade for x in liste]",
+          "Süzmek: if sonda; dönüştürmek: if-else başta",
+          "lambda x: x * x ile mini fonksiyon"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "kapanis",
+      "sure_sn": 10,
+      "anlatim": "Sihirli kalıbın ustası oldun! Yarın atölyenin ustası bir sır verecek: aletleri başka aletlere takmak. map, filter ve sorted ile fonksiyonlarla oynayacağız.",
+      "ekran": {
+        "baslik": "Yarın: Üst düzey fonksiyonlar",
+        "gorsel": "gorseller/python/harita/atolye.webp"
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

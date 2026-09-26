@@ -1,0 +1,254 @@
+{
+  "kurs": "python",
+  "gun": 2,
+  "baslik": "Değişkenler ve hazır fonksiyonlar",
+  "maskot": "piko",
+  "ozet": "Piko, kahramanın bilgilerini etiketli kutularda saklamayı anlatıyor: değişkenler, veri tipleri, input() ile girdi almak ve len, round, max gibi hazır fonksiyonlar.",
+  "hedef_sure_sn": 147,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 11,
+      "anlatim": "Selam, ben Piko! Hâlâ Başlangıç Kampı'ndayız. Oyunumuzun bir kahramanı olacak. Ama bilgisayar kahramanın adını, canını, altınını nasıl hatırlayacak? Bugün hafızada etiketli kutular açıyoruz!",
+      "ekran": {
+        "baslik": "Gün 2: Değişkenler ve hazır fonksiyonlar",
+        "gorsel": "gorseller/python/harita/kamp.webp"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "Değişken, içine bilgi koyduğun etiketli bir kutu. Buradaki eşittir matematikteki eşittir değil: sağdaki değeri soldaki kutuya koy demek. Sonra kutunun adını yazarak içindekini kullanırsın.",
+      "ekran": {
+        "baslik": "Değişken: etiketli bir kutu",
+        "kod": "name = \"Piko\"\nhp = 100\nprint(name)\nprint(hp)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          1,
+          2
+        ],
+        "cikti": "Piko\n100"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true,
+      "yonetmen_notu": "İki karton kutu belirir; üzerlerinde name ve hp etiketleri, içlerine değerler düşer."
+    },
+    {
+      "no": 3,
+      "tur": "anlatim",
+      "sure_sn": 12,
+      "anlatim": "Kutulara isim verirken birkaç kural var. İsim harfle ya da alt çizgiyle başlar, boşluk içermez. Büyük ve küçük harf fark eder. En önemlisi de anlamlı isimler seçmek.",
+      "ekran": {
+        "baslik": "İsim verme kuralları",
+        "maddeler": [
+          "Harfle ya da _ ile başla: score",
+          "Boşluk yok, _ kullan: player_name",
+          "Score ile score ayrı kutular",
+          "Anlamlı isim seç: x yerine gold"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "Kutulara farklı türde bilgiler girer. Yazıya str, tam sayıya int, ondalıklı sayıya float, doğru ya da yanlışa bool deriz. Bir değerin tipini merak edersen type fonksiyonuna sorman yeter.",
+      "ekran": {
+        "baslik": "Veri tipleri",
+        "kod": "name = \"Piko\"\nhp = 100\nspeed = 2.5\nis_alive = True\nprint(name, hp, speed, is_alive)\nprint(type(name))\nprint(type(hp))\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          6,
+          7
+        ],
+        "cikti": "Piko 100 2.5 True\n<class 'str'>\n<class 'int'>"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 10,
+      "anlatim": "Kutuya yeni bir değer koyunca eskisinin yerine geçer. Üçüncü satır şunu der: altının şimdiki değerini al, yirmi beş ekle, sonucu aynı kutuya geri koy.",
+      "ekran": {
+        "baslik": "Kutunun içini değiştirmek",
+        "kod": "gold = 10\nprint(\"Başta:\", gold)\ngold = gold + 25\nprint(\"Hazineden sonra:\", gold)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          3
+        ],
+        "cikti": "Başta: 10\nHazineden sonra: 35"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "input ile kullanıcıya soru sorarsın. Gelen cevap her zaman yazıdır. Sayı lazımsa int ile çevirirsin. Bu sitede cevaplarını editörün altındaki Girdi kutusuna yazıyorsun; her satır bir cevap.",
+      "ekran": {
+        "baslik": "Kullanıcıdan bilgi almak",
+        "kod": "name = input(\"Adın ne? \")\nprint(\"Merhaba\", name)\nage = int(input(\"Kaç yaşındasın? \"))\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          1,
+          3
+        ],
+        "cikti": "Adın ne? Ece\nMerhaba Ece\nKaç yaşındasın? 12"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": false,
+      "yonetmen_notu": "Girdi kutusuna 'Ece' ve '12' yazılırken gösterilir."
+    },
+    {
+      "no": 7,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "Python'ın içinde kullanıma hazır fonksiyonlar gelir. len uzunluğu ölçer, float yazıyı ondalıklı sayıya çevirir, round yuvarlar, max ve min de en büyüğü ve en küçüğü bulur.",
+      "ekran": {
+        "baslik": "Hazır fonksiyonlar",
+        "kod": "name = \"Piko\"\nprint(len(name))\nprint(float(\"2.5\") + 1)\nprint(round(7.6))\nprint(max(3, 9, 4), min(3, 9, 4))\n",
+        "dil": "python",
+        "cikti": "4\n3.5\n8\n9 3"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "hata",
+      "sure_sn": 14,
+      "anlatim": "En sık hata: yazı ile sayıyı toplamaya çalışmak. Tırnak içindeki on iki bir yazı, bir ise sayı. Python TypeError diyor: yazıya sadece yazı eklenebilir. Bunu nasıl düzelteceğini Tip dedektifi görevinde sen bulacaksın.",
+      "ekran": {
+        "baslik": "Yazı + sayı = hata",
+        "kod": "age = \"12\"\nprint(age + 1)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "TypeError: can only concatenate str (not \"int\") to str"
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "soru",
+      "sure_sn": 8,
+      "anlatim": "Hadi bakalım. Sence bu kod ne yazdırır? On mu, beş mi, yoksa başka bir şey mi?",
+      "ekran": {
+        "baslik": "Sence ne yazar?",
+        "kod": "gold = 10\ngold = gold + 5\nprint(gold)\n",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 10,
+      "tur": "cikti",
+      "sure_sn": 8,
+      "anlatim": "On beş! Önce kutuda on vardı. İkinci satır ona beş ekledi ve sonucu aynı kutuya geri koydu.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "gold = 10\ngold = gold + 5\nprint(gold)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "15"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 11,
+      "tur": "gorev",
+      "sure_sn": 14,
+      "anlatim": "Görev zamanı! Önce kutuya kendi adını koyacaksın. Sonra üç değişkenle bir kahraman kartı hazırlayacaksın. Tip dedektifi görevinde hata veren bir kodu kurtaracaksın. Challenge'da da iki kutunun içeriğini yer değiştireceksin.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Kutuyu doldur",
+          "Görev 2: Kahraman kartı",
+          "Görev 3: Tip dedektifi",
+          "Sahne görevi: Değişkenli ordu",
+          "Challenge: Kutuları değiştir"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 12,
+      "tur": "ozet",
+      "sure_sn": 8,
+      "anlatim": "Bugün kutular açtık, içlerine farklı tipte bilgiler koyduk. Kullanıcıdan bilgi aldık ve hazır fonksiyonlarla iş gördük.",
+      "ekran": {
+        "baslik": "Bugün öğrendiklerin",
+        "maddeler": [
+          "Değişken = etiketli kutu; = sağdakini sola koyar",
+          "Tipler: str, int, float, bool; type() ile bak",
+          "input() hep yazı verir; int() ile sayıya çevir"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 13,
+      "tur": "kapanis",
+      "sure_sn": 10,
+      "anlatim": "Kamptaki eğitimin bitti, tebrikler! Yarın Python Köyü'ne gidiyoruz. Köyün pazarında operatörlerle hesap yapacak, doğru mu yanlış mı diye sorular soracağız.",
+      "ekran": {
+        "baslik": "Yarın: Operatörler",
+        "gorsel": "gorseller/python/harita/koy.webp"
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      },
+      "yonetmen_notu": "Harita kamptan köye doğru kayar."
+    }
+  ]
+}

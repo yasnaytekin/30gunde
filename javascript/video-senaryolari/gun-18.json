@@ -1,0 +1,236 @@
+{
+  "kurs": "javascript",
+  "gun": 18,
+  "baslik": "Zamanlayıcılar",
+  "maskot": "kodi",
+  "ozet": "Kodi, Olay Kuşağı'nda setTimeout, setInterval ve clearInterval ile zamanlanmış işleri, üst üste binen sayaçları önlemeyi ve Date ile saat göstermeyi anlatıyor.",
+  "hedef_sure_sn": 156,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 11,
+      "anlatim": "Selam, ben Kodi! Olay Kuşağı'nda zaman da bir olaydır: her saniye bir tık! Bir işi bir saniye sonra, ya da her saniye yaptırabilir miyiz? Bugün zamanlayıcıları öğreniyoruz!",
+      "ekran": {
+        "baslik": "Gün 18: Zamanlayıcılar",
+        "gorsel": "gorseller/javascript/bolgeler/kusak.webp"
+      },
+      "maskot": {
+        "poz": "el-sallama",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 15,
+      "anlatim": "setTimeout bir fonksiyonu bir kez, verdiğin milisaniye sonra çalıştırır. Bin milisaniye bir saniyedir. Dikkat et: setTimeout beklemez! Fonksiyonu kenara koyar ve kod hemen devam eder.",
+      "ekran": {
+        "baslik": "setTimeout: biraz sonra",
+        "kod": "console.log(\"Geri sayım başladı\");\nsetTimeout(() => {\n  console.log(\"Kalkış!\");\n}, 1000);\nconsole.log(\"Bu satır önce yazılır!\");\n",
+        "vurgu_satirlari": [
+          2,
+          4,
+          5
+        ],
+        "cikti": "Geri sayım başladı\nBu satır önce yazılır!\nKalkış!",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true,
+      "yonetmen_notu": "Çıktının son satırı bir saniye gecikmeyle belirir."
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "setInterval ise fonksiyonu her seferinde yeniden çalıştırır, ta ki sen durdurana kadar. Bize bir kimlik numarası döndürür; beşinci tıkta onu clearInterval'a verip sayacı durduruyoruz.",
+      "ekran": {
+        "baslik": "setInterval ve clearInterval",
+        "kod": "let count = 0;\nconst timer = setInterval(() => {\n  count++;\n  console.log(\"Tık\", count);\n  if (count === 5) clearInterval(timer);\n}, 200);\n",
+        "vurgu_satirlari": [
+          2,
+          5
+        ],
+        "cikti": "Tık 1\nTık 2\nTık 3\nTık 4\nTık 5",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "hata",
+      "sure_sn": 14,
+      "anlatim": "Sık hata: Başlat düğmesine iki kez basılınca iki ayrı sayaç çalışır ve süre iki kat hızlı akar! Hata mesajı çıkmaz, sadece sayı garip biçimde hızlanır.",
+      "ekran": {
+        "baslik": "Sık hata: üst üste binen sayaçlar",
+        "kod": "startBtn.addEventListener(\"click\", () => {\n  setInterval(tick, 1000); // her tıklamada yeni sayaç!\n});\n",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "İki tıklamadan sonra süre saniyede 2 artar.",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 18,
+      "anlatim": "Çözüm: sayaç zaten çalışıyorsa yenisini kurma. timer null değilse start hemen çıkar. Burada start'ı iki kez çağırdık ama yalnızca tek sayaç çalıştı. Durdururken de timer'ı tekrar null yapıyoruz.",
+      "ekran": {
+        "baslik": "Çözüm: tek sayaç",
+        "kod": "let timer = null;\nlet n = 0;\nfunction tick() { n++; console.log(\"Tık\", n); if (n === 3) stop(); }\nfunction start() {\n  if (timer !== null) return; // zaten çalışıyor\n  timer = setInterval(tick, 100);\n}\nfunction stop() { clearInterval(timer); timer = null; }\nstart();\nstart();\n",
+        "vurgu_satirlari": [
+          5,
+          8,
+          9,
+          10
+        ],
+        "cikti": "Tık 1\nTık 2\nTık 3",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 15,
+      "anlatim": "new Date şu anı verir; içinden saati, dakikayı, saniyeyi alabiliriz. padStart tek haneli sayının başına sıfır ekler. Aylar sıfırdan başlar, yani Ocak sıfırdır!",
+      "ekran": {
+        "baslik": "Date ve padStart",
+        "kod": "const t = new Date(2026, 0, 5, 9, 7, 3); // 5 Ocak 2026\nconst h = String(t.getHours()).padStart(2, \"0\");\nconst m = String(t.getMinutes()).padStart(2, \"0\");\nconst s = String(t.getSeconds()).padStart(2, \"0\");\nconsole.log(`${h}:${m}:${s}`);\n",
+        "vurgu_satirlari": [
+          1,
+          2
+        ],
+        "cikti": "09:07:03",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "Hepsini birleştirip canlı bir saat yapalım. showTime'ı önce bir kez hemen çağırıyoruz, sonra setInterval her saniye güncelliyor.",
+      "ekran": {
+        "baslik": "Canlı üs saati",
+        "kod": "const clock = document.querySelector(\"#clock\");\nfunction showTime() {\n  clock.textContent = new Date().toLocaleTimeString(\"tr-TR\");\n}\nshowTime(); // hemen göster\nsetInterval(showTime, 1000); // sonra her saniye\n",
+        "vurgu_satirlari": [
+          5,
+          6
+        ],
+        "cikti": "Üs saati: 14:32:08 (her saniye bir sonraki saniyeye geçer)",
+        "html": "<p>Üs saati: <strong id=\"clock\"></strong></p>",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sol"
+      },
+      "calistir": false
+    },
+    {
+      "no": 8,
+      "tur": "soru",
+      "sure_sn": 9,
+      "anlatim": "Soru! Bekleme süresi sıfır milisaniye. Sence önce A mı yazılır, yoksa B mi?",
+      "ekran": {
+        "baslik": "Sence ne yazar?",
+        "kod": "setTimeout(() => console.log(\"A\"), 0);\nconsole.log(\"B\");\n",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 9,
+      "tur": "cikti",
+      "sure_sn": 9,
+      "anlatim": "Önce B! Süre sıfır bile olsa setTimeout fonksiyonu kenara koyar. Şimdiki kod bitince sıra A'ya gelir.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "setTimeout(() => console.log(\"A\"), 0);\nconsole.log(\"B\");\n",
+        "cikti": "B\nA",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 10,
+      "tur": "gorev",
+      "sure_sn": 13,
+      "anlatim": "Görev zamanı! Gecikmeli bir kalkış mesajı, Dur düğmesiyle duran bir uçuş sayacı ve belli sayıda yanıp sönüp kendiliğinden duran bir işaret ışığı yapacaksın.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Gecikmeli kalkış",
+          "Görev 2: Uçuş süresi",
+          "Görev 3: Yanıp sönen işaret"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "ozet",
+      "sure_sn": 12,
+      "anlatim": "Özetleyelim: setTimeout bir kez, setInterval tekrar tekrar çalışır. Kimlik numarasını sakla ve clearInterval ile durdur. Aynı anda tek sayaç çalıştığından emin ol.",
+      "ekran": {
+        "baslik": "Özet",
+        "maddeler": [
+          "setTimeout(fn, ms): bir kez, sonra",
+          "setInterval + clearInterval(timer)",
+          "timer !== null ise yeni sayaç kurma"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 12,
+      "tur": "kapanis",
+      "sure_sn": 10,
+      "anlatim": "Zaman artık senin kontrolünde! Yarın renkleri, temaları ve efektleri JavaScript'ten değiştireceğiz: CSS'i kodla kontrol etmek. Görüşürüz!",
+      "ekran": {
+        "baslik": "Yarın: CSS'i kodla kontrol etmek",
+        "gorsel": "gorseller/javascript/arka-plan/bg-space-wide.webp"
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

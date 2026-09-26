@@ -1,0 +1,213 @@
+{
+  "kurs": "python",
+  "gun": 12,
+  "baslik": "Modüller",
+  "maskot": "piko",
+  "ozet": "Piko, atölyenin alet dolabını açıyor: import ile modül kullanmak, math ve random modülleri, from ve as ile içe aktarmak ve kendi modülünü yazma fikri.",
+  "hedef_sure_sn": 123,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 12,
+      "anlatim": "Selam, ben Piko! Atölyenin duvarında dev bir alet dolabı var. Her çekmecede başka ustaların yaptığı aletler duruyor: hesap aletleri, zar ve kura aletleri. Python'da bu çekmecelere modül denir. Hadi açalım!",
+      "ekran": {
+        "baslik": "Gün 12: Modüller",
+        "gorsel": "gorseller/python/harita/atolye.webp"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "yonetmen_notu": "Dolabın çekmeceleri tek tek açılır: math, random."
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "Modül, fonksiyonlarla dolu bir Python dosyası. import ile projene alırsın. Sonra modülün adı, nokta ve aletin adı: karekök, pi sayısı, aşağı ve yukarı yuvarlama. Python bu modüllerle birlikte gelir.",
+      "ekran": {
+        "baslik": "import math",
+        "kod": "import math\n\nprint(math.sqrt(49))\nprint(round(math.pi, 4))\nprint(math.floor(4.7), math.ceil(4.2))\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          1,
+          3
+        ],
+        "cikti": "7.0\n3.1416\n4 5"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "Oyunların sürprizleri random modülünden gelir. randint iki sayı arasında, ikisi de dahil, rastgele bir tam sayı verir. choice listeden birini seçer, shuffle listeyi karıştırır. Her çalıştırmada sonuç değişir!",
+      "ekran": {
+        "baslik": "random: şans aletleri",
+        "kod": "import random\n\nprint(\"Zar:\", random.randint(1, 6))\nfriends = [\"Ali\", \"Ece\", \"Can\", \"Zeynep\"]\nprint(\"Kurada çıkan:\", random.choice(friends))\nrandom.shuffle(friends)\nprint(\"Karışık sıra:\", friends)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          3,
+          5,
+          6
+        ],
+        "cikti": "Zar: 4\nKurada çıkan: Ece\nKarışık sıra: ['Can', 'Ali', 'Zeynep', 'Ece']"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": false,
+      "yonetmen_notu": "Kod üç kez çalıştırılır; her seferinde farklı bir çıktı belirir. Gösterilen çıktı bir örnektir."
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "from ile çekmeceden sadece istediğin aleti alırsın; artık başına math yazmana gerek yok. as ile uzun isimleri kısaltırsın. seed sabit olunca rastgele sayı her seferinde aynı çıkar.",
+      "ekran": {
+        "baslik": "from, as ve seed",
+        "kod": "from math import sqrt, pi\nimport random as rnd\n\nprint(sqrt(144))\nprint(pi)\nrnd.seed(7)\nprint(rnd.randint(1, 100))\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          1,
+          2,
+          6
+        ],
+        "cikti": "12.0\n3.141592653589793\n42"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "anlatim",
+      "sure_sn": 12,
+      "anlatim": "Kendi modülünü de yazabilirsin. Bilgisayarında araclar.py adında bir dosya yaparsan, aynı klasördeki başka bir dosyada import araclar diyerek fonksiyonlarını kullanırsın. Büyük projeler böyle düzenlenir.",
+      "ekran": {
+        "baslik": "Kendi modülün",
+        "maddeler": [
+          "araclar.py: kendi fonksiyonların",
+          "Aynı klasörde: import araclar",
+          "Büyük projeler parçalara böyle ayrılır"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 6,
+      "tur": "hata",
+      "sure_sn": 12,
+      "anlatim": "import math dedik ama sqrt'yi tek başına yazdık. Python NameError veriyor: sqrt'yi tanımıyor. Ya math nokta sqrt yaz, ya da from ile sqrt'yi doğrudan al.",
+      "ekran": {
+        "baslik": "Modül adı unutulunca",
+        "kod": "import math\nprint(sqrt(16))\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "NameError: name 'sqrt' is not defined"
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "soru",
+      "sure_sn": 8,
+      "anlatim": "Biri aşağı, biri yukarı yuvarlıyor. Sence bu toplam kaç eder?",
+      "ekran": {
+        "baslik": "Sence ne yazar?",
+        "kod": "import math\nprint(math.floor(7.9) + math.ceil(7.1))\n",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "cikti",
+      "sure_sn": 10,
+      "anlatim": "On beş! floor yedi noktayı dokuzu yediye indirdi, ceil yedi nokta biri sekize çıkardı. Yedi artı sekiz, on beş.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "import math\nprint(math.floor(7.9) + math.ceil(7.1))\n",
+        "dil": "python",
+        "cikti": "15"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "gorev",
+      "sure_sn": 12,
+      "anlatim": "Görevlerde math ile bir karenin kenarını bulacak, random ile zar atacak ve hazine listesinden rastgele bir ödül seçeceksin. Challenge'da pi sayısıyla bir dairenin alanını hesaplayacaksın.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Karekök",
+          "Görev 2: Zar at",
+          "Görev 3: Rastgele hazine",
+          "Challenge: Daire alanı"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 10,
+      "tur": "ozet",
+      "sure_sn": 6,
+      "anlatim": "Bugün başka ustaların aletlerini projemize aldık ve oyunumuza şans kattık.",
+      "ekran": {
+        "baslik": "Bugün öğrendiklerin",
+        "maddeler": [
+          "import modul ile al, modul.alet ile kullan",
+          "math: sqrt, pi, floor, ceil; random: randint, choice, shuffle",
+          "from ... import ve as ile kısa yaz; seed ile tekrarla"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "kapanis",
+      "sure_sn": 9,
+      "anlatim": "Alet dolabı artık senin! Yarın atölyenin köşesindeki sihirli kalıbı çalıştıracağız: dört satırlık döngüleri tek satıra sığdıran list comprehension.",
+      "ekran": {
+        "baslik": "Yarın: List comprehension",
+        "gorsel": "gorseller/python/harita/atolye.webp"
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

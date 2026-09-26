@@ -1,0 +1,204 @@
+{
+ "day": 7,
+ "title": "Döngüler",
+ "region": "ay",
+ "xp_complete": 150,
+ "objective": "for, while ve for...of ile işleri tekrarlatmak, dizileri dolaşmak ve toplam biriktirmek",
+ "story": "Döngü Ayı'nın yörüngesine girdik! Burada her şey tekrar eder: tur, tur, bir tur daha... Aynı komutu yüz kez yazmak yerine bilgisayara **döngü** ile tekrarlatacağız.",
+ "sections": [
+  {
+   "title": "for döngüsü",
+   "body": "`for` bir işi belirli sayıda tekrarlar. Parantezin içinde noktalı virgülle ayrılmış üç parça vardır:\n\n```js\nfor (let i = 1; i <= 5; i++) {\n  console.log(\"Tur\", i);\n}\n```\n\n1. `let i = 1`: başlangıç, bir kez çalışır.\n2. `i <= 5`: koşul, her turdan önce sınanır; yanlış olunca döngü biter.\n3. `i++`: her turun sonunda çalışır, sayacı bir artırır.\n\nGeriye saymak için `i--` kullanılır: `for (let i = 5; i >= 1; i--)`."
+  },
+  {
+   "title": "while döngüsü",
+   "body": "`while` (iken) koşul doğru olduğu sürece tekrar eder. Kaç tur süreceğini baştan bilmediğinde işe yarar:\n\n```js\nlet fuel = 100;\nwhile (fuel > 0) {\n  fuel -= 30;\n  console.log(\"Kalan yakıt:\", fuel);\n}\n```\n\nDikkat: döngünün içinde koşulu değiştiren bir şey olmalı (burada `fuel -= 30`). Yoksa döngü hiç bitmez ve program donar!"
+  },
+  {
+   "title": "Dizileri dolaşmak",
+   "body": "Bir dizinin her elemanına sırayla bakmak için `for...of` en kolay yoldur:\n\n```js\nconst planets = [\"Merkür\", \"Venüs\", \"Dünya\"];\nfor (const planet of planets) {\n  console.log(planet);\n}\n```\n\nSıra numarası da lazımsa klasik `for` ile indeksi kullan:\n\n```js\nfor (let i = 0; i < planets.length; i++) {\n  console.log(i + 1, planets[i]);\n}\n```\n\nPython bildiysen: `for...of`, Python'daki `for planet in planets` gibidir."
+  },
+  {
+   "title": "Biriktirmek, break ve continue",
+   "body": "Döngüden önce `0` ile başlayan bir değişken açıp her turda ona ekleyerek **toplam** ya da **sayı** biriktirebilirsin:\n\n```js\nconst tanks = [40, 25, 35];\nlet total = 0;\nfor (const tank of tanks) {\n  total += tank;\n}\nconsole.log(total);  // 100\n```\n\n- `break`: döngüyü hemen bitirir.\n- `continue`: bu turun geri kalanını atlar, sonraki tura geçer."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Geri sayım",
+   "code": "for (let i = 5; i >= 1; i--) {\n  console.log(i);\n}\nconsole.log(\"Ateşle!\");\n",
+   "note": "i-- sayacı her turda bir azaltır."
+  },
+  {
+   "title": "Toplam ve sayaç",
+   "code": "const tanks = [40, 25, 35, 60];\nlet total = 0;\nlet full = 0;\nfor (const tank of tanks) {\n  total += tank;\n  if (tank >= 40) {\n    full++;\n  }\n}\nconsole.log(\"Toplam yakıt:\", total);\nconsole.log(\"Dolu depo:\", full);\n",
+   "note": "total ve full döngüden ÖNCE oluşturulur; yoksa her turda sıfırlanırlar."
+  }
+ ],
+ "tasks": [
+  {
+   "id": "js-d7-t1",
+   "title": "Geri sayım",
+   "prompt": "Bir `for` döngüsüyle 10'dan 1'e kadar geri say (her sayı ayrı satırda), en sonda `Kalkış!` yazsın.\n\nOn ayrı `console.log` yazma; döngü içinde tek bir `console.log` yeter.",
+   "starter": "// for döngüsüyle 10'dan 1'e kadar say\n\nconsole.log(\"Kalkış!\");\n",
+   "solution": "// for döngüsüyle 10'dan 1'e kadar say\nfor (let i = 10; i >= 1; i--) {\n  console.log(i);\n}\n\nconsole.log(\"Kalkış!\");\n",
+   "hints": [
+    "Başlangıç 10, koşul i >= 1, her turda i--",
+    "for (let i = 10; i >= 1; i--) { console.log(i); }"
+   ],
+   "check": {
+    "code_contains": [
+     "for"
+    ],
+    "js": "assert(_lines.join(\"|\") === \"10|9|8|7|6|5|4|3|2|1|Kalkış!\", \"Çıktı 10'dan 1'e kadar sayılar ve en sonda 'Kalkış!' olmalı.\");\nassert((_code.match(/console\\.log/g) || []).length <= 2, \"Her sayı için ayrı console.log yazma; döngü kullan.\");"
+   },
+   "xp": 50
+  },
+  {
+   "id": "js-d7-t2",
+   "title": "Yakıt depoları",
+   "prompt": "`for...of` döngüsüyle `tanks` dizisini dolaş:\n\n- `total`: bütün depoların toplamı\n- `bigTanks`: 90 ya da daha fazla yakıtı olan depo sayısı\n\nSonuçları kendin hesaplayıp yazma; döngü hesaplasın.",
+   "starter": "const tanks = [120, 85, 60, 95];\nlet total = 0;\nlet bigTanks = 0;\n\n// for...of ile topla ve say\n\nconsole.log(\"Toplam yakıt:\", total);\nconsole.log(\"Büyük depo:\", bigTanks);\n",
+   "solution": "const tanks = [120, 85, 60, 95];\nlet total = 0;\nlet bigTanks = 0;\n\n// for...of ile topla ve say\nfor (const tank of tanks) {\n  total += tank;\n  if (tank >= 90) {\n    bigTanks++;\n  }\n}\n\nconsole.log(\"Toplam yakıt:\", total);\nconsole.log(\"Büyük depo:\", bigTanks);\n",
+   "hints": [
+    "for (const tank of tanks) { ... }",
+    "Her turda total += tank;",
+    "if (tank >= 90) { bigTanks++; }"
+   ],
+   "check": {
+    "code_contains": [
+     "for"
+    ],
+    "js": "assert(/for\\s*\\(\\s*(const|let)\\s+\\w+\\s+of\\s/.test(_code), \"for...of döngüsü kullanmalısın: for (const tank of tanks)\");\nassert(total === 360, \"total 360 olmalı.\");\nassert(bigTanks === 2, \"bigTanks 2 olmalı (120 ve 95).\");\nassert(!/360/.test(_code) && !/bigTanks\\s*=\\s*2\\b/.test(_code), \"Sonuçları elle yazma; döngü hesaplasın.\");"
+   },
+   "xp": 50
+  },
+  {
+   "id": "js-d7-t3",
+   "title": "Yörünge turları",
+   "prompt": "Roket her yörünge turunda 30 yakıt harcıyor. Yakıt **30 ya da daha fazla** olduğu sürece tur atmaya devam etsin.\n\nBir `while` döngüsüyle her turda `fuel`'den 30 çıkar ve `rounds`'u bir artır. Sonunda çıktı: `3 tur atıldı, kalan yakıt: 10`",
+   "starter": "let fuel = 100;\nlet rounds = 0;\n\n// while döngüsü\n\nconsole.log(`${rounds} tur atıldı, kalan yakıt: ${fuel}`);\n",
+   "solution": "let fuel = 100;\nlet rounds = 0;\n\n// while döngüsü\nwhile (fuel >= 30) {\n  fuel -= 30;\n  rounds++;\n}\n\nconsole.log(`${rounds} tur atıldı, kalan yakıt: ${fuel}`);\n",
+   "hints": [
+    "while (fuel >= 30) { ... }",
+    "İçeride: fuel -= 30; ve rounds++;"
+   ],
+   "check": {
+    "code_contains": [
+     "while"
+    ],
+    "js": "assert(rounds === 3, \"rounds 3 olmalı.\");\nassert(fuel === 10, \"fuel 10 olmalı.\");\nassert(!/rounds\\s*=\\s*3/.test(_code) && !/fuel\\s*=\\s*10\\b/.test(_code), \"Sonuçları elle yazma; while döngüsü hesaplasın.\");\nassert(_lines.includes(\"3 tur atıldı, kalan yakıt: 10\"), \"Çıktıda '3 tur atıldı, kalan yakıt: 10' görünmeli.\");"
+   },
+   "xp": 50
+  }
+ ],
+ "challenge": {
+  "id": "js-d7-c",
+  "title": "Asteroit taraması",
+  "prompt": "Tarayıcıdan gelen ölçümleri topla. Ama iki kural var:\n\n- **Negatif** sayılar sensör hatasıdır: `continue` ile atla.\n- `99` gelirse tarama bitmiştir: `break` ile döngüden çık (99 ve sonrası sayılmaz).\n\n`total`: geçerli ölçümlerin toplamı, `valid`: geçerli ölçüm sayısı. (0 geçerli bir ölçümdür.)",
+  "starter": "const scans = [3, 7, -1, 12, 0, 5, 99, 4];\nlet total = 0;\nlet valid = 0;\n\n// Döngüyle topla (continue ve break kullan)\n\nconsole.log(\"Geçerli ölçüm:\", valid, \"| Toplam:\", total);\n",
+  "solution": "const scans = [3, 7, -1, 12, 0, 5, 99, 4];\nlet total = 0;\nlet valid = 0;\n\n// Döngüyle topla (continue ve break kullan)\nfor (const value of scans) {\n  if (value === 99) {\n    break;\n  }\n  if (value < 0) {\n    continue;\n  }\n  total += value;\n  valid++;\n}\n\nconsole.log(\"Geçerli ölçüm:\", valid, \"| Toplam:\", total);\n",
+  "hints": [
+   "Önce 99 kontrolü: if (value === 99) { break; }",
+   "Sonra negatif kontrolü: if (value < 0) { continue; }",
+   "En sonda: total += value; valid++;"
+  ],
+  "check": {
+   "code_contains": [
+    "break",
+    "continue"
+   ],
+   "js": "assert(total === 27, \"total 27 olmalı (3 + 7 + 12 + 0 + 5).\");\nassert(valid === 5, \"valid 5 olmalı.\");\nassert(!/27/.test(_code), \"Sonucu elle yazma; döngü hesaplasın.\");"
+  },
+  "xp": 75
+ },
+ "project_contribution": "Düşman dalgaları",
+ "project_task": {
+  "id": "js-d7-p",
+  "title": "Düşman dalgaları",
+  "prompt": "Düşmanlar dalga dalga geliyor. `waves` dizisindeki her sayı bir dalgadaki düşman sayısı.\n\nBir `for` döngüsüyle her dalgayı yazdır ve `totalEnemies`'e ekle; sonunda toplamı yazdır:\n\n```\nDalga 1: 3 düşman\nDalga 2: 5 düşman\nDalga 3: 8 düşman\nToplam: 16 düşman\n```",
+  "starter": "const waves = [3, 5, 8];\nlet totalEnemies = 0;\n\n// Her dalgayı döngüyle yazdır ve topla\n\n// Toplamı yazdır\n",
+  "solution": "const waves = [3, 5, 8];\nlet totalEnemies = 0;\n\n// Her dalgayı döngüyle yazdır ve topla\nfor (let i = 0; i < waves.length; i++) {\n  console.log(`Dalga ${i + 1}: ${waves[i]} düşman`);\n  totalEnemies += waves[i];\n}\n\n// Toplamı yazdır\nconsole.log(`Toplam: ${totalEnemies} düşman`);\n",
+  "hints": [
+   "Sıra numarası lazım: for (let i = 0; i < waves.length; i++)",
+   "Dalga numarası i + 1, düşman sayısı waves[i]",
+   "totalEnemies += waves[i];"
+  ],
+  "check": {
+   "code_contains": [
+    "for"
+   ],
+   "js": "assert(totalEnemies === 16, \"totalEnemies 16 olmalı.\");\nassert(_lines.join(\"|\") === \"Dalga 1: 3 düşman|Dalga 2: 5 düşman|Dalga 3: 8 düşman|Toplam: 16 düşman\", \"Çıktı 3 dalga satırı ve 'Toplam: 16 düşman' olmalı.\");\nassert((_code.match(/console\\.log/g) || []).length <= 2, \"Her dalga için ayrı console.log yazma; döngü kullan.\");\nassert(!/16/.test(_code), \"Toplamı elle yazma; döngüde biriktir.\");"
+  },
+  "xp": 100
+ },
+ "tracks": {
+  "js-web": {
+   "project_contribution": "Döngüyle menü",
+   "project_task": {
+    "id": "js-d7-pw",
+    "title": "Numaralı menü",
+    "prompt": "Menüyü bir `for` döngüsüyle numaralı yazdır. Ziyaretçinin bulunduğu sayfanın (`active`) yanına ` (buradasın)` ekle. Sonunda bağlantı sayısını yazdır:\n\n```\n1. Ana Sayfa\n2. Hakkımda\n3. Projeler (buradasın)\n4. İletişim\nToplam 4 bağlantı\n```",
+    "starter": "const menu = [\"Ana Sayfa\", \"Hakkımda\", \"Projeler\", \"İletişim\"];\nconst active = \"Projeler\";\n\n// Menüyü döngüyle numaralı yazdır\n\n// Bağlantı sayısını yazdır\n",
+    "solution": "const menu = [\"Ana Sayfa\", \"Hakkımda\", \"Projeler\", \"İletişim\"];\nconst active = \"Projeler\";\n\n// Menüyü döngüyle numaralı yazdır\nfor (let i = 0; i < menu.length; i++) {\n  const mark = menu[i] === active ? \" (buradasın)\" : \"\";\n  console.log(`${i + 1}. ${menu[i]}${mark}`);\n}\n\n// Bağlantı sayısını yazdır\nconsole.log(`Toplam ${menu.length} bağlantı`);\n",
+    "hints": [
+     "for (let i = 0; i < menu.length; i++)",
+     "Numara i + 1; aktif sayfa kontrolü: menu[i] === active",
+     "Üçlü operatörle ek metni seç: menu[i] === active ? \" (buradasın)\" : \"\""
+    ],
+    "check": {
+     "code_contains": [
+      "for",
+      "length"
+     ],
+     "js": "assert(_lines.join(\"|\") === \"1. Ana Sayfa|2. Hakkımda|3. Projeler (buradasın)|4. İletişim|Toplam 4 bağlantı\", \"Çıktı numaralı 4 menü satırı (Projeler'in yanında ' (buradasın)') ve 'Toplam 4 bağlantı' olmalı.\");\nassert((_code.match(/console\\.log/g) || []).length <= 3, \"Her bağlantı için ayrı console.log yazma; döngü kullan.\");\nassert(!/Toplam 4/.test(_code) && /===\\s*active|active\\s*===/.test(_code), \"Sayıyı menu.length'ten al ve aktif sayfayı active ile karşılaştır.\");"
+    },
+    "xp": 100
+   }
+  },
+  "js-app": {
+   "project_contribution": "Numaralı görev listesi",
+   "project_task": {
+    "id": "js-d7-pa",
+    "title": "Numaralı görev listesi",
+    "prompt": "`tasks` görevleri, `done` ise aynı sıradaki görevin bitip bitmediğini tutuyor. Bir `for` döngüsüyle listeyi yazdır: bitenler `[x]`, bitmeyenler `[ ]` ile. Biten görevleri `doneCount`'ta say ve sonunda yazdır:\n\n```\n1. [x] Matematik ödevi\n2. [ ] Kitap okuma\n3. [ ] İngilizce kelime\n4. [x] Oda toplama\nTamamlanan: 2/4\n```",
+    "starter": "const tasks = [\"Matematik ödevi\", \"Kitap okuma\", \"İngilizce kelime\", \"Oda toplama\"];\nconst done = [true, false, false, true];\nlet doneCount = 0;\n\n// Döngüyle listeyi yazdır ve biten görevleri say\n\n// Tamamlanan satırını yazdır\n",
+    "solution": "const tasks = [\"Matematik ödevi\", \"Kitap okuma\", \"İngilizce kelime\", \"Oda toplama\"];\nconst done = [true, false, false, true];\nlet doneCount = 0;\n\n// Döngüyle listeyi yazdır ve biten görevleri say\nfor (let i = 0; i < tasks.length; i++) {\n  const box = done[i] ? \"[x]\" : \"[ ]\";\n  console.log(`${i + 1}. ${box} ${tasks[i]}`);\n  if (done[i]) {\n    doneCount++;\n  }\n}\n\n// Tamamlanan satırını yazdır\nconsole.log(`Tamamlanan: ${doneCount}/${tasks.length}`);\n",
+    "hints": [
+     "Aynı i ile iki diziye de bakabilirsin: tasks[i] ve done[i]",
+     "const box = done[i] ? \"[x]\" : \"[ ]\";",
+     "if (done[i]) { doneCount++; }"
+    ],
+    "check": {
+     "code_contains": [
+      "for"
+     ],
+     "js": "assert(doneCount === 2, \"doneCount 2 olmalı.\");\nassert(_lines.join(\"|\") === \"1. [x] Matematik ödevi|2. [ ] Kitap okuma|3. [ ] İngilizce kelime|4. [x] Oda toplama|Tamamlanan: 2/4\", \"Çıktı numaralı 4 görev satırı ve 'Tamamlanan: 2/4' olmalı.\");\nassert((_code.match(/console\\.log/g) || []).length <= 3, \"Her görev için ayrı console.log yazma; döngü kullan.\");\nassert(!/2\\/4/.test(_code), \"Sayıları elle yazma; doneCount ve tasks.length kullan.\");"
+    },
+    "xp": 100
+   }
+  },
+  "js-quiz": {
+   "project_contribution": "Döngüyle sorular",
+   "project_task": {
+    "id": "js-d7-pq",
+    "title": "Sorular ve sonuç",
+    "prompt": "Bir `for` döngüsüyle bütün soruları `Soru 1: ...` biçiminde yazdır. Aynı döngüde yarışmacının cevabını (`userAnswers[i]`) doğru cevapla (`answers[i]`) karşılaştır, doğruları `correctCount`'ta say. Sonunda:\n\n```\nDoğru sayısı: 2/3\n```",
+    "starter": "const questions = [\"Ay, hangi gezegenin uydusudur?\", \"Güneş sistemindeki en büyük gezegen hangisidir?\", \"Kızıl gezegen olarak bilinen gezegen hangisidir?\"];\nconst answers = [\"Dünya\", \"Jüpiter\", \"Mars\"];\nconst userAnswers = [\"Dünya\", \"Satürn\", \"Mars\"];\nlet correctCount = 0;\n\n// Soruları yazdır ve doğruları say\n\n// Sonucu yazdır\n",
+    "solution": "const questions = [\"Ay, hangi gezegenin uydusudur?\", \"Güneş sistemindeki en büyük gezegen hangisidir?\", \"Kızıl gezegen olarak bilinen gezegen hangisidir?\"];\nconst answers = [\"Dünya\", \"Jüpiter\", \"Mars\"];\nconst userAnswers = [\"Dünya\", \"Satürn\", \"Mars\"];\nlet correctCount = 0;\n\n// Soruları yazdır ve doğruları say\nfor (let i = 0; i < questions.length; i++) {\n  console.log(`Soru ${i + 1}: ${questions[i]}`);\n  if (userAnswers[i] === answers[i]) {\n    correctCount++;\n  }\n}\n\n// Sonucu yazdır\nconsole.log(`Doğru sayısı: ${correctCount}/${questions.length}`);\n",
+    "hints": [
+     "for (let i = 0; i < questions.length; i++)",
+     "if (userAnswers[i] === answers[i]) { correctCount++; }"
+    ],
+    "check": {
+     "code_contains": [
+      "for"
+     ],
+     "js": "assert(correctCount === 2, \"correctCount 2 olmalı.\");\nassert(_lines[0] === \"Soru 1: Ay, hangi gezegenin uydusudur?\" && _lines[1] === \"Soru 2: Güneş sistemindeki en büyük gezegen hangisidir?\" && _lines[2] === \"Soru 3: Kızıl gezegen olarak bilinen gezegen hangisidir?\", \"İlk üç satır 'Soru 1: ...', 'Soru 2: ...', 'Soru 3: ...' olmalı.\");\nassert(_lines.includes(\"Doğru sayısı: 2/3\"), \"Çıktıda 'Doğru sayısı: 2/3' görünmeli.\");\nassert((_code.match(/console\\.log/g) || []).length <= 2, \"Her soru için ayrı console.log yazma; döngü kullan.\");\nassert(!/2\\/3/.test(_code) && !/Soru 2/.test(_code), \"Sayıları elle yazma; döngü ve sayaç kullan.\");"
+    },
+    "xp": 100
+   }
+  }
+ },
+ "available": true
+}

@@ -1,0 +1,225 @@
+{
+  "kurs": "python",
+  "gun": 25,
+  "baslik": "Pandas",
+  "maskot": "piko",
+  "ozet": "Piko, Bilgi Limanı başkanının dev defterinden yola çıkarak pandas ile tablo kurmayı, filtrelemeyi, sıralamayı ve CSV verisini gruplayarak özetlemeyi anlatıyor.",
+  "hedef_sure_sn": 143,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 14,
+      "anlatim": "Selam, ben Piko! Liman başkanının masasında dev bir defter var: her satırda bir gemi, her sütunda bir bilgi. Satır satır okumak yerine, en çok yükü kim taşıyor diye sorup anında cevap almak istiyor. Bugün pandas ile tanışıyoruz!",
+      "ekran": {
+        "baslik": "Gün 25: Pandas",
+        "maddeler": [
+          "Bilgi Limanı",
+          "Tablo verisi: DataFrame"
+        ]
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "yonetmen_notu": "Arka plan: Bilgi Limanı bölge görseli (gorseller/python/harita/liman.webp). Dosya repoda henüz yok; eklenince ekran.gorsel alanına yazılmalı. Liman başkanının masasında satır ve sütunlarla dolu dev bir defter."
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "pandas'ın kalbi DataFrame denen tablo. Onu bir sözlükten kuruyorum: anahtarlar sütun adları, listeler de sütunların değerleri oluyor. Soldaki sıfır, bir, iki satır numaraları. shape satır ve sütun sayısını veriyor.",
+      "ekran": {
+        "baslik": "İlk tablo: DataFrame",
+        "kod": "import pandas as pd\n\ndata = {\"isim\": [\"Piko\", \"Ece\", \"Can\"], \"skor\": [300, 250, 120]}\ndf = pd.DataFrame(data)\nprint(df)\nprint(\"Boyut:\", df.shape)\nprint(\"Ortalama skor:\", df[\"skor\"].mean())\n",
+        "vurgu_satirlari": [
+          4,
+          6
+        ],
+        "dil": "python",
+        "cikti": "   isim  skor\n0  Piko   300\n1   Ece   250\n2   Can   120\nBoyut: (3, 2)\nOrtalama skor: 223.33333333333334"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true,
+      "yonetmen_notu": "Kod pandas paketini kullanır; doğrulayıcının Python ortamında kurulu olmalı."
+    },
+    {
+      "no": 3,
+      "tur": "anlatim",
+      "sure_sn": 13,
+      "anlatim": "Tabloyu tanımak için birkaç kısayol var. Tek bir sütunu köşeli parantezle alırsın, buna Series denir. Series'in mean, max ve sum gibi hazır metotları vardır.",
+      "ekran": {
+        "baslik": "Tabloyu tanımak",
+        "maddeler": [
+          "df.head(): ilk 5 satır",
+          "df.shape, df.columns",
+          "df.describe(): sayısal özet",
+          "df[\"skor\"]: bir sütun (Series)"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "Filtrelemek için tablonun içine bir koşul yazıyorum. Skoru iki yüz elli ve üstü olan satırlar kalıyor. Satır numaralarının korunduğuna dikkat et: Can'ın satırı olan iki numara aradan çıktı.",
+      "ekran": {
+        "baslik": "Filtrele",
+        "kod": "import pandas as pd\n\ndf = pd.DataFrame({\"isim\": [\"Piko\", \"Ece\", \"Can\", \"Ada\"],\n                   \"skor\": [300, 250, 120, 280]})\nprint(df[df[\"skor\"] >= 250])\n",
+        "vurgu_satirlari": [
+          5
+        ],
+        "dil": "python",
+        "cikti": "   isim  skor\n0  Piko   300\n1   Ece   250\n3   Ada   280"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true,
+      "yonetmen_notu": "Kod pandas paketini kullanır; doğrulayıcının Python ortamında kurulu olmalı."
+    },
+    {
+      "no": 5,
+      "tur": "soru",
+      "sure_sn": 10,
+      "anlatim": "Şimdi sıra sende! Tabloyu skora göre büyükten küçüğe sıralayıp isimleri listeye çeviriyorum. Sence listede sıra nasıl olur?",
+      "ekran": {
+        "baslik": "Sence ne yazdırır?",
+        "kod": "import pandas as pd\n\ndf = pd.DataFrame({\"isim\": [\"Piko\", \"Ece\", \"Can\", \"Ada\"],\n                   \"skor\": [300, 250, 120, 280]})\ntop = df.sort_values(\"skor\", ascending=False)\nprint(top[\"isim\"].tolist())\n",
+        "vurgu_satirlari": [
+          5
+        ],
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 6,
+      "tur": "cikti",
+      "sure_sn": 10,
+      "anlatim": "Piko en üstte, sonra Ada, Ece ve Can. ascending False büyükten küçüğe demek, tolist de sütunu düz bir listeye çeviriyor.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "import pandas as pd\n\ndf = pd.DataFrame({\"isim\": [\"Piko\", \"Ece\", \"Can\", \"Ada\"],\n                   \"skor\": [300, 250, 120, 280]})\ntop = df.sort_values(\"skor\", ascending=False)\nprint(top[\"isim\"].tolist())\n",
+        "dil": "python",
+        "cikti": "['Piko', 'Ada', 'Ece', 'Can']"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sol"
+      },
+      "calistir": true,
+      "yonetmen_notu": "Kod pandas paketini kullanır; doğrulayıcının Python ortamında kurulu olmalı."
+    },
+    {
+      "no": 7,
+      "tur": "kod",
+      "sure_sn": 17,
+      "anlatim": "Gerçek veriler çoğunlukla CSV dosyasında, virgülle ayrılmış satırlar olarak gelir. read_csv onu tabloya çevirir; burada yazıyı StringIO ile dosya gibi okutuyorum. groupby aynı oyuncunun skorlarını topluyor, idxmax da kazananı buluyor.",
+      "ekran": {
+        "baslik": "CSV ve gruplama",
+        "kod": "import io\nimport pandas as pd\n\ncsv = \"oyuncu,skor\\nPiko,50\\nEce,70\\nPiko,40\\nEce,10\\n\"\ndf = pd.read_csv(io.StringIO(csv))\ntotals = df.groupby(\"oyuncu\")[\"skor\"].sum()\nprint(totals)\nprint(\"Kazanan:\", totals.idxmax())\n",
+        "vurgu_satirlari": [
+          5,
+          6,
+          8
+        ],
+        "dil": "python",
+        "cikti": "oyuncu\nEce     80\nPiko    90\nName: skor, dtype: int64\nKazanan: Piko"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true,
+      "yonetmen_notu": "Kod pandas paketini kullanır; doğrulayıcının Python ortamında kurulu olmalı."
+    },
+    {
+      "no": 8,
+      "tur": "hata",
+      "sure_sn": 12,
+      "anlatim": "Sık hata: sütun adını yanlış yazmak. Tabloda isim var ama ben ad istedim. pandas bu sütunu bulamayınca KeyError veriyor. Emin değilsen df.columns ile adlara bak.",
+      "ekran": {
+        "baslik": "Sık hata: olmayan sütun",
+        "kod": "import pandas as pd\n\ndf = pd.DataFrame({\"isim\": [\"Piko\"], \"skor\": [300]})\nprint(df[\"ad\"])\n",
+        "vurgu_satirlari": [
+          4
+        ],
+        "cikti": "KeyError: 'ad'",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sol"
+      },
+      "calistir": true,
+      "yonetmen_notu": "Kod pandas paketini kullanır; doğrulayıcının Python ortamında kurulu olmalı."
+    },
+    {
+      "no": 9,
+      "tur": "gorev",
+      "sure_sn": 13,
+      "anlatim": "Görevlerde ilk tablonu kurup satırlarını sayacak, gemilerin ortalama yükünü bulacak ve ağır gemileri listeleyeceksin. Projede de oyun skorlarını analiz edip kazananı seçiyorsun.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: İlk tablom",
+          "Görev 2: Ortalama yük",
+          "Görev 3: Ağır gemiler",
+          "Challenge: En iyi oyuncu",
+          "Proje: Skor analizi"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 10,
+      "tur": "ozet",
+      "sure_sn": 11,
+      "anlatim": "Özetle: sözlükten ya da CSV'den tablo kur, koşulla süz, sırala, groupby ile özetle.",
+      "ekran": {
+        "baslik": "Bugün öğrendiklerin",
+        "maddeler": [
+          "pd.DataFrame ve pd.read_csv",
+          "df[koşul], sort_values, tolist",
+          "groupby ile toplama"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "kapanis",
+      "sure_sn": 13,
+      "anlatim": "Bilgi Limanı'nı da bitirdik, muhteşemsin! Yarın son bölgeye, Python Dağı'na tırmanıyoruz. İlk durak: web'in istek ve yanıtla nasıl çalıştığı ve Python ile web sayfası üretmek. Görüşürüz!",
+      "ekran": {
+        "baslik": "Yarın: Python ile web",
+        "maddeler": [
+          "Yeni bölge: Python Dağı",
+          "İstek, yanıt, yönlendirme"
+        ]
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

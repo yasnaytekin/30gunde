@@ -1,0 +1,246 @@
+{
+  "kurs": "python",
+  "gun": 21,
+  "baslik": "Sınıflar ve nesneler",
+  "maskot": "piko",
+  "ozet": "Piko, Bilgi Limanı'nın tersanesinde class ile kalıp kurmayı; __init__, self, metotlar, __str__ ve kalıtımla nesneler üretmeyi anlatıyor.",
+  "hedef_sure_sn": 150,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 14,
+      "anlatim": "Selam, ben Piko! Bilgi Limanı'na vardık! Tersanede gemiler tek bir çizime göre yapılıyor. Çizim bir kez hazırlanıyor, ondan istediğin kadar gemi çıkıyor. Python'da çizime sınıf, üretilen gemilere nesne diyoruz.",
+      "ekran": {
+        "baslik": "Gün 21: Sınıflar ve nesneler",
+        "maddeler": [
+          "Yeni bölge: Bilgi Limanı",
+          "class, __init__, self, metot, kalıtım"
+        ]
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "yonetmen_notu": "Arka plan: Bilgi Limanı bölge görseli (gorseller/python/harita/liman.webp). Dosya repoda henüz yok; eklenince ekran.gorsel alanına yazılmalı. Tersanede tek bir gemi çiziminden üç gemi çıkar."
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 13,
+      "anlatim": "Aslında hep nesne kullandın: Piko yazısı bir str nesnesi. Kendi sınıfımızı class ile kuruyorum, adı büyük harfle başlıyor. Parantezle çağırınca o kalıptan bir nesne çıkıyor.",
+      "ekran": {
+        "baslik": "Sınıf ve nesne",
+        "kod": "class Pet:\n    pass\n\ntost = Pet()\nprint(type(tost))\nprint(type(\"Piko\"))\n",
+        "vurgu_satirlari": [
+          1,
+          4
+        ],
+        "dil": "python",
+        "cikti": "<class '__main__.Pet'>\n<class 'str'>"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "__init__ nesne oluşturulurken kendiliğinden çalışan özel bir metot. self o an üretilen nesnenin kendisi. self.name ve self.happiness bu nesnenin özellikleri oluyor, her nesnenin kendine ait.",
+      "ekran": {
+        "baslik": "__init__ ve self",
+        "kod": "class Pet:\n    def __init__(self, name):\n        self.name = name\n        self.happiness = 50\n\ntost = Pet(\"Tost\")\nprint(tost.name)\nprint(tost.happiness)\n",
+        "vurgu_satirlari": [
+          2,
+          3,
+          4
+        ],
+        "dil": "python",
+        "cikti": "Tost\n50"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "anlatim",
+      "sure_sn": 10,
+      "anlatim": "Sınıfın içindeki fonksiyonlara metot denir. İlk parametreleri her zaman self olur. Böylece metot hangi nesnenin özelliğini değiştireceğini bilir.",
+      "ekran": {
+        "baslik": "Metotlar",
+        "kod": "class Pet:\n    def __init__(self, name):\n        self.name = name\n        self.happiness = 50\n\n    def feed(self):\n        self.happiness += 10\n",
+        "vurgu_satirlari": [
+          6,
+          7
+        ],
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 5,
+      "tur": "soru",
+      "sure_sn": 10,
+      "anlatim": "Aynı kalıptan iki evcil hayvan yaptım ve sadece Tost'u iki kez besledim. Sence ekranda hangi mutluluk değerleri çıkar?",
+      "ekran": {
+        "baslik": "Sence ne yazdırır?",
+        "kod": "class Pet:\n    def __init__(self, name):\n        self.name = name\n        self.happiness = 50\n\n    def feed(self):\n        self.happiness += 10\n\ntost = Pet(\"Tost\")\nmisket = Pet(\"Misket\")\ntost.feed()\ntost.feed()\nprint(tost.name, tost.happiness)\nprint(misket.name, misket.happiness)\n",
+        "vurgu_satirlari": [
+          11,
+          12
+        ],
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 6,
+      "tur": "cikti",
+      "sure_sn": 10,
+      "anlatim": "Tost yetmiş oldu, Misket elli kaldı. İki nesne aynı kalıptan çıktı ama her birinin özellikleri ayrı ayrı saklanıyor.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "class Pet:\n    def __init__(self, name):\n        self.name = name\n        self.happiness = 50\n\n    def feed(self):\n        self.happiness += 10\n\ntost = Pet(\"Tost\")\nmisket = Pet(\"Misket\")\ntost.feed()\ntost.feed()\nprint(tost.name, tost.happiness)\nprint(misket.name, misket.happiness)\n",
+        "dil": "python",
+        "cikti": "Tost 70\nMisket 50"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "__str__ metodu, print bir nesneyi yazdırırken ne görüneceğini belirler. Böylece gemi kendini güzel bir cümleyle tanıtıyor.",
+      "ekran": {
+        "baslik": "Kendini tanıtan nesne",
+        "kod": "class Ship:\n    def __init__(self, name, cargo):\n        self.name = name\n        self.cargo = cargo\n\n    def __str__(self):\n        return f\"{self.name} gemisi, yük: {self.cargo}\"\n\nprint(Ship(\"Martı\", 12))\n",
+        "vurgu_satirlari": [
+          6,
+          7
+        ],
+        "dil": "python",
+        "cikti": "Martı gemisi, yük: 12"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "kod",
+      "sure_sn": 17,
+      "anlatim": "Kalıtımda bir sınıf başka bir sınıfın her şeyini miras alır. Wizard, Hero'dan geliyor, kendi __init__'i bile yok ama adı biliyor. Üstüne cast metodunu ekliyor. Kendi __init__'ini yazarsan üsttekini super ile çağırırsın.",
+      "ekran": {
+        "baslik": "Kalıtım",
+        "kod": "class Hero:\n    def __init__(self, name):\n        self.name = name\n\nclass Wizard(Hero):\n    def cast(self):\n        return f\"{self.name} büyü yaptı!\"\n\nw = Wizard(\"Merlin\")\nprint(w.cast())\n",
+        "vurgu_satirlari": [
+          5,
+          6
+        ],
+        "maddeler": [
+          "Kendi __init__ yazarsan: super().__init__(name)"
+        ],
+        "dil": "python",
+        "cikti": "Merlin büyü yaptı!"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "hata",
+      "sure_sn": 12,
+      "anlatim": "En sık hata metotta self'i unutmak. Python nesneyi gizlice ilk bilgi olarak gönderir ama metot hiç parametre beklemiyor. Sonuç TypeError!",
+      "ekran": {
+        "baslik": "Sık hata: self unutuldu",
+        "kod": "class Pet:\n    def feed():\n        print(\"Mama yedi\")\n\nPet().feed()\n",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "TypeError: Pet.feed() takes 0 positional arguments but 1 was given",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 10,
+      "tur": "gorev",
+      "sure_sn": 13,
+      "anlatim": "Görevlerde bir evcil hayvan sınıfı, para harcayan bir cüzdan ve kendini tanıtan bir kahraman yazacaksın. Projede de maceranın karakterleri birbirine saldırabilecek.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Evcil hayvan",
+          "Görev 2: Cüzdan",
+          "Görev 3: Kendini tanıt",
+          "Challenge: Büyücü",
+          "Proje: Karakter sınıfları"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "ozet",
+      "sure_sn": 11,
+      "anlatim": "Özetle: sınıf kalıp, nesne ondan çıkan şey. __init__ kurar, metotlar iş yapar, kalıtım da miras bırakır.",
+      "ekran": {
+        "baslik": "Bugün öğrendiklerin",
+        "maddeler": [
+          "class ile kalıp, Pet() ile nesne",
+          "__init__ ve self ile özellikler",
+          "Metotlar ve kalıtım (super)"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 12,
+      "tur": "kapanis",
+      "sure_sn": 12,
+      "anlatim": "Tersanenin ustası oldun! Yarın limanın ilan panosuna gidiyoruz. Web sayfalarından başlık, bağlantı ve metin toplamayı, yani web kazımayı öğreneceğiz. Görüşürüz!",
+      "ekran": {
+        "baslik": "Yarın: Web kazıma",
+        "maddeler": [
+          "HTML etiketleri",
+          "BeautifulSoup"
+        ]
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

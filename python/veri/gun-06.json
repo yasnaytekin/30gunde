@@ -1,0 +1,1134 @@
+{
+ "day": 6,
+ "title": "Tuple'lar",
+ "region": "orman",
+ "project_contribution": "Harita konumları",
+ "game_role": "Her bölgeden çıkarken attığın adımların özeti yazılır.",
+ "xp_complete": 150,
+ "objective": "Değişmeyen veri grupları olan tuple'ları oluşturmak, açmak ve kullanmak",
+ "story": "Veri Ormanı'nın ağaçlarına eski kaşifler işaretler kazımış: (3, 5), (8, 2)... Bunlar gizli yerlerin koordinatları ve kimse onları değiştiremez. Bugün Python'da değiştirilemeyen bu mühürlü kutuları, yani **tuple**'ları öğreneceğiz.",
+ "sections": [
+  {
+   "title": "Tuple nedir?",
+   "body": "Tuple, listeye çok benzer ama **parantezle** yazılır ve bir kez oluşturulduktan sonra **değiştirilemez**.\n\n```python\npos = (3, 5)\ncolors = (\"mavi\", \"sarı\", \"yeşil\")\nprint(colors[0])    # mavi\nprint(len(colors))  # 3\n```\n\nElemanlara listedeki gibi sıra numarasıyla (index) ulaşırsın. `colors[-1]` son elemanı verir."
+  },
+  {
+   "title": "Neden değişmesin?",
+   "body": "Bazı bilgiler hiç değişmemeli: haritadaki bir noktanın koordinatı, haftanın günleri, bir rengin kodu. Tuple bu bilgileri kazara bozmamızı engeller.\n\n`colors[0] = \"kırmızı\"` yazarsan Python `TypeError` hatası verir. Değiştirmen gerekiyorsa önce listeye çevir, değiştir, sonra tekrar tuple yap:\n\n```python\nitems = list(colors)\nitems.append(\"mor\")\ncolors = tuple(items)\n```"
+  },
+  {
+   "title": "Tuple açmak",
+   "body": "Tuple'daki değerleri tek satırda ayrı değişkenlere dağıtabilirsin. Buna **açma** (unpacking) denir:\n\n```python\npos = (3, 5)\nx, y = pos\nprint(x)  # 3\nprint(y)  # 5\n```\n\nAynı hileyle iki değişkenin değerini yer değiştirebilirsin: `a, b = b, a`"
+  },
+  {
+   "title": "Faydalı işlemler",
+   "body": "- `\"sarı\" in colors` tuple'da var mı diye sorar\n- `colors.count(\"mavi\")` kaç kez geçtiğini sayar\n- `colors.index(\"sarı\")` kaçıncı sırada olduğunu söyler\n- `(1, 2) + (3, 4)` iki tuple'ı birleştirip yeni bir tuple yapar\n\nTek elemanlı tuple yazarken virgülü unutma: `(5,)`. Virgül olmazsa Python onu sadece parantez içindeki bir sayı sanar."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Konum",
+   "code": "pos = (3, 5)\nprint(\"Konum:\", pos)\nx, y = pos\nprint(\"x =\", x)\nprint(\"y =\", y)\n",
+   "note": ""
+  },
+  {
+   "title": "Kilidi aç, değiştir, kilitle",
+   "code": "colors = (\"mavi\", \"sarı\")\nitems = list(colors)\nitems.append(\"yeşil\")\ncolors = tuple(items)\nprint(colors)\nprint(type(colors))\n",
+   "note": "Tuple'ı değiştirmenin tek yolu yeni bir tuple yapmaktır."
+  },
+  {
+   "title": "Yer değiştirme",
+   "code": "left = \"kılıç\"\nright = \"kalkan\"\nleft, right = right, left\nprint(\"Sol el:\", left)\nprint(\"Sağ el:\", right)\n",
+   "note": ""
+  }
+ ],
+ "tasks": [
+  {
+   "id": "d6-t1",
+   "title": "Konumu aç",
+   "prompt": "`pos` tuple'ını `x` ve `y` değişkenlerine aç. Kod `x = 4, y = 9` yazdırmalı.",
+   "starter": "pos = (4, 9)\n\n# pos'u x ve y değişkenlerine aç\n\nprint(f\"x = {x}, y = {y}\")\n",
+   "solution": "pos = (4, 9)\n\nx, y = pos\n\nprint(f\"x = {x}, y = {y}\")\n",
+   "hints": [
+    "Tek satır yeterli: x, y = pos",
+    "Virgülün solunda iki değişken, sağında tuple olmalı."
+   ],
+   "check": {
+    "python": "\nout, g = _run(_set(_code, \"pos\", (7, 1)))\nassert g.get(\"x\") == 7 and g.get(\"y\") == 1, \"x ve y değerlerini pos'tan almalısın: x, y = pos\"\nassert \"x = 7, y = 1\" in out, \"pos (7, 1) olunca 'x = 7, y = 1' yazmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "pos = (4, 9)",
+      "notes": [
+       "`pos` adında bir değişken oluşturuluyor ve içine `(4, 9)` (tuple (değiştirilemeyen grup)) konuyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "x, y = pos",
+      "notes": [
+       "`x, y`: sağdaki değerler sırayla bu değişkenlere dağıtılıyor (açma / unpacking)."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "print(f\"x = {x}, y = {y}\")",
+      "notes": [
+       "`print(f\"x = {x}, y = {y}\")`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "pos",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `(4, 9)`."
+     },
+     {
+      "term": "x",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `pos`."
+     },
+     {
+      "term": "y",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `pos`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     },
+     {
+      "term": "f\"...{}\"",
+      "kind": "metin",
+      "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d6-t2",
+   "title": "Renk paleti",
+   "prompt": "`colors` tuple'ındaki ilk rengi, son rengi ve renk sayısını yazdır:\n\n```\nİlk renk: mavi\nSon renk: yeşil\nRenk sayısı: 3\n```",
+   "starter": "colors = (\"mavi\", \"sarı\", \"yeşil\")\n\n# İlk rengi, son rengi ve renk sayısını yazdır\n",
+   "solution": "colors = (\"mavi\", \"sarı\", \"yeşil\")\n\nprint(f\"İlk renk: {colors[0]}\")\nprint(f\"Son renk: {colors[-1]}\")\nprint(f\"Renk sayısı: {len(colors)}\")\n",
+   "hints": [
+    "İlk eleman colors[0], son eleman colors[-1]",
+    "Eleman sayısı için len() kullan."
+   ],
+   "check": {
+    "python": "\nout, _ = _run(_set(_code, \"colors\", (\"kırmızı\", \"mor\", \"turuncu\", \"gri\")))\nassert \"İlk renk: kırmızı\" in out, \"İlk rengi colors[0] ile al.\"\nassert \"Son renk: gri\" in out, \"Son rengi colors[-1] ile al; tuple uzasa da doğru çalışsın.\"\nassert \"Renk sayısı: 4\" in out, \"Renk sayısını len(colors) ile hesapla.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "colors = (\"mavi\", \"sarı\", \"yeşil\")",
+      "notes": [
+       "`colors` adında bir değişken oluşturuluyor ve içine `(\"mavi\", \"sarı\", \"yeşil\")` (tuple (değiştirilemeyen grup)) konuyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "print(f\"İlk renk: {colors[0]}\")",
+      "notes": [
+       "`print(f\"İlk renk: {colors[0]}\")`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "print(f\"Son renk: {colors[-1]}\")",
+      "notes": [
+       "`print(f\"Son renk: {colors[-1]}\")`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "print(f\"Renk sayısı: {len(colors)}\")",
+      "notes": [
+       "`print(f\"Renk sayısı: {len(colors)}\")`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "colors",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `(\"mavi\", \"sarı\", \"yeşil\")`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     },
+     {
+      "term": "f\"...{}\"",
+      "kind": "metin",
+      "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+     },
+     {
+      "term": "[ ]",
+      "kind": "seçme",
+      "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+     },
+     {
+      "term": "-",
+      "kind": "operatör",
+      "desc": "Sayının önündeki eksi işareti."
+     },
+     {
+      "term": "len()",
+      "kind": "fonksiyon",
+      "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d6-t3",
+   "title": "Yeni eşya ekle",
+   "prompt": "Tuple değiştirilemez, ama listeye çevirip yeni bir tuple yapabiliriz. `items` tuple'ının sonuna `\"kalkan\"` ekle. Sonunda `items` yine bir **tuple** olmalı.",
+   "starter": "items = (\"kılıç\", \"iksir\")\n\n# items'ı listeye çevir, \"kalkan\" ekle, tekrar tuple yap\n\nprint(items)\n",
+   "solution": "items = (\"kılıç\", \"iksir\")\n\nbag = list(items)\nbag.append(\"kalkan\")\nitems = tuple(bag)\n\nprint(items)\n",
+   "hints": [
+    "list(items) ile tuple'dan liste yap.",
+    "Listeye append() ile ekle, sonra tuple(...) ile geri çevir."
+   ],
+   "check": {
+    "code_contains": [
+     "list(",
+     "tuple("
+    ],
+    "python": "\nout, g = _run(_set(_code, \"items\", (\"yay\", \"ok\", \"harita\")))\nres = g.get(\"items\")\nassert isinstance(res, tuple), \"Sonunda items yine bir tuple olmalı: tuple(...)\"\nassert res == (\"yay\", \"ok\", \"harita\", \"kalkan\"), \"items'ın sonuna 'kalkan' eklenmeli, eski eşyalar kalmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "items = (\"kılıç\", \"iksir\")",
+      "notes": [
+       "`items` adında bir değişken oluşturuluyor ve içine `(\"kılıç\", \"iksir\")` (tuple (değiştirilemeyen grup)) konuyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "bag = list(items)",
+      "notes": [
+       "`bag` adında bir değişken oluşturuluyor ve içine `list(items)` konuyor."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "bag.append(\"kalkan\")",
+      "notes": [
+       "`bag.append(\"kalkan\")`: `bag` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "items = tuple(bag)",
+      "notes": [
+       "`items` değişkenine yeni değer veriliyor: `tuple(bag)`."
+      ]
+     },
+     {
+      "n": 7,
+      "code": "print(items)",
+      "notes": [
+       "`print(items)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "items",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `(\"kılıç\", \"iksir\")`."
+     },
+     {
+      "term": "bag",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `list(items)`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "list()",
+      "kind": "fonksiyon",
+      "desc": "Bir değerden liste oluşturur ya da boş liste yapar."
+     },
+     {
+      "term": ".append()",
+      "kind": "metot",
+      "desc": "Listenin sonuna yeni bir eleman ekler."
+     },
+     {
+      "term": "tuple()",
+      "kind": "fonksiyon",
+      "desc": "Bir değerden tuple (değiştirilemeyen liste) oluşturur."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "id": "d6-c",
+  "title": "Yer değiştir",
+  "prompt": "`a` ve `b` değişkenlerinin değerlerini **üçüncü bir değişken kullanmadan** yer değiştir. Tuple açma hilesini hatırla.",
+  "starter": "a = \"sol\"\nb = \"sağ\"\n\n# a ile b'yi yer değiştir\n\nprint(\"a:\", a)\nprint(\"b:\", b)\n",
+  "solution": "a = \"sol\"\nb = \"sağ\"\n\na, b = b, a\n\nprint(\"a:\", a)\nprint(\"b:\", b)\n",
+  "hints": [
+   "Tek satırda olur: a, b = b, a"
+  ],
+  "check": {
+   "python": "\n_, g = _run(_set(_set(_code, \"a\", 10), \"b\", 20))\nassert g.get(\"a\") == 20 and g.get(\"b\") == 10, \"a ile b yer değiştirmeli: a, b = b, a\"\nassert re.search(r\"a\\s*,\\s*b\\s*=\\s*b\\s*,\\s*a\", _code), \"Tuple açma hilesini kullan: a, b = b, a\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "a = \"sol\"",
+     "notes": [
+      "`a` adında bir değişken oluşturuluyor ve içine `\"sol\"` (metin (str)) konuyor."
+     ]
+    },
+    {
+     "n": 2,
+     "code": "b = \"sağ\"",
+     "notes": [
+      "`b` adında bir değişken oluşturuluyor ve içine `\"sağ\"` (metin (str)) konuyor."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "a, b = b, a",
+     "notes": [
+      "`a, b`: sağdaki değerler sırayla bu değişkenlere dağıtılıyor (açma / unpacking)."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "print(\"a:\", a)",
+     "notes": [
+      "`print(\"a:\", a)`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 7,
+     "code": "print(\"b:\", b)",
+     "notes": [
+      "`print(\"b:\", b)`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "a",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `\"sol\"`."
+    },
+    {
+     "term": "b",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `\"sağ\"`."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    }
+   ]
+  }
+ },
+ "project_task": {
+  "id": "d6-p",
+  "title": "Harita konumları",
+  "prompt": "Piko'nun ormandaki adımları `path` listesinde tuple olarak duruyor. Her tuple bir konum: `(x, y)`.\n\n- `start` ilk konum, `current` son konum olsun.\n- Sonra şunları yazdır:\n\n```\nBaşlangıç: (0, 0)\nŞu an: (2, 1)\nAdım sayısı: 3\n```\n\nAdım sayısı, konum sayısının bir eksiğidir.",
+  "starter": "path = [(0, 0), (1, 0), (1, 1), (2, 1)]\n\n# start ve current değişkenlerini oluştur\n\n# Üç satırı yazdır\n",
+  "solution": "path = [(0, 0), (1, 0), (1, 1), (2, 1)]\n\nstart = path[0]\ncurrent = path[-1]\n\nprint(f\"Başlangıç: {start}\")\nprint(f\"Şu an: {current}\")\nprint(f\"Adım sayısı: {len(path) - 1}\")\n",
+  "hints": [
+   "İlk konum path[0], son konum path[-1]",
+   "Adım sayısı: len(path) - 1"
+  ],
+  "check": {
+   "python": "\nout, g = _run(_set(_code, \"path\", [(5, 5), (5, 6), (6, 6), (7, 6), (7, 7)]))\nassert g.get(\"start\") == (5, 5), \"start ilk konum olmalı: path[0]\"\nassert g.get(\"current\") == (7, 7), \"current son konum olmalı: path[-1]\"\nassert \"Başlangıç: (5, 5)\" in out and \"Şu an: (7, 7)\" in out, \"Başlangıç ve Şu an satırlarını yazdır.\"\nassert \"Adım sayısı: 4\" in out, \"Adım sayısını len(path) - 1 ile hesapla.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "path = [(0, 0), (1, 0), (1, 1), (2, 1)]",
+     "notes": [
+      "`path` adında bir değişken oluşturuluyor ve içine `[(0, 0), (1, 0), (1, 1), (2, 1)]` (liste) konuyor."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "start = path[0]",
+     "notes": [
+      "`start` adında bir değişken oluşturuluyor ve içine `path[0]` konuyor."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "current = path[-1]",
+     "notes": [
+      "`current` adında bir değişken oluşturuluyor ve içine `path[-1]` konuyor."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "print(f\"Başlangıç: {start}\")",
+     "notes": [
+      "`print(f\"Başlangıç: {start}\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 7,
+     "code": "print(f\"Şu an: {current}\")",
+     "notes": [
+      "`print(f\"Şu an: {current}\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 8,
+     "code": "print(f\"Adım sayısı: {len(path) - 1}\")",
+     "notes": [
+      "`print(f\"Adım sayısı: {len(path) - 1}\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "path",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `[(0, 0), (1, 0), (1, 1), (2, 1)]`."
+    },
+    {
+     "term": "start",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `path[0]`."
+    },
+    {
+     "term": "current",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `path[-1]`."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "[ ]",
+     "kind": "seçme",
+     "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+    },
+    {
+     "term": "-",
+     "kind": "operatör",
+     "desc": "Sayının önündeki eksi işareti."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    },
+    {
+     "term": "f\"...{}\"",
+     "kind": "metin",
+     "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+    },
+    {
+     "term": "len()",
+     "kind": "fonksiyon",
+     "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+    }
+   ]
+  }
+ },
+ "available": true,
+ "tracks": {
+  "veri": {
+   "project_task": {
+    "id": "d6-pv",
+    "title": "Harcama kayıtları",
+    "prompt": "Her harcama bir tuple: `(kategori, tutar)`. Kayıtlar `records` listesinde.\n\n- `first`: ilk kayıt, `last`: son kayıt\n- Son kaydı iki değişkene aç: `category, amount = last`\n- Sonra şöyle yazdır:\n\n```\nİlk kayıt: ('kira', 2000)\nSon harcama: market - 120 TL\n```",
+    "starter": "records = [(\"kira\", 2000), (\"ulaşım\", 400), (\"market\", 120)]\n",
+    "solution": "records = [(\"kira\", 2000), (\"ulaşım\", 400), (\"market\", 120)]\nfirst = records[0]\nlast = records[-1]\ncategory, amount = last\nprint(\"İlk kayıt:\", first)\nprint(f\"Son harcama: {category} - {amount} TL\")\n",
+    "hints": [
+     "records[0] ilk, records[-1] son eleman.",
+     "category, amount = last satırı tuple'ı açar."
+    ],
+    "check": {
+     "python": "\nout, g = _run(_set(_code, \"records\", [(\"okul\", 50), (\"sinema\", 180)]))\nassert g.get(\"first\") == (\"okul\", 50), \"first ilk kayıt olmalı: records[0]\"\nassert g.get(\"last\") == (\"sinema\", 180), \"last son kayıt olmalı: records[-1]\"\nassert g.get(\"category\") == \"sinema\" and g.get(\"amount\") == 180, \"Son kaydı category ve amount değişkenlerine aç.\"\nassert \"Son harcama: sinema - 180 TL\" in out, \"Son harcama satırını f-string ile yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "records = [(\"kira\", 2000), (\"ulaşım\", 400), (\"market\", 120)]",
+       "notes": [
+        "`records` adında bir değişken oluşturuluyor ve içine `[(\"kira\", 2000), (\"ulaşım\", 400), (\"market\", 120)]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "first = records[0]",
+       "notes": [
+        "`first` adında bir değişken oluşturuluyor ve içine `records[0]` konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "last = records[-1]",
+       "notes": [
+        "`last` adında bir değişken oluşturuluyor ve içine `records[-1]` konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "category, amount = last",
+       "notes": [
+        "`category, amount`: sağdaki değerler sırayla bu değişkenlere dağıtılıyor (açma / unpacking)."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "print(\"İlk kayıt:\", first)",
+       "notes": [
+        "`print(\"İlk kayıt:\", first)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "print(f\"Son harcama: {category} - {amount} TL\")",
+       "notes": [
+        "`print(f\"Son harcama: {category} - {amount} TL\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "records",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[(\"kira\", 2000), (\"ulaşım\", 400), (\"market\", 120)]`."
+      },
+      {
+       "term": "first",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `records[0]`."
+      },
+      {
+       "term": "last",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `records[-1]`."
+      },
+      {
+       "term": "category",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `last`."
+      },
+      {
+       "term": "amount",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `last`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": "-",
+       "kind": "operatör",
+       "desc": "Sayının önündeki eksi işareti."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Harcama kayıtları",
+   "game_role": "Her harcamayı (kategori, tutar) ikilisi olarak saklar."
+  },
+  "otomasyon": {
+   "project_task": {
+    "id": "d6-po",
+    "title": "Toplantı saati",
+    "prompt": "Toplantılar tuple olarak duruyor: `(ad, saat, dakika)`. Toplantılar `meetings` listesinde.\n\n- `next_meeting`: listedeki ilk toplantı\n- Onu üç değişkene aç: `name, hour, minute = next_meeting`\n- `Sıradaki: Proje toplantısı saat 14:30` gibi yazdır.\n- `count`: toplantı sayısı. `Bugün 2 toplantı var` yazdır.",
+    "starter": "meetings = [(\"Proje toplantısı\", 14, 30), (\"Ders\", 16, 45)]\n",
+    "solution": "meetings = [(\"Proje toplantısı\", 14, 30), (\"Ders\", 16, 45)]\nnext_meeting = meetings[0]\nname, hour, minute = next_meeting\nprint(f\"Sıradaki: {name} saat {hour}:{minute}\")\ncount = len(meetings)\nprint(f\"Bugün {count} toplantı var\")\n",
+    "hints": [
+     "meetings[0] ilk toplantı.",
+     "name, hour, minute = next_meeting"
+    ],
+    "check": {
+     "python": "\nout, g = _run(_set(_code, \"meetings\", [(\"Doktor\", 10, 15), (\"A\", 1, 10), (\"B\", 2, 20)]))\nassert g.get(\"next_meeting\") == (\"Doktor\", 10, 15), \"next_meeting ilk toplantı olmalı.\"\nassert (g.get(\"name\"), g.get(\"hour\"), g.get(\"minute\")) == (\"Doktor\", 10, 15), \"İlk toplantıyı name, hour, minute değişkenlerine aç.\"\nassert \"Sıradaki: Doktor saat 10:15\" in out, \"'Sıradaki: Doktor saat 10:15' gibi yazdır.\"\nassert \"Bugün 3 toplantı var\" in out, \"Toplantı sayısını len() ile yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "meetings = [(\"Proje toplantısı\", 14, 30), (\"Ders\", 16, 45)]",
+       "notes": [
+        "`meetings` adında bir değişken oluşturuluyor ve içine `[(\"Proje toplantısı\", 14, 30), (\"Ders\", 16, 45)]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "next_meeting = meetings[0]",
+       "notes": [
+        "`next_meeting` adında bir değişken oluşturuluyor ve içine `meetings[0]` konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "name, hour, minute = next_meeting",
+       "notes": [
+        "`name, hour, minute`: sağdaki değerler sırayla bu değişkenlere dağıtılıyor (açma / unpacking)."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "print(f\"Sıradaki: {name} saat {hour}:{minute}\")",
+       "notes": [
+        "`print(f\"Sıradaki: {name} saat {hour}:{minute}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "count = len(meetings)",
+       "notes": [
+        "`count` adında bir değişken oluşturuluyor ve içine `len(meetings)` konuyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "print(f\"Bugün {count} toplantı var\")",
+       "notes": [
+        "`print(f\"Bugün {count} toplantı var\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "meetings",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[(\"Proje toplantısı\", 14, 30), (\"Ders\", 16, 45)]`."
+      },
+      {
+       "term": "next_meeting",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `meetings[0]`."
+      },
+      {
+       "term": "name",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `next_meeting`."
+      },
+      {
+       "term": "hour",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `next_meeting`."
+      },
+      {
+       "term": "minute",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `next_meeting`."
+      },
+      {
+       "term": "count",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `len(meetings)`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Toplantı saati",
+   "game_role": "Toplantıları (ad, saat, dakika) olarak saklar."
+  },
+  "web": {
+   "project_task": {
+    "id": "d6-pw",
+    "title": "Yazı kayıtları",
+    "prompt": "Her yazı bir tuple: `(başlık, slug)`. Yazılar `posts` listesinde, eskiden yeniye sıralı.\n\n- `first`: ilk yazı, `latest`: en yeni (son) yazı\n- En yeni yazıyı iki değişkene aç: `title, slug = latest`\n- Sonra şöyle yazdır:\n\n```\nİlk yazı: ('Merhaba Dünya', 'merhaba-dunya')\nEn yeni yazı: Python Notlarım -> /blog/python-notlarim.html\n```",
+    "starter": "posts = [(\"Merhaba Dünya\", \"merhaba-dunya\"), (\"Kodla Oyna\", \"kodla-oyna\"), (\"Python Notlarım\", \"python-notlarim\")]\n",
+    "solution": "posts = [(\"Merhaba Dünya\", \"merhaba-dunya\"), (\"Kodla Oyna\", \"kodla-oyna\"), (\"Python Notlarım\", \"python-notlarim\")]\nfirst = posts[0]\nlatest = posts[-1]\ntitle, slug = latest\nprint(\"İlk yazı:\", first)\nprint(f\"En yeni yazı: {title} -> /blog/{slug}.html\")\n",
+    "hints": [
+     "posts[0] ilk, posts[-1] son eleman.",
+     "title, slug = latest satırı tuple'ı açar."
+    ],
+    "check": {
+     "python": "\nout, g = _run(_set(_code, \"posts\", [(\"Oyun Günlüğü\", \"oyun\"), (\"Resim Defteri\", \"resim\")]))\nassert g.get(\"first\") == (\"Oyun Günlüğü\", \"oyun\"), \"first ilk yazı olmalı: posts[0]\"\nassert g.get(\"latest\") == (\"Resim Defteri\", \"resim\"), \"latest son yazı olmalı: posts[-1]\"\nassert g.get(\"title\") == \"Resim Defteri\" and g.get(\"slug\") == \"resim\", \"En yeni yazıyı title ve slug değişkenlerine aç.\"\nassert \"En yeni yazı: Resim Defteri -> /blog/resim.html\" in out, \"En yeni yazı satırını f-string ile yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "posts = [(\"Merhaba Dünya\", \"merhaba-dunya\"), (\"Kodla Oyna\", \"kodla-oyna\"), (\"Python Notlarım\", \"python-notlarim\")]",
+       "notes": [
+        "`posts` adında bir değişken oluşturuluyor ve içine `[(\"Merhaba Dünya\", \"merhaba-dunya\"), (\"Kodla Oyna\", \"kodl...` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "first = posts[0]",
+       "notes": [
+        "`first` adında bir değişken oluşturuluyor ve içine `posts[0]` konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "latest = posts[-1]",
+       "notes": [
+        "`latest` adında bir değişken oluşturuluyor ve içine `posts[-1]` konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "title, slug = latest",
+       "notes": [
+        "`title, slug`: sağdaki değerler sırayla bu değişkenlere dağıtılıyor (açma / unpacking)."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "print(\"İlk yazı:\", first)",
+       "notes": [
+        "`print(\"İlk yazı:\", first)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "print(f\"En yeni yazı: {title} -> /blog/{slug}.html\")",
+       "notes": [
+        "`print(f\"En yeni yazı: {title} -> /blog/{slug}.html\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "posts",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[(\"Merhaba Dünya\", \"merhaba-dunya\"), (\"Kodla Oyna\", \"kodl...`."
+      },
+      {
+       "term": "first",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `posts[0]`."
+      },
+      {
+       "term": "latest",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `posts[-1]`."
+      },
+      {
+       "term": "title",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `latest`."
+      },
+      {
+       "term": "slug",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `latest`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": "-",
+       "kind": "operatör",
+       "desc": "Sayının önündeki eksi işareti."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Yazı kayıtları",
+   "game_role": "Her yazıyı (başlık, slug) ikilisi olarak saklar."
+  },
+  "bot": {
+   "project_task": {
+    "id": "d6-pb",
+    "title": "Niyet ve cevap",
+    "prompt": "Botun bildiği **niyetler** (kullanıcının ne istediği) ve cevapları iki tuple'da, aynı sırayla duruyor. Kullanıcının niyeti `intent`.\n\n- `position`: niyetin `intents` içindeki sırası (`index()`)\n- `reply`: `replies` içinde aynı sıradaki cevap\n- `rule`: `(intent, reply)` tuple'ı\n\nSonra şöyle yazdır:\n\n```\n3 niyet biliyorum\nKural: ('hava', 'Bugün hava güneşli.')\n```",
+    "starter": "intents = (\"selam\", \"hava\", \"veda\")\nreplies = (\"Merhaba!\", \"Bugün hava güneşli.\", \"Görüşürüz!\")\nintent = \"hava\"\n",
+    "solution": "intents = (\"selam\", \"hava\", \"veda\")\nreplies = (\"Merhaba!\", \"Bugün hava güneşli.\", \"Görüşürüz!\")\nintent = \"hava\"\nposition = intents.index(intent)\nreply = replies[position]\nrule = (intent, reply)\nprint(f\"{len(intents)} niyet biliyorum\")\nprint(\"Kural:\", rule)\n",
+    "hints": [
+     "intents.index(\"hava\") 1 verir.",
+     "rule = (intent, reply) iki değeri bir tuple'da toplar."
+    ],
+    "check": {
+     "python": "\nout, g = _run(_set(_code, \"intent\", \"veda\"))\nassert g.get(\"position\") == 2, \"position, intents.index(intent) olmalı.\"\nassert g.get(\"reply\") == \"Görüşürüz!\", \"reply, replies içinde aynı sıradaki cevap olmalı: replies[position]\"\nassert g.get(\"rule\") == (\"veda\", \"Görüşürüz!\") and isinstance(g[\"rule\"], tuple), \"rule, (intent, reply) tuple'ı olmalı.\"\nassert \"Kural: ('veda', 'Görüşürüz!')\" in out, \"Kural satırını yazdır.\"\nout, g = _run(_set(_set(_set(_code, \"intents\", (\"a\", \"b\")), \"replies\", (\"A\", \"B\")), \"intent\", \"a\"))\nassert \"2 niyet biliyorum\" in out and g.get(\"rule\") == (\"a\", \"A\"), \"Niyet sayısını len(intents) ile yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "intents = (\"selam\", \"hava\", \"veda\")",
+       "notes": [
+        "`intents` adında bir değişken oluşturuluyor ve içine `(\"selam\", \"hava\", \"veda\")` (tuple (değiştirilemeyen grup)) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "replies = (\"Merhaba!\", \"Bugün hava güneşli.\", \"Görüşürüz!\")",
+       "notes": [
+        "`replies` adında bir değişken oluşturuluyor ve içine `(\"Merhaba!\", \"Bugün hava güneşli.\", \"Görüşürüz!\")` (tuple (değiştirilemeyen grup)) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "intent = \"hava\"",
+       "notes": [
+        "`intent` adında bir değişken oluşturuluyor ve içine `\"hava\"` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "position = intents.index(intent)",
+       "notes": [
+        "`position` adında bir değişken oluşturuluyor ve içine `intents.index(intent)` konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "reply = replies[position]",
+       "notes": [
+        "`reply` adında bir değişken oluşturuluyor ve içine `replies[position]` konuyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "rule = (intent, reply)",
+       "notes": [
+        "`rule` adında bir değişken oluşturuluyor ve içine `(intent, reply)` (tuple (değiştirilemeyen grup)) konuyor."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "print(f\"{len(intents)} niyet biliyorum\")",
+       "notes": [
+        "`print(f\"{len(intents)} niyet biliyorum\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "print(\"Kural:\", rule)",
+       "notes": [
+        "`print(\"Kural:\", rule)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "intents",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `(\"selam\", \"hava\", \"veda\")`."
+      },
+      {
+       "term": "replies",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `(\"Merhaba!\", \"Bugün hava güneşli.\", \"Görüşürüz!\")`."
+      },
+      {
+       "term": "intent",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"hava\"`."
+      },
+      {
+       "term": "position",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `intents.index(intent)`."
+      },
+      {
+       "term": "reply",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `replies[position]`."
+      },
+      {
+       "term": "rule",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `(intent, reply)`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": ".index()",
+       "kind": "metot",
+       "desc": "Elemanın listedeki sırasını bulur."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Kural ikilisi",
+   "game_role": "Kullanıcının niyetini cevabıyla eşleştirip (niyet, cevap) ikilisi yapar."
+  },
+  "okul": {
+   "project_task": {
+    "id": "d6-pn",
+    "title": "Pazartesi programı",
+    "prompt": "Ders programı dönem boyunca değişmez, o yüzden tuple'da tutalım. `monday` pazartesi günkü derslerin sırası.\n\n- `first_lesson`: ilk ders, `last_lesson`: son ders\n- `math_hours`: pazartesi kaç saat Matematik var (`count`)\n- `history_slot`: Tarih kaçıncı derste (`index` + 1)\n\nSonra şöyle yazdır:\n\n```\nİlk ders: Matematik\nSon ders: Beden Eğitimi\nMatematik: 2 saat\nTarih 4. derste\n```",
+    "starter": "monday = (\"Matematik\", \"Fizik\", \"Matematik\", \"Tarih\", \"Beden Eğitimi\")\n",
+    "solution": "monday = (\"Matematik\", \"Fizik\", \"Matematik\", \"Tarih\", \"Beden Eğitimi\")\nfirst_lesson = monday[0]\nlast_lesson = monday[-1]\nmath_hours = monday.count(\"Matematik\")\nhistory_slot = monday.index(\"Tarih\") + 1\nprint(\"İlk ders:\", first_lesson)\nprint(\"Son ders:\", last_lesson)\nprint(f\"Matematik: {math_hours} saat\")\nprint(f\"Tarih {history_slot}. derste\")\n",
+    "hints": [
+     "monday[0] ilk, monday[-1] son eleman.",
+     "monday.count(\"Matematik\") kaç kez geçtiğini, monday.index(\"Tarih\") sırasını (0'dan başlayarak) verir."
+    ],
+    "check": {
+     "python": "\nout, g = _run(_set(_code, \"monday\", (\"Tarih\", \"Matematik\", \"Kimya\", \"Matematik\", \"Resim\")))\nassert g.get(\"first_lesson\") == \"Tarih\", \"first_lesson ilk ders olmalı: monday[0]\"\nassert g.get(\"last_lesson\") == \"Resim\", \"last_lesson son ders olmalı: monday[-1]\"\nassert g.get(\"math_hours\") == 2, \"math_hours, monday.count(\\\"Matematik\\\") ile hesaplanmalı.\"\nassert g.get(\"history_slot\") == 1, \"history_slot, monday.index(\\\"Tarih\\\") + 1 olmalı.\"\nfor line in [\"İlk ders: Tarih\", \"Son ders: Resim\", \"Matematik: 2 saat\", \"Tarih 1. derste\"]:\n    assert line in out, \"Başka bir programla '\" + line + \"' yazmalı; değerleri değişkenlerden al.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "monday = (\"Matematik\", \"Fizik\", \"Matematik\", \"Tarih\", \"Beden Eğitimi\")",
+       "notes": [
+        "`monday` adında bir değişken oluşturuluyor ve içine `(\"Matematik\", \"Fizik\", \"Matematik\", \"Tarih\", \"Beden Eğiti...` (tuple (değiştirilemeyen grup)) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "first_lesson = monday[0]",
+       "notes": [
+        "`first_lesson` adında bir değişken oluşturuluyor ve içine `monday[0]` konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "last_lesson = monday[-1]",
+       "notes": [
+        "`last_lesson` adında bir değişken oluşturuluyor ve içine `monday[-1]` konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "math_hours = monday.count(\"Matematik\")",
+       "notes": [
+        "`math_hours` adında bir değişken oluşturuluyor ve içine `monday.count(\"Matematik\")` konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "history_slot = monday.index(\"Tarih\") + 1",
+       "notes": [
+        "`history_slot` adında bir değişken oluşturuluyor ve içine `monday.index(\"Tarih\") + 1` konuyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "print(\"İlk ders:\", first_lesson)",
+       "notes": [
+        "`print(\"İlk ders:\", first_lesson)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "print(\"Son ders:\", last_lesson)",
+       "notes": [
+        "`print(\"Son ders:\", last_lesson)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "print(f\"Matematik: {math_hours} saat\")",
+       "notes": [
+        "`print(f\"Matematik: {math_hours} saat\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "print(f\"Tarih {history_slot}. derste\")",
+       "notes": [
+        "`print(f\"Tarih {history_slot}. derste\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "monday",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `(\"Matematik\", \"Fizik\", \"Matematik\", \"Tarih\", \"Beden Eğiti...`."
+      },
+      {
+       "term": "first_lesson",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `monday[0]`."
+      },
+      {
+       "term": "last_lesson",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `monday[-1]`."
+      },
+      {
+       "term": "math_hours",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `monday.count(\"Matematik\")`."
+      },
+      {
+       "term": "history_slot",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `monday.index(\"Tarih\") + 1`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": "-",
+       "kind": "operatör",
+       "desc": "Sayının önündeki eksi işareti."
+      },
+      {
+       "term": ".count()",
+       "kind": "metot",
+       "desc": "Bir elemanın kaç kez geçtiğini sayar."
+      },
+      {
+       "term": "+",
+       "kind": "operatör",
+       "desc": "Toplama; metinlerde ve listelerde uç uca ekleme."
+      },
+      {
+       "term": ".index()",
+       "kind": "metot",
+       "desc": "Elemanın listedeki sırasını bulur."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Ders programı",
+   "game_role": "Bir günün ders programını değişmeyen bir tuple olarak tutar."
+  }
+ }
+}

@@ -1,0 +1,213 @@
+{
+ "day": 11,
+ "title": "map, filter, reduce",
+ "region": "nebula",
+ "xp_complete": 150,
+ "objective": "map, filter, reduce, find, some, every ve sort ile dizileri dönüştürmek, süzmek ve sıralamak",
+ "story": "Fonksiyon Nebulası'nın derinlerindesin, kaptan. Radarın yüzlerce yıldızı listeliyor; hepsini tek tek döngüyle gezmek yerine dizilere **map, filter ve reduce** gibi süper güçler vereceğiz.",
+ "sections": [
+  {
+   "title": "map: her elemanı dönüştür",
+   "body": "`map`, dizinin **her elemanına** bir fonksiyon uygular ve sonuçlardan **yeni bir dizi** yapar. Asıl dizi değişmez:\n\n```js\nconst prices = [10, 20, 30];\nconst doubled = prices.map((p) => p * 2);\nconsole.log(doubled); // [20, 40, 60]\nconsole.log(prices);  // [10, 20, 30]\n```\n\nYeni dizinin uzunluğu her zaman eskisiyle aynıdır. Fonksiyon ikinci bir değer de alır: elemanın **sırası** (index, 0'dan başlar).\n\n```js\nconst names = [\"Ada\", \"Can\"];\nconst lines = names.map((name, i) => (i + 1) + \". \" + name);\nconsole.log(lines); // ['1. Ada', '2. Can']\n```"
+  },
+  {
+   "title": "filter, find, some ve every",
+   "body": "`filter` koşulu sağlayan elemanlardan yeni bir dizi yapar. Fonksiyon `true` döndürürse eleman kalır, `false` döndürürse elenir:\n\n```js\nconst fuel = [80, 15, 60, 5];\nconst low = fuel.filter((f) => f < 20);   // [15, 5]\nconst first = fuel.find((f) => f < 20);   // 15\nconst none = fuel.find((f) => f > 100);   // undefined\nfuel.some((f) => f < 10);                 // true\nfuel.every((f) => f > 0);                 // true\n```\n\n- `find` dizi değil, **ilk uyan elemanı** verir; hiçbiri uymazsa `undefined`.\n- `some`: **en az biri** uyuyorsa `true`.\n- `every`: **hepsi** uyuyorsa `true`."
+  },
+  {
+   "title": "reduce: tek bir değere indirgemek",
+   "body": "`reduce` bütün diziyi dolaşıp **tek bir değer** üretir: toplam, en büyük değer, bir sayaç... İki şey verirsin: bir fonksiyon ve başlangıç değeri.\n\n```js\nconst stars = [3, 5, 2];\nconst total = stars.reduce((sum, s) => sum + s, 0);\nconsole.log(total); // 10\n```\n\nFonksiyonun ilk parametresi (burada `sum`) şimdiye kadar **biriken** değer, ikincisi sıradaki eleman. Adım adım: 0 + 3 = 3, 3 + 5 = 8, 8 + 2 = 10.\n\nBaşlangıç değerini (`0`) yazmayı unutma; nesne dizilerinde mutlaka gerekir:\n\n```js\nconst tanks = [{ fuel: 40 }, { fuel: 25 }];\nconst all = tanks.reduce((sum, t) => sum + t.fuel, 0); // 65\n```"
+  },
+  {
+   "title": "sort ve zincirleme",
+   "body": "`sort` diziyi sıralar ama dikkat: elemanları **metin gibi** karşılaştırır! Sayılar için bir karşılaştırma fonksiyonu ver:\n\n```js\n[10, 9, 100].sort();                  // [10, 100, 9]  yanlış!\n[10, 9, 100].sort((a, b) => a - b);   // [9, 10, 100]  küçükten büyüğe\n[10, 9, 100].sort((a, b) => b - a);   // [100, 10, 9]  büyükten küçüğe\n```\n\nFonksiyon negatif bir sayı döndürürse `a` öne, pozitif döndürürse `b` öne geçer. Nesneleri bir alana göre sıralamak için: `players.sort((a, b) => b.score - a.score)`.\n\n`sort` **asıl diziyi değiştirir**. Asıl dizi bozulmasın istiyorsan önce `slice()` ile kopyala: `scores.slice().sort(...)`.\n\nBu metotlar dizi döndürdüğü için arka arkaya **zincirlenebilir**:\n\n```js\nconst winners = players\n  .filter((p) => p.score > 50)\n  .sort((a, b) => b.score - a.score)\n  .map((p) => p.name);\n```"
+  }
+ ],
+ "examples": [
+  {
+   "title": "Yakıt raporu",
+   "code": "const tanks = [80, 15, 60, 5, 45];\n\nconst percent = tanks.map((t) => t + \"%\");\nconst low = tanks.filter((t) => t < 20);\nconst total = tanks.reduce((sum, t) => sum + t, 0);\n\nconsole.log(\"Depolar:\", percent);\nconsole.log(\"Az kalanlar:\", low);\nconsole.log(\"Toplam yakıt:\", total);\nconsole.log(\"Hiç boş depo yok mu?\", tanks.every((t) => t > 0));\n",
+   "note": "tanks dizisine 0 ekleyip tekrar çalıştır: every ne der?"
+  },
+  {
+   "title": "Gezegenleri sırala",
+   "code": "const planets = [\n  { name: \"Mars\", distance: 228 },\n  { name: \"Merkür\", distance: 58 },\n  { name: \"Jüpiter\", distance: 778 },\n  { name: \"Venüs\", distance: 108 },\n];\n\nconst order = planets\n  .slice()\n  .sort((a, b) => a.distance - b.distance)\n  .map((p, i) => (i + 1) + \". \" + p.name);\n\nconsole.log(order.join(\"\\n\"));\nconsole.log(\"İlk uzak gezegen:\", planets.find((p) => p.distance > 500).name);\n",
+   "note": "Uzaklıklar milyon km. sort'taki a ile b'nin yerini değiştirip tekrar çalıştır."
+  }
+ ],
+ "tasks": [
+  {
+   "id": "js-d11-t1",
+   "title": "İki kat hız",
+   "prompt": "`speeds` dizisindeki her hızı **2 ile çarparak** `doubled` adında yeni bir dizi oluştur. `map` kullan; `speeds` değişmesin.",
+   "starter": "const speeds = [3, 7, 12, 5];\n\n// doubled dizisini map ile oluştur\n\nconsole.log(doubled);\n",
+   "solution": "const speeds = [3, 7, 12, 5];\n\n// doubled dizisini map ile oluştur\nconst doubled = speeds.map((s) => s * 2);\n\nconsole.log(doubled);\n",
+   "hints": [
+    "const doubled = speeds.map((s) => ...);",
+    "Her eleman için s * 2 döndür."
+   ],
+   "check": {
+    "code_contains": [
+     "map"
+    ],
+    "js": "assert(Array.isArray(doubled), \"doubled bir dizi olmalı.\");\nassert(same(doubled, [6, 14, 24, 10]), \"doubled [6, 14, 24, 10] olmalı.\");\nassert(same(speeds, [3, 7, 12, 5]), \"speeds dizisi değişmemeli.\");\nassert(/\\.map\\s*\\(/.test(_code), \"Bu görevde map kullan.\");"
+   },
+   "xp": 50
+  },
+  {
+   "id": "js-d11-t2",
+   "title": "Sinyal ayıklama",
+   "prompt": "Radar sinyallerini ayıkla:\n\n1. `strong`: 30 ve üstü sinyallerden oluşan yeni dizi (`filter`).\n2. `firstWeak`: 10'dan küçük **ilk** sinyal (`find`).",
+   "starter": "const signals = [12, 45, 8, 60, 33, 5];\n\n// strong ve firstWeak'i oluştur\n\nconsole.log(\"Güçlü:\", strong);\nconsole.log(\"İlk zayıf:\", firstWeak);\n",
+   "solution": "const signals = [12, 45, 8, 60, 33, 5];\n\n// strong ve firstWeak'i oluştur\nconst strong = signals.filter((s) => s >= 30);\nconst firstWeak = signals.find((s) => s < 10);\n\nconsole.log(\"Güçlü:\", strong);\nconsole.log(\"İlk zayıf:\", firstWeak);\n",
+   "hints": [
+    "signals.filter((s) => s >= 30)",
+    "find ilk uyan elemanı verir: signals.find((s) => s < 10)"
+   ],
+   "check": {
+    "code_contains": [
+     "filter",
+     "find"
+    ],
+    "js": "assert(same(strong, [45, 60, 33]), \"strong [45, 60, 33] olmalı (30 dahil ve üstü).\");\nassert(firstWeak === 8, \"firstWeak 8 olmalı (10'dan küçük ilk sinyal).\");\nassert(/\\.filter\\s*\\(/.test(_code) && /\\.find\\s*\\(/.test(_code), \"filter ve find kullanmalısın.\");"
+   },
+   "xp": 50
+  },
+  {
+   "id": "js-d11-t3",
+   "title": "Toplam yakıt",
+   "prompt": "`reduce` ile bütün depolardaki yakıtı topla ve `total` değişkenine koy. Sonra ortalamayı `average` değişkenine hesapla (toplam / depo sayısı).\n\nÇıktı: `Toplam yakıt: 105` ve `Ortalama: 35`",
+   "starter": "const tanks = [\n  { name: \"A\", fuel: 42 },\n  { name: \"B\", fuel: 27 },\n  { name: \"C\", fuel: 36 },\n];\n\n// total ve average'ı hesapla\n\nconsole.log(\"Toplam yakıt:\", total);\nconsole.log(\"Ortalama:\", average);\n",
+   "solution": "const tanks = [\n  { name: \"A\", fuel: 42 },\n  { name: \"B\", fuel: 27 },\n  { name: \"C\", fuel: 36 },\n];\n\n// total ve average'ı hesapla\nconst total = tanks.reduce((sum, t) => sum + t.fuel, 0);\nconst average = total / tanks.length;\n\nconsole.log(\"Toplam yakıt:\", total);\nconsole.log(\"Ortalama:\", average);\n",
+   "hints": [
+    "tanks.reduce((sum, t) => sum + t.fuel, 0)",
+    "Başlangıç değeri 0'ı unutma.",
+    "average = total / tanks.length"
+   ],
+   "check": {
+    "code_contains": [
+     "reduce",
+     "length"
+    ],
+    "js": "assert(total === 105, \"total 105 olmalı (42 + 27 + 36).\");\nassert(average === 35, \"average 35 olmalı.\");\nassert(!/\\b105\\b/.test(_code) && !/\\b35\\b/.test(_code), \"Sonuçları elle yazma; reduce ve length ile hesapla.\");\nassert(/\\.reduce\\s*\\(/.test(_code), \"Toplamı reduce ile bul.\");"
+   },
+   "xp": 50
+  }
+ ],
+ "challenge": {
+  "id": "js-d11-c",
+  "title": "Skor analizi",
+  "prompt": "`scores` dizisini analiz et, ama `scores` **değişmesin**:\n\n- `sorted`: küçükten büyüğe sıralı kopya (`[7, 9, 25, 40, 100]`). Karşılaştırma fonksiyonu kullan!\n- `top3`: en yüksek 3 skor, büyükten küçüğe (`[100, 40, 25]`). İpucu: `slice(0, 3)` ilk 3 elemanı verir.\n- `allPassed`: bütün skorlar 5'ten büyük mü? (`every`)\n- `hasPerfect`: 100 olan bir skor var mı? (`some`)",
+  "starter": "const scores = [40, 100, 9, 25, 7];\n\n// sorted, top3, allPassed, hasPerfect\n\nconsole.log(sorted, top3, allPassed, hasPerfect);\n",
+  "solution": "const scores = [40, 100, 9, 25, 7];\n\n// sorted, top3, allPassed, hasPerfect\nconst sorted = scores.slice().sort((a, b) => a - b);\nconst top3 = scores.slice().sort((a, b) => b - a).slice(0, 3);\nconst allPassed = scores.every((s) => s > 5);\nconst hasPerfect = scores.some((s) => s === 100);\n\nconsole.log(sorted, top3, allPassed, hasPerfect);\n",
+  "hints": [
+   "Kopya için önce slice(): scores.slice().sort((a, b) => a - b)",
+   "Büyükten küçüğe: (a, b) => b - a",
+   "scores.every((s) => s > 5)"
+  ],
+  "check": {
+   "code_contains": [
+    "sort",
+    "every",
+    "some"
+   ],
+   "js": "assert(same(sorted, [7, 9, 25, 40, 100]), \"sorted [7, 9, 25, 40, 100] olmalı. Sayıları sıralarken (a, b) => a - b kullan.\");\nassert(same(top3, [100, 40, 25]), \"top3 [100, 40, 25] olmalı.\");\nassert(same(scores, [40, 100, 9, 25, 7]), \"scores dizisi değişmemeli; sıralamadan önce slice() ile kopyala.\");\nassert(allPassed === true && hasPerfect === true, \"allPassed ve hasPerfect true olmalı.\");\nassert(/\\.every\\s*\\(/.test(_code) && /\\.some\\s*\\(/.test(_code), \"every ve some kullanmalısın.\");"
+  },
+  "xp": 75
+ },
+ "project_contribution": "Skor tablosu",
+ "project_task": {
+  "id": "js-d11-p",
+  "title": "Skor tablosu",
+  "prompt": "Oyunun skor tablosunu hazırla. `leaderboard(list)` fonksiyonunu yaz:\n\n- Oyuncuları skora göre **büyükten küçüğe** sıralasın,\n- `\"1. Ece - 150\"` biçiminde metinlerden oluşan bir **dizi** döndürsün (sıra numarası `map`'in ikinci parametresinden),\n- Asıl `list` dizisinin sırası değişmesin (önce `slice()` ile kopyala).",
+  "starter": "const players = [\n  { name: \"Ada\", score: 120 },\n  { name: \"Can\", score: 85 },\n  { name: \"Ece\", score: 150 },\n  { name: \"Mert\", score: 95 },\n];\n\nfunction leaderboard(list) {\n  // kopyala, sırala, sonra map ile metne çevir\n}\n\nconsole.log(leaderboard(players));\n",
+  "solution": "const players = [\n  { name: \"Ada\", score: 120 },\n  { name: \"Can\", score: 85 },\n  { name: \"Ece\", score: 150 },\n  { name: \"Mert\", score: 95 },\n];\n\nfunction leaderboard(list) {\n  // kopyala, sırala, sonra map ile metne çevir\n  return list\n    .slice()\n    .sort((a, b) => b.score - a.score)\n    .map((p, i) => `${i + 1}. ${p.name} - ${p.score}`);\n}\n\nconsole.log(leaderboard(players));\n",
+  "hints": [
+   "list.slice().sort((a, b) => b.score - a.score)",
+   ".map((p, i) => `${i + 1}. ${p.name} - ${p.score}`)",
+   "Fonksiyonda return yazmayı unutma."
+  ],
+  "check": {
+   "code_contains": [
+    "sort",
+    "map",
+    "return"
+   ],
+   "js": "const board = leaderboard(players);\nassert(Array.isArray(board), \"leaderboard bir dizi döndürmeli.\");\nassert(same(board, [\"1. Ece - 150\", \"2. Ada - 120\", \"3. Mert - 95\", \"4. Can - 85\"]), \"Sonuç ['1. Ece - 150', '2. Ada - 120', '3. Mert - 95', '4. Can - 85'] olmalı.\");\nassert(players[0].name === \"Ada\", \"Asıl players dizisinin sırası değişmemeli; önce slice() ile kopyala.\");\nconst other = leaderboard([{ name: \"Zeynep\", score: 5 }, { name: \"Efe\", score: 70 }]);\nassert(same(other, [\"1. Efe - 70\", \"2. Zeynep - 5\"]), \"Fonksiyon başka oyuncu listeleriyle de çalışmalı.\");"
+  },
+  "xp": 100
+ },
+ "tracks": {
+  "js-web": {
+   "project_contribution": "Projeleri filtrele",
+   "project_task": {
+    "id": "js-d11-pw",
+    "title": "Projeleri filtrele",
+    "prompt": "Sitende projelerini etikete göre süzeceğiz. `titlesByTag(list, tag)` fonksiyonunu yaz: etiketi (`tag`) verilen etikete eşit olan projelerin yalnızca **başlıklarını** dizi olarak döndürsün (`filter` + `map`).\n\nÖrnek: `titlesByTag(projects, \"js\")` → `[\"Hesap Makinesi\", \"Yıldız Oyunu\"]`",
+    "starter": "const projects = [\n  { title: \"Hesap Makinesi\", tag: \"js\", year: 2026 },\n  { title: \"Kedi Galerisi\", tag: \"html\", year: 2025 },\n  { title: \"Yıldız Oyunu\", tag: \"js\", year: 2026 },\n  { title: \"Tarif Defteri\", tag: \"css\", year: 2025 },\n];\n\nfunction titlesByTag(list, tag) {\n  // filter ile süz, map ile başlıkları al\n}\n\nconsole.log(\"js projelerim:\", titlesByTag(projects, \"js\"));\n",
+    "solution": "const projects = [\n  { title: \"Hesap Makinesi\", tag: \"js\", year: 2026 },\n  { title: \"Kedi Galerisi\", tag: \"html\", year: 2025 },\n  { title: \"Yıldız Oyunu\", tag: \"js\", year: 2026 },\n  { title: \"Tarif Defteri\", tag: \"css\", year: 2025 },\n];\n\nfunction titlesByTag(list, tag) {\n  // filter ile süz, map ile başlıkları al\n  return list.filter((p) => p.tag === tag).map((p) => p.title);\n}\n\nconsole.log(\"js projelerim:\", titlesByTag(projects, \"js\"));\n",
+    "hints": [
+     "list.filter((p) => p.tag === tag)",
+     "Sonuna .map((p) => p.title) ekle.",
+     "return yazmayı unutma."
+    ],
+    "check": {
+     "code_contains": [
+      "filter",
+      "map"
+     ],
+     "js": "assert(same(titlesByTag(projects, \"js\"), [\"Hesap Makinesi\", \"Yıldız Oyunu\"]), \"titlesByTag(projects, \\\"js\\\") ['Hesap Makinesi', 'Yıldız Oyunu'] döndürmeli.\");\nassert(same(titlesByTag(projects, \"css\"), [\"Tarif Defteri\"]), \"titlesByTag(projects, \\\"css\\\") ['Tarif Defteri'] döndürmeli.\");\nassert(same(titlesByTag(projects, \"python\"), []), \"Uyan proje yoksa boş dizi döndürmeli.\");\nassert(same(titlesByTag([{ title: \"Blog\", tag: \"web\", year: 2024 }], \"web\"), [\"Blog\"]), \"Fonksiyon verilen list ile çalışmalı.\");"
+    },
+    "xp": 100
+   }
+  },
+  "js-app": {
+   "project_contribution": "Çalışma istatistiği",
+   "project_task": {
+    "id": "js-d11-pa",
+    "title": "Çalışma istatistiği",
+    "prompt": "Asistan günün istatistiğini çıkarsın. `stats(list)` fonksiyonunu yaz; `{ done, minutes }` nesnesi döndürsün:\n\n- `done`: tamamlanan (`done: true`) görev sayısı (`filter`),\n- `minutes`: **tamamlanan** görevlerin toplam dakikası (`reduce`).\n\nÇıktı: `Tamamlanan: 3 görev, 80 dakika`",
+    "starter": "const tasks = [\n  { title: \"Matematik ödevi\", minutes: 40, done: true },\n  { title: \"Fizik tekrarı\", minutes: 30, done: false },\n  { title: \"İngilizce kelimeler\", minutes: 15, done: true },\n  { title: \"Kitap okuma\", minutes: 25, done: true },\n];\n\nfunction stats(list) {\n  // tamamlananları süz, dakikalarını topla\n}\n\nconst s = stats(tasks);\nconsole.log(`Tamamlanan: ${s.done} görev, ${s.minutes} dakika`);\n",
+    "solution": "const tasks = [\n  { title: \"Matematik ödevi\", minutes: 40, done: true },\n  { title: \"Fizik tekrarı\", minutes: 30, done: false },\n  { title: \"İngilizce kelimeler\", minutes: 15, done: true },\n  { title: \"Kitap okuma\", minutes: 25, done: true },\n];\n\nfunction stats(list) {\n  // tamamlananları süz, dakikalarını topla\n  const finished = list.filter((t) => t.done);\n  const minutes = finished.reduce((sum, t) => sum + t.minutes, 0);\n  return { done: finished.length, minutes };\n}\n\nconst s = stats(tasks);\nconsole.log(`Tamamlanan: ${s.done} görev, ${s.minutes} dakika`);\n",
+    "hints": [
+     "const finished = list.filter((t) => t.done);",
+     "finished.reduce((sum, t) => sum + t.minutes, 0)",
+     "return { done: finished.length, minutes: ... };"
+    ],
+    "check": {
+     "code_contains": [
+      "filter",
+      "reduce"
+     ],
+     "js": "const r = stats(tasks);\nassert(r && r.done === 3 && r.minutes === 80, \"stats(tasks) { done: 3, minutes: 80 } döndürmeli.\");\nconst r2 = stats([{ title: \"X\", minutes: 10, done: false }, { title: \"Y\", minutes: 50, done: true }]);\nassert(r2.done === 1 && r2.minutes === 50, \"Yalnızca tamamlanan görevlerin dakikaları toplanmalı; fonksiyon başka listelerle de çalışmalı.\");\nconst r3 = stats([]);\nassert(r3.done === 0 && r3.minutes === 0, \"Boş listede { done: 0, minutes: 0 } olmalı (reduce'a başlangıç değeri ver).\");\nassert(_lines.includes(\"Tamamlanan: 3 görev, 80 dakika\"), \"Çıktıda 'Tamamlanan: 3 görev, 80 dakika' görünmeli.\");"
+    },
+    "xp": 100
+   }
+  },
+  "js-quiz": {
+   "project_contribution": "Sonuç özeti",
+   "project_task": {
+    "id": "js-d11-pq",
+    "title": "Sonuç özeti",
+    "prompt": "Yarışma bitince sonuç özeti gösterilecek. `summary(list)` fonksiyonu şu nesneyi döndürsün:\n\n- `correctCount`: doğru cevap sayısı (`filter`),\n- `score`: doğru cevapların puanlarının toplamı (`reduce`),\n- `missed`: yanlış cevaplanan soruların **metinleri** (`filter` + `map`).",
+    "starter": "const answers = [\n  { question: \"Ay hangi gezegenin uydusu?\", correct: true, points: 10 },\n  { question: \"En büyük gezegen hangisi?\", correct: false, points: 10 },\n  { question: \"Kızıl gezegen hangisi?\", correct: true, points: 20 },\n  { question: \"Halkalı gezegen hangisi?\", correct: false, points: 20 },\n];\n\nfunction summary(list) {\n  // correctCount, score, missed\n}\n\nconsole.log(summary(answers));\n",
+    "solution": "const answers = [\n  { question: \"Ay hangi gezegenin uydusu?\", correct: true, points: 10 },\n  { question: \"En büyük gezegen hangisi?\", correct: false, points: 10 },\n  { question: \"Kızıl gezegen hangisi?\", correct: true, points: 20 },\n  { question: \"Halkalı gezegen hangisi?\", correct: false, points: 20 },\n];\n\nfunction summary(list) {\n  // correctCount, score, missed\n  const right = list.filter((a) => a.correct);\n  return {\n    correctCount: right.length,\n    score: right.reduce((sum, a) => sum + a.points, 0),\n    missed: list.filter((a) => !a.correct).map((a) => a.question),\n  };\n}\n\nconsole.log(summary(answers));\n",
+    "hints": [
+     "const right = list.filter((a) => a.correct);",
+     "score: right.reduce((sum, a) => sum + a.points, 0)",
+     "missed: list.filter((a) => !a.correct).map((a) => a.question)"
+    ],
+    "check": {
+     "code_contains": [
+      "filter",
+      "map",
+      "reduce"
+     ],
+     "js": "const r = summary(answers);\nassert(r && r.correctCount === 2, \"correctCount 2 olmalı.\");\nassert(r.score === 30, \"score 30 olmalı (yalnızca doğru cevapların puanları).\");\nassert(same(r.missed, [\"En büyük gezegen hangisi?\", \"Halkalı gezegen hangisi?\"]), \"missed yanlış cevaplanan soruların metinleri olmalı.\");\nconst r2 = summary([{ question: \"A?\", correct: true, points: 5 }]);\nassert(r2.correctCount === 1 && r2.score === 5 && same(r2.missed, []), \"Fonksiyon başka cevap listeleriyle de çalışmalı.\");"
+    },
+    "xp": 100
+   }
+  }
+ },
+ "available": true
+}

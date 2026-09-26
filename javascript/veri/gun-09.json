@@ -1,0 +1,202 @@
+{
+ "day": 9,
+ "title": "Ok fonksiyonları ve kapsam",
+ "region": "nebula",
+ "xp_complete": 150,
+ "objective": "Ok fonksiyonu yazmak, kapsamı anlamak, fonksiyonları değer gibi kullanmak ve hatırlayan fonksiyonlar (closure) yapmak",
+ "story": "Fonksiyon Nebulası'na girdik! Bu renkli bulutta fonksiyonlar değişkenlere konuyor, başka fonksiyonlara gönderiliyor, hatta bir şeyleri **hatırlıyor**. Bugün **ok fonksiyonlarını** ve **kapsamı** keşfediyoruz.",
+ "sections": [
+  {
+   "title": "Ok fonksiyonu (=>)",
+   "body": "Fonksiyon yazmanın kısa bir yolu daha var: **ok fonksiyonu**. Fonksiyonu bir değişkene koyarsın, parametrelerden sonra `=>` yazarsın:\n\n```js\n// Uzun hali\nfunction square(n) {\n  return n * n;\n}\n\n// Ok fonksiyonu hali\nconst square2 = (n) => n * n;\n\n// Birden çok satır gerekirse süslü parantez ve return\nconst describe = (name, speed) => {\n  const kmh = speed * 3600;\n  return `${name}: saatte ${kmh} km`;\n};\n```\n\nTek satırlık ok fonksiyonunda `return` yazılmaz; `=>` işaretinden sonraki değer kendiliğinden döndürülür. Parametre yoksa boş parantez yazılır: `() => ...`"
+  },
+  {
+   "title": "Kapsam: değişken nerede yaşar?",
+   "body": "`let` ve `const` ile oluşturulan bir değişken yalnızca içinde oluşturulduğu **süslü parantez bloğunda** yaşar. Buna **kapsam** denir:\n\n```js\nconst ship = \"Kartal\";      // dışarıda: her yerden görünür\nif (true) {\n  const note = \"iç not\";    // sadece bu bloğun içinde\n  console.log(ship, note);  // ikisi de görünür\n}\nconsole.log(note);          // Hata: note is not defined\n```\n\nİçerideki kod dışarıdaki değişkenleri görür ve değiştirebilir; dışarıdaki kod içeridekileri göremez. Blok içinde aynı adla yeniden `let` yazarsan **yeni, ayrı** bir değişken oluşur!\n\nEski kodlardaki `var` blokları dinlemez, bloğun dışından da görünür. Bu yüzden karışıklık çıkarır; sen `let` ve `const` kullan."
+  },
+  {
+   "title": "Fonksiyon da bir değerdir",
+   "body": "JavaScript'te fonksiyonlar sayı ya da metin gibi birer **değerdir**: değişkene konur, başka bir fonksiyona gönderilir. Başka bir fonksiyona gönderilen fonksiyona **callback (geri çağırma)** denir:\n\n```js\nfunction doTwice(action) {\n  action();\n  action();\n}\n\ndoTwice(() => console.log(\"Motor ateşlendi!\"));\n```\n\nDizilerin `forEach` metodu da callback alır ve her eleman için onu çağırır:\n\n```js\nconst planets = [\"Mars\", \"Venüs\"];\nplanets.forEach((planet) => console.log(planet));\n```"
+  },
+  {
+   "title": "Closure: hatırlayan fonksiyonlar",
+   "body": "Bir fonksiyon, içinde başka bir fonksiyon oluşturup onu döndürebilir. İçteki fonksiyon, dıştaki fonksiyonun değişkenlerini **hatırlar**; dıştaki fonksiyon bitse bile! Buna **closure** denir:\n\n```js\nfunction makeCounter() {\n  let count = 0;\n  return () => {\n    count++;\n    return count;\n  };\n}\n\nconst counterA = makeCounter();\nconst counterB = makeCounter();\nconsole.log(counterA());  // 1\nconsole.log(counterA());  // 2\nconsole.log(counterB());  // 1 (kendi count'u var)\n```\n\n`makeCounter` her çağrıldığında yepyeni bir `count` oluşur. Bu yüzden her sayaç kendi sayısını tutar ve dışarıdan kimse o sayıyı bozamaz."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Ok fonksiyonları",
+   "code": "const double = (n) => n * 2;\nconst greet = (name) => `Merhaba ${name}!`;\nconst isFull = (fuel) => fuel >= 100;\n\nconsole.log(double(21));\nconsole.log(greet(\"Ada\"));\nconsole.log(isFull(80));\n",
+   "note": "Tek satırlık ok fonksiyonlarında return yazılmaz."
+  },
+  {
+   "title": "Hatırlayan sayaç",
+   "code": "function makeCounter() {\n  let count = 0;\n  return () => {\n    count++;\n    return count;\n  };\n}\n\nconst laps = makeCounter();\nlaps();\nlaps();\nconsole.log(\"Tur:\", laps());\n\nconst other = makeCounter();\nconsole.log(\"Diğer sayaç:\", other());\n",
+   "note": "laps ile other ayrı count değişkenlerini hatırlıyor."
+  }
+ ],
+ "tasks": [
+  {
+   "id": "js-d9-t1",
+   "title": "Oka çevir",
+   "prompt": "1. `triple` fonksiyonunu **ok fonksiyonu** olarak yeniden yaz: `const triple = ...`\n2. `isPositive` adında bir ok fonksiyonu yaz: sayı 0'dan büyükse `true`, değilse `false` döndürsün.\n\nKodunda `function` kelimesi kalmasın.",
+   "starter": "function triple(n) {\n  return n * 3;\n}\n\n// triple'ı ok fonksiyonu olarak yeniden yaz, sonra isPositive'i ekle\n\nconsole.log(triple(4));\nconsole.log(isPositive(-2));\n",
+   "solution": "// triple'ı ok fonksiyonu olarak yeniden yaz, sonra isPositive'i ekle\nconst triple = (n) => n * 3;\nconst isPositive = (n) => n > 0;\n\nconsole.log(triple(4));\nconsole.log(isPositive(-2));\n",
+   "hints": [
+    "const triple = (n) => n * 3;",
+    "Karşılaştırmanın sonucu zaten true/false: (n) => n > 0"
+   ],
+   "check": {
+    "code_contains": [
+     "=>"
+    ],
+    "js": "assert(!/function/.test(_code), \"Kodunda function kelimesi kalmamalı; ok fonksiyonu kullan.\");\nassert(/const\\s+triple\\s*=\\s*\\(?\\s*\\w+\\s*\\)?\\s*=>/.test(_code), \"triple'ı const triple = (n) => ... biçiminde yaz.\");\nassert(triple(4) === 12 && triple(-2) === -6 && triple(0) === 0, \"triple sayının 3 katını döndürmeli.\");\nassert(isPositive(5) === true && isPositive(0) === false && isPositive(-3) === false, \"isPositive 0'dan büyük sayılar için true, diğerleri için false döndürmeli.\");"
+   },
+   "xp": 50
+  },
+  {
+   "id": "js-d9-t2",
+   "title": "Kapsam dedektifi",
+   "prompt": "**1.** Bu kod `Çok hızlı!` yazmalıydı ama `Hız normal.` yazıyor. Neden? Blok içindeki `let` **yeni** bir değişken oluşturuyor! Hatayı düzelt: kodda yalnızca bir tane `let message` kalsın.\n\n**2.** `addFuel` adında bir ok fonksiyonu yaz: aldığı miktarı dışarıdaki `fuel` değişkenine eklesin ve `fuel`'in yeni değerini döndürsün. Sonra `addFuel(25)`'i iki kez çağır. `fuel` 90 olmalı.",
+   "starter": "let message = \"Hız normal.\";\nconst speed = 120;\n\nif (speed > 100) {\n  let message = \"Çok hızlı!\";\n}\n\nconsole.log(message);\n\nlet fuel = 40;\n// addFuel ok fonksiyonunu yaz ve iki kez 25 ile çağır\n\nconsole.log(\"Yakıt:\", fuel);\n",
+   "solution": "let message = \"Hız normal.\";\nconst speed = 120;\n\nif (speed > 100) {\n  message = \"Çok hızlı!\";\n}\n\nconsole.log(message);\n\nlet fuel = 40;\n// addFuel ok fonksiyonunu yaz ve iki kez 25 ile çağır\nconst addFuel = (amount) => {\n  fuel += amount;\n  return fuel;\n};\naddFuel(25);\naddFuel(25);\n\nconsole.log(\"Yakıt:\", fuel);\n",
+   "hints": [
+    "Blok içinde let yazmazsan dışarıdaki message değişir: message = \"Çok hızlı!\";",
+    "const addFuel = (amount) => { fuel += amount; return fuel; };"
+   ],
+   "check": {
+    "code_contains": [
+     "=>"
+    ],
+    "js": "assert(message === \"Çok hızlı!\", \"message 'Çok hızlı!' olmalı. Blok içindeki let yeni bir değişken oluşturuyor.\");\nassert((_code.match(/let\\s+message/g) || []).length === 1, \"Kodda yalnızca bir tane let message olmalı.\");\nassert(fuel === 90, \"addFuel(25)'i iki kez çağırdıktan sonra fuel 90 olmalı.\");\nassert(!/fuel\\s*=\\s*90/.test(_code), \"fuel'i elle 90 yapma; addFuel'i çağır.\");\nassert(addFuel(10) === 100 && fuel === 100, \"addFuel dışarıdaki fuel'e eklemeli ve yeni değeri döndürmeli (addFuel(10) → 100).\");"
+   },
+   "xp": 50
+  },
+  {
+   "id": "js-d9-t3",
+   "title": "Tekrarlayıcı",
+   "prompt": "`repeat(times, action)` fonksiyonu, `action` fonksiyonunu 1'den `times`'a kadar her sayıyla bir kez çağırsın: `action(1)`, `action(2)`, ...\n\nAlttaki satır `repeat`'e bir ok fonksiyonu gönderiyor; çıktı `Tur 1`, `Tur 2`, `Tur 3` olmalı.",
+   "starter": "const repeat = (times, action) => {\n  // action'ı 1'den times'a kadar her sayıyla çağır\n};\n\nrepeat(3, (n) => console.log(`Tur ${n}`));\n",
+   "solution": "const repeat = (times, action) => {\n  // action'ı 1'den times'a kadar her sayıyla çağır\n  for (let i = 1; i <= times; i++) {\n    action(i);\n  }\n};\n\nrepeat(3, (n) => console.log(`Tur ${n}`));\n",
+   "hints": [
+    "İçeride bir for döngüsü: for (let i = 1; i <= times; i++)",
+    "Döngüde action(i); çağır."
+   ],
+   "check": {
+    "code_contains": [
+     "action("
+    ],
+    "js": "assert(_lines.join(\"|\") === \"Tur 1|Tur 2|Tur 3\", \"Çıktı 'Tur 1', 'Tur 2', 'Tur 3' olmalı.\");\nconst got = [];\nrepeat(4, (n) => got.push(n));\nassert(same(got, [1, 2, 3, 4]), \"repeat(4, ...) action'ı 1, 2, 3, 4 ile çağırmalı.\");\nlet calls = 0;\nrepeat(0, () => calls++);\nassert(calls === 0, \"repeat(0, ...) action'ı hiç çağırmamalı.\");"
+   },
+   "xp": 50
+  }
+ ],
+ "challenge": {
+  "id": "js-d9-c",
+  "title": "Yakıt deposu fabrikası",
+  "prompt": "`makeTank(capacity)` fonksiyonu bir **fill** fonksiyonu döndürsün. Depo boş (0) başlar. Her `fill(amount)` çağrısında:\n\n- depoya `amount` eklenir, ama depo `capacity`'yi **aşamaz**,\n- depodaki güncel miktar döndürülür.\n\nHer `makeTank` çağrısı ayrı bir depo oluşturmalı. Örnek: `const mainTank = makeTank(100);` ile `mainTank(30)` → `30`, `mainTank(50)` → `80`, `mainTank(40)` → `100`",
+  "starter": "function makeTank(capacity) {\n  // depodaki miktarı tutan bir değişken ve onu güncelleyen bir fonksiyon\n}\n\nconst mainTank = makeTank(100);\nconsole.log(mainTank(30));\nconsole.log(mainTank(50));\nconsole.log(mainTank(40));\n",
+  "solution": "function makeTank(capacity) {\n  // depodaki miktarı tutan bir değişken ve onu güncelleyen bir fonksiyon\n  let level = 0;\n  return (amount) => {\n    level = Math.min(level + amount, capacity);\n    return level;\n  };\n}\n\nconst mainTank = makeTank(100);\nconsole.log(mainTank(30));\nconsole.log(mainTank(50));\nconsole.log(mainTank(40));\n",
+  "hints": [
+   "makeCounter'a benzer: let level = 0; sonra bir ok fonksiyonu döndür.",
+   "Math.min(level + amount, capacity) kapasiteyi aşmayı engeller.",
+   "İçteki fonksiyon return level; demeli."
+  ],
+  "check": {
+   "code_contains": [
+    "return"
+   ],
+   "js": "const t1 = makeTank(100);\nassert(typeof t1 === \"function\", \"makeTank bir fonksiyon döndürmeli.\");\nassert(t1(30) === 30 && t1(50) === 80, \"Yeni bir makeTank(100) deposuna 30 ve 50 eklenince 30, sonra 80 dönmeli.\");\nassert(t1(40) === 100 && t1(5) === 100, \"Depo kapasiteyi aşmamalı: 80 + 40 → 100.\");\nconst t2 = makeTank(10);\nassert(t2(4) === 4 && t2(4) === 8 && t2(4) === 10, \"makeTank(10) ayrı bir depo olmalı ve 10'u aşmamalı.\");\nassert(t1(0) === 100, \"İki depo birbirini etkilememeli.\");"
+  },
+  "xp": 75
+ },
+ "project_contribution": "Sayaç üreten fonksiyon",
+ "project_task": {
+  "id": "js-d9-p",
+  "title": "Sayaç fabrikası",
+  "prompt": "Oyunda birçok şeyi saymamız gerekecek: yıldızlar, skor, düşmanlar... Her biri için ayrı kod yazmak yerine sayaç üreten bir fonksiyon yazalım.\n\n`makeCounter(step)` bir fonksiyon döndürsün. Döndürülen fonksiyon her çağrıldığında sayıyı `step` kadar artırıp yeni sayıyı döndürsün. `step` verilmezse **1** olsun.\n\nSonra `countStar = makeCounter()` ve `addScore = makeCounter(10)` oluştur; bir döngüyle 3 yıldız topla (her turda ikisini de çağır). Beklenen çıktı: `Yıldız: 3 | Skor: 30`",
+  "starter": "function makeCounter(step = 1) {\n  // ...\n}\n\nconst countStar = makeCounter();\nconst addScore = makeCounter(10);\nlet stars = 0;\nlet score = 0;\n\n// 3 yıldız topla: her turda stars = countStar(); score = addScore();\n\nconsole.log(`Yıldız: ${stars} | Skor: ${score}`);\n",
+  "solution": "function makeCounter(step = 1) {\n  let count = 0;\n  return () => {\n    count += step;\n    return count;\n  };\n}\n\nconst countStar = makeCounter();\nconst addScore = makeCounter(10);\nlet stars = 0;\nlet score = 0;\n\n// 3 yıldız topla: her turda stars = countStar(); score = addScore();\nfor (let i = 0; i < 3; i++) {\n  stars = countStar();\n  score = addScore();\n}\n\nconsole.log(`Yıldız: ${stars} | Skor: ${score}`);\n",
+  "hints": [
+   "let count = 0; sonra bir ok fonksiyonu döndür.",
+   "İçteki fonksiyon: count += step; return count;",
+   "for (let i = 0; i < 3; i++) { stars = countStar(); score = addScore(); }"
+  ],
+  "check": {
+   "code_contains": [
+    "return"
+   ],
+   "js": "const c1 = makeCounter();\nassert(typeof c1 === \"function\", \"makeCounter bir fonksiyon döndürmeli.\");\nassert(c1() === 1 && c1() === 2 && c1() === 3, \"makeCounter() ile oluşan sayaç 1, 2, 3 diye saymalı.\");\nconst c2 = makeCounter(5);\nassert(c2() === 5 && c2() === 10, \"makeCounter(5) ile oluşan sayaç 5, 10 diye saymalı.\");\nassert(c1() === 4, \"Her sayaç kendi sayısını tutmalı; sayaçlar birbirini etkilememeli.\");\nassert(stars === 3 && score === 30, \"3 yıldızdan sonra stars 3, score 30 olmalı.\");\nassert(!/(stars|score)\\s*=\\s*(3|30)\\b/.test(_code), \"Sayıları elle yazma; sayaçları çağır.\");\nassert(_lines.includes(\"Yıldız: 3 | Skor: 30\"), \"Çıktıda 'Yıldız: 3 | Skor: 30' görünmeli.\");"
+  },
+  "xp": 100
+ },
+ "tracks": {
+  "js-web": {
+   "project_contribution": "Ziyaret sayacı",
+   "project_task": {
+    "id": "js-d9-pw",
+    "title": "Ziyaret sayacı",
+    "prompt": "Sitenin her sayfası kaç kez ziyaret edildiğini hatırlasın. `makeVisitCounter(pageName)` bir fonksiyon döndürsün; o fonksiyon her çağrıldığında ziyareti bir artırıp şu metni döndürsün:\n\n```\nHakkımda sayfası 2 kez ziyaret edildi.\n```\n\nHer sayfanın sayacı ayrı olmalı. Alttaki hazır satırlar fonksiyonunu kullanıyor.",
+    "starter": "function makeVisitCounter(pageName) {\n  // ...\n}\n\nconst visitAbout = makeVisitCounter(\"Hakkımda\");\nconst visitProjects = makeVisitCounter(\"Projeler\");\nconsole.log(visitAbout());\nconsole.log(visitProjects());\nconsole.log(visitAbout());\n",
+    "solution": "function makeVisitCounter(pageName) {\n  let visits = 0;\n  return () => {\n    visits++;\n    return `${pageName} sayfası ${visits} kez ziyaret edildi.`;\n  };\n}\n\nconst visitAbout = makeVisitCounter(\"Hakkımda\");\nconst visitProjects = makeVisitCounter(\"Projeler\");\nconsole.log(visitAbout());\nconsole.log(visitProjects());\nconsole.log(visitAbout());\n",
+    "hints": [
+     "let visits = 0; sonra bir ok fonksiyonu döndür.",
+     "İçteki fonksiyon: visits++; ve şablon metni return et."
+    ],
+    "check": {
+     "code_contains": [
+      "return"
+     ],
+     "js": "assert(_lines.join(\"|\") === \"Hakkımda sayfası 1 kez ziyaret edildi.|Projeler sayfası 1 kez ziyaret edildi.|Hakkımda sayfası 2 kez ziyaret edildi.\", \"Çıktı sırasıyla Hakkımda 1, Projeler 1, Hakkımda 2 ziyaret satırları olmalı.\");\nconst blog = makeVisitCounter(\"Blog\");\nassert(typeof blog === \"function\", \"makeVisitCounter bir fonksiyon döndürmeli.\");\nassert(blog() === \"Blog sayfası 1 kez ziyaret edildi.\" && blog() === \"Blog sayfası 2 kez ziyaret edildi.\", \"makeVisitCounter(\\\"Blog\\\") ile oluşan sayaç 'Blog sayfası 1 kez ziyaret edildi.' ile başlamalı.\");\nassert(makeVisitCounter(\"Galeri\")() === \"Galeri sayfası 1 kez ziyaret edildi.\" && blog() === \"Blog sayfası 3 kez ziyaret edildi.\", \"Her sayfanın sayacı ayrı olmalı.\");"
+    },
+    "xp": 100
+   }
+  },
+  "js-app": {
+   "project_contribution": "Pomodoro sayacı",
+   "project_task": {
+    "id": "js-d9-pa",
+    "title": "Pomodoro sayacı",
+    "prompt": "Pomodoro yönteminde belli bir süre odaklanıp mola verirsin; her odak süresi bir **tur**dur.\n\n`makePomodoro` adında bir **ok fonksiyonu** yaz. `minutes` parametresi alsın (verilmezse **25**) ve bir fonksiyon döndürsün. Döndürülen fonksiyon her çağrıldığında turu bir artırıp şu metni döndürsün:\n\n```\nTur 2 bitti: toplam 50 dakika\n```",
+    "starter": "// makePomodoro ok fonksiyonunu yaz\n\nconst focus = makePomodoro();\nconsole.log(focus());\nconsole.log(focus());\n",
+    "solution": "// makePomodoro ok fonksiyonunu yaz\nconst makePomodoro = (minutes = 25) => {\n  let rounds = 0;\n  return () => {\n    rounds++;\n    return `Tur ${rounds} bitti: toplam ${rounds * minutes} dakika`;\n  };\n};\n\nconst focus = makePomodoro();\nconsole.log(focus());\nconsole.log(focus());\n",
+    "hints": [
+     "const makePomodoro = (minutes = 25) => { ... };",
+     "İçeride let rounds = 0; ve bir ok fonksiyonu döndür.",
+     "Toplam dakika: rounds * minutes"
+    ],
+    "check": {
+     "code_contains": [
+      "=>",
+      "return"
+     ],
+     "js": "assert(/const\\s+makePomodoro\\s*=/.test(_code), \"makePomodoro'yu ok fonksiyonu olarak yaz: const makePomodoro = (minutes = 25) => { ... }\");\nassert(_lines.join(\"|\") === \"Tur 1 bitti: toplam 25 dakika|Tur 2 bitti: toplam 50 dakika\", \"Çıktı 'Tur 1 bitti: toplam 25 dakika' ve 'Tur 2 bitti: toplam 50 dakika' olmalı.\");\nconst p = makePomodoro(30);\nassert(p() === \"Tur 1 bitti: toplam 30 dakika\" && p() === \"Tur 2 bitti: toplam 60 dakika\" && p() === \"Tur 3 bitti: toplam 90 dakika\", \"makePomodoro(30) ile turlar 30, 60, 90 dakika olmalı.\");\nassert(makePomodoro()() === \"Tur 1 bitti: toplam 25 dakika\", \"Her makePomodoro çağrısı sıfırdan başlayan yeni bir sayaç oluşturmalı.\");"
+    },
+    "xp": 100
+   }
+  },
+  "js-quiz": {
+   "project_contribution": "Puan tutucu",
+   "project_task": {
+    "id": "js-d9-pq",
+    "title": "Puan tutucu",
+    "prompt": "`makeScoreKeeper(points)` bir fonksiyon döndürsün (`points` verilmezse **10**). Döndürülen fonksiyon `isCorrect` alsın: `true` ise puana `points` eklesin; her durumda güncel puanı döndürsün.\n\nSonra `results` dizisini döngüyle dolaşıp her sonucu `keeper`'a gönder ve son puanı `finalScore`'a koy. Beklenen çıktı: `Puan: 30`",
+    "starter": "function makeScoreKeeper(points = 10) {\n  // ...\n}\n\nconst keeper = makeScoreKeeper();\nconst results = [true, false, true, true];\nlet finalScore = 0;\n\n// Her sonucu keeper'a gönder\n\nconsole.log(\"Puan:\", finalScore);\n",
+    "solution": "function makeScoreKeeper(points = 10) {\n  let score = 0;\n  return (isCorrect) => {\n    if (isCorrect) {\n      score += points;\n    }\n    return score;\n  };\n}\n\nconst keeper = makeScoreKeeper();\nconst results = [true, false, true, true];\nlet finalScore = 0;\n\n// Her sonucu keeper'a gönder\nfor (const result of results) {\n  finalScore = keeper(result);\n}\n\nconsole.log(\"Puan:\", finalScore);\n",
+    "hints": [
+     "let score = 0; sonra (isCorrect) => { ... } döndür.",
+     "if (isCorrect) { score += points; } return score;",
+     "for (const result of results) { finalScore = keeper(result); }"
+    ],
+    "check": {
+     "code_contains": [
+      "return"
+     ],
+     "js": "const k = makeScoreKeeper();\nassert(typeof k === \"function\", \"makeScoreKeeper bir fonksiyon döndürmeli.\");\nassert(k(true) === 10 && k(false) === 10 && k(true) === 20, \"Doğru cevapta 10 eklenmeli, yanlışta puan değişmemeli; her çağrı güncel puanı döndürmeli.\");\nconst k5 = makeScoreKeeper(5);\nassert(k5(true) === 5 && k5(true) === 10, \"makeScoreKeeper(5) her doğru cevapta 5 eklemeli.\");\nassert(k(false) === 20, \"Her puan tutucu kendi puanını tutmalı.\");\nassert(finalScore === 30, \"finalScore 30 olmalı.\");\nassert(!/finalScore\\s*=\\s*30/.test(_code), \"Puanı elle yazma; keeper'ı döngüde çağır.\");\nassert(_lines.includes(\"Puan: 30\"), \"Çıktıda 'Puan: 30' görünmeli.\");"
+    },
+    "xp": 100
+   }
+  }
+ },
+ "available": true
+}

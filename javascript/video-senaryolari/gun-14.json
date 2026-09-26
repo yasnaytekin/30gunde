@@ -1,0 +1,189 @@
+{
+  "kurs": "javascript",
+  "gun": 14,
+  "baslik": "Olaylar",
+  "maskot": "kodi",
+  "ozet": "DOM Gezegeni'nde sayfayı olaylara kulak veren bir kontrol paneline çeviriyoruz: addEventListener, e.target, input olayı, durum ile ekranı güncellemek, tek seferlik dinleyici ve olay yetkilendirme.",
+  "hedef_sure_sn": 160,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 11,
+      "anlatim": "Selam, ben Kodi! DOM Gezegeni'nde her şey sana tepki vermeyi bekliyor. Bir düğmeye basmak, bir kutuya harf yazmak... Bunların hepsi birer olay. Sayfamız onları nasıl duyacak?",
+      "ekran": {
+        "baslik": "Gün 14: Olaylar",
+        "gorsel": "gorseller/javascript/bolgeler/dom.webp"
+      },
+      "maskot": { "poz": "el-sallama", "konum": "sag" }
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 15,
+      "anlatim": "addEventListener bir elemana, bu olay olunca şu fonksiyonu çalıştır der. Fonksiyon hemen çalışmaz; düğmeye her tıklandığında çalışır. Kodu çalıştırdıktan sonra düğmeye kendin tıkla.",
+      "ekran": {
+        "baslik": "addEventListener: olayı dinle",
+        "kod": "const btn = document.querySelector(\"#start\");\nbtn.addEventListener(\"click\", () => {\n  console.log(\"Tıklandı!\");\n});\n",
+        "dil": "js",
+        "vurgu_satirlari": [2],
+        "html": "<button id=\"start\">Başla</button>",
+        "cikti": "Başla düğmesine her tıklandığında Çıktı alanına bir satır \"Tıklandı!\" eklenir."
+      },
+      "maskot": { "poz": "isaret", "konum": "alt-sag" },
+      "calistir": false,
+      "yonetmen_notu": "İmleç düğmeye üç kez tıklar, Çıktı alanında üç satır belirir."
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 17,
+      "anlatim": "Tarayıcı dinleyiciye bir olay nesnesi verir, adı genelde e. e.target, olayın olduğu elemandır. count değişkeni sayfanın durumu: olay durumu değiştirir, biz de ekranı durumdan güncelleriz.",
+      "ekran": {
+        "baslik": "Olay nesnesi ve e.target",
+        "kod": "let count = 0;\nconst btn = document.querySelector(\"#btn\");\n\nbtn.addEventListener(\"click\", (e) => {\n  count++;\n  document.querySelector(\"#info\").textContent = `${count} tıklama`;\n  console.log(\"Tıklanan:\", e.target.textContent);\n});\n",
+        "dil": "js",
+        "vurgu_satirlari": [4, 5, 6, 7],
+        "html": "<button id=\"btn\">Tıkla</button>\n<p id=\"info\">0 tıklama</p>",
+        "cikti": "Üç tıklamadan sonra sayfada \"3 tıklama\" yazar; Çıktı alanında her tıklamada \"Tıklanan: Tıkla\" satırı çıkar."
+      },
+      "maskot": { "poz": "konusma", "konum": "alt-sag" },
+      "calistir": false
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 15,
+      "anlatim": "Bir kutuya her harf yazıldığında input olayı olur. Kutudaki metin value özelliğinde. Böylece paragraf, sen yazdıkça canlı canlı güncelleniyor.",
+      "ekran": {
+        "baslik": "input olayı ve value",
+        "kod": "const input = document.querySelector(\"#name\");\nconst hello = document.querySelector(\"#hello\");\n\ninput.addEventListener(\"input\", () => {\n  hello.textContent = \"Merhaba, \" + input.value + \"!\";\n});\n",
+        "dil": "js",
+        "vurgu_satirlari": [4, 5],
+        "html": "<input id=\"name\" placeholder=\"Adını yaz\">\n<p id=\"hello\">Merhaba!</p>",
+        "cikti": "Kutuya \"Ada\" yazıldıkça paragraf harf harf güncellenir ve sonunda \"Merhaba, Ada!\" olur."
+      },
+      "maskot": { "poz": "mutlu", "konum": "alt-sag" },
+      "calistir": false
+    },
+    {
+      "no": 5,
+      "tur": "hata",
+      "sure_sn": 15,
+      "anlatim": "Sık yapılan hata: fonksiyonu verirken parantez koymak. launch parantezle yazılınca hemen bir kez çalışır ve tıklamayı hiç dinlemez. Doğrusu parantezsiz: sadece launch.",
+      "ekran": {
+        "baslik": "launch mı, launch() mı?",
+        "kod": "function launch() {\n  console.log(\"Kalkış!\");\n}\nconst btn = document.querySelector(\"#start\");\nbtn.addEventListener(\"click\", launch());\n",
+        "dil": "js",
+        "vurgu_satirlari": [5],
+        "html": "<button id=\"start\">Başla</button>",
+        "cikti": "Kod çalışır çalışmaz Çıktı alanına bir kez \"Kalkış!\" yazılır; düğmeye tıklamak hiçbir şey yapmaz."
+      },
+      "maskot": { "poz": "uzgun", "konum": "sag" },
+      "calistir": false
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "Bazen bir dinleyici sadece bir kez çalışmalı. once true yazarsak ilk tıklamadan sonra kendiliğinden kalkar. Elle kaldırmak için removeEventListener aynı adlı fonksiyonu ister.",
+      "ekran": {
+        "baslik": "Tek seferlik dinleyici",
+        "kod": "const btn = document.querySelector(\"#launch\");\nbtn.addEventListener(\"click\", () => {\n  console.log(\"Kalkış!\");\n}, { once: true });\n",
+        "dil": "js",
+        "vurgu_satirlari": [4],
+        "html": "<button id=\"launch\">Kalkış</button>",
+        "cikti": "İlk tıklamada Çıktı alanına \"Kalkış!\" yazılır; sonraki tıklamalar hiçbir şey yapmaz."
+      },
+      "maskot": { "poz": "konusma", "konum": "alt-sag" },
+      "calistir": false
+    },
+    {
+      "no": 7,
+      "tur": "kod",
+      "sure_sn": 17,
+      "anlatim": "Tıklama olayı kabarcık gibi yukarı, kapsayan elemanlara yükselir. Bu yüzden her düğmeye ayrı dinleyici yerine kutuya tek dinleyici koyarız. Buna olay yetkilendirme denir; e.target hangi düğme olduğunu söyler.",
+      "ekran": {
+        "baslik": "Olay yetkilendirme",
+        "kod": "const hello = document.querySelector(\"#hello\");\nconst colors = { \"kırmızı\": \"#d1242f\", \"mavi\": \"#1f6feb\" };\ndocument.querySelector(\"#colors\").addEventListener(\"click\", (e) => {\n  if (e.target.tagName !== \"BUTTON\") return;\n  hello.style.color = colors[e.target.textContent];\n});\n",
+        "dil": "js",
+        "vurgu_satirlari": [3, 4, 5],
+        "html": "<p id=\"hello\">Merhaba!</p>\n<div id=\"colors\"><button>kırmızı</button> <button>mavi</button></div>",
+        "cikti": "\"mavi\" düğmesine tıklanınca \"Merhaba!\" yazısı maviye, \"kırmızı\"ya tıklanınca kırmızıya döner. Tek dinleyici iki düğmeyi de yönetir."
+      },
+      "maskot": { "poz": "isaret", "konum": "alt-sag" },
+      "calistir": false,
+      "yonetmen_notu": "Tıklanan düğmeden kutuya doğru yükselen küçük bir kabarcık animasyonu."
+    },
+    {
+      "no": 8,
+      "tur": "soru",
+      "sure_sn": 11,
+      "anlatim": "Üç canla başlıyoruz. Vur düğmesine iki kez tıklarsan paragrafta ne yazar? Durdur ve düşün.",
+      "ekran": {
+        "baslik": "Sence sayfada ne yazar?",
+        "kod": "let lives = 3;\nconst btn = document.querySelector(\"#hit\");\nconst text = document.querySelector(\"#lives\");\nbtn.addEventListener(\"click\", () => {\n  lives--;\n  text.textContent = \"Can: \" + lives;\n});\n",
+        "dil": "js",
+        "html": "<button id=\"hit\">Vur</button>\n<p id=\"lives\">Can: 3</p>"
+      },
+      "maskot": { "poz": "dusunme", "konum": "sag" }
+    },
+    {
+      "no": 9,
+      "tur": "cikti",
+      "sure_sn": 10,
+      "anlatim": "Can: 1! Her tıklamada önce durum bir azaldı, sonra ekran yeni durumla güncellendi.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "let lives = 3;\nconst btn = document.querySelector(\"#hit\");\nconst text = document.querySelector(\"#lives\");\nbtn.addEventListener(\"click\", () => {\n  lives--;\n  text.textContent = \"Can: \" + lives;\n});\n",
+        "dil": "js",
+        "vurgu_satirlari": [5, 6],
+        "html": "<button id=\"hit\">Vur</button>\n<p id=\"lives\">Can: 3</p>",
+        "cikti": "İki tıklamadan sonra sayfada: Can: 1"
+      },
+      "maskot": { "poz": "mutlu", "konum": "sag" },
+      "calistir": false
+    },
+    {
+      "no": 10,
+      "tur": "gorev",
+      "sure_sn": 12,
+      "anlatim": "Görevlerin: kontrol panelinde hızı düğmelerle yönet, çağrı adını yazıldıkça göster ve yalnızca bir kez çalışan bir kalkış düğmesi yap.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Hız kontrolü",
+          "Görev 2: Çağrı adı",
+          "Görev 3: Tek seferlik kalkış"
+        ]
+      },
+      "maskot": { "poz": "isaret", "konum": "sol" }
+    },
+    {
+      "no": 11,
+      "tur": "ozet",
+      "sure_sn": 11,
+      "anlatim": "Özet: addEventListener olayı dinler, e.target olayın olduğu elemanı söyler. Önce durumu değiştir, sonra ekranı güncelle. Çok düğme için tek dinleyici yeter.",
+      "ekran": {
+        "baslik": "Özet",
+        "maddeler": [
+          "addEventListener(\"click\", fonksiyon): parantezsiz",
+          "e.target, input olayı ve value",
+          "Durum → ekran; olay yetkilendirme"
+        ]
+      },
+      "maskot": { "poz": "on", "konum": "sag" }
+    },
+    {
+      "no": 12,
+      "tur": "kapanis",
+      "sure_sn": 10,
+      "anlatim": "Sayfan artık seni dinliyor, bravo! Yarın DOM Gezegeni'nde inşaat var: JavaScript ile sıfırdan yeni elemanlar üretip sayfaya ekleyeceğiz.",
+      "ekran": {
+        "baslik": "Yarın: Eleman oluşturmak",
+        "gorsel": "maskotlar/kodi-javascript/kahraman.png"
+      },
+      "maskot": { "poz": "tebrik", "konum": "sag" }
+    }
+  ]
+}

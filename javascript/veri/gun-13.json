@@ -1,0 +1,244 @@
+{
+ "day": 13,
+ "title": "DOM'a giriş",
+ "region": "dom",
+ "xp_complete": 150,
+ "objective": "querySelector ile sayfadaki elemanları bulmak; metnini, sınıfını, stilini ve niteliklerini değiştirmek",
+ "story": "DOM Gezegeni'ne iniş yaptın! Buradaki her şey bir web sayfası: başlıklar, paragraflar, düğmeler. Bugün JavaScript ile sayfaya dokunmayı, yani **DOM**'u değiştirmeyi öğreneceksin.",
+ "sections": [
+  {
+   "title": "DOM nedir?",
+   "body": "Tarayıcı bir HTML sayfasını açınca onu okuyup bir **ağaca** dönüştürür: her etiket (`h1`, `p`, `button`...) bir **nesne** olur. Bu ağaca **DOM** (Document Object Model, Belge Nesne Modeli) denir. JavaScript bu nesnelere ulaşıp onları değiştirebilir; değiştirdiğin anda sayfa da değişir.\n\nAğacın kökü `document` nesnesidir. Sayfadaki her şeye oradan ulaşırız.\n\n**Bugünden itibaren görevlerde bir sayfa var.** Sayfanın HTML'i görevle birlikte hazır gelir; sen yalnızca JavaScript yazarsın. Editörün yanındaki **önizleme** paneli sayfayı gösterir. Kodun sayfa yüklendikten sonra çalışır, yani bütün elemanlar hazırdır. `console.log` da çalışmaya devam eder; çıktısı yine Çıktı alanında görünür."
+  },
+  {
+   "title": "querySelector ile eleman bulmak",
+   "body": "`document.querySelector(\"seçici\")` CSS seçicisine uyan **ilk** elemanı verir:\n\n```js\nconst title = document.querySelector(\"#title\");    // id=\"title\" olan\nconst note = document.querySelector(\".note\");      // class=\"note\" olan ilk eleman\nconst firstItem = document.querySelector(\"ul li\"); // ul içindeki ilk li\n```\n\nUyan **hepsini** almak için `querySelectorAll` kullanılır. Bir liste döner; `for...of` ya da `forEach` ile gezebilirsin:\n\n```js\nconst planets = document.querySelectorAll(\".planet\");\nconsole.log(planets.length);\nfor (const p of planets) {\n  console.log(p.textContent);\n}\n```\n\nSeçiciye uyan eleman yoksa `querySelector` `null` döndürür. `Cannot set properties of null` hatası görürsen seçiciyi kontrol et: id için `#`, sınıf için `.` koydun mu?"
+  },
+  {
+   "title": "textContent ve innerHTML",
+   "body": "`textContent` bir elemanın içindeki **metni** okur ya da değiştirir:\n\n```js\nconst status = document.querySelector(\"#status\");\nconsole.log(status.textContent);    // eski metin\nstatus.textContent = \"İniş tamam!\"; // yeni metin\n```\n\n`innerHTML` ise verdiğin metni **HTML olarak** yorumlar: `box.innerHTML = \"<b>Kalın</b>\"` gerçekten kalın yazı üretir.\n\n**Güvenlik notu:** Kullanıcının yazdığı bir metni asla `innerHTML` ile sayfaya koyma; biri metnin içine zararlı HTML ya da kod gizleyebilir. Metin göstermek için `textContent` kullan. Bu kursta da hep onu tercih edeceğiz."
+  },
+  {
+   "title": "classList, style ve nitelikler",
+   "body": "Görünümü değiştirmenin en temiz yolu **sınıf** (class) eklemek ya da çıkarmaktır; sınıfın nasıl görüneceğini CSS söyler:\n\n```js\nconst panel = document.querySelector(\"#panel\");\npanel.classList.add(\"active\");      // ekle\npanel.classList.remove(\"hidden\");   // çıkar\npanel.classList.toggle(\"dark\");     // varsa çıkar, yoksa ekle\npanel.classList.contains(\"active\"); // true\n```\n\nTek bir stili doğrudan da verebilirsin. CSS'teki tireli adlar burada camelCase olur (`background-color` → `backgroundColor`):\n\n```js\npanel.style.color = \"#d63384\";\npanel.style.backgroundColor = \"#0b1026\";\n```\n\n`href`, `src`, `disabled`, `data-...` gibi HTML **nitelikleri** (attribute) için:\n\n```js\nconst link = document.querySelector(\"#docs\");\nlink.getAttribute(\"href\");                                // oku\nlink.setAttribute(\"href\", \"https://developer.mozilla.org\"); // değiştir\nconst btn = document.querySelector(\"#launch\");\nbtn.removeAttribute(\"disabled\");                          // kaldır\n```"
+  }
+ ],
+ "examples": [
+  {
+   "title": "Başlığı değiştir",
+   "code": "const title = document.querySelector(\"#title\");\ntitle.textContent = \"Merhaba, DOM Gezegeni!\";\ntitle.style.color = \"#d63384\";\n\nconst note = document.querySelector(\".note\");\nnote.textContent = \"Bu satırı JavaScript yazdı.\";\nnote.classList.add(\"big\");\n\nconsole.log(\"Başlık:\", title.textContent);\n",
+   "note": "Kodu değiştirip Çalıştır'a bas; önizleme her çalıştırmada sayfayı baştan kurar.",
+   "mode": "page",
+   "html": "<h1 id=\"title\">Merhaba</h1>\n<p class=\"note\">Bu metin JavaScript ile değişecek.</p>\n",
+   "css": ".big{font-size:22px;font-weight:bold}"
+  },
+  {
+   "title": "Hepsini işaretle",
+   "code": "const planets = document.querySelectorAll(\".planet\");\nconsole.log(\"Gezegen sayısı:\", planets.length);\n\nfor (const p of planets) {\n  p.classList.add(\"visited\");\n  p.textContent = p.textContent + \" (ziyaret edildi)\";\n}\n\nconst link = document.querySelector(\"#link\");\nlink.setAttribute(\"href\", \"https://developer.mozilla.org\");\nconsole.log(\"Bağlantı:\", link.getAttribute(\"href\"));\n",
+   "note": "querySelectorAll bir liste verir; for...of ile her elemana tek tek dokunuruz.",
+   "mode": "page",
+   "html": "<ul>\n  <li class=\"planet\">Merkür</li>\n  <li class=\"planet\">Venüs</li>\n  <li class=\"planet\">Mars</li>\n</ul>\n<a id=\"link\" href=\"#\">Belgeler</a>\n",
+   "css": ".visited{color:#7a86b8}"
+  }
+ ],
+ "tasks": [
+  {
+   "id": "js-d13-t1",
+   "title": "İlk dokunuş",
+   "prompt": "Sayfadaki başlığın (`#title`) metnini `DOM Gezegeni`, durum paragrafının (`#status`) metnini `İniş tamam!` yap. `textContent` kullan.",
+   "starter": "const title = document.querySelector(\"#title\");\n\n// title'ın ve #status'un metnini değiştir\n\n",
+   "solution": "const title = document.querySelector(\"#title\");\n\n// title'ın ve #status'un metnini değiştir\ntitle.textContent = \"DOM Gezegeni\";\ndocument.querySelector(\"#status\").textContent = \"İniş tamam!\";\n",
+   "hints": [
+    "title.textContent = \"DOM Gezegeni\";",
+    "#status için de document.querySelector(\"#status\") kullan."
+   ],
+   "check": {
+    "code_contains": [
+     "querySelector",
+     "textContent"
+    ],
+    "js": "assert($(\"#title\").textContent.trim() === \"DOM Gezegeni\", \"#title metni 'DOM Gezegeni' olmalı.\");\nassert($(\"#status\").textContent.trim() === \"İniş tamam!\", \"#status metni 'İniş tamam!' olmalı.\");"
+   },
+   "xp": 50,
+   "mode": "page",
+   "html": "<h1 id=\"title\">Görev Merkezi</h1>\n<p id=\"status\">Bekleniyor...</p>\n<div id=\"panel\" class=\"box hidden\">Gizli panel: rota hazır.</div>\n<ul id=\"planets\">\n  <li class=\"planet\">Merkür</li>\n  <li class=\"planet\">Venüs</li>\n  <li class=\"planet\">Mars</li>\n  <li class=\"planet\">Jüpiter</li>\n</ul>\n<p><a id=\"docs\" href=\"#\">Belgeler</a> <button id=\"launch\" data-fuel=\"80\" disabled>Kalkış</button></p>\n",
+   "css": ".hidden{display:none}.box{padding:8px;border:2px dashed #7a86b8;border-radius:8px}.active{color:#1a7f37;font-weight:bold}.visited{color:#7a86b8;text-decoration:line-through}"
+  },
+  {
+   "id": "js-d13-t2",
+   "title": "Sınıf ve stil",
+   "prompt": "Paneli hazırla:\n\n1. `#status`'a `active` sınıfını ekle.\n2. `#panel`'den `hidden` sınıfını kaldır (panel görünsün).\n3. `#title`'ın yazı rengini `style` ile `#d63384` yap.",
+   "starter": "const status = document.querySelector(\"#status\");\nconst panel = document.querySelector(\"#panel\");\nconst title = document.querySelector(\"#title\");\n\n// sınıf ekle, sınıf kaldır, rengi değiştir\n\n",
+   "solution": "const status = document.querySelector(\"#status\");\nconst panel = document.querySelector(\"#panel\");\nconst title = document.querySelector(\"#title\");\n\n// sınıf ekle, sınıf kaldır, rengi değiştir\nstatus.classList.add(\"active\");\npanel.classList.remove(\"hidden\");\ntitle.style.color = \"#d63384\";\n",
+   "hints": [
+    "status.classList.add(\"active\");",
+    "panel.classList.remove(\"hidden\");",
+    "title.style.color = \"#d63384\";"
+   ],
+   "check": {
+    "code_contains": [
+     "classList.add",
+     "classList.remove",
+     "style.color"
+    ],
+    "js": "assert($(\"#status\").classList.contains(\"active\"), \"#status'a active sınıfı eklenmeli.\");\nassert(!$(\"#panel\").classList.contains(\"hidden\"), \"#panel'den hidden sınıfı kaldırılmalı.\");\nassert($(\"#panel\").classList.contains(\"box\"), \"#panel'in diğer sınıfı (box) kalmalı; yalnızca hidden'ı kaldır.\");\nassert($(\"#title\").style.color === \"rgb(214, 51, 132)\", \"#title'ın rengi #d63384 olmalı (title.style.color).\");"
+   },
+   "xp": 50,
+   "mode": "page",
+   "html": "<h1 id=\"title\">Görev Merkezi</h1>\n<p id=\"status\">Bekleniyor...</p>\n<div id=\"panel\" class=\"box hidden\">Gizli panel: rota hazır.</div>\n<ul id=\"planets\">\n  <li class=\"planet\">Merkür</li>\n  <li class=\"planet\">Venüs</li>\n  <li class=\"planet\">Mars</li>\n  <li class=\"planet\">Jüpiter</li>\n</ul>\n<p><a id=\"docs\" href=\"#\">Belgeler</a> <button id=\"launch\" data-fuel=\"80\" disabled>Kalkış</button></p>\n",
+   "css": ".hidden{display:none}.box{padding:8px;border:2px dashed #7a86b8;border-radius:8px}.active{color:#1a7f37;font-weight:bold}.visited{color:#7a86b8;text-decoration:line-through}"
+  },
+  {
+   "id": "js-d13-t3",
+   "title": "Bütün gezegenler",
+   "prompt": "`querySelectorAll` ile bütün `.planet` elemanlarını al ve bir döngüyle her birine `visited` sınıfını ekle.\n\nSonra `#status`'a kaç gezegen olduğunu yaz: `4 gezegen ziyaret edildi`. Sayıyı elle yazma; listenin `length`'ini kullan.",
+   "starter": "const planets = document.querySelectorAll(\".planet\");\n\n// her gezegene visited ekle\n\n// #status'a gezegen sayısını yaz\n\n",
+   "solution": "const planets = document.querySelectorAll(\".planet\");\n\n// her gezegene visited ekle\nfor (const p of planets) {\n  p.classList.add(\"visited\");\n}\n\n// #status'a gezegen sayısını yaz\ndocument.querySelector(\"#status\").textContent = `${planets.length} gezegen ziyaret edildi`;\n",
+   "hints": [
+    "for (const p of planets) { p.classList.add(\"visited\"); }",
+    "planets.length gezegen sayısını verir.",
+    "`${planets.length} gezegen ziyaret edildi`"
+   ],
+   "check": {
+    "code_contains": [
+     "querySelectorAll",
+     "classList.add",
+     "length"
+    ],
+    "js": "const items = $$(\".planet\");\nassert(items.every((li) => li.classList.contains(\"visited\")), \"Bütün .planet elemanlarına visited sınıfı eklenmeli.\");\nassert($(\"#status\").textContent.trim() === \"4 gezegen ziyaret edildi\", \"#status '4 gezegen ziyaret edildi' olmalı.\");\nassert(!/[\"'`]4 gezegen/.test(_code), \"Sayıyı elle yazma; planets.length kullan.\");"
+   },
+   "xp": 50,
+   "mode": "page",
+   "html": "<h1 id=\"title\">Görev Merkezi</h1>\n<p id=\"status\">Bekleniyor...</p>\n<div id=\"panel\" class=\"box hidden\">Gizli panel: rota hazır.</div>\n<ul id=\"planets\">\n  <li class=\"planet\">Merkür</li>\n  <li class=\"planet\">Venüs</li>\n  <li class=\"planet\">Mars</li>\n  <li class=\"planet\">Jüpiter</li>\n</ul>\n<p><a id=\"docs\" href=\"#\">Belgeler</a> <button id=\"launch\" data-fuel=\"80\" disabled>Kalkış</button></p>\n",
+   "css": ".hidden{display:none}.box{padding:8px;border:2px dashed #7a86b8;border-radius:8px}.active{color:#1a7f37;font-weight:bold}.visited{color:#7a86b8;text-decoration:line-through}"
+  }
+ ],
+ "challenge": {
+  "id": "js-d13-c",
+  "title": "Kalkış izni",
+  "prompt": "Kalkış düğmesinin (`#launch`) yakıt bilgisi `data-fuel` niteliğinde. `updateLaunch()` fonksiyonunu yaz:\n\n- `getAttribute` ile `data-fuel`'i oku ve sayıya çevir.\n- Yakıt 50 ya da fazlaysa: düğmenin `disabled` niteliğini kaldır, `#status`'a `Kalkışa hazır (yakıt 80)` yaz.\n- Azsa: düğmeye `disabled` niteliğini koy (`setAttribute(\"disabled\", \"\")`), `#status`'a `Yakıt yetersiz (yakıt 30)` yaz.\n\nAyrıca `#docs` bağlantısının `href` niteliğini `https://developer.mozilla.org` yap.",
+  "starter": "const launch = document.querySelector(\"#launch\");\nconst status = document.querySelector(\"#status\");\n\nfunction updateLaunch() {\n  // data-fuel'i oku, sayıya çevir, düğmeyi ve #status'u güncelle\n}\n\nupdateLaunch();\n\n// #docs bağlantısının href niteliğini değiştir\n\n",
+  "solution": "const launch = document.querySelector(\"#launch\");\nconst status = document.querySelector(\"#status\");\n\nfunction updateLaunch() {\n  // data-fuel'i oku, sayıya çevir, düğmeyi ve #status'u güncelle\n  const fuel = Number(launch.getAttribute(\"data-fuel\"));\n  if (fuel >= 50) {\n    launch.removeAttribute(\"disabled\");\n    status.textContent = `Kalkışa hazır (yakıt ${fuel})`;\n  } else {\n    launch.setAttribute(\"disabled\", \"\");\n    status.textContent = `Yakıt yetersiz (yakıt ${fuel})`;\n  }\n}\n\nupdateLaunch();\n\n// #docs bağlantısının href niteliğini değiştir\ndocument.querySelector(\"#docs\").setAttribute(\"href\", \"https://developer.mozilla.org\");\n",
+  "hints": [
+   "const fuel = Number(launch.getAttribute(\"data-fuel\"));",
+   "launch.removeAttribute(\"disabled\");",
+   "Metinde yakıtı değişkenden yaz: `Kalkışa hazır (yakıt ${fuel})`"
+  ],
+  "check": {
+   "code_contains": [
+    "getAttribute",
+    "setAttribute"
+   ],
+   "js": "assert($(\"#launch\").disabled === false, \"Yakıt 80 iken #launch düğmesi etkin olmalı (disabled kaldırılmalı).\");\nassert($(\"#status\").textContent.trim() === \"Kalkışa hazır (yakıt 80)\", \"#status 'Kalkışa hazır (yakıt 80)' olmalı.\");\nassert($(\"#docs\").getAttribute(\"href\") === \"https://developer.mozilla.org\", \"#docs bağlantısının href'i 'https://developer.mozilla.org' olmalı.\");\n$(\"#launch\").setAttribute(\"data-fuel\", \"30\");\nupdateLaunch();\nassert($(\"#launch\").disabled === true, \"Yakıt 30 iken updateLaunch() düğmeyi devre dışı bırakmalı.\");\nassert($(\"#status\").textContent.trim() === \"Yakıt yetersiz (yakıt 30)\", \"Yakıt 30 iken #status 'Yakıt yetersiz (yakıt 30)' olmalı; yakıtı nitelikten oku.\");"
+  },
+  "xp": 75,
+  "mode": "page",
+  "html": "<h1 id=\"title\">Görev Merkezi</h1>\n<p id=\"status\">Bekleniyor...</p>\n<div id=\"panel\" class=\"box hidden\">Gizli panel: rota hazır.</div>\n<ul id=\"planets\">\n  <li class=\"planet\">Merkür</li>\n  <li class=\"planet\">Venüs</li>\n  <li class=\"planet\">Mars</li>\n  <li class=\"planet\">Jüpiter</li>\n</ul>\n<p><a id=\"docs\" href=\"#\">Belgeler</a> <button id=\"launch\" data-fuel=\"80\" disabled>Kalkış</button></p>\n",
+  "css": ".hidden{display:none}.box{padding:8px;border:2px dashed #7a86b8;border-radius:8px}.active{color:#1a7f37;font-weight:bold}.visited{color:#7a86b8;text-decoration:line-through}"
+ },
+ "project_contribution": "Başlangıç ekranı",
+ "project_task": {
+  "id": "js-d13-p",
+  "title": "Başlangıç ekranı",
+  "prompt": "Oyunun başlangıç ekranını doldur. `showStart(g)` fonksiyonunu yaz:\n\n- `g.title`'ı `#game-title`'a, `g.pilot`'u `#pilot`'a, `g.level`'ı `#level`'a yazsın (`textContent`).\n- Başla düğmesine (`#start-btn`) `ready` sınıfını eklesin.\n\nMetinleri elle yazma; hep `g` nesnesinden al.",
+  "starter": "const game = { title: \"Yıldız Avcısı\", pilot: \"Ada\", level: 1 };\n\nfunction showStart(g) {\n  // elemanları bul ve g'deki bilgilerle doldur\n}\n\nshowStart(game);\n",
+  "solution": "const game = { title: \"Yıldız Avcısı\", pilot: \"Ada\", level: 1 };\n\nfunction showStart(g) {\n  // elemanları bul ve g'deki bilgilerle doldur\n  document.querySelector(\"#game-title\").textContent = g.title;\n  document.querySelector(\"#pilot\").textContent = g.pilot;\n  document.querySelector(\"#level\").textContent = g.level;\n  document.querySelector(\"#start-btn\").classList.add(\"ready\");\n}\n\nshowStart(game);\n",
+  "hints": [
+   "document.querySelector(\"#game-title\").textContent = g.title;",
+   "#pilot ve #level için de aynısını yap.",
+   "classList.add(\"ready\")"
+  ],
+  "check": {
+   "code_contains": [
+    "querySelector",
+    "textContent",
+    "classList.add"
+   ],
+   "js": "assert($(\"#game-title\").textContent.trim() === \"Yıldız Avcısı\", \"#game-title 'Yıldız Avcısı' olmalı.\");\nassert($(\"#pilot\").textContent.trim() === \"Ada\" && $(\"#level\").textContent.trim() === \"1\", \"#pilot 'Ada', #level '1' olmalı.\");\nassert($(\"#start-btn\").classList.contains(\"ready\"), \"#start-btn düğmesine ready sınıfı eklenmeli.\");\nshowStart({ title: \"Test Uçuşu\", pilot: \"Can\", level: 4 });\nassert($(\"#game-title\").textContent.trim() === \"Test Uçuşu\" && $(\"#pilot\").textContent.trim() === \"Can\" && $(\"#level\").textContent.trim() === \"4\", \"showStart, verilen g nesnesindeki bilgileri yazmalı; metinleri elle yazma.\");"
+  },
+  "xp": 100,
+  "mode": "page",
+  "html": "<div id=\"start-screen\" class=\"screen\">\n  <h1 id=\"game-title\">Oyun</h1>\n  <p>Pilot: <span id=\"pilot\">?</span></p>\n  <p>Seviye: <span id=\"level\">?</span></p>\n  <button id=\"start-btn\">Başla</button>\n</div>\n<div id=\"game-panel\" class=\"screen hidden\">\n  <p id=\"hud\">Skor: 0</p>\n  <h2>Envanter</h2>\n  <ul id=\"inventory\"></ul>\n</div>\n",
+  "css": "html,body{background:#0b1026;color:#e8ecff}.screen{padding:12px;border:1px solid #2c3566;border-radius:10px}.hidden{display:none}#game-title{color:#f7df1e;margin-top:0}#start-btn{padding:6px 14px;border-radius:6px;border:1px solid #7a86b8}.ready{background:#f7df1e;color:#0b1026;font-weight:bold}.item{margin:4px 0}"
+ },
+ "tracks": {
+  "js-web": {
+   "project_contribution": "Sitenin başlığı",
+   "project_task": {
+    "id": "js-d13-pw",
+    "title": "Sitenin başlığı",
+    "prompt": "Sitenin başlık bölümünü doldur. `fillHeader(profile)` fonksiyonunu yaz:\n\n- `profile.name`'i `#site-name`'e, `profile.tagline`'ı `#tagline`'a yazsın.\n- `#site-header`'a `filled` sınıfını eklesin (alt çizgisi sarı olur).\n\nSonra kendi bilgilerinle çağır.",
+    "starter": "const me = { name: \"Deniz Yıldız\", tagline: \"Kod yazan, oyun tasarlayan bir kaşif\" };\n\nfunction fillHeader(profile) {\n  // #site-name, #tagline ve #site-header\n}\n\nfillHeader(me);\n",
+    "solution": "const me = { name: \"Deniz Yıldız\", tagline: \"Kod yazan, oyun tasarlayan bir kaşif\" };\n\nfunction fillHeader(profile) {\n  // #site-name, #tagline ve #site-header\n  document.querySelector(\"#site-name\").textContent = profile.name;\n  document.querySelector(\"#tagline\").textContent = profile.tagline;\n  document.querySelector(\"#site-header\").classList.add(\"filled\");\n}\n\nfillHeader(me);\n",
+    "hints": [
+     "document.querySelector(\"#site-name\").textContent = profile.name;",
+     "classList.add(\"filled\")"
+    ],
+    "check": {
+     "code_contains": [
+      "querySelector",
+      "textContent",
+      "classList.add"
+     ],
+     "js": "assert($(\"#site-name\").textContent.trim() === me.name && $(\"#tagline\").textContent.trim() === me.tagline, \"#site-name ve #tagline, me nesnesindeki bilgileri göstermeli.\");\nassert($(\"#site-header\").classList.contains(\"filled\"), \"#site-header'a filled sınıfı eklenmeli.\");\nfillHeader({ name: \"Test Kişi\", tagline: \"Deneme cümlesi\" });\nassert($(\"#site-name\").textContent.trim() === \"Test Kişi\" && $(\"#tagline\").textContent.trim() === \"Deneme cümlesi\", \"fillHeader verilen profile nesnesini kullanmalı.\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<header id=\"site-header\">\n  <h1 id=\"site-name\">Adın</h1>\n  <p id=\"tagline\">Kısa bir cümle</p>\n  <button id=\"theme-btn\">Koyu tema</button>\n</header>\n<main>\n  <h2>Projelerim</h2>\n  <div id=\"projects\"></div>\n</main>\n",
+    "css": "html:has(body.dark){background:#0b1026}body.dark{background:#0b1026;color:#e8ecff}#site-header{padding:10px 0;border-bottom:3px solid #c9cfe8}#site-header.filled{border-bottom-color:#f7df1e}#site-name{margin:0}.card{border:1px solid #c9cfe8;border-radius:8px;padding:6px 10px;margin:6px 0}.card h3{margin:0}.tag{margin:2px 0 0;font-size:13px;color:#7a86b8}"
+   }
+  },
+  "js-app": {
+   "project_contribution": "Günün özeti",
+   "project_task": {
+    "id": "js-d13-pa",
+    "title": "Günün özeti",
+    "prompt": "Görev listesi sayfada hazır. `updateSummary()` fonksiyonunu yaz: sayfadaki görevleri say ve `#summary`'ye `1/4 görev tamamlandı` biçiminde yaz.\n\n- Bütün görevler: `.task` elemanları\n- Tamamlananlar: hem `task` hem `done` sınıfı olanlar (seçici: `.task.done`)\n\nSayıları elle yazma; `querySelectorAll(...).length` ile say.",
+    "starter": "function updateSummary() {\n  // görevleri say, #summary'ye yaz\n}\n\nupdateSummary();\n",
+    "solution": "function updateSummary() {\n  // görevleri say, #summary'ye yaz\n  const all = document.querySelectorAll(\".task\").length;\n  const done = document.querySelectorAll(\".task.done\").length;\n  document.querySelector(\"#summary\").textContent = `${done}/${all} görev tamamlandı`;\n}\n\nupdateSummary();\n",
+    "hints": [
+     "document.querySelectorAll(\".task\").length",
+     "Tamamlananlar: document.querySelectorAll(\".task.done\").length",
+     "`${done}/${all} görev tamamlandı`"
+    ],
+    "check": {
+     "code_contains": [
+      "querySelectorAll",
+      "length"
+     ],
+     "js": "assert($(\"#summary\").textContent.trim() === \"1/4 görev tamamlandı\", \"#summary '1/4 görev tamamlandı' olmalı.\");\n$$(\".task\")[2].classList.add(\"done\");\nupdateSummary();\nassert($(\"#summary\").textContent.trim() === \"2/4 görev tamamlandı\", \"Bir görev daha tamamlanınca updateSummary() '2/4 görev tamamlandı' yazmalı; sayıları sayfadan say.\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<h1>Çalışma Asistanım</h1>\n<p id=\"summary\">...</p>\n<ul id=\"task-list\">\n  <li class=\"task done\"><span class=\"name\">Matematik ödevi</span> <button class=\"done-btn\">Geri al</button></li>\n  <li class=\"task\"><span class=\"name\">Fizik tekrarı</span> <button class=\"done-btn\">Tamamla</button></li>\n  <li class=\"task\"><span class=\"name\">İngilizce kelimeler</span> <button class=\"done-btn\">Tamamla</button></li>\n  <li class=\"task\"><span class=\"name\">Kitap okuma</span> <button class=\"done-btn\">Tamamla</button></li>\n</ul>\n<p><input id=\"new-task\" placeholder=\"Yeni görev\"> <button id=\"add-btn\">Ekle</button></p>\n",
+    "css": "#summary{font-weight:bold}.task{margin:4px 0}.done .name{text-decoration:line-through;color:#7a86b8}.done-btn{font-size:13px;margin-left:6px}"
+   }
+  },
+  "js-quiz": {
+   "project_contribution": "Soruyu ekranda göster",
+   "project_task": {
+    "id": "js-d13-pq",
+    "title": "Soruyu göster",
+    "prompt": "Soru artık sayfada görünecek. `showQuestion(q)` fonksiyonunu yaz:\n\n- `q.text`'i `#question`'a yazsın.\n- `querySelectorAll(\".option\")` ile üç düğmeyi alsın ve her düğmeye sırasıyla `q.options` dizisindeki seçeneği yazsın.",
+    "starter": "const question = { text: \"Kızıl gezegen hangisi?\", options: [\"Mars\", \"Venüs\", \"Merkür\"], answer: 0 };\n\nfunction showQuestion(q) {\n  // #question ve .option düğmeleri\n}\n\nshowQuestion(question);\n",
+    "solution": "const question = { text: \"Kızıl gezegen hangisi?\", options: [\"Mars\", \"Venüs\", \"Merkür\"], answer: 0 };\n\nfunction showQuestion(q) {\n  // #question ve .option düğmeleri\n  document.querySelector(\"#question\").textContent = q.text;\n  const buttons = document.querySelectorAll(\".option\");\n  buttons.forEach((btn, i) => {\n    btn.textContent = q.options[i];\n  });\n}\n\nshowQuestion(question);\n",
+    "hints": [
+     "document.querySelector(\"#question\").textContent = q.text;",
+     "buttons.forEach((btn, i) => { btn.textContent = q.options[i]; });"
+    ],
+    "check": {
+     "code_contains": [
+      "querySelectorAll",
+      "textContent"
+     ],
+     "js": "const texts = () => $$(\".option\").map((b) => b.textContent.trim()).join(\"|\");\nassert($(\"#question\").textContent.trim() === \"Kızıl gezegen hangisi?\", \"#question 'Kızıl gezegen hangisi?' olmalı.\");\nassert(texts() === \"Mars|Venüs|Merkür\", \"Düğmelerde sırasıyla Mars, Venüs, Merkür yazmalı.\");\nshowQuestion({ text: \"En büyük gezegen?\", options: [\"Satürn\", \"Jüpiter\", \"Neptün\"], answer: 1 });\nassert($(\"#question\").textContent.trim() === \"En büyük gezegen?\" && texts() === \"Satürn|Jüpiter|Neptün\", \"showQuestion verilen q nesnesini göstermeli; metinleri elle yazma.\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<h1>Bilgi Yarışması</h1>\n<p id=\"question\">Soru yükleniyor...</p>\n<div id=\"options\">\n  <button class=\"option\">?</button>\n  <button class=\"option\">?</button>\n  <button class=\"option\">?</button>\n</div>\n<p id=\"feedback\"></p>\n<p id=\"score\">Puan: 0</p>\n",
+    "css": "#question{font-size:18px;font-weight:bold}.option{display:block;margin:6px 0;padding:6px 12px;min-width:180px;text-align:left}#feedback{font-weight:bold}"
+   }
+  }
+ },
+ "available": true
+}

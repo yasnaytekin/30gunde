@@ -1,0 +1,8 @@
+__pycache__/
+*.pyc
+video-sablonu/*/built.html
+video-sablonu/*/*.mp4
+video-sablonu/*/onizleme_*.png
+video-sablonu/*/pv_*.png
+video-sablonu/tanitim-videosu/music.wav
+.DS_Store

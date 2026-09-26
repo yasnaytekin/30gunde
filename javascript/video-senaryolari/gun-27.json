@@ -1,0 +1,218 @@
+{
+  "kurs": "javascript",
+  "gun": 27,
+  "baslik": "Sınıflar ve modüller",
+  "maskot": "kodi",
+  "ozet": "Kodi, Async İstasyonu'nun gemi fabrikasında class ile nesne kalıpları yazmayı; constructor, this, metot, getter, extends ve super kullanmayı ve kodu modüllere bölme fikrini anlatıyor.",
+  "hedef_sure_sn": 152,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 12,
+      "anlatim": "Selam, ben Kodi! İstasyonda onlarca gemi var ve hepsinin adı, hızı, yakıtı var. Her birini tek tek yazmak yerine bir kalıp yapsak? Bugün sınıflarla bir gemi fabrikası kuruyoruz!",
+      "ekran": {
+        "baslik": "Gün 27: Sınıflar ve modüller",
+        "gorsel": "gorseller/javascript/bolgeler/istasyon.webp"
+      },
+      "maskot": {
+        "poz": "el-sallama",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 18,
+      "anlatim": "Sınıf bir kalıp gibi çalışır. new ile kalıptan yeni bir nesne, yani bir örnek üretiriz. constructor nesne üretilirken bir kez çalışır; this ise şu anki nesne demektir. Sınıf adları büyük harfle başlar.",
+      "ekran": {
+        "baslik": "Sınıf: nesne kalıbı",
+        "kod": "class Ship {\n  constructor(name, speed) {\n    this.name = name;\n    this.speed = speed;\n  }\n}\nconst a = new Ship(\"Kartal\", 10);\nconst b = new Ship(\"Şahin\", 12);\nconsole.log(a.name, b.speed);\n",
+        "vurgu_satirlari": [
+          2,
+          3,
+          7
+        ],
+        "cikti": "Kartal 12",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true,
+      "yonetmen_notu": "Bir fabrika bandından aynı kalıpla iki farklı gemi çıkar."
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 18,
+      "anlatim": "Sınıfın içine yazılan fonksiyonlara metot denir; başlarına function yazılmaz. fly yakıtı azaltır. get ile yazılan isEmpty ise parantezsiz, bir özellik gibi okunur ama her seferinde yeniden hesaplanır.",
+      "ekran": {
+        "baslik": "Metotlar ve getter",
+        "kod": "class Ship {\n  constructor(name) { this.name = name; this.fuel = 100; }\n  fly(km) {\n    this.fuel -= km / 10;\n  }\n  get isEmpty() {\n    return this.fuel <= 0;\n  }\n}\nconst s = new Ship(\"Kartal\");\ns.fly(300);\nconsole.log(s.fuel, s.isEmpty);\n",
+        "vurgu_satirlari": [
+          3,
+          6,
+          12
+        ],
+        "cikti": "70 false",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 18,
+      "anlatim": "Bir sınıfı extends ile genişletebilirsin; yeni sınıf eskisinin her şeyini miras alır. super, üst sınıfın constructor'ını çağırır ve this'ten önce yazılır. super.describe ise üstteki metodu kullanıp genişletir.",
+      "ekran": {
+        "baslik": "extends ve super",
+        "kod": "class Ship {\n  constructor(name) { this.name = name; }\n  describe() { return `${this.name} gemisi`; }\n}\nclass Explorer extends Ship {\n  constructor(name, planet) { super(name); this.planet = planet; }\n  describe() { return `${super.describe()}, hedef: ${this.planet}`; }\n}\nconst e = new Explorer(\"Kaşif\", \"Mars\");\nconsole.log(e.describe());\nconsole.log(e instanceof Ship);\n",
+        "vurgu_satirlari": [
+          5,
+          6,
+          7
+        ],
+        "cikti": "Kaşif gemisi, hedef: Mars\ntrue",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "anlatim",
+      "sure_sn": 16,
+      "anlatim": "Büyük projelerde her şeyi tek dosyaya yazmayız; kodu modüllere böleriz. Bir dosya export ile paylaşır, diğeri import ile alır. Her sınıf kendi dosyasında yaşayabilir.",
+      "ekran": {
+        "baslik": "Modüller: kodu dosyalara bölmek",
+        "kod": "// ship.js\nexport class Ship { /* ... */ }\nexport const MAX_SPEED = 20;\n\n// main.js\nimport { Ship, MAX_SPEED } from \"./ship.js\";\nconst s = new Ship(\"Kartal\");\n",
+        "vurgu_satirlari": [
+          2,
+          6
+        ],
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sol"
+      },
+      "calistir": false,
+      "yonetmen_notu": "Kodun altında küçük not: HTML'de <script type=\"module\" src=\"main.js\"></script>. Kursun editöründe tek betik çalıştığı için görevlerde import yok."
+    },
+    {
+      "no": 6,
+      "tur": "hata",
+      "sure_sn": 14,
+      "anlatim": "Sık hata: new yazmayı unutmak. Sınıf bir fonksiyon gibi çağrılamaz; JavaScript bunu hemen TypeError ile durdurur. Mesaj diyor ki: sınıf, new olmadan çağrılamaz.",
+      "ekran": {
+        "baslik": "Sık hata: new'i unutmak",
+        "kod": "class Ship {\n  constructor(name) { this.name = name; }\n}\nconst s = Ship(\"Kartal\");\n",
+        "vurgu_satirlari": [
+          4
+        ],
+        "cikti": "TypeError: Class constructor Ship cannot be invoked without 'new'",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "soru",
+      "sure_sn": 10,
+      "anlatim": "Soru zamanı! Robotun pili 30 ve iki saat çalışıyor. Getter her okunuşta yeniden hesaplanıyor. Sence ne yazar?",
+      "ekran": {
+        "baslik": "Sence ne yazar?",
+        "kod": "class Robot {\n  constructor(battery) { this.battery = battery; }\n  work(hours) { this.battery -= hours * 10; }\n  get status() { return this.battery > 20 ? \"hazır\" : \"şarj gerekli\"; }\n}\nconst bip = new Robot(30);\nbip.work(2);\nconsole.log(bip.battery, bip.status);\n",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 8,
+      "tur": "cikti",
+      "sure_sn": 9,
+      "anlatim": "Cevap: 10, şarj gerekli! İki saatte pil 20 azaldı ve 10'a düştü. status okununca yeniden hesaplandı.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "class Robot {\n  constructor(battery) { this.battery = battery; }\n  work(hours) { this.battery -= hours * 10; }\n  get status() { return this.battery > 20 ? \"hazır\" : \"şarj gerekli\"; }\n}\nconst bip = new Robot(30);\nbip.work(2);\nconsole.log(bip.battery, bip.status);\n",
+        "vurgu_satirlari": [
+          4,
+          8
+        ],
+        "cikti": "10 şarj gerekli",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "gorev",
+      "sure_sn": 13,
+      "anlatim": "Görev zamanı! Uydularını anlatan bir gezegen sınıfı, yüzde kaç dolu olduğunu söyleyen bir yakıt deposu ve hazır bir gemi sınıfını genişleten bir kargo gemisi yazacaksın.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Gezegen sınıfı",
+          "Görev 2: Yakıt deposu",
+          "Görev 3: Kargo gemisi"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 10,
+      "tur": "ozet",
+      "sure_sn": 12,
+      "anlatim": "Özetleyelim: class bir kalıptır, new ile örnek üretir, constructor ve this ile özellik ekler. Metotlar ve getter davranış katar. extends ve super ile genişletir, modüllerle dosyalara bölersin.",
+      "ekran": {
+        "baslik": "Özet",
+        "maddeler": [
+          "class + constructor + this; new ile örnek",
+          "Metot ve get ile getter",
+          "extends + super  ·  export / import"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "kapanis",
+      "sure_sn": 12,
+      "anlatim": "Gemi fabrikan hazır ve Async İstasyonu'nu tamamladın! Yarın JavaScript Yıldızı'na doğru yola çıkıyoruz. İlk durak: temiz kod. Görüşürüz!",
+      "ekran": {
+        "baslik": "Yarın: Temiz kod",
+        "gorsel": "gorseller/javascript/bolgeler/yildiz.webp"
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

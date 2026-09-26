@@ -1,0 +1,1579 @@
+{
+ "day": 20,
+ "title": "Paket yöneticisi pip",
+ "region": "ada",
+ "project_contribution": "Paket listesi",
+ "game_role": "Oyunun jeneriğinde paket listen yazılır.",
+ "xp_complete": 150,
+ "objective": "Paket ve pip kavramlarını öğrenmek, requirements.txt dosyalarını okuyup yazmak",
+ "story": "Keşif Adası'nın limanına her gün gemiler yanaşıyor. Gemilerden dünyanın her yerinden kutular iniyor: içlerinde başka programcıların yaptığı hazır aletler var. Python dünyasında bu kutulara **paket**, onları getiren gemiye de **pip** diyoruz.",
+ "sections": [
+  {
+   "title": "Paket nedir?",
+   "body": "Paket, başkalarının yazıp herkesle paylaştığı modüller topluluğudur. Dünyada yüz binlerce Python paketi var ve hepsi **PyPI** (Python Package Index) adlı dev bir depoda durur.\n\nÖrneğin `requests` internetten veri almayı, `pygame` oyun yapmayı, `pandas` tablo işlemeyi kolaylaştırır."
+  },
+  {
+   "title": "pip komutları",
+   "body": "`pip` paketleri kurmaya yarayan programdır. Bu komutlar Python kodunun içine değil, bilgisayarındaki **terminale** yazılır:\n\n```\npip install requests        # kur\npip install pygame==2.5.2   # belli bir sürümü kur\npip list                    # kurulu paketleri göster\npip uninstall requests      # kaldır\npip freeze                  # paketleri sürümleriyle listele\n```"
+  },
+  {
+   "title": "requirements.txt",
+   "body": "Bir projenin hangi paketlere ihtiyacı olduğu `requirements.txt` dosyasına yazılır. Her satırda bir paket ve sürümü olur:\n\n```\nrequests==2.31.0\npygame==2.5.2\n```\n\nBaşka biri projeni indirdiğinde `pip install -r requirements.txt` yazarak hepsini tek seferde kurar."
+  },
+  {
+   "title": "Sürüm numaraları",
+   "body": "`2.31.0` gibi sürümler **büyük.küçük.yama** şeklinde okunur. Karşılaştırırken dikkat! Yazı olarak karşılaştırırsan `\"2.4.1\" > \"2.31.0\"` çıkar, çünkü Python harf harf bakar ve `4`, `3`'ten büyüktür. Doğrusu parçaları sayıya çevirmektir:\n\n```python\nv = tuple(int(p) for p in \"2.31.0\".split(\".\"))   # (2, 31, 0)\n```\n\nBu sitedeki Python, bazı popüler paketlerle birlikte gelir. `import this` yazıp çalıştır, sana bir sürpriz var."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Python'ın bilgelikleri",
+   "code": "import this\n",
+   "note": "Python'ın yazım felsefesi. İngilizce ama güzel!"
+  },
+  {
+   "title": "Satırı parçala",
+   "code": "line = \"requests==2.31.0\"\nname, version = line.split(\"==\")\nprint(\"Paket:\", name)\nprint(\"Sürüm:\", version)\n",
+   "note": ""
+  },
+  {
+   "title": "Sürüm tuzağı",
+   "code": "a = \"2.4.1\"\nb = \"2.31.0\"\nprint(\"Yazı olarak:\", a > b)\nva = tuple(int(p) for p in a.split(\".\"))\nvb = tuple(int(p) for p in b.split(\".\"))\nprint(\"Sayı olarak:\", va > vb)\n",
+   "note": "Hangisi doğru? 31, 4'ten büyük olduğu için 2.31.0 daha yeni."
+  }
+ ],
+ "tasks": [
+  {
+   "id": "d20-t1",
+   "title": "Satırı parçala",
+   "prompt": "`line` içindeki paket adını `name`, sürümü `version` değişkenine koy.",
+   "starter": "line = \"requests==2.31.0\"\n\nname = \"\"\nversion = \"\"\n\nprint(name, version)\n",
+   "solution": "line = \"requests==2.31.0\"\n\nname, version = line.split(\"==\")\n\nprint(name, version)\n",
+   "hints": [
+    "line.split(\"==\") iki parçalı bir liste verir.",
+    "Tuple açma gibi iki değişkene dağıtabilirsin."
+   ],
+   "check": {
+    "python": "\n_, g = _run(_set(_code, \"line\", \"pygame==2.5.2\"))\nassert g.get(\"name\") == \"pygame\" and g.get(\"version\") == \"2.5.2\", \"line 'pygame==2.5.2' iken name 'pygame', version '2.5.2' olmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "line = \"requests==2.31.0\"",
+      "notes": [
+       "`line` adında bir değişken oluşturuluyor ve içine `\"requests==2.31.0\"` (metin (str)) konuyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "name, version = line.split(\"==\")",
+      "notes": [
+       "`name, version`: sağdaki değerler sırayla bu değişkenlere dağıtılıyor (açma / unpacking)."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "print(name, version)",
+      "notes": [
+       "`print(name, version)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "line",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `\"requests==2.31.0\"`."
+     },
+     {
+      "term": "name",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `line.split(\"==\")`."
+     },
+     {
+      "term": "version",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `line.split(\"==\")`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": ".split()",
+      "kind": "metot",
+      "desc": "Metni parçalara böler ve liste yapar (varsayılan: boşluklardan)."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d20-t2",
+   "title": "requirements okuyucu",
+   "prompt": "`text` bir requirements.txt içeriği. Her satırı parçalayıp `packages` sözlüğüne `{paket: sürüm}` olarak ekle. Boş satırları atla.",
+   "starter": "text = \"\"\"requests==2.31.0\nflask==3.0.0\n\nnumpy==1.26.4\"\"\"\n\npackages = {}\n\nprint(packages)\n",
+   "solution": "text = \"\"\"requests==2.31.0\nflask==3.0.0\n\nnumpy==1.26.4\"\"\"\n\npackages = {}\nfor line in text.splitlines():\n    line = line.strip()\n    if line == \"\":\n        continue\n    name, version = line.split(\"==\")\n    packages[name] = version\n\nprint(packages)\n",
+   "hints": [
+    "text.splitlines() satırları verir.",
+    "Boş satırı atlamak için: if line == \"\": continue"
+   ],
+   "check": {
+    "python": "\n_, g = _run(_set(_code, \"text\", \"rich==13.7.0\\n\\npygame==2.5.2\\n\"))\nassert g.get(\"packages\") == {\"rich\": \"13.7.0\", \"pygame\": \"2.5.2\"}, \"packages, her paketin adını ve sürümünü içermeli; boş satırlar atlanmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "text = \"\"\"requests==2.31.0",
+      "notes": [
+       "`text` adında bir değişken oluşturuluyor ve içine `\"\"\"requests==2.31.0 flask==3.0.0 numpy==1.26.4\"\"\"` (metin (str)) konuyor."
+      ]
+     },
+     {
+      "n": 2,
+      "code": "flask==3.0.0",
+      "notes": [
+       "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "numpy==1.26.4\"\"\"",
+      "notes": [
+       "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+      ]
+     },
+     {
+      "n": 6,
+      "code": "packages = {}",
+      "notes": [
+       "`packages` adında bir değişken oluşturuluyor ve içine `{}` (sözlük (anahtar: değer)) konuyor."
+      ]
+     },
+     {
+      "n": 7,
+      "code": "for line in text.splitlines():",
+      "notes": [
+       "Döngü: `text.splitlines()` içindeki her eleman sırayla `line` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+      ]
+     },
+     {
+      "n": 8,
+      "code": "    line = line.strip()",
+      "notes": [
+       "`line` değişkenine yeni değer veriliyor: `line.strip()`."
+      ]
+     },
+     {
+      "n": 9,
+      "code": "    if line == \"\":",
+      "notes": [
+       "Koşul: `line == \"\"` doğruysa altındaki girintili satırlar çalışır."
+      ]
+     },
+     {
+      "n": 10,
+      "code": "        continue",
+      "notes": [
+       "`continue`: Döngünün bu turunu atlar, sıradakine geçer."
+      ]
+     },
+     {
+      "n": 11,
+      "code": "    name, version = line.split(\"==\")",
+      "notes": [
+       "`name, version`: sağdaki değerler sırayla bu değişkenlere dağıtılıyor (açma / unpacking)."
+      ]
+     },
+     {
+      "n": 12,
+      "code": "    packages[name] = version",
+      "notes": [
+       "`packages[...]` konumundaki değer `version` ile değiştiriliyor."
+      ]
+     },
+     {
+      "n": 14,
+      "code": "print(packages)",
+      "notes": [
+       "`print(packages)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "text",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `\"\"\"requests==2.31.0 flask==3.0.0 numpy==1.26.4\"\"\"`."
+     },
+     {
+      "term": "packages",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `{}`."
+     },
+     {
+      "term": "name",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `line.split(\"==\")`."
+     },
+     {
+      "term": "version",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `line.split(\"==\")`."
+     },
+     {
+      "term": "line",
+      "kind": "döngü değişkeni",
+      "desc": "Döngünün her turunda `text.splitlines()` içindeki sıradaki elemanı tutar."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "for",
+      "kind": "anahtar kelime",
+      "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+     },
+     {
+      "term": ".splitlines()",
+      "kind": "metot",
+      "desc": "Metni satırlarına böler."
+     },
+     {
+      "term": ".strip()",
+      "kind": "metot",
+      "desc": "Metnin başındaki ve sonundaki boşlukları siler."
+     },
+     {
+      "term": "if",
+      "kind": "anahtar kelime",
+      "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+     },
+     {
+      "term": "==",
+      "kind": "operatör",
+      "desc": "Eşit mi? (True/False)"
+     },
+     {
+      "term": "continue",
+      "kind": "anahtar kelime",
+      "desc": "Döngünün bu turunu atlar, sıradakine geçer."
+     },
+     {
+      "term": ".split()",
+      "kind": "metot",
+      "desc": "Metni parçalara böler ve liste yapar (varsayılan: boşluklardan)."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d20-t3",
+   "title": "Hangisi daha yeni?",
+   "prompt": "`v1` ve `v2` sürümlerini **sayı olarak** karşılaştır. Daha yeni olanı `newer` değişkenine koy (eşitse `v1`).",
+   "starter": "v1 = \"2.4.1\"\nv2 = \"2.31.0\"\n\nnewer = v1\n\nprint(\"Daha yeni:\", newer)\n",
+   "solution": "v1 = \"2.4.1\"\nv2 = \"2.31.0\"\n\nt1 = tuple(int(p) for p in v1.split(\".\"))\nt2 = tuple(int(p) for p in v2.split(\".\"))\nnewer = v2 if t2 > t1 else v1\n\nprint(\"Daha yeni:\", newer)\n",
+   "hints": [
+    "Her sürümü parçala: v1.split(\".\")",
+    "Parçaları int'e çevirip tuple yap, tuple'lar sayı gibi karşılaştırılır."
+   ],
+   "check": {
+    "python": "\nfor a, b, expected in [(\"2.4.1\", \"2.31.0\", \"2.31.0\"), (\"10.0.0\", \"9.9.9\", \"10.0.0\"), (\"1.2.3\", \"1.2.3\", \"1.2.3\"), (\"0.9\", \"0.10\", \"0.10\")]:\n    _, g = _run(_set(_set(_code, \"v1\", a), \"v2\", b))\n    assert g.get(\"newer\") == expected, a + \" ve \" + b + \" için daha yeni olan \" + expected + \" olmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "v1 = \"2.4.1\"",
+      "notes": [
+       "`v1` adında bir değişken oluşturuluyor ve içine `\"2.4.1\"` (metin (str)) konuyor."
+      ]
+     },
+     {
+      "n": 2,
+      "code": "v2 = \"2.31.0\"",
+      "notes": [
+       "`v2` adında bir değişken oluşturuluyor ve içine `\"2.31.0\"` (metin (str)) konuyor."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "t1 = tuple(int(p) for p in v1.split(\".\"))",
+      "notes": [
+       "`t1` adında bir değişken oluşturuluyor ve içine `tuple(int(p) for p in v1.split(\".\"))` konuyor.",
+       "Tek satırda döngüyle yeni bir liste/dizi üretiliyor."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "t2 = tuple(int(p) for p in v2.split(\".\"))",
+      "notes": [
+       "`t2` adında bir değişken oluşturuluyor ve içine `tuple(int(p) for p in v2.split(\".\"))` konuyor.",
+       "Tek satırda döngüyle yeni bir liste/dizi üretiliyor."
+      ]
+     },
+     {
+      "n": 6,
+      "code": "newer = v2 if t2 > t1 else v1",
+      "notes": [
+       "`newer` adında bir değişken oluşturuluyor ve içine `v2 if t2 > t1 else v1` konuyor."
+      ]
+     },
+     {
+      "n": 8,
+      "code": "print(\"Daha yeni:\", newer)",
+      "notes": [
+       "`print(\"Daha yeni:\", newer)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "v1",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `\"2.4.1\"`."
+     },
+     {
+      "term": "v2",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `\"2.31.0\"`."
+     },
+     {
+      "term": "t1",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `tuple(int(p) for p in v1.split(\".\"))`."
+     },
+     {
+      "term": "t2",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `tuple(int(p) for p in v2.split(\".\"))`."
+     },
+     {
+      "term": "newer",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `v2 if t2 > t1 else v1`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "tuple()",
+      "kind": "fonksiyon",
+      "desc": "Bir değerden tuple (değiştirilemeyen liste) oluşturur."
+     },
+     {
+      "term": "[... for ... in ...]",
+      "kind": "liste üreteci",
+      "desc": "Liste üreteci: [ifade for x in liste if koşul] ile tek satırda yeni liste."
+     },
+     {
+      "term": "int()",
+      "kind": "fonksiyon",
+      "desc": "Bir değeri tam sayıya çevirir, örneğin \"42\" yazısını 42 sayısına."
+     },
+     {
+      "term": ".split()",
+      "kind": "metot",
+      "desc": "Metni parçalara böler ve liste yapar (varsayılan: boşluklardan)."
+     },
+     {
+      "term": "A if ... else B",
+      "kind": "koşul",
+      "desc": "Tek satırlık koşul: A if koşul else B."
+     },
+     {
+      "term": ">",
+      "kind": "operatör",
+      "desc": "Büyük mü?"
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "id": "d20-c",
+  "title": "Eksik paketler",
+  "prompt": "`needed` projenin istediği paketler, `installed` kurulu olanlar. Kurulması gereken paketleri alfabetik sırayla `to_install` listesine koy.",
+  "starter": "needed = {\"requests\", \"pygame\", \"rich\"}\ninstalled = {\"pygame\", \"numpy\"}\n\nto_install = []\n\nprint(to_install)\n",
+  "solution": "needed = {\"requests\", \"pygame\", \"rich\"}\ninstalled = {\"pygame\", \"numpy\"}\n\nto_install = sorted(needed - installed)\n\nprint(to_install)\n",
+  "hints": [
+   "Set farkını hatırla: needed - installed",
+   "sorted() sonucu liste olarak verir."
+  ],
+  "check": {
+   "python": "\n_, g = _run(_set(_set(_code, \"needed\", {\"c\", \"a\", \"b\"}), \"installed\", {\"b\"}))\nassert g.get(\"to_install\") == [\"a\", \"c\"], \"to_install, kurulu olmayan paketlerin sıralı listesi olmalı.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "needed = {\"requests\", \"pygame\", \"rich\"}",
+     "notes": [
+      "`needed` adında bir değişken oluşturuluyor ve içine `{\"requests\", \"pygame\", \"rich\"}` (set (tekrarsız küme)) konuyor."
+     ]
+    },
+    {
+     "n": 2,
+     "code": "installed = {\"pygame\", \"numpy\"}",
+     "notes": [
+      "`installed` adında bir değişken oluşturuluyor ve içine `{\"pygame\", \"numpy\"}` (set (tekrarsız küme)) konuyor."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "to_install = sorted(needed - installed)",
+     "notes": [
+      "`to_install` adında bir değişken oluşturuluyor ve içine `sorted(needed - installed)` konuyor."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "print(to_install)",
+     "notes": [
+      "`print(to_install)`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "needed",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"requests\", \"pygame\", \"rich\"}`."
+    },
+    {
+     "term": "installed",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"pygame\", \"numpy\"}`."
+    },
+    {
+     "term": "to_install",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `sorted(needed - installed)`."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "sorted()",
+     "kind": "fonksiyon",
+     "desc": "Sıralanmış yeni bir liste verir; asıl liste değişmez."
+    },
+    {
+     "term": "-",
+     "kind": "operatör",
+     "desc": "Çıkarma."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    }
+   ]
+  }
+ },
+ "project_task": {
+  "id": "d20-p",
+  "title": "Paket listesi",
+  "prompt": "Oyunumuzu bilgisayarında çalıştırmak isteyenler için bir requirements.txt hazırlayalım. `packages` sözlüğünden, paketleri **alfabetik sırayla** `ad==sürüm` biçiminde satır satır içeren `requirements` yazısını oluştur ve yazdır:\n\n```\npygame==2.5.2\nrich==13.7.0\n```",
+  "starter": "packages = {\"rich\": \"13.7.0\", \"pygame\": \"2.5.2\"}\n\nrequirements = \"\"\n\nprint(requirements)\n",
+  "solution": "packages = {\"rich\": \"13.7.0\", \"pygame\": \"2.5.2\"}\n\nlines = [f\"{name}=={version}\" for name, version in sorted(packages.items())]\nrequirements = \"\\n\".join(lines)\n\nprint(requirements)\n",
+  "hints": [
+   "sorted(packages.items()) paketleri isme göre sıralar.",
+   "Satırları birleştirmek için \"\\n\".join(liste)"
+  ],
+  "check": {
+   "python": "\n_, g = _run(_set(_code, \"packages\", {\"numpy\": \"1.26.4\", \"flask\": \"3.0.0\", \"rich\": \"13.7.0\"}))\nreq = g.get(\"requirements\", \"\")\nassert req.strip().splitlines() == [\"flask==3.0.0\", \"numpy==1.26.4\", \"rich==13.7.0\"], \"requirements, alfabetik sırayla ad==sürüm satırlarından oluşmalı.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "packages = {\"rich\": \"13.7.0\", \"pygame\": \"2.5.2\"}",
+     "notes": [
+      "`packages` adında bir değişken oluşturuluyor ve içine `{\"rich\": \"13.7.0\", \"pygame\": \"2.5.2\"}` (sözlük (anahtar: değer)) konuyor."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "lines = [f\"{name}=={version}\" for name, version in sorted(packages.items())]",
+     "notes": [
+      "`lines` adında bir değişken oluşturuluyor ve içine `[f\"{name}=={version}\" for name, version in sorted(package...` (liste üreteciyle kurulan liste) konuyor.",
+      "Tek satırda döngüyle yeni bir liste/dizi üretiliyor."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "requirements = \"\\n\".join(lines)",
+     "notes": [
+      "`requirements` adında bir değişken oluşturuluyor ve içine `\"\\n\".join(lines)` konuyor."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "print(requirements)",
+     "notes": [
+      "`print(requirements)`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "packages",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"rich\": \"13.7.0\", \"pygame\": \"2.5.2\"}`."
+    },
+    {
+     "term": "lines",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `[f\"{name}=={version}\" for name, version in sorted(package...`."
+    },
+    {
+     "term": "requirements",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `\"\\n\".join(lines)`."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "[... for ... in ...]",
+     "kind": "liste üreteci",
+     "desc": "Liste üreteci: [ifade for x in liste if koşul] ile tek satırda yeni liste."
+    },
+    {
+     "term": "f\"...{}\"",
+     "kind": "metin",
+     "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+    },
+    {
+     "term": "sorted()",
+     "kind": "fonksiyon",
+     "desc": "Sıralanmış yeni bir liste verir; asıl liste değişmez."
+    },
+    {
+     "term": ".items()",
+     "kind": "metot",
+     "desc": "Sözlüğün (anahtar, değer) çiftlerini verir."
+    },
+    {
+     "term": ".join()",
+     "kind": "metot",
+     "desc": "Listedeki metinleri aradaki yazıyla birleştirir: \", \".join(liste)"
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    }
+   ]
+  }
+ },
+ "available": true,
+ "tracks": {
+  "veri": {
+   "project_task": {
+    "id": "d20-pv",
+    "title": "requirements.txt",
+    "prompt": "Harcama Defteri'ni başka bir bilgisayarda çalıştırmak için gereken paketleri yazalım. `packages` sözlüğünden (paket -> sürüm), paketleri **alfabetik sırayla** `ad==sürüm` biçiminde satır satır içeren `requirements` yazısını oluştur ve yazdır:\n\n```\nmatplotlib==3.8.2\npandas==2.1.4\n```",
+    "starter": "packages = {\"pandas\": \"2.1.4\", \"matplotlib\": \"3.8.2\"}\n",
+    "solution": "packages = {\"pandas\": \"2.1.4\", \"matplotlib\": \"3.8.2\"}\nlines = []\nfor name in sorted(packages):\n    lines.append(f\"{name}=={packages[name]}\")\nrequirements = \"\\n\".join(lines)\nprint(requirements)\n",
+    "hints": [
+     "sorted(packages) anahtarları alfabetik verir.",
+     "\"\\n\".join(lines) satırları alt alta birleştirir."
+    ],
+    "check": {
+     "python": "\n_, g = _run(_set(_code, \"packages\", {\"numpy\": \"1.26.4\", \"flask\": \"3.0.0\", \"rich\": \"13.7.0\"}))\nreq = g.get(\"requirements\", \"\")\nassert req.strip().splitlines() == [\"flask==3.0.0\", \"numpy==1.26.4\", \"rich==13.7.0\"], \"requirements, alfabetik sırayla ad==sürüm satırları olmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "packages = {\"pandas\": \"2.1.4\", \"matplotlib\": \"3.8.2\"}",
+       "notes": [
+        "`packages` adında bir değişken oluşturuluyor ve içine `{\"pandas\": \"2.1.4\", \"matplotlib\": \"3.8.2\"}` (sözlük (anahtar: değer)) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "lines = []",
+       "notes": [
+        "`lines` adında bir değişken oluşturuluyor ve içine `[]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "for name in sorted(packages):",
+       "notes": [
+        "Döngü: `sorted(packages)` içindeki her eleman sırayla `name` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "    lines.append(f\"{name}=={packages[name]}\")",
+       "notes": [
+        "`lines.append(f\"{name}=={packages[name]}\")`: `lines` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "requirements = \"\\n\".join(lines)",
+       "notes": [
+        "`requirements` adında bir değişken oluşturuluyor ve içine `\"\\n\".join(lines)` konuyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "print(requirements)",
+       "notes": [
+        "`print(requirements)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "packages",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"pandas\": \"2.1.4\", \"matplotlib\": \"3.8.2\"}`."
+      },
+      {
+       "term": "lines",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[]`."
+      },
+      {
+       "term": "requirements",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"\\n\".join(lines)`."
+      },
+      {
+       "term": "name",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `sorted(packages)` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": "sorted()",
+       "kind": "fonksiyon",
+       "desc": "Sıralanmış yeni bir liste verir; asıl liste değişmez."
+      },
+      {
+       "term": ".append()",
+       "kind": "metot",
+       "desc": "Listenin sonuna yeni bir eleman ekler."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": ".join()",
+       "kind": "metot",
+       "desc": "Listedeki metinleri aradaki yazıyla birleştirir: \", \".join(liste)"
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Paket listesi",
+   "game_role": "Programın ihtiyaç duyduğu paketleri requirements.txt biçiminde yazar."
+  },
+  "otomasyon": {
+   "project_task": {
+    "id": "d20-po",
+    "title": "requirements.txt okuma",
+    "prompt": "Asistan bir projenin `requirements.txt` dosyasını okuyabilsin. `parse_requirements(text)`:\n\n- Her `ad==sürüm` satırını sözlüğe koysun: `{\"requests\": \"2.31.0\"}`\n- Boş satırları ve `#` ile başlayan yorum satırlarını atlasın.",
+    "starter": "def parse_requirements(text):\n    pass\n",
+    "solution": "def parse_requirements(text):\n    packages = {}\n    for line in text.splitlines():\n        line = line.strip()\n        if not line or line.startswith(\"#\"):\n            continue\n        name, version = line.split(\"==\")\n        packages[name] = version\n    return packages\n",
+    "hints": [
+     "text.splitlines() satırları verir.",
+     "line.split(\"==\") adı ve sürümü ayırır."
+    ],
+    "check": {
+     "python": "\ntext = \"# asistan paketleri\\nrequests==2.31.0\\n\\nschedule==1.2.1\\n\"\nassert parse_requirements(text) == {\"requests\": \"2.31.0\", \"schedule\": \"1.2.1\"}, \"İki paketi de sözlüğe koymalı, yorumu ve boş satırı atlamalı.\"\nassert parse_requirements(\"\") == {}, \"Boş metin için boş sözlük.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "def parse_requirements(text):",
+       "notes": [
+        "`parse_requirements` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `text`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "    packages = {}",
+       "notes": [
+        "`packages` adında bir değişken oluşturuluyor ve içine `{}` (sözlük (anahtar: değer)) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "    for line in text.splitlines():",
+       "notes": [
+        "Döngü: `text.splitlines()` içindeki her eleman sırayla `line` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "        line = line.strip()",
+       "notes": [
+        "`line` değişkenine yeni değer veriliyor: `line.strip()`."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "        if not line or line.startswith(\"#\"):",
+       "notes": [
+        "Koşul: `not line or line.startswith(\"#\")` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "            continue",
+       "notes": [
+        "`continue`: Döngünün bu turunu atlar, sıradakine geçer."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "        name, version = line.split(\"==\")",
+       "notes": [
+        "`name, version`: sağdaki değerler sırayla bu değişkenlere dağıtılıyor (açma / unpacking)."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "        packages[name] = version",
+       "notes": [
+        "`packages[...]` konumundaki değer `version` ile değiştiriliyor."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "    return packages",
+       "notes": [
+        "Fonksiyon `packages` değerini geri verir ve burada biter."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "packages",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `{}`."
+      },
+      {
+       "term": "name",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `line.split(\"==\")`."
+      },
+      {
+       "term": "version",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `line.split(\"==\")`."
+      },
+      {
+       "term": "line",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `text.splitlines()` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "text",
+       "kind": "parametre",
+       "desc": "`parse_requirements` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "parse_requirements()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `text`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": ".splitlines()",
+       "kind": "metot",
+       "desc": "Metni satırlarına böler."
+      },
+      {
+       "term": ".strip()",
+       "kind": "metot",
+       "desc": "Metnin başındaki ve sonundaki boşlukları siler."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "or",
+       "kind": "operatör",
+       "desc": "\"veya\": koşullardan biri doğruysa True."
+      },
+      {
+       "term": "not",
+       "kind": "operatör",
+       "desc": "Koşulu tersine çevirir (True ↔ False)."
+      },
+      {
+       "term": ".startswith()",
+       "kind": "metot",
+       "desc": "Metin verilen yazıyla mı başlıyor? (True/False)"
+      },
+      {
+       "term": "continue",
+       "kind": "anahtar kelime",
+       "desc": "Döngünün bu turunu atlar, sıradakine geçer."
+      },
+      {
+       "term": ".split()",
+       "kind": "metot",
+       "desc": "Metni parçalara böler ve liste yapar (varsayılan: boşluklardan)."
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Paket okuyucu",
+   "game_role": "requirements.txt dosyasını okuyup hangi paketin hangi sürümü istendiğini bulur."
+  },
+  "web": {
+   "project_task": {
+    "id": "d20-pw",
+    "title": "requirements.txt okuma",
+    "prompt": "Arkadaşın site üreticini kendi bilgisayarında çalıştırmak istiyor. `requirements` yazısındaki paketleri okuyup `versions` sözlüğüne koy (paket -> sürüm):\n\n- `==` içermeyen satırları (boş satırlar ve `#` ile başlayan yorumlar) atla.\n- Kalan satırları `split(\"==\")` ile ad ve sürüme ayır.\n\nSonra paket sayısını ve paketleri **alfabetik sırayla** yazdır:\n\n```\n3 paket\nbeautifulsoup4: 4.12.3\njinja2: 3.1.3\nmarkdown: 3.5.2\n```",
+    "starter": "requirements = \"\"\"markdown==3.5.2\n# sayfaları güzelleştirmek için\njinja2==3.1.3\n\nbeautifulsoup4==4.12.3\n\"\"\"\nversions = {}\n",
+    "solution": "requirements = \"\"\"markdown==3.5.2\n# sayfaları güzelleştirmek için\njinja2==3.1.3\n\nbeautifulsoup4==4.12.3\n\"\"\"\nversions = {}\nfor line in requirements.splitlines():\n    if \"==\" not in line:\n        continue\n    name, version = line.strip().split(\"==\")\n    versions[name] = version\nprint(len(versions), \"paket\")\nfor name in sorted(versions):\n    print(f\"{name}: {versions[name]}\")\n",
+    "hints": [
+     "for line in requirements.splitlines(): her satırı sırayla verir; if \"==\" not in line: continue ile atla.",
+     "name, version = line.strip().split(\"==\")"
+    ],
+    "check": {
+     "python": "\ntest = \"flask==3.0.0\\n# yorum\\nrich==13.7.0\\n\\nnumpy==1.26.4\\n\"\nout, g = _run(_set(_code, \"requirements\", test))\nassert g.get(\"versions\") == {\"flask\": \"3.0.0\", \"rich\": \"13.7.0\", \"numpy\": \"1.26.4\"}, \"versions, paket -> sürüm sözlüğü olmalı; yorum ve boş satırları atla.\"\nlines = [l.strip() for l in out.strip().splitlines()]\nassert lines == [\"3 paket\", \"flask: 3.0.0\", \"numpy: 1.26.4\", \"rich: 13.7.0\"], \"Önce '3 paket', sonra paketleri alfabetik sırayla 'ad: sürüm' biçiminde yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "requirements = \"\"\"markdown==3.5.2",
+       "notes": [
+        "`requirements` adında bir değişken oluşturuluyor ve içine `\"\"\"markdown==3.5.2 # sayfaları güzelleştirmek için jinja2...` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "# sayfaları güzelleştirmek için",
+       "notes": [
+        "Yorum satırı: `#` ile başlayan satırı Python çalıştırmaz, kodu okuyana not bırakır."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "jinja2==3.1.3",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "beautifulsoup4==4.12.3",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "\"\"\"",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "versions = {}",
+       "notes": [
+        "`versions` adında bir değişken oluşturuluyor ve içine `{}` (sözlük (anahtar: değer)) konuyor."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "for line in requirements.splitlines():",
+       "notes": [
+        "Döngü: `requirements.splitlines()` içindeki her eleman sırayla `line` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "    if \"==\" not in line:",
+       "notes": [
+        "Koşul: `\"==\" not in line` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "        continue",
+       "notes": [
+        "`continue`: Döngünün bu turunu atlar, sıradakine geçer."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "    name, version = line.strip().split(\"==\")",
+       "notes": [
+        "`name, version`: sağdaki değerler sırayla bu değişkenlere dağıtılıyor (açma / unpacking)."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "    versions[name] = version",
+       "notes": [
+        "`versions[...]` konumundaki değer `version` ile değiştiriliyor."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "print(len(versions), \"paket\")",
+       "notes": [
+        "`print(len(versions), \"paket\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 14,
+       "code": "for name in sorted(versions):",
+       "notes": [
+        "Döngü: `sorted(versions)` içindeki her eleman sırayla `name` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 15,
+       "code": "    print(f\"{name}: {versions[name]}\")",
+       "notes": [
+        "`print(f\"{name}: {versions[name]}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "requirements",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"\"\"markdown==3.5.2 # sayfaları güzelleştirmek için jinja2...`."
+      },
+      {
+       "term": "versions",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `{}`."
+      },
+      {
+       "term": "name",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `line.strip().split(\"==\")`."
+      },
+      {
+       "term": "version",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `line.strip().split(\"==\")`."
+      },
+      {
+       "term": "line",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `requirements.splitlines()` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": ".splitlines()",
+       "kind": "metot",
+       "desc": "Metni satırlarına böler."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "not in",
+       "kind": "operatör",
+       "desc": "İçinde yok mu?"
+      },
+      {
+       "term": "continue",
+       "kind": "anahtar kelime",
+       "desc": "Döngünün bu turunu atlar, sıradakine geçer."
+      },
+      {
+       "term": ".split()",
+       "kind": "metot",
+       "desc": "Metni parçalara böler ve liste yapar (varsayılan: boşluklardan)."
+      },
+      {
+       "term": ".strip()",
+       "kind": "metot",
+       "desc": "Metnin başındaki ve sonundaki boşlukları siler."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      },
+      {
+       "term": "sorted()",
+       "kind": "fonksiyon",
+       "desc": "Sıralanmış yeni bir liste verir; asıl liste değişmez."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Paket listesi okuyucu",
+   "game_role": "requirements.txt dosyasını okuyup sitenin hangi paketlere ihtiyaç duyduğunu çıkarır."
+  },
+  "bot": {
+   "project_task": {
+    "id": "d20-pb",
+    "title": "Paket kontrolü",
+    "prompt": "Botun çalışması için gereken paketler `requirements` yazısında (`requirements.txt` gibi, her satırda `ad==sürüm`). Bilgisayarda kurulu olanlar `installed` sözlüğünde (paket -> sürüm).\n\n- `missing`: hiç kurulu olmayan paketlerin adları\n- `different`: kurulu ama sürümü farklı olan paketlerin adları\n\nSatırları `requirements.splitlines()` ile, adı ve sürümü `line.split(\"==\")` ile ayırabilirsin. Sonra şöyle yazdır:\n\n```\nEksik: ['beautifulsoup4']\nFarklı sürüm: ['pandas']\nÇalıştır: pip install -r requirements.txt\n```\n\nEksik ya da farklı sürümlü paket yoksa son satır yerine `Her şey hazır!` yazdır.",
+    "starter": "requirements = \"\"\"requests==2.31.0\nbeautifulsoup4==4.12.3\npandas==2.1.4\"\"\"\ninstalled = {\"requests\": \"2.31.0\", \"pandas\": \"2.0.3\"}\n",
+    "solution": "requirements = \"\"\"requests==2.31.0\nbeautifulsoup4==4.12.3\npandas==2.1.4\"\"\"\ninstalled = {\"requests\": \"2.31.0\", \"pandas\": \"2.0.3\"}\nmissing = []\ndifferent = []\nfor line in requirements.splitlines():\n    name, version = line.split(\"==\")\n    if name not in installed:\n        missing.append(name)\n    elif installed[name] != version:\n        different.append(name)\nprint(\"Eksik:\", missing)\nprint(\"Farklı sürüm:\", different)\nif missing or different:\n    print(\"Çalıştır: pip install -r requirements.txt\")\nelse:\n    print(\"Her şey hazır!\")\n",
+    "hints": [
+     "name, version = line.split(\"==\") satırı iki parçaya ayırır.",
+     "Önce name not in installed, sonra elif installed[name] != version."
+    ],
+    "check": {
+     "python": "\nout, g = _run(_set(_set(_code, \"requirements\", \"a==1\\nb==2\\nc==3\"), \"installed\", {\"a\": \"1\", \"c\": \"4\", \"z\": \"9\"}))\nassert g.get(\"missing\") == [\"b\"], \"missing, kurulu olmayan paketlerin listesi olmalı.\"\nassert g.get(\"different\") == [\"c\"], \"different, sürümü farklı olan paketlerin listesi olmalı.\"\nassert \"Eksik: ['b']\" in out and \"Farklı sürüm: ['c']\" in out, \"Eksik ve Farklı sürüm satırlarını yazdır.\"\nassert \"Çalıştır: pip install -r requirements.txt\" in out and \"Her şey hazır!\" not in out, \"Eksik ya da farklı paket varsa pip komutunu yazdır.\"\nout, _ = _run(_set(_code, \"installed\", {\"requests\": \"2.31.0\", \"beautifulsoup4\": \"4.12.3\", \"pandas\": \"2.1.4\"}))\nassert \"Her şey hazır!\" in out and \"pip install\" not in out, \"Her paket doğru sürümle kuruluysa 'Her şey hazır!' yazmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "requirements = \"\"\"requests==2.31.0",
+       "notes": [
+        "`requirements` adında bir değişken oluşturuluyor ve içine `\"\"\"requests==2.31.0 beautifulsoup4==4.12.3 pandas==2.1.4\"\"\"` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "beautifulsoup4==4.12.3",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "pandas==2.1.4\"\"\"",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "installed = {\"requests\": \"2.31.0\", \"pandas\": \"2.0.3\"}",
+       "notes": [
+        "`installed` adında bir değişken oluşturuluyor ve içine `{\"requests\": \"2.31.0\", \"pandas\": \"2.0.3\"}` (sözlük (anahtar: değer)) konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "missing = []",
+       "notes": [
+        "`missing` adında bir değişken oluşturuluyor ve içine `[]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "different = []",
+       "notes": [
+        "`different` adında bir değişken oluşturuluyor ve içine `[]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "for line in requirements.splitlines():",
+       "notes": [
+        "Döngü: `requirements.splitlines()` içindeki her eleman sırayla `line` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "    name, version = line.split(\"==\")",
+       "notes": [
+        "`name, version`: sağdaki değerler sırayla bu değişkenlere dağıtılıyor (açma / unpacking)."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "    if name not in installed:",
+       "notes": [
+        "Koşul: `name not in installed` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "        missing.append(name)",
+       "notes": [
+        "`missing.append(name)`: `missing` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "    elif installed[name] != version:",
+       "notes": [
+        "`elif`: yukarıdaki koşul yanlışsa `installed[name] != version` koşuluna bakılır."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "        different.append(name)",
+       "notes": [
+        "`different.append(name)`: `different` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "print(\"Eksik:\", missing)",
+       "notes": [
+        "`print(\"Eksik:\", missing)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 14,
+       "code": "print(\"Farklı sürüm:\", different)",
+       "notes": [
+        "`print(\"Farklı sürüm:\", different)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 15,
+       "code": "if missing or different:",
+       "notes": [
+        "Koşul: `missing or different` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 16,
+       "code": "    print(\"Çalıştır: pip install -r requirements.txt\")",
+       "notes": [
+        "`print(\"Çalıştır: pip install -r requirements.txt\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 17,
+       "code": "else:",
+       "notes": [
+        "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+       ]
+      },
+      {
+       "n": 18,
+       "code": "    print(\"Her şey hazır!\")",
+       "notes": [
+        "`print(\"Her şey hazır!\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "requirements",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"\"\"requests==2.31.0 beautifulsoup4==4.12.3 pandas==2.1.4\"\"\"`."
+      },
+      {
+       "term": "installed",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"requests\": \"2.31.0\", \"pandas\": \"2.0.3\"}`."
+      },
+      {
+       "term": "missing",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[]`."
+      },
+      {
+       "term": "different",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[]`."
+      },
+      {
+       "term": "name",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `line.split(\"==\")`."
+      },
+      {
+       "term": "version",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `line.split(\"==\")`."
+      },
+      {
+       "term": "line",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `requirements.splitlines()` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": ".splitlines()",
+       "kind": "metot",
+       "desc": "Metni satırlarına böler."
+      },
+      {
+       "term": ".split()",
+       "kind": "metot",
+       "desc": "Metni parçalara böler ve liste yapar (varsayılan: boşluklardan)."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "not in",
+       "kind": "operatör",
+       "desc": "İçinde yok mu?"
+      },
+      {
+       "term": ".append()",
+       "kind": "metot",
+       "desc": "Listenin sonuna yeni bir eleman ekler."
+      },
+      {
+       "term": "elif",
+       "kind": "anahtar kelime",
+       "desc": "Önceki koşullar yanlışsa bu koşula bakılır (\"değilse eğer\")."
+      },
+      {
+       "term": "!=",
+       "kind": "operatör",
+       "desc": "Eşit değil mi?"
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "or",
+       "kind": "operatör",
+       "desc": "\"veya\": koşullardan biri doğruysa True."
+      },
+      {
+       "term": "else",
+       "kind": "anahtar kelime",
+       "desc": "Yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Kurulum kontrolü",
+   "game_role": "Botun ihtiyaç duyduğu paketlerin kurulu olup olmadığını denetler."
+  },
+  "okul": {
+   "project_task": {
+    "id": "d20-pn",
+    "title": "Eksik paketler",
+    "prompt": "Not Defteri'nin ileride kullanacağı paketler `required` yazısında (`requirements.txt` biçiminde, her satır `ad==sürüm`). Bilgisayarında kurulu olanlar `installed` sözlüğünde (paket -> sürüm).\n\n- `to_install`: kurulu olmayan **ya da** sürümü farklı olan satırların listesi (`required`'daki sırayla)\n- `to_install` boş değilse `pip install` komutunu yazdır:\n\n```\npip install beautifulsoup4==4.12.3 numpy==1.26.4\n```\n\n- Boşsa `Tüm paketler kurulu.` yazdır.",
+    "starter": "required = \"\"\"pandas==2.1.4\nbeautifulsoup4==4.12.3\nnumpy==1.26.4\"\"\"\ninstalled = {\"pandas\": \"2.1.4\", \"numpy\": \"1.24.0\"}\n",
+    "solution": "required = \"\"\"pandas==2.1.4\nbeautifulsoup4==4.12.3\nnumpy==1.26.4\"\"\"\ninstalled = {\"pandas\": \"2.1.4\", \"numpy\": \"1.24.0\"}\nto_install = []\nfor line in required.splitlines():\n    name, version = line.split(\"==\")\n    if installed.get(name) != version:\n        to_install.append(line)\nif to_install:\n    print(\"pip install \" + \" \".join(to_install))\nelse:\n    print(\"Tüm paketler kurulu.\")\n",
+    "hints": [
+     "required.splitlines() satırları verir; line.split(\"==\") adı ve sürümü ayırır.",
+     "installed.get(name) paket kurulu değilse None verir; sürümle karşılaştır. \" \".join(to_install) listeyi boşlukla birleştirir."
+    ],
+    "check": {
+     "python": "\nout, g = _run(_set(_set(_code, \"required\", \"a==1\\nb==2\\nc==3\"), \"installed\", {\"a\": \"1\", \"c\": \"4\"}))\nassert g.get(\"to_install\") == [\"b==2\", \"c==3\"], \"to_install, kurulu olmayan ya da sürümü farklı olan satırlar olmalı.\"\nassert \"pip install b==2 c==3\" in out, \"'pip install b==2 c==3' gibi tek satırlık bir komut yazdırmalı.\"\nout, g = _run(_set(_set(_code, \"required\", \"a==1\\nb==2\"), \"installed\", {\"a\": \"1\", \"b\": \"2\"}))\nassert g.get(\"to_install\") == [] and \"Tüm paketler kurulu.\" in out and \"pip\" not in out, \"Her şey kuruluysa sadece 'Tüm paketler kurulu.' yazmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "required = \"\"\"pandas==2.1.4",
+       "notes": [
+        "`required` adında bir değişken oluşturuluyor ve içine `\"\"\"pandas==2.1.4 beautifulsoup4==4.12.3 numpy==1.26.4\"\"\"` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "beautifulsoup4==4.12.3",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "numpy==1.26.4\"\"\"",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "installed = {\"pandas\": \"2.1.4\", \"numpy\": \"1.24.0\"}",
+       "notes": [
+        "`installed` adında bir değişken oluşturuluyor ve içine `{\"pandas\": \"2.1.4\", \"numpy\": \"1.24.0\"}` (sözlük (anahtar: değer)) konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "to_install = []",
+       "notes": [
+        "`to_install` adında bir değişken oluşturuluyor ve içine `[]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "for line in required.splitlines():",
+       "notes": [
+        "Döngü: `required.splitlines()` içindeki her eleman sırayla `line` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "    name, version = line.split(\"==\")",
+       "notes": [
+        "`name, version`: sağdaki değerler sırayla bu değişkenlere dağıtılıyor (açma / unpacking)."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "    if installed.get(name) != version:",
+       "notes": [
+        "Koşul: `installed.get(name) != version` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "        to_install.append(line)",
+       "notes": [
+        "`to_install.append(line)`: `to_install` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "if to_install:",
+       "notes": [
+        "Koşul: `to_install` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "    print(\"pip install \" + \" \".join(to_install))",
+       "notes": [
+        "`print(\"pip install \" + \" \".join(to_install))`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "else:",
+       "notes": [
+        "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "    print(\"Tüm paketler kurulu.\")",
+       "notes": [
+        "`print(\"Tüm paketler kurulu.\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "required",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"\"\"pandas==2.1.4 beautifulsoup4==4.12.3 numpy==1.26.4\"\"\"`."
+      },
+      {
+       "term": "installed",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"pandas\": \"2.1.4\", \"numpy\": \"1.24.0\"}`."
+      },
+      {
+       "term": "to_install",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[]`."
+      },
+      {
+       "term": "name",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `line.split(\"==\")`."
+      },
+      {
+       "term": "version",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `line.split(\"==\")`."
+      },
+      {
+       "term": "line",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `required.splitlines()` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": ".splitlines()",
+       "kind": "metot",
+       "desc": "Metni satırlarına böler."
+      },
+      {
+       "term": ".split()",
+       "kind": "metot",
+       "desc": "Metni parçalara böler ve liste yapar (varsayılan: boşluklardan)."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "!=",
+       "kind": "operatör",
+       "desc": "Eşit değil mi?"
+      },
+      {
+       "term": ".get()",
+       "kind": "metot",
+       "desc": "Sözlükten anahtarın değerini alır; anahtar yoksa hata vermez, varsayılanı verir."
+      },
+      {
+       "term": ".append()",
+       "kind": "metot",
+       "desc": "Listenin sonuna yeni bir eleman ekler."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "+",
+       "kind": "operatör",
+       "desc": "Toplama; metinlerde ve listelerde uç uca ekleme."
+      },
+      {
+       "term": ".join()",
+       "kind": "metot",
+       "desc": "Listedeki metinleri aradaki yazıyla birleştirir: \", \".join(liste)"
+      },
+      {
+       "term": "else",
+       "kind": "anahtar kelime",
+       "desc": "Yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Kurulum kontrolü",
+   "game_role": "Gereken paketlerden hangilerinin eksik olduğunu bulup pip komutunu hazırlar."
+  }
+ }
+}

@@ -1,0 +1,240 @@
+{
+ "day": 23,
+ "title": "Oyun döngüsü",
+ "region": "piksel",
+ "xp_complete": 150,
+ "objective": "oyunun durumunu bir nesnede tutmak, dikdörtgen çarpışmasını hesaplamak, skor ve oyun bitti durumunu yönetmek",
+ "story": "Piksel Gezegeni'nin son durağındasın. Çizmeyi ve hareket ettirmeyi öğrendin; şimdi hepsini birleştirip gerçek bir **oyun döngüsü** kuracaksın: hareket et, çarpışmaları yakala, puan topla, gerekirse oyunu bitir.",
+ "sections": [
+  {
+   "title": "Oyunun durumu tek yerde",
+   "body": "Bir oyunda o anki her şey (oyuncunun yeri, yıldızlar, skor, oyun bitti mi) **durum** (state) olarak adlandırılır. Hepsini tek bir nesnede tutmak işleri çok kolaylaştırır:\n\n```js\nconst game = {\n  player: { x: 20, y: 150, w: 30, h: 20 },\n  stars: [{ x: 120, y: 40, w: 12, h: 12 }],\n  score: 0,\n  over: false,\n};\n```\n\nArtık `console.log(game)` bütün oyunu gösterir; kaydetmek, yeniden başlatmak ve hata aramak kolaylaşır."
+  },
+  {
+   "title": "Döngünün üç adımı",
+   "body": "Her karede aynı sıra izlenir: **güncelle → çarpışmaları kontrol et → çiz**.\n\n```js\nfunction step() {\n  if (!game.over) {\n    update();   // her şeyi hareket ettir\n    collide();  // çarpışmalara bak, puanı değiştir\n  }\n  draw();       // durumu ekrana çiz\n}\n\nfunction loop() {\n  step();\n  requestAnimationFrame(loop);\n}\n```\n\nSıra önemli: önce hareket, sonra çarpışma, en son çizim. Böylece ekranda her zaman en güncel durum görünür. Oyun bitince `update` ve `collide` durur ama `draw` son hali göstermeye devam eder."
+  },
+  {
+   "title": "Dikdörtgen çarpışması (AABB)",
+   "body": "İki dikdörtgen, hem yatayda **hem de** dikeyde üst üste biniyorsa çarpışır. Bunu dört koşulla yazarız:\n\n```js\nfunction hits(a, b) {\n  return a.x < b.x + b.w &&  // a, b'nin sağ kenarından önce başlıyor\n         a.x + a.w > b.x &&  // a'nın sağ kenarı b'nin solunu geçiyor\n         a.y < b.y + b.h &&  // dikeyde de aynısı\n         a.y + a.h > b.y;\n}\n```\n\nDört koşuldan biri bile yanlışsa aralarında boşluk vardır. Tam kenar kenara değmek (`a.x + a.w === b.x`) çarpışma sayılmaz.\n\nOyunlarda buna **AABB** (eksenlere hizalı kutu) testi denir: çok hızlıdır ve çoğu oyuna yeter. Daire şeklindeki nesneler için bile çoğu zaman çevrelerindeki kutu kullanılır."
+  },
+  {
+   "title": "Toplamak, oyun bitti, yeniden başla",
+   "body": "Değen yıldızları çıkarıp her biri için puan vermenin güvenli yolu `filter`'dır (döngü içinde diziden eleman silmek karışıklık çıkarır):\n\n```js\nconst before = game.stars.length;\ngame.stars = game.stars.filter((s) => !hits(game.player, s));\ngame.score += before - game.stars.length;\nif (game.stars.length === 0) game.over = true;\n```\n\nYeniden başlatmak için durumu sıfırdan kuran bir fonksiyon yaz:\n\n```js\nfunction newGame() {\n  return { player: { x: 20, y: 150, w: 30, h: 20 }, stars: makeStars(), score: 0, over: false };\n}\nlet game = newGame();\nfunction restart() {\n  game = newGame();\n}\n```\n\nHer seferinde **yeni** nesne ve **yeni** dizi üretmek önemli: eski diziyi tekrar kullanırsan toplanmış yıldızlar geri gelmez."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Çarpışma dedektörü",
+   "code": "const canvas = document.querySelector(\"#c\");\nconst ctx = canvas.getContext(\"2d\");\nconst wall = { x: 130, y: 30, w: 40, h: 40 };\nconst box = { x: 0, y: 40, w: 20, h: 20, vx: 1.5 };\n\nfunction hits(a, b) {\n  return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;\n}\n\nfunction step() {\n  box.x += box.vx;\n  if (box.x > canvas.width) box.x = -box.w;\n  const hit = hits(box, wall);\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  ctx.fillStyle = hit ? \"#e53935\" : \"#9e9e9e\";\n  ctx.fillRect(wall.x, wall.y, wall.w, wall.h);\n  ctx.fillStyle = \"#4fc3f7\";\n  ctx.fillRect(box.x, box.y, box.w, box.h);\n  document.querySelector(\"#info\").textContent = hit ? \"Çarpışma!\" : \"Yol açık\";\n}\n\nfunction loop() {\n  step();\n  requestAnimationFrame(loop);\n}\nloop();\n",
+   "note": "Kutu duvara girince duvar kırmızı olur. wall.y'yi 70 yap: artık çarpışmaz.",
+   "mode": "page",
+   "html": "<canvas id=\"c\" width=\"240\" height=\"100\"></canvas>\n<p id=\"info\"></p>\n",
+   "css": "canvas{background:#e8ebf3;border-radius:8px;max-width:100%;display:block}"
+  },
+  {
+   "title": "Mini oyun: yıldız topla",
+   "code": "const canvas = document.querySelector(\"#c\");\nconst ctx = canvas.getContext(\"2d\");\nconst info = document.querySelector(\"#info\");\n\nfunction hits(a, b) {\n  return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;\n}\n\nfunction newGame() {\n  return {\n    player: { x: 10, y: 40, w: 20, h: 20, vx: 0, vy: 0 },\n    stars: [\n      { x: 80, y: 20, w: 10, h: 10 },\n      { x: 150, y: 70, w: 10, h: 10 },\n      { x: 210, y: 30, w: 10, h: 10 },\n    ],\n    score: 0,\n    over: false,\n  };\n}\nlet game = newGame();\n\ndocument.addEventListener(\"keydown\", (e) => {\n  const p = game.player;\n  if (e.key === \"ArrowRight\") p.vx = 2;\n  if (e.key === \"ArrowLeft\") p.vx = -2;\n  if (e.key === \"ArrowUp\") p.vy = -2;\n  if (e.key === \"ArrowDown\") p.vy = 2;\n  if (e.key === \"r\") game = newGame();\n});\ndocument.addEventListener(\"keyup\", () => {\n  game.player.vx = 0;\n  game.player.vy = 0;\n});\n\nfunction update() {\n  const p = game.player;\n  p.x = Math.max(0, Math.min(p.x + p.vx, canvas.width - p.w));\n  p.y = Math.max(0, Math.min(p.y + p.vy, canvas.height - p.h));\n}\n\nfunction collide() {\n  const before = game.stars.length;\n  game.stars = game.stars.filter((s) => !hits(game.player, s));\n  game.score += before - game.stars.length;\n  if (game.stars.length === 0) game.over = true;\n}\n\nfunction draw() {\n  ctx.fillStyle = \"#0b1026\";\n  ctx.fillRect(0, 0, canvas.width, canvas.height);\n  ctx.fillStyle = \"#f7df1e\";\n  for (const s of game.stars) ctx.fillRect(s.x, s.y, s.w, s.h);\n  ctx.fillStyle = \"#4fc3f7\";\n  ctx.fillRect(game.player.x, game.player.y, game.player.w, game.player.h);\n  info.textContent = game.over ? \"Tebrikler! Yeniden başlamak için R tuşu\" : \"Skor: \" + game.score;\n}\n\nfunction loop() {\n  if (!game.over) {\n    update();\n    collide();\n  }\n  draw();\n  requestAnimationFrame(loop);\n}\nloop();\n",
+   "note": "Önizlemeye tıkla, sonra ok tuşlarıyla gemiyi yönet.",
+   "mode": "page",
+   "html": "<canvas id=\"c\" width=\"240\" height=\"100\"></canvas>\n<p id=\"info\"></p>\n",
+   "css": "canvas{border-radius:8px;max-width:100%}"
+  }
+ ],
+ "tasks": [
+  {
+   "id": "js-d23-t1",
+   "title": "Çarpışıyor mu?",
+   "prompt": "`hits(a, b)` fonksiyonunu yaz: `{ x, y, w, h }` biçimindeki iki dikdörtgen üst üste biniyorsa `true`, binmiyorsa `false` döndürsün.\n\nKenar kenara değmek çarpışma sayılmaz. Alttaki kod sonucu `#info`'ya yazıyor.",
+   "starter": "const ctx = document.querySelector(\"#c\").getContext(\"2d\");\nconst ship = { x: 40, y: 40, w: 40, h: 30 };\nconst rock = { x: 70, y: 60, w: 30, h: 30 };\n\nfunction hits(a, b) {\n  // dört koşul\n  return false;\n}\n\nctx.fillStyle = \"#4fc3f7\";\nctx.fillRect(ship.x, ship.y, ship.w, ship.h);\nctx.fillStyle = \"#9e9e9e\";\nctx.fillRect(rock.x, rock.y, rock.w, rock.h);\ndocument.querySelector(\"#info\").textContent = \"Çarpışma: \" + (hits(ship, rock) ? \"evet\" : \"hayır\");\n",
+   "solution": "const ctx = document.querySelector(\"#c\").getContext(\"2d\");\nconst ship = { x: 40, y: 40, w: 40, h: 30 };\nconst rock = { x: 70, y: 60, w: 30, h: 30 };\n\nfunction hits(a, b) {\n  // dört koşul\n  return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;\n}\n\nctx.fillStyle = \"#4fc3f7\";\nctx.fillRect(ship.x, ship.y, ship.w, ship.h);\nctx.fillStyle = \"#9e9e9e\";\nctx.fillRect(rock.x, rock.y, rock.w, rock.h);\ndocument.querySelector(\"#info\").textContent = \"Çarpışma: \" + (hits(ship, rock) ? \"evet\" : \"hayır\");\n",
+   "hints": [
+    "Yatayda: a.x < b.x + b.w && a.x + a.w > b.x",
+    "Dikeyde aynısı y ve h ile. Dördünü && ile bağla."
+   ],
+   "check": {
+    "code_contains": [
+     "&&"
+    ],
+    "js": "const R = (x, y, w, h) => ({ x, y, w, h });\nassert($(\"#info\").textContent.trim() === \"Çarpışma: evet\", \"Gemi ile kaya üst üste biniyor; #info 'Çarpışma: evet' yazmalı.\");\nassert(hits(R(0, 0, 10, 10), R(5, 5, 10, 10)) === true, \"Üst üste binen iki kutu için true dönmeli.\");\nassert(hits(R(0, 0, 50, 50), R(10, 10, 5, 5)) === true, \"Biri diğerinin içindeyse de çarpışmadır.\");\nassert(hits(R(5, -5, 10, 10), R(0, 0, 10, 10)) === true, \"Yukarıdan binen kutu da çarpışır.\");\nassert(hits(R(0, 0, 10, 10), R(10, 0, 10, 10)) === false, \"Kenar kenara değmek çarpışma değil: < ve > kullan.\");\nassert(hits(R(20, 0, 10, 10), R(0, 0, 10, 10)) === false, \"Kutular yatayda ayrıysa false dönmeli.\");\nassert(hits(R(0, 0, 10, 10), R(0, 20, 10, 10)) === false, \"Kutular dikeyde ayrıysa false dönmeli (y ve h koşullarını da yaz).\");\nassert(hits(R(0, 15, 10, 10), R(0, 0, 10, 10)) === false, \"Dikeydeki dört koşulun hepsi gerekli.\");"
+   },
+   "xp": 50,
+   "mode": "page",
+   "html": "<canvas id=\"c\" width=\"200\" height=\"120\"></canvas>\n<p id=\"info\"></p>\n",
+   "css": "canvas{background:#e8ebf3;border-radius:8px;max-width:100%;display:block}"
+  },
+  {
+   "id": "js-d23-t2",
+   "title": "Meteor çarpınca",
+   "prompt": "Oyuncuya değen meteorlar can götürsün. `collide()` fonksiyonunu yaz:\n\n- `game.meteors` içinden oyuncuya değenleri çıkar (`filter`) ve çıkan her meteor için `game.lives`'ı 1 azalt.\n- `game.lives` `0` ya da daha az olursa `game.over = true` yap ve `#info`'ya `Oyun bitti!` yaz.\n\n`hits` fonksiyonu hazır.",
+   "starter": "function hits(a, b) {\n  return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;\n}\n\nconst game = {\n  player: { x: 80, y: 80, w: 30, h: 20 },\n  meteors: [\n    { x: 90, y: 70, w: 15, h: 15 },\n    { x: 20, y: 20, w: 15, h: 15 },\n  ],\n  lives: 3,\n  over: false,\n};\n\nfunction collide() {\n  // değen meteorları çıkar, can azalt, gerekirse oyunu bitir\n}\n\ncollide();\ndocument.querySelector(\"#info\").textContent = `Can: ${game.lives}`;\n",
+   "solution": "function hits(a, b) {\n  return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;\n}\n\nconst game = {\n  player: { x: 80, y: 80, w: 30, h: 20 },\n  meteors: [\n    { x: 90, y: 70, w: 15, h: 15 },\n    { x: 20, y: 20, w: 15, h: 15 },\n  ],\n  lives: 3,\n  over: false,\n};\n\nfunction collide() {\n  // değen meteorları çıkar, can azalt, gerekirse oyunu bitir\n  const before = game.meteors.length;\n  game.meteors = game.meteors.filter((m) => !hits(game.player, m));\n  game.lives -= before - game.meteors.length;\n  if (game.lives <= 0) {\n    game.over = true;\n    document.querySelector(\"#info\").textContent = \"Oyun bitti!\";\n  }\n}\n\ncollide();\ndocument.querySelector(\"#info\").textContent = `Can: ${game.lives}`;\n",
+   "hints": [
+    "const before = game.meteors.length; önce eski sayıyı sakla.",
+    "game.meteors = game.meteors.filter((m) => !hits(game.player, m));",
+    "Azalan can: before - game.meteors.length"
+   ],
+   "check": {
+    "code_contains": [
+     "filter",
+     "hits("
+    ],
+    "js": "assert(game.lives === 2 && $(\"#info\").textContent.trim() === \"Can: 2\", \"Açılışta bir meteor değiyor: can 2 olmalı.\");\ngame.player = { x: 0, y: 0, w: 20, h: 20 };\ngame.meteors = [{ x: 10, y: 10, w: 10, h: 10 }, { x: 100, y: 100, w: 10, h: 10 }, { x: 5, y: 0, w: 5, h: 5 }];\ngame.lives = 3;\ngame.over = false;\ncollide();\nassert(game.meteors.length === 1 && game.meteors[0].x === 100, \"Değen iki meteor diziden çıkarılmalı, uzaktaki kalmalı.\");\nassert(game.lives === 1, \"Değen her meteor için can 1 azalmalı (3 → 1).\");\nassert(game.over === false, \"Can kaldıysa oyun bitmemeli.\");\ngame.meteors = [{ x: 0, y: 0, w: 10, h: 10 }];\ncollide();\nassert(game.lives === 0 && game.over === true, \"Can 0 olunca game.over true olmalı.\");\nassert($(\"#info\").textContent.trim() === \"Oyun bitti!\", \"Oyun bitince #info 'Oyun bitti!' yazmalı.\");"
+   },
+   "xp": 50,
+   "mode": "page",
+   "html": "<canvas id=\"c\" width=\"200\" height=\"120\"></canvas>\n<p id=\"info\"></p>\n",
+   "css": "canvas{background:#e8ebf3;border-radius:8px;max-width:100%;display:block}"
+  },
+  {
+   "id": "js-d23-t3",
+   "title": "Yeniden başla",
+   "prompt": "`newGame()` fonksiyonunu yaz: her çağrıldığında **yepyeni** bir durum nesnesi döndürsün:\n\n```js\n{ score: 0, over: false, stars: [ /* 3 yıldız */ ] }\n```\n\nYıldızlar `(40, 30)`, `(100, 70)` ve `(160, 40)` noktalarında; her birinin `w` ve `h` değeri `10`.\n\n`#restart` düğmesine tıklanınca `game = newGame()` olsun ve `#info` `Skor: 0` yazsın.",
+   "starter": "let game = { score: 7, over: true, stars: [] };\n\nfunction newGame() {\n  // yeni bir durum nesnesi döndür\n}\n\n// #restart tıklanınca yeniden başlat\n\n",
+   "solution": "let game = { score: 7, over: true, stars: [] };\n\nfunction newGame() {\n  // yeni bir durum nesnesi döndür\n  return {\n    score: 0,\n    over: false,\n    stars: [\n      { x: 40, y: 30, w: 10, h: 10 },\n      { x: 100, y: 70, w: 10, h: 10 },\n      { x: 160, y: 40, w: 10, h: 10 },\n    ],\n  };\n}\n\n// #restart tıklanınca yeniden başlat\ndocument.querySelector(\"#restart\").addEventListener(\"click\", () => {\n  game = newGame();\n  document.querySelector(\"#info\").textContent = `Skor: ${game.score}`;\n});\n",
+   "hints": [
+    "Nesneyi fonksiyonun içinde yaz ve return et: her çağrıda yeni bir nesne oluşur.",
+    "Tıklama: game = newGame(); sonra #info'yu güncelle."
+   ],
+   "check": {
+    "code_contains": [
+     "return",
+     "addEventListener"
+    ],
+    "js": "const a = newGame();\nconst b = newGame();\nassert(a && a.score === 0 && a.over === false, \"newGame() score 0 ve over false olan bir nesne döndürmeli.\");\nassert(Array.isArray(a.stars) && a.stars.length === 3, \"Yeni oyunda 3 yıldız olmalı.\");\nconst s = a.stars[1];\nassert(s.x === 100 && s.y === 70 && s.w === 10 && s.h === 10, \"İkinci yıldız { x: 100, y: 70, w: 10, h: 10 } olmalı.\");\nassert(a !== b && a.stars !== b.stars, \"Her çağrıda yepyeni bir nesne ve yeni bir dizi dönmeli.\");\nclick(\"#restart\");\nassert(game.score === 0 && game.over === false && game.stars.length === 3, \"Yeniden başla'ya tıklanınca game = newGame() olmalı.\");\nassert($(\"#info\").textContent.trim() === \"Skor: 0\", \"#info 'Skor: 0' yazmalı.\");\ngame.stars.pop();\ngame.score = 4;\nclick(\"#restart\");\nassert(game.stars.length === 3 && game.score === 0, \"Toplanan yıldızlar yeniden başlayınca geri gelmeli.\");"
+   },
+   "xp": 50,
+   "mode": "page",
+   "html": "<p id=\"info\">Skor: 7 · Oyun bitti</p>\n<button id=\"restart\">Yeniden başla</button>\n",
+   "css": ""
+  }
+ ],
+ "challenge": {
+  "id": "js-d23-c",
+  "title": "Düşen yıldızlar",
+  "prompt": "Yıldızlar yukarıdan düşüyor. `update()` fonksiyonunu yaz:\n\n- Oyun bittiyse (`game.over`) hiçbir şey yapma.\n- Her yıldızın `y`'sini kendi `vy`'si kadar artır.\n- Tuvalin altından çıkan yıldızları (`y > canvas.height`) diziden çıkar; her biri için `game.missed`'i 1 artır.\n- `game.missed` `3` ya da daha fazla olunca `game.over = true` yap ve `#info`'ya `Oyun bitti! Kaçan: 3` yaz.",
+  "starter": "const canvas = document.querySelector(\"#c\");\nconst ctx = canvas.getContext(\"2d\");\nconst game = {\n  stars: [\n    { x: 30, y: 0, vy: 1 },\n    { x: 100, y: -40, vy: 1.5 },\n    { x: 160, y: -10, vy: 0.8 },\n  ],\n  missed: 0,\n  over: false,\n};\n\nfunction update() {\n  // düşür, kaçanları say, gerekirse bitir\n}\n\nfunction draw() {\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  ctx.fillStyle = \"#f7df1e\";\n  for (const s of game.stars) ctx.fillRect(s.x, s.y, 8, 8);\n}\n\nfunction loop() {\n  update();\n  draw();\n  requestAnimationFrame(loop);\n}\nrequestAnimationFrame(loop);\n\n",
+  "solution": "const canvas = document.querySelector(\"#c\");\nconst ctx = canvas.getContext(\"2d\");\nconst game = {\n  stars: [\n    { x: 30, y: 0, vy: 1 },\n    { x: 100, y: -40, vy: 1.5 },\n    { x: 160, y: -10, vy: 0.8 },\n  ],\n  missed: 0,\n  over: false,\n};\n\nfunction update() {\n  // düşür, kaçanları say, gerekirse bitir\n  if (game.over) return;\n  for (const s of game.stars) {\n    s.y += s.vy;\n  }\n  const before = game.stars.length;\n  game.stars = game.stars.filter((s) => s.y <= canvas.height);\n  game.missed += before - game.stars.length;\n  if (game.missed >= 3) {\n    game.over = true;\n    document.querySelector(\"#info\").textContent = `Oyun bitti! Kaçan: ${game.missed}`;\n  }\n}\n\nfunction draw() {\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  ctx.fillStyle = \"#f7df1e\";\n  for (const s of game.stars) ctx.fillRect(s.x, s.y, 8, 8);\n}\n\nfunction loop() {\n  update();\n  draw();\n  requestAnimationFrame(loop);\n}\nrequestAnimationFrame(loop);\n\n",
+  "hints": [
+   "En başta: if (game.over) return;",
+   "Kalanlar: game.stars.filter((s) => s.y <= canvas.height)",
+   "Kaçan sayısı: önceki uzunluk - yeni uzunluk"
+  ],
+  "check": {
+   "code_contains": [
+    "filter",
+    "game.over"
+   ],
+   "js": "game.over = false;\ngame.missed = 0;\ngame.stars = [{ x: 10, y: 10, vy: 2 }, { x: 50, y: 119, vy: 3 }, { x: 90, y: 50, vy: 1 }];\nupdate();\nassert(game.stars.length === 2, \"Tuvalin altından çıkan yıldız (y > canvas.height) diziden çıkarılmalı.\");\nassert(game.stars[0].y === 12 && game.stars[1].y === 51, \"Her yıldız kendi vy'si kadar düşmeli.\");\nassert(game.missed === 1 && game.over === false, \"Kaçan her yıldız game.missed'i 1 artırmalı.\");\ngame.stars = [{ x: 0, y: 200, vy: 1 }, { x: 0, y: 130, vy: 1 }];\nupdate();\nassert(game.missed === 3 && game.over === true, \"Kaçan sayısı 3 olunca game.over true olmalı.\");\nassert(/Oyun bitti!/.test($(\"#info\").textContent) && /Kaçan:\\s*3/.test($(\"#info\").textContent), \"#info 'Oyun bitti! Kaçan: 3' yazmalı.\");\ngame.stars = [{ x: 0, y: 0, vy: 5 }];\nupdate();\nassert(game.stars[0].y === 0, \"Oyun bittiyse update() hiçbir şey yapmamalı.\");"
+  },
+  "xp": 75,
+  "mode": "page",
+  "html": "<canvas id=\"c\" width=\"200\" height=\"120\"></canvas>\n<p id=\"info\"></p>\n",
+  "css": "canvas{background:#e8ebf3;border-radius:8px;max-width:100%;display:block}"
+ },
+ "project_contribution": "Çarpışma ve yıldız toplama",
+ "project_task": {
+  "id": "js-d23-p",
+  "title": "Yıldız toplama",
+  "prompt": "Gemi yıldızlara değince onları toplasın! Yıldızlar artık birer kutu: `{ x, y, w, h }`. `update()` ve `draw()` hazır.\n\n- `hits(a, b)`: iki dikdörtgen çarpışıyor mu (AABB)?\n- `collect()`: `stars` içinden gemiye değenleri çıkar, her biri için `score`'u 1 artır ve `#info`'ya `Skor: 2` biçiminde yaz. Hiç yıldız kalmayınca `#info` `Tebrikler! Bütün yıldızlar toplandı.` yazsın.\n- `step()`: sırayla `update()`, `collect()` ve `draw()`'u çağırsın. Döngü `step()`'i her karede çağırıyor.",
+  "starter": "const canvas = document.querySelector(\"#game\");\nconst ctx = canvas.getContext(\"2d\");\nconst info = document.querySelector(\"#info\");\n\nconst ship = { x: 20, y: 150, w: 30, h: 20, vx: 3 };\nlet stars = [\n  { x: 120, y: 155, w: 12, h: 12 },\n  { x: 200, y: 150, w: 12, h: 12 },\n  { x: 260, y: 160, w: 12, h: 12 },\n];\nlet score = 0;\n\nfunction update() {\n  ship.x += ship.vx;\n  if (ship.x < 0 || ship.x + ship.w > canvas.width) {\n    ship.x = Math.max(0, Math.min(ship.x, canvas.width - ship.w));\n    ship.vx = -ship.vx;\n  }\n}\n\nfunction draw() {\n  ctx.fillStyle = \"#0b1026\";\n  ctx.fillRect(0, 0, canvas.width, canvas.height);\n  ctx.fillStyle = \"#f7df1e\";\n  for (const s of stars) ctx.fillRect(s.x, s.y, s.w, s.h);\n  ctx.fillStyle = \"#4fc3f7\";\n  ctx.fillRect(ship.x, ship.y, ship.w, ship.h);\n}\n\nfunction hits(a, b) {\n  // AABB: dört koşul\n  return false;\n}\n\nfunction collect() {\n  // değen yıldızları çıkar, skoru artır, #info'yu güncelle\n}\n\nfunction step() {\n  // update → collect → draw\n}\n\nfunction loop() {\n  step();\n  requestAnimationFrame(loop);\n}\nrequestAnimationFrame(loop);\ndraw();\n",
+  "solution": "const canvas = document.querySelector(\"#game\");\nconst ctx = canvas.getContext(\"2d\");\nconst info = document.querySelector(\"#info\");\n\nconst ship = { x: 20, y: 150, w: 30, h: 20, vx: 3 };\nlet stars = [\n  { x: 120, y: 155, w: 12, h: 12 },\n  { x: 200, y: 150, w: 12, h: 12 },\n  { x: 260, y: 160, w: 12, h: 12 },\n];\nlet score = 0;\n\nfunction update() {\n  ship.x += ship.vx;\n  if (ship.x < 0 || ship.x + ship.w > canvas.width) {\n    ship.x = Math.max(0, Math.min(ship.x, canvas.width - ship.w));\n    ship.vx = -ship.vx;\n  }\n}\n\nfunction draw() {\n  ctx.fillStyle = \"#0b1026\";\n  ctx.fillRect(0, 0, canvas.width, canvas.height);\n  ctx.fillStyle = \"#f7df1e\";\n  for (const s of stars) ctx.fillRect(s.x, s.y, s.w, s.h);\n  ctx.fillStyle = \"#4fc3f7\";\n  ctx.fillRect(ship.x, ship.y, ship.w, ship.h);\n}\n\nfunction hits(a, b) {\n  // AABB: dört koşul\n  return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;\n}\n\nfunction collect() {\n  // değen yıldızları çıkar, skoru artır, #info'yu güncelle\n  const before = stars.length;\n  stars = stars.filter((s) => !hits(ship, s));\n  score += before - stars.length;\n  if (stars.length === 0) {\n    info.textContent = \"Tebrikler! Bütün yıldızlar toplandı.\";\n  } else {\n    info.textContent = `Skor: ${score}`;\n  }\n}\n\nfunction step() {\n  // update → collect → draw\n  update();\n  collect();\n  draw();\n}\n\nfunction loop() {\n  step();\n  requestAnimationFrame(loop);\n}\nrequestAnimationFrame(loop);\ndraw();\n",
+  "hints": [
+   "hits: a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y",
+   "collect: stars = stars.filter((s) => !hits(ship, s)); ve kaç tane azaldığını score'a ekle.",
+   "step: update(); collect(); draw();"
+  ],
+  "check": {
+   "code_contains": [
+    "filter",
+    "hits(ship"
+   ],
+   "js": "const colorIs = (sel, x, y, hex) => { const p = pixel(sel, x, y); const n = parseInt(hex.slice(1), 16); return p[3] === 255 && p[0] === (n >> 16) && p[1] === ((n >> 8) & 255) && p[2] === (n & 255); };\nconst isEmpty = (sel, x, y) => pixel(sel, x, y)[3] === 0;\nconst R = (x, y, w, h) => ({ x, y, w, h });\nassert(hits(R(0, 0, 10, 10), R(5, 5, 10, 10)) === true, \"hits: üst üste binen kutular için true dönmeli.\");\nassert(hits(R(0, 0, 10, 10), R(10, 0, 10, 10)) === false, \"hits: kenar kenara değmek çarpışma değil.\");\nassert(hits(R(0, 0, 10, 10), R(0, 30, 10, 10)) === false, \"hits: dikeyde ayrı kutular çarpışmaz.\");\nObject.assign(ship, { x: 100, y: 100, vx: 0 });\nstars = [R(110, 105, 12, 12), R(200, 20, 12, 12), R(125, 95, 12, 12)];\nscore = 0;\ncollect();\nassert(score === 2 && stars.length === 1, \"collect(): gemiye değen iki yıldız toplanmalı (skor 2, 1 yıldız kalmalı).\");\nassert($(\"#info\").textContent.trim() === \"Skor: 2\", \"#info 'Skor: 2' yazmalı.\");\nstars = [R(100, 100, 12, 12)];\ncollect();\nassert(score === 3 && /Tebrikler/.test($(\"#info\").textContent), \"Son yıldız da toplanınca #info 'Tebrikler! Bütün yıldızlar toplandı.' yazmalı.\");\nObject.assign(ship, { x: 50, y: 150, vx: 4 });\nstars = [R(82, 155, 12, 12)];\nscore = 0;\nstep();\nassert(ship.x === 54, \"step() önce update() çağırmalı.\");\nassert(score === 1 && stars.length === 0, \"step() update'ten sonra collect() çağırmalı.\");\nassert(colorIs(\"#game\", 69, 160, \"#4fc3f7\"), \"step() en sonda draw() çağırmalı.\");"
+  },
+  "xp": 100,
+  "mode": "page",
+  "html": "<canvas id=\"game\" width=\"300\" height=\"200\"></canvas>\n<p id=\"info\">Skor: 0</p>\n",
+  "css": "canvas{background:#0b1026;display:block;max-width:100%;border-radius:8px}#info{font-weight:600;margin:8px 0 0}"
+ },
+ "tracks": {
+  "js-web": {
+   "project_contribution": "Galeri kaydırıcı",
+   "project_task": {
+    "id": "js-d23-pw",
+    "title": "Galeri kaydırıcı",
+    "prompt": "Galeri fotoğrafları tek tek göstersin.\n\n- `show()`: `#slide`'a `photos[current]` yazsın ve yalnızca `current` sıradaki `.dot`'a `active` sınıfı versin (diğerlerinden kaldırsın).\n- `next()`: `current`'ı 1 artırsın; sondan sonra başa dönsün. `prev()`: 1 azaltsın; baştan önce sona gitsin. İkisi de sonra `show()`'u çağırsın.\n- `#next` ve `#prev` düğmeleri bu fonksiyonları çalıştırsın.\n\nFotoğraf sayısını elle yazma, `photos.length` kullan.",
+    "starter": "const photos = [\"Mars gün batımı\", \"Jüpiter fırtınası\", \"Satürn halkaları\", \"Ay yüzeyi\"];\nlet current = 0;\n\nfunction show() {\n  // #slide ve .dot'ları güncelle\n}\n\nfunction next() {\n  // 1 ileri, sondan sonra başa\n}\n\nfunction prev() {\n  // 1 geri, baştan önce sona\n}\n\n// düğmeleri bağla\n\nshow();\n",
+    "solution": "const photos = [\"Mars gün batımı\", \"Jüpiter fırtınası\", \"Satürn halkaları\", \"Ay yüzeyi\"];\nlet current = 0;\n\nfunction show() {\n  // #slide ve .dot'ları güncelle\n  document.querySelector(\"#slide\").textContent = photos[current];\n  document.querySelectorAll(\".dot\").forEach((dot, i) => {\n    dot.classList.toggle(\"active\", i === current);\n  });\n}\n\nfunction next() {\n  // 1 ileri, sondan sonra başa\n  current = (current + 1) % photos.length;\n  show();\n}\n\nfunction prev() {\n  // 1 geri, baştan önce sona\n  current = (current - 1 + photos.length) % photos.length;\n  show();\n}\n\n// düğmeleri bağla\ndocument.querySelector(\"#next\").addEventListener(\"click\", next);\ndocument.querySelector(\"#prev\").addEventListener(\"click\", prev);\n\nshow();\n",
+    "hints": [
+     "Başa dönmek için kalan (%) işlemi: current = (current + 1) % photos.length;",
+     "Geri giderken negatif olmasın: (current - 1 + photos.length) % photos.length",
+     "dot.classList.toggle(\"active\", i === current)"
+    ],
+    "check": {
+     "code_contains": [
+      "photos.length",
+      "classList"
+     ],
+     "js": "const activeDots = () => $$(\".dot\").map((d, i) => (d.classList.contains(\"active\") ? i : -1)).filter((i) => i >= 0);\nassert($(\"#slide\").textContent.trim() === \"Mars gün batımı\", \"Açılışta ilk fotoğraf ('Mars gün batımı') görünmeli.\");\nassert(same(activeDots(), [0]), \"Açılışta yalnızca ilk nokta active olmalı.\");\nclick(\"#next\");\nassert(current === 1 && $(\"#slide\").textContent.trim() === \"Jüpiter fırtınası\", \"#next'e tıklayınca sıradaki fotoğraf görünmeli.\");\nassert(same(activeDots(), [1]), \"Yalnızca o anki fotoğrafın noktası active olmalı.\");\nclick(\"#prev\");\nclick(\"#prev\");\nassert(current === 3 && $(\"#slide\").textContent.trim() === \"Ay yüzeyi\", \"İlk fotoğraftan geri gidince son fotoğrafa dönmeli.\");\nassert(same(activeDots(), [3]), \"Son nokta active olmalı.\");\nclick(\"#next\");\nassert(current === 0 && $(\"#slide\").textContent.trim() === \"Mars gün batımı\", \"Son fotoğraftan ileri gidince başa dönmeli.\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<header><h1 id=\"site-title\">Ada'nın Sitesi</h1><nav><a href=\"#\">Ana sayfa</a> · <a href=\"#\">Galeri</a> · <a href=\"#\">İletişim</a></nav></header>\n<section id=\"gallery\"><button id=\"prev\">‹</button><div id=\"slide\"></div><button id=\"next\">›</button></section>\n<div id=\"dots\"><span class=\"dot\"></span><span class=\"dot\"></span><span class=\"dot\"></span><span class=\"dot\"></span></div>\n",
+    "css": "header{border-bottom:3px solid #7e57c2;margin-bottom:10px;padding-bottom:4px}#site-title{margin:0;color:#4a2f8a;font-size:22px}nav a{color:#7e57c2}#gallery{display:flex;align-items:center;gap:8px}#slide{flex:1;text-align:center;padding:24px;background:#1b1f33;color:#fff;border-radius:8px;font-size:20px}#dots{text-align:center}.dot{display:inline-block;width:10px;height:10px;border-radius:50%;background:#ccc;margin:4px}.dot.active{background:#7e57c2}"
+   }
+  },
+  "js-app": {
+   "project_contribution": "Çalışma/mola durumları",
+   "project_task": {
+    "id": "js-d23-pa",
+    "title": "Çalışma / mola döngüsü",
+    "prompt": "Odak zamanlayıcısı bir **durum makinesi**: her an üç durumdan birinde. `next()` fonksiyonunu yaz:\n\n| Şimdiki durum | Koşul | Yeni durum |\n|---|---|---|\n| `\"calisma\"` | `round < totalRounds` | `\"mola\"` |\n| `\"calisma\"` | son tur (`round === totalRounds`) | `\"bitti\"` |\n| `\"mola\"` | | `round` 1 artar, `\"calisma\"` |\n| `\"bitti\"` | | değişmez |\n\nHer geçişten sonra hazır olan `render()`'ı çağır. `#next` düğmesi `next()`'i çalıştırsın.",
+    "starter": "let state = \"calisma\";\nlet round = 1;\nlet totalRounds = 3;\n\nconst labels = { calisma: \"Çalışma zamanı\", mola: \"Mola zamanı\", bitti: \"Bugünlük bitti!\" };\nfunction render() {\n  document.querySelector(\"#status\").textContent = labels[state];\n  document.querySelector(\"#round\").textContent = `Tur ${round}/${totalRounds}`;\n}\n\nfunction next() {\n  // duruma göre geçiş yap, sonra render()\n}\n\n// #next düğmesini bağla\n\nrender();\n",
+    "solution": "let state = \"calisma\";\nlet round = 1;\nlet totalRounds = 3;\n\nconst labels = { calisma: \"Çalışma zamanı\", mola: \"Mola zamanı\", bitti: \"Bugünlük bitti!\" };\nfunction render() {\n  document.querySelector(\"#status\").textContent = labels[state];\n  document.querySelector(\"#round\").textContent = `Tur ${round}/${totalRounds}`;\n}\n\nfunction next() {\n  // duruma göre geçiş yap, sonra render()\n  if (state === \"calisma\") {\n    state = round < totalRounds ? \"mola\" : \"bitti\";\n  } else if (state === \"mola\") {\n    round++;\n    state = \"calisma\";\n  }\n  render();\n}\n\n// #next düğmesini bağla\ndocument.querySelector(\"#next\").addEventListener(\"click\", next);\n\nrender();\n",
+    "hints": [
+     "if (state === \"calisma\") { ... } else if (state === \"mola\") { ... }",
+     "Çalışmadan sonra: state = round < totalRounds ? \"mola\" : \"bitti\";",
+     "\"bitti\" durumunda hiçbir şey değişmez; yalnızca render() çağrılır."
+    ],
+    "check": {
+     "code_contains": [
+      "addEventListener",
+      "round"
+     ],
+     "js": "state = \"calisma\";\nround = 1;\ntotalRounds = 2;\nnext();\nassert(state === \"mola\" && round === 1, \"Çalışmadan sonra mola gelmeli (tur değişmez).\");\nassert($(\"#status\").textContent.trim() === \"Mola zamanı\", \"Geçişten sonra render() çağrılmalı: #status 'Mola zamanı' olmalı.\");\nclick(\"#next\");\nassert(state === \"calisma\" && round === 2, \"Moladan sonra tur 1 artmalı ve çalışma gelmeli (#next düğmesi next() çalıştırmalı).\");\nnext();\nassert(state === \"bitti\", \"Son turdaki çalışmadan sonra durum 'bitti' olmalı.\");\nassert($(\"#status\").textContent.trim() === \"Bugünlük bitti!\", \"#status 'Bugünlük bitti!' olmalı.\");\nnext();\nassert(state === \"bitti\" && round === 2, \"'bitti' durumunda hiçbir şey değişmemeli.\");\nstate = \"calisma\";\nround = 1;\ntotalRounds = 3;\nconst seen = [];\nfor (let i = 0; i < 5; i++) {\n  next();\n  seen.push(state + round);\n}\nassert(same(seen, [\"mola1\", \"calisma2\", \"mola2\", \"calisma3\", \"bitti3\"]), \"Tur sayısı totalRounds'tan gelmeli: 3 turda sıra mola, çalışma, mola, çalışma, bitti olmalı.\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<h2 class=\"app-title\">Çalışma Asistanım</h2>\n<p id=\"status\"></p>\n<p id=\"round\"></p>\n<button id=\"next\">Sonraki</button>\n",
+    "css": ".app-title{margin:0 0 8px;color:#2e7d32}#status{font-size:20px;font-weight:700}"
+   }
+  },
+  "js-quiz": {
+   "project_contribution": "Soru akışı",
+   "project_task": {
+    "id": "js-d23-pq",
+    "title": "Soru akışı",
+    "prompt": "Yarışma döngüsü: soru göster → cevap al → puanla → sıradaki soru → bitince sonuç. `show()` ve düğmeler hazır.\n\n- `answer(i)`: seçilen `i` doğruysa (`questions[current].dogru`) `score`'u 1 artır, sonra `nextQuestion()`'ı çağır.\n- `nextQuestion()`: `current`'ı 1 artır; soru kaldıysa `show()`, kalmadıysa `finish()`.\n- `finish()`: `#question`'a `Yarışma bitti!`, `#score`'a `Puan: 2/3` biçiminde sonucu yaz ve seçenek düğmelerini gizle (`hidden = true`).",
+    "starter": "let questions = [\n  { soru: \"Ay, hangi gezegenin uydusudur?\", secenekler: [\"Mars\", \"Dünya\", \"Jüpiter\"], dogru: 1 },\n  { soru: \"Kızıl gezegen hangisidir?\", secenekler: [\"Venüs\", \"Mars\", \"Merkür\"], dogru: 1 },\n  { soru: \"Halkalarıyla ünlü gezegen hangisidir?\", secenekler: [\"Satürn\", \"Mars\", \"Uranüs\"], dogru: 0 },\n];\nlet current = 0;\nlet score = 0;\nconst buttons = document.querySelectorAll(\"#options button\");\n\nfunction show() {\n  const q = questions[current];\n  document.querySelector(\"#question\").textContent = q.soru;\n  buttons.forEach((btn, i) => {\n    btn.textContent = q.secenekler[i];\n    btn.hidden = false;\n  });\n  document.querySelector(\"#score\").textContent = `Puan: ${score}`;\n}\n\nfunction answer(i) {\n  // doğruysa puan ver, sonra sıradaki soru\n}\n\nfunction nextQuestion() {\n  // current++; soru kaldıysa show(), yoksa finish()\n}\n\nfunction finish() {\n  // sonuç ekranı\n}\n\nbuttons.forEach((btn) => btn.addEventListener(\"click\", () => answer(Number(btn.dataset.i))));\nshow();\n",
+    "solution": "let questions = [\n  { soru: \"Ay, hangi gezegenin uydusudur?\", secenekler: [\"Mars\", \"Dünya\", \"Jüpiter\"], dogru: 1 },\n  { soru: \"Kızıl gezegen hangisidir?\", secenekler: [\"Venüs\", \"Mars\", \"Merkür\"], dogru: 1 },\n  { soru: \"Halkalarıyla ünlü gezegen hangisidir?\", secenekler: [\"Satürn\", \"Mars\", \"Uranüs\"], dogru: 0 },\n];\nlet current = 0;\nlet score = 0;\nconst buttons = document.querySelectorAll(\"#options button\");\n\nfunction show() {\n  const q = questions[current];\n  document.querySelector(\"#question\").textContent = q.soru;\n  buttons.forEach((btn, i) => {\n    btn.textContent = q.secenekler[i];\n    btn.hidden = false;\n  });\n  document.querySelector(\"#score\").textContent = `Puan: ${score}`;\n}\n\nfunction answer(i) {\n  // doğruysa puan ver, sonra sıradaki soru\n  if (i === questions[current].dogru) score++;\n  nextQuestion();\n}\n\nfunction nextQuestion() {\n  // current++; soru kaldıysa show(), yoksa finish()\n  current++;\n  if (current < questions.length) {\n    show();\n  } else {\n    finish();\n  }\n}\n\nfunction finish() {\n  // sonuç ekranı\n  document.querySelector(\"#question\").textContent = \"Yarışma bitti!\";\n  document.querySelector(\"#score\").textContent = `Puan: ${score}/${questions.length}`;\n  buttons.forEach((btn) => {\n    btn.hidden = true;\n  });\n}\n\nbuttons.forEach((btn) => btn.addEventListener(\"click\", () => answer(Number(btn.dataset.i))));\nshow();\n",
+    "hints": [
+     "answer: if (i === questions[current].dogru) score++; nextQuestion();",
+     "nextQuestion: current++; if (current < questions.length) show(); else finish();",
+     "finish: `Puan: ${score}/${questions.length}`"
+    ],
+    "check": {
+     "code_contains": [
+      "questions.length",
+      "finish()"
+     ],
+     "js": "assert($(\"#question\").textContent === questions[0].soru, \"Açılışta ilk soru görünmeli.\");\nclick('#options button[data-i=\"1\"]');\nassert(score === 1 && current === 1, \"Doğru cevapta puan 1 artmalı ve sıradaki soruya geçilmeli.\");\nassert($(\"#question\").textContent === questions[1].soru, \"İkinci soru görünmeli.\");\nanswer(0);\nassert(score === 1 && current === 2, \"Yanlış cevapta puan artmamalı ama sıradaki soruya geçilmeli.\");\nanswer(0);\nassert($(\"#question\").textContent.trim() === \"Yarışma bitti!\", \"Sorular bitince #question 'Yarışma bitti!' yazmalı.\");\nassert($(\"#score\").textContent.trim() === \"Puan: 2/3\", \"#score 'Puan: 2/3' yazmalı.\");\nassert($$(\"#options button\").every((b) => b.hidden), \"Bitişte seçenek düğmeleri gizlenmeli (hidden = true).\");\nquestions = [\n  { soru: \"Güneşe en yakın gezegen?\", secenekler: [\"Venüs\", \"Dünya\", \"Merkür\"], dogru: 2 },\n  { soru: \"En büyük gezegen?\", secenekler: [\"Satürn\", \"Jüpiter\", \"Neptün\"], dogru: 1 },\n];\ncurrent = 0;\nscore = 0;\nshow();\nanswer(2);\nanswer(0);\nassert($(\"#score\").textContent.trim() === \"Puan: 1/2\", \"Sonuç soru sayısından hesaplanmalı (questions.length): 'Puan: 1/2'.\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<h2 class=\"quiz-title\">Bilgi Yarışması</h2>\n<p id=\"question\"></p>\n<div id=\"options\"><button data-i=\"0\"></button> <button data-i=\"1\"></button> <button data-i=\"2\"></button></div>\n<p id=\"score\"></p>\n",
+    "css": ".quiz-title{margin:0 0 8px;color:#5e35b1}#question{font-weight:600}#options button{margin:2px}"
+   }
+  }
+ },
+ "available": true
+}

@@ -1,0 +1,1922 @@
+{
+ "day": 22,
+ "title": "Web kazıma",
+ "region": "liman",
+ "project_contribution": "Hazine ipuçları",
+ "game_role": "İkinci bölgeye girince hazine ipuçların çıkar.",
+ "xp_complete": 150,
+ "objective": "BeautifulSoup ile HTML sayfalarından başlık, bağlantı ve metin toplamak",
+ "story": "Limandaki bilgi panosu ilanlarla dolu: gemi saatleri, fiyatlar, kayıp eşyalar... Hepsini elle deftere geçirmek saatler sürer. Web sayfaları da böyle panolardır. Bir programın sayfayı okuyup işine yarayan bilgileri toplamasına **web kazıma** denir.",
+ "sections": [
+  {
+   "title": "HTML'e hızlı bakış",
+   "body": "Web sayfaları **HTML** ile yazılır. HTML, içeriği etiketlerle işaretler:\n\n```\n<h1>Başlık</h1>\n<p class=\"fiyat\">25 altın</p>\n<a href=\"/harita\">Haritaya git</a>\n```\n\n- `<h1>`, `<p>`, `<a>` etiket adları\n- `class=\"fiyat\"` ve `href=\"/harita\"` etiketin **özellikleri**\n- Etiketlerin arasındaki yazı, etiketin metnidir"
+  },
+  {
+   "title": "BeautifulSoup",
+   "body": "`BeautifulSoup` HTML'i okuyup içinde arama yapmamızı sağlayan bir pakettir:\n\n```python\nfrom bs4 import BeautifulSoup\n\nsoup = BeautifulSoup(html, \"html.parser\")\nprint(soup.title.text)              # <title> etiketinin metni\nfirst = soup.find(\"p\")              # ilk <p>\nprices = soup.find_all(\"p\", class_=\"fiyat\")   # tüm fiyat paragrafları\nlink = soup.find(\"a\")[\"href\"]       # bir özelliğin değeri\n```\n\n`class` Python'da özel bir kelime olduğu için sonuna alt çizgi koyarız: `class_`"
+  },
+  {
+   "title": "Gerçek dünyada",
+   "body": "Gerçek bir sayfayı kazırken önce sayfanın HTML'i internetten indirilir:\n\n```python\nimport requests\nhtml = requests.get(\"https://ornek.com\").text\n```\n\nBu sitede internetten sayfa indiremediğimiz için HTML'i hazır bir yazı olarak vereceğiz. Kazıma kısmı aynen böyle çalışır.\n\nİlk çalıştırmada BeautifulSoup paketi yükleneceği için birkaç saniye bekleyebilirsin."
+  },
+  {
+   "title": "Kibar bir kazıyıcı ol",
+   "body": "- Bir sitenin kazınmaya izin verip vermediğine bak (sitenin kullanım şartları ve `robots.txt` dosyası)\n- Siteye saniyede yüzlerce istek gönderme, sunucuyu yorarsın\n- Kişisel bilgileri toplama\n- Site bir **API** sunuyorsa kazımak yerine onu kullan (28. günde göreceğiz)"
+  }
+ ],
+ "examples": [
+  {
+   "title": "Başlık ve paragraflar",
+   "code": "from bs4 import BeautifulSoup\n\nhtml = \"\"\"\n<html><head><title>Liman Panosu</title></head>\n<body>\n  <h1>Bugünün gemileri</h1>\n  <p>Martı saat 10.00'da kalkıyor.</p>\n  <p>Yunus saat 14.30'da geliyor.</p>\n</body></html>\n\"\"\"\n\nsoup = BeautifulSoup(html, \"html.parser\")\nprint(soup.title.text)\nprint(soup.find(\"h1\").text)\nfor p in soup.find_all(\"p\"):\n    print(\"-\", p.text)\n",
+   "note": ""
+  },
+  {
+   "title": "Bağlantılar",
+   "code": "from bs4 import BeautifulSoup\n\nhtml = '<a href=\"/harita\">Harita</a> <a href=\"/gemiler\">Gemiler</a>'\nsoup = BeautifulSoup(html, \"html.parser\")\nfor a in soup.find_all(\"a\"):\n    print(a.text, \"->\", a[\"href\"])\n",
+   "note": ""
+  },
+  {
+   "title": "Sınıfa göre bul",
+   "code": "from bs4 import BeautifulSoup\n\nhtml = \"\"\"\n<ul>\n  <li class=\"urun\">İp <span class=\"fiyat\">5</span></li>\n  <li class=\"urun\">Fener <span class=\"fiyat\">40</span></li>\n</ul>\n\"\"\"\nsoup = BeautifulSoup(html, \"html.parser\")\nprices = [int(s.text) for s in soup.find_all(\"span\", class_=\"fiyat\")]\nprint(prices, \"toplam:\", sum(prices))\n",
+   "note": ""
+  }
+ ],
+ "tasks": [
+  {
+   "id": "d22-t1",
+   "title": "Sayfa başlığı",
+   "prompt": "`html` içindeki sayfa başlığını (`<title>`) bul ve `title` değişkenine koy.",
+   "starter": "from bs4 import BeautifulSoup\n\nhtml = \"<html><head><title>Piko'nun Günlüğü</title></head><body><h1>Merhaba</h1></body></html>\"\n\nsoup = BeautifulSoup(html, \"html.parser\")\ntitle = \"\"\n\nprint(title)\n",
+   "solution": "from bs4 import BeautifulSoup\n\nhtml = \"<html><head><title>Piko'nun Günlüğü</title></head><body><h1>Merhaba</h1></body></html>\"\n\nsoup = BeautifulSoup(html, \"html.parser\")\ntitle = soup.title.text\n\nprint(title)\n",
+   "hints": [
+    "soup.title başlık etiketini verir.",
+    "Metni için sonuna .text ekle."
+   ],
+   "check": {
+    "python": "\n_, g = _run(_set(_code, \"html\", \"<html><head><title>Liman</title></head><body></body></html>\"))\nassert g.get(\"title\") == \"Liman\", \"title, <title> etiketinin metni olmalı: soup.title.text\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "from bs4 import BeautifulSoup",
+      "notes": [
+       "`bs4` modülünden `BeautifulSoup` programa alınıyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "html = \"<html><head><title>Piko'nun Günlüğü</title></head><body><h1>Merhaba</h1></body></html>\"",
+      "notes": [
+       "`html` adında bir değişken oluşturuluyor ve içine `\"<html><head><title>Piko'nun Günlüğü</title></head><body>...` (metin (str)) konuyor."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "soup = BeautifulSoup(html, \"html.parser\")",
+      "notes": [
+       "`soup` adında bir değişken oluşturuluyor ve içine `BeautifulSoup(html, \"html.parser\")` konuyor."
+      ]
+     },
+     {
+      "n": 6,
+      "code": "title = soup.title.text",
+      "notes": [
+       "`title` adında bir değişken oluşturuluyor ve içine `soup.title.text` konuyor."
+      ]
+     },
+     {
+      "n": 8,
+      "code": "print(title)",
+      "notes": [
+       "`print(title)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "html",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `\"<html><head><title>Piko'nun Günlüğü</title></head><body>...`."
+     },
+     {
+      "term": "soup",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `BeautifulSoup(html, \"html.parser\")`."
+     },
+     {
+      "term": "title",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `soup.title.text`."
+     },
+     {
+      "term": "import",
+      "kind": "anahtar kelime",
+      "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+     },
+     {
+      "term": "bs4",
+      "kind": "modül",
+      "desc": "HTML sayfalarını okuma kütüphanesi (BeautifulSoup)."
+     },
+     {
+      "term": "BeautifulSoup",
+      "kind": "araç",
+      "desc": "HTML sayfasını okuyup içinde arama yapmayı sağlar (bs4)."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "BeautifulSoup()",
+      "kind": "fonksiyon",
+      "desc": "HTML sayfasını okuyup içinde arama yapmayı sağlar (bs4)."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d22-t2",
+   "title": "Tüm bağlantılar",
+   "prompt": "Sayfadaki tüm `<a>` etiketlerinin `href` değerlerini sırayla `links` listesine koy.",
+   "starter": "from bs4 import BeautifulSoup\n\nhtml = '<a href=\"/harita\">Harita</a> <p>yazı</p> <a href=\"/gemiler\">Gemiler</a>'\nsoup = BeautifulSoup(html, \"html.parser\")\n\nlinks = []\n\nprint(links)\n",
+   "solution": "from bs4 import BeautifulSoup\n\nhtml = '<a href=\"/harita\">Harita</a> <p>yazı</p> <a href=\"/gemiler\">Gemiler</a>'\nsoup = BeautifulSoup(html, \"html.parser\")\n\nlinks = [a[\"href\"] for a in soup.find_all(\"a\")]\n\nprint(links)\n",
+   "hints": [
+    "soup.find_all(\"a\") tüm bağlantıları verir.",
+    "Bir etiketin özelliği: a[\"href\"]"
+   ],
+   "check": {
+    "python": "\n_, g = _run(_set(_code, \"html\", '<a href=\"/a\">A</a><div><a href=\"/b\">B</a></div><a href=\"/c\">C</a>'))\nassert g.get(\"links\") == [\"/a\", \"/b\", \"/c\"], \"links, tüm href değerlerini sırayla içermeli.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "from bs4 import BeautifulSoup",
+      "notes": [
+       "`bs4` modülünden `BeautifulSoup` programa alınıyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "html = '<a href=\"/harita\">Harita</a> <p>yazı</p> <a href=\"/gemiler\">Gemiler</a>'",
+      "notes": [
+       "`html` adında bir değişken oluşturuluyor ve içine `'<a href=\"/harita\">Harita</a> <p>yazı</p> <a href=\"/gemil...` (metin (str)) konuyor."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "soup = BeautifulSoup(html, \"html.parser\")",
+      "notes": [
+       "`soup` adında bir değişken oluşturuluyor ve içine `BeautifulSoup(html, \"html.parser\")` konuyor."
+      ]
+     },
+     {
+      "n": 6,
+      "code": "links = [a[\"href\"] for a in soup.find_all(\"a\")]",
+      "notes": [
+       "`links` adında bir değişken oluşturuluyor ve içine `[a[\"href\"] for a in soup.find_all(\"a\")]` (liste üreteciyle kurulan liste) konuyor.",
+       "Tek satırda döngüyle yeni bir liste/dizi üretiliyor."
+      ]
+     },
+     {
+      "n": 8,
+      "code": "print(links)",
+      "notes": [
+       "`print(links)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "html",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `'<a href=\"/harita\">Harita</a> <p>yazı</p> <a href=\"/gemil...`."
+     },
+     {
+      "term": "soup",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `BeautifulSoup(html, \"html.parser\")`."
+     },
+     {
+      "term": "links",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `[a[\"href\"] for a in soup.find_all(\"a\")]`."
+     },
+     {
+      "term": "import",
+      "kind": "anahtar kelime",
+      "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+     },
+     {
+      "term": "bs4",
+      "kind": "modül",
+      "desc": "HTML sayfalarını okuma kütüphanesi (BeautifulSoup)."
+     },
+     {
+      "term": "BeautifulSoup",
+      "kind": "araç",
+      "desc": "HTML sayfasını okuyup içinde arama yapmayı sağlar (bs4)."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "BeautifulSoup()",
+      "kind": "fonksiyon",
+      "desc": "HTML sayfasını okuyup içinde arama yapmayı sağlar (bs4)."
+     },
+     {
+      "term": "[... for ... in ...]",
+      "kind": "liste üreteci",
+      "desc": "Liste üreteci: [ifade for x in liste if koşul] ile tek satırda yeni liste."
+     },
+     {
+      "term": "[ ]",
+      "kind": "seçme",
+      "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+     },
+     {
+      "term": ".find_all()",
+      "kind": "metot",
+      "desc": "HTML içinde verilen etiketin hepsini bulur (bs4)."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d22-t3",
+   "title": "Fiyatları topla",
+   "prompt": "`class=\"fiyat\"` olan tüm etiketlerdeki sayıları topla ve `total` değişkenine koy.",
+   "starter": "from bs4 import BeautifulSoup\n\nhtml = \"\"\"\n<li>İp <span class=\"fiyat\">5</span></li>\n<li>Fener <span class=\"fiyat\">40</span></li>\n<li>Harita <span class=\"fiyat\">15</span></li>\n\"\"\"\nsoup = BeautifulSoup(html, \"html.parser\")\n\ntotal = 0\n\nprint(\"Toplam:\", total)\n",
+   "solution": "from bs4 import BeautifulSoup\n\nhtml = \"\"\"\n<li>İp <span class=\"fiyat\">5</span></li>\n<li>Fener <span class=\"fiyat\">40</span></li>\n<li>Harita <span class=\"fiyat\">15</span></li>\n\"\"\"\nsoup = BeautifulSoup(html, \"html.parser\")\n\ntotal = sum([int(s.text) for s in soup.find_all(class_=\"fiyat\")])\n\nprint(\"Toplam:\", total)\n",
+   "hints": [
+    "soup.find_all(class_=\"fiyat\")",
+    "Metinler yazıdır, toplamadan önce int() ile çevir."
+   ],
+   "check": {
+    "python": "\ntest = '<span class=\"fiyat\">3</span><b class=\"fiyat\">10</b><span>99</span>'\n_, g = _run(_set(_code, \"html\", test))\nassert g.get(\"total\") == 13, \"Sadece class='fiyat' olan etiketlerdeki sayıları toplamalısın.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "from bs4 import BeautifulSoup",
+      "notes": [
+       "`bs4` modülünden `BeautifulSoup` programa alınıyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "html = \"\"\"",
+      "notes": [
+       "`html` adında bir değişken oluşturuluyor ve içine `\"\"\" <li>İp <span class=\"fiyat\">5</span></li> <li>Fener <s...` (metin (str)) konuyor."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "<li>İp <span class=\"fiyat\">5</span></li>",
+      "notes": [
+       "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "<li>Fener <span class=\"fiyat\">40</span></li>",
+      "notes": [
+       "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+      ]
+     },
+     {
+      "n": 6,
+      "code": "<li>Harita <span class=\"fiyat\">15</span></li>",
+      "notes": [
+       "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+      ]
+     },
+     {
+      "n": 7,
+      "code": "\"\"\"",
+      "notes": [
+       "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+      ]
+     },
+     {
+      "n": 8,
+      "code": "soup = BeautifulSoup(html, \"html.parser\")",
+      "notes": [
+       "`soup` adında bir değişken oluşturuluyor ve içine `BeautifulSoup(html, \"html.parser\")` konuyor."
+      ]
+     },
+     {
+      "n": 10,
+      "code": "total = sum([int(s.text) for s in soup.find_all(class_=\"fiyat\")])",
+      "notes": [
+       "`total` adında bir değişken oluşturuluyor ve içine `sum([int(s.text) for s in soup.find_all(class_=\"fiyat\")])` konuyor.",
+       "Tek satırda döngüyle yeni bir liste/dizi üretiliyor."
+      ]
+     },
+     {
+      "n": 12,
+      "code": "print(\"Toplam:\", total)",
+      "notes": [
+       "`print(\"Toplam:\", total)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "html",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `\"\"\" <li>İp <span class=\"fiyat\">5</span></li> <li>Fener <s...`."
+     },
+     {
+      "term": "soup",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `BeautifulSoup(html, \"html.parser\")`."
+     },
+     {
+      "term": "total",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `sum([int(s.text) for s in soup.find_all(class_=\"fiyat\")])`."
+     },
+     {
+      "term": "import",
+      "kind": "anahtar kelime",
+      "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+     },
+     {
+      "term": "bs4",
+      "kind": "modül",
+      "desc": "HTML sayfalarını okuma kütüphanesi (BeautifulSoup)."
+     },
+     {
+      "term": "BeautifulSoup",
+      "kind": "araç",
+      "desc": "HTML sayfasını okuyup içinde arama yapmayı sağlar (bs4)."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "BeautifulSoup()",
+      "kind": "fonksiyon",
+      "desc": "HTML sayfasını okuyup içinde arama yapmayı sağlar (bs4)."
+     },
+     {
+      "term": "sum()",
+      "kind": "fonksiyon",
+      "desc": "Listedeki sayıları toplar."
+     },
+     {
+      "term": "[... for ... in ...]",
+      "kind": "liste üreteci",
+      "desc": "Liste üreteci: [ifade for x in liste if koşul] ile tek satırda yeni liste."
+     },
+     {
+      "term": "int()",
+      "kind": "fonksiyon",
+      "desc": "Bir değeri tam sayıya çevirir, örneğin \"42\" yazısını 42 sayısına."
+     },
+     {
+      "term": ".find_all()",
+      "kind": "metot",
+      "desc": "HTML içinde verilen etiketin hepsini bulur (bs4)."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "id": "d22-c",
+  "title": "Tabloyu oku",
+  "prompt": "HTML tablosundaki her satırı `(isim, skor)` tuple'ı olarak `rows` listesine koy. Başlık satırını atla, skoru int yap.",
+  "starter": "from bs4 import BeautifulSoup\n\nhtml = \"\"\"\n<table>\n  <tr><th>İsim</th><th>Skor</th></tr>\n  <tr><td>Piko</td><td>300</td></tr>\n  <tr><td>Ece</td><td>250</td></tr>\n</table>\n\"\"\"\nsoup = BeautifulSoup(html, \"html.parser\")\n\nrows = []\n\nprint(rows)\n",
+  "solution": "from bs4 import BeautifulSoup\n\nhtml = \"\"\"\n<table>\n  <tr><th>İsim</th><th>Skor</th></tr>\n  <tr><td>Piko</td><td>300</td></tr>\n  <tr><td>Ece</td><td>250</td></tr>\n</table>\n\"\"\"\nsoup = BeautifulSoup(html, \"html.parser\")\n\nrows = []\nfor tr in soup.find_all(\"tr\"):\n    cells = tr.find_all(\"td\")\n    if len(cells) == 2:\n        rows.append((cells[0].text, int(cells[1].text)))\n\nprint(rows)\n",
+  "hints": [
+   "Her satır bir <tr>. İçindeki hücreler: tr.find_all(\"td\")",
+   "Başlık satırında <td> yoktur, <th> vardır; bu yüzden boş gelir."
+  ],
+  "check": {
+   "python": "\ntest = \"<table><tr><th>A</th><th>B</th></tr><tr><td>Can</td><td>7</td></tr><tr><td>Ada</td><td>12</td></tr><tr><td>Efe</td><td>1</td></tr></table>\"\n_, g = _run(_set(_code, \"html\", test))\nassert g.get(\"rows\") == [(\"Can\", 7), (\"Ada\", 12), (\"Efe\", 1)], \"rows, başlık dışındaki satırları (isim, skor) olarak içermeli; skor int olmalı.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "from bs4 import BeautifulSoup",
+     "notes": [
+      "`bs4` modülünden `BeautifulSoup` programa alınıyor."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "html = \"\"\"",
+     "notes": [
+      "`html` adında bir değişken oluşturuluyor ve içine `\"\"\" <table> <tr><th>İsim</th><th>Skor</th></tr> <tr><td>P...` (metin (str)) konuyor."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "<table>",
+     "notes": [
+      "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "  <tr><th>İsim</th><th>Skor</th></tr>",
+     "notes": [
+      "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "  <tr><td>Piko</td><td>300</td></tr>",
+     "notes": [
+      "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+     ]
+    },
+    {
+     "n": 7,
+     "code": "  <tr><td>Ece</td><td>250</td></tr>",
+     "notes": [
+      "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+     ]
+    },
+    {
+     "n": 8,
+     "code": "</table>",
+     "notes": [
+      "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+     ]
+    },
+    {
+     "n": 9,
+     "code": "\"\"\"",
+     "notes": [
+      "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+     ]
+    },
+    {
+     "n": 10,
+     "code": "soup = BeautifulSoup(html, \"html.parser\")",
+     "notes": [
+      "`soup` adında bir değişken oluşturuluyor ve içine `BeautifulSoup(html, \"html.parser\")` konuyor."
+     ]
+    },
+    {
+     "n": 12,
+     "code": "rows = []",
+     "notes": [
+      "`rows` adında bir değişken oluşturuluyor ve içine `[]` (liste) konuyor."
+     ]
+    },
+    {
+     "n": 13,
+     "code": "for tr in soup.find_all(\"tr\"):",
+     "notes": [
+      "Döngü: `soup.find_all(\"tr\")` içindeki her eleman sırayla `tr` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+     ]
+    },
+    {
+     "n": 14,
+     "code": "    cells = tr.find_all(\"td\")",
+     "notes": [
+      "`cells` adında bir değişken oluşturuluyor ve içine `tr.find_all(\"td\")` konuyor."
+     ]
+    },
+    {
+     "n": 15,
+     "code": "    if len(cells) == 2:",
+     "notes": [
+      "Koşul: `len(cells) == 2` doğruysa altındaki girintili satırlar çalışır."
+     ]
+    },
+    {
+     "n": 16,
+     "code": "        rows.append((cells[0].text, int(cells[1].text)))",
+     "notes": [
+      "`rows.append((cells[0].text, int(cells[1].text)))`: `rows` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+     ]
+    },
+    {
+     "n": 18,
+     "code": "print(rows)",
+     "notes": [
+      "`print(rows)`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "html",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `\"\"\" <table> <tr><th>İsim</th><th>Skor</th></tr> <tr><td>P...`."
+    },
+    {
+     "term": "soup",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `BeautifulSoup(html, \"html.parser\")`."
+    },
+    {
+     "term": "rows",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `[]`."
+    },
+    {
+     "term": "cells",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `tr.find_all(\"td\")`."
+    },
+    {
+     "term": "tr",
+     "kind": "döngü değişkeni",
+     "desc": "Döngünün her turunda `soup.find_all(\"tr\")` içindeki sıradaki elemanı tutar."
+    },
+    {
+     "term": "import",
+     "kind": "anahtar kelime",
+     "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+    },
+    {
+     "term": "bs4",
+     "kind": "modül",
+     "desc": "HTML sayfalarını okuma kütüphanesi (BeautifulSoup)."
+    },
+    {
+     "term": "BeautifulSoup",
+     "kind": "araç",
+     "desc": "HTML sayfasını okuyup içinde arama yapmayı sağlar (bs4)."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "BeautifulSoup()",
+     "kind": "fonksiyon",
+     "desc": "HTML sayfasını okuyup içinde arama yapmayı sağlar (bs4)."
+    },
+    {
+     "term": "for",
+     "kind": "anahtar kelime",
+     "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+    },
+    {
+     "term": ".find_all()",
+     "kind": "metot",
+     "desc": "HTML içinde verilen etiketin hepsini bulur (bs4)."
+    },
+    {
+     "term": "if",
+     "kind": "anahtar kelime",
+     "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+    },
+    {
+     "term": "==",
+     "kind": "operatör",
+     "desc": "Eşit mi? (True/False)"
+    },
+    {
+     "term": "len()",
+     "kind": "fonksiyon",
+     "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+    },
+    {
+     "term": ".append()",
+     "kind": "metot",
+     "desc": "Listenin sonuna yeni bir eleman ekler."
+    },
+    {
+     "term": "int()",
+     "kind": "fonksiyon",
+     "desc": "Bir değeri tam sayıya çevirir, örneğin \"42\" yazısını 42 sayısına."
+    },
+    {
+     "term": "[ ]",
+     "kind": "seçme",
+     "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    }
+   ]
+  }
+ },
+ "project_task": {
+  "id": "d22-p",
+  "title": "Hazine ipuçları",
+  "prompt": "Limandaki eski bir sayfada hazine ipuçları saklı. Sadece `class=\"ipucu\"` olan maddeler gerçek ipucu, diğerleri tuzak!\n\n- Gerçek ipuçlarının metinlerini sırayla `clues` listesine koy.\n- Sonra `1. Deniz fenerine git` gibi numaralı yazdır.",
+  "starter": "from bs4 import BeautifulSoup\n\nhtml = \"\"\"\n<ul>\n  <li class=\"ipucu\">Deniz fenerine git</li>\n  <li class=\"tuzak\">Mağaraya gir</li>\n  <li class=\"ipucu\">Üç adım kuzeye yürü</li>\n  <li class=\"ipucu\">Kırmızı taşın altına bak</li>\n</ul>\n\"\"\"\nsoup = BeautifulSoup(html, \"html.parser\")\n\nclues = []\n\n# Numaralı yazdır\n",
+  "solution": "from bs4 import BeautifulSoup\n\nhtml = \"\"\"\n<ul>\n  <li class=\"ipucu\">Deniz fenerine git</li>\n  <li class=\"tuzak\">Mağaraya gir</li>\n  <li class=\"ipucu\">Üç adım kuzeye yürü</li>\n  <li class=\"ipucu\">Kırmızı taşın altına bak</li>\n</ul>\n\"\"\"\nsoup = BeautifulSoup(html, \"html.parser\")\n\nclues = [li.text.strip() for li in soup.find_all(\"li\", class_=\"ipucu\")]\n\nfor i, clue in enumerate(clues, 1):\n    print(f\"{i}. {clue}\")\n",
+  "hints": [
+   "soup.find_all(\"li\", class_=\"ipucu\")",
+   "Numaralar için enumerate(clues, 1)"
+  ],
+  "check": {
+   "python": "\ntest = '<li class=\"tuzak\">Yanlış</li><li class=\"ipucu\">Batıya dön</li><li class=\"ipucu\">Kazı</li>'\nout, g = _run(_set(_code, \"html\", test))\nassert g.get(\"clues\") == [\"Batıya dön\", \"Kazı\"], \"clues sadece class='ipucu' olan maddeleri içermeli.\"\nlines = [l.strip() for l in out.strip().splitlines()]\nassert lines == [\"1. Batıya dön\", \"2. Kazı\"], \"İpuçlarını '1. ...' biçiminde numaralı yazdır.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "from bs4 import BeautifulSoup",
+     "notes": [
+      "`bs4` modülünden `BeautifulSoup` programa alınıyor."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "html = \"\"\"",
+     "notes": [
+      "`html` adında bir değişken oluşturuluyor ve içine `\"\"\" <ul> <li class=\"ipucu\">Deniz fenerine git</li> <li cl...` (metin (str)) konuyor."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "<ul>",
+     "notes": [
+      "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "  <li class=\"ipucu\">Deniz fenerine git</li>",
+     "notes": [
+      "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "  <li class=\"tuzak\">Mağaraya gir</li>",
+     "notes": [
+      "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+     ]
+    },
+    {
+     "n": 7,
+     "code": "  <li class=\"ipucu\">Üç adım kuzeye yürü</li>",
+     "notes": [
+      "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+     ]
+    },
+    {
+     "n": 8,
+     "code": "  <li class=\"ipucu\">Kırmızı taşın altına bak</li>",
+     "notes": [
+      "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+     ]
+    },
+    {
+     "n": 9,
+     "code": "</ul>",
+     "notes": [
+      "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+     ]
+    },
+    {
+     "n": 10,
+     "code": "\"\"\"",
+     "notes": [
+      "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+     ]
+    },
+    {
+     "n": 11,
+     "code": "soup = BeautifulSoup(html, \"html.parser\")",
+     "notes": [
+      "`soup` adında bir değişken oluşturuluyor ve içine `BeautifulSoup(html, \"html.parser\")` konuyor."
+     ]
+    },
+    {
+     "n": 13,
+     "code": "clues = [li.text.strip() for li in soup.find_all(\"li\", class_=\"ipucu\")]",
+     "notes": [
+      "`clues` adında bir değişken oluşturuluyor ve içine `[li.text.strip() for li in soup.find_all(\"li\", class_=\"ip...` (liste üreteciyle kurulan liste) konuyor.",
+      "Tek satırda döngüyle yeni bir liste/dizi üretiliyor."
+     ]
+    },
+    {
+     "n": 15,
+     "code": "for i, clue in enumerate(clues, 1):",
+     "notes": [
+      "Döngü: `enumerate(clues, 1)` içindeki her eleman sırayla `i, clue` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+     ]
+    },
+    {
+     "n": 16,
+     "code": "    print(f\"{i}. {clue}\")",
+     "notes": [
+      "`print(f\"{i}. {clue}\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "html",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `\"\"\" <ul> <li class=\"ipucu\">Deniz fenerine git</li> <li cl...`."
+    },
+    {
+     "term": "soup",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `BeautifulSoup(html, \"html.parser\")`."
+    },
+    {
+     "term": "clues",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `[li.text.strip() for li in soup.find_all(\"li\", class_=\"ip...`."
+    },
+    {
+     "term": "i",
+     "kind": "döngü değişkeni",
+     "desc": "Döngünün her turunda `enumerate(clues, 1)` içindeki sıradaki elemanı tutar."
+    },
+    {
+     "term": "clue",
+     "kind": "döngü değişkeni",
+     "desc": "Döngünün her turunda `enumerate(clues, 1)` içindeki sıradaki elemanı tutar."
+    },
+    {
+     "term": "import",
+     "kind": "anahtar kelime",
+     "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+    },
+    {
+     "term": "bs4",
+     "kind": "modül",
+     "desc": "HTML sayfalarını okuma kütüphanesi (BeautifulSoup)."
+    },
+    {
+     "term": "BeautifulSoup",
+     "kind": "araç",
+     "desc": "HTML sayfasını okuyup içinde arama yapmayı sağlar (bs4)."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "BeautifulSoup()",
+     "kind": "fonksiyon",
+     "desc": "HTML sayfasını okuyup içinde arama yapmayı sağlar (bs4)."
+    },
+    {
+     "term": "[... for ... in ...]",
+     "kind": "liste üreteci",
+     "desc": "Liste üreteci: [ifade for x in liste if koşul] ile tek satırda yeni liste."
+    },
+    {
+     "term": ".strip()",
+     "kind": "metot",
+     "desc": "Metnin başındaki ve sonundaki boşlukları siler."
+    },
+    {
+     "term": ".find_all()",
+     "kind": "metot",
+     "desc": "HTML içinde verilen etiketin hepsini bulur (bs4)."
+    },
+    {
+     "term": "for",
+     "kind": "anahtar kelime",
+     "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+    },
+    {
+     "term": "enumerate()",
+     "kind": "fonksiyon",
+     "desc": "Listeyi gezerken her elemanın sıra numarasını da verir: (0, ilk), (1, ikinci)..."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    },
+    {
+     "term": "f\"...{}\"",
+     "kind": "metin",
+     "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+    }
+   ]
+  }
+ },
+ "available": true,
+ "tracks": {
+  "veri": {
+   "project_task": {
+    "id": "d22-pv",
+    "title": "Kur tablosunu okuma",
+    "prompt": "Bir sitedeki kur tablosu HTML olarak `html` değişkeninde. Her kur `<td class=\"kur\" data-kod=\"USD\">32.50</td>` gibi.\n\nBeautifulSoup ile `class=\"kur\"` olan hücreleri bul ve `rates` sözlüğünü oluştur: `{\"USD\": 32.5, \"EUR\": 35.1}` (değerler float). Sonra `USD: 32.5` gibi her kuru ayrı satırda yazdır.",
+    "starter": "from bs4 import BeautifulSoup\n\nhtml = \"\"\"\n<table>\n  <tr><td class=\"kur\" data-kod=\"USD\">32.50</td></tr>\n  <tr><td class=\"kur\" data-kod=\"EUR\">35.10</td></tr>\n  <tr><td class=\"not\">Kurlar bilgi amaçlıdır</td></tr>\n</table>\n\"\"\"\n",
+    "solution": "from bs4 import BeautifulSoup\n\nhtml = \"\"\"\n<table>\n  <tr><td class=\"kur\" data-kod=\"USD\">32.50</td></tr>\n  <tr><td class=\"kur\" data-kod=\"EUR\">35.10</td></tr>\n  <tr><td class=\"not\">Kurlar bilgi amaçlıdır</td></tr>\n</table>\n\"\"\"\nsoup = BeautifulSoup(html, \"html.parser\")\nrates = {}\nfor cell in soup.find_all(\"td\", class_=\"kur\"):\n    rates[cell[\"data-kod\"]] = float(cell.text)\nfor code in rates:\n    print(f\"{code}: {rates[code]}\")\n",
+    "hints": [
+     "soup.find_all(\"td\", class_=\"kur\") kur hücrelerini verir.",
+     "cell[\"data-kod\"] özelliği, cell.text içindeki yazıyı verir."
+    ],
+    "check": {
+     "python": "\ntest = '<td class=\"kur\" data-kod=\"GBP\">41.00</td><td class=\"x\" data-kod=\"Y\">1</td><td class=\"kur\" data-kod=\"JPY\">0.22</td>'\nout, g = _run(_set(_code, \"html\", test))\nassert g.get(\"rates\") == {\"GBP\": 41.0, \"JPY\": 0.22}, \"rates sadece class='kur' hücrelerinden oluşmalı, değerler float.\"\nassert \"GBP: 41.0\" in out and \"JPY: 0.22\" in out, \"Her kuru 'GBP: 41.0' gibi yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "from bs4 import BeautifulSoup",
+       "notes": [
+        "`bs4` modülünden `BeautifulSoup` programa alınıyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "html = \"\"\"",
+       "notes": [
+        "`html` adında bir değişken oluşturuluyor ve içine `\"\"\" <table> <tr><td class=\"kur\" data-kod=\"USD\">32.50</td>...` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "<table>",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "  <tr><td class=\"kur\" data-kod=\"USD\">32.50</td></tr>",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "  <tr><td class=\"kur\" data-kod=\"EUR\">35.10</td></tr>",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "  <tr><td class=\"not\">Kurlar bilgi amaçlıdır</td></tr>",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "</table>",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "\"\"\"",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "soup = BeautifulSoup(html, \"html.parser\")",
+       "notes": [
+        "`soup` adında bir değişken oluşturuluyor ve içine `BeautifulSoup(html, \"html.parser\")` konuyor."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "rates = {}",
+       "notes": [
+        "`rates` adında bir değişken oluşturuluyor ve içine `{}` (sözlük (anahtar: değer)) konuyor."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "for cell in soup.find_all(\"td\", class_=\"kur\"):",
+       "notes": [
+        "Döngü: `soup.find_all(\"td\", class_=\"kur\")` içindeki her eleman sırayla `cell` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "    rates[cell[\"data-kod\"]] = float(cell.text)",
+       "notes": [
+        "`rates[...]` konumundaki değer `float(cell.text)` ile değiştiriliyor."
+       ]
+      },
+      {
+       "n": 14,
+       "code": "for code in rates:",
+       "notes": [
+        "Döngü: `rates` içindeki her eleman sırayla `code` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 15,
+       "code": "    print(f\"{code}: {rates[code]}\")",
+       "notes": [
+        "`print(f\"{code}: {rates[code]}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "html",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"\"\" <table> <tr><td class=\"kur\" data-kod=\"USD\">32.50</td>...`."
+      },
+      {
+       "term": "soup",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `BeautifulSoup(html, \"html.parser\")`."
+      },
+      {
+       "term": "rates",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `{}`."
+      },
+      {
+       "term": "cell",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `soup.find_all(\"td\", class_=\"kur\")` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "code",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `rates` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "bs4",
+       "kind": "modül",
+       "desc": "HTML sayfalarını okuma kütüphanesi (BeautifulSoup)."
+      },
+      {
+       "term": "BeautifulSoup",
+       "kind": "araç",
+       "desc": "HTML sayfasını okuyup içinde arama yapmayı sağlar (bs4)."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "BeautifulSoup()",
+       "kind": "fonksiyon",
+       "desc": "HTML sayfasını okuyup içinde arama yapmayı sağlar (bs4)."
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": ".find_all()",
+       "kind": "metot",
+       "desc": "HTML içinde verilen etiketin hepsini bulur (bs4)."
+      },
+      {
+       "term": "float()",
+       "kind": "fonksiyon",
+       "desc": "Bir değeri ondalıklı sayıya çevirir."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Döviz kurları",
+   "game_role": "Bir web sayfasındaki kur tablosundan güncel kurları okur."
+  },
+  "otomasyon": {
+   "project_task": {
+    "id": "d22-po",
+    "title": "Duyuruları toplama",
+    "prompt": "Okulunun duyuru sayfası `html` değişkeninde. Her duyuru `<div class=\"duyuru\">` içinde bir `<a>` bağlantısı.\n\nBeautifulSoup ile duyuruları bul ve `(başlık, bağlantı)` tuple'larından oluşan `notices` listesini yap. Reklamları (`class=\"reklam\"`) alma. Sonra her birini `- Sınav takvimi: /sinav` gibi yazdır.",
+    "starter": "from bs4 import BeautifulSoup\n\nhtml = \"\"\"\n<div class=\"duyuru\"><a href=\"/sinav\">Sınav takvimi</a></div>\n<div class=\"reklam\"><a href=\"/kampanya\">Büyük indirim!</a></div>\n<div class=\"duyuru\"><a href=\"/gezi\">Gezi formu</a></div>\n\"\"\"\n",
+    "solution": "from bs4 import BeautifulSoup\n\nhtml = \"\"\"\n<div class=\"duyuru\"><a href=\"/sinav\">Sınav takvimi</a></div>\n<div class=\"reklam\"><a href=\"/kampanya\">Büyük indirim!</a></div>\n<div class=\"duyuru\"><a href=\"/gezi\">Gezi formu</a></div>\n\"\"\"\nsoup = BeautifulSoup(html, \"html.parser\")\nnotices = []\nfor box in soup.find_all(\"div\", class_=\"duyuru\"):\n    link = box.find(\"a\")\n    notices.append((link.text, link[\"href\"]))\nfor title, href in notices:\n    print(f\"- {title}: {href}\")\n",
+    "hints": [
+     "soup.find_all(\"div\", class_=\"duyuru\")",
+     "box.find(\"a\") bağlantıyı verir; link.text başlık, link[\"href\"] adres."
+    ],
+    "check": {
+     "python": "\ntest = '<div class=\"duyuru\"><a href=\"/a\">A</a></div><div class=\"reklam\"><a href=\"/r\">R</a></div><div class=\"duyuru\"><a href=\"/b\">B</a></div>'\nout, g = _run(_set(_code, \"html\", test))\nassert g.get(\"notices\") == [(\"A\", \"/a\"), (\"B\", \"/b\")], \"notices sadece duyuruların (başlık, bağlantı) ikilileri olmalı.\"\nassert \"- A: /a\" in out and \"- B: /b\" in out and \"R\" not in out, \"Duyuruları '- A: /a' gibi yazdır, reklamı yazma.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "from bs4 import BeautifulSoup",
+       "notes": [
+        "`bs4` modülünden `BeautifulSoup` programa alınıyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "html = \"\"\"",
+       "notes": [
+        "`html` adında bir değişken oluşturuluyor ve içine `\"\"\" <div class=\"duyuru\"><a href=\"/sinav\">Sınav takvimi</a...` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "<div class=\"duyuru\"><a href=\"/sinav\">Sınav takvimi</a></div>",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "<div class=\"reklam\"><a href=\"/kampanya\">Büyük indirim!</a></div>",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "<div class=\"duyuru\"><a href=\"/gezi\">Gezi formu</a></div>",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "\"\"\"",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "soup = BeautifulSoup(html, \"html.parser\")",
+       "notes": [
+        "`soup` adında bir değişken oluşturuluyor ve içine `BeautifulSoup(html, \"html.parser\")` konuyor."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "notices = []",
+       "notes": [
+        "`notices` adında bir değişken oluşturuluyor ve içine `[]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "for box in soup.find_all(\"div\", class_=\"duyuru\"):",
+       "notes": [
+        "Döngü: `soup.find_all(\"div\", class_=\"duyuru\")` içindeki her eleman sırayla `box` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "    link = box.find(\"a\")",
+       "notes": [
+        "`link` adında bir değişken oluşturuluyor ve içine `box.find(\"a\")` konuyor."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "    notices.append((link.text, link[\"href\"]))",
+       "notes": [
+        "`notices.append((link.text, link[\"href\"]))`: `notices` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "for title, href in notices:",
+       "notes": [
+        "Döngü: `notices` içindeki her eleman sırayla `title, href` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 14,
+       "code": "    print(f\"- {title}: {href}\")",
+       "notes": [
+        "`print(f\"- {title}: {href}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "html",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"\"\" <div class=\"duyuru\"><a href=\"/sinav\">Sınav takvimi</a...`."
+      },
+      {
+       "term": "soup",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `BeautifulSoup(html, \"html.parser\")`."
+      },
+      {
+       "term": "notices",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[]`."
+      },
+      {
+       "term": "link",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `box.find(\"a\")`."
+      },
+      {
+       "term": "box",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `soup.find_all(\"div\", class_=\"duyuru\")` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "title",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `notices` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "href",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `notices` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "bs4",
+       "kind": "modül",
+       "desc": "HTML sayfalarını okuma kütüphanesi (BeautifulSoup)."
+      },
+      {
+       "term": "BeautifulSoup",
+       "kind": "araç",
+       "desc": "HTML sayfasını okuyup içinde arama yapmayı sağlar (bs4)."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "BeautifulSoup()",
+       "kind": "fonksiyon",
+       "desc": "HTML sayfasını okuyup içinde arama yapmayı sağlar (bs4)."
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": ".find_all()",
+       "kind": "metot",
+       "desc": "HTML içinde verilen etiketin hepsini bulur (bs4)."
+      },
+      {
+       "term": ".find()",
+       "kind": "metot",
+       "desc": "Aranan parçanın metindeki yerini verir (yoksa -1)."
+      },
+      {
+       "term": ".append()",
+       "kind": "metot",
+       "desc": "Listenin sonuna yeni bir eleman ekler."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Duyuru takibi",
+   "game_role": "Okul/iş sitesindeki yeni duyuruları senin için toplar."
+  },
+  "web": {
+   "project_task": {
+    "id": "d22-pw",
+    "title": "Başka bir sayfayı okuma",
+    "prompt": "Bir arkadaşının blogunu kendi sitende önermek istiyorsun. Sayfanın HTML'i `html` değişkeninde.\n\nBeautifulSoup ile:\n\n- `page_title`: sayfanın `<title>` yazısı\n- `posts`: `class=\"post\"` olan bağlantılardan `(yazı, adres)` tuple'larının listesi: `[(\"Oyun Yaptım\", \"/yazi/oyun.html\"), ...]`\n- Önce `page_title`'ı, sonra her yazıyı `Oyun Yaptım -> /yazi/oyun.html` gibi ayrı satırda yazdır.",
+    "starter": "from bs4 import BeautifulSoup\n\nhtml = \"\"\"\n<html><head><title>Can'ın Blogu</title></head>\n<body>\n  <a class=\"post\" href=\"/yazi/oyun.html\">Oyun Yaptım</a>\n  <a class=\"menu\" href=\"/hakkinda.html\">Hakkında</a>\n  <a class=\"post\" href=\"/yazi/robot.html\">Robot Kolu</a>\n</body></html>\n\"\"\"\n",
+    "solution": "from bs4 import BeautifulSoup\n\nhtml = \"\"\"\n<html><head><title>Can'ın Blogu</title></head>\n<body>\n  <a class=\"post\" href=\"/yazi/oyun.html\">Oyun Yaptım</a>\n  <a class=\"menu\" href=\"/hakkinda.html\">Hakkında</a>\n  <a class=\"post\" href=\"/yazi/robot.html\">Robot Kolu</a>\n</body></html>\n\"\"\"\nsoup = BeautifulSoup(html, \"html.parser\")\npage_title = soup.title.text\nposts = []\nfor a in soup.find_all(\"a\", class_=\"post\"):\n    posts.append((a.text, a[\"href\"]))\nprint(page_title)\nfor text, href in posts:\n    print(f\"{text} -> {href}\")\n",
+    "hints": [
+     "soup.title.text sayfa başlığını verir; soup.find_all(\"a\", class_=\"post\") yazı bağlantılarını.",
+     "a.text bağlantının yazısını, a[\"href\"] adresini verir."
+    ],
+    "check": {
+     "python": "\ntest = '<html><head><title>Deniz</title></head><body><a class=\"post\" href=\"/a.html\">A</a><a class=\"x\" href=\"/y.html\">Y</a><a class=\"post\" href=\"/b.html\">B</a></body></html>'\nout, g = _run(_set(_code, \"html\", test))\nassert g.get(\"page_title\") == \"Deniz\", \"page_title, <title> etiketinin yazısı olmalı: soup.title.text\"\nassert g.get(\"posts\") == [(\"A\", \"/a.html\"), (\"B\", \"/b.html\")], \"posts sadece class='post' bağlantılarından (yazı, adres) tuple'ları olmalı.\"\nassert \"Deniz\" in out and \"A -> /a.html\" in out and \"B -> /b.html\" in out, \"Başlığı ve her yazıyı 'A -> /a.html' gibi yazdır.\"\nassert \"/y.html\" not in out, \"class='post' olmayan bağlantıları yazdırma.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "from bs4 import BeautifulSoup",
+       "notes": [
+        "`bs4` modülünden `BeautifulSoup` programa alınıyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "html = \"\"\"",
+       "notes": [
+        "`html` adında bir değişken oluşturuluyor ve içine `\"\"\" <html><head><title>Can'ın Blogu</title></head> <body>...` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "<html><head><title>Can'ın Blogu</title></head>",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "<body>",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "  <a class=\"post\" href=\"/yazi/oyun.html\">Oyun Yaptım</a>",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "  <a class=\"menu\" href=\"/hakkinda.html\">Hakkında</a>",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "  <a class=\"post\" href=\"/yazi/robot.html\">Robot Kolu</a>",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "</body></html>",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "\"\"\"",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "soup = BeautifulSoup(html, \"html.parser\")",
+       "notes": [
+        "`soup` adında bir değişken oluşturuluyor ve içine `BeautifulSoup(html, \"html.parser\")` konuyor."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "page_title = soup.title.text",
+       "notes": [
+        "`page_title` adında bir değişken oluşturuluyor ve içine `soup.title.text` konuyor."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "posts = []",
+       "notes": [
+        "`posts` adında bir değişken oluşturuluyor ve içine `[]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 14,
+       "code": "for a in soup.find_all(\"a\", class_=\"post\"):",
+       "notes": [
+        "Döngü: `soup.find_all(\"a\", class_=\"post\")` içindeki her eleman sırayla `a` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 15,
+       "code": "    posts.append((a.text, a[\"href\"]))",
+       "notes": [
+        "`posts.append((a.text, a[\"href\"]))`: `posts` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 16,
+       "code": "print(page_title)",
+       "notes": [
+        "`print(page_title)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 17,
+       "code": "for text, href in posts:",
+       "notes": [
+        "Döngü: `posts` içindeki her eleman sırayla `text, href` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 18,
+       "code": "    print(f\"{text} -> {href}\")",
+       "notes": [
+        "`print(f\"{text} -> {href}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "html",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"\"\" <html><head><title>Can'ın Blogu</title></head> <body>...`."
+      },
+      {
+       "term": "soup",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `BeautifulSoup(html, \"html.parser\")`."
+      },
+      {
+       "term": "page_title",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `soup.title.text`."
+      },
+      {
+       "term": "posts",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[]`."
+      },
+      {
+       "term": "a",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `soup.find_all(\"a\", class_=\"post\")` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "text",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `posts` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "href",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `posts` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "bs4",
+       "kind": "modül",
+       "desc": "HTML sayfalarını okuma kütüphanesi (BeautifulSoup)."
+      },
+      {
+       "term": "BeautifulSoup",
+       "kind": "araç",
+       "desc": "HTML sayfasını okuyup içinde arama yapmayı sağlar (bs4)."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "BeautifulSoup()",
+       "kind": "fonksiyon",
+       "desc": "HTML sayfasını okuyup içinde arama yapmayı sağlar (bs4)."
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": ".find_all()",
+       "kind": "metot",
+       "desc": "HTML içinde verilen etiketin hepsini bulur (bs4)."
+      },
+      {
+       "term": ".append()",
+       "kind": "metot",
+       "desc": "Listenin sonuna yeni bir eleman ekler."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Arkadaş blogu",
+   "game_role": "Başka bir blogun sayfasından başlığı ve yazı bağlantılarını okur."
+  },
+  "bot": {
+   "project_task": {
+    "id": "d22-pb",
+    "title": "SSS sayfasını okuma",
+    "prompt": "Bot, bir sitenin **Sık Sorulan Sorular** sayfasından cevap öğrensin. Sayfa `html` değişkeninde; her soru-cevap bir `<div class=\"sss\">` içinde: soru `<h3>`, cevap `<p>`.\n\nBeautifulSoup ile `class=\"sss\"` olan kutuları bul ve `faq` sözlüğünü oluştur (soru -> cevap). Reklam kutusunu alma. Sonra her birini iki satırda yazdır:\n\n```\nS: Kargo ne zaman gelir?\nC: 2-3 iş günü içinde.\n```",
+    "starter": "from bs4 import BeautifulSoup\n\nhtml = \"\"\"\n<div class=\"sss\"><h3>Kargo ne zaman gelir?</h3><p>2-3 iş günü içinde.</p></div>\n<div class=\"reklam\"><h3>Büyük indirim!</h3><p>Hemen al.</p></div>\n<div class=\"sss\"><h3>İade edebilir miyim?</h3><p>Evet, 14 gün içinde.</p></div>\n\"\"\"\n",
+    "solution": "from bs4 import BeautifulSoup\n\nhtml = \"\"\"\n<div class=\"sss\"><h3>Kargo ne zaman gelir?</h3><p>2-3 iş günü içinde.</p></div>\n<div class=\"reklam\"><h3>Büyük indirim!</h3><p>Hemen al.</p></div>\n<div class=\"sss\"><h3>İade edebilir miyim?</h3><p>Evet, 14 gün içinde.</p></div>\n\"\"\"\nsoup = BeautifulSoup(html, \"html.parser\")\nfaq = {}\nfor box in soup.find_all(\"div\", class_=\"sss\"):\n    question = box.find(\"h3\").text\n    answer = box.find(\"p\").text\n    faq[question] = answer\nfor question in faq:\n    print(f\"S: {question}\")\n    print(f\"C: {faq[question]}\")\n",
+    "hints": [
+     "soup.find_all(\"div\", class_=\"sss\") soru kutularını verir.",
+     "box.find(\"h3\").text soruyu, box.find(\"p\").text cevabı verir."
+    ],
+    "check": {
+     "python": "\ntest = '<div class=\"sss\"><h3>A?</h3><p>Bir.</p></div><div class=\"reklam\"><h3>R?</h3><p>Al!</p></div><div class=\"sss\"><h3>B?</h3><p>İki.</p></div>'\nout, g = _run(_set(_code, \"html\", test))\nassert g.get(\"faq\") == {\"A?\": \"Bir.\", \"B?\": \"İki.\"}, \"faq, sadece class='sss' kutularından oluşan soru -> cevap sözlüğü olmalı.\"\nassert \"S: A?\" in out and \"C: Bir.\" in out and \"C: İki.\" in out, \"Her soruyu 'S: ...', cevabını 'C: ...' olarak yazdır.\"\nassert \"R?\" not in out, \"Reklam kutusunu yazdırma.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "from bs4 import BeautifulSoup",
+       "notes": [
+        "`bs4` modülünden `BeautifulSoup` programa alınıyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "html = \"\"\"",
+       "notes": [
+        "`html` adında bir değişken oluşturuluyor ve içine `\"\"\" <div class=\"sss\"><h3>Kargo ne zaman gelir?</h3><p>2-3...` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "<div class=\"sss\"><h3>Kargo ne zaman gelir?</h3><p>2-3 iş günü içinde.</p></div>",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "<div class=\"reklam\"><h3>Büyük indirim!</h3><p>Hemen al.</p></div>",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "<div class=\"sss\"><h3>İade edebilir miyim?</h3><p>Evet, 14 gün içinde.</p></div>",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "\"\"\"",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "soup = BeautifulSoup(html, \"html.parser\")",
+       "notes": [
+        "`soup` adında bir değişken oluşturuluyor ve içine `BeautifulSoup(html, \"html.parser\")` konuyor."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "faq = {}",
+       "notes": [
+        "`faq` adında bir değişken oluşturuluyor ve içine `{}` (sözlük (anahtar: değer)) konuyor."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "for box in soup.find_all(\"div\", class_=\"sss\"):",
+       "notes": [
+        "Döngü: `soup.find_all(\"div\", class_=\"sss\")` içindeki her eleman sırayla `box` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "    question = box.find(\"h3\").text",
+       "notes": [
+        "`question` adında bir değişken oluşturuluyor ve içine `box.find(\"h3\").text` konuyor."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "    answer = box.find(\"p\").text",
+       "notes": [
+        "`answer` adında bir değişken oluşturuluyor ve içine `box.find(\"p\").text` konuyor."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "    faq[question] = answer",
+       "notes": [
+        "`faq[...]` konumundaki değer `answer` ile değiştiriliyor."
+       ]
+      },
+      {
+       "n": 14,
+       "code": "for question in faq:",
+       "notes": [
+        "Döngü: `faq` içindeki her eleman sırayla `question` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 15,
+       "code": "    print(f\"S: {question}\")",
+       "notes": [
+        "`print(f\"S: {question}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 16,
+       "code": "    print(f\"C: {faq[question]}\")",
+       "notes": [
+        "`print(f\"C: {faq[question]}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "html",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"\"\" <div class=\"sss\"><h3>Kargo ne zaman gelir?</h3><p>2-3...`."
+      },
+      {
+       "term": "soup",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `BeautifulSoup(html, \"html.parser\")`."
+      },
+      {
+       "term": "faq",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `{}`."
+      },
+      {
+       "term": "question",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `box.find(\"h3\").text`."
+      },
+      {
+       "term": "answer",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `box.find(\"p\").text`."
+      },
+      {
+       "term": "box",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `soup.find_all(\"div\", class_=\"sss\")` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "bs4",
+       "kind": "modül",
+       "desc": "HTML sayfalarını okuma kütüphanesi (BeautifulSoup)."
+      },
+      {
+       "term": "BeautifulSoup",
+       "kind": "araç",
+       "desc": "HTML sayfasını okuyup içinde arama yapmayı sağlar (bs4)."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "BeautifulSoup()",
+       "kind": "fonksiyon",
+       "desc": "HTML sayfasını okuyup içinde arama yapmayı sağlar (bs4)."
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": ".find_all()",
+       "kind": "metot",
+       "desc": "HTML içinde verilen etiketin hepsini bulur (bs4)."
+      },
+      {
+       "term": ".find()",
+       "kind": "metot",
+       "desc": "Aranan parçanın metindeki yerini verir (yoksa -1)."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      }
+     ]
+    }
+   },
+   "project_contribution": "SSS okuyucu",
+   "game_role": "Bir web sayfasındaki sık sorulan soruları ve cevaplarını öğrenir."
+  },
+  "okul": {
+   "project_task": {
+    "id": "d22-pn",
+    "title": "Not sayfasını okuma",
+    "prompt": "Okulunun not sayfası HTML olarak `html` değişkeninde. Her ders bir `<tr class=\"ders\">` satırı; içinde ders adı `<td class=\"ad\">`, not `<td class=\"puan\">` hücresinde. Duyuru satırlarını alma.\n\nBeautifulSoup ile `grades` sözlüğünü oluştur: `{\"Matematik\": 85, \"Fizik\": 70}` (notlar tam sayı). Sonra her dersi `Matematik: 85` gibi ayrı satırda yazdır.",
+    "starter": "from bs4 import BeautifulSoup\n\nhtml = \"\"\"\n<table>\n  <tr><th>Ders</th><th>Not</th></tr>\n  <tr class=\"ders\"><td class=\"ad\">Matematik</td><td class=\"puan\">85</td></tr>\n  <tr class=\"ders\"><td class=\"ad\">Fizik</td><td class=\"puan\">70</td></tr>\n  <tr class=\"duyuru\"><td>Veli toplantısı cuma günü</td></tr>\n</table>\n\"\"\"\n",
+    "solution": "from bs4 import BeautifulSoup\n\nhtml = \"\"\"\n<table>\n  <tr><th>Ders</th><th>Not</th></tr>\n  <tr class=\"ders\"><td class=\"ad\">Matematik</td><td class=\"puan\">85</td></tr>\n  <tr class=\"ders\"><td class=\"ad\">Fizik</td><td class=\"puan\">70</td></tr>\n  <tr class=\"duyuru\"><td>Veli toplantısı cuma günü</td></tr>\n</table>\n\"\"\"\nsoup = BeautifulSoup(html, \"html.parser\")\ngrades = {}\nfor row in soup.find_all(\"tr\", class_=\"ders\"):\n    name = row.find(\"td\", class_=\"ad\").text\n    grades[name] = int(row.find(\"td\", class_=\"puan\").text)\nfor name in grades:\n    print(f\"{name}: {grades[name]}\")\n",
+    "hints": [
+     "soup.find_all(\"tr\", class_=\"ders\") ders satırlarını verir.",
+     "row.find(\"td\", class_=\"puan\").text notun yazısını verir; int() ile sayıya çevir."
+    ],
+    "check": {
+     "python": "\ntest = '<table><tr class=\"ders\"><td class=\"ad\">Kimya</td><td class=\"puan\">55</td></tr><tr class=\"duyuru\"><td class=\"ad\">Gezi</td><td class=\"puan\">1</td></tr><tr class=\"ders\"><td class=\"ad\">Müzik</td><td class=\"puan\">100</td></tr></table>'\nout, g = _run(_set(_code, \"html\", test))\nassert g.get(\"grades\") == {\"Kimya\": 55, \"Müzik\": 100}, \"grades sadece class='ders' satırlarından oluşmalı, notlar int.\"\nassert \"Kimya: 55\" in out and \"Müzik: 100\" in out and \"Gezi\" not in out, \"Her dersi 'Kimya: 55' gibi yazdır, duyuruyu yazma.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "from bs4 import BeautifulSoup",
+       "notes": [
+        "`bs4` modülünden `BeautifulSoup` programa alınıyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "html = \"\"\"",
+       "notes": [
+        "`html` adında bir değişken oluşturuluyor ve içine `\"\"\" <table> <tr><th>Ders</th><th>Not</th></tr> <tr class=...` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "<table>",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "  <tr><th>Ders</th><th>Not</th></tr>",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "  <tr class=\"ders\"><td class=\"ad\">Matematik</td><td class=\"puan\">85</td></tr>",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "  <tr class=\"ders\"><td class=\"ad\">Fizik</td><td class=\"puan\">70</td></tr>",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "  <tr class=\"duyuru\"><td>Veli toplantısı cuma günü</td></tr>",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "</table>",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "\"\"\"",
+       "notes": [
+        "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "soup = BeautifulSoup(html, \"html.parser\")",
+       "notes": [
+        "`soup` adında bir değişken oluşturuluyor ve içine `BeautifulSoup(html, \"html.parser\")` konuyor."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "grades = {}",
+       "notes": [
+        "`grades` adında bir değişken oluşturuluyor ve içine `{}` (sözlük (anahtar: değer)) konuyor."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "for row in soup.find_all(\"tr\", class_=\"ders\"):",
+       "notes": [
+        "Döngü: `soup.find_all(\"tr\", class_=\"ders\")` içindeki her eleman sırayla `row` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 14,
+       "code": "    name = row.find(\"td\", class_=\"ad\").text",
+       "notes": [
+        "`name` adında bir değişken oluşturuluyor ve içine `row.find(\"td\", class_=\"ad\").text` konuyor."
+       ]
+      },
+      {
+       "n": 15,
+       "code": "    grades[name] = int(row.find(\"td\", class_=\"puan\").text)",
+       "notes": [
+        "`grades[...]` konumundaki değer `int(row.find(\"td\", class_=\"puan\").text)` ile değiştiriliyor."
+       ]
+      },
+      {
+       "n": 16,
+       "code": "for name in grades:",
+       "notes": [
+        "Döngü: `grades` içindeki her eleman sırayla `name` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 17,
+       "code": "    print(f\"{name}: {grades[name]}\")",
+       "notes": [
+        "`print(f\"{name}: {grades[name]}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "html",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"\"\" <table> <tr><th>Ders</th><th>Not</th></tr> <tr class=...`."
+      },
+      {
+       "term": "soup",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `BeautifulSoup(html, \"html.parser\")`."
+      },
+      {
+       "term": "grades",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `{}`."
+      },
+      {
+       "term": "name",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `row.find(\"td\", class_=\"ad\").text`."
+      },
+      {
+       "term": "row",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `soup.find_all(\"tr\", class_=\"ders\")` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "bs4",
+       "kind": "modül",
+       "desc": "HTML sayfalarını okuma kütüphanesi (BeautifulSoup)."
+      },
+      {
+       "term": "BeautifulSoup",
+       "kind": "araç",
+       "desc": "HTML sayfasını okuyup içinde arama yapmayı sağlar (bs4)."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "BeautifulSoup()",
+       "kind": "fonksiyon",
+       "desc": "HTML sayfasını okuyup içinde arama yapmayı sağlar (bs4)."
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": ".find_all()",
+       "kind": "metot",
+       "desc": "HTML içinde verilen etiketin hepsini bulur (bs4)."
+      },
+      {
+       "term": ".find()",
+       "kind": "metot",
+       "desc": "Aranan parçanın metindeki yerini verir (yoksa -1)."
+      },
+      {
+       "term": "int()",
+       "kind": "fonksiyon",
+       "desc": "Bir değeri tam sayıya çevirir, örneğin \"42\" yazısını 42 sayısına."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Okul sitesinden notlar",
+   "game_role": "Okulun not sayfasındaki tablodan notlarını okur."
+  }
+ }
+}

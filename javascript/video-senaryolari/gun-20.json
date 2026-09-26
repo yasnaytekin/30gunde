@@ -1,0 +1,221 @@
+{
+  "kurs": "javascript",
+  "gun": 20,
+  "baslik": "Kalıcı veri",
+  "maskot": "kodi",
+  "ozet": "Kodi, Olay Kuşağı'nın son durağında localStorage ile metin, sayı, dizi ve nesne saklamayı; açılışta yükleyip varsayılan değer kullanmayı ve || ile ?? farkını anlatıyor.",
+  "hedef_sure_sn": 160,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 12,
+      "anlatim": "Selam, ben Kodi! Sayfayı yenileyince skorun sıfırlanıyor mu? Olay Kuşağı'nın son durağında gemine bir hafıza takıyoruz. Bugün localStorage ile bilgileri kalıcı yapacağız!",
+      "ekran": {
+        "baslik": "Gün 20: Kalıcı veri",
+        "gorsel": "gorseller/javascript/bolgeler/kusak.webp"
+      },
+      "maskot": {
+        "poz": "el-sallama",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 17,
+      "anlatim": "localStorage her sitenin tarayıcıda kendine ait küçük bir defteridir. Sayfa kapansa da içindekiler kalır. setItem kaydeder, getItem okur, removeItem siler. Kayıt yoksa getItem null verir.",
+      "ekran": {
+        "baslik": "Tarayıcının defteri",
+        "kod": "localStorage.setItem(\"pilot\", \"Ada\");      // kaydet\nconst name = localStorage.getItem(\"pilot\"); // \"Ada\"\nlocalStorage.removeItem(\"pilot\");          // sil\nconsole.log(localStorage.getItem(\"pilot\"));\n",
+        "vurgu_satirlari": [
+          1,
+          2,
+          3
+        ],
+        "cikti": "null",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 17,
+      "anlatim": "Dikkat: localStorage her şeyi metin olarak saklar. 42 kaydedersen geri tırnaklı 42 gelir. Hesap yapmadan önce Number ile çevir. Sondaki veya sıfır da kayıt yoksa sıfır kullanılmasını sağlar.",
+      "ekran": {
+        "baslik": "Sayılar metin olarak saklanır",
+        "kod": "localStorage.setItem(\"best\", 42);\nlocalStorage.getItem(\"best\");        // \"42\" (metin!)\nconst best = Number(localStorage.getItem(\"best\")) || 0;\nconsole.log(best + 1);\n",
+        "vurgu_satirlari": [
+          2,
+          3
+        ],
+        "cikti": "43",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sol"
+      },
+      "calistir": false
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "Varsayılan değer için iki araç var. Veya işareti, yanlış sayılan her değerde sağ tarafı kullanır, sıfır bile olsa. Çift soru işareti ise yalnızca null ve undefined'da devreye girer.",
+      "ekran": {
+        "baslik": "|| ve ?? farkı",
+        "kod": "console.log(0 || 5);\nconsole.log(0 ?? 5);\nconsole.log(null ?? \"yeni pilot\");\nconsole.log(Number(null) || 0);\n",
+        "vurgu_satirlari": [
+          1,
+          2
+        ],
+        "cikti": "5\n0\nyeni pilot\n0",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 17,
+      "anlatim": "Dizi ve nesneleri saklamak için önce JSON.stringify ile metne çeviririz, okurken JSON.parse ile geri çeviririz. Kayıt yoksa JSON.parse null verir; çift soru işaretiyle boş bir dizi kullanırız.",
+      "ekran": {
+        "baslik": "Diziler ve nesneler: JSON",
+        "kod": "const items = [\"kalkan\", \"lazer\"];\nlocalStorage.setItem(\"inventory\", JSON.stringify(items));\nconst back = JSON.parse(localStorage.getItem(\"inventory\")) ?? [];\nconsole.log(back.length);\n",
+        "vurgu_satirlari": [
+          2,
+          3
+        ],
+        "cikti": "2",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 17,
+      "anlatim": "Kalıcı veri kullanan her sayfa aynı düzeni izler: açılışta yükle, ekranda göster, değişince yeniden kaydet. Ayarlarda eksik alanları yayma ile varsayılanlardan doldururuz. Kayıtlı olanlar üste yazılır.",
+      "ekran": {
+        "baslik": "Açılışta yükle, değişince kaydet",
+        "kod": "const DEFAULTS = { sound: true, volume: 5 };\nconst saved = JSON.parse('{\"volume\":8}') ?? {}; // kayıttan gelmiş gibi\nconst settings = { ...DEFAULTS, ...saved };\nconsole.log(settings);\n",
+        "vurgu_satirlari": [
+          3
+        ],
+        "cikti": "{ sound: true, volume: 8 }",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "İşte düzenin kendisi: not kutusu açılışta kayıttan doluyor, her yazışta yeniden kaydediliyor. Sayfayı yenilesen de notun yerinde duruyor!",
+      "ekran": {
+        "baslik": "Örnek: kaptan notu",
+        "kod": "const note = document.querySelector(\"#note\");\nnote.value = localStorage.getItem(\"note\") ?? \"\";\nnote.addEventListener(\"input\", () => {\n  localStorage.setItem(\"note\", note.value);\n});\n",
+        "vurgu_satirlari": [
+          2,
+          4
+        ],
+        "cikti": "Yazdığın not, sayfa yenilendikten sonra da kutuda görünür.",
+        "html": "<textarea id=\"note\" rows=\"3\" cols=\"30\" placeholder=\"Kaptan notu...\"></textarea>",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 8,
+      "tur": "hata",
+      "sure_sn": 14,
+      "anlatim": "Sık hata: diziyi JSON'a çevirmeden kaydetmek. localStorage onu kendi bildiği gibi metne çevirir ve köşeli parantezler kaybolur. Geri okuyunca dizi değil, düz bir metin gelir!",
+      "ekran": {
+        "baslik": "Sık hata: JSON'u unutmak",
+        "kod": "localStorage.setItem(\"inventory\", [\"kalkan\", \"lazer\"]);\nconsole.log(localStorage.getItem(\"inventory\"));\n",
+        "vurgu_satirlari": [
+          1
+        ],
+        "cikti": "kalkan,lazer   (dizi değil, metin!)",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 9,
+      "tur": "gorev",
+      "sure_sn": 13,
+      "anlatim": "Görev zamanı! Sayfayı kaçıncı kez açtığını sayan bir sayaç, adını hatırlayan bir selam ve JSON ile saklanan bir envanter listesi yapacaksın.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Ziyaret sayacı",
+          "Görev 2: Pilotu hatırla",
+          "Görev 3: Envanter kaydı"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 10,
+      "tur": "ozet",
+      "sure_sn": 12,
+      "anlatim": "Özetleyelim: setItem, getItem ve removeItem ile tarayıcının defterini kullan. Sayıları Number ile çevir, dizileri ve nesneleri JSON ile sakla. Kayıt yoksa varsayılan değer kullan.",
+      "ekran": {
+        "baslik": "Özet",
+        "maddeler": [
+          "setItem / getItem / removeItem",
+          "Her şey metin: Number() ve JSON.stringify / parse",
+          "Kayıt yoksa: || 0, ?? [], { ...DEFAULTS, ...saved }"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "kapanis",
+      "sure_sn": 11,
+      "anlatim": "Tebrikler, Olay Kuşağı'nı geçtin! Yarın Piksel Gezegeni'ne iniyoruz. Orada canvas adlı tuvale kodla çizim yapacağız. Görüşürüz!",
+      "ekran": {
+        "baslik": "Yarın: Canvas ile çizim",
+        "gorsel": "gorseller/javascript/bolgeler/piksel.webp"
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

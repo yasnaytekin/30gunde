@@ -1,0 +1,968 @@
+{
+ "day": 2,
+ "title": "Değişkenler ve hazır fonksiyonlar",
+ "region": "kamp",
+ "project_contribution": "Oyuncu bilgileri",
+ "game_role": "Kahramanın adı, canı ve altını oyunun üst satırında görünür.",
+ "xp_complete": 150,
+ "objective": "Değişken oluşturmak, veri tiplerini tanımak, girdi almak ve hazır fonksiyonları kullanmak",
+ "story": "Oyunumuzun bir kahramanı olacak. Ama bilgisayar kahramanın adını, canını, altınını nasıl hatırlayacak? Bugün bilgisayarın hafızasında etiketli kutular açacağız. Bunlara **değişken** diyoruz!",
+ "sections": [
+  {
+   "title": "Değişken: etiketli bir kutu",
+   "body": "Bir değişken, içine bilgi koyduğun etiketli bir kutudur.\n\n```python\nname = \"Piko\"\nhp = 100\n```\n\nBuradaki `=` işareti matematikteki eşittir değildir. \"Sağdaki değeri soldaki kutuya koy\" demektir. Sonra kutunun adını yazarak içindekini kullanırsın: `print(name)`"
+  },
+  {
+   "title": "İsim verme kuralları",
+   "body": "- Harfle ya da `_` ile başlar: `score`, `_gizli`\n- Boşluk olmaz, yerine `_` kullan: `player_name`\n- Büyük/küçük harf farklıdır: `Score` ile `score` ayrı kutulardır\n- Türkçe karakterleri (ş, ğ, ı...) değişken adlarında kullanmamak iyi bir alışkanlıktır\n- Anlamlı isim seç: `x` yerine `gold`"
+  },
+  {
+   "title": "Veri tipleri",
+   "body": "Kutulara farklı türde bilgiler koyabilirsin:\n\n- `str` (yazı): `\"Piko\"`\n- `int` (tam sayı): `100`\n- `float` (ondalıklı sayı): `3.5`\n- `bool` (doğru/yanlış): `True` ya da `False`\n\nBir değerin tipini öğrenmek için `type()` kullanılır: `print(type(100))`"
+  },
+  {
+   "title": "Kutunun içini değiştirmek",
+   "body": "Değişkene yeni bir değer verince eskisinin yerine geçer:\n\n```python\ngold = 10\ngold = gold + 5\nprint(gold)  # 15\n```"
+  },
+  {
+   "title": "Kullanıcıdan bilgi almak",
+   "body": "`input()` kullanıcıdan bir cevap ister. Gelen cevap **her zaman yazıdır** (str). Sayıya çevirmek için `int()` kullanırız:\n\n```python\nage = int(input(\"Kaç yaşındasın? \"))\n```\n\nBu sitede `input()` kullanınca cevaplarını editörün altındaki **Girdi** kutusuna yaz. Her satır bir cevaptır.\n\nTersini de yapabilirsin: `str(12)` sayıyı yazıya çevirir."
+  },
+  {
+   "title": "Python'ın hazır fonksiyonları",
+   "body": "Python'ın içinde kullanıma hazır birçok fonksiyon gelir. Bunlara **hazır fonksiyonlar** (built-in functions) denir. Şimdiye kadar `print()`, `input()`, `type()`, `int()` ve `str()` ile tanıştın. Birkaç tane daha:\n\n- `len(\"Piko\")` bir yazının uzunluğunu verir: `4`\n- `float(\"2.5\")` yazıyı ondalıklı sayıya çevirir\n- `round(7.6)` en yakın tam sayıya yuvarlar: `8`\n- `max(3, 9, 4)` en büyüğü, `min(3, 9, 4)` en küçüğü verir\n\nBir fonksiyonun ne yaptığını unutursan `help(len)` yazıp çalıştırabilirsin."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Kahramanın kutuları",
+   "code": "name = \"Piko\"\nhp = 100\nspeed = 2.5\nis_alive = True\nprint(name, hp, speed, is_alive)\nprint(type(name))\nprint(type(hp))\n",
+   "note": ""
+  },
+  {
+   "title": "Değeri güncelle",
+   "code": "gold = 10\nprint(\"Başta:\", gold)\ngold = gold + 25\nprint(\"Hazineden sonra:\", gold)\n",
+   "note": ""
+  },
+  {
+   "title": "Girdi alalım",
+   "code": "name = input(\"Adın ne? \")\nprint(\"Merhaba\", name)\n",
+   "note": "Girdi kutusundaki adı değiştirip tekrar çalıştır.",
+   "inputs": [
+    "Ayşe"
+   ]
+  },
+  {
+   "title": "Hazır fonksiyonlar",
+   "code": "name = \"Piko\"\nprint(len(name))\nprint(float(\"2.5\") + 1)\nprint(round(7.6))\nprint(max(3, 9, 4), min(3, 9, 4))\n",
+   "note": "Her satırın sonucunu çalıştırmadan önce tahmin etmeye çalış."
+  }
+ ],
+ "tasks": [
+  {
+   "id": "d2-t1",
+   "title": "Kutuyu doldur",
+   "prompt": "`name` değişkeninin içine kendi adını koy ve çalıştır.",
+   "starter": "name = \"Ahmet\"\nprint(name)\n",
+   "solution": "name = \"Deniz\"\nprint(name)\n",
+   "hints": [
+    "Sadece tırnakların içindeki adı değiştir.",
+    "Örnek: name = \"Zeynep\""
+   ],
+   "check": {
+    "python": "\nassert isinstance(name, str), \"name bir yazı olmalı, tırnak kullan.\"\nassert name.strip() and name != \"Ahmet\", \"name değişkenine kendi adını yaz.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "name = \"Deniz\"",
+      "notes": [
+       "`name` adında bir değişken oluşturuluyor ve içine `\"Deniz\"` (metin (str)) konuyor."
+      ]
+     },
+     {
+      "n": 2,
+      "code": "print(name)",
+      "notes": [
+       "`print(name)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "name",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `\"Deniz\"`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d2-t2",
+   "title": "Kahraman kartı",
+   "prompt": "Üç değişken oluştur: `hero` (kahramanın adı, yazı), `age` (yaşı, tam sayı) ve `hp` (değeri 100). Sonra üçünü de `print()` ile yazdır.",
+   "starter": "# Değişkenleri burada oluştur\n",
+   "solution": "hero = \"Piko\"\nage = 12\nhp = 100\nprint(hero, age, hp)\n",
+   "hints": [
+    "Her değişken ayrı bir satırda: hero = ...",
+    "age tırnaksız bir sayı olmalı: age = 12",
+    "Hepsini yazdırmak için: print(hero, age, hp)"
+   ],
+   "check": {
+    "python": "\nassert isinstance(hero, str) and hero.strip(), \"hero bir yazı olmalı, örneğin \\\"Piko\\\".\"\nassert isinstance(age, int) and not isinstance(age, bool), \"age tırnaksız bir tam sayı olmalı.\"\nassert isinstance(hp, int) and not isinstance(hp, bool), \"hp tırnaksız bir tam sayı olmalı (örneğin 100).\"\nassert hero in _output and str(age) in _output and str(hp) in _output, \"Üç değişkeni de print() ile yazdır.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "hero = \"Piko\"",
+      "notes": [
+       "`hero` adında bir değişken oluşturuluyor ve içine `\"Piko\"` (metin (str)) konuyor."
+      ]
+     },
+     {
+      "n": 2,
+      "code": "age = 12",
+      "notes": [
+       "`age` adında bir değişken oluşturuluyor ve içine `12` (tam sayı) konuyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "hp = 100",
+      "notes": [
+       "`hp` adında bir değişken oluşturuluyor ve içine `100` (tam sayı) konuyor."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "print(hero, age, hp)",
+      "notes": [
+       "`print(hero, age, hp)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "hero",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `\"Piko\"`."
+     },
+     {
+      "term": "age",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `12`."
+     },
+     {
+      "term": "hp",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `100`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d2-t3",
+   "title": "Tip dedektifi",
+   "prompt": "Bu kod hata veriyor çünkü yazı ile sayı toplanamaz. `a`'yı sayıya çevirerek `total` değerinin 10 olmasını sağla. `a = \"7\"` satırını değiştirme.",
+   "starter": "a = \"7\"\nb = 3\ntotal = a + b  # Bu satır hata veriyor!\nprint(total)\n",
+   "solution": "a = \"7\"\nb = 3\ntotal = int(a) + b\nprint(total)\n",
+   "hints": [
+    "Hata mesajını oku: str ile int toplanamıyor.",
+    "int() yazıyı sayıya çevirir.",
+    "total = int(a) + b"
+   ],
+   "check": {
+    "code_contains": [
+     "int("
+    ],
+    "python": "\nassert a == \"7\", 'a = \"7\" satırını değiştirme.'\nassert total == 10, \"total 10 olmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "a = \"7\"",
+      "notes": [
+       "`a` adında bir değişken oluşturuluyor ve içine `\"7\"` (metin (str)) konuyor."
+      ]
+     },
+     {
+      "n": 2,
+      "code": "b = 3",
+      "notes": [
+       "`b` adında bir değişken oluşturuluyor ve içine `3` (tam sayı) konuyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "total = int(a) + b",
+      "notes": [
+       "`total` adında bir değişken oluşturuluyor ve içine `int(a) + b` konuyor."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "print(total)",
+      "notes": [
+       "`print(total)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "a",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `\"7\"`."
+     },
+     {
+      "term": "b",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `3`."
+     },
+     {
+      "term": "total",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `int(a) + b`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "+",
+      "kind": "operatör",
+      "desc": "Toplama; metinlerde ve listelerde uç uca ekleme."
+     },
+     {
+      "term": "int()",
+      "kind": "fonksiyon",
+      "desc": "Bir değeri tam sayıya çevirir, örneğin \"42\" yazısını 42 sayısına."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "id": "d2-c",
+  "title": "Kutuları değiştir",
+  "prompt": "Eline iki bardak verdiler, birinde süt var diğerinde meyve suyu. İçeriklerini değiştirmek için üçüncü bir bardak gerekir, değil mi? `a` ve `b` değişkenlerinin içeriğini yer değiştir. \"elma\" ve \"armut\" kelimelerini bir daha yazmak yok!",
+  "starter": "a = \"elma\"\nb = \"armut\"\n# a ile b'nin içeriğini değiştir\n\nprint(a, b)\n",
+  "solution": "a = \"elma\"\nb = \"armut\"\ntemp = a\na = b\nb = temp\nprint(a, b)\n",
+  "hints": [
+   "Üçüncü bir değişken oluştur: temp = a",
+   "Sonra a'ya b'yi, b'ye de temp'i koy."
+  ],
+  "check": {
+   "python": "\nassert a == \"armut\" and b == \"elma\", \"Sonunda a armut, b elma olmalı.\"\nassert _code.count(\"elma\") == 1 and _code.count(\"armut\") == 1, \"Kelimeleri tekrar yazma, değişkenleri kullan.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "a = \"elma\"",
+     "notes": [
+      "`a` adında bir değişken oluşturuluyor ve içine `\"elma\"` (metin (str)) konuyor."
+     ]
+    },
+    {
+     "n": 2,
+     "code": "b = \"armut\"",
+     "notes": [
+      "`b` adında bir değişken oluşturuluyor ve içine `\"armut\"` (metin (str)) konuyor."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "temp = a",
+     "notes": [
+      "`temp` adında bir değişken oluşturuluyor ve içine `a` konuyor."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "a = b",
+     "notes": [
+      "`a` değişkenine yeni değer veriliyor: `b`."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "b = temp",
+     "notes": [
+      "`b` değişkenine yeni değer veriliyor: `temp`."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "print(a, b)",
+     "notes": [
+      "`print(a, b)`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "a",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `\"elma\"`."
+    },
+    {
+     "term": "b",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `\"armut\"`."
+    },
+    {
+     "term": "temp",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `a`."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    }
+   ]
+  }
+ },
+ "project_task": {
+  "id": "d2-p",
+  "title": "Oyuncu bilgileri",
+  "prompt": "Kahramanımızın bilgilerini değişkenlerde tutalım:\n\n- `player_name`: kahramanın adı\n- `player_hp`: 100\n- `player_gold`: 0\n- `player_level`: 1\n\nSonra `Kahraman: Piko` gibi bir satır yazdır (ad değişkenden gelsin).",
+  "starter": "# Kahramanın bilgileri\n",
+  "solution": "player_name = \"Piko\"\nplayer_hp = 100\nplayer_gold = 0\nplayer_level = 1\nprint(\"Kahraman:\", player_name)\n",
+  "hints": [
+   "Dört değişkeni tek tek oluştur.",
+   "print(\"Kahraman:\", player_name)"
+  ],
+  "check": {
+   "python": "\nassert isinstance(player_name, str) and player_name.strip(), \"player_name bir yazı olmalı.\"\nassert isinstance(player_hp, int) and not isinstance(player_hp, bool) and player_hp > 0, \"player_hp 0'dan büyük bir tam sayı olmalı (örneğin 100).\"\nassert isinstance(player_gold, int) and not isinstance(player_gold, bool) and player_gold >= 0, \"player_gold bir tam sayı olmalı (örneğin 0).\"\nassert isinstance(player_level, int) and not isinstance(player_level, bool) and player_level >= 1, \"player_level 1 ya da daha büyük bir tam sayı olmalı.\"\nassert \"Kahraman: \" + player_name in _output, \"Çıktıda 'Kahraman: ' ve ardından kahramanın adı görünmeli.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "player_name = \"Piko\"",
+     "notes": [
+      "`player_name` adında bir değişken oluşturuluyor ve içine `\"Piko\"` (metin (str)) konuyor."
+     ]
+    },
+    {
+     "n": 2,
+     "code": "player_hp = 100",
+     "notes": [
+      "`player_hp` adında bir değişken oluşturuluyor ve içine `100` (tam sayı) konuyor."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "player_gold = 0",
+     "notes": [
+      "`player_gold` adında bir değişken oluşturuluyor ve içine `0` (tam sayı) konuyor."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "player_level = 1",
+     "notes": [
+      "`player_level` adında bir değişken oluşturuluyor ve içine `1` (tam sayı) konuyor."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "print(\"Kahraman:\", player_name)",
+     "notes": [
+      "`print(\"Kahraman:\", player_name)`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "player_name",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `\"Piko\"`."
+    },
+    {
+     "term": "player_hp",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `100`."
+    },
+    {
+     "term": "player_gold",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `0`."
+    },
+    {
+     "term": "player_level",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `1`."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    }
+   ]
+  }
+ },
+ "available": true,
+ "visual_task": {
+  "id": "d2-v",
+  "title": "Değişkenli ordu",
+  "prompt": "Ordunun genişliği `genislik` değişkeninde duruyor. **3 satır** yazdır; her satırda `genislik` kadar Piko olsun. Yıldızları elle sayma: `\"*\" * genislik` yan yana `genislik` tane yıldız yazar.\n\nDeğişkeni `genislik = 6` yaparsan ordu kendiliğinden genişlemeli!",
+  "starter": "genislik = 4\n\nprint(\"****\")\n",
+  "solution": "genislik = 4\n\nprint(\"*\" * genislik)\nprint(\"*\" * genislik)\nprint(\"*\" * genislik)\n",
+  "hints": [
+   "Bir satır: print(\"*\" * genislik)",
+   "Bu satırı üç kez yaz."
+  ],
+  "check": {
+   "python": "\ndef _satirlar(text):\n    return [l.rstrip() for l in text.strip(\"\\n\").split(\"\\n\")] if text.strip() else []\n\ndef _kontrol(n):\n    s = _satirlar(out)\n    assert len(s) == 3, \"3 satır yazdırmalısın.\"\n    assert all(r == \"*\" * n for r in s), \"genislik = {} iken her satırda {} yıldız olmalı.\".format(n, n)\nout = _output\n_kontrol(genislik)\nout, _ = _run(_set(_code, \"genislik\", 6))\n_kontrol(6)\n"
+  },
+  "xp": 40,
+  "scene": {
+   "target": [
+    "****",
+    "****",
+    "****"
+   ]
+  },
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "genislik = 4",
+     "notes": [
+      "`genislik` adında bir değişken oluşturuluyor ve içine `4` (tam sayı) konuyor."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "print(\"*\" * genislik)",
+     "notes": [
+      "`print(\"*\" * genislik)`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "print(\"*\" * genislik)",
+     "notes": [
+      "`print(\"*\" * genislik)`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "print(\"*\" * genislik)",
+     "notes": [
+      "`print(\"*\" * genislik)`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "genislik",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `4`."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    },
+    {
+     "term": "*",
+     "kind": "operatör",
+     "desc": "Çarpma; metni ya da listeyi tekrarlama (\"*\" * 3 → \"***\")."
+    }
+   ]
+  }
+ },
+ "tracks": {
+  "veri": {
+   "project_task": {
+    "id": "d2-pv",
+    "title": "Bütçe bilgileri",
+    "prompt": "Defterin bilgilerini değişkenlerde tutalım:\n\n- `owner`: defterin sahibi (senin adın)\n- `budget`: aylık bütçe, `5000`\n- `currency`: `\"TL\"`\n\nSonra değişkenleri kullanarak şu iki satırı yazdır:\n\n```\nSahip: Ece\nBütçe: 5000 TL\n```",
+    "starter": "owner = \"Ece\"\n# budget ve currency değişkenlerini ekle\n",
+    "solution": "owner = \"Ece\"\nbudget = 5000\ncurrency = \"TL\"\nprint(\"Sahip:\", owner)\nprint(\"Bütçe:\", budget, currency)\n",
+    "hints": [
+     "budget = 5000 bir sayı, currency = \"TL\" bir yazı.",
+     "print(\"Bütçe:\", budget, currency) virgüllerin yerine boşluk koyar."
+    ],
+    "check": {
+     "python": "\nassert isinstance(budget, (int, float)) and not isinstance(budget, bool) and budget > 0, \"budget sıfırdan büyük bir sayı olmalı (örneğin 5000).\"\nassert isinstance(currency, str) and currency.strip(), \"currency bir yazı olmalı (örneğin \\\"TL\\\").\"\nout, _ = _run(_set(_set(_code, \"owner\", \"Deniz\"), \"budget\", 7250))\nassert \"Sahip: Deniz\" in out, \"Sahip satırında owner değişkenini kullan.\"\nassert \"Bütçe: 7250 TL\" in out, \"Bütçe satırında budget ve currency değişkenlerini kullan.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "owner = \"Ece\"",
+       "notes": [
+        "`owner` adında bir değişken oluşturuluyor ve içine `\"Ece\"` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "budget = 5000",
+       "notes": [
+        "`budget` adında bir değişken oluşturuluyor ve içine `5000` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "currency = \"TL\"",
+       "notes": [
+        "`currency` adında bir değişken oluşturuluyor ve içine `\"TL\"` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "print(\"Sahip:\", owner)",
+       "notes": [
+        "`print(\"Sahip:\", owner)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "print(\"Bütçe:\", budget, currency)",
+       "notes": [
+        "`print(\"Bütçe:\", budget, currency)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "owner",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"Ece\"`."
+      },
+      {
+       "term": "budget",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `5000`."
+      },
+      {
+       "term": "currency",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"TL\"`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Bütçe bilgileri",
+   "game_role": "Defterin sahibini ve aylık bütçeyi tutar."
+  },
+  "otomasyon": {
+   "project_task": {
+    "id": "d2-po",
+    "title": "Kullanıcı bilgileri",
+    "prompt": "Asistanın bilgilerini değişkenlerde tutalım:\n\n- `user_name`: senin adın\n- `task_count`: bugünkü görev sayısı, `3`\n- `work_hours`: bugün çalışacağın saat, `6`\n\nSonra değişkenleri kullanarak şöyle yazdır:\n\n```\nMerhaba, Ece\nBugün 3 görevin var.\n```",
+    "starter": "user_name = \"Ece\"\n# task_count ve work_hours değişkenlerini ekle\n",
+    "solution": "user_name = \"Ece\"\ntask_count = 3\nwork_hours = 6\nprint(\"Merhaba,\", user_name)\nprint(\"Bugün\", task_count, \"görevin var.\")\n",
+    "hints": [
+     "task_count = 3 ve work_hours = 6 sayı.",
+     "print(\"Bugün\", task_count, \"görevin var.\")"
+    ],
+    "check": {
+     "python": "\nassert isinstance(task_count, int) and not isinstance(task_count, bool) and isinstance(work_hours, int) and not isinstance(work_hours, bool), \"task_count ve work_hours tırnaksız tam sayılar olmalı (örneğin 3 ve 6).\"\nout, _ = _run(_set(_set(_code, \"user_name\", \"Deniz\"), \"task_count\", 5))\nassert \"Merhaba, Deniz\" in out, \"Selamda user_name değişkenini kullan.\"\nassert \"Bugün 5 görevin var.\" in out, \"Görev sayısını task_count değişkeninden yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "user_name = \"Ece\"",
+       "notes": [
+        "`user_name` adında bir değişken oluşturuluyor ve içine `\"Ece\"` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "task_count = 3",
+       "notes": [
+        "`task_count` adında bir değişken oluşturuluyor ve içine `3` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "work_hours = 6",
+       "notes": [
+        "`work_hours` adında bir değişken oluşturuluyor ve içine `6` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "print(\"Merhaba,\", user_name)",
+       "notes": [
+        "`print(\"Merhaba,\", user_name)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "print(\"Bugün\", task_count, \"görevin var.\")",
+       "notes": [
+        "`print(\"Bugün\", task_count, \"görevin var.\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "user_name",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"Ece\"`."
+      },
+      {
+       "term": "task_count",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `3`."
+      },
+      {
+       "term": "work_hours",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `6`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Kullanıcı bilgileri",
+   "game_role": "Asistanın kime ve kaç görev için çalıştığını tutar."
+  },
+  "web": {
+   "project_task": {
+    "id": "d2-pw",
+    "title": "Site bilgileri",
+    "prompt": "Sitenin bilgilerini değişkenlerde tutalım:\n\n- `owner`: sitenin sahibi (senin adın)\n- `site_title`: sitenin adı, `\"Kod Günlüğüm\"`\n- `year`: bu yıl, `2026`\n\nSonra değişkenleri kullanarak sayfanın üst yazısını (site adı) ve alt yazısını yazdır:\n\n```\nKod Günlüğüm\n© 2026 Ece\n```",
+    "starter": "owner = \"Ece\"\n# site_title ve year değişkenlerini ekle\n",
+    "solution": "owner = \"Ece\"\nsite_title = \"Kod Günlüğüm\"\nyear = 2026\nprint(site_title)\nprint(\"©\", year, owner)\n",
+    "hints": [
+     "site_title = \"Kod Günlüğüm\" bir yazı, year = 2026 bir sayı.",
+     "print(\"©\", year, owner) virgüllerin yerine boşluk koyar."
+    ],
+    "check": {
+     "python": "\nassert isinstance(site_title, str) and site_title.strip(), \"site_title bir yazı olmalı (örneğin \\\"Kod Günlüğüm\\\").\"\nassert isinstance(year, int) and not isinstance(year, bool), \"year tırnaksız bir tam sayı olmalı (örneğin 2026).\"\nout, _ = _run(_set(_set(_set(_code, \"owner\", \"Deniz\"), \"year\", 2027), \"site_title\", \"Oyun Notlarım\"))\nassert \"Oyun Notlarım\" in out, \"Üst yazıda site_title değişkenini kullan.\"\nassert \"© 2027 Deniz\" in out, \"Alt yazıda year ve owner değişkenlerini kullan: © 2027 Deniz\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "owner = \"Ece\"",
+       "notes": [
+        "`owner` adında bir değişken oluşturuluyor ve içine `\"Ece\"` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "site_title = \"Kod Günlüğüm\"",
+       "notes": [
+        "`site_title` adında bir değişken oluşturuluyor ve içine `\"Kod Günlüğüm\"` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "year = 2026",
+       "notes": [
+        "`year` adında bir değişken oluşturuluyor ve içine `2026` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "print(site_title)",
+       "notes": [
+        "`print(site_title)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "print(\"©\", year, owner)",
+       "notes": [
+        "`print(\"©\", year, owner)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "owner",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"Ece\"`."
+      },
+      {
+       "term": "site_title",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"Kod Günlüğüm\"`."
+      },
+      {
+       "term": "year",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `2026`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Site bilgileri",
+   "game_role": "Sitenin adını, sahibini ve yılını tutar; sayfanın üst ve alt yazısını yazar."
+  },
+  "bot": {
+   "project_task": {
+    "id": "d2-pb",
+    "title": "Bot ayarları",
+    "prompt": "Botun ayarlarını değişkenlerde tutalım:\n\n- `bot_name`: botun adı, `\"Bilge\"`\n- `version`: sürüm numarası, `1`\n- `user`: botla konuşan kişinin adı (senin adın)\n\nSonra değişkenleri kullanarak şu üç satırı yazdır:\n\n```\nBot: Bilge\nSürüm: 1\nBilge diyor ki: Merhaba Ece\n```",
+    "starter": "bot_name = \"Bilge\"\n# version ve user değişkenlerini ekle\n",
+    "solution": "bot_name = \"Bilge\"\nversion = 1\nuser = \"Ece\"\nprint(\"Bot:\", bot_name)\nprint(\"Sürüm:\", version)\nprint(bot_name, \"diyor ki: Merhaba\", user)\n",
+    "hints": [
+     "version = 1 bir sayı, user = \"Ece\" bir yazı.",
+     "print(bot_name, \"diyor ki: Merhaba\", user) virgüllerin yerine boşluk koyar."
+    ],
+    "check": {
+     "python": "\nassert isinstance(version, (int, float)) and not isinstance(version, bool), \"version tırnaksız bir sayı olmalı (örneğin 1).\"\nassert isinstance(user, str) and user, \"user, adını tutan bir yazı olmalı.\"\nout, _ = _run(_set(_set(_set(_code, \"bot_name\", \"Robo\"), \"version\", 2), \"user\", \"Deniz\"))\nassert \"Bot: Robo\" in out, \"Bot satırında bot_name değişkenini kullan.\"\nassert \"Sürüm: 2\" in out, \"Sürüm satırında version değişkenini kullan.\"\nassert \"Robo diyor ki: Merhaba Deniz\" in out, \"Üçüncü satırda bot_name ve user değişkenlerini kullan.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "bot_name = \"Bilge\"",
+       "notes": [
+        "`bot_name` adında bir değişken oluşturuluyor ve içine `\"Bilge\"` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "version = 1",
+       "notes": [
+        "`version` adında bir değişken oluşturuluyor ve içine `1` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "user = \"Ece\"",
+       "notes": [
+        "`user` adında bir değişken oluşturuluyor ve içine `\"Ece\"` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "print(\"Bot:\", bot_name)",
+       "notes": [
+        "`print(\"Bot:\", bot_name)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "print(\"Sürüm:\", version)",
+       "notes": [
+        "`print(\"Sürüm:\", version)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "print(bot_name, \"diyor ki: Merhaba\", user)",
+       "notes": [
+        "`print(bot_name, \"diyor ki: Merhaba\", user)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "bot_name",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"Bilge\"`."
+      },
+      {
+       "term": "version",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `1`."
+      },
+      {
+       "term": "user",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"Ece\"`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Bot ayarları",
+   "game_role": "Botun adını, sürümünü ve konuştuğu kişiyi tutar."
+  },
+  "okul": {
+   "project_task": {
+    "id": "d2-pn",
+    "title": "Öğrenci bilgileri",
+    "prompt": "Defterin sahibinin bilgilerini değişkenlerde tutalım:\n\n- `student`: öğrencinin adı (senin adın)\n- `grade_level`: sınıfın, `10`\n- `lesson_count`: bu dönem aldığın ders sayısı, `8`\n\nSonra değişkenleri kullanarak şu üç satırı yazdır:\n\n```\nÖğrenci: Ece\nSınıf: 10\nDers sayısı: 8\n```",
+    "starter": "student = \"Ece\"\n# grade_level ve lesson_count değişkenlerini ekle\n",
+    "solution": "student = \"Ece\"\ngrade_level = 10\nlesson_count = 8\nprint(\"Öğrenci:\", student)\nprint(\"Sınıf:\", grade_level)\nprint(\"Ders sayısı:\", lesson_count)\n",
+    "hints": [
+     "grade_level = 10 ve lesson_count = 8 birer sayı.",
+     "print(\"Sınıf:\", grade_level) virgülün yerine boşluk koyar."
+    ],
+    "check": {
+     "python": "\nassert isinstance(grade_level, int) and not isinstance(grade_level, bool), \"grade_level tırnaksız bir tam sayı olmalı (örneğin 10).\"\nassert isinstance(lesson_count, int) and not isinstance(lesson_count, bool), \"lesson_count tırnaksız bir tam sayı olmalı (örneğin 8).\"\nout, _ = _run(_set(_set(_set(_code, \"student\", \"Deniz\"), \"grade_level\", 11), \"lesson_count\", 12))\nassert \"Öğrenci: Deniz\" in out, \"Öğrenci satırında student değişkenini kullan.\"\nassert \"Sınıf: 11\" in out, \"Sınıf satırında grade_level değişkenini kullan.\"\nassert \"Ders sayısı: 12\" in out, \"Ders sayısı satırında lesson_count değişkenini kullan.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "student = \"Ece\"",
+       "notes": [
+        "`student` adında bir değişken oluşturuluyor ve içine `\"Ece\"` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "grade_level = 10",
+       "notes": [
+        "`grade_level` adında bir değişken oluşturuluyor ve içine `10` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "lesson_count = 8",
+       "notes": [
+        "`lesson_count` adında bir değişken oluşturuluyor ve içine `8` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "print(\"Öğrenci:\", student)",
+       "notes": [
+        "`print(\"Öğrenci:\", student)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "print(\"Sınıf:\", grade_level)",
+       "notes": [
+        "`print(\"Sınıf:\", grade_level)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "print(\"Ders sayısı:\", lesson_count)",
+       "notes": [
+        "`print(\"Ders sayısı:\", lesson_count)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "student",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"Ece\"`."
+      },
+      {
+       "term": "grade_level",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `10`."
+      },
+      {
+       "term": "lesson_count",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `8`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Öğrenci bilgileri",
+   "game_role": "Defterin kime ait olduğunu, sınıfını ve ders sayısını tutar."
+  }
+ }
+}

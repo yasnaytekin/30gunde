@@ -1,0 +1,1616 @@
+{
+ "day": 16,
+ "title": "Tarih ve saat",
+ "region": "ada",
+ "project_contribution": "Günlük seri",
+ "game_role": "Oyun açılınca günlük serin hesaplanır.",
+ "xp_complete": 150,
+ "objective": "datetime modülüyle tarih oluşturmak, biçimlendirmek ve tarihler arasında hesap yapmak",
+ "story": "Keşif Adası'na ayak bastık! Adanın ortasında dev bir güneş saati var ve üzerinde bir yazı: \"Zamanı okuyan, adanın sırrını çözer.\" Oyunlardaki günlük ödüller, seriler ve geri sayımlar hep tarih hesabıyla çalışır. Bugün Python'la zamanı okuyoruz.",
+ "sections": [
+  {
+   "title": "datetime modülü",
+   "body": "Tarih ve saat için `datetime` modülünü kullanırız. En çok üç parçasını kullanacağız:\n\n```python\nfrom datetime import date, datetime, timedelta\n\ntoday = date.today()      # bugünün tarihi\nnow = datetime.now()      # şu anki tarih ve saat\n```\n\n`date.today()` her gün farklı sonuç verir. Bu yüzden görevlerde sabit tarihlerle çalışacağız."
+  },
+  {
+   "title": "Tarih oluşturmak",
+   "body": "```python\nbirthday = date(2014, 5, 19)   # yıl, ay, gün\nprint(birthday.year)    # 2014\nprint(birthday.month)   # 5\nprint(birthday.day)     # 19\nprint(birthday.weekday())  # 0 pazartesi ... 6 pazar\n```\n\nSaat de lazımsa `datetime(2026, 9, 23, 14, 30)` yazılır: 14.30."
+  },
+  {
+   "title": "Biçimlendirmek",
+   "body": "`strftime` tarihi istediğin biçimde yazıya çevirir:\n\n- `%d` gün, `%m` ay, `%Y` dört haneli yıl\n- `%H` saat, `%M` dakika\n\n```python\nd = date(2026, 9, 23)\nprint(d.strftime(\"%d.%m.%Y\"))   # 23.09.2026\n```\n\nTersini `datetime.strptime(\"23.09.2026\", \"%d.%m.%Y\")` yapar: yazıdan tarih üretir."
+  },
+  {
+   "title": "Tarihlerle hesap",
+   "body": "İki tarihi çıkarırsan aradaki süreyi verir. `.days` ile gün sayısını alırsın:\n\n```python\nstart = date(2026, 9, 1)\nend = date(2026, 9, 30)\nprint((end - start).days)   # 29\n```\n\nBir tarihe gün eklemek için `timedelta` kullanılır:\n\n```python\nprint(start + timedelta(days=7))   # bir hafta sonrası\n```"
+  }
+ ],
+ "examples": [
+  {
+   "title": "Tarihin parçaları",
+   "code": "from datetime import date\n\nd = date(2026, 9, 23)\nprint(\"Yıl:\", d.year)\nprint(\"Ay:\", d.month)\nprint(\"Gün:\", d.day)\nprint(d.strftime(\"%d.%m.%Y\"))\n",
+   "note": ""
+  },
+  {
+   "title": "Kaç gün kaldı?",
+   "code": "from datetime import date\n\ntoday = date(2026, 9, 23)\nnew_year = date(2027, 1, 1)\nleft = (new_year - today).days\nprint(f\"Yeni yıla {left} gün var.\")\n",
+   "note": ""
+  },
+  {
+   "title": "Bir hafta sonra",
+   "code": "from datetime import date, timedelta\n\nstart = date(2026, 9, 23)\nfor week in range(1, 4):\n    print(f\"{week}. hafta:\", (start + timedelta(days=7 * week)).strftime(\"%d.%m.%Y\"))\n",
+   "note": ""
+  }
+ ],
+ "tasks": [
+  {
+   "id": "d16-t1",
+   "title": "Tarihi biçimle",
+   "prompt": "`year`, `month` ve `day` ile bir tarih oluştur ve `23.09.2026` biçiminde yazdır.",
+   "starter": "from datetime import date\n\nyear = 2026\nmonth = 9\nday = 23\n\n# Tarihi oluştur ve gün.ay.yıl biçiminde yazdır\n",
+   "solution": "from datetime import date\n\nyear = 2026\nmonth = 9\nday = 23\n\nd = date(year, month, day)\nprint(d.strftime(\"%d.%m.%Y\"))\n",
+   "hints": [
+    "d = date(year, month, day)",
+    "Biçim: d.strftime(\"%d.%m.%Y\")"
+   ],
+   "check": {
+    "python": "\nout, _ = _run(_set(_set(_set(_code, \"year\", 2031), \"month\", 4), \"day\", 5))\nassert \"05.04.2031\" in out, \"year=2031, month=4, day=5 iken 05.04.2031 yazmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "from datetime import date",
+      "notes": [
+       "`datetime` modülünden `date` programa alınıyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "year = 2026",
+      "notes": [
+       "`year` adında bir değişken oluşturuluyor ve içine `2026` (tam sayı) konuyor."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "month = 9",
+      "notes": [
+       "`month` adında bir değişken oluşturuluyor ve içine `9` (tam sayı) konuyor."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "day = 23",
+      "notes": [
+       "`day` adında bir değişken oluşturuluyor ve içine `23` (tam sayı) konuyor."
+      ]
+     },
+     {
+      "n": 7,
+      "code": "d = date(year, month, day)",
+      "notes": [
+       "`d` adında bir değişken oluşturuluyor ve içine `date(year, month, day)` konuyor."
+      ]
+     },
+     {
+      "n": 8,
+      "code": "print(d.strftime(\"%d.%m.%Y\"))",
+      "notes": [
+       "`print(d.strftime(\"%d.%m.%Y\"))`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "year",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `2026`."
+     },
+     {
+      "term": "month",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `9`."
+     },
+     {
+      "term": "day",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `23`."
+     },
+     {
+      "term": "d",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `date(year, month, day)`."
+     },
+     {
+      "term": "import",
+      "kind": "anahtar kelime",
+      "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+     },
+     {
+      "term": "datetime",
+      "kind": "modül",
+      "desc": "Tarih ve saat araçları."
+     },
+     {
+      "term": "date",
+      "kind": "araç",
+      "desc": "Bir tarihi (yıl, ay, gün) temsil eder (datetime modülünden)."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "date()",
+      "kind": "fonksiyon",
+      "desc": "Bir tarihi (yıl, ay, gün) temsil eder (datetime modülünden)."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     },
+     {
+      "term": ".strftime()",
+      "kind": "metot",
+      "desc": "Tarihi istenen biçimde yazıya çevirir, örn. \"%d.%m.%Y\"."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d16-t2",
+   "title": "Kaç gün kaldı?",
+   "prompt": "`today` ile doğum günü (`birthday`) arasında kaç gün olduğunu `days_left` değişkenine koy ve `Doğum gününe 12 gün var.` gibi yazdır.",
+   "starter": "from datetime import date\n\ntoday = date(2026, 9, 23)\nbirthday_day = 5\nbirthday = date(2026, 10, birthday_day)\n\ndays_left = 0\n\nprint(f\"Doğum gününe {days_left} gün var.\")\n",
+   "solution": "from datetime import date\n\ntoday = date(2026, 9, 23)\nbirthday_day = 5\nbirthday = date(2026, 10, birthday_day)\n\ndays_left = (birthday - today).days\n\nprint(f\"Doğum gününe {days_left} gün var.\")\n",
+   "hints": [
+    "İki tarihi çıkar: birthday - today",
+    "Gün sayısı için sonuna .days ekle."
+   ],
+   "check": {
+    "python": "\nout, g = _run(_set(_code, \"birthday_day\", 20))\nassert g.get(\"days_left\") == 27, \"birthday 20 Ekim iken 27 gün olmalı: (birthday - today).days\"\nassert \"Doğum gününe 27 gün var.\" in out, \"Cümleyi days_left ile yazdır.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "from datetime import date",
+      "notes": [
+       "`datetime` modülünden `date` programa alınıyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "today = date(2026, 9, 23)",
+      "notes": [
+       "`today` adında bir değişken oluşturuluyor ve içine `date(2026, 9, 23)` konuyor."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "birthday_day = 5",
+      "notes": [
+       "`birthday_day` adında bir değişken oluşturuluyor ve içine `5` (tam sayı) konuyor."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "birthday = date(2026, 10, birthday_day)",
+      "notes": [
+       "`birthday` adında bir değişken oluşturuluyor ve içine `date(2026, 10, birthday_day)` konuyor."
+      ]
+     },
+     {
+      "n": 7,
+      "code": "days_left = (birthday - today).days",
+      "notes": [
+       "`days_left` adında bir değişken oluşturuluyor ve içine `(birthday - today).days` konuyor."
+      ]
+     },
+     {
+      "n": 9,
+      "code": "print(f\"Doğum gününe {days_left} gün var.\")",
+      "notes": [
+       "`print(f\"Doğum gününe {days_left} gün var.\")`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "today",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `date(2026, 9, 23)`."
+     },
+     {
+      "term": "birthday_day",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `5`."
+     },
+     {
+      "term": "birthday",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `date(2026, 10, birthday_day)`."
+     },
+     {
+      "term": "days_left",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `(birthday - today).days`."
+     },
+     {
+      "term": "import",
+      "kind": "anahtar kelime",
+      "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+     },
+     {
+      "term": "datetime",
+      "kind": "modül",
+      "desc": "Tarih ve saat araçları."
+     },
+     {
+      "term": "date",
+      "kind": "araç",
+      "desc": "Bir tarihi (yıl, ay, gün) temsil eder (datetime modülünden)."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "date()",
+      "kind": "fonksiyon",
+      "desc": "Bir tarihi (yıl, ay, gün) temsil eder (datetime modülünden)."
+     },
+     {
+      "term": "-",
+      "kind": "operatör",
+      "desc": "Çıkarma."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     },
+     {
+      "term": "f\"...{}\"",
+      "kind": "metin",
+      "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d16-t3",
+   "title": "Bir hafta sonra",
+   "prompt": "`start` tarihine `weeks` hafta ekle ve sonucu `gün.ay.yıl` biçiminde yazdır.",
+   "starter": "from datetime import date, timedelta\n\nstart = date(2026, 9, 23)\nweeks = 1\n\n# start + weeks hafta\n",
+   "solution": "from datetime import date, timedelta\n\nstart = date(2026, 9, 23)\nweeks = 1\n\nlater = start + timedelta(weeks=weeks)\nprint(later.strftime(\"%d.%m.%Y\"))\n",
+   "hints": [
+    "timedelta(weeks=weeks) ya da timedelta(days=7 * weeks)",
+    "Biçim için strftime(\"%d.%m.%Y\")"
+   ],
+   "check": {
+    "code_contains": [
+     "timedelta("
+    ],
+    "python": "\nout, _ = _run(_set(_code, \"weeks\", 3))\nassert \"14.10.2026\" in out, \"weeks 3 iken 14.10.2026 yazmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "from datetime import date, timedelta",
+      "notes": [
+       "`datetime` modülünden `date`, `timedelta` programa alınıyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "start = date(2026, 9, 23)",
+      "notes": [
+       "`start` adında bir değişken oluşturuluyor ve içine `date(2026, 9, 23)` konuyor."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "weeks = 1",
+      "notes": [
+       "`weeks` adında bir değişken oluşturuluyor ve içine `1` (tam sayı) konuyor."
+      ]
+     },
+     {
+      "n": 6,
+      "code": "later = start + timedelta(weeks=weeks)",
+      "notes": [
+       "`later` adında bir değişken oluşturuluyor ve içine `start + timedelta(weeks=weeks)` konuyor."
+      ]
+     },
+     {
+      "n": 7,
+      "code": "print(later.strftime(\"%d.%m.%Y\"))",
+      "notes": [
+       "`print(later.strftime(\"%d.%m.%Y\"))`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "start",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `date(2026, 9, 23)`."
+     },
+     {
+      "term": "weeks",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `1`."
+     },
+     {
+      "term": "later",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `start + timedelta(weeks=weeks)`."
+     },
+     {
+      "term": "import",
+      "kind": "anahtar kelime",
+      "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+     },
+     {
+      "term": "datetime",
+      "kind": "modül",
+      "desc": "Tarih ve saat araçları."
+     },
+     {
+      "term": "date",
+      "kind": "araç",
+      "desc": "Bir tarihi (yıl, ay, gün) temsil eder (datetime modülünden)."
+     },
+     {
+      "term": "timedelta",
+      "kind": "araç",
+      "desc": "İki tarih arasındaki süreyi (gün, saat...) temsil eder."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "date()",
+      "kind": "fonksiyon",
+      "desc": "Bir tarihi (yıl, ay, gün) temsil eder (datetime modülünden)."
+     },
+     {
+      "term": "+",
+      "kind": "operatör",
+      "desc": "Toplama; metinlerde ve listelerde uç uca ekleme."
+     },
+     {
+      "term": "timedelta()",
+      "kind": "fonksiyon",
+      "desc": "İki tarih arasındaki süreyi (gün, saat...) temsil eder."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     },
+     {
+      "term": ".strftime()",
+      "kind": "metot",
+      "desc": "Tarihi istenen biçimde yazıya çevirir, örn. \"%d.%m.%Y\"."
+     }
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "id": "d16-c",
+  "title": "Haftanın günü",
+  "prompt": "`weekday()` 0 (pazartesi) ile 6 (pazar) arasında sayı verir. Bu sayıyı `names` listesinde kullanarak tarihin hangi gün olduğunu yazdır: `23.09.2026 Çarşamba`",
+  "starter": "from datetime import date\n\nnames = [\"Pazartesi\", \"Salı\", \"Çarşamba\", \"Perşembe\", \"Cuma\", \"Cumartesi\", \"Pazar\"]\nyear, month, day = 2026, 9, 23\nd = date(year, month, day)\n\n# Tarihi ve gün adını yazdır\n",
+  "solution": "from datetime import date\n\nnames = [\"Pazartesi\", \"Salı\", \"Çarşamba\", \"Perşembe\", \"Cuma\", \"Cumartesi\", \"Pazar\"]\nyear, month, day = 2026, 9, 23\nd = date(year, month, day)\n\nprint(d.strftime(\"%d.%m.%Y\"), names[d.weekday()])\n",
+  "hints": [
+   "Gün adı: names[d.weekday()]"
+  ],
+  "check": {
+   "python": "\nassert \"23.09.2026 Çarşamba\" in _output, \"23.09.2026 için 'Çarşamba' yazmalı.\"\nsrc = _code.replace(\"year, month, day = 2026, 9, 23\", \"year, month, day = 2027, 1, 1\")\nassert src != _code, \"year, month, day = 2026, 9, 23 satırını değiştirme.\"\nout, _ = _run(src)\nassert \"01.01.2027 Cuma\" in out, \"Başka tarihlerde de doğru gün adını yazmalı.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "from datetime import date",
+     "notes": [
+      "`datetime` modülünden `date` programa alınıyor."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "names = [\"Pazartesi\", \"Salı\", \"Çarşamba\", \"Perşembe\", \"Cuma\", \"Cumartesi\", \"Pazar\"]",
+     "notes": [
+      "`names` adında bir değişken oluşturuluyor ve içine `[\"Pazartesi\", \"Salı\", \"Çarşamba\", \"Perşembe\", \"Cuma\", \"Cu...` (liste) konuyor."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "year, month, day = 2026, 9, 23",
+     "notes": [
+      "`year, month, day`: sağdaki değerler sırayla bu değişkenlere dağıtılıyor (açma / unpacking)."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "d = date(year, month, day)",
+     "notes": [
+      "`d` adında bir değişken oluşturuluyor ve içine `date(year, month, day)` konuyor."
+     ]
+    },
+    {
+     "n": 7,
+     "code": "print(d.strftime(\"%d.%m.%Y\"), names[d.weekday()])",
+     "notes": [
+      "`print(d.strftime(\"%d.%m.%Y\"), names[d.weekday()])`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "names",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `[\"Pazartesi\", \"Salı\", \"Çarşamba\", \"Perşembe\", \"Cuma\", \"Cu...`."
+    },
+    {
+     "term": "year",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `2026, 9, 23`."
+    },
+    {
+     "term": "month",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `2026, 9, 23`."
+    },
+    {
+     "term": "day",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `2026, 9, 23`."
+    },
+    {
+     "term": "d",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `date(year, month, day)`."
+    },
+    {
+     "term": "import",
+     "kind": "anahtar kelime",
+     "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+    },
+    {
+     "term": "datetime",
+     "kind": "modül",
+     "desc": "Tarih ve saat araçları."
+    },
+    {
+     "term": "date",
+     "kind": "araç",
+     "desc": "Bir tarihi (yıl, ay, gün) temsil eder (datetime modülünden)."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "date()",
+     "kind": "fonksiyon",
+     "desc": "Bir tarihi (yıl, ay, gün) temsil eder (datetime modülünden)."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    },
+    {
+     "term": ".strftime()",
+     "kind": "metot",
+     "desc": "Tarihi istenen biçimde yazıya çevirir, örn. \"%d.%m.%Y\"."
+    },
+    {
+     "term": "[ ]",
+     "kind": "seçme",
+     "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+    },
+    {
+     "term": ".weekday()",
+     "kind": "metot",
+     "desc": "Haftanın gününü sayı olarak verir (0 = Pazartesi)."
+    }
+   ]
+  }
+ },
+ "project_task": {
+  "id": "d16-p",
+  "title": "Günlük seri",
+  "prompt": "Oyunlarda her gün girersen serin büyür. `last_play` son oynanan gün, `today` bugün.\n\n- Aradaki fark 0 günse: `Bugün zaten oynadın.`\n- 1 günse: `Seri devam ediyor!`\n- Daha fazlaysa: `Seri bozuldu, yeniden başla!`",
+  "starter": "from datetime import date\n\ntoday = date(2026, 9, 23)\nlast_day = 22\nlast_play = date(2026, 9, last_day)\n\n# Farkı hesapla ve mesajı yazdır\n",
+  "solution": "from datetime import date\n\ntoday = date(2026, 9, 23)\nlast_day = 22\nlast_play = date(2026, 9, last_day)\n\ngap = (today - last_play).days\nif gap == 0:\n    print(\"Bugün zaten oynadın.\")\nelif gap == 1:\n    print(\"Seri devam ediyor!\")\nelse:\n    print(\"Seri bozuldu, yeniden başla!\")\n",
+  "hints": [
+   "gap = (today - last_play).days",
+   "if gap == 0 ... elif gap == 1 ... else"
+  ],
+  "check": {
+   "python": "\nfor d, expected in [(23, \"Bugün zaten oynadın.\"), (22, \"Seri devam ediyor!\"), (18, \"Seri bozuldu, yeniden başla!\")]:\n    out, _ = _run(_set(_code, \"last_day\", d))\n    assert expected in out, \"Son oyun \" + str(d) + \" Eylül iken '\" + expected + \"' yazmalı.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "from datetime import date",
+     "notes": [
+      "`datetime` modülünden `date` programa alınıyor."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "today = date(2026, 9, 23)",
+     "notes": [
+      "`today` adında bir değişken oluşturuluyor ve içine `date(2026, 9, 23)` konuyor."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "last_day = 22",
+     "notes": [
+      "`last_day` adında bir değişken oluşturuluyor ve içine `22` (tam sayı) konuyor."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "last_play = date(2026, 9, last_day)",
+     "notes": [
+      "`last_play` adında bir değişken oluşturuluyor ve içine `date(2026, 9, last_day)` konuyor."
+     ]
+    },
+    {
+     "n": 7,
+     "code": "gap = (today - last_play).days",
+     "notes": [
+      "`gap` adında bir değişken oluşturuluyor ve içine `(today - last_play).days` konuyor."
+     ]
+    },
+    {
+     "n": 8,
+     "code": "if gap == 0:",
+     "notes": [
+      "Koşul: `gap == 0` doğruysa altındaki girintili satırlar çalışır."
+     ]
+    },
+    {
+     "n": 9,
+     "code": "    print(\"Bugün zaten oynadın.\")",
+     "notes": [
+      "`print(\"Bugün zaten oynadın.\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 10,
+     "code": "elif gap == 1:",
+     "notes": [
+      "`elif`: yukarıdaki koşul yanlışsa `gap == 1` koşuluna bakılır."
+     ]
+    },
+    {
+     "n": 11,
+     "code": "    print(\"Seri devam ediyor!\")",
+     "notes": [
+      "`print(\"Seri devam ediyor!\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 12,
+     "code": "else:",
+     "notes": [
+      "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+     ]
+    },
+    {
+     "n": 13,
+     "code": "    print(\"Seri bozuldu, yeniden başla!\")",
+     "notes": [
+      "`print(\"Seri bozuldu, yeniden başla!\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "today",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `date(2026, 9, 23)`."
+    },
+    {
+     "term": "last_day",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `22`."
+    },
+    {
+     "term": "last_play",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `date(2026, 9, last_day)`."
+    },
+    {
+     "term": "gap",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `(today - last_play).days`."
+    },
+    {
+     "term": "import",
+     "kind": "anahtar kelime",
+     "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+    },
+    {
+     "term": "datetime",
+     "kind": "modül",
+     "desc": "Tarih ve saat araçları."
+    },
+    {
+     "term": "date",
+     "kind": "araç",
+     "desc": "Bir tarihi (yıl, ay, gün) temsil eder (datetime modülünden)."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "date()",
+     "kind": "fonksiyon",
+     "desc": "Bir tarihi (yıl, ay, gün) temsil eder (datetime modülünden)."
+    },
+    {
+     "term": "-",
+     "kind": "operatör",
+     "desc": "Çıkarma."
+    },
+    {
+     "term": "if",
+     "kind": "anahtar kelime",
+     "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+    },
+    {
+     "term": "==",
+     "kind": "operatör",
+     "desc": "Eşit mi? (True/False)"
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    },
+    {
+     "term": "elif",
+     "kind": "anahtar kelime",
+     "desc": "Önceki koşullar yanlışsa bu koşula bakılır (\"değilse eğer\")."
+    },
+    {
+     "term": "else",
+     "kind": "anahtar kelime",
+     "desc": "Yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+    }
+   ]
+  }
+ },
+ "available": true,
+ "tracks": {
+  "veri": {
+   "project_task": {
+    "id": "d16-pv",
+    "title": "Kira hatırlatıcı",
+    "prompt": "Kira her ay ödeniyor. Bugün `today`, bir sonraki ödeme günü `due` (Ekim'in `due_day`'inci günü).\n\n- `days_left`: iki tarih arasındaki gün farkı (`(due - today).days`)\n- 0'dan büyükse: `Kiraya 7 gün kaldı` gibi yazdır.\n- 0 ise: `Kira bugün!`\n- 0'dan küçükse: `Kira gecikti!`",
+    "starter": "from datetime import date\n\ntoday = date(2026, 9, 24)\ndue_day = 1\ndue = date(2026, 10, due_day)\n",
+    "solution": "from datetime import date\n\ntoday = date(2026, 9, 24)\ndue_day = 1\ndue = date(2026, 10, due_day)\ndays_left = (due - today).days\nif days_left > 0:\n    print(f\"Kiraya {days_left} gün kaldı\")\nelif days_left == 0:\n    print(\"Kira bugün!\")\nelse:\n    print(\"Kira gecikti!\")\n",
+    "hints": [
+     "İki tarihi çıkarınca timedelta çıkar; .days gün sayısını verir.",
+     "days_left > 0, == 0 ve kalan durum için if / elif / else."
+    ],
+    "check": {
+     "python": "\nimport datetime as _dt\n\ndef _due(d):\n    out, g = _run(\"import datetime\\n\" + _set(_code, \"due\", d))\n    return out, g\n\nfor d, expected in [(_dt.date(2026, 10, 1), \"Kiraya 7 gün kaldı\"), (_dt.date(2026, 10, 5), \"Kiraya 11 gün kaldı\"), (_dt.date(2026, 9, 24), \"Kira bugün!\"), (_dt.date(2026, 9, 20), \"Kira gecikti!\")]:\n    out, g = _due(d)\n    assert expected in out, \"Ödeme günü \" + d.isoformat() + \" iken '\" + expected + \"' yazmalı.\"\nassert g.get(\"days_left\") == -4, \"days_left = (due - today).days olmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "from datetime import date",
+       "notes": [
+        "`datetime` modülünden `date` programa alınıyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "today = date(2026, 9, 24)",
+       "notes": [
+        "`today` adında bir değişken oluşturuluyor ve içine `date(2026, 9, 24)` konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "due_day = 1",
+       "notes": [
+        "`due_day` adında bir değişken oluşturuluyor ve içine `1` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "due = date(2026, 10, due_day)",
+       "notes": [
+        "`due` adında bir değişken oluşturuluyor ve içine `date(2026, 10, due_day)` konuyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "days_left = (due - today).days",
+       "notes": [
+        "`days_left` adında bir değişken oluşturuluyor ve içine `(due - today).days` konuyor."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "if days_left > 0:",
+       "notes": [
+        "Koşul: `days_left > 0` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "    print(f\"Kiraya {days_left} gün kaldı\")",
+       "notes": [
+        "`print(f\"Kiraya {days_left} gün kaldı\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "elif days_left == 0:",
+       "notes": [
+        "`elif`: yukarıdaki koşul yanlışsa `days_left == 0` koşuluna bakılır."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "    print(\"Kira bugün!\")",
+       "notes": [
+        "`print(\"Kira bugün!\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "else:",
+       "notes": [
+        "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "    print(\"Kira gecikti!\")",
+       "notes": [
+        "`print(\"Kira gecikti!\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "today",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `date(2026, 9, 24)`."
+      },
+      {
+       "term": "due_day",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `1`."
+      },
+      {
+       "term": "due",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `date(2026, 10, due_day)`."
+      },
+      {
+       "term": "days_left",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `(due - today).days`."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "datetime",
+       "kind": "modül",
+       "desc": "Tarih ve saat araçları."
+      },
+      {
+       "term": "date",
+       "kind": "araç",
+       "desc": "Bir tarihi (yıl, ay, gün) temsil eder (datetime modülünden)."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "date()",
+       "kind": "fonksiyon",
+       "desc": "Bir tarihi (yıl, ay, gün) temsil eder (datetime modülünden)."
+      },
+      {
+       "term": "-",
+       "kind": "operatör",
+       "desc": "Çıkarma."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": ">",
+       "kind": "operatör",
+       "desc": "Büyük mü?"
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "elif",
+       "kind": "anahtar kelime",
+       "desc": "Önceki koşullar yanlışsa bu koşula bakılır (\"değilse eğer\")."
+      },
+      {
+       "term": "==",
+       "kind": "operatör",
+       "desc": "Eşit mi? (True/False)"
+      },
+      {
+       "term": "else",
+       "kind": "anahtar kelime",
+       "desc": "Yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Ödeme hatırlatıcı",
+   "game_role": "Kira gününe kaç gün kaldığını söyler."
+  },
+  "otomasyon": {
+   "project_task": {
+    "id": "d16-po",
+    "title": "Toplantı hatırlatıcı",
+    "prompt": "Toplantı `start` zamanında başlıyor. Asistan `minutes_before` dakika önce hatırlatsın.\n\n- `reminder`: `start - timedelta(minutes=minutes_before)`\n- `Hatırlatma: 13:45` biçiminde yazdır (`strftime(\"%H:%M\")`).\n- `Toplantı: 24.09.2026 14:00` biçiminde de yazdır (`%d.%m.%Y %H:%M`).",
+    "starter": "from datetime import datetime, timedelta\n\nstart = datetime(2026, 9, 24, 14, 0)\nminutes_before = 15\n",
+    "solution": "from datetime import datetime, timedelta\n\nstart = datetime(2026, 9, 24, 14, 0)\nminutes_before = 15\nreminder = start - timedelta(minutes=minutes_before)\nprint(\"Hatırlatma:\", reminder.strftime(\"%H:%M\"))\nprint(\"Toplantı:\", start.strftime(\"%d.%m.%Y %H:%M\"))\n",
+    "hints": [
+     "timedelta(minutes=15) 15 dakikalık bir süre.",
+     "reminder.strftime(\"%H:%M\") saati 13:45 biçiminde verir."
+    ],
+    "check": {
+     "python": "\nout, g = _run(_set(_code, \"minutes_before\", 90))\nassert \"Hatırlatma: 12:30\" in out, \"minutes_before 90 iken 'Hatırlatma: 12:30' yazmalı.\"\nassert \"Toplantı: 24.09.2026 14:00\" in out, \"Toplantıyı '24.09.2026 14:00' biçiminde yazdır.\"\nout, _ = _run(_set(_code, \"minutes_before\", 5))\nassert \"Hatırlatma: 13:55\" in out, \"minutes_before 5 iken 'Hatırlatma: 13:55' yazmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "from datetime import datetime, timedelta",
+       "notes": [
+        "`datetime` modülünden `datetime`, `timedelta` programa alınıyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "start = datetime(2026, 9, 24, 14, 0)",
+       "notes": [
+        "`start` adında bir değişken oluşturuluyor ve içine `datetime(2026, 9, 24, 14, 0)` konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "minutes_before = 15",
+       "notes": [
+        "`minutes_before` adında bir değişken oluşturuluyor ve içine `15` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "reminder = start - timedelta(minutes=minutes_before)",
+       "notes": [
+        "`reminder` adında bir değişken oluşturuluyor ve içine `start - timedelta(minutes=minutes_before)` konuyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "print(\"Hatırlatma:\", reminder.strftime(\"%H:%M\"))",
+       "notes": [
+        "`print(\"Hatırlatma:\", reminder.strftime(\"%H:%M\"))`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "print(\"Toplantı:\", start.strftime(\"%d.%m.%Y %H:%M\"))",
+       "notes": [
+        "`print(\"Toplantı:\", start.strftime(\"%d.%m.%Y %H:%M\"))`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "start",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `datetime(2026, 9, 24, 14, 0)`."
+      },
+      {
+       "term": "minutes_before",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `15`."
+      },
+      {
+       "term": "reminder",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `start - timedelta(minutes=minutes_before)`."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "datetime",
+       "kind": "modül",
+       "desc": "Tarih ve saat araçları."
+      },
+      {
+       "term": "timedelta",
+       "kind": "araç",
+       "desc": "İki tarih arasındaki süreyi (gün, saat...) temsil eder."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "datetime()",
+       "kind": "fonksiyon",
+       "desc": "Tarih ve saati birlikte temsil eder."
+      },
+      {
+       "term": "-",
+       "kind": "operatör",
+       "desc": "Çıkarma."
+      },
+      {
+       "term": "timedelta()",
+       "kind": "fonksiyon",
+       "desc": "İki tarih arasındaki süreyi (gün, saat...) temsil eder."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": ".strftime()",
+       "kind": "metot",
+       "desc": "Tarihi istenen biçimde yazıya çevirir, örn. \"%d.%m.%Y\"."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Hatırlatıcı",
+   "game_role": "Toplantıdan önce ne zaman hatırlatma yapılacağını hesaplar."
+  },
+  "web": {
+   "project_task": {
+    "id": "d16-pw",
+    "title": "Yayın tarihi",
+    "prompt": "Her yazının altında yayın tarihi görünsün.\n\n- `pretty`: `published` tarihini `01.09.2026` biçiminde yazıya çevir (`strftime(\"%d.%m.%Y\")`)\n- `days_ago`: yayından bu yana geçen gün (`(today - published).days`)\n- `Yayın tarihi: 01.09.2026` yazdır.\n- `days_ago` 7 veya daha azsa `Yeni yazı!`, değilse `23 gün önce yayınlandı` gibi yazdır.",
+    "starter": "from datetime import date\n\ntoday = date(2026, 9, 24)\npublished = date(2026, 9, 1)\n",
+    "solution": "from datetime import date\n\ntoday = date(2026, 9, 24)\npublished = date(2026, 9, 1)\npretty = published.strftime(\"%d.%m.%Y\")\ndays_ago = (today - published).days\nprint(f\"Yayın tarihi: {pretty}\")\nif days_ago <= 7:\n    print(\"Yeni yazı!\")\nelse:\n    print(f\"{days_ago} gün önce yayınlandı\")\n",
+    "hints": [
+     "published.strftime(\"%d.%m.%Y\") gün.ay.yıl biçiminde yazı verir.",
+     "İki tarihi çıkarınca timedelta çıkar; .days gün sayısını verir."
+    ],
+    "check": {
+     "python": "\nimport datetime as _dt\n\ndef _pub(d):\n    return _run(\"import datetime\\n\" + _set(_code, \"published\", d))\n\nfor d, expected, pretty_text in [\n    (_dt.date(2026, 9, 20), \"Yeni yazı!\", \"20.09.2026\"),\n    (_dt.date(2026, 9, 17), \"Yeni yazı!\", \"17.09.2026\"),\n    (_dt.date(2026, 8, 25), \"30 gün önce yayınlandı\", \"25.08.2026\"),\n    (_dt.date(2026, 9, 1), \"23 gün önce yayınlandı\", \"01.09.2026\"),\n]:\n    out, g = _pub(d)\n    assert \"Yayın tarihi: \" + pretty_text in out, \"Yayın tarihi \" + d.isoformat() + \" iken 'Yayın tarihi: \" + pretty_text + \"' yazmalı.\"\n    assert expected in out, \"Yayın tarihi \" + d.isoformat() + \" iken '\" + expected + \"' yazmalı.\"\n    if expected != \"Yeni yazı!\":\n        assert \"Yeni yazı!\" not in out, \"7 günden eski yazılar için 'Yeni yazı!' yazmamalı.\"\nassert g.get(\"days_ago\") == 23, \"days_ago = (today - published).days olmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "from datetime import date",
+       "notes": [
+        "`datetime` modülünden `date` programa alınıyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "today = date(2026, 9, 24)",
+       "notes": [
+        "`today` adında bir değişken oluşturuluyor ve içine `date(2026, 9, 24)` konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "published = date(2026, 9, 1)",
+       "notes": [
+        "`published` adında bir değişken oluşturuluyor ve içine `date(2026, 9, 1)` konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "pretty = published.strftime(\"%d.%m.%Y\")",
+       "notes": [
+        "`pretty` adında bir değişken oluşturuluyor ve içine `published.strftime(\"%d.%m.%Y\")` konuyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "days_ago = (today - published).days",
+       "notes": [
+        "`days_ago` adında bir değişken oluşturuluyor ve içine `(today - published).days` konuyor."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "print(f\"Yayın tarihi: {pretty}\")",
+       "notes": [
+        "`print(f\"Yayın tarihi: {pretty}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "if days_ago <= 7:",
+       "notes": [
+        "Koşul: `days_ago <= 7` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "    print(\"Yeni yazı!\")",
+       "notes": [
+        "`print(\"Yeni yazı!\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "else:",
+       "notes": [
+        "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "    print(f\"{days_ago} gün önce yayınlandı\")",
+       "notes": [
+        "`print(f\"{days_ago} gün önce yayınlandı\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "today",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `date(2026, 9, 24)`."
+      },
+      {
+       "term": "published",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `date(2026, 9, 1)`."
+      },
+      {
+       "term": "pretty",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `published.strftime(\"%d.%m.%Y\")`."
+      },
+      {
+       "term": "days_ago",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `(today - published).days`."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "datetime",
+       "kind": "modül",
+       "desc": "Tarih ve saat araçları."
+      },
+      {
+       "term": "date",
+       "kind": "araç",
+       "desc": "Bir tarihi (yıl, ay, gün) temsil eder (datetime modülünden)."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "date()",
+       "kind": "fonksiyon",
+       "desc": "Bir tarihi (yıl, ay, gün) temsil eder (datetime modülünden)."
+      },
+      {
+       "term": ".strftime()",
+       "kind": "metot",
+       "desc": "Tarihi istenen biçimde yazıya çevirir, örn. \"%d.%m.%Y\"."
+      },
+      {
+       "term": "-",
+       "kind": "operatör",
+       "desc": "Çıkarma."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "<=",
+       "kind": "operatör",
+       "desc": "Küçük ya da eşit mi?"
+      },
+      {
+       "term": "else",
+       "kind": "anahtar kelime",
+       "desc": "Yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Yayın tarihi",
+   "game_role": "Yazının tarihini güzel biçimde yazar, yeni yazılara etiket koyar."
+  },
+  "bot": {
+   "project_task": {
+    "id": "d16-pb",
+    "title": "Saate göre selam",
+    "prompt": "Bot saati bilsin! Şu an `now`, seninle en son konuştuğu an `last_seen`.\n\n- `hour`: şu anki saat (`now.hour` saati sayı olarak verir)\n- Saat 12'den küçükse `Günaydın!`, 18'den küçükse `İyi günler!`, değilse `İyi akşamlar!` selamını seç ve yanına saati ekleyerek yazdır: `Günaydın! Saat 09:30.` (`strftime(\"%H:%M\")`)\n- `days_away`: iki an arasındaki gün farkı (`(now - last_seen).days`)\n- `days_away` 1 veya daha fazlaysa `Seni 2 gündür görmedim!` gibi yazdır.",
+    "starter": "import datetime\n\nnow = datetime.datetime(2026, 9, 24, 9, 30)\nlast_seen = datetime.datetime(2026, 9, 21, 20, 0)\n",
+    "solution": "import datetime\n\nnow = datetime.datetime(2026, 9, 24, 9, 30)\nlast_seen = datetime.datetime(2026, 9, 21, 20, 0)\nhour = now.hour\nif hour < 12:\n    greeting = \"Günaydın!\"\nelif hour < 18:\n    greeting = \"İyi günler!\"\nelse:\n    greeting = \"İyi akşamlar!\"\nprint(f\"{greeting} Saat {now.strftime('%H:%M')}.\")\ndays_away = (now - last_seen).days\nif days_away >= 1:\n    print(f\"Seni {days_away} gündür görmedim!\")\n",
+    "hints": [
+     "now.strftime(\"%H:%M\") saati 09:30 biçiminde verir.",
+     "İki zamanı çıkarınca timedelta çıkar; .days gün sayısını verir."
+    ],
+    "check": {
+     "python": "\nimport datetime as _dt\n\ndef _try(now, last):\n    return _run(_set(_set(_code, \"now\", now), \"last_seen\", last))\n\nout, g = _try(_dt.datetime(2026, 9, 24, 21, 5), _dt.datetime(2026, 9, 21, 8, 0))\nassert \"İyi akşamlar! Saat 21:05.\" in out, \"Saat 21:05 iken 'İyi akşamlar! Saat 21:05.' yazmalı.\"\nassert g.get(\"hour\") == 21, \"hour = now.hour olmalı.\"\nassert g.get(\"days_away\") == 3 and \"Seni 3 gündür görmedim!\" in out, \"days_away = (now - last_seen).days olmalı ve 'Seni 3 gündür görmedim!' yazmalı.\"\nout, g = _try(_dt.datetime(2026, 9, 24, 12, 0), _dt.datetime(2026, 9, 24, 8, 15))\nassert \"İyi günler! Saat 12:00.\" in out, \"Saat 12:00 iken 'İyi günler! Saat 12:00.' yazmalı.\"\nassert \"gündür\" not in out, \"Aynı gün konuştuysanız 'gündür görmedim' yazmamalı.\"\nout, _ = _try(_dt.datetime(2026, 9, 25, 7, 45), _dt.datetime(2026, 9, 24, 7, 0))\nassert \"Günaydın! Saat 07:45.\" in out and \"Seni 1 gündür görmedim!\" in out, \"Saat 07:45 iken 'Günaydın! Saat 07:45.' ve 'Seni 1 gündür görmedim!' yazmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "import datetime",
+       "notes": [
+        "`datetime` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "now = datetime.datetime(2026, 9, 24, 9, 30)",
+       "notes": [
+        "`now` adında bir değişken oluşturuluyor ve içine `datetime.datetime(2026, 9, 24, 9, 30)` konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "last_seen = datetime.datetime(2026, 9, 21, 20, 0)",
+       "notes": [
+        "`last_seen` adında bir değişken oluşturuluyor ve içine `datetime.datetime(2026, 9, 21, 20, 0)` konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "hour = now.hour",
+       "notes": [
+        "`hour` adında bir değişken oluşturuluyor ve içine `now.hour` konuyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "if hour < 12:",
+       "notes": [
+        "Koşul: `hour < 12` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "    greeting = \"Günaydın!\"",
+       "notes": [
+        "`greeting` adında bir değişken oluşturuluyor ve içine `\"Günaydın!\"` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "elif hour < 18:",
+       "notes": [
+        "`elif`: yukarıdaki koşul yanlışsa `hour < 18` koşuluna bakılır."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "    greeting = \"İyi günler!\"",
+       "notes": [
+        "`greeting` değişkenine yeni değer veriliyor: `\"İyi günler!\"`."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "else:",
+       "notes": [
+        "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "    greeting = \"İyi akşamlar!\"",
+       "notes": [
+        "`greeting` değişkenine yeni değer veriliyor: `\"İyi akşamlar!\"`."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "print(f\"{greeting} Saat {now.strftime('%H:%M')}.\")",
+       "notes": [
+        "`print(f\"{greeting} Saat {now.strftime('%H:%M')}.\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "days_away = (now - last_seen).days",
+       "notes": [
+        "`days_away` adında bir değişken oluşturuluyor ve içine `(now - last_seen).days` konuyor."
+       ]
+      },
+      {
+       "n": 14,
+       "code": "if days_away >= 1:",
+       "notes": [
+        "Koşul: `days_away >= 1` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 15,
+       "code": "    print(f\"Seni {days_away} gündür görmedim!\")",
+       "notes": [
+        "`print(f\"Seni {days_away} gündür görmedim!\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "now",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `datetime.datetime(2026, 9, 24, 9, 30)`."
+      },
+      {
+       "term": "last_seen",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `datetime.datetime(2026, 9, 21, 20, 0)`."
+      },
+      {
+       "term": "hour",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `now.hour`."
+      },
+      {
+       "term": "greeting",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"Günaydın!\"`."
+      },
+      {
+       "term": "days_away",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `(now - last_seen).days`."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "datetime",
+       "kind": "modül",
+       "desc": "Tarih ve saat araçları."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": ".datetime()",
+       "kind": "metot",
+       "desc": "`datetime` nesnesinin `datetime` metodunu çağırır."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "<",
+       "kind": "operatör",
+       "desc": "Küçük mü?"
+      },
+      {
+       "term": "elif",
+       "kind": "anahtar kelime",
+       "desc": "Önceki koşullar yanlışsa bu koşula bakılır (\"değilse eğer\")."
+      },
+      {
+       "term": "else",
+       "kind": "anahtar kelime",
+       "desc": "Yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": ".strftime()",
+       "kind": "metot",
+       "desc": "Tarihi istenen biçimde yazıya çevirir, örn. \"%d.%m.%Y\"."
+      },
+      {
+       "term": "-",
+       "kind": "operatör",
+       "desc": "Çıkarma."
+      },
+      {
+       "term": ">=",
+       "kind": "operatör",
+       "desc": "Büyük ya da eşit mi?"
+      }
+     ]
+    }
+   },
+   "project_contribution": "Zaman bilen bot",
+   "game_role": "Saate göre selam verir ve seni ne zamandır görmediğini söyler."
+  },
+  "okul": {
+   "project_task": {
+    "id": "d16-pn",
+    "title": "Sınav geri sayımı",
+    "prompt": "Bugün `today`, sınav günü `exam`.\n\n- `days_left`: iki tarih arasındaki gün farkı (`(exam - today).days`)\n- Önce sınav tarihini `Sınav tarihi: 05.10.2026` biçiminde yazdır (`strftime(\"%d.%m.%Y\")`).\n- Sonra:\n  - 7'den fazla gün varsa: `Sınava 11 gün var`\n  - 1 ile 7 gün arasıysa: `Sınav yaklaşıyor: 3 gün kaldı!`\n  - 0 ise: `Sınav bugün, başarılar!`\n  - 0'dan küçükse: `Sınav geçti.`",
+    "starter": "from datetime import date\n\ntoday = date(2026, 9, 24)\nexam = date(2026, 10, 5)\n",
+    "solution": "from datetime import date\n\ntoday = date(2026, 9, 24)\nexam = date(2026, 10, 5)\ndays_left = (exam - today).days\nprint(\"Sınav tarihi:\", exam.strftime(\"%d.%m.%Y\"))\nif days_left > 7:\n    print(f\"Sınava {days_left} gün var\")\nelif days_left > 0:\n    print(f\"Sınav yaklaşıyor: {days_left} gün kaldı!\")\nelif days_left == 0:\n    print(\"Sınav bugün, başarılar!\")\nelse:\n    print(\"Sınav geçti.\")\n",
+    "hints": [
+     "İki tarihi çıkarınca timedelta çıkar; .days gün sayısını verir.",
+     "Sıra önemli: önce > 7, sonra > 0, sonra == 0, en son else."
+    ],
+    "check": {
+     "python": "\nimport datetime as _dt\n\ndef _exam(d):\n    return _run(\"import datetime\\n\" + _set(_code, \"exam\", d))\n\nfor d, expected in [(_dt.date(2026, 10, 5), \"Sınava 11 gün var\"), (_dt.date(2026, 10, 2), \"Sınava 8 gün var\"), (_dt.date(2026, 10, 1), \"Sınav yaklaşıyor: 7 gün kaldı!\"), (_dt.date(2026, 9, 26), \"Sınav yaklaşıyor: 2 gün kaldı!\"), (_dt.date(2026, 9, 24), \"Sınav bugün, başarılar!\"), (_dt.date(2026, 9, 20), \"Sınav geçti.\")]:\n    out, g = _exam(d)\n    assert expected in out, \"Sınav günü \" + d.isoformat() + \" iken '\" + expected + \"' yazmalı.\"\nassert g.get(\"days_left\") == -4, \"days_left = (exam - today).days olmalı.\"\nassert \"Sınav tarihi: 20.09.2026\" in out, \"Sınav tarihini strftime(\\\"%d.%m.%Y\\\") ile yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "from datetime import date",
+       "notes": [
+        "`datetime` modülünden `date` programa alınıyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "today = date(2026, 9, 24)",
+       "notes": [
+        "`today` adında bir değişken oluşturuluyor ve içine `date(2026, 9, 24)` konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "exam = date(2026, 10, 5)",
+       "notes": [
+        "`exam` adında bir değişken oluşturuluyor ve içine `date(2026, 10, 5)` konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "days_left = (exam - today).days",
+       "notes": [
+        "`days_left` adında bir değişken oluşturuluyor ve içine `(exam - today).days` konuyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "print(\"Sınav tarihi:\", exam.strftime(\"%d.%m.%Y\"))",
+       "notes": [
+        "`print(\"Sınav tarihi:\", exam.strftime(\"%d.%m.%Y\"))`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "if days_left > 7:",
+       "notes": [
+        "Koşul: `days_left > 7` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "    print(f\"Sınava {days_left} gün var\")",
+       "notes": [
+        "`print(f\"Sınava {days_left} gün var\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "elif days_left > 0:",
+       "notes": [
+        "`elif`: yukarıdaki koşul yanlışsa `days_left > 0` koşuluna bakılır."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "    print(f\"Sınav yaklaşıyor: {days_left} gün kaldı!\")",
+       "notes": [
+        "`print(f\"Sınav yaklaşıyor: {days_left} gün kaldı!\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "elif days_left == 0:",
+       "notes": [
+        "`elif`: yukarıdaki koşul yanlışsa `days_left == 0` koşuluna bakılır."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "    print(\"Sınav bugün, başarılar!\")",
+       "notes": [
+        "`print(\"Sınav bugün, başarılar!\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "else:",
+       "notes": [
+        "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+       ]
+      },
+      {
+       "n": 14,
+       "code": "    print(\"Sınav geçti.\")",
+       "notes": [
+        "`print(\"Sınav geçti.\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "today",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `date(2026, 9, 24)`."
+      },
+      {
+       "term": "exam",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `date(2026, 10, 5)`."
+      },
+      {
+       "term": "days_left",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `(exam - today).days`."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "datetime",
+       "kind": "modül",
+       "desc": "Tarih ve saat araçları."
+      },
+      {
+       "term": "date",
+       "kind": "araç",
+       "desc": "Bir tarihi (yıl, ay, gün) temsil eder (datetime modülünden)."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "date()",
+       "kind": "fonksiyon",
+       "desc": "Bir tarihi (yıl, ay, gün) temsil eder (datetime modülünden)."
+      },
+      {
+       "term": "-",
+       "kind": "operatör",
+       "desc": "Çıkarma."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": ".strftime()",
+       "kind": "metot",
+       "desc": "Tarihi istenen biçimde yazıya çevirir, örn. \"%d.%m.%Y\"."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": ">",
+       "kind": "operatör",
+       "desc": "Büyük mü?"
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "elif",
+       "kind": "anahtar kelime",
+       "desc": "Önceki koşullar yanlışsa bu koşula bakılır (\"değilse eğer\")."
+      },
+      {
+       "term": "==",
+       "kind": "operatör",
+       "desc": "Eşit mi? (True/False)"
+      },
+      {
+       "term": "else",
+       "kind": "anahtar kelime",
+       "desc": "Yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Sınav geri sayımı",
+   "game_role": "Sınava kaç gün kaldığını söyler ve yaklaşınca uyarır."
+  }
+ }
+}

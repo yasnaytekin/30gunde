@@ -1,0 +1,195 @@
+{
+  "kurs": "javascript",
+  "gun": 12,
+  "baslik": "Set, Map ve JSON",
+  "maskot": "kodi",
+  "ozet": "Nebulanın ucundaki istasyonda Set ile tekrarları ayıklıyor, Map ile anahtar-değer tutuyor, spread ile kopyalıyor ve veriyi JSON'a çevirip geri alıyoruz.",
+  "hedef_sure_sn": 165,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 11,
+      "anlatim": "Selam, ben Kodi! Nebulanın ucundaki istasyona kenetlendik. İstasyon bilgisayarı başka gemilerle ortak bir dil konuşuyor: JSON. Bugün iki yeni kutu da tanıyacağız: Set ve Map.",
+      "ekran": {
+        "baslik": "Gün 12: Set, Map ve JSON",
+        "gorsel": "gorseller/javascript/bolgeler/nebula.webp"
+      },
+      "maskot": { "poz": "el-sallama", "konum": "sag" }
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 15,
+      "anlatim": "Set her değeri yalnızca bir kez tutar. Mars'ı ikinci kez eklemeye çalıştık ama görmezden geldi, bu yüzden boyut iki. has ile bir değer var mı diye sorarız.",
+      "ekran": {
+        "baslik": "Set: tekrarsız kutu",
+        "kod": "const visited = new Set();\nvisited.add(\"Mars\");\nvisited.add(\"Venüs\");\nvisited.add(\"Mars\");\nconsole.log(visited.size);\nconsole.log(visited.has(\"Mars\"));\n",
+        "dil": "js",
+        "vurgu_satirlari": [4, 5],
+        "cikti": "2\ntrue"
+      },
+      "maskot": { "poz": "isaret", "konum": "alt-sag" },
+      "calistir": true
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "Set'in en sevilen işi: bir diziden tekrarları atmak. new Set tekrarları siler, üç nokta da onu yeniden diziye çevirir.",
+      "ekran": {
+        "baslik": "Tekrarları atmak",
+        "kod": "const logs = [\"Mars\", \"Ay\", \"Mars\", \"Ay\", \"Venüs\"];\nconst unique = [...new Set(logs)];\nconsole.log(unique);\n",
+        "dil": "js",
+        "vurgu_satirlari": [2],
+        "cikti": "[ 'Mars', 'Ay', 'Venüs' ]"
+      },
+      "maskot": { "poz": "mutlu", "konum": "alt-sag" },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 17,
+      "anlatim": "Map de anahtar ve değer tutar ama kendi metotlarıyla: set ekler, get okur. Aynı anahtara yeniden set yaparsak değer güncellenir. for of ile her çifti anahtar ve değer olarak açarız.",
+      "ekran": {
+        "baslik": "Map: anahtar → değer",
+        "kod": "const cargo = new Map();\ncargo.set(\"su\", 40);\ncargo.set(\"yakıt\", 25);\ncargo.set(\"su\", 35);\nconsole.log(cargo.get(\"su\"), cargo.size);\nfor (const [item, amount] of cargo) {\n  console.log(item, amount);\n}\n",
+        "dil": "js",
+        "vurgu_satirlari": [2, 4, 6],
+        "cikti": "35 2\nsu 35\nyakıt 25"
+      },
+      "maskot": { "poz": "konusma", "konum": "alt-sag" },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "anlatim",
+      "sure_sn": 10,
+      "anlatim": "Hangisini ne zaman kullanalım? Alanları belli şeyler için nesne. Sürekli eklenip silinen, sayılan şeyler için Map daha rahat.",
+      "ekran": {
+        "baslik": "Nesne mi, Map mi?",
+        "maddeler": [
+          "Nesne: oyuncu, gemi gibi alanları belli şeyler",
+          "Map: envanter adetleri, kelime sayacı"
+        ]
+      },
+      "maskot": { "poz": "dusunme", "konum": "sag" }
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "Üç nokta, yani spread, bir diziyi ya da nesneyi açıp içindekileri döker. Böylece kopya çıkarır, üstüne ekleriz. full'da yakıtın üzerine yüz yazıldı, ship ise değişmedi.",
+      "ekran": {
+        "baslik": "Spread (...): aç ve kopyala",
+        "kod": "const crew = [\"Ada\", \"Can\"];\nconst bigger = [...crew, \"Ece\"];\nconsole.log(bigger);\nconst ship = { name: \"Kartal\", fuel: 50 };\nconst full = { ...ship, fuel: 100 };\nconsole.log(ship.fuel, full.fuel);\n",
+        "dil": "js",
+        "vurgu_satirlari": [2, 5],
+        "cikti": "[ 'Ada', 'Can', 'Ece' ]\n50 100"
+      },
+      "maskot": { "poz": "isaret", "konum": "alt-sag" },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "kod",
+      "sure_sn": 17,
+      "anlatim": "JSON, veriyi metne çevirmenin standart yolu. stringify nesneyi metne çevirir, bak türü artık string. parse ise metni yeniden nesneye çevirir. Anahtarlar hep çift tırnaklı.",
+      "ekran": {
+        "baslik": "JSON: verinin ortak dili",
+        "kod": "const player = { name: \"Ada\", level: 3, items: [\"kalkan\", \"lazer\"] };\nconst text = JSON.stringify(player);\nconsole.log(text);\nconsole.log(typeof text);\nconst back = JSON.parse(text);\nconsole.log(back.items[1]);\n",
+        "dil": "js",
+        "vurgu_satirlari": [2, 5],
+        "cikti": "{\"name\":\"Ada\",\"level\":3,\"items\":[\"kalkan\",\"lazer\"]}\nstring\nlazer"
+      },
+      "maskot": { "poz": "konusma", "konum": "alt-sag" },
+      "calistir": true,
+      "yonetmen_notu": "Nesne bir paket gibi sıkıştırılıp metin şeridine dönüşür, sonra geri açılır."
+    },
+    {
+      "no": 8,
+      "tur": "hata",
+      "sure_sn": 14,
+      "anlatim": "Bozuk bir metni parse etmeye çalışırsak SyntaxError alırız. Burada anahtar çift tırnaksız yazılmış; JSON bunu kabul etmez. Mesaj, sorunun hangi konumda olduğunu da söylüyor.",
+      "ekran": {
+        "baslik": "Bozuk JSON",
+        "kod": "const data = JSON.parse(\"{name: 'Ada'}\");\n",
+        "dil": "js",
+        "vurgu_satirlari": [1],
+        "cikti": "SyntaxError: Expected property name or '}' in JSON at position 1"
+      },
+      "maskot": { "poz": "sasirma", "konum": "sag" },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "soru",
+      "sure_sn": 11,
+      "anlatim": "b'yi eşittirle, c'yi spread ile oluşturduk. Sonra b'ye Venüs ekledik. Sence a ile c'nin uzunluğu kaç?",
+      "ekran": {
+        "baslik": "Sence ne yazdırır?",
+        "kod": "const a = [\"Mars\", \"Ay\"];\nconst b = a;\nconst c = [...a];\nb.push(\"Venüs\");\nconsole.log(a.length, c.length);\n",
+        "dil": "js"
+      },
+      "maskot": { "poz": "dusunme", "konum": "sag" }
+    },
+    {
+      "no": 10,
+      "tur": "cikti",
+      "sure_sn": 11,
+      "anlatim": "Üç ve iki! b yeni bir dizi değil, a ile aynı diziyi gösteriyor; b değişince a da değişti. c ise gerçek bir kopya.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "const a = [\"Mars\", \"Ay\"];\nconst b = a;\nconst c = [...a];\nb.push(\"Venüs\");\nconsole.log(a.length, c.length);\n",
+        "dil": "js",
+        "vurgu_satirlari": [2, 3],
+        "cikti": "3 2"
+      },
+      "maskot": { "poz": "mutlu", "konum": "sag" },
+      "calistir": true
+    },
+    {
+      "no": 11,
+      "tur": "gorev",
+      "sure_sn": 12,
+      "anlatim": "Görevlerin: seyir defterindeki tekrarlı yıldızları ayıkla, kargo haritasını güncelleyip topla ve seyir defterini JSON'a çevirip geri al.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Tekrarsız yıldızlar",
+          "Görev 2: Kargo haritası",
+          "Görev 3: Seyir defteri"
+        ]
+      },
+      "maskot": { "poz": "isaret", "konum": "sol" }
+    },
+    {
+      "no": 12,
+      "tur": "ozet",
+      "sure_sn": 11,
+      "anlatim": "Özet: Set tekrarsız tutar, Map anahtar ve değer tutar. Spread kopyalar. JSON veriyi metne çevirir ve geri alır.",
+      "ekran": {
+        "baslik": "Özet",
+        "maddeler": [
+          "Set: add, has, size; [...new Set(dizi)]",
+          "Map: set, get, has, size",
+          "Spread ile kopya; JSON.stringify ve JSON.parse"
+        ]
+      },
+      "maskot": { "poz": "on", "konum": "sag" }
+    },
+    {
+      "no": 13,
+      "tur": "kapanis",
+      "sure_sn": 11,
+      "anlatim": "Fonksiyon Nebulası tamamlandı, harikasın! Yarın DOM Gezegeni'ne iniyoruz. Kodumuz artık web sayfasındaki yazıları ve renkleri değiştirecek.",
+      "ekran": {
+        "baslik": "Yarın: DOM'a giriş",
+        "gorsel": "gorseller/javascript/bolgeler/dom.webp"
+      },
+      "maskot": { "poz": "tebrik", "konum": "sag" },
+      "yonetmen_notu": "Roket nebuladan çıkar, DOM Gezegeni ekranı doldurur."
+    }
+  ]
+}

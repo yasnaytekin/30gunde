@@ -1,0 +1,240 @@
+{
+  "kurs": "python",
+  "gun": 22,
+  "baslik": "Web kazıma",
+  "maskot": "piko",
+  "ozet": "Piko, Bilgi Limanı'nın ilan panosundan yola çıkarak HTML'in yapısını ve BeautifulSoup ile başlık, bağlantı ve metin toplamayı anlatıyor.",
+  "hedef_sure_sn": 155,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 14,
+      "anlatim": "Selam, ben Piko! Bilgi Limanı'nın panosu ilanlarla dolu: gemi saatleri, fiyatlar, kayıp eşyalar. Hepsini elle deftere geçirmek saatler sürer. Web sayfaları da böyle panolar. Bugün sayfalardan bilgi toplamayı, yani web kazımayı öğreniyoruz!",
+      "ekran": {
+        "baslik": "Gün 22: Web kazıma",
+        "maddeler": [
+          "Bilgi Limanı",
+          "HTML ve BeautifulSoup"
+        ]
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sag"
+      },
+      "yonetmen_notu": "Arka plan: Bilgi Limanı bölge görseli (gorseller/python/harita/liman.webp). Dosya repoda henüz yok; eklenince ekran.gorsel alanına yazılmalı. Rüzgârda uçuşan ilanlarla dolu bir pano."
+    },
+    {
+      "no": 2,
+      "tur": "anlatim",
+      "sure_sn": 15,
+      "anlatim": "Web sayfaları HTML ile yazılır. İçerik etiketlerle işaretlenir: h1 başlık, p paragraf, a bağlantı. class ve href etiketin özellikleri, etiketlerin arasındaki yazı da metni.",
+      "ekran": {
+        "baslik": "HTML'e hızlı bakış",
+        "kod": "<h1>Başlık</h1>\n<p class=\"fiyat\">25 altın</p>\n<a href=\"/harita\">Haritaya git</a>\n",
+        "dil": "html",
+        "vurgu_satirlari": [
+          2,
+          3
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 17,
+      "anlatim": "BeautifulSoup HTML'i okuyup içinde arama yapmamızı sağlar. soup.title başlığı, find ilk eşleşen etiketi, find_all ise hepsini liste olarak getiriyor. Sonundaki .text etiketin içindeki yazıyı veriyor.",
+      "ekran": {
+        "baslik": "Başlık ve paragraflar",
+        "kod": "from bs4 import BeautifulSoup\n\nhtml = \"\"\"<title>Liman Panosu</title>\n<h1>Bugünün gemileri</h1>\n<p>Martı 10.00'da kalkıyor.</p>\n<p>Yunus 14.30'da geliyor.</p>\"\"\"\n\nsoup = BeautifulSoup(html, \"html.parser\")\nprint(soup.title.text)\nprint(soup.find(\"h1\").text)\nfor p in soup.find_all(\"p\"):\n    print(\"-\", p.text)\n",
+        "vurgu_satirlari": [
+          8,
+          11
+        ],
+        "dil": "python",
+        "cikti": "Liman Panosu\nBugünün gemileri\n- Martı 10.00'da kalkıyor.\n- Yunus 14.30'da geliyor."
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true,
+      "yonetmen_notu": "Kod bs4 (BeautifulSoup) paketini kullanır; doğrulayıcının Python ortamında kurulu olmalı."
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "Bir özelliğin değerini almak için etikete sözlük gibi davranıyorum: köşeli parantez içinde href. Her bağlantının yazısı ve adresi yan yana geliyor.",
+      "ekran": {
+        "baslik": "Bağlantılar",
+        "kod": "from bs4 import BeautifulSoup\n\nhtml = '<a href=\"/harita\">Harita</a> <a href=\"/gemiler\">Gemiler</a>'\nsoup = BeautifulSoup(html, \"html.parser\")\nfor a in soup.find_all(\"a\"):\n    print(a.text, \"->\", a[\"href\"])\n",
+        "vurgu_satirlari": [
+          6
+        ],
+        "dil": "python",
+        "cikti": "Harita -> /harita\nGemiler -> /gemiler"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      },
+      "calistir": true,
+      "yonetmen_notu": "Kod bs4 (BeautifulSoup) paketini kullanır; doğrulayıcının Python ortamında kurulu olmalı."
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 15,
+      "anlatim": "Sadece fiyatları istiyorum. class Python'da özel bir kelime olduğu için sonuna alt çizgi koyuyorum. Bulunan yazıları int ile sayıya çevirip topluyorum.",
+      "ekran": {
+        "baslik": "Sınıfa göre bul: class_",
+        "kod": "from bs4 import BeautifulSoup\n\nhtml = \"\"\"<li>İp <span class=\"fiyat\">5</span></li>\n<li>Fener <span class=\"fiyat\">40</span></li>\"\"\"\nsoup = BeautifulSoup(html, \"html.parser\")\nspans = soup.find_all(\"span\", class_=\"fiyat\")\nprices = [int(s.text) for s in spans]\nprint(prices, \"toplam:\", sum(prices))\n",
+        "vurgu_satirlari": [
+          6
+        ],
+        "dil": "python",
+        "cikti": "[5, 40] toplam: 45"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true,
+      "yonetmen_notu": "Kod bs4 (BeautifulSoup) paketini kullanır; doğrulayıcının Python ortamında kurulu olmalı."
+    },
+    {
+      "no": 6,
+      "tur": "hata",
+      "sure_sn": 13,
+      "anlatim": "Sık hata: sayfada olmayan bir etiketi aramak. find bir şey bulamazsa None döner. None'ın text'i olmadığı için AttributeError alırsın. Önce sonucun None olup olmadığına bak.",
+      "ekran": {
+        "baslik": "Sık hata: bulunamayan etiket",
+        "kod": "from bs4 import BeautifulSoup\n\nsoup = BeautifulSoup(\"<p>Merhaba</p>\", \"html.parser\")\nprint(soup.find(\"h1\").text)\n",
+        "vurgu_satirlari": [
+          4
+        ],
+        "cikti": "AttributeError: 'NoneType' object has no attribute 'text'",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "uzgun",
+        "konum": "sol"
+      },
+      "calistir": true,
+      "yonetmen_notu": "Kod bs4 (BeautifulSoup) paketini kullanır; doğrulayıcının Python ortamında kurulu olmalı."
+    },
+    {
+      "no": 7,
+      "tur": "soru",
+      "sure_sn": 9,
+      "anlatim": "Mini soru! Üç paragraf var. Sence find ne getirir, find_all'un uzunluğu kaç çıkar?",
+      "ekran": {
+        "baslik": "Sence ne yazdırır?",
+        "kod": "from bs4 import BeautifulSoup\n\nhtml = \"<p>İp</p><p>Fener</p><p>Harita</p>\"\nsoup = BeautifulSoup(html, \"html.parser\")\nprint(soup.find(\"p\").text)\nprint(len(soup.find_all(\"p\")))\n",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 8,
+      "tur": "cikti",
+      "sure_sn": 9,
+      "anlatim": "find sadece ilk paragrafı, yani İp'i getirdi. find_all üçünü de buldu.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "from bs4 import BeautifulSoup\n\nhtml = \"<p>İp</p><p>Fener</p><p>Harita</p>\"\nsoup = BeautifulSoup(html, \"html.parser\")\nprint(soup.find(\"p\").text)\nprint(len(soup.find_all(\"p\")))\n",
+        "dil": "python",
+        "cikti": "İp\n3"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sol"
+      },
+      "calistir": true,
+      "yonetmen_notu": "Kod bs4 (BeautifulSoup) paketini kullanır; doğrulayıcının Python ortamında kurulu olmalı."
+    },
+    {
+      "no": 9,
+      "tur": "anlatim",
+      "sure_sn": 15,
+      "anlatim": "Gerçek bir sayfada HTML önce requests ile internetten indirilir. Ama kibar bir kazıyıcı ol: sitenin izin verip vermediğine bak, sunucuyu isteklere boğma, kişisel bilgi toplama. Site bir API sunuyorsa onu kullan.",
+      "ekran": {
+        "baslik": "Kibar bir kazıyıcı ol",
+        "maddeler": [
+          "Gerçekte: html = requests.get(adres).text",
+          "Kullanım şartları ve robots.txt",
+          "Çok hızlı istek gönderme",
+          "Kişisel bilgi toplama",
+          "API varsa onu kullan"
+        ]
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 10,
+      "tur": "gorev",
+      "sure_sn": 13,
+      "anlatim": "Görevlerde sayfanın başlığını bulacak, tüm bağlantıları toplayacak ve fiyatları toplayacaksın. Projede de eski bir sayfadaki gerçek hazine ipuçlarını tuzaklardan ayırıyorsun.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Sayfa başlığı",
+          "Görev 2: Tüm bağlantılar",
+          "Görev 3: Fiyatları topla",
+          "Challenge: Tabloyu oku",
+          "Proje: Hazine ipuçları"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "ozet",
+      "sure_sn": 11,
+      "anlatim": "Özetle: HTML'i BeautifulSoup'a ver, find ile tekini, find_all ile hepsini bul, sonra text ve özelliklerini al.",
+      "ekran": {
+        "baslik": "Bugün öğrendiklerin",
+        "maddeler": [
+          "HTML: etiket, özellik, metin",
+          "find, find_all, class_",
+          ".text ve etiket[\"href\"]"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 12,
+      "tur": "kapanis",
+      "sure_sn": 12,
+      "anlatim": "Panoyu okumayı öğrendin, bravo! Yarın projelerimizi düzene sokacağız. Her projeye kendi paket dolabını veren sanal ortamı tanıyacağız. Görüşürüz!",
+      "ekran": {
+        "baslik": "Yarın: Sanal ortam",
+        "maddeler": [
+          "venv",
+          "Proje düzeni"
+        ]
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

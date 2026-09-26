@@ -1,0 +1,1307 @@
+{
+ "day": 14,
+ "title": "Üst düzey fonksiyonlar",
+ "region": "atolye",
+ "project_contribution": "Skor tablosu",
+ "game_role": "Oyun sonunda skor tablosu senin sıralamanla yazılır.",
+ "xp_complete": 150,
+ "objective": "Fonksiyonları değer gibi kullanmak: map, filter, sorted ve fonksiyon döndüren fonksiyonlar",
+ "story": "Atölyenin ustası Piko'ya bir sır verdi: \"Aletleri başka aletlere de takabilirsin!\" Bir matkabın ucunu değiştirmek gibi, bir fonksiyona başka bir fonksiyonu verebilirsin. Bugün fonksiyonlarla oynayan fonksiyonları, yani **üst düzey fonksiyonları** öğreniyoruz.",
+ "sections": [
+  {
+   "title": "Fonksiyonlar da değerdir",
+   "body": "Bir fonksiyonu parantezsiz yazarsan onu çağırmazsın, **kendisini** alırsın. Onu değişkene koyabilir ya da başka fonksiyona verebilirsin:\n\n```python\ndef shout(text):\n    return text.upper() + \"!\"\n\ndef use_twice(func, value):\n    return func(func(value))\n\nprint(use_twice(shout, \"hey\"))   # HEY!!\n```"
+  },
+  {
+   "title": "map ve filter",
+   "body": "- `map(fonksiyon, liste)` her elemana fonksiyonu uygular\n- `filter(fonksiyon, liste)` fonksiyonun `True` dediği elemanları tutar\n\n```python\nscores = [40, 75, 90]\nbonus = list(map(lambda s: s + 10, scores))       # [50, 85, 100]\npassed = list(filter(lambda s: s >= 60, scores))  # [75, 90]\n```\n\nSonucu görmek için `list(...)` içine almayı unutma."
+  },
+  {
+   "title": "sorted ve key",
+   "body": "`sorted` bir listeyi sıralar. `key` ile **neye göre** sıralanacağını söylersin:\n\n```python\nplayers = [(\"Ali\", 120), (\"Piko\", 300), (\"Ece\", 250)]\nby_score = sorted(players, key=lambda p: p[1], reverse=True)\n```\n\n`reverse=True` büyükten küçüğe sıralar. `min` ve `max` de `key` alır: `max(players, key=lambda p: p[1])`"
+  },
+  {
+   "title": "Fonksiyon üreten fonksiyon",
+   "body": "Bir fonksiyon, içinde yeni bir fonksiyon yapıp onu döndürebilir. İçteki fonksiyon dıştakinin değerlerini hatırlar; buna **closure** denir:\n\n```python\ndef make_multiplier(n):\n    def multiply(x):\n        return x * n\n    return multiply\n\ntriple = make_multiplier(3)\nprint(triple(5))   # 15\n```\n\nİleride göreceğin **decorator**'lar (`@` ile başlayan satırlar) da bu fikirle çalışır."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Fonksiyonu fonksiyona ver",
+   "code": "def shout(text):\n    return text.upper() + \"!\"\n\ndef use_twice(func, value):\n    return func(func(value))\n\nprint(use_twice(shout, \"hey\"))\nprint(use_twice(lambda n: n * 10, 3))\n",
+   "note": ""
+  },
+  {
+   "title": "map ve filter",
+   "code": "scores = [40, 75, 90, 55]\nprint(list(map(lambda s: s + 10, scores)))\nprint(list(filter(lambda s: s >= 60, scores)))\n",
+   "note": ""
+  },
+  {
+   "title": "Sıralama",
+   "code": "players = [(\"Ali\", 120), (\"Piko\", 300), (\"Ece\", 250)]\nfor name, score in sorted(players, key=lambda p: p[1], reverse=True):\n    print(name, score)\nprint(\"Kısa isim önce:\", sorted([\"Zeynep\", \"Can\", \"Ece\"], key=len))\n",
+   "note": ""
+  }
+ ],
+ "tasks": [
+  {
+   "id": "d14-t1",
+   "title": "Uygula",
+   "prompt": "`apply(func, value)` fonksiyonu, kendisine verilen `func` fonksiyonunu `value` üzerinde çalıştırıp sonucu döndürsün.",
+   "starter": "def apply(func, value):\n    pass\n\nprint(apply(abs, -7))\nprint(apply(len, \"Piko\"))\n",
+   "solution": "def apply(func, value):\n    return func(value)\n\nprint(apply(abs, -7))\nprint(apply(len, \"Piko\"))\n",
+   "hints": [
+    "func bir fonksiyon, onu çağırmak için func(value) yaz.",
+    "return func(value)"
+   ],
+   "check": {
+    "python": "\nassert apply(abs, -3) == 3, \"apply(abs, -3) 3 döndürmeli.\"\nassert apply(len, \"abc\") == 3, \"apply(len, 'abc') 3 döndürmeli.\"\nassert apply(lambda x: x * 10, 4) == 40, \"apply bir lambda ile de çalışmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "def apply(func, value):",
+      "notes": [
+       "`apply` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `func`, `value`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+      ]
+     },
+     {
+      "n": 2,
+      "code": "    return func(value)",
+      "notes": [
+       "Fonksiyon `func(value)` değerini geri verir ve burada biter."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "print(apply(abs, -7))",
+      "notes": [
+       "`print(apply(abs, -7))`: parantez içindeki değeri ekrana yazdırır.",
+       "`apply(...)`: senin tanımladığın fonksiyonu çağırır."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "print(apply(len, \"Piko\"))",
+      "notes": [
+       "`print(apply(len, \"Piko\"))`: parantez içindeki değeri ekrana yazdırır.",
+       "`apply(...)`: senin tanımladığın fonksiyonu çağırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "func",
+      "kind": "parametre",
+      "desc": "`apply` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+     },
+     {
+      "term": "value",
+      "kind": "parametre",
+      "desc": "`apply` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+     },
+     {
+      "term": "def",
+      "kind": "anahtar kelime",
+      "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+     },
+     {
+      "term": "apply()",
+      "kind": "senin fonksiyonun",
+      "desc": "Kodda tanımlanan fonksiyon; parametreleri: `func`, `value`."
+     },
+     {
+      "term": "return",
+      "kind": "anahtar kelime",
+      "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+     },
+     {
+      "term": "func()",
+      "kind": "fonksiyon",
+      "desc": "Bu isimdeki fonksiyonu çağırır."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     },
+     {
+      "term": "-",
+      "kind": "operatör",
+      "desc": "Sayının önündeki eksi işareti."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d14-t2",
+   "title": "Bonus puan",
+   "prompt": "`map` kullanarak her skora 10 puan ekle ve sonucu `bonus` listesine koy.",
+   "starter": "scores = [40, 75, 90]\n\nbonus = []\n\nprint(bonus)\n",
+   "solution": "scores = [40, 75, 90]\n\nbonus = list(map(lambda s: s + 10, scores))\n\nprint(bonus)\n",
+   "hints": [
+    "map(lambda s: s + 10, scores)",
+    "Sonucu list(...) içine al."
+   ],
+   "check": {
+    "code_contains": [
+     "map("
+    ],
+    "python": "\n_, g = _run(_set(_code, \"scores\", [0, 5]))\nassert g.get(\"bonus\") == [10, 15], \"bonus, her skorun 10 fazlası olmalı ve bir liste olmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "scores = [40, 75, 90]",
+      "notes": [
+       "`scores` adında bir değişken oluşturuluyor ve içine `[40, 75, 90]` (liste) konuyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "bonus = list(map(lambda s: s + 10, scores))",
+      "notes": [
+       "`bonus` adında bir değişken oluşturuluyor ve içine `list(map(lambda s: s + 10, scores))` konuyor."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "print(bonus)",
+      "notes": [
+       "`print(bonus)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "scores",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `[40, 75, 90]`."
+     },
+     {
+      "term": "bonus",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `list(map(lambda s: s + 10, scores))`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "list()",
+      "kind": "fonksiyon",
+      "desc": "Bir değerden liste oluşturur ya da boş liste yapar."
+     },
+     {
+      "term": "map()",
+      "kind": "fonksiyon",
+      "desc": "Bir fonksiyonu listenin her elemanına uygular."
+     },
+     {
+      "term": "lambda",
+      "kind": "anahtar kelime",
+      "desc": "Tek satırlık isimsiz küçük fonksiyon."
+     },
+     {
+      "term": "+",
+      "kind": "operatör",
+      "desc": "Toplama; metinlerde ve listelerde uç uca ekleme."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d14-t3",
+   "title": "Geçenler",
+   "prompt": "`filter` kullanarak 60 ve üstü skorları `passed` listesine koy.",
+   "starter": "scores = [40, 75, 90, 59, 60]\n\npassed = []\n\nprint(passed)\n",
+   "solution": "scores = [40, 75, 90, 59, 60]\n\npassed = list(filter(lambda s: s >= 60, scores))\n\nprint(passed)\n",
+   "hints": [
+    "filter(lambda s: s >= 60, scores)",
+    "Sonucu list(...) içine al."
+   ],
+   "check": {
+    "code_contains": [
+     "filter("
+    ],
+    "python": "\n_, g = _run(_set(_code, \"scores\", [100, 1, 60]))\nassert g.get(\"passed\") == [100, 60], \"passed sadece 60 ve üstü skorları içermeli.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "scores = [40, 75, 90, 59, 60]",
+      "notes": [
+       "`scores` adında bir değişken oluşturuluyor ve içine `[40, 75, 90, 59, 60]` (liste) konuyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "passed = list(filter(lambda s: s >= 60, scores))",
+      "notes": [
+       "`passed` adında bir değişken oluşturuluyor ve içine `list(filter(lambda s: s >= 60, scores))` konuyor."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "print(passed)",
+      "notes": [
+       "`print(passed)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "scores",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `[40, 75, 90, 59, 60]`."
+     },
+     {
+      "term": "passed",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `list(filter(lambda s: s >= 60, scores))`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "list()",
+      "kind": "fonksiyon",
+      "desc": "Bir değerden liste oluşturur ya da boş liste yapar."
+     },
+     {
+      "term": "filter()",
+      "kind": "fonksiyon",
+      "desc": "Listeden yalnızca koşulu sağlayan elemanları seçer."
+     },
+     {
+      "term": "lambda",
+      "kind": "anahtar kelime",
+      "desc": "Tek satırlık isimsiz küçük fonksiyon."
+     },
+     {
+      "term": ">=",
+      "kind": "operatör",
+      "desc": "Büyük ya da eşit mi?"
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "id": "d14-c",
+  "title": "Çarpan üretici",
+  "prompt": "`make_multiplier(n)` fonksiyonu, aldığı sayıyı `n` ile çarpan **yeni bir fonksiyon** döndürsün.",
+  "starter": "def make_multiplier(n):\n    pass\n\ndouble = make_multiplier(2)\nprint(double(21))\n",
+  "solution": "def make_multiplier(n):\n    def multiply(x):\n        return x * n\n    return multiply\n\ndouble = make_multiplier(2)\nprint(double(21))\n",
+  "hints": [
+   "İçeride def multiply(x): tanımla.",
+   "En sonda fonksiyonun kendisini döndür: return multiply (parantezsiz)"
+  ],
+  "check": {
+   "python": "\nf = make_multiplier(3)\nassert callable(f), \"make_multiplier bir fonksiyon döndürmeli.\"\nassert f(5) == 15, \"make_multiplier(3)(5) 15 olmalı.\"\nassert make_multiplier(10)(4) == 40, \"make_multiplier(10)(4) 40 olmalı.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "def make_multiplier(n):",
+     "notes": [
+      "`make_multiplier` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `n`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+     ]
+    },
+    {
+     "n": 2,
+     "code": "    def multiply(x):",
+     "notes": [
+      "`multiply` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `x`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "        return x * n",
+     "notes": [
+      "Fonksiyon `x * n` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "    return multiply",
+     "notes": [
+      "Fonksiyon `multiply` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "double = make_multiplier(2)",
+     "notes": [
+      "`double` adında bir değişken oluşturuluyor ve içine `make_multiplier(2)` konuyor.",
+      "`make_multiplier(...)`: senin tanımladığın fonksiyonu çağırır."
+     ]
+    },
+    {
+     "n": 7,
+     "code": "print(double(21))",
+     "notes": [
+      "`print(double(21))`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "double",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `make_multiplier(2)`."
+    },
+    {
+     "term": "n",
+     "kind": "parametre",
+     "desc": "`make_multiplier` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+    },
+    {
+     "term": "x",
+     "kind": "parametre",
+     "desc": "`multiply` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+    },
+    {
+     "term": "def",
+     "kind": "anahtar kelime",
+     "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+    },
+    {
+     "term": "make_multiplier()",
+     "kind": "senin fonksiyonun",
+     "desc": "Kodda tanımlanan fonksiyon; parametreleri: `n`."
+    },
+    {
+     "term": "multiply()",
+     "kind": "senin fonksiyonun",
+     "desc": "Kodda tanımlanan fonksiyon; parametreleri: `x`."
+    },
+    {
+     "term": "return",
+     "kind": "anahtar kelime",
+     "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+    },
+    {
+     "term": "*",
+     "kind": "operatör",
+     "desc": "Çarpma; metni ya da listeyi tekrarlama (\"*\" * 3 → \"***\")."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    },
+    {
+     "term": "double()",
+     "kind": "fonksiyon",
+     "desc": "Bu isimdeki fonksiyonu çağırır."
+    }
+   ]
+  }
+ },
+ "project_task": {
+  "id": "d14-p",
+  "title": "Skor tablosu",
+  "prompt": "Oyunun skor tablosunu yapalım. `players` listesini skora göre **büyükten küçüğe** sırala ve `ranking` değişkenine koy. Sonra şöyle yazdır:\n\n```\n1. Piko: 300\n2. Ece: 250\n3. Ali: 120\n```",
+  "starter": "players = [(\"Ali\", 120), (\"Piko\", 300), (\"Ece\", 250)]\n\nranking = players\n\n# Sıralı tabloyu yazdır\n",
+  "solution": "players = [(\"Ali\", 120), (\"Piko\", 300), (\"Ece\", 250)]\n\nranking = sorted(players, key=lambda p: p[1], reverse=True)\n\nfor i, (name, score) in enumerate(ranking, 1):\n    print(f\"{i}. {name}: {score}\")\n",
+  "hints": [
+   "sorted(players, key=lambda p: p[1], reverse=True)",
+   "Sıra numarası için enumerate(ranking, 1)"
+  ],
+  "check": {
+   "code_contains": [
+    "sorted("
+   ],
+   "python": "\ntest = [(\"Can\", 5), (\"Deniz\", 50), (\"Ada\", 20), (\"Efe\", 35)]\nout, g = _run(_set(_code, \"players\", test))\nassert g.get(\"ranking\") == [(\"Deniz\", 50), (\"Efe\", 35), (\"Ada\", 20), (\"Can\", 5)], \"ranking skora göre büyükten küçüğe sıralı olmalı.\"\nlines = [l.strip() for l in out.strip().splitlines()]\nassert lines == [\"1. Deniz: 50\", \"2. Efe: 35\", \"3. Ada: 20\", \"4. Can: 5\"], \"Her satır '1. Deniz: 50' biçiminde olmalı.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "players = [(\"Ali\", 120), (\"Piko\", 300), (\"Ece\", 250)]",
+     "notes": [
+      "`players` adında bir değişken oluşturuluyor ve içine `[(\"Ali\", 120), (\"Piko\", 300), (\"Ece\", 250)]` (liste) konuyor."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "ranking = sorted(players, key=lambda p: p[1], reverse=True)",
+     "notes": [
+      "`ranking` adında bir değişken oluşturuluyor ve içine `sorted(players, key=lambda p: p[1], reverse=True)` konuyor."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "for i, (name, score) in enumerate(ranking, 1):",
+     "notes": [
+      "Döngü: `enumerate(ranking, 1)` içindeki her eleman sırayla `i, name, score` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "    print(f\"{i}. {name}: {score}\")",
+     "notes": [
+      "`print(f\"{i}. {name}: {score}\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "players",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `[(\"Ali\", 120), (\"Piko\", 300), (\"Ece\", 250)]`."
+    },
+    {
+     "term": "ranking",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `sorted(players, key=lambda p: p[1], reverse=True)`."
+    },
+    {
+     "term": "i",
+     "kind": "döngü değişkeni",
+     "desc": "Döngünün her turunda `enumerate(ranking, 1)` içindeki sıradaki elemanı tutar."
+    },
+    {
+     "term": "name",
+     "kind": "döngü değişkeni",
+     "desc": "Döngünün her turunda `enumerate(ranking, 1)` içindeki sıradaki elemanı tutar."
+    },
+    {
+     "term": "score",
+     "kind": "döngü değişkeni",
+     "desc": "Döngünün her turunda `enumerate(ranking, 1)` içindeki sıradaki elemanı tutar."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "sorted()",
+     "kind": "fonksiyon",
+     "desc": "Sıralanmış yeni bir liste verir; asıl liste değişmez."
+    },
+    {
+     "term": "lambda",
+     "kind": "anahtar kelime",
+     "desc": "Tek satırlık isimsiz küçük fonksiyon."
+    },
+    {
+     "term": "True",
+     "kind": "değer",
+     "desc": "Doğru (mantıksal değer)."
+    },
+    {
+     "term": "[ ]",
+     "kind": "seçme",
+     "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+    },
+    {
+     "term": "for",
+     "kind": "anahtar kelime",
+     "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+    },
+    {
+     "term": "enumerate()",
+     "kind": "fonksiyon",
+     "desc": "Listeyi gezerken her elemanın sıra numarasını da verir: (0, ilk), (1, ikinci)..."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    },
+    {
+     "term": "f\"...{}\"",
+     "kind": "metin",
+     "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+    }
+   ]
+  }
+ },
+ "available": true,
+ "tracks": {
+  "veri": {
+   "project_task": {
+    "id": "d14-pv",
+    "title": "En büyük 3 harcama",
+    "prompt": "Kayıtları tutara göre **büyükten küçüğe** sırala (`sorted`, `key` ve `lambda`) ve ilk üçünü `top3` değişkenine koy. Sonra şöyle yazdır:\n\n```\n1. kira: 2000 TL\n2. market: 450 TL\n3. ulaşım: 400 TL\n```",
+    "starter": "records = [(\"market\", 450), (\"kahve\", 35), (\"kira\", 2000), (\"ulaşım\", 400), (\"kitap\", 90)]\n",
+    "solution": "records = [(\"market\", 450), (\"kahve\", 35), (\"kira\", 2000), (\"ulaşım\", 400), (\"kitap\", 90)]\ntop3 = sorted(records, key=lambda r: r[1], reverse=True)[:3]\nnumber = 1\nfor category, amount in top3:\n    print(f\"{number}. {category}: {amount} TL\")\n    number += 1\n",
+    "hints": [
+     "sorted(records, key=lambda r: r[1], reverse=True)",
+     "İlk üç eleman için [:3]"
+    ],
+    "check": {
+     "code_contains": [
+      "sorted(",
+      "lambda"
+     ],
+     "python": "\nout, g = _run(_set(_code, \"records\", [(\"a\", 5), (\"b\", 50), (\"c\", 20), (\"d\", 35)]))\nassert g.get(\"top3\") == [(\"b\", 50), (\"d\", 35), (\"c\", 20)], \"top3, tutara göre büyükten küçüğe ilk üç kayıt olmalı.\"\nfor line in [\"1. b: 50 TL\", \"2. d: 35 TL\", \"3. c: 20 TL\"]:\n    assert line in out, \"'\" + line + \"' gibi numaralı yazdırmalısın.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "records = [(\"market\", 450), (\"kahve\", 35), (\"kira\", 2000), (\"ulaşım\", 400), (\"kitap\", 90)]",
+       "notes": [
+        "`records` adında bir değişken oluşturuluyor ve içine `[(\"market\", 450), (\"kahve\", 35), (\"kira\", 2000), (\"ulaşım...` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "top3 = sorted(records, key=lambda r: r[1], reverse=True)[:3]",
+       "notes": [
+        "`top3` adında bir değişken oluşturuluyor ve içine `sorted(records, key=lambda r: r[1], reverse=True)[:3]` konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "number = 1",
+       "notes": [
+        "`number` adında bir değişken oluşturuluyor ve içine `1` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "for category, amount in top3:",
+       "notes": [
+        "Döngü: `top3` içindeki her eleman sırayla `category, amount` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "    print(f\"{number}. {category}: {amount} TL\")",
+       "notes": [
+        "`print(f\"{number}. {category}: {amount} TL\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    number += 1",
+       "notes": [
+        "`number += 1`: `number` değişkeninin değeri güncelleniyor."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "records",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[(\"market\", 450), (\"kahve\", 35), (\"kira\", 2000), (\"ulaşım...`."
+      },
+      {
+       "term": "top3",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `sorted(records, key=lambda r: r[1], reverse=True)[:3]`."
+      },
+      {
+       "term": "number",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `1`."
+      },
+      {
+       "term": "category",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `top3` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "amount",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `top3` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "[a:b]",
+       "kind": "seçme",
+       "desc": "Dilimleme: a'dan başlayıp b'ye kadar (b hariç) olan parçayı alır."
+      },
+      {
+       "term": "sorted()",
+       "kind": "fonksiyon",
+       "desc": "Sıralanmış yeni bir liste verir; asıl liste değişmez."
+      },
+      {
+       "term": "lambda",
+       "kind": "anahtar kelime",
+       "desc": "Tek satırlık isimsiz küçük fonksiyon."
+      },
+      {
+       "term": "True",
+       "kind": "değer",
+       "desc": "Doğru (mantıksal değer)."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "+=",
+       "kind": "operatör",
+       "desc": "Değişkenin kendi değerine ekler: x += 1 → x = x + 1."
+      }
+     ]
+    }
+   },
+   "project_contribution": "En büyük harcamalar",
+   "game_role": "En çok para giden üç harcamayı sıralar."
+  },
+  "otomasyon": {
+   "project_task": {
+    "id": "d14-po",
+    "title": "Günün sırası",
+    "prompt": "Görevler `(başlık, öncelik)` ikilileri. `sorted` ve `lambda` ile önce **önceliğe** (küçükten büyüğe), öncelik aynıysa **başlığa** göre sırala ve `ordered` değişkenine koy. Sonra numaralı yazdır:\n\n```\n1. Faturayı öde (1)\n2. Rapor yaz (1)\n3. Spor (2)\n4. Kitap oku (3)\n```",
+    "starter": "tasks = [(\"Spor\", 2), (\"Rapor yaz\", 1), (\"Kitap oku\", 3), (\"Faturayı öde\", 1)]\n",
+    "solution": "tasks = [(\"Spor\", 2), (\"Rapor yaz\", 1), (\"Kitap oku\", 3), (\"Faturayı öde\", 1)]\nordered = sorted(tasks, key=lambda t: (t[1], t[0]))\nnumber = 1\nfor title, priority in ordered:\n    print(f\"{number}. {title} ({priority})\")\n    number += 1\n",
+    "hints": [
+     "key=lambda t: (t[1], t[0]) önce önceliğe, sonra başlığa bakar.",
+     "Numara için bir sayaç tut."
+    ],
+    "check": {
+     "code_contains": [
+      "sorted(",
+      "lambda"
+     ],
+     "python": "\nout, g = _run(_set(_code, \"tasks\", [(\"b\", 2), (\"c\", 1), (\"a\", 2)]))\nassert g.get(\"ordered\") == [(\"c\", 1), (\"a\", 2), (\"b\", 2)], \"ordered önce önceliğe, sonra başlığa göre sıralı olmalı.\"\nfor line in [\"1. c (1)\", \"2. a (2)\", \"3. b (2)\"]:\n    assert line in out, \"'\" + line + \"' gibi numaralı yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "tasks = [(\"Spor\", 2), (\"Rapor yaz\", 1), (\"Kitap oku\", 3), (\"Faturayı öde\", 1)]",
+       "notes": [
+        "`tasks` adında bir değişken oluşturuluyor ve içine `[(\"Spor\", 2), (\"Rapor yaz\", 1), (\"Kitap oku\", 3), (\"Fatur...` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "ordered = sorted(tasks, key=lambda t: (t[1], t[0]))",
+       "notes": [
+        "`ordered` adında bir değişken oluşturuluyor ve içine `sorted(tasks, key=lambda t: (t[1], t[0]))` konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "number = 1",
+       "notes": [
+        "`number` adında bir değişken oluşturuluyor ve içine `1` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "for title, priority in ordered:",
+       "notes": [
+        "Döngü: `ordered` içindeki her eleman sırayla `title, priority` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "    print(f\"{number}. {title} ({priority})\")",
+       "notes": [
+        "`print(f\"{number}. {title} ({priority})\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    number += 1",
+       "notes": [
+        "`number += 1`: `number` değişkeninin değeri güncelleniyor."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "tasks",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[(\"Spor\", 2), (\"Rapor yaz\", 1), (\"Kitap oku\", 3), (\"Fatur...`."
+      },
+      {
+       "term": "ordered",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `sorted(tasks, key=lambda t: (t[1], t[0]))`."
+      },
+      {
+       "term": "number",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `1`."
+      },
+      {
+       "term": "title",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `ordered` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "priority",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `ordered` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "sorted()",
+       "kind": "fonksiyon",
+       "desc": "Sıralanmış yeni bir liste verir; asıl liste değişmez."
+      },
+      {
+       "term": "lambda",
+       "kind": "anahtar kelime",
+       "desc": "Tek satırlık isimsiz küçük fonksiyon."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "+=",
+       "kind": "operatör",
+       "desc": "Değişkenin kendi değerine ekler: x += 1 → x = x + 1."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Önceliğe göre sıra",
+   "game_role": "Görevleri önceliğe, sonra ada göre sıralar."
+  },
+  "web": {
+   "project_task": {
+    "id": "d14-pw",
+    "title": "Son yazılar",
+    "prompt": "Ana sayfada en yeni 3 yazı görünsün. Tarihler `\"yıl-ay-gün\"` biçiminde olduğu için yazı olarak da doğru sıralanır.\n\n- `recent`: yazıları tarihe göre **yeniden eskiye** sırala (`sorted`, `key` ve `lambda`) ve ilk üçünü al.\n- `titles`: `map` ile `recent`'teki yazıların sadece başlıkları (liste)\n- Sonra şöyle yazdır (`\" | \".join(titles)`):\n\n```\nSon yazılar: Python Notlarım | Kodla Oyna | Merhaba Dünya\n```",
+    "starter": "posts = [(\"Merhaba Dünya\", \"2026-08-02\"), (\"Python Notlarım\", \"2026-09-15\"), (\"Kodla Oyna\", \"2026-09-01\"), (\"Kısa Not\", \"2026-07-20\")]\n",
+    "solution": "posts = [(\"Merhaba Dünya\", \"2026-08-02\"), (\"Python Notlarım\", \"2026-09-15\"), (\"Kodla Oyna\", \"2026-09-01\"), (\"Kısa Not\", \"2026-07-20\")]\nrecent = sorted(posts, key=lambda p: p[1], reverse=True)[:3]\ntitles = list(map(lambda p: p[0], recent))\nprint(\"Son yazılar: \" + \" | \".join(titles))\n",
+    "hints": [
+     "sorted(posts, key=lambda p: p[1], reverse=True)[:3]",
+     "list(map(lambda p: p[0], recent)) sadece başlıkları verir."
+    ],
+    "check": {
+     "code_contains": [
+      "sorted(",
+      "map(",
+      "lambda"
+     ],
+     "python": "\ntest = [(\"a\", \"2026-01-05\"), (\"b\", \"2025-12-30\"), (\"c\", \"2026-03-01\"), (\"d\", \"2026-02-10\")]\nout, g = _run(_set(_code, \"posts\", test))\nassert g.get(\"recent\") == [(\"c\", \"2026-03-01\"), (\"d\", \"2026-02-10\"), (\"a\", \"2026-01-05\")], \"recent, tarihe göre yeniden eskiye ilk üç yazı olmalı.\"\nassert g.get(\"titles\") == [\"c\", \"d\", \"a\"], \"titles, recent'teki başlıkların listesi olmalı: list(map(...))\"\nassert \"Son yazılar: c | d | a\" in out, \"'Son yazılar: c | d | a' gibi yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "posts = [(\"Merhaba Dünya\", \"2026-08-02\"), (\"Python Notlarım\", \"2026-09-15\"), (\"Kodla Oyna\", \"2026-09-01\"), (\"Kısa Not\", \"2026-07-20\")]",
+       "notes": [
+        "`posts` adında bir değişken oluşturuluyor ve içine `[(\"Merhaba Dünya\", \"2026-08-02\"), (\"Python Notlarım\", \"20...` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "recent = sorted(posts, key=lambda p: p[1], reverse=True)[:3]",
+       "notes": [
+        "`recent` adında bir değişken oluşturuluyor ve içine `sorted(posts, key=lambda p: p[1], reverse=True)[:3]` konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "titles = list(map(lambda p: p[0], recent))",
+       "notes": [
+        "`titles` adında bir değişken oluşturuluyor ve içine `list(map(lambda p: p[0], recent))` konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "print(\"Son yazılar: \" + \" | \".join(titles))",
+       "notes": [
+        "`print(\"Son yazılar: \" + \" | \".join(titles))`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "posts",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[(\"Merhaba Dünya\", \"2026-08-02\"), (\"Python Notlarım\", \"20...`."
+      },
+      {
+       "term": "recent",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `sorted(posts, key=lambda p: p[1], reverse=True)[:3]`."
+      },
+      {
+       "term": "titles",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `list(map(lambda p: p[0], recent))`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "[a:b]",
+       "kind": "seçme",
+       "desc": "Dilimleme: a'dan başlayıp b'ye kadar (b hariç) olan parçayı alır."
+      },
+      {
+       "term": "sorted()",
+       "kind": "fonksiyon",
+       "desc": "Sıralanmış yeni bir liste verir; asıl liste değişmez."
+      },
+      {
+       "term": "lambda",
+       "kind": "anahtar kelime",
+       "desc": "Tek satırlık isimsiz küçük fonksiyon."
+      },
+      {
+       "term": "True",
+       "kind": "değer",
+       "desc": "Doğru (mantıksal değer)."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": "list()",
+       "kind": "fonksiyon",
+       "desc": "Bir değerden liste oluşturur ya da boş liste yapar."
+      },
+      {
+       "term": "map()",
+       "kind": "fonksiyon",
+       "desc": "Bir fonksiyonu listenin her elemanına uygular."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "+",
+       "kind": "operatör",
+       "desc": "Toplama; metinlerde ve listelerde uç uca ekleme."
+      },
+      {
+       "term": ".join()",
+       "kind": "metot",
+       "desc": "Listedeki metinleri aradaki yazıyla birleştirir: \", \".join(liste)"
+      }
+     ]
+    }
+   },
+   "project_contribution": "Son yazılar",
+   "game_role": "Ana sayfa için en yeni üç yazıyı sıralar."
+  },
+  "bot": {
+   "project_task": {
+    "id": "d14-pb",
+    "title": "En uygun niyet",
+    "prompt": "Bot mesajdaki anahtar kelimeleri sayıp her niyete bir puan verdi: `scores` listesi `(niyet, puan)` ikilileri. En çok puanı alan niyet, kullanıcının büyük ihtimalle istediği şeydir.\n\n- `ranked`: puana göre **büyükten küçüğe** sıralı liste (`sorted`, `key` ve `lambda`)\n- `best`: en yüksek puanlı niyetin adı\n- `matched`: `ranked` içinden puanı 0'dan büyük olanlar (`filter` ve `lambda`; sonucu `list()` ile listeye çevir)\n\nSonra şöyle yazdır:\n\n```\nEn uygun niyet: hava\nhava: 2 puan\nsaat: 1 puan\n```",
+    "starter": "scores = [(\"selam\", 0), (\"hava\", 2), (\"saat\", 1), (\"veda\", 0)]\n",
+    "solution": "scores = [(\"selam\", 0), (\"hava\", 2), (\"saat\", 1), (\"veda\", 0)]\nranked = sorted(scores, key=lambda s: s[1], reverse=True)\nbest = ranked[0][0]\nmatched = list(filter(lambda s: s[1] > 0, ranked))\nprint(f\"En uygun niyet: {best}\")\nfor intent, score in matched:\n    print(f\"{intent}: {score} puan\")\n",
+    "hints": [
+     "sorted(scores, key=lambda s: s[1], reverse=True)",
+     "list(filter(lambda s: s[1] > 0, ranked))"
+    ],
+    "check": {
+     "code_contains": [
+      "sorted(",
+      "lambda",
+      "filter("
+     ],
+     "python": "\nout, g = _run(_set(_code, \"scores\", [(\"a\", 1), (\"b\", 0), (\"c\", 5), (\"d\", 3)]))\nassert g.get(\"ranked\") == [(\"c\", 5), (\"d\", 3), (\"a\", 1), (\"b\", 0)], \"ranked, puana göre büyükten küçüğe sıralı olmalı.\"\nassert g.get(\"best\") == \"c\", \"best, en yüksek puanlı niyetin adı olmalı: ranked[0][0]\"\nassert g.get(\"matched\") == [(\"c\", 5), (\"d\", 3), (\"a\", 1)], \"matched, ranked içinden puanı 0'dan büyük olanların listesi olmalı.\"\nfor line in [\"En uygun niyet: c\", \"c: 5 puan\", \"a: 1 puan\"]:\n    assert line in out, \"'\" + line + \"' gibi yazdırmalısın.\"\nassert \"b: 0 puan\" not in out, \"Puanı 0 olan niyetleri yazdırma.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "scores = [(\"selam\", 0), (\"hava\", 2), (\"saat\", 1), (\"veda\", 0)]",
+       "notes": [
+        "`scores` adında bir değişken oluşturuluyor ve içine `[(\"selam\", 0), (\"hava\", 2), (\"saat\", 1), (\"veda\", 0)]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "ranked = sorted(scores, key=lambda s: s[1], reverse=True)",
+       "notes": [
+        "`ranked` adında bir değişken oluşturuluyor ve içine `sorted(scores, key=lambda s: s[1], reverse=True)` konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "best = ranked[0][0]",
+       "notes": [
+        "`best` adında bir değişken oluşturuluyor ve içine `ranked[0][0]` konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "matched = list(filter(lambda s: s[1] > 0, ranked))",
+       "notes": [
+        "`matched` adında bir değişken oluşturuluyor ve içine `list(filter(lambda s: s[1] > 0, ranked))` konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "print(f\"En uygun niyet: {best}\")",
+       "notes": [
+        "`print(f\"En uygun niyet: {best}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "for intent, score in matched:",
+       "notes": [
+        "Döngü: `matched` içindeki her eleman sırayla `intent, score` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "    print(f\"{intent}: {score} puan\")",
+       "notes": [
+        "`print(f\"{intent}: {score} puan\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "scores",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[(\"selam\", 0), (\"hava\", 2), (\"saat\", 1), (\"veda\", 0)]`."
+      },
+      {
+       "term": "ranked",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `sorted(scores, key=lambda s: s[1], reverse=True)`."
+      },
+      {
+       "term": "best",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `ranked[0][0]`."
+      },
+      {
+       "term": "matched",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `list(filter(lambda s: s[1] > 0, ranked))`."
+      },
+      {
+       "term": "intent",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `matched` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "score",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `matched` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "sorted()",
+       "kind": "fonksiyon",
+       "desc": "Sıralanmış yeni bir liste verir; asıl liste değişmez."
+      },
+      {
+       "term": "lambda",
+       "kind": "anahtar kelime",
+       "desc": "Tek satırlık isimsiz küçük fonksiyon."
+      },
+      {
+       "term": "True",
+       "kind": "değer",
+       "desc": "Doğru (mantıksal değer)."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": "list()",
+       "kind": "fonksiyon",
+       "desc": "Bir değerden liste oluşturur ya da boş liste yapar."
+      },
+      {
+       "term": "filter()",
+       "kind": "fonksiyon",
+       "desc": "Listeden yalnızca koşulu sağlayan elemanları seçer."
+      },
+      {
+       "term": ">",
+       "kind": "operatör",
+       "desc": "Büyük mü?"
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Niyet sıralaması",
+   "game_role": "Niyetleri puanlarına göre sıralayıp en uygununu seçer."
+  },
+  "okul": {
+   "project_task": {
+    "id": "d14-pn",
+    "title": "En iyi derslerin",
+    "prompt": "Kayıtları nota göre **büyükten küçüğe** sırala (`sorted`, `key` ve `lambda`) ve `ranking` değişkenine koy. `passed`: `filter` ve `lambda` ile notu 50 veya üstü olan kayıtlar (liste olarak).\n\nSonra şöyle yazdır:\n\n```\n1. Tarih: 90\n2. Matematik: 85\n3. Kimya: 70\n4. Fizik: 42\nGeçilen ders: 3/4\n```",
+    "starter": "records = [(\"Matematik\", 85), (\"Fizik\", 42), (\"Tarih\", 90), (\"Kimya\", 70)]\n",
+    "solution": "records = [(\"Matematik\", 85), (\"Fizik\", 42), (\"Tarih\", 90), (\"Kimya\", 70)]\nranking = sorted(records, key=lambda r: r[1], reverse=True)\npassed = list(filter(lambda r: r[1] >= 50, records))\nnumber = 1\nfor lesson, grade in ranking:\n    print(f\"{number}. {lesson}: {grade}\")\n    number += 1\nprint(f\"Geçilen ders: {len(passed)}/{len(records)}\")\n",
+    "hints": [
+     "sorted(records, key=lambda r: r[1], reverse=True)",
+     "list(filter(lambda r: r[1] >= 50, records))"
+    ],
+    "check": {
+     "code_contains": [
+      "sorted(",
+      "filter(",
+      "lambda"
+     ],
+     "python": "\nout, g = _run(_set(_code, \"records\", [(\"a\", 10), (\"b\", 60), (\"c\", 55)]))\nassert g.get(\"ranking\") == [(\"b\", 60), (\"c\", 55), (\"a\", 10)], \"ranking, nota göre büyükten küçüğe sıralı olmalı.\"\nassert g.get(\"passed\") == [(\"b\", 60), (\"c\", 55)], \"passed, notu 50 ve üstü olan kayıtların listesi olmalı.\"\nfor line in [\"1. b: 60\", \"2. c: 55\", \"3. a: 10\", \"Geçilen ders: 2/3\"]:\n    assert line in out, \"'\" + line + \"' gibi numaralı yazdırmalısın.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "records = [(\"Matematik\", 85), (\"Fizik\", 42), (\"Tarih\", 90), (\"Kimya\", 70)]",
+       "notes": [
+        "`records` adında bir değişken oluşturuluyor ve içine `[(\"Matematik\", 85), (\"Fizik\", 42), (\"Tarih\", 90), (\"Kimya...` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "ranking = sorted(records, key=lambda r: r[1], reverse=True)",
+       "notes": [
+        "`ranking` adında bir değişken oluşturuluyor ve içine `sorted(records, key=lambda r: r[1], reverse=True)` konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "passed = list(filter(lambda r: r[1] >= 50, records))",
+       "notes": [
+        "`passed` adında bir değişken oluşturuluyor ve içine `list(filter(lambda r: r[1] >= 50, records))` konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "number = 1",
+       "notes": [
+        "`number` adında bir değişken oluşturuluyor ve içine `1` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "for lesson, grade in ranking:",
+       "notes": [
+        "Döngü: `ranking` içindeki her eleman sırayla `lesson, grade` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    print(f\"{number}. {lesson}: {grade}\")",
+       "notes": [
+        "`print(f\"{number}. {lesson}: {grade}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "    number += 1",
+       "notes": [
+        "`number += 1`: `number` değişkeninin değeri güncelleniyor."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "print(f\"Geçilen ders: {len(passed)}/{len(records)}\")",
+       "notes": [
+        "`print(f\"Geçilen ders: {len(passed)}/{len(records)}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "records",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[(\"Matematik\", 85), (\"Fizik\", 42), (\"Tarih\", 90), (\"Kimya...`."
+      },
+      {
+       "term": "ranking",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `sorted(records, key=lambda r: r[1], reverse=True)`."
+      },
+      {
+       "term": "passed",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `list(filter(lambda r: r[1] >= 50, records))`."
+      },
+      {
+       "term": "number",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `1`."
+      },
+      {
+       "term": "lesson",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `ranking` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "grade",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `ranking` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "sorted()",
+       "kind": "fonksiyon",
+       "desc": "Sıralanmış yeni bir liste verir; asıl liste değişmez."
+      },
+      {
+       "term": "lambda",
+       "kind": "anahtar kelime",
+       "desc": "Tek satırlık isimsiz küçük fonksiyon."
+      },
+      {
+       "term": "True",
+       "kind": "değer",
+       "desc": "Doğru (mantıksal değer)."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": "list()",
+       "kind": "fonksiyon",
+       "desc": "Bir değerden liste oluşturur ya da boş liste yapar."
+      },
+      {
+       "term": "filter()",
+       "kind": "fonksiyon",
+       "desc": "Listeden yalnızca koşulu sağlayan elemanları seçer."
+      },
+      {
+       "term": ">=",
+       "kind": "operatör",
+       "desc": "Büyük ya da eşit mi?"
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "+=",
+       "kind": "operatör",
+       "desc": "Değişkenin kendi değerine ekler: x += 1 → x = x + 1."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Ders sıralaması",
+   "game_role": "Dersleri nota göre sıralar ve geçilenleri ayıklar."
+  }
+ }
+}

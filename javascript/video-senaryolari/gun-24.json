@@ -1,0 +1,233 @@
+{
+  "kurs": "javascript",
+  "gun": 24,
+  "baslik": "Hatalar ve hata ayıklama",
+  "maskot": "kodi",
+  "ozet": "Kodi, Async İstasyonu'nda hata mesajlarını okumayı, hata türlerini, try/catch/finally ile hataları yakalamayı, throw ile kendi hatanı fırlatmayı ve adım adım hata ayıklamayı anlatıyor.",
+  "hedef_sure_sn": 167,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 12,
+      "anlatim": "Selam, ben Kodi! Async İstasyonu'na kenetlendik. İstasyonun bilgisayarı arada bir kırmızı alarm veriyor. Panik yok! Bugün hata mesajlarını okumayı ve hataları yakalamayı öğreniyoruz.",
+      "ekran": {
+        "baslik": "Gün 24: Hatalar ve hata ayıklama",
+        "gorsel": "gorseller/javascript/bolgeler/istasyon.webp"
+      },
+      "maskot": {
+        "poz": "el-sallama",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 2,
+      "tur": "hata",
+      "sure_sn": 15,
+      "anlatim": "İşte kırmızı bir alarm. Her hata mesajının üç parçası var: tür, açıklama ve satır numarası. Burada tür ReferenceError, açıklama ise consle tanımlı değil diyor. Yani bir yazım hatası!",
+      "ekran": {
+        "baslik": "Hata mesajını oku",
+        "kod": "const fuel = 50;\nconsle.log(fuel);\n",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "ReferenceError: consle is not defined   (2. satır)",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sag"
+      },
+      "calistir": true,
+      "yonetmen_notu": "Hata mesajının üç parçası ayrı renklerle çerçevelenir: tür, açıklama, satır."
+    },
+    {
+      "no": 3,
+      "tur": "anlatim",
+      "sure_sn": 16,
+      "anlatim": "En sık göreceğin türler şunlar. ReferenceError: böyle bir isim yok. TypeError: değer bu işe uygun değil. SyntaxError: kod kurallara uymuyor. RangeError: sayı izin verilen aralıkta değil.",
+      "ekran": {
+        "baslik": "Hata türleri",
+        "maddeler": [
+          "ReferenceError: consle.log(1)",
+          "TypeError: undefined.length, 5()",
+          "SyntaxError: if (x > 1 {  ·  JSON.parse(\"{\")",
+          "RangeError: new Array(-1)"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 18,
+      "anlatim": "Hata çıkabilecek kodu try bloğuna koyarsan program çökmez, hemen catch'e atlar. error nesnesinin name ve message özellikleri var. finally ise hata olsa da olmasa da çalışır.",
+      "ekran": {
+        "baslik": "try, catch, finally",
+        "kod": "try {\n  const data = JSON.parse(\"{bozuk\"); // burada hata çıkar\n  console.log(\"Bu satır çalışmaz\");\n} catch (error) {\n  console.log(\"Yakalandı:\", error.name);\n} finally {\n  console.log(\"Bu her durumda çalışır\");\n}\nconsole.log(\"Program devam ediyor!\");\n",
+        "vurgu_satirlari": [
+          2,
+          5,
+          7
+        ],
+        "cikti": "Yakalandı: SyntaxError\nBu her durumda çalışır\nProgram devam ediyor!",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 15,
+      "anlatim": "Bozuk bir kayıt bütün oyunu durdurmamalı. Her kaydı ayrı ayrı try içinde okuyoruz. Bozuk olan yakalanıyor, döngü sıradakiyle devam ediyor.",
+      "ekran": {
+        "baslik": "Örnek: bozuk kayıtlar",
+        "kod": "const saves = ['{\"skor\": 12}', \"{bozuk kayıt\", '{\"skor\": 30}'];\nfor (const text of saves) {\n  try {\n    console.log(\"Skor:\", JSON.parse(text).skor);\n  } catch (error) {\n    console.log(\"Okunamadı:\", error.name);\n  }\n}\n",
+        "vurgu_satirlari": [
+          3,
+          5
+        ],
+        "cikti": "Skor: 12\nOkunamadı: SyntaxError\nSkor: 30",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 18,
+      "anlatim": "Bir fonksiyon hatalı veri alırsa sessizce yanlış sonuç vermek yerine açık bir mesajla durmalı. throw fonksiyonu anında durdurur ve hatayı çağıran koda gönderir. Oradaki catch onu yakalar.",
+      "ekran": {
+        "baslik": "throw: kendi hatanı fırlat",
+        "kod": "function setCrew(count) {\n  if (count < 1 || count > 6) {\n    throw new Error(\"Ekip 1 ile 6 kişi arasında olmalı\");\n  }\n  return count;\n}\ntry {\n  setCrew(9);\n} catch (error) {\n  console.log(\"Hata:\", error.message);\n}\n",
+        "vurgu_satirlari": [
+          3,
+          8,
+          10
+        ],
+        "cikti": "Hata: Ekip 1 ile 6 kişi arasında olmalı",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "anlatim",
+      "sure_sn": 17,
+      "anlatim": "Programcılar hatayı tahminle değil, adım adım bulur. Mesajı oku, şüphelendiğin değeri console.log ile yazdır, sorunu küçült ve her seferinde tek bir şey değiştirip yeniden çalıştır.",
+      "ekran": {
+        "baslik": "Hata ayıklama stratejisi",
+        "maddeler": [
+          "1. Mesajı oku: tür, açıklama, satır",
+          "2. Değerlere bak: console.log, console.table",
+          "3. Sorunu küçült",
+          "4. Tek şey değiştir, tekrar çalıştır"
+        ]
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 8,
+      "tur": "soru",
+      "sure_sn": 10,
+      "anlatim": "Soru zamanı! try içinde ikinci satır hata veriyor. Sence konsolda hangi harfler, hangi sırayla görünür?",
+      "ekran": {
+        "baslik": "Sence ne yazar?",
+        "kod": "try {\n  console.log(\"A\");\n  null.length;\n  console.log(\"B\");\n} catch (error) {\n  console.log(\"C\");\n} finally {\n  console.log(\"D\");\n}\n",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 9,
+      "tur": "cikti",
+      "sure_sn": 10,
+      "anlatim": "Cevap A, C, D! null'ın uzunluğu olmadığı için TypeError çıktı ve B atlandı. catch C'yi yazdı, finally de her zamanki gibi D'yi.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "try {\n  console.log(\"A\");\n  null.length;\n  console.log(\"B\");\n} catch (error) {\n  console.log(\"C\");\n} finally {\n  console.log(\"D\");\n}\n",
+        "vurgu_satirlari": [
+          3
+        ],
+        "cikti": "A\nC\nD",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 10,
+      "tur": "gorev",
+      "sure_sn": 13,
+      "anlatim": "Görev zamanı! Bozuk metinde çökmeyen bir okuma fonksiyonu, hatalı yakıtta hata fırlatan bir doğrulama ve finally ile her durumda kapanan bir kalkış paneli yazacaksın.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Güvenli okuma",
+          "Görev 2: Yakıt doğrulama",
+          "Görev 3: finally ile kapanış"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "ozet",
+      "sure_sn": 12,
+      "anlatim": "Özetleyelim: hata mesajında tür, açıklama ve satır var. Beklediğin hataları try ve catch ile yakala, temizliği finally'ye koy. Hatalı veride throw ile açıkça dur.",
+      "ekran": {
+        "baslik": "Özet",
+        "maddeler": [
+          "Tür + açıklama + satır numarası",
+          "try / catch (error) / finally",
+          "throw new Error(\"...\") ile açık mesaj"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 12,
+      "tur": "kapanis",
+      "sure_sn": 11,
+      "anlatim": "Artık alarmlardan korkmuyorsun! İstasyonda hiçbir iş anında bitmiyor. Yarın JavaScript'e beklemeyi öğreteceğiz: Promise ve async await. Görüşürüz!",
+      "ekran": {
+        "baslik": "Yarın: Promise ve async/await",
+        "gorsel": "gorseller/javascript/arka-plan/bg-space-wide.webp"
+      },
+      "maskot": {
+        "poz": "el-sallama",
+        "konum": "orta"
+      }
+    }
+  ]
+}

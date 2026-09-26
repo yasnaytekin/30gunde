@@ -1,0 +1,214 @@
+{
+  "kurs": "python",
+  "gun": 14,
+  "baslik": "Üst düzey fonksiyonlar",
+  "maskot": "piko",
+  "ozet": "Piko, fonksiyonları değer gibi kullanmayı anlatıyor: fonksiyonu fonksiyona vermek, map, filter, sorted ile key, ve fonksiyon döndüren fonksiyonlar (closure).",
+  "hedef_sure_sn": 124,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 12,
+      "anlatim": "Selam, ben Piko! Atölyenin ustası bana bir sır verdi: aletleri başka aletlere de takabilirsin! Matkabın ucunu değiştirmek gibi, bir fonksiyona başka bir fonksiyonu verebilirsin. Bugün üst düzey fonksiyonları öğreniyoruz.",
+      "ekran": {
+        "baslik": "Gün 14: Üst düzey fonksiyonlar",
+        "gorsel": "gorseller/python/harita/atolye.webp"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "yonetmen_notu": "Bir matkaba farklı uçlar takılıp çıkarılır."
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "Fonksiyonu parantezsiz yazarsan onu çağırmazsın, kendisini alırsın. use_twice, verdiğin fonksiyonu iki kez uygular. hey, önce büyük harf ve ünlem alıyor, sonra bir ünlem daha. lambda da verilebilir!",
+      "ekran": {
+        "baslik": "Fonksiyonlar da değerdir",
+        "kod": "def shout(text):\n    return text.upper() + \"!\"\n\ndef use_twice(func, value):\n    return func(func(value))\n\nprint(use_twice(shout, \"hey\"))\nprint(use_twice(lambda n: n * 10, 3))\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          5,
+          7
+        ],
+        "cikti": "HEY!!\n300"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 11,
+      "anlatim": "map her elemana fonksiyonu uygular: bütün skorlar iki katına çıktı. filter ise fonksiyonun True dediği elemanları tutar: burada altmışın altındakiler.",
+      "ekran": {
+        "baslik": "map ve filter",
+        "kod": "scores = [40, 75, 90, 55]\nprint(list(map(lambda s: s * 2, scores)))\nprint(list(filter(lambda s: s < 60, scores)))\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2,
+          3
+        ],
+        "cikti": "[80, 150, 180, 110]\n[40, 55]"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "hata",
+      "sure_sn": 10,
+      "anlatim": "list'i unutursan Python sonucu değil, bir map nesnesi gösterir. Hata vermez ama işine de yaramaz. Sonuçları görmek için list içine al.",
+      "ekran": {
+        "baslik": "list() unutulunca",
+        "kod": "scores = [40, 75, 90]\nprint(map(lambda s: s * 2, scores))\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "<map object at 0x7f3a2c1b5e10>"
+      },
+      "maskot": {
+        "poz": "uzgun",
+        "konum": "sag"
+      },
+      "calistir": false,
+      "yonetmen_notu": "Adres her çalıştırmada farklıdır; ekranda örnek bir adres gösterilir."
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "sorted'a key ile neye göre sıralayacağını söylersin. Burada her oyuncunun skoruna bakıyoruz, reverse True da büyükten küçüğe dizer. key olarak len verirsen kısa isimler öne geçer.",
+      "ekran": {
+        "baslik": "sorted ve key",
+        "kod": "players = [(\"Ali\", 120), (\"Piko\", 300), (\"Ece\", 250)]\nfor name, score in sorted(players, key=lambda p: p[1], reverse=True):\n    print(name, score)\nprint(\"Kısa isim önce:\", sorted([\"Zeynep\", \"Can\", \"Ece\"], key=len))\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2,
+          4
+        ],
+        "cikti": "Piko 300\nEce 250\nAli 120\nKısa isim önce: ['Can', 'Ece', 'Zeynep']"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "Bir fonksiyon, içinde yeni bir fonksiyon yapıp onu döndürebilir. İçteki fonksiyon dıştakinin değerini hatırlar; buna closure denir. plus5 artık her sayıya beş ekleyen yepyeni bir alet.",
+      "ekran": {
+        "baslik": "Fonksiyon üreten fonksiyon",
+        "kod": "def make_adder(n):\n    def add(x):\n        return x + n\n    return add\n\nplus5 = make_adder(5)\nprint(plus5(10))\nprint(plus5(1))\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          4,
+          7
+        ],
+        "cikti": "15\n6"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "soru",
+      "sure_sn": 9,
+      "anlatim": "max da key alır, map'e de hazır bir fonksiyon verebilirsin. Sence bu iki satır ne yazdırır?",
+      "ekran": {
+        "baslik": "Sence ne yazar?",
+        "kod": "names = [\"Piko\", \"Al\", \"Ece\"]\nprint(max(names, key=len))\nprint(list(map(len, names)))\n",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "cikti",
+      "sure_sn": 10,
+      "anlatim": "Piko ve dört, iki, üç! max en uzun ismi seçti. map ise len fonksiyonunu her isme uygulayıp uzunlukları bir listeye koydu.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "names = [\"Piko\", \"Al\", \"Ece\"]\nprint(max(names, key=len))\nprint(list(map(len, names)))\n",
+        "dil": "python",
+        "cikti": "Piko\n[4, 2, 3]"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "gorev",
+      "sure_sn": 13,
+      "anlatim": "Görevlerde bir fonksiyonu başka bir fonksiyona verecek, map ile skorlara bonus ekleyecek ve filter ile geçenleri ayıracaksın. Challenge'da fonksiyon üreten bir fonksiyon, yani çarpan üretici yazacaksın.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Uygula",
+          "Görev 2: Bonus puan",
+          "Görev 3: Geçenler",
+          "Challenge: Çarpan üretici"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 10,
+      "tur": "ozet",
+      "sure_sn": 8,
+      "anlatim": "Bugün fonksiyonları bir değer gibi elden ele verdik, listelere uyguladık ve yeni fonksiyonlar ürettik.",
+      "ekran": {
+        "baslik": "Bugün öğrendiklerin",
+        "maddeler": [
+          "Parantezsiz fonksiyon = fonksiyonun kendisi",
+          "map uygular, filter süzer; list() ile gör",
+          "sorted/max key alır; closure değer hatırlar"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "kapanis",
+      "sure_sn": 9,
+      "anlatim": "Artık alet ustasısın! Yarın atölyenin son odasına giriyoruz: bir dedektif bürosu. Kırmızı hata mesajlarını okuyup hata tiplerini tanıyacağız.",
+      "ekran": {
+        "baslik": "Yarın: Hata tipleri",
+        "gorsel": "gorseller/python/harita/atolye.webp"
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

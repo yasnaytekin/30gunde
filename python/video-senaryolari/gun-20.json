@@ -1,0 +1,232 @@
+{
+  "kurs": "python",
+  "gun": 20,
+  "baslik": "Paket yöneticisi pip",
+  "maskot": "piko",
+  "ozet": "Piko, Keşif Adası'nın limanına inen kutulardan yola çıkarak paketleri, pip komutlarını, requirements.txt dosyasını ve sürüm karşılaştırma tuzağını anlatıyor.",
+  "hedef_sure_sn": 154,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 13,
+      "anlatim": "Selam, ben Piko! Keşif Adası'nın limanına her gün gemiler yanaşıyor ve dünyanın dört bir yanından kutular iniyor. İçlerinde başka programcıların yaptığı hazır aletler var. Bu kutulara paket, onları getiren gemiye pip diyoruz!",
+      "ekran": {
+        "baslik": "Gün 20: Paket yöneticisi pip",
+        "maddeler": [
+          "Keşif Adası",
+          "Paketler, pip, requirements.txt"
+        ]
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "yonetmen_notu": "Arka plan: Keşif Adası bölge görseli (gorseller/python/harita/ada.webp). Dosya repoda henüz yok; eklenince ekran.gorsel alanına yazılmalı. Limana yanaşan gemiden kutular iner; kutuların üstünde requests, pygame, pandas yazar."
+    },
+    {
+      "no": 2,
+      "tur": "anlatim",
+      "sure_sn": 14,
+      "anlatim": "Paket, birilerinin yazıp herkesle paylaştığı modüller topluluğudur. Yüz binlerce paket PyPI adlı dev bir depoda durur. requests internetten veri alır, pygame oyun yapar, pandas tablo işler.",
+      "ekran": {
+        "baslik": "Paket nedir?",
+        "maddeler": [
+          "PyPI: Python Package Index",
+          "requests: internetten veri",
+          "pygame: oyun",
+          "pandas: tablo"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 3,
+      "tur": "anlatim",
+      "sure_sn": 16,
+      "anlatim": "pip paketleri kuran programdır. Bu komutlar Python kodunun içine değil, bilgisayarındaki terminale yazılır. install kurar, iki eşittirle belli bir sürümü seçersin. list ve freeze kurulu paketleri gösterir, uninstall kaldırır.",
+      "ekran": {
+        "baslik": "pip komutları (terminalde)",
+        "maddeler": [
+          "pip install requests",
+          "pip install pygame==2.5.2",
+          "pip list  /  pip freeze",
+          "pip uninstall requests"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 4,
+      "tur": "hata",
+      "sure_sn": 12,
+      "anlatim": "İşte en sık hata: pip komutunu Python dosyasına yazmak. Python bunu kod sanıyor ve SyntaxError veriyor. pip install her zaman terminalde çalışır.",
+      "ekran": {
+        "baslik": "Sık hata: pip kodun içinde",
+        "kod": "pip install requests\n",
+        "vurgu_satirlari": [
+          1
+        ],
+        "cikti": "SyntaxError: invalid syntax",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "uzgun",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "anlatim",
+      "sure_sn": 15,
+      "anlatim": "Bir projenin ihtiyaç duyduğu paketler requirements.txt dosyasına yazılır, her satırda paket ve sürümü. Projeni indiren biri tek komutla hepsini kurar: pip install tire r requirements.txt.",
+      "ekran": {
+        "baslik": "requirements.txt",
+        "maddeler": [
+          "requests==2.31.0",
+          "pygame==2.5.2",
+          "Hepsini kur: pip install -r requirements.txt"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "Böyle bir satırı Python'la okumak kolay. split ile iki eşittirden bölüyorum, iki parçayı da aynı anda iki değişkene açıyorum.",
+      "ekran": {
+        "baslik": "Satırı parçala",
+        "kod": "line = \"requests==2.31.0\"\nname, version = line.split(\"==\")\nprint(\"Paket:\", name)\nprint(\"Sürüm:\", version)\n",
+        "vurgu_satirlari": [
+          2
+        ],
+        "dil": "python",
+        "cikti": "Paket: requests\nSürüm: 2.31.0"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "anlatim",
+      "sure_sn": 9,
+      "anlatim": "Sürüm numaraları büyük, küçük ve yama diye üç parçadan oluşur. Karşılaştırırken bir tuzak var, hemen görelim.",
+      "ekran": {
+        "baslik": "Sürüm numaraları",
+        "maddeler": [
+          "2.31.0 = büyük.küçük.yama",
+          "Hangisi daha yeni: 2.4.1 mi, 2.31.0 mı?"
+        ]
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 8,
+      "tur": "soru",
+      "sure_sn": 9,
+      "anlatim": "Sence sürümleri yazı olarak karşılaştırınca, 2.4.1 büyük mü çıkar? True mu yazar, False mu?",
+      "ekran": {
+        "baslik": "Sence ne yazdırır?",
+        "kod": "a = \"2.4.1\"\nb = \"2.31.0\"\nprint(\"Yazı olarak:\", a > b)\n",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 9,
+      "tur": "cikti",
+      "sure_sn": 16,
+      "anlatim": "True yazdı ama bu yanlış! Yazılar harf harf karşılaştırılır ve dört, üçten büyüktür. Doğrusu parçaları sayıya çevirip tuple yapmak. O zaman otuz bir, dörtten büyük çıkar ve 2.31.0 daha yeni olur.",
+      "ekran": {
+        "baslik": "Sürüm tuzağı",
+        "kod": "a = \"2.4.1\"\nb = \"2.31.0\"\nprint(\"Yazı olarak:\", a > b)\nva = tuple(int(p) for p in a.split(\".\"))\nvb = tuple(int(p) for p in b.split(\".\"))\nprint(\"Sayı olarak:\", va > vb)\n",
+        "vurgu_satirlari": [
+          4,
+          6
+        ],
+        "dil": "python",
+        "cikti": "Yazı olarak: True\nSayı olarak: False"
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 10,
+      "tur": "gorev",
+      "sure_sn": 13,
+      "anlatim": "Görevlerde bir satırı parçalayacak, bütün bir requirements metnini sözlüğe çevirecek ve iki sürümden hangisinin daha yeni olduğunu bulacaksın. Projede de oyunumuzun paket listesini hazırlıyorsun.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Satırı parçala",
+          "Görev 2: requirements okuyucu",
+          "Görev 3: Hangisi daha yeni?",
+          "Challenge: Eksik paketler",
+          "Proje: Paket listesi"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "ozet",
+      "sure_sn": 12,
+      "anlatim": "Özetle: paketler PyPI'da durur, pip onları terminalden kurar, requirements.txt de listeyi saklar. Bir sürpriz: import this yazıp çalıştır!",
+      "ekran": {
+        "baslik": "Bugün öğrendiklerin",
+        "maddeler": [
+          "Paket = paylaşılan hazır modüller",
+          "pip install, list, freeze, uninstall",
+          "Sürümleri sayı olarak karşılaştır"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 12,
+      "tur": "kapanis",
+      "sure_sn": 13,
+      "anlatim": "Keşif Adası'nı bitirdik, tebrikler! Yarın Bilgi Limanı'na yelken açıyoruz. Orada class ile kendi veri tiplerini, yani sınıfları ve nesneleri kuracağız. Görüşürüz!",
+      "ekran": {
+        "baslik": "Yarın: Sınıflar ve nesneler",
+        "maddeler": [
+          "Yeni bölge: Bilgi Limanı",
+          "class, __init__, self"
+        ]
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

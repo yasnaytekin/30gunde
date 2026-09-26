@@ -1,0 +1,255 @@
+{
+  "kurs": "javascript",
+  "gun": 25,
+  "baslik": "Promise ve async/await",
+  "maskot": "kodi",
+  "ozet": "Kodi, Async İstasyonu'nda asenkron işleri, Promise oluşturmayı, then/catch ile sonucu ve hatayı almayı, async/await ile beklemeyi ve Promise.all ile işleri birlikte yürütmeyi anlatıyor.",
+  "hedef_sure_sn": 176,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 12,
+      "anlatim": "Selam, ben Kodi! İstasyonda hiçbir iş anında bitmiyor: yakıt dolumu sürüyor, sinyaller gecikiyor. JavaScript beklemeyi nasıl öğrenir? Bugün Promise ve async await ile tanışıyoruz!",
+      "ekran": {
+        "baslik": "Gün 25: Promise ve async/await",
+        "gorsel": "gorseller/javascript/bolgeler/istasyon.webp"
+      },
+      "maskot": {
+        "poz": "el-sallama",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 15,
+      "anlatim": "Bazı işler zaman alır. JavaScript bu sırada durup beklemez, diğer işlere devam eder ve uzun iş bitince haber alır. Bu yüzden çıktı sırası bir, iki, üç olur. Bu tür işlere asenkron denir.",
+      "ekran": {
+        "baslik": "Neden bekleme gerekir?",
+        "kod": "console.log(\"1. Sinyal gönderildi\");\nsetTimeout(() => console.log(\"3. Cevap geldi\"), 100);\nconsole.log(\"2. Beklerken başka işler\");\n",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "1. Sinyal gönderildi\n2. Beklerken başka işler\n3. Cevap geldi",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 17,
+      "anlatim": "Promise, iş bitince sana sonucu vereceğim sözüdür. Önce bekler, sonra ya tamamlanır ya da reddedilir. resolve sözü tutar ve then içindeki fonksiyon o değerle çalışır.",
+      "ekran": {
+        "baslik": "Promise: bir söz",
+        "kod": "function wait(ms) {\n  return new Promise((resolve) => {\n    setTimeout(() => resolve(\"hazır\"), ms);\n  });\n}\nwait(100).then((result) => console.log(\"Sonuç:\", result));\n",
+        "vurgu_satirlari": [
+          2,
+          3,
+          6
+        ],
+        "cikti": "Sonuç: hazır",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "reject ise sözü bozar. O zaman then atlanır, catch içindeki fonksiyon hatayla çalışır. Burada yedinci seviye yok, bu yüzden söz bozuluyor.",
+      "ekran": {
+        "baslik": "reject ve catch",
+        "kod": "function loadLevel(n) {\n  return new Promise((resolve, reject) => {\n    if (n > 5) reject(new Error(`Seviye ${n} bulunamadı`));\n    else resolve(`Seviye ${n} yüklendi`);\n  });\n}\nloadLevel(7)\n  .then((text) => console.log(text))\n  .catch((error) => console.log(\"Hata:\", error.message));\n",
+        "vurgu_satirlari": [
+          3,
+          9
+        ],
+        "cikti": "Hata: Seviye 7 bulunamadı",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "then zincirleri uzayınca okumak zorlaşır. async bir fonksiyonun içinde await, Promise bitene kadar bekler. Kod yukarıdan aşağı, sırayla okunur. async fonksiyon da bir Promise döndürür.",
+      "ekran": {
+        "baslik": "async ve await",
+        "kod": "function wait(ms) {\n  return new Promise((resolve) => setTimeout(resolve, ms));\n}\nasync function countdown() {\n  console.log(\"Geri sayım...\");\n  await wait(100);\n  console.log(\"Kalkış!\");\n  return \"yörüngede\";\n}\nconsole.log(await countdown());\n",
+        "vurgu_satirlari": [
+          4,
+          6,
+          10
+        ],
+        "cikti": "Geri sayım...\nKalkış!\nyörüngede",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 15,
+      "anlatim": "Reddedilen bir Promise'i await edersen hata fırlatılır. Dün öğrendiğimiz try ve catch ile yakalarız. Beşinci seviye yüklenir, dokuzuncu ise yakalanır.",
+      "ekran": {
+        "baslik": "await ve try/catch",
+        "kod": "async function start(n) {\n  try {\n    console.log(await loadLevel(n));\n  } catch (error) {\n    console.log(\"Sorun:\", error.message);\n  }\n}\nawait start(5);\nawait start(9);\n",
+        "vurgu_satirlari": [
+          3,
+          5
+        ],
+        "cikti": "Seviye 5 yüklendi\nSorun: Seviye 9 bulunamadı",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 7,
+      "tur": "kod",
+      "sure_sn": 17,
+      "anlatim": "Birbirini beklemesi gerekmeyen işleri sırayla beklemek zaman kaybıdır. Promise.all hepsini aynı anda başlatır ve sonuçları aynı sırayla bir dizi olarak verir. Süre toplam değil, en uzunu kadar!",
+      "ekran": {
+        "baslik": "Promise.all: birlikte bekle",
+        "kod": "function loadPart(name, ms) {\n  return new Promise((resolve) => setTimeout(() => resolve(name + \" hazır\"), ms));\n}\nconst start = Date.now();\nconst parts = await Promise.all([loadPart(\"Motor\", 150), loadPart(\"Kanat\", 100)]);\nconsole.log(parts);\nconsole.log(\"250 ms'den kısa sürdü:\", Date.now() - start < 250);\n",
+        "vurgu_satirlari": [
+          5
+        ],
+        "cikti": "[ 'Motor hazır', 'Kanat hazır' ]\n250 ms'den kısa sürdü: true",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "hata",
+      "sure_sn": 14,
+      "anlatim": "Sık hata: await'i unutmak. O zaman değişkene sonuç değil, henüz bekleyen bir Promise gelir. Hata mesajı çıkmaz ama ekranda beklediğin yazı yerine garip bir şey görürsün.",
+      "ekran": {
+        "baslik": "Sık hata: await'i unutmak",
+        "kod": "const level = loadPart(\"Seviye 1\", 100); // await yok!\nconsole.log(level);\n",
+        "vurgu_satirlari": [
+          1
+        ],
+        "cikti": "Promise { <pending> }",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 9,
+      "tur": "soru",
+      "sure_sn": 9,
+      "anlatim": "Soru zamanı! Bekleme süresi sıfır. Sence A, B ve C hangi sırayla yazılır?",
+      "ekran": {
+        "baslik": "Sence ne yazar?",
+        "kod": "console.log(\"A\");\nwait(0).then(() => console.log(\"B\"));\nconsole.log(\"C\");\n",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 10,
+      "tur": "cikti",
+      "sure_sn": 9,
+      "anlatim": "Cevap A, C, B! Söz sıfır milisaniyede bile olsa sonradan tutulur. Şimdiki kod bitmeden then çalışmaz.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "function wait(ms) {\n  return new Promise((resolve) => setTimeout(resolve, ms));\n}\nconsole.log(\"A\");\nwait(0).then(() => console.log(\"B\"));\nconsole.log(\"C\");\n",
+        "vurgu_satirlari": [
+          5
+        ],
+        "cikti": "A\nC\nB",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 11,
+      "tur": "gorev",
+      "sure_sn": 13,
+      "anlatim": "Görev zamanı! Kendi bekleme sözünü yazacaksın, async bir yakıt dolumu fonksiyonu yapacaksın ve motor çok ısınırsa hatayı yakalayan bir uçuş öncesi kontrolü kuracaksın.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Bekleme sözü",
+          "Görev 2: Yakıt dolumu",
+          "Görev 3: Motor kontrolü"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 12,
+      "tur": "ozet",
+      "sure_sn": 12,
+      "anlatim": "Özetleyelim: Promise bir sözdür; resolve tutar, reject bozar. Sonucu then ya da await ile al, hatayı catch ile yakala. Bağımsız işleri Promise.all ile birlikte beklet.",
+      "ekran": {
+        "baslik": "Özet",
+        "maddeler": [
+          "new Promise((resolve, reject) => ...)",
+          "then / catch  ·  async + await + try/catch",
+          "Promise.all([...]): birlikte, aynı sırayla"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 13,
+      "tur": "kapanis",
+      "sure_sn": 11,
+      "anlatim": "Bekleme ustası oldun! Yarın bu bilgiyi gerçek bir işte kullanacağız: fetch ile bir sunucudan veri isteyeceğiz. Görüşürüz!",
+      "ekran": {
+        "baslik": "Yarın: fetch ve API",
+        "gorsel": "gorseller/javascript/arka-plan/bg-space-wide.webp"
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

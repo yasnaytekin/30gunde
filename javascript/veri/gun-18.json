@@ -1,0 +1,241 @@
+{
+ "day": 18,
+ "title": "Zamanlayıcılar",
+ "region": "kusak",
+ "xp_complete": 150,
+ "objective": "setTimeout, setInterval ve clearInterval ile zamanlanmış işler yapmak, üst üste binen sayaçları önlemek",
+ "story": "Olay Kuşağı'nda zaman da bir olaydır: her saniye bir tık! Bugün **zamanlayıcılarla** geri sayımlar, saatler ve kronometreler kuracaksın.",
+ "sections": [
+  {
+   "title": "setTimeout: biraz sonra",
+   "body": "`setTimeout(fonksiyon, ms)` fonksiyonu **bir kez**, belirttiğin milisaniye sonra çalıştırır (1000 ms = 1 saniye):\n\n```js\nconsole.log(\"Geri sayım başladı\");\nsetTimeout(() => {\n  console.log(\"Kalkış!\");\n}, 1000);\nconsole.log(\"Bu satır önce yazılır!\");\n```\n\n`setTimeout` beklemez: fonksiyonu \"sonra çalıştır\" diye bir kenara koyar ve kod hemen devam eder. Bu yüzden son satır `Kalkış!`'tan önce yazılır."
+  },
+  {
+   "title": "setInterval ve clearInterval",
+   "body": "`setInterval(fonksiyon, ms)` fonksiyonu her `ms` milisaniyede **bir kez daha** çalıştırır, ta ki sen durdurana kadar:\n\n```js\nlet count = 0;\nconst timer = setInterval(() => {\n  count++;\n  console.log(\"Tık\", count);\n  if (count === 5) clearInterval(timer);\n}, 200);\n```\n\n`setInterval` bir **kimlik numarası** döndürür; sayacı durdurmak için bunu `clearInterval`'a verirsin. `setTimeout`'u da `clearTimeout` ile iptal edebilirsin."
+  },
+  {
+   "title": "Üst üste binen sayaçlar",
+   "body": "Başlat düğmesine iki kez basılırsa **iki ayrı** sayaç çalışır ve süre iki kat hızlı akar! Çözüm: sayaç zaten çalışıyorsa yenisini kurma (ya da önce eskisini durdur):\n\n```js\nlet timer = null;\nfunction start() {\n  if (timer !== null) return; // zaten çalışıyor\n  timer = setInterval(tick, 1000);\n}\nfunction stop() {\n  clearInterval(timer);\n  timer = null;\n}\n```\n\nHer adımı `tick()` gibi ayrı bir fonksiyona koymak iyi bir fikir: onu elle çağırıp tek adımı deneyebilirsin. Denerken aralığı kısa tut (ör. `100` ms), iş bitince gerçek değeri (`1000`) yazarsın."
+  },
+  {
+   "title": "Tarih ve saat: Date",
+   "body": "`new Date()` şu anı verir. İçinden saat, dakika ve saniyeyi alabilirsin:\n\n```js\nconst now = new Date();\nconst h = String(now.getHours()).padStart(2, \"0\");\nconst m = String(now.getMinutes()).padStart(2, \"0\");\nconsole.log(`${h}:${m}`); // ör. 09:05\n```\n\n- `padStart(2, \"0\")` metni 2 karakter olana kadar başına 0 ekler: `\"5\"` → `\"05\"`.\n- Belli bir anı da oluşturabilirsin: `new Date(2026, 0, 5, 9, 7, 3)` → 5 Ocak 2026, 09:07:03. Aylar **0'dan** başlar (Ocak = 0)."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Gecikmeli sinyal",
+   "code": "document.querySelector(\"#send\").addEventListener(\"click\", () => {\n  const info = document.querySelector(\"#info\");\n  info.textContent = \"Sinyal yolda...\";\n  setTimeout(() => {\n    info.textContent = \"Sinyal Mars üssüne ulaştı!\";\n  }, 1000);\n});\n",
+   "note": "Düğmeye bas ve 1 saniye bekle.",
+   "mode": "page",
+   "html": "<button id=\"send\">Sinyal gönder</button>\n<p id=\"info\">Hazır.</p>\n",
+   "css": ""
+  },
+  {
+   "title": "Canlı saat",
+   "code": "const clock = document.querySelector(\"#clock\");\n\nfunction showTime() {\n  clock.textContent = new Date().toLocaleTimeString(\"tr-TR\");\n}\n\nshowTime(); // hemen göster\nsetInterval(showTime, 1000); // sonra her saniye güncelle\n",
+   "note": "showTime() satırını silersen saat ilk saniye boş kalır.",
+   "mode": "page",
+   "html": "<p>Üs saati: <strong id=\"clock\"></strong></p>",
+   "css": "#clock{font-family:monospace;font-size:22px}"
+  }
+ ],
+ "tasks": [
+  {
+   "id": "js-d18-t1",
+   "title": "Gecikmeli kalkış",
+   "prompt": "`#launch` düğmesine tıklanınca:\n\n- `#info` hemen `Hazırlanıyor...` olsun,\n- **200 ms sonra** (`setTimeout`) `Kalkış!` olsun.",
+   "starter": "const info = document.querySelector(\"#info\");\n\n// click olayını dinle, içinde setTimeout kullan\n\n",
+   "solution": "const info = document.querySelector(\"#info\");\n\n// click olayını dinle, içinde setTimeout kullan\ndocument.querySelector(\"#launch\").addEventListener(\"click\", () => {\n  info.textContent = \"Hazırlanıyor...\";\n  setTimeout(() => {\n    info.textContent = \"Kalkış!\";\n  }, 200);\n});\n",
+   "hints": [
+    "setTimeout(() => { ... }, 200);",
+    "İlk metni setTimeout'un dışında, hemen yaz."
+   ],
+   "check": {
+    "code_contains": [
+     "setTimeout"
+    ],
+    "js": "assert($(\"#info\").textContent === \"Beklemede\", \"Tıklamadan önce #info değişmemeli.\");\nclick(\"#launch\");\nassert($(\"#info\").textContent === \"Hazırlanıyor...\", \"Tıklayınca #info hemen 'Hazırlanıyor...' olmalı.\");\nawait sleep(80);\nassert($(\"#info\").textContent === \"Hazırlanıyor...\", \"'Kalkış!' hemen değil, 200 ms sonra yazılmalı.\");\nawait sleep(250);\nassert($(\"#info\").textContent === \"Kalkış!\", \"200 ms sonra #info 'Kalkış!' olmalı.\");"
+   },
+   "xp": 50,
+   "mode": "page",
+   "html": "<button id=\"launch\">Kalkış</button>\n<p id=\"info\">Beklemede</p>\n",
+   "css": ""
+  },
+  {
+   "id": "js-d18-t2",
+   "title": "Uçuş süresi",
+   "prompt": "Sayfa açılınca `count` her **100 ms'de** 1 artsın ve `#count`'ta görünsün (`setInterval`).\n\n`#stop` düğmesine tıklanınca sayaç dursun (`clearInterval`).",
+   "starter": "let count = 0;\nconst countEl = document.querySelector(\"#count\");\n\n// her 100 ms'de count'u artır\n\n// Dur düğmesi sayacı durdursun\n\n",
+   "solution": "let count = 0;\nconst countEl = document.querySelector(\"#count\");\n\n// her 100 ms'de count'u artır\nconst timer = setInterval(() => {\n  count++;\n  countEl.textContent = count;\n}, 100);\n\n// Dur düğmesi sayacı durdursun\ndocument.querySelector(\"#stop\").addEventListener(\"click\", () => {\n  clearInterval(timer);\n});\n",
+   "hints": [
+    "const timer = setInterval(() => { ... }, 100);",
+    "Tıklayınca: clearInterval(timer);"
+   ],
+   "check": {
+    "code_contains": [
+     "setInterval",
+     "clearInterval"
+    ],
+    "js": "await sleep(350);\nassert(count >= 2 && count <= 4, \"350 ms sonra count yaklaşık 3 olmalı (her 100 ms'de 1 artmalı).\");\nassert($(\"#count\").textContent === String(count), \"#count, count'un değerini göstermeli.\");\nclick(\"#stop\");\nconst stopped = count;\nawait sleep(250);\nassert(count === stopped, \"Dur'a tıklayınca sayaç durmalı (clearInterval).\");"
+   },
+   "xp": 50,
+   "mode": "page",
+   "html": "<p>Uçuş süresi: <span id=\"count\">0</span></p>\n<button id=\"stop\">Dur</button>\n",
+   "css": ""
+  },
+  {
+   "id": "js-d18-t3",
+   "title": "Yanıp sönen işaret",
+   "prompt": "İşaret ışığı `#light` her **100 ms'de** yanıp sönsün: `on` sınıfını aç/kapat (`classList.toggle`) ve `blinks` sayısını 1 artır.\n\n6 kez değiştikten sonra (`blinks === 6`) sayaç dursun. `#blinks`'te değişim sayısı görünsün.",
+   "starter": "const light = document.querySelector(\"#light\");\nlet blinks = 0;\n\n// setInterval ile yak/söndür, 6 değişimde durdur\n\n",
+   "solution": "const light = document.querySelector(\"#light\");\nlet blinks = 0;\n\n// setInterval ile yak/söndür, 6 değişimde durdur\nconst timer = setInterval(() => {\n  light.classList.toggle(\"on\");\n  blinks++;\n  document.querySelector(\"#blinks\").textContent = blinks;\n  if (blinks === 6) clearInterval(timer);\n}, 100);\n",
+   "hints": [
+    "light.classList.toggle(\"on\");",
+    "if (blinks === 6) clearInterval(timer);"
+   ],
+   "check": {
+    "code_contains": [
+     "setInterval",
+     "clearInterval",
+     "toggle"
+    ],
+    "js": "await sleep(250);\nassert(blinks >= 1 && blinks <= 3, \"250 ms sonra ışık 1-3 kez değişmiş olmalı (her 100 ms'de bir).\");\nassert($(\"#light\").classList.contains(\"on\") === (blinks % 2 === 1), \"Işık her adımda on sınıfını aç/kapatmalı.\");\nawait sleep(750);\nassert(blinks === 6, \"Işık tam 6 kez değişip durmalı.\");\nassert(!$(\"#light\").classList.contains(\"on\"), \"6 değişimden sonra ışık sönük olmalı.\");\nassert($(\"#blinks\").textContent === \"6\", \"#blinks 6 göstermeli.\");\nawait sleep(250);\nassert(blinks === 6, \"Sayaç durmalı (clearInterval); blinks 6'dan fazla olmamalı.\");"
+   },
+   "xp": 50,
+   "mode": "page",
+   "html": "<div id=\"light\"></div>\n<p>Değişim: <span id=\"blinks\">0</span></p>\n",
+   "css": "#light{width:40px;height:40px;border-radius:50%;background:#333}#light.on{background:#f7df1e}"
+  }
+ ],
+ "challenge": {
+  "id": "js-d18-c",
+  "title": "Kronometre",
+  "prompt": "Bir kronometre yap. `tenths` saniyenin onda birini sayar; `#watch` onu `2.3` biçiminde göstersin (`(tenths / 10).toFixed(1)`).\n\n- `#start`: her 100 ms'de `tenths`'i artırmaya başlasın. **Zaten çalışıyorsa** yeni sayaç kurmasın!\n- `#stop`: sayacı durdursun (`timer` yeniden `null` olsun ki tekrar başlatılabilsin).\n- `#reset`: durdursun, `tenths`'i 0 yapsın ve `0.0` göstersin.",
+  "starter": "let tenths = 0;\nlet timer = null;\nconst watch = document.querySelector(\"#watch\");\n\nfunction show() {\n  watch.textContent = (tenths / 10).toFixed(1);\n}\n\n// Başlat, Durdur ve Sıfırla düğmelerini dinle\n\n",
+  "solution": "let tenths = 0;\nlet timer = null;\nconst watch = document.querySelector(\"#watch\");\n\nfunction show() {\n  watch.textContent = (tenths / 10).toFixed(1);\n}\n\nfunction stop() {\n  clearInterval(timer);\n  timer = null;\n}\n\n// Başlat, Durdur ve Sıfırla düğmelerini dinle\ndocument.querySelector(\"#start\").addEventListener(\"click\", () => {\n  if (timer !== null) return; // zaten çalışıyor\n  timer = setInterval(() => {\n    tenths++;\n    show();\n  }, 100);\n});\ndocument.querySelector(\"#stop\").addEventListener(\"click\", stop);\ndocument.querySelector(\"#reset\").addEventListener(\"click\", () => {\n  stop();\n  tenths = 0;\n  show();\n});\n",
+  "hints": [
+   "if (timer !== null) return; iki kez başlatmayı engeller.",
+   "Durdururken: clearInterval(timer); timer = null;"
+  ],
+  "check": {
+   "code_contains": [
+    "setInterval",
+    "clearInterval",
+    "null"
+   ],
+   "js": "click(\"#start\");\nclick(\"#start\");\nawait sleep(450);\nassert(tenths >= 3 && tenths <= 6, \"450 ms sonra tenths yaklaşık 4 olmalı. İki kez Başlat'a basınca sayaçlar üst üste binmemeli!\");\nassert($(\"#watch\").textContent === (tenths / 10).toFixed(1), \"#watch tenths'i '0.4' biçiminde göstermeli.\");\nclick(\"#stop\");\nconst stopped = tenths;\nawait sleep(200);\nassert(tenths === stopped, \"Durdur'a basınca sayaç durmalı.\");\nclick(\"#start\");\nawait sleep(250);\nassert(tenths > stopped, \"Durdurduktan sonra Başlat yeniden çalışmalı (timer = null yapmayı unutma).\");\nclick(\"#reset\");\nassert(tenths === 0 && $(\"#watch\").textContent === \"0.0\", \"Sıfırla tenths'i 0 yapmalı ve '0.0' göstermeli.\");\nawait sleep(200);\nassert(tenths === 0, \"Sıfırla sayacı da durdurmalı.\");"
+  },
+  "xp": 75,
+  "mode": "page",
+  "html": "<p id=\"watch\">0.0</p>\n<button id=\"start\">Başlat</button> <button id=\"stop\">Durdur</button> <button id=\"reset\">Sıfırla</button>\n",
+  "css": "#watch{font-family:monospace;font-size:28px;margin:4px 0}"
+ },
+ "project_contribution": "Süre sayacı",
+ "project_task": {
+  "id": "js-d18-p",
+  "title": "Süre sayacı",
+  "prompt": "Oyunun 10 saniyelik süresi olsun. İki fonksiyon yaz:\n\n- `tick()`: `timeLeft`'i 1 azaltsın (0'ın altına inmesin) ve `#time`'a yazsın. 0 olunca sayacı durdursun (`clearInterval`) ve `#info`'ya `Süre doldu!` yazsın.\n- `startTimer()`: önce eski sayacı durdursun, `timeLeft`'i 10 yapıp `#time`'a yazsın, sonra `setInterval(tick, TICK_MS)` ile sayacı başlatsın.\n\nForm gönderilince `startTimer()` zaten çağrılıyor. Denemesi kolay olsun diye `TICK_MS` şimdilik 100 ms; gerçek oyunda 1000 yaparsın.",
+  "starter": "const TICK_MS = 100; // gerçek oyunda 1000 (1 saniye)\nlet timeLeft = 10;\nlet timer = null;\nconst timeEl = document.querySelector(\"#time\");\nconst info = document.querySelector(\"#info\");\n\nfunction tick() {\n  // 1 azalt (0'ın altına inme), #time'a yaz; 0 olunca durdur ve \"Süre doldu!\" yaz\n}\n\nfunction startTimer() {\n  // eski sayacı durdur, süreyi 10 yap, setInterval ile başlat\n}\n\ndocument.querySelector(\"#pilot-form\").addEventListener(\"submit\", (e) => {\n  e.preventDefault();\n  startTimer();\n});\n",
+  "solution": "const TICK_MS = 100; // gerçek oyunda 1000 (1 saniye)\nlet timeLeft = 10;\nlet timer = null;\nconst timeEl = document.querySelector(\"#time\");\nconst info = document.querySelector(\"#info\");\n\nfunction tick() {\n  // 1 azalt (0'ın altına inme), #time'a yaz; 0 olunca durdur ve \"Süre doldu!\" yaz\n  if (timeLeft > 0) timeLeft--;\n  timeEl.textContent = timeLeft;\n  if (timeLeft === 0) {\n    clearInterval(timer);\n    timer = null;\n    info.textContent = \"Süre doldu!\";\n  }\n}\n\nfunction startTimer() {\n  // eski sayacı durdur, süreyi 10 yap, setInterval ile başlat\n  clearInterval(timer);\n  timeLeft = 10;\n  timeEl.textContent = timeLeft;\n  info.textContent = \"Yıldızları topla!\";\n  timer = setInterval(tick, TICK_MS);\n}\n\ndocument.querySelector(\"#pilot-form\").addEventListener(\"submit\", (e) => {\n  e.preventDefault();\n  startTimer();\n});\n",
+  "hints": [
+   "if (timeLeft > 0) timeLeft--;",
+   "startTimer'ın ilk satırı: clearInterval(timer);",
+   "timer = setInterval(tick, TICK_MS);"
+  ],
+  "check": {
+   "code_contains": [
+    "setInterval",
+    "clearInterval"
+   ],
+   "js": "assert(timeLeft === 10, \"Başta timeLeft 10 olmalı.\");\ntick();\nassert(timeLeft === 9 && $(\"#time\").textContent === \"9\", \"tick() süreyi 1 azaltmalı ve #time'a yazmalı.\");\nfor (let i = 0; i < 12; i++) tick();\nassert(timeLeft === 0 && $(\"#time\").textContent === \"0\", \"Süre 0'ın altına inmemeli.\");\nassert($(\"#info\").textContent === \"Süre doldu!\", \"Süre bitince #info 'Süre doldu!' olmalı.\");\nsubmit(\"#pilot-form\");\nsubmit(\"#pilot-form\");\nassert(timeLeft === 10 && $(\"#time\").textContent === \"10\", \"startTimer() süreyi 10'a döndürmeli ve göstermeli.\");\nawait sleep(350);\nassert(timeLeft >= 6 && timeLeft <= 8, \"Sayaç her TICK_MS'de 1 azalmalı; iki kez başlatınca sayaçlar üst üste binmemeli (önce clearInterval).\");"
+  },
+  "xp": 100,
+  "mode": "page",
+  "html": "<h2 id=\"title\">Yıldız Avcısı</h2>\n<form id=\"pilot-form\"><input id=\"pilot-name\" placeholder=\"Pilot adı\" autocomplete=\"off\"> <button>Başla</button></form>\n<p id=\"info\">Pilot adını yaz ve başla.</p>\n<p id=\"hud\">Skor: <span id=\"score\">0</span> · Süre: <span id=\"time\">10</span> · En yüksek: <span id=\"best\">0</span></p>\n<div id=\"field\"><div id=\"ship\"></div></div>\n<div id=\"colors\"><button data-color=\"#f7df1e\">Sarı</button> <button data-color=\"#4dd0e1\">Turkuaz</button> <button data-color=\"#ff6b6b\">Kırmızı</button></div>\n",
+  "css": ":root{--ship-color:#f7df1e}#title{margin:0 0 6px;color:#0b1026}#info.error{color:#c0392b;font-weight:600}#hud{margin:4px 0}#field{position:relative;width:300px;height:70px;background:#0b1026;border-radius:8px;overflow:hidden}#field.hit{background:#8e1b2b}#ship{position:absolute;left:0;bottom:10px;width:30px;height:30px;border-radius:50% 50% 6px 6px;background:var(--ship-color)}#colors{margin-top:8px}"
+ },
+ "tracks": {
+  "js-web": {
+   "project_contribution": "Canlı saat",
+   "project_task": {
+    "id": "js-d18-pw",
+    "title": "Canlı saat",
+    "prompt": "Sitenin başlığında canlı bir saat olsun.\n\n- `formatTime(date)`: verilen `Date`'i `\"09:07:03\"` biçiminde (saat:dakika:saniye, her biri 2 haneli) döndürsün.\n- `updateClock()`: `#clock`'a `formatTime(new Date())` yazsın.\n- Sayfa açılınca `updateClock()` hemen çalışsın, sonra `setInterval` ile her saniye tekrarlansın.",
+    "starter": "const clock = document.querySelector(\"#clock\");\n\nfunction formatTime(date) {\n  // saat, dakika, saniye → \"HH:MM:SS\" (padStart ile)\n}\n\nfunction updateClock() {\n  // #clock'a şimdiki saati yaz\n}\n\n// hemen göster ve her saniye güncelle\n\n",
+    "solution": "const clock = document.querySelector(\"#clock\");\n\nfunction formatTime(date) {\n  // saat, dakika, saniye → \"HH:MM:SS\" (padStart ile)\n  const h = String(date.getHours()).padStart(2, \"0\");\n  const m = String(date.getMinutes()).padStart(2, \"0\");\n  const s = String(date.getSeconds()).padStart(2, \"0\");\n  return `${h}:${m}:${s}`;\n}\n\nfunction updateClock() {\n  // #clock'a şimdiki saati yaz\n  clock.textContent = formatTime(new Date());\n}\n\n// hemen göster ve her saniye güncelle\nupdateClock();\nsetInterval(updateClock, 1000);\n",
+    "hints": [
+     "String(date.getHours()).padStart(2, \"0\")",
+     "return `${h}:${m}:${s}`;",
+     "updateClock(); setInterval(updateClock, 1000);"
+    ],
+    "check": {
+     "code_contains": [
+      "padStart",
+      "setInterval"
+     ],
+     "js": "assert(formatTime(new Date(2026, 0, 5, 9, 7, 3)) === \"09:07:03\", \"formatTime(9:07:03 anı) '09:07:03' döndürmeli.\");\nassert(formatTime(new Date(2026, 5, 1, 23, 45, 59)) === \"23:45:59\", \"formatTime(23:45:59 anı) '23:45:59' döndürmeli.\");\nassert(formatTime(new Date(2026, 5, 1, 0, 0, 0)) === \"00:00:00\", \"Gece yarısı '00:00:00' olmalı.\");\nassert(/^\\d\\d:\\d\\d:\\d\\d$/.test($(\"#clock\").textContent), \"Sayfa açılınca #clock hemen saati 'SS:DD:ss' biçiminde göstermeli.\");\n$(\"#clock\").textContent = \"--\";\nawait sleep(1100);\nassert(/^\\d\\d:\\d\\d:\\d\\d$/.test($(\"#clock\").textContent), \"Saat setInterval ile her saniye güncellenmeli.\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<header id=\"top\"><h2 id=\"site-title\">Deniz Yıldız</h2> <input id=\"search\" placeholder=\"Sitede ara ( / )\" autocomplete=\"off\"> <span id=\"clock\">--:--:--</span></header>\n<nav id=\"accents\"><button data-accent=\"#f7df1e\">Sarı</button> <button data-accent=\"#26c6da\">Turkuaz</button> <button data-accent=\"#b388ff\">Mor</button> <button id=\"theme-btn\">Tema değiştir</button></nav>\n<form id=\"contact\"><input id=\"c-name\" placeholder=\"Adın\" autocomplete=\"off\"> <input id=\"c-email\" placeholder=\"E-posta adresin\" autocomplete=\"off\"> <button>Gönder</button></form>\n<p id=\"form-msg\"></p>\n",
+    "css": ":root{--accent:#f7df1e}body.dark{background:#0b1026;color:#eef1ff}#site-title{display:inline-block;margin:0 8px 6px 0;border-bottom:4px solid var(--accent)}#clock{font-family:monospace;margin-left:8px}nav{margin:6px 0}nav button.active{outline:3px solid var(--accent)}#contact input{margin:4px 4px 4px 0}#form-msg.error{color:#c0392b;font-weight:600}"
+   }
+  },
+  "js-app": {
+   "project_contribution": "Odak zamanlayıcısı",
+   "project_task": {
+    "id": "js-d18-pa",
+    "title": "Odak zamanlayıcısı",
+    "prompt": "25 dakikalık odak zamanlayıcısı yapalım. `render()` hazır. Üç fonksiyon yaz:\n\n- `tick()`: `secondsLeft`'i 1 azaltsın (0'ın altına inmesin) ve `render()` çağırsın. 0 olunca `pause()` çağırsın ve `#focus-msg`'ye `Mola zamanı!` yazsın.\n- `start()`: sayaç **zaten çalışıyorsa hiçbir şey yapmasın**; değilse `setInterval(tick, TICK_MS)` ile başlasın.\n- `pause()`: sayacı durdursun ve `timer`'ı `null` yapsın.\n\n`TICK_MS` denemek için 100 ms; gerçekte 1000 olur.",
+    "starter": "const TICK_MS = 100; // gerçekte 1000 (1 saniye)\nlet secondsLeft = 25 * 60;\nlet timer = null;\n\nfunction render() {\n  const m = String(Math.floor(secondsLeft / 60)).padStart(2, \"0\");\n  const s = String(secondsLeft % 60).padStart(2, \"0\");\n  document.querySelector(\"#focus-time\").textContent = `${m}:${s}`;\n}\n\nfunction tick() {\n  // 1 azalt, render(); 0 olunca pause() ve \"Mola zamanı!\"\n}\n\nfunction start() {\n  // zaten çalışıyorsa çık; değilse setInterval ile başlat\n}\n\nfunction pause() {\n  // sayacı durdur\n}\n\ndocument.querySelector(\"#focus-start\").addEventListener(\"click\", start);\ndocument.querySelector(\"#focus-pause\").addEventListener(\"click\", pause);\nrender();\n",
+    "solution": "const TICK_MS = 100; // gerçekte 1000 (1 saniye)\nlet secondsLeft = 25 * 60;\nlet timer = null;\n\nfunction render() {\n  const m = String(Math.floor(secondsLeft / 60)).padStart(2, \"0\");\n  const s = String(secondsLeft % 60).padStart(2, \"0\");\n  document.querySelector(\"#focus-time\").textContent = `${m}:${s}`;\n}\n\nfunction tick() {\n  // 1 azalt, render(); 0 olunca pause() ve \"Mola zamanı!\"\n  if (secondsLeft > 0) secondsLeft--;\n  render();\n  if (secondsLeft === 0) {\n    pause();\n    document.querySelector(\"#focus-msg\").textContent = \"Mola zamanı!\";\n  }\n}\n\nfunction start() {\n  // zaten çalışıyorsa çık; değilse setInterval ile başlat\n  if (timer !== null) return;\n  timer = setInterval(tick, TICK_MS);\n}\n\nfunction pause() {\n  // sayacı durdur\n  clearInterval(timer);\n  timer = null;\n}\n\ndocument.querySelector(\"#focus-start\").addEventListener(\"click\", start);\ndocument.querySelector(\"#focus-pause\").addEventListener(\"click\", pause);\nrender();\n",
+    "hints": [
+     "if (timer !== null) return;",
+     "timer = setInterval(tick, TICK_MS);",
+     "pause: clearInterval(timer); timer = null;"
+    ],
+    "check": {
+     "code_contains": [
+      "setInterval",
+      "clearInterval"
+     ],
+     "js": "assert(secondsLeft === 1500 && $(\"#focus-time\").textContent === \"25:00\", \"Başta 25:00 görünmeli.\");\ntick();\nassert(secondsLeft === 1499 && $(\"#focus-time\").textContent === \"24:59\", \"tick() bir saniye azaltmalı ve render() ile '24:59' göstermeli.\");\nsecondsLeft = 2;\ntick();\ntick();\ntick();\nassert(secondsLeft === 0 && $(\"#focus-time\").textContent === \"00:00\", \"Süre 0'ın altına inmemeli.\");\nassert($(\"#focus-msg\").textContent === \"Mola zamanı!\", \"Süre bitince #focus-msg 'Mola zamanı!' olmalı.\");\nsecondsLeft = 100;\nclick(\"#focus-start\");\nclick(\"#focus-start\");\nawait sleep(450);\nassert(secondsLeft >= 94 && secondsLeft <= 98, \"Başlat'tan sonra her TICK_MS'de 1 azalmalı; iki kez Başlat'a basınca sayaç iki kat hızlanmamalı.\");\nclick(\"#focus-pause\");\nconst paused = secondsLeft;\nawait sleep(250);\nassert(secondsLeft === paused, \"Duraklat'a basınca sayaç durmalı.\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<h2 id=\"app-title\">Çalışma Asistanım</h2>\n<form id=\"task-form\"><input id=\"task-input\" placeholder=\"Yeni görev\" autocomplete=\"off\"> <button>Ekle</button></form>\n<p id=\"task-msg\"></p>\n<ul id=\"task-list\"></ul>\n<div id=\"progress\"><div id=\"progress-bar\"></div></div> <span id=\"progress-text\">0 / 0</span>\n<p id=\"focus\"><strong id=\"focus-time\">25:00</strong> <button id=\"focus-start\">Başlat</button> <button id=\"focus-pause\">Duraklat</button> <span id=\"focus-msg\"></span></p>\n",
+    "css": "#app-title{margin:0 0 6px}#task-msg.error{color:#c0392b;font-weight:600}#task-list li{cursor:pointer;padding:2px 0}#task-list li.done{text-decoration:line-through;opacity:.55}#progress{display:inline-block;vertical-align:middle;width:200px;height:10px;background:#e3e6f0;border-radius:5px;overflow:hidden}#progress-bar{width:var(--progress,0%);height:100%;background:#43a047}#focus-time{font-family:monospace;font-size:20px}"
+   }
+  },
+  "js-quiz": {
+   "project_contribution": "Süreli soru",
+   "project_task": {
+    "id": "js-d18-pq",
+    "title": "Süreli soru",
+    "prompt": "Her soru için 10 saniye var! İki fonksiyon yaz ve `answer`'a bir satır ekle:\n\n- `tick()`: `timeLeft`'i 1 azaltsın (0'ın altına inmesin), `#time`'a yazsın. 0 olunca sayacı durdursun, `answered = true` yapsın, `#feedback`'e `Süre doldu!` yazsın ve bütün seçenek düğmelerini kapatsın (`btn.disabled = true`).\n- `startQuestion()`: eski sayacı durdursun; `timeLeft = 10`, `answered = false`, `#feedback` boş, düğmeler açık (`disabled = false`) olsun; sonra `setInterval(tick, TICK_MS)` ile başlasın.\n- `answer(index)` içinde cevap verilince sayaç dursun (`clearInterval(timer)`).",
+    "starter": "const question = { text: \"Ay, hangi gezegenin uydusudur?\", options: [\"Mars\", \"Dünya\", \"Jüpiter\"], correct: 1 };\nconst buttons = document.querySelectorAll(\".option\");\nconst feedback = document.querySelector(\"#feedback\");\nlet score = 0;\nlet answered = false;\nconst TICK_MS = 100; // gerçekte 1000 (1 saniye)\nlet timeLeft = 10;\nlet timer = null;\nconst timeEl = document.querySelector(\"#time\");\n\nfunction answer(index) {\n  if (answered) return;\n  answered = true;\n  // sayacı durdur\n  if (index === question.correct) {\n    score += 10;\n    document.querySelector(\"#score\").textContent = score;\n    feedback.textContent = \"Doğru!\";\n  } else {\n    feedback.textContent = `Yanlış! Doğru cevap: ${question.options[question.correct]}`;\n  }\n}\nbuttons.forEach((btn, i) => btn.addEventListener(\"click\", () => answer(i)));\n\nfunction tick() {\n  // süreyi azalt; 0 olunca durdur, \"Süre doldu!\", düğmeleri kapat\n}\n\nfunction startQuestion() {\n  // her şeyi sıfırla ve sayacı başlat\n}\n\ndocument.querySelector(\"#player-form\").addEventListener(\"submit\", (e) => {\n  e.preventDefault();\n  startQuestion();\n});\n",
+    "solution": "const question = { text: \"Ay, hangi gezegenin uydusudur?\", options: [\"Mars\", \"Dünya\", \"Jüpiter\"], correct: 1 };\nconst buttons = document.querySelectorAll(\".option\");\nconst feedback = document.querySelector(\"#feedback\");\nlet score = 0;\nlet answered = false;\nconst TICK_MS = 100; // gerçekte 1000 (1 saniye)\nlet timeLeft = 10;\nlet timer = null;\nconst timeEl = document.querySelector(\"#time\");\n\nfunction answer(index) {\n  if (answered) return;\n  answered = true;\n  // sayacı durdur\n  clearInterval(timer);\n  if (index === question.correct) {\n    score += 10;\n    document.querySelector(\"#score\").textContent = score;\n    feedback.textContent = \"Doğru!\";\n  } else {\n    feedback.textContent = `Yanlış! Doğru cevap: ${question.options[question.correct]}`;\n  }\n}\nbuttons.forEach((btn, i) => btn.addEventListener(\"click\", () => answer(i)));\n\nfunction tick() {\n  // süreyi azalt; 0 olunca durdur, \"Süre doldu!\", düğmeleri kapat\n  if (timeLeft > 0) timeLeft--;\n  timeEl.textContent = timeLeft;\n  if (timeLeft === 0) {\n    clearInterval(timer);\n    answered = true;\n    feedback.textContent = \"Süre doldu!\";\n    buttons.forEach((btn) => (btn.disabled = true));\n  }\n}\n\nfunction startQuestion() {\n  // her şeyi sıfırla ve sayacı başlat\n  clearInterval(timer);\n  timeLeft = 10;\n  answered = false;\n  feedback.textContent = \"\";\n  timeEl.textContent = timeLeft;\n  buttons.forEach((btn) => (btn.disabled = false));\n  timer = setInterval(tick, TICK_MS);\n}\n\ndocument.querySelector(\"#player-form\").addEventListener(\"submit\", (e) => {\n  e.preventDefault();\n  startQuestion();\n});\n",
+    "hints": [
+     "buttons.forEach((btn) => (btn.disabled = true));",
+     "startQuestion'ın ilk satırı: clearInterval(timer);",
+     "answer içinde: clearInterval(timer);"
+    ],
+    "check": {
+     "code_contains": [
+      "setInterval",
+      "clearInterval",
+      "disabled"
+     ],
+     "js": "const opts = $$(\".option\");\ntick();\nassert(timeLeft === 9 && $(\"#time\").textContent === \"9\", \"tick() süreyi 1 azaltmalı ve #time'a yazmalı.\");\ntimeLeft = 1;\ntick();\nassert(timeLeft === 0 && $(\"#feedback\").textContent === \"Süre doldu!\", \"Süre bitince #feedback 'Süre doldu!' olmalı.\");\nassert(opts.every((b) => b.disabled), \"Süre bitince seçenek düğmeleri kapanmalı (disabled).\");\ntick();\nassert(timeLeft === 0, \"Süre 0'ın altına inmemeli.\");\nanswer(1);\nassert(score === 0, \"Süre dolduktan sonra verilen cevap sayılmamalı (answered = true).\");\nstartQuestion();\nstartQuestion();\nassert(timeLeft === 10 && $(\"#feedback\").textContent === \"\" && opts.every((b) => !b.disabled), \"startQuestion() süreyi 10 yapmalı, #feedback'i boşaltmalı ve düğmeleri açmalı.\");\nawait sleep(350);\nassert(timeLeft >= 6 && timeLeft <= 8, \"Sayaç her TICK_MS'de 1 azalmalı; iki kez başlatınca sayaçlar üst üste binmemeli.\");\nanswer(1);\nassert(score === 10, \"Yeni soruda doğru cevap puan kazandırmalı.\");\nconst left = timeLeft;\nawait sleep(250);\nassert(timeLeft === left, \"Cevap verilince sayaç durmalı (answer içinde clearInterval).\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<h2 id=\"quiz-title\">Bilgi Yarışması</h2>\n<form id=\"player-form\"><input id=\"player-name\" placeholder=\"Yarışmacı adı\" autocomplete=\"off\"> <button>Katıl</button></form>\n<p id=\"welcome\"></p>\n<p id=\"question\">Ay, hangi gezegenin uydusudur?</p>\n<div id=\"options\"><button class=\"option\">1) Mars</button> <button class=\"option\">2) Dünya</button> <button class=\"option\">3) Jüpiter</button></div>\n<p id=\"feedback\"></p>\n<p id=\"status\">Puan: <span id=\"score\">0</span> · Süre: <span id=\"time\">10</span> · Rekor: <span id=\"best\">0</span></p>\n",
+    "css": "#quiz-title{margin:0 0 6px}#welcome.error{color:#c0392b;font-weight:600}.option{margin:2px;padding:6px 10px;border:1px solid #9aa3c0;border-radius:6px;background:#f4f6fb;color:#1b1f33}.option.correct{background:#2e7d32;color:#fff}.option.wrong{background:#c62828;color:#fff}"
+   }
+  }
+ },
+ "available": true
+}

@@ -1,0 +1,966 @@
+{
+ "day": 15,
+ "title": "Hata tipleri",
+ "region": "atolye",
+ "project_contribution": "Hata avı",
+ "game_role": "Düzelttiğin kod oyunun başında oyuncu durumunu yazar.",
+ "xp_complete": 150,
+ "objective": "Python'ın hata tiplerini tanımak, hata mesajlarını okumak ve hataları düzeltmek",
+ "story": "Atölyenin son odası bir dedektif bürosu! Masada bir sürü bozuk kod var ve hepsi kırmızı hata mesajları veriyor. Ama hata mesajları düşmanımız değil, ipucudur: bize neyin, nerede bozulduğunu söylerler. Bugün hata dedektifi oluyoruz.",
+ "sections": [
+  {
+   "title": "Hata mesajı nasıl okunur?",
+   "body": "Bir hata mesajında üç önemli bilgi vardır:\n\n- **Satır numarası:** sorun nerede?\n- **Hata tipi:** `NameError`, `TypeError` gibi\n- **Açıklama:** tipin yanındaki kısa cümle\n\nÖnce satıra git, sonra hata tipine bak. Çoğu zaman sorun o satırda ya da hemen bir üstündedir."
+  },
+  {
+   "title": "En sık görülen hatalar",
+   "body": "- `SyntaxError`: yazım kuralı bozuk (unutulan `:` ya da parantez)\n- `IndentationError`: girinti hatalı\n- `NameError`: tanımlanmamış bir isim (çoğu zaman yazım hatası)\n- `TypeError`: yanlış tipler birlikte kullanılmış (`\"Yaş: \" + 12`)\n- `ValueError`: tip doğru ama değer uygun değil (`int(\"on iki\")`)\n- `IndexError`: listede olmayan bir sıra numarası (`items[10]`)\n- `KeyError`: sözlükte olmayan bir anahtar\n- `ZeroDivisionError`: sıfıra bölme\n- `AttributeError`: o tipte olmayan bir metot (`5.upper()`)\n- `ModuleNotFoundError`: olmayan bir modül"
+  },
+  {
+   "title": "Tipleri kontrol etmek",
+   "body": "Birçok hata tip karışıklığından çıkar. `type()` ile bir değerin tipine bakabilirsin:\n\n```python\nage = \"12\"\nprint(type(age))       # <class 'str'>\nprint(int(age) + 1)    # 13\n```\n\nYazı ile sayıyı birleştirirken `str()` ya da f-string kullan: `f\"Yaş: {age}\"`"
+  },
+  {
+   "title": "Dedektif taktikleri",
+   "body": "- Değişkenlerin içinde ne olduğunu görmek için ara yerlere `print()` koy\n- Kodu küçük parçalar halinde çalıştır\n- Hata mesajını yüksek sesle oku, gerçekten çok şey söyler\n- Liste boş olabilir mi, sayı sıfır olabilir mi? Uç durumları düşün\n\nBirkaç gün sonra, Keşif Adası'nda bu hataları program çökmeden yakalamayı (`try` ve `except`) öğreneceğiz."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Tip karışıklığını çöz",
+   "code": "age = 12\nprint(\"Yaşım \" + str(age))\nprint(f\"Yaşım {age}\")\ntext = \"7\"\nprint(int(text) + 3)\n",
+   "note": ""
+  },
+  {
+   "title": "Tipine bak",
+   "code": "values = [3, \"3\", 3.0, True, [3]]\nfor v in values:\n    print(repr(v), \"->\", type(v).__name__)\n",
+   "note": ""
+  },
+  {
+   "title": "Güvenli bakış",
+   "code": "items = [\"kılıç\", \"kalkan\"]\nhero = {\"name\": \"Piko\"}\nprint(items[-1])\nprint(hero.get(\"gold\", 0))\nnums = []\nprint(sum(nums) / len(nums) if nums else 0)\n",
+   "note": "Bu satırların her biri, bir hatayı önlemenin yolunu gösteriyor."
+  }
+ ],
+ "tasks": [
+  {
+   "id": "d15-t1",
+   "title": "TypeError'ı düzelt",
+   "prompt": "Bu kod `TypeError` veriyor. Düzelt ki `Yaşım 12` yazsın.",
+   "starter": "age = 12\nprint(\"Yaşım \" + age)\n",
+   "solution": "age = 12\nprint(\"Yaşım \" + str(age))\n",
+   "hints": [
+    "Yazı ile sayı + ile birleştirilemez.",
+    "age'i str(age) ile yazıya çevir ya da f-string kullan."
+   ],
+   "check": {
+    "python": "\nassert \"Yaşım 12\" in _output, \"Çıktı 'Yaşım 12' olmalı.\"\nout, _ = _run(_set(_code, \"age\", 9))\nassert \"Yaşım 9\" in out, \"age değişince çıktı da değişmeli.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "age = 12",
+      "notes": [
+       "`age` adında bir değişken oluşturuluyor ve içine `12` (tam sayı) konuyor."
+      ]
+     },
+     {
+      "n": 2,
+      "code": "print(\"Yaşım \" + str(age))",
+      "notes": [
+       "`print(\"Yaşım \" + str(age))`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "age",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `12`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     },
+     {
+      "term": "+",
+      "kind": "operatör",
+      "desc": "Toplama; metinlerde ve listelerde uç uca ekleme."
+     },
+     {
+      "term": "str()",
+      "kind": "fonksiyon",
+      "desc": "Bir değeri metne (yazıya) çevirir."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d15-t2",
+   "title": "IndexError'ı düzelt",
+   "prompt": "Bu kod çantadaki son eşyayı yazdırmak istiyor ama hata veriyor. Düzelt. Çanta büyüse de son eşyayı yazdırmalı.",
+   "starter": "items = [\"kılıç\", \"kalkan\", \"iksir\"]\nprint(\"Son eşya:\", items[3])\n",
+   "solution": "items = [\"kılıç\", \"kalkan\", \"iksir\"]\nprint(\"Son eşya:\", items[-1])\n",
+   "hints": [
+    "Sıra numaraları 0'dan başlar; 3 elemanlı listenin son indeksi 2'dir.",
+    "Her zaman son elemanı veren kısayol: items[-1]"
+   ],
+   "check": {
+    "python": "\nassert \"Son eşya: iksir\" in _output, \"Son eşya 'iksir' yazmalı.\"\nout, _ = _run(_set(_code, \"items\", [\"a\", \"b\", \"c\", \"d\", \"yay\"]))\nassert \"Son eşya: yay\" in out, \"Liste uzayınca da son eşyayı yazmalı: items[-1]\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "items = [\"kılıç\", \"kalkan\", \"iksir\"]",
+      "notes": [
+       "`items` adında bir değişken oluşturuluyor ve içine `[\"kılıç\", \"kalkan\", \"iksir\"]` (liste) konuyor."
+      ]
+     },
+     {
+      "n": 2,
+      "code": "print(\"Son eşya:\", items[-1])",
+      "notes": [
+       "`print(\"Son eşya:\", items[-1])`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "items",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `[\"kılıç\", \"kalkan\", \"iksir\"]`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     },
+     {
+      "term": "[ ]",
+      "kind": "seçme",
+      "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+     },
+     {
+      "term": "-",
+      "kind": "operatör",
+      "desc": "Sayının önündeki eksi işareti."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d15-t3",
+   "title": "KeyError'ı düzelt",
+   "prompt": "Sözlükte `gold` anahtarı yok, bu yüzden kod hata veriyor. `get()` kullanarak düzelt: anahtar yoksa `0` yazsın.",
+   "starter": "hero = {\"name\": \"Piko\", \"hp\": 100}\nprint(\"Altın:\", hero[\"gold\"])\n",
+   "solution": "hero = {\"name\": \"Piko\", \"hp\": 100}\nprint(\"Altın:\", hero.get(\"gold\", 0))\n",
+   "hints": [
+    "hero.get(\"gold\", 0) anahtar yoksa 0 verir."
+   ],
+   "check": {
+    "code_contains": [
+     ".get("
+    ],
+    "python": "\nassert \"Altın: 0\" in _output, \"Anahtar yoksa 'Altın: 0' yazmalı.\"\nout, _ = _run(_set(_code, \"hero\", {\"name\": \"Piko\", \"gold\": 55}))\nassert \"Altın: 55\" in out, \"Anahtar varsa değerini yazmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "hero = {\"name\": \"Piko\", \"hp\": 100}",
+      "notes": [
+       "`hero` adında bir değişken oluşturuluyor ve içine `{\"name\": \"Piko\", \"hp\": 100}` (sözlük (anahtar: değer)) konuyor."
+      ]
+     },
+     {
+      "n": 2,
+      "code": "print(\"Altın:\", hero.get(\"gold\", 0))",
+      "notes": [
+       "`print(\"Altın:\", hero.get(\"gold\", 0))`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "hero",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"name\": \"Piko\", \"hp\": 100}`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     },
+     {
+      "term": ".get()",
+      "kind": "metot",
+      "desc": "Sözlükten anahtarın değerini alır; anahtar yoksa hata vermez, varsayılanı verir."
+     }
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "id": "d15-c",
+  "title": "Sıfıra bölme",
+  "prompt": "`average(nums)` ortalamayı döndürüyor ama boş listede `ZeroDivisionError` veriyor. Liste boşsa `0` döndürecek şekilde düzelt.",
+  "starter": "def average(nums):\n    return sum(nums) / len(nums)\n\nprint(average([2, 4, 6]))\nprint(average([]))\n",
+  "solution": "def average(nums):\n    if len(nums) == 0:\n        return 0\n    return sum(nums) / len(nums)\n\nprint(average([2, 4, 6]))\nprint(average([]))\n",
+  "hints": [
+   "Bölmeden önce listenin boş olup olmadığına bak.",
+   "if len(nums) == 0: return 0"
+  ],
+  "check": {
+   "python": "\nassert average([]) == 0, \"Boş listede 0 döndürmeli.\"\nassert average([2, 4]) == 3, \"average([2, 4]) 3 olmalı.\"\nassert average([5]) == 5, \"average([5]) 5 olmalı.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "def average(nums):",
+     "notes": [
+      "`average` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `nums`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+     ]
+    },
+    {
+     "n": 2,
+     "code": "    if len(nums) == 0:",
+     "notes": [
+      "Koşul: `len(nums) == 0` doğruysa altındaki girintili satırlar çalışır."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "        return 0",
+     "notes": [
+      "Fonksiyon `0` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "    return sum(nums) / len(nums)",
+     "notes": [
+      "Fonksiyon `sum(nums) / len(nums)` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "print(average([2, 4, 6]))",
+     "notes": [
+      "`print(average([2, 4, 6]))`: parantez içindeki değeri ekrana yazdırır.",
+      "`average(...)`: senin tanımladığın fonksiyonu çağırır."
+     ]
+    },
+    {
+     "n": 7,
+     "code": "print(average([]))",
+     "notes": [
+      "`print(average([]))`: parantez içindeki değeri ekrana yazdırır.",
+      "`average(...)`: senin tanımladığın fonksiyonu çağırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "nums",
+     "kind": "parametre",
+     "desc": "`average` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+    },
+    {
+     "term": "def",
+     "kind": "anahtar kelime",
+     "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+    },
+    {
+     "term": "average()",
+     "kind": "senin fonksiyonun",
+     "desc": "Kodda tanımlanan fonksiyon; parametreleri: `nums`."
+    },
+    {
+     "term": "if",
+     "kind": "anahtar kelime",
+     "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+    },
+    {
+     "term": "==",
+     "kind": "operatör",
+     "desc": "Eşit mi? (True/False)"
+    },
+    {
+     "term": "len()",
+     "kind": "fonksiyon",
+     "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+    },
+    {
+     "term": "return",
+     "kind": "anahtar kelime",
+     "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+    },
+    {
+     "term": "/",
+     "kind": "operatör",
+     "desc": "Bölme; sonuç her zaman ondalıklı sayıdır."
+    },
+    {
+     "term": "sum()",
+     "kind": "fonksiyon",
+     "desc": "Listedeki sayıları toplar."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    }
+   ]
+  }
+ },
+ "project_task": {
+  "id": "d15-p",
+  "title": "Hata avı",
+  "prompt": "Piko'nun oyununa üç hata sızmış! Kodu çalıştır, hata mesajlarını oku ve tek tek düzelt. Düzgün çalıştığında şöyle yazmalı:\n\n```\nOyuncu: Piko\nCan: 100\nİlk eşya: kılıç\n```",
+  "starter": "player = {\"name\": \"Piko\", \"hp\": 100}\nitems = [\"kılıç\", \"iksir\"]\n\nprint(\"Oyuncu: \" + plyer[\"name\"])\nprint(\"Can: \" + player[\"hp\"])\nprint(\"İlk eşya: \" + items[1])\n",
+  "solution": "player = {\"name\": \"Piko\", \"hp\": 100}\nitems = [\"kılıç\", \"iksir\"]\n\nprint(\"Oyuncu: \" + player[\"name\"])\nprint(\"Can: \" + str(player[\"hp\"]))\nprint(\"İlk eşya: \" + items[0])\n",
+  "hints": [
+   "Birinci hata NameError: değişkenin adına dikkatle bak.",
+   "İkinci hata TypeError: sayıyı str() ile yazıya çevir.",
+   "Üçüncü hata sonuç hatası: ilk eleman items[0]"
+  ],
+  "check": {
+   "python": "\nlines = [l.strip() for l in _output.strip().splitlines()]\nassert lines == [\"Oyuncu: Piko\", \"Can: 100\", \"İlk eşya: kılıç\"], \"Çıktı tam olarak üç satır olmalı: Oyuncu, Can ve İlk eşya.\"\nout, _ = _run(_set(_set(_code, \"player\", {\"name\": \"Ece\", \"hp\": 7}), \"items\", [\"yay\", \"ok\"]))\nassert \"Oyuncu: Ece\" in out and \"Can: 7\" in out and \"İlk eşya: yay\" in out, \"Değerleri elle yazma, değişkenlerden al.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "player = {\"name\": \"Piko\", \"hp\": 100}",
+     "notes": [
+      "`player` adında bir değişken oluşturuluyor ve içine `{\"name\": \"Piko\", \"hp\": 100}` (sözlük (anahtar: değer)) konuyor."
+     ]
+    },
+    {
+     "n": 2,
+     "code": "items = [\"kılıç\", \"iksir\"]",
+     "notes": [
+      "`items` adında bir değişken oluşturuluyor ve içine `[\"kılıç\", \"iksir\"]` (liste) konuyor."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "print(\"Oyuncu: \" + player[\"name\"])",
+     "notes": [
+      "`print(\"Oyuncu: \" + player[\"name\"])`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "print(\"Can: \" + str(player[\"hp\"]))",
+     "notes": [
+      "`print(\"Can: \" + str(player[\"hp\"]))`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "print(\"İlk eşya: \" + items[0])",
+     "notes": [
+      "`print(\"İlk eşya: \" + items[0])`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "player",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"name\": \"Piko\", \"hp\": 100}`."
+    },
+    {
+     "term": "items",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `[\"kılıç\", \"iksir\"]`."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    },
+    {
+     "term": "+",
+     "kind": "operatör",
+     "desc": "Toplama; metinlerde ve listelerde uç uca ekleme."
+    },
+    {
+     "term": "[ ]",
+     "kind": "seçme",
+     "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+    },
+    {
+     "term": "str()",
+     "kind": "fonksiyon",
+     "desc": "Bir değeri metne (yazıya) çevirir."
+    }
+   ]
+  }
+ },
+ "available": true,
+ "tracks": {
+  "veri": {
+   "project_task": {
+    "id": "d15-pv",
+    "title": "Rapordaki hatalar",
+    "prompt": "Harcama raporuna üç hata sızmış! Kodu çalıştır, hata mesajlarını oku ve tek tek düzelt. Düzgün çalıştığında şöyle yazmalı:\n\n```\nSahip: Ece\nToplam: 465 TL\nİlk harcama: 120 TL\n```",
+    "starter": "owner = \"Ece\"\namounts = [120, 45, 300]\nprint(\"Sahip: \" + ownr)\nprint(\"Toplam: \" + sum(amounts) + \" TL\")\nprint(f\"İlk harcama: {amounts[3]} TL\")\n",
+    "solution": "owner = \"Ece\"\namounts = [120, 45, 300]\nprint(\"Sahip: \" + owner)\nprint(\"Toplam: \" + str(sum(amounts)) + \" TL\")\nprint(f\"İlk harcama: {amounts[0]} TL\")\n",
+    "hints": [
+     "NameError: değişkenin adını doğru yaz.",
+     "TypeError: yazı ile sayıyı + ile birleştirmek için str() kullan. IndexError: ilk elemanın indeksi 0."
+    ],
+    "check": {
+     "python": "\nlines = [l.strip() for l in _output.strip().splitlines()]\nassert lines == [\"Sahip: Ece\", \"Toplam: 465 TL\", \"İlk harcama: 120 TL\"], \"Çıktı tam olarak üç satır olmalı: Sahip, Toplam ve İlk harcama.\"\nout, _ = _run(_set(_set(_code, \"owner\", \"Can\"), \"amounts\", [7, 8]))\nassert \"Sahip: Can\" in out and \"Toplam: 15 TL\" in out and \"İlk harcama: 7 TL\" in out, \"Değerleri elle yazma, değişkenleri kullan.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "owner = \"Ece\"",
+       "notes": [
+        "`owner` adında bir değişken oluşturuluyor ve içine `\"Ece\"` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "amounts = [120, 45, 300]",
+       "notes": [
+        "`amounts` adında bir değişken oluşturuluyor ve içine `[120, 45, 300]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "print(\"Sahip: \" + owner)",
+       "notes": [
+        "`print(\"Sahip: \" + owner)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "print(\"Toplam: \" + str(sum(amounts)) + \" TL\")",
+       "notes": [
+        "`print(\"Toplam: \" + str(sum(amounts)) + \" TL\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "print(f\"İlk harcama: {amounts[0]} TL\")",
+       "notes": [
+        "`print(f\"İlk harcama: {amounts[0]} TL\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "owner",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"Ece\"`."
+      },
+      {
+       "term": "amounts",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[120, 45, 300]`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "+",
+       "kind": "operatör",
+       "desc": "Toplama; metinlerde ve listelerde uç uca ekleme."
+      },
+      {
+       "term": "str()",
+       "kind": "fonksiyon",
+       "desc": "Bir değeri metne (yazıya) çevirir."
+      },
+      {
+       "term": "sum()",
+       "kind": "fonksiyon",
+       "desc": "Listedeki sayıları toplar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Hata avı",
+   "game_role": "Rapor kodundaki hataları temizler."
+  },
+  "otomasyon": {
+   "project_task": {
+    "id": "d15-po",
+    "title": "Asistandaki hatalar",
+    "prompt": "Asistanın koduna üç hata sızmış! Kodu çalıştır, hata mesajlarını oku ve düzelt. Düzgün çalışınca şöyle yazmalı:\n\n```\nKullanıcı: Ece\nGörev sayısı: 3\nİlk görev: Kahve\n```",
+    "starter": "user = {\"name\": \"Ece\"}\ntasks = [\"Kahve\", \"Rapor yaz\", \"Spor\"]\nprint(\"Kullanıcı: \" + user[\"isim\"])\nprint(\"Görev sayısı: \" + len(tasks))\nprint(\"İlk görev: \" + task[0])\n",
+    "solution": "user = {\"name\": \"Ece\"}\ntasks = [\"Kahve\", \"Rapor yaz\", \"Spor\"]\nprint(\"Kullanıcı: \" + user[\"name\"])\nprint(\"Görev sayısı: \" + str(len(tasks)))\nprint(\"İlk görev: \" + tasks[0])\n",
+    "hints": [
+     "KeyError: sözlükte olan anahtarı kullan.",
+     "TypeError için str(); NameError için değişkenin doğru adı: tasks"
+    ],
+    "check": {
+     "python": "\nlines = [l.strip() for l in _output.strip().splitlines()]\nassert lines == [\"Kullanıcı: Ece\", \"Görev sayısı: 3\", \"İlk görev: Kahve\"], \"Çıktı tam olarak üç satır olmalı.\"\nout, _ = _run(_set(_set(_code, \"user\", {\"name\": \"Can\"}), \"tasks\", [\"Uyu\"]))\nassert \"Kullanıcı: Can\" in out and \"Görev sayısı: 1\" in out and \"İlk görev: Uyu\" in out, \"Değerleri elle yazma, değişkenleri kullan.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "user = {\"name\": \"Ece\"}",
+       "notes": [
+        "`user` adında bir değişken oluşturuluyor ve içine `{\"name\": \"Ece\"}` (sözlük (anahtar: değer)) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "tasks = [\"Kahve\", \"Rapor yaz\", \"Spor\"]",
+       "notes": [
+        "`tasks` adında bir değişken oluşturuluyor ve içine `[\"Kahve\", \"Rapor yaz\", \"Spor\"]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "print(\"Kullanıcı: \" + user[\"name\"])",
+       "notes": [
+        "`print(\"Kullanıcı: \" + user[\"name\"])`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "print(\"Görev sayısı: \" + str(len(tasks)))",
+       "notes": [
+        "`print(\"Görev sayısı: \" + str(len(tasks)))`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "print(\"İlk görev: \" + tasks[0])",
+       "notes": [
+        "`print(\"İlk görev: \" + tasks[0])`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "user",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"name\": \"Ece\"}`."
+      },
+      {
+       "term": "tasks",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[\"Kahve\", \"Rapor yaz\", \"Spor\"]`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "+",
+       "kind": "operatör",
+       "desc": "Toplama; metinlerde ve listelerde uç uca ekleme."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": "str()",
+       "kind": "fonksiyon",
+       "desc": "Bir değeri metne (yazıya) çevirir."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Hata avı",
+   "game_role": "Asistanın kodundaki hataları temizler."
+  },
+  "web": {
+   "project_task": {
+    "id": "d15-pw",
+    "title": "Site özetindeki hatalar",
+    "prompt": "Site özetine üç hata sızmış! Kodu çalıştır, hata mesajlarını oku ve tek tek düzelt. Düzgün çalıştığında şöyle yazmalı:\n\n```\nSite: Kod Günlüğüm\nYazı sayısı: 3\nEn yeni yazı: Python Notlarım\n```",
+    "starter": "site_title = \"Kod Günlüğüm\"\nposts = [\"Merhaba Dünya\", \"Kodla Oyna\", \"Python Notlarım\"]\nprint(\"Site: \" + site_titel)\nprint(\"Yazı sayısı: \" + len(posts))\nprint(f\"En yeni yazı: {posts[3]}\")\n",
+    "solution": "site_title = \"Kod Günlüğüm\"\nposts = [\"Merhaba Dünya\", \"Kodla Oyna\", \"Python Notlarım\"]\nprint(\"Site: \" + site_title)\nprint(\"Yazı sayısı: \" + str(len(posts)))\nprint(f\"En yeni yazı: {posts[-1]}\")\n",
+    "hints": [
+     "NameError: değişkenin adını doğru yaz.",
+     "TypeError: yazı ile sayıyı + ile birleştirmek için str() kullan. IndexError: son eleman için posts[-1] yaz."
+    ],
+    "check": {
+     "python": "\nlines = [l.strip() for l in _output.strip().splitlines()]\nassert lines == [\"Site: Kod Günlüğüm\", \"Yazı sayısı: 3\", \"En yeni yazı: Python Notlarım\"], \"Çıktı tam olarak üç satır olmalı: Site, Yazı sayısı ve En yeni yazı.\"\nout, _ = _run(_set(_set(_code, \"site_title\", \"Oyun Sitem\"), \"posts\", [\"A\", \"B\"]))\nassert \"Site: Oyun Sitem\" in out and \"Yazı sayısı: 2\" in out and \"En yeni yazı: B\" in out, \"Değerleri elle yazma, değişkenleri kullan (son yazı için posts[-1]).\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "site_title = \"Kod Günlüğüm\"",
+       "notes": [
+        "`site_title` adında bir değişken oluşturuluyor ve içine `\"Kod Günlüğüm\"` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "posts = [\"Merhaba Dünya\", \"Kodla Oyna\", \"Python Notlarım\"]",
+       "notes": [
+        "`posts` adında bir değişken oluşturuluyor ve içine `[\"Merhaba Dünya\", \"Kodla Oyna\", \"Python Notlarım\"]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "print(\"Site: \" + site_title)",
+       "notes": [
+        "`print(\"Site: \" + site_title)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "print(\"Yazı sayısı: \" + str(len(posts)))",
+       "notes": [
+        "`print(\"Yazı sayısı: \" + str(len(posts)))`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "print(f\"En yeni yazı: {posts[-1]}\")",
+       "notes": [
+        "`print(f\"En yeni yazı: {posts[-1]}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "site_title",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"Kod Günlüğüm\"`."
+      },
+      {
+       "term": "posts",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[\"Merhaba Dünya\", \"Kodla Oyna\", \"Python Notlarım\"]`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "+",
+       "kind": "operatör",
+       "desc": "Toplama; metinlerde ve listelerde uç uca ekleme."
+      },
+      {
+       "term": "str()",
+       "kind": "fonksiyon",
+       "desc": "Bir değeri metne (yazıya) çevirir."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": "-",
+       "kind": "operatör",
+       "desc": "Sayının önündeki eksi işareti."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Hata avı",
+   "game_role": "Site özeti kodundaki hataları temizler."
+  },
+  "bot": {
+   "project_task": {
+    "id": "d15-pb",
+    "title": "Bottaki hatalar",
+    "prompt": "Botun koduna üç hata sızmış! Kodu çalıştır, hata mesajlarını oku ve tek tek düzelt. Son satır, konuşmadaki **ilk** mesajın cevabını yazmalı. Düzgün çalıştığında şöyle yazmalı:\n\n```\nBot: Bilge\nMesaj sayısı: 3\nİlk cevap: Merhaba!\n```",
+    "starter": "bot_name = \"Bilge\"\nreplies = {\"selam\": \"Merhaba!\", \"veda\": \"Görüşürüz!\"}\nhistory = [\"selam\", \"hava\", \"veda\"]\nprint(\"Bot: \" + bot_nme)\nprint(\"Mesaj sayısı: \" + len(history))\nprint(\"İlk cevap: \" + replies[history[3]])\n",
+    "solution": "bot_name = \"Bilge\"\nreplies = {\"selam\": \"Merhaba!\", \"veda\": \"Görüşürüz!\"}\nhistory = [\"selam\", \"hava\", \"veda\"]\nprint(\"Bot: \" + bot_name)\nprint(\"Mesaj sayısı: \" + str(len(history)))\nprint(\"İlk cevap: \" + replies[history[0]])\n",
+    "hints": [
+     "NameError: değişkenin adını doğru yaz. TypeError: yazı ile sayıyı + ile birleştirmek için str() kullan.",
+     "IndexError: listenin ilk elemanının indeksi 0."
+    ],
+    "check": {
+     "python": "\nlines = [l.strip() for l in _output.strip().splitlines()]\nassert lines == [\"Bot: Bilge\", \"Mesaj sayısı: 3\", \"İlk cevap: Merhaba!\"], \"Çıktı tam olarak üç satır olmalı: Bot, Mesaj sayısı ve İlk cevap.\"\nout, _ = _run(_set(_set(_code, \"bot_name\", \"Robo\"), \"history\", [\"veda\", \"x\"]))\nassert \"Bot: Robo\" in out and \"Mesaj sayısı: 2\" in out and \"İlk cevap: Görüşürüz!\" in out, \"Değerleri elle yazma, değişkenleri kullan: ilk cevap replies[history[0]]\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "bot_name = \"Bilge\"",
+       "notes": [
+        "`bot_name` adında bir değişken oluşturuluyor ve içine `\"Bilge\"` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "replies = {\"selam\": \"Merhaba!\", \"veda\": \"Görüşürüz!\"}",
+       "notes": [
+        "`replies` adında bir değişken oluşturuluyor ve içine `{\"selam\": \"Merhaba!\", \"veda\": \"Görüşürüz!\"}` (sözlük (anahtar: değer)) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "history = [\"selam\", \"hava\", \"veda\"]",
+       "notes": [
+        "`history` adında bir değişken oluşturuluyor ve içine `[\"selam\", \"hava\", \"veda\"]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "print(\"Bot: \" + bot_name)",
+       "notes": [
+        "`print(\"Bot: \" + bot_name)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "print(\"Mesaj sayısı: \" + str(len(history)))",
+       "notes": [
+        "`print(\"Mesaj sayısı: \" + str(len(history)))`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "print(\"İlk cevap: \" + replies[history[0]])",
+       "notes": [
+        "`print(\"İlk cevap: \" + replies[history[0]])`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "bot_name",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"Bilge\"`."
+      },
+      {
+       "term": "replies",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"selam\": \"Merhaba!\", \"veda\": \"Görüşürüz!\"}`."
+      },
+      {
+       "term": "history",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[\"selam\", \"hava\", \"veda\"]`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "+",
+       "kind": "operatör",
+       "desc": "Toplama; metinlerde ve listelerde uç uca ekleme."
+      },
+      {
+       "term": "str()",
+       "kind": "fonksiyon",
+       "desc": "Bir değeri metne (yazıya) çevirir."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Hata avı",
+   "game_role": "Botun kodundaki hataları temizler."
+  },
+  "okul": {
+   "project_task": {
+    "id": "d15-pn",
+    "title": "Not özetindeki hatalar",
+    "prompt": "Not özetine üç hata sızmış! Kodu çalıştır, hata mesajlarını oku ve tek tek düzelt. Düzgün çalıştığında şöyle yazmalı:\n\n```\nÖğrenci: Ece\nDers sayısı: 2\nMatematik notu: 85\n```",
+    "starter": "student = \"Ece\"\ngrades = {\"Matematik\": 85, \"Fizik\": 70}\nprint(\"Öğrenci: \" + studnet)\nprint(\"Ders sayısı: \" + len(grades))\nprint(f\"Matematik notu: {grades['matematik']}\")\n",
+    "solution": "student = \"Ece\"\ngrades = {\"Matematik\": 85, \"Fizik\": 70}\nprint(\"Öğrenci: \" + student)\nprint(\"Ders sayısı: \" + str(len(grades)))\nprint(f\"Matematik notu: {grades['Matematik']}\")\n",
+    "hints": [
+     "NameError: değişkenin adını doğru yaz.",
+     "TypeError: yazı ile sayıyı + ile birleştirmek için str() kullan. KeyError: sözlükteki anahtar büyük harfle başlıyor."
+    ],
+    "check": {
+     "python": "\nlines = [l.strip() for l in _output.strip().splitlines()]\nassert lines == [\"Öğrenci: Ece\", \"Ders sayısı: 2\", \"Matematik notu: 85\"], \"Çıktı tam olarak üç satır olmalı: Öğrenci, Ders sayısı ve Matematik notu.\"\nout, _ = _run(_set(_set(_code, \"student\", \"Can\"), \"grades\", {\"Matematik\": 40, \"Tarih\": 60, \"Fizik\": 1}))\nassert \"Öğrenci: Can\" in out and \"Ders sayısı: 3\" in out and \"Matematik notu: 40\" in out, \"Değerleri elle yazma, değişkenleri kullan.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "student = \"Ece\"",
+       "notes": [
+        "`student` adında bir değişken oluşturuluyor ve içine `\"Ece\"` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "grades = {\"Matematik\": 85, \"Fizik\": 70}",
+       "notes": [
+        "`grades` adında bir değişken oluşturuluyor ve içine `{\"Matematik\": 85, \"Fizik\": 70}` (sözlük (anahtar: değer)) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "print(\"Öğrenci: \" + student)",
+       "notes": [
+        "`print(\"Öğrenci: \" + student)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "print(\"Ders sayısı: \" + str(len(grades)))",
+       "notes": [
+        "`print(\"Ders sayısı: \" + str(len(grades)))`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "print(f\"Matematik notu: {grades['Matematik']}\")",
+       "notes": [
+        "`print(f\"Matematik notu: {grades['Matematik']}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "student",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"Ece\"`."
+      },
+      {
+       "term": "grades",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"Matematik\": 85, \"Fizik\": 70}`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "+",
+       "kind": "operatör",
+       "desc": "Toplama; metinlerde ve listelerde uç uca ekleme."
+      },
+      {
+       "term": "str()",
+       "kind": "fonksiyon",
+       "desc": "Bir değeri metne (yazıya) çevirir."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Hata avı",
+   "game_role": "Not özeti kodundaki hataları temizler."
+  }
+ }
+}

@@ -1,0 +1,167 @@
+{
+  "kurs": "javascript",
+  "gun": 9,
+  "baslik": "Ok fonksiyonları ve kapsam",
+  "maskot": "kodi",
+  "ozet": "Fonksiyon Nebulası'nda ok fonksiyonlarını, değişkenlerin yaşadığı kapsamı, fonksiyonları değer gibi göndermeyi (callback) ve bir şeyleri hatırlayan fonksiyonları (closure) keşfediyoruz.",
+  "hedef_sure_sn": 150,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 11,
+      "anlatim": "Selam, ben Kodi! Fonksiyon Nebulası'na girdik. Bu renkli bulutta fonksiyonlar değişkenlere konuyor, başka fonksiyonlara gönderiliyor, hatta bir şeyleri hatırlıyor. Nasıl mı?",
+      "ekran": {
+        "baslik": "Gün 9: Ok fonksiyonları ve kapsam",
+        "gorsel": "gorseller/javascript/bolgeler/nebula.webp"
+      },
+      "maskot": { "poz": "el-sallama", "konum": "sag" },
+      "yonetmen_notu": "Roket renkli nebula bulutunun içine süzülür."
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "Ok fonksiyonu, fonksiyon yazmanın kısa yolu. Fonksiyonu bir değişkene koyar, parametrelerden sonra ok işareti yazarız. Tek satırlık ok fonksiyonunda return yazılmaz; oktan sonraki değer kendiliğinden döner.",
+      "ekran": {
+        "baslik": "Ok fonksiyonu: =>",
+        "kod": "const double = (n) => n * 2;\nconst greet = (name) => `Merhaba ${name}!`;\nconst isFull = (fuel) => fuel >= 100;\n\nconsole.log(double(21));\nconsole.log(greet(\"Ada\"));\nconsole.log(isFull(80));\n",
+        "dil": "js",
+        "vurgu_satirlari": [1, 2, 3],
+        "cikti": "42\nMerhaba Ada!\nfalse"
+      },
+      "maskot": { "poz": "isaret", "konum": "alt-sag" },
+      "calistir": true
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 13,
+      "anlatim": "Birden fazla satır gerekirse süslü parantez açarız. O zaman return'ü kendimiz yazmalıyız. Saniyedeki hızı saatliğe çevirdik.",
+      "ekran": {
+        "baslik": "Çok satırlı ok fonksiyonu",
+        "kod": "const describe = (name, speed) => {\n  const kmh = speed * 3600;\n  return `${name}: saatte ${kmh} km`;\n};\n\nconsole.log(describe(\"Kartal\", 11));\n",
+        "dil": "js",
+        "vurgu_satirlari": [1, 3],
+        "cikti": "Kartal: saatte 39600 km"
+      },
+      "maskot": { "poz": "konusma", "konum": "alt-sag" },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "hata",
+      "sure_sn": 17,
+      "anlatim": "Kapsam, değişkenin nerede yaşadığıdır. let ve const ile açılan değişken sadece kendi süslü parantez bloğunda yaşar. İçeriden dışarısı görünür, ama dışarıdan içerisi görünmez. Bu yüzden son satır hata verdi.",
+      "ekran": {
+        "baslik": "Kapsam: değişken nerede yaşar?",
+        "kod": "const ship = \"Kartal\";\nif (true) {\n  const note = \"iç not\";\n  console.log(ship, note);\n}\nconsole.log(note);\n",
+        "dil": "js",
+        "vurgu_satirlari": [3, 6],
+        "cikti": "Kartal iç not\nReferenceError: note is not defined"
+      },
+      "maskot": { "poz": "sasirma", "konum": "sag" },
+      "calistir": true,
+      "yonetmen_notu": "Blok bir kutu gibi çizilir; note kutunun içinde kalır, dışarıdan bakan ok kırmızıya döner."
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "Fonksiyonlar da birer değerdir; başka bir fonksiyona gönderilebilir. Gönderilen fonksiyona callback denir. doTwice onu iki kez çağırdı. forEach de her eleman için callback'i çağırır.",
+      "ekran": {
+        "baslik": "Fonksiyon da bir değerdir",
+        "kod": "function doTwice(action) {\n  action();\n  action();\n}\ndoTwice(() => console.log(\"Motor ateşlendi!\"));\n\nconst planets = [\"Mars\", \"Venüs\"];\nplanets.forEach((planet) => console.log(planet));\n",
+        "dil": "js",
+        "vurgu_satirlari": [5, 8],
+        "cikti": "Motor ateşlendi!\nMotor ateşlendi!\nMars\nVenüs"
+      },
+      "maskot": { "poz": "isaret", "konum": "alt-sag" },
+      "calistir": true
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 18,
+      "anlatim": "Şimdi sihirli kısım: closure! makeCounter içinde bir fonksiyon oluşturup döndürüyor. İçteki fonksiyon count değişkenini hatırlıyor. Her sayacın kendi count'u var: A iki oldu, B bir.",
+      "ekran": {
+        "baslik": "Closure: hatırlayan fonksiyonlar",
+        "kod": "function makeCounter() {\n  let count = 0;\n  return () => {\n    count++;\n    return count;\n  };\n}\nconst counterA = makeCounter();\nconst counterB = makeCounter();\nconsole.log(counterA(), counterA(), counterB());\n",
+        "dil": "js",
+        "vurgu_satirlari": [2, 3, 4],
+        "cikti": "1 2 1"
+      },
+      "maskot": { "poz": "mutlu", "konum": "alt-sag" },
+      "calistir": true,
+      "yonetmen_notu": "İki sayaç iki ayrı küçük kutu olarak gösterilir, her birinde kendi count'u."
+    },
+    {
+      "no": 7,
+      "tur": "soru",
+      "sure_sn": 10,
+      "anlatim": "laps sayacını iki kez sessizce çağırıyoruz, üçüncüde yazdırıyoruz. Sence kaç yazar?",
+      "ekran": {
+        "baslik": "Sence ne yazdırır?",
+        "kod": "function makeCounter() {\n  let count = 0;\n  return () => {\n    count++;\n    return count;\n  };\n}\nconst laps = makeCounter();\nlaps();\nlaps();\nconsole.log(\"Tur:\", laps());\n",
+        "dil": "js"
+      },
+      "maskot": { "poz": "dusunme", "konum": "sag" }
+    },
+    {
+      "no": 8,
+      "tur": "cikti",
+      "sure_sn": 9,
+      "anlatim": "Tur: 3! Yazdırmasak bile her çağrı count'u artırdı; fonksiyon sayıyı hatırladı.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "function makeCounter() {\n  let count = 0;\n  return () => {\n    count++;\n    return count;\n  };\n}\nconst laps = makeCounter();\nlaps();\nlaps();\nconsole.log(\"Tur:\", laps());\n",
+        "dil": "js",
+        "vurgu_satirlari": [9, 10, 11],
+        "cikti": "Tur: 3"
+      },
+      "maskot": { "poz": "mutlu", "konum": "sag" },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "gorev",
+      "sure_sn": 12,
+      "anlatim": "Görevlerin: iki fonksiyonu oka çevir, kapsam dedektifi olup gizli hatayı bul ve bir işi istediğin kadar tekrarlayan bir fonksiyon yaz.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Oka çevir",
+          "Görev 2: Kapsam dedektifi",
+          "Görev 3: Tekrarlayıcı"
+        ]
+      },
+      "maskot": { "poz": "isaret", "konum": "sol" }
+    },
+    {
+      "no": 10,
+      "tur": "ozet",
+      "sure_sn": 11,
+      "anlatim": "Özet: ok fonksiyonu kısa yazımdır. Değişken kendi bloğunda yaşar. Fonksiyonlar gönderilebilir, closure ile değişkenleri hatırlar.",
+      "ekran": {
+        "baslik": "Özet",
+        "maddeler": [
+          "(n) => n * 2: tek satırda return yok",
+          "let/const bloğunda yaşar",
+          "callback ve closure"
+        ]
+      },
+      "maskot": { "poz": "on", "konum": "sag" }
+    },
+    {
+      "no": 11,
+      "tur": "kapanis",
+      "sure_sn": 10,
+      "anlatim": "Nebulada harika bir gündü! Yarın bir uzay istasyonuna yanaşıyoruz. Geminin bütün bilgilerini tek pakette tutmayı öğreneceğiz: nesneler.",
+      "ekran": {
+        "baslik": "Yarın: Nesneler",
+        "gorsel": "maskotlar/kodi-javascript/kahraman.png"
+      },
+      "maskot": { "poz": "tebrik", "konum": "sag" }
+    }
+  ]
+}

@@ -1,0 +1,245 @@
+{
+ "day": 21,
+ "title": "Canvas ile çizim",
+ "region": "piksel",
+ "xp_complete": 150,
+ "objective": "canvas üzerine dikdörtgen, daire ve çizgi çizmek; bir diziden döngüyle resim çizmek",
+ "story": "Piksel Gezegeni'ne indin! Burada her şey minicik renkli noktalardan, yani piksellerden oluşuyor. Bugün **canvas** adlı tuvale kodla çizim yapacak ve oyun alanının ilk resmini çizeceksin.",
+ "sections": [
+  {
+   "title": "Tuval ve fırça",
+   "body": "HTML'deki `<canvas>` etiketi boş bir resim tuvalidir. Üzerine çizmek için önce ondan bir **fırça** (çizim bağlamı) isteriz:\n\n```js\nconst canvas = document.querySelector(\"#game\");\nconst ctx = canvas.getContext(\"2d\");\n```\n\n`ctx` artık bütün çizim komutlarını bilen nesnedir. Tuvalin boyutu HTML'de `width` ve `height` ile verilir: `<canvas id=\"game\" width=\"300\" height=\"200\">`. Kodda bu değerleri `canvas.width` ve `canvas.height` ile okursun."
+  },
+  {
+   "title": "Koordinatlar: y aşağı doğru büyür",
+   "body": "Tuvalde her noktanın bir `(x, y)` adresi vardır. **Sol üst köşe `(0, 0)`** noktasıdır. `x` sağa gittikçe, `y` ise **aşağı** gittikçe büyür (matematik dersindekinin tersi!).\n\n| Nokta | x | y |\n|---|---|---|\n| Sol üst köşe | 0 | 0 |\n| Sağ üst köşe | 300 | 0 |\n| Sol alt köşe | 0 | 200 |\n| Orta | 150 | 100 |\n\nYani bir şeyi yukarı taşımak için `y`'yi **azaltırsın**."
+  },
+  {
+   "title": "Dikdörtgen, çerçeve ve silgi",
+   "body": "Önce rengi seç, sonra çiz. `fillStyle` kendisinden sonraki bütün dolgu çizimlerini etkiler:\n\n```js\nctx.fillStyle = \"#0b1026\";       // dolgu rengi\nctx.fillRect(0, 0, 300, 200);    // x, y, genişlik, yükseklik\n\nctx.strokeStyle = \"#f7df1e\";     // çizgi rengi\nctx.lineWidth = 3;\nctx.strokeRect(20, 20, 60, 40);  // içi boş çerçeve\n\nctx.clearRect(0, 0, 300, 200);   // bölgeyi siler (şeffaf yapar)\n```\n\nRenkleri `\"#f7df1e\"` gibi onaltılık (hex) kodlarla ya da `\"white\"` gibi adlarla yazabilirsin. Dikdörtgenin `(x, y)` noktası onun **sol üst köşesidir**."
+  },
+  {
+   "title": "Daire, çizgi, yazı ve veriden çizim",
+   "body": "Daire ve çizgiler bir **yol** (path) olarak çizilir: `beginPath()` ile başla, şekli tarif et, sonra `fill()` (doldur) ya da `stroke()` (çiz) de:\n\n```js\nctx.beginPath();\nctx.arc(150, 100, 30, 0, Math.PI * 2); // merkez x, y, yarıçap, tam tur\nctx.fillStyle = \"#ff9800\";\nctx.fill();\n\nctx.beginPath();\nctx.moveTo(10, 190);  // kalemi buraya koy\nctx.lineTo(290, 190); // buraya kadar çiz\nctx.strokeStyle = \"white\";\nctx.stroke();\n\nctx.fillStyle = \"white\";\nctx.font = \"16px sans-serif\";\nctx.fillText(\"Yıldız Avcısı\", 10, 20);\n```\n\nAsıl güç, resmi **veriden** çizmektir: bir dizideki her eleman için aynı komutu döngüyle çalıştırırsın. Dizi değişince resim de değişir:\n\n```js\nconst stars = [{ x: 40, y: 30 }, { x: 120, y: 80 }, { x: 250, y: 50 }];\nctx.fillStyle = \"#f7df1e\";\nfor (const star of stars) {\n  ctx.fillRect(star.x, star.y, 6, 6);\n}\n```"
+  }
+ ],
+ "examples": [
+  {
+   "title": "Gece manzarası",
+   "code": "const ctx = document.querySelector(\"#sky\").getContext(\"2d\");\n\n// Gökyüzü\nctx.fillStyle = \"#0b1026\";\nctx.fillRect(0, 0, 300, 160);\n\n// Ay\nctx.beginPath();\nctx.arc(240, 40, 22, 0, Math.PI * 2);\nctx.fillStyle = \"#fff5c0\";\nctx.fill();\n\n// Yer\nctx.fillStyle = \"#2e7d32\";\nctx.fillRect(0, 130, 300, 30);\n\n// Roket: dolgu ve çerçeve\nctx.fillStyle = \"#e53935\";\nctx.fillRect(60, 80, 16, 50);\nctx.strokeStyle = \"white\";\nctx.strokeRect(60, 80, 16, 50);\n\n// Yazı\nctx.fillStyle = \"white\";\nctx.font = \"14px sans-serif\";\nctx.fillText(\"Piksel Gezegeni\", 10, 20);\n",
+   "note": "Koordinatları değiştir: roketi sağa taşımak için x'i, yukarı taşımak için y'yi azalt.",
+   "mode": "page",
+   "html": "<canvas id=\"sky\" width=\"300\" height=\"160\"></canvas>",
+   "css": "canvas{border-radius:8px;max-width:100%}"
+  },
+  {
+   "title": "Veriden gökyüzü",
+   "code": "const canvas = document.querySelector(\"#sky\");\nconst ctx = canvas.getContext(\"2d\");\nctx.fillStyle = \"#0b1026\";\nctx.fillRect(0, 0, canvas.width, canvas.height);\n\n// 40 rastgele yıldız\nctx.fillStyle = \"white\";\nfor (let i = 0; i < 40; i++) {\n  const x = Math.random() * canvas.width;\n  const y = Math.random() * canvas.height;\n  ctx.fillRect(x, y, 2, 2);\n}\n\n// Gezegenler bir diziden\nconst planets = [\n  { x: 60, y: 90, r: 25, color: \"#ff9800\" },\n  { x: 150, y: 50, r: 15, color: \"#4fc3f7\" },\n  { x: 235, y: 100, r: 35, color: \"#e53935\" },\n];\nfor (const p of planets) {\n  ctx.beginPath();\n  ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);\n  ctx.fillStyle = p.color;\n  ctx.fill();\n}\n",
+   "note": "Her çalıştırmada yıldızlar başka yerde. planets dizisine yeni bir gezegen ekle.",
+   "mode": "page",
+   "html": "<canvas id=\"sky\" width=\"300\" height=\"160\"></canvas>",
+   "css": "canvas{border-radius:8px;max-width:100%}"
+  }
+ ],
+ "tasks": [
+  {
+   "id": "js-d21-t1",
+   "title": "Uzay zemini",
+   "prompt": "`#c` tuvalinin **tamamını** koyu lacivert (`#0b1026`) boya. Sonra üstüne `(20, 30)` noktasından başlayan, 60 genişliğinde ve 40 yüksekliğinde kırmızı (`#e53935`) bir dikdörtgen çiz.\n\nTuvalin boyutunu elle yazma: `canvas.width` ve `canvas.height` kullan.",
+   "starter": "const canvas = document.querySelector(\"#c\");\nconst ctx = canvas.getContext(\"2d\");\n\n// Önce zemin, sonra kırmızı dikdörtgen\n\n",
+   "solution": "const canvas = document.querySelector(\"#c\");\nconst ctx = canvas.getContext(\"2d\");\n\n// Önce zemin, sonra kırmızı dikdörtgen\nctx.fillStyle = \"#0b1026\";\nctx.fillRect(0, 0, canvas.width, canvas.height);\nctx.fillStyle = \"#e53935\";\nctx.fillRect(20, 30, 60, 40);\n",
+   "hints": [
+    "Önce rengi seç: ctx.fillStyle = \"#0b1026\";",
+    "Bütün tuval: ctx.fillRect(0, 0, canvas.width, canvas.height);",
+    "Sonra rengi değiştirip ctx.fillRect(20, 30, 60, 40);"
+   ],
+   "check": {
+    "code_contains": [
+     "fillStyle",
+     "fillRect"
+    ],
+    "js": "const colorIs = (sel, x, y, hex) => { const p = pixel(sel, x, y); const n = parseInt(hex.slice(1), 16); return p[3] === 255 && p[0] === (n >> 16) && p[1] === ((n >> 8) & 255) && p[2] === (n & 255); };\nconst isEmpty = (sel, x, y) => pixel(sel, x, y)[3] === 0;\nassert(colorIs(\"#c\", 5, 5, \"#0b1026\") && colorIs(\"#c\", 195, 115, \"#0b1026\"), \"Tuvalin tamamı #0b1026 ile boyanmalı (köşeler dahil).\");\nassert(colorIs(\"#c\", 50, 50, \"#e53935\"), \"(20, 30) noktasından başlayan kırmızı (#e53935) bir dikdörtgen olmalı.\");\nassert(colorIs(\"#c\", 85, 50, \"#0b1026\") && colorIs(\"#c\", 50, 75, \"#0b1026\"), \"Dikdörtgen 60 genişliğinde ve 40 yüksekliğinde olmalı.\");\nassert(/canvas\\.width/.test(_code) && /canvas\\.height/.test(_code), \"Zemin için canvas.width ve canvas.height kullan.\");"
+   },
+   "xp": 50,
+   "mode": "page",
+   "html": "<canvas id=\"c\" width=\"200\" height=\"120\"></canvas>",
+   "css": "canvas{background:#e8ebf3;border-radius:8px;max-width:100%;display:block}"
+  },
+  {
+   "id": "js-d21-t2",
+   "title": "Turuncu gezegen",
+   "prompt": "Merkezi `(100, 60)`, yarıçapı `30` olan turuncu (`#ff9800`) bir **daire** çiz. `beginPath`, `arc` ve `fill` kullan.",
+   "starter": "const canvas = document.querySelector(\"#c\");\nconst ctx = canvas.getContext(\"2d\");\n\n// Daireyi çiz\n\n",
+   "solution": "const canvas = document.querySelector(\"#c\");\nconst ctx = canvas.getContext(\"2d\");\n\n// Daireyi çiz\nctx.beginPath();\nctx.arc(100, 60, 30, 0, Math.PI * 2);\nctx.fillStyle = \"#ff9800\";\nctx.fill();\n",
+   "hints": [
+    "ctx.arc(x, y, yarıçap, 0, Math.PI * 2) tam bir daire tarif eder.",
+    "Önce ctx.beginPath(), en sonda ctx.fill()."
+   ],
+   "check": {
+    "code_contains": [
+     "beginPath",
+     "arc",
+     "fill"
+    ],
+    "js": "const colorIs = (sel, x, y, hex) => { const p = pixel(sel, x, y); const n = parseInt(hex.slice(1), 16); return p[3] === 255 && p[0] === (n >> 16) && p[1] === ((n >> 8) & 255) && p[2] === (n & 255); };\nconst isEmpty = (sel, x, y) => pixel(sel, x, y)[3] === 0;\nassert(colorIs(\"#c\", 100, 60, \"#ff9800\"), \"Dairenin merkezi (100, 60) turuncu (#ff9800) olmalı.\");\nassert(colorIs(\"#c\", 120, 60, \"#ff9800\") && colorIs(\"#c\", 100, 85, \"#ff9800\"), \"Dairenin yarıçapı 30 olmalı.\");\nassert(isEmpty(\"#c\", 140, 60), \"Daire çok büyük: yarıçap 30 olmalı.\");\nassert(isEmpty(\"#c\", 76, 36), \"Kare değil daire çizmelisin: arc kullan.\");"
+   },
+   "xp": 50,
+   "mode": "page",
+   "html": "<canvas id=\"c\" width=\"200\" height=\"120\"></canvas>",
+   "css": "canvas{background:#e8ebf3;border-radius:8px;max-width:100%;display:block}"
+  },
+  {
+   "id": "js-d21-t3",
+   "title": "Yıldızları diziden çiz",
+   "prompt": "`drawStars()` fonksiyonunu yaz:\n\n1. Önce tuvalin tamamını `clearRect` ile temizlesin.\n2. Sonra `stars` dizisindeki her yıldız için `(x, y)` noktasından başlayan 10×10 sarı (`#f7df1e`) bir kare çizsin.\n\nDizi değişip `drawStars()` yeniden çağrılınca resim de değişmeli.",
+   "starter": "const canvas = document.querySelector(\"#c\");\nconst ctx = canvas.getContext(\"2d\");\nconst stars = [\n  { x: 20, y: 20 },\n  { x: 90, y: 70 },\n  { x: 160, y: 30 },\n];\n\nfunction drawStars() {\n  // temizle, sonra her yıldızı çiz\n}\n\ndrawStars();\n",
+   "solution": "const canvas = document.querySelector(\"#c\");\nconst ctx = canvas.getContext(\"2d\");\nconst stars = [\n  { x: 20, y: 20 },\n  { x: 90, y: 70 },\n  { x: 160, y: 30 },\n];\n\nfunction drawStars() {\n  // temizle, sonra her yıldızı çiz\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  ctx.fillStyle = \"#f7df1e\";\n  for (const star of stars) {\n    ctx.fillRect(star.x, star.y, 10, 10);\n  }\n}\n\ndrawStars();\n",
+   "hints": [
+    "ctx.clearRect(0, 0, canvas.width, canvas.height);",
+    "for (const star of stars) { ctx.fillRect(star.x, star.y, 10, 10); }"
+   ],
+   "check": {
+    "code_contains": [
+     "clearRect",
+     "fillRect",
+     "for"
+    ],
+    "js": "const colorIs = (sel, x, y, hex) => { const p = pixel(sel, x, y); const n = parseInt(hex.slice(1), 16); return p[3] === 255 && p[0] === (n >> 16) && p[1] === ((n >> 8) & 255) && p[2] === (n & 255); };\nconst isEmpty = (sel, x, y) => pixel(sel, x, y)[3] === 0;\nassert(colorIs(\"#c\", 25, 25, \"#f7df1e\") && colorIs(\"#c\", 95, 75, \"#f7df1e\") && colorIs(\"#c\", 165, 35, \"#f7df1e\"), \"Üç yıldız da (x, y) noktasından başlayan 10×10 sarı (#f7df1e) kare olmalı.\");\nstars.push({ x: 40, y: 90 });\ndrawStars();\nassert(colorIs(\"#c\", 45, 95, \"#f7df1e\"), \"Diziye eklenen yıldız da çizilmeli: yıldızları döngüyle çiz.\");\nstars.shift();\ndrawStars();\nassert(isEmpty(\"#c\", 25, 25), \"drawStars() önce tuvali clearRect ile temizlemeli; silinen yıldız kaybolmalı.\");\nassert(colorIs(\"#c\", 45, 95, \"#f7df1e\"), \"Kalan yıldızlar yine çizilmeli.\");"
+   },
+   "xp": 50,
+   "mode": "page",
+   "html": "<canvas id=\"c\" width=\"200\" height=\"120\"></canvas>",
+   "css": "canvas{background:#e8ebf3;border-radius:8px;max-width:100%;display:block}"
+  }
+ ],
+ "challenge": {
+  "id": "js-d21-c",
+  "title": "Satranç tahtası",
+  "prompt": "`#board` tuvaline 8×8'lik bir satranç tahtası çiz. Her kare 20×20 piksel.\n\n- Satır ve sütun numaralarının toplamı **çiftse** kare beyaz (`#ffffff`), **tekse** koyu (`#1b1f33`) olsun.\n- İç içe iki `for` döngüsü kullan: biri satırlar (`row`), biri sütunlar (`col`) için.\n- Bir kare `(col * 20, row * 20)` noktasından başlar.",
+  "starter": "const ctx = document.querySelector(\"#board\").getContext(\"2d\");\n\n// İç içe iki döngüyle 64 kare\n\n",
+  "solution": "const ctx = document.querySelector(\"#board\").getContext(\"2d\");\n\n// İç içe iki döngüyle 64 kare\nfor (let row = 0; row < 8; row++) {\n  for (let col = 0; col < 8; col++) {\n    ctx.fillStyle = (row + col) % 2 === 0 ? \"#ffffff\" : \"#1b1f33\";\n    ctx.fillRect(col * 20, row * 20, 20, 20);\n  }\n}\n",
+  "hints": [
+   "for (let row = 0; row < 8; row++) { for (let col = 0; col < 8; col++) { ... } }",
+   "Çift mi? (row + col) % 2 === 0",
+   "ctx.fillRect(col * 20, row * 20, 20, 20);"
+  ],
+  "check": {
+   "code_contains": [
+    "for",
+    "%",
+    "fillRect"
+   ],
+   "js": "const colorIs = (sel, x, y, hex) => { const p = pixel(sel, x, y); const n = parseInt(hex.slice(1), 16); return p[3] === 255 && p[0] === (n >> 16) && p[1] === ((n >> 8) & 255) && p[2] === (n & 255); };\nconst isEmpty = (sel, x, y) => pixel(sel, x, y)[3] === 0;\nfor (let row = 0; row < 8; row++) {\n  for (let col = 0; col < 8; col++) {\n    const white = (row + col) % 2 === 0;\n    assert(colorIs(\"#board\", col * 20 + 10, row * 20 + 10, white ? \"#ffffff\" : \"#1b1f33\"), `Satır ${row}, sütun ${col} karesi ${white ? \"beyaz (#ffffff)\" : \"koyu (#1b1f33)\"} olmalı.`);\n  }\n}\nassert((_code.match(/fillRect/g) || []).length <= 3, \"64 kareyi tek tek yazma; iç içe iki döngü kullan.\");"
+  },
+  "xp": 75,
+  "mode": "page",
+  "html": "<canvas id=\"board\" width=\"160\" height=\"160\"></canvas>",
+  "css": "canvas{border:2px solid #1b1f33}"
+ },
+ "project_contribution": "Oyun alanını çizmek",
+ "project_task": {
+  "id": "js-d21-p",
+  "title": "Oyun alanı",
+  "prompt": "Yıldız Avcısı'nın oyun alanını çizme zamanı! `drawGame()` fonksiyonunu yaz:\n\n1. Tuvalin tamamını `#0b1026` ile boya (bu, eski resmi de siler).\n2. Gemiyi `ship` nesnesindeki `x`, `y`, `w`, `h` değerleriyle mavi (`#4fc3f7`) bir dikdörtgen olarak çiz.\n3. `stars` dizisindeki her yıldızı, merkezi `(x, y)` ve yarıçapı `6` olan sarı (`#f7df1e`) bir daire olarak çiz.\n\nGemi ya da yıldızlar değişip `drawGame()` yeniden çağrılınca resim de değişmeli.",
+  "starter": "const canvas = document.querySelector(\"#game\");\nconst ctx = canvas.getContext(\"2d\");\n\nconst ship = { x: 20, y: 90, w: 30, h: 20 };\nconst stars = [\n  { x: 120, y: 40 },\n  { x: 200, y: 150 },\n  { x: 260, y: 70 },\n];\n\nfunction drawGame() {\n  // 1. zemin  2. gemi  3. yıldızlar\n}\n\ndrawGame();\n",
+  "solution": "const canvas = document.querySelector(\"#game\");\nconst ctx = canvas.getContext(\"2d\");\n\nconst ship = { x: 20, y: 90, w: 30, h: 20 };\nconst stars = [\n  { x: 120, y: 40 },\n  { x: 200, y: 150 },\n  { x: 260, y: 70 },\n];\n\nfunction drawGame() {\n  // 1. zemin  2. gemi  3. yıldızlar\n  ctx.fillStyle = \"#0b1026\";\n  ctx.fillRect(0, 0, canvas.width, canvas.height);\n\n  ctx.fillStyle = \"#4fc3f7\";\n  ctx.fillRect(ship.x, ship.y, ship.w, ship.h);\n\n  ctx.fillStyle = \"#f7df1e\";\n  for (const star of stars) {\n    ctx.beginPath();\n    ctx.arc(star.x, star.y, 6, 0, Math.PI * 2);\n    ctx.fill();\n  }\n}\n\ndrawGame();\n",
+  "hints": [
+   "Zemin: ctx.fillRect(0, 0, canvas.width, canvas.height);",
+   "Gemi: ctx.fillRect(ship.x, ship.y, ship.w, ship.h);",
+   "Her yıldız için beginPath, arc(star.x, star.y, 6, 0, Math.PI * 2) ve fill."
+  ],
+  "check": {
+   "code_contains": [
+    "fillRect",
+    "arc",
+    "for"
+   ],
+   "js": "const colorIs = (sel, x, y, hex) => { const p = pixel(sel, x, y); const n = parseInt(hex.slice(1), 16); return p[3] === 255 && p[0] === (n >> 16) && p[1] === ((n >> 8) & 255) && p[2] === (n & 255); };\nconst isEmpty = (sel, x, y) => pixel(sel, x, y)[3] === 0;\nassert(colorIs(\"#game\", 5, 5, \"#0b1026\") && colorIs(\"#game\", 295, 195, \"#0b1026\"), \"Tuvalin tamamı #0b1026 ile boyanmalı.\");\nassert(colorIs(\"#game\", 35, 100, \"#4fc3f7\"), \"Gemi (ship) mavi (#4fc3f7) bir dikdörtgen olarak çizilmeli.\");\nassert(colorIs(\"#game\", 120, 40, \"#f7df1e\") && colorIs(\"#game\", 200, 150, \"#f7df1e\") && colorIs(\"#game\", 260, 70, \"#f7df1e\"), \"Her yıldız merkezi (x, y) olan sarı (#f7df1e) bir daire olmalı.\");\nship.x = 150;\nship.y = 20;\nstars.push({ x: 60, y: 170 });\ndrawGame();\nassert(colorIs(\"#game\", 165, 30, \"#4fc3f7\"), \"Gemi, ship.x ve ship.y değerlerine göre çizilmeli.\");\nassert(colorIs(\"#game\", 35, 100, \"#0b1026\"), \"drawGame() önce zemini boyamalı; geminin eski yeri silinmeli.\");\nassert(colorIs(\"#game\", 60, 170, \"#f7df1e\"), \"Diziye eklenen yıldız da çizilmeli: yıldızları döngüyle çiz.\");"
+  },
+  "xp": 100,
+  "mode": "page",
+  "html": "<canvas id=\"game\" width=\"300\" height=\"200\"></canvas>\n<p id=\"info\">Skor: 0</p>\n",
+  "css": "canvas{background:#0b1026;display:block;max-width:100%;border-radius:8px}#info{font-weight:600;margin:8px 0 0}"
+ },
+ "tracks": {
+  "js-web": {
+   "project_contribution": "Canvas afişi",
+   "project_task": {
+    "id": "js-d21-pw",
+    "title": "Canvas afişi",
+    "prompt": "Sitenin en üstüne kodla çizilmiş bir afiş (banner) ekle. `drawBanner()` fonksiyonunu yaz:\n\n1. Tuvalin tamamını `#1b1f33` ile boya.\n2. `planets` dizisindeki her gezegeni kendi `x`, `y`, `r` ve `color` değerleriyle bir daire olarak çiz.\n3. `(75, 58)` noktasına beyaz renkle, `bold 20px sans-serif` yazı tipiyle `siteName` metnini yaz (`fillText`).",
+    "starter": "const canvas = document.querySelector(\"#banner\");\nconst ctx = canvas.getContext(\"2d\");\nconst siteName = \"Ada'nın Sitesi\";\nconst planets = [\n  { x: 40, y: 50, r: 25, color: \"#f7df1e\" },\n  { x: 265, y: 30, r: 18, color: \"#4fc3f7\" },\n  { x: 215, y: 75, r: 12, color: \"#e53935\" },\n];\n\nfunction drawBanner() {\n  // zemin, gezegenler, yazı\n}\n\ndrawBanner();\n",
+    "solution": "const canvas = document.querySelector(\"#banner\");\nconst ctx = canvas.getContext(\"2d\");\nconst siteName = \"Ada'nın Sitesi\";\nconst planets = [\n  { x: 40, y: 50, r: 25, color: \"#f7df1e\" },\n  { x: 265, y: 30, r: 18, color: \"#4fc3f7\" },\n  { x: 215, y: 75, r: 12, color: \"#e53935\" },\n];\n\nfunction drawBanner() {\n  // zemin, gezegenler, yazı\n  ctx.fillStyle = \"#1b1f33\";\n  ctx.fillRect(0, 0, canvas.width, canvas.height);\n\n  for (const p of planets) {\n    ctx.beginPath();\n    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);\n    ctx.fillStyle = p.color;\n    ctx.fill();\n  }\n\n  ctx.fillStyle = \"white\";\n  ctx.font = \"bold 20px sans-serif\";\n  ctx.fillText(siteName, 75, 58);\n}\n\ndrawBanner();\n",
+    "hints": [
+     "Her gezegen için: ctx.beginPath(); ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2); ctx.fillStyle = p.color; ctx.fill();",
+     "Yazı: ctx.font = \"bold 20px sans-serif\"; ctx.fillText(siteName, 75, 58);"
+    ],
+    "check": {
+     "code_contains": [
+      "arc",
+      "fillText"
+     ],
+     "js": "const colorIs = (sel, x, y, hex) => { const p = pixel(sel, x, y); const n = parseInt(hex.slice(1), 16); return p[3] === 255 && p[0] === (n >> 16) && p[1] === ((n >> 8) & 255) && p[2] === (n & 255); };\nconst isEmpty = (sel, x, y) => pixel(sel, x, y)[3] === 0;\nassert(colorIs(\"#banner\", 5, 5, \"#1b1f33\") && colorIs(\"#banner\", 295, 95, \"#1b1f33\"), \"Afişin zemini #1b1f33 olmalı.\");\nassert(colorIs(\"#banner\", 40, 50, \"#f7df1e\") && colorIs(\"#banner\", 265, 30, \"#4fc3f7\") && colorIs(\"#banner\", 215, 75, \"#e53935\"), \"Her gezegen kendi renginde, merkezi (x, y) olan bir daire olmalı.\");\nplanets.push({ x: 150, y: 88, r: 8, color: \"#4caf50\" });\nplanets[0].color = \"#ff9800\";\ndrawBanner();\nassert(colorIs(\"#banner\", 150, 88, \"#4caf50\"), \"Diziye eklenen gezegen de çizilmeli: gezegenleri döngüyle çiz.\");\nassert(colorIs(\"#banner\", 40, 50, \"#ff9800\"), \"Gezegenin rengi dizideki color değerinden gelmeli.\");\nassert(/siteName/.test(_code.split(\"drawBanner\")[1] || \"\"), \"Afişe siteName metnini fillText ile yaz.\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<header><h1 id=\"site-title\">Ada'nın Sitesi</h1><nav><a href=\"#\">Ana sayfa</a> · <a href=\"#\">Galeri</a> · <a href=\"#\">İletişim</a></nav></header>\n<canvas id=\"banner\" width=\"300\" height=\"100\"></canvas>\n",
+    "css": "header{border-bottom:3px solid #7e57c2;margin-bottom:10px;padding-bottom:4px}#site-title{margin:0;color:#4a2f8a;font-size:22px}nav a{color:#7e57c2}canvas{display:block;max-width:100%;border-radius:8px}"
+   }
+  },
+  "js-app": {
+   "project_contribution": "Haftalık grafik",
+   "project_task": {
+    "id": "js-d21-pa",
+    "title": "Haftalık çalışma grafiği",
+    "prompt": "Asistan, haftalık çalışma dakikalarını çubuk grafikle göstersin. `drawChart()` fonksiyonunu yaz:\n\n- Önce tuvali `clearRect` ile temizle.\n- `minutes` dizisindeki her gün için yeşil (`#4caf50`) bir çubuk çiz: `i`. çubuk `x = i * 40 + 5` noktasından başlasın, genişliği `30` olsun.\n- Yükseklik ölçekli olsun: en uzun gün tam `100` piksel, diğerleri orantılı: `h = m / max * 100` (`max = Math.max(...minutes)`).\n- Çubuklar tuvalin altına otursun: `y = canvas.height - h`.\n- Son olarak `#total` paragrafına haftalık toplamı `Toplam: 255 dk` biçiminde yaz (sayıyı hesapla).",
+    "starter": "const canvas = document.querySelector(\"#chart\");\nconst ctx = canvas.getContext(\"2d\");\n// Pazartesiden pazara çalışılan dakikalar\nconst minutes = [30, 45, 60, 20, 50, 10, 40];\n\nfunction drawChart() {\n  // temizle, çubukları çiz, toplamı yaz\n}\n\ndrawChart();\n",
+    "solution": "const canvas = document.querySelector(\"#chart\");\nconst ctx = canvas.getContext(\"2d\");\n// Pazartesiden pazara çalışılan dakikalar\nconst minutes = [30, 45, 60, 20, 50, 10, 40];\n\nfunction drawChart() {\n  // temizle, çubukları çiz, toplamı yaz\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  const max = Math.max(...minutes);\n  ctx.fillStyle = \"#4caf50\";\n  for (let i = 0; i < minutes.length; i++) {\n    const h = minutes[i] / max * 100;\n    ctx.fillRect(i * 40 + 5, canvas.height - h, 30, h);\n  }\n  const total = minutes.reduce((sum, m) => sum + m, 0);\n  document.querySelector(\"#total\").textContent = `Toplam: ${total} dk`;\n}\n\ndrawChart();\n",
+    "hints": [
+     "const max = Math.max(...minutes);",
+     "Döngüde: const h = minutes[i] / max * 100; ctx.fillRect(i * 40 + 5, canvas.height - h, 30, h);",
+     "Toplam için reduce: minutes.reduce((sum, m) => sum + m, 0)"
+    ],
+    "check": {
+     "code_contains": [
+      "clearRect",
+      "fillRect",
+      "Math.max"
+     ],
+     "js": "const colorIs = (sel, x, y, hex) => { const p = pixel(sel, x, y); const n = parseInt(hex.slice(1), 16); return p[3] === 255 && p[0] === (n >> 16) && p[1] === ((n >> 8) & 255) && p[2] === (n & 255); };\nconst isEmpty = (sel, x, y) => pixel(sel, x, y)[3] === 0;\nassert(colorIs(\"#chart\", 100, 30, \"#4caf50\"), \"En uzun gün (60 dk) tam 100 piksel yüksekliğinde yeşil (#4caf50) bir çubuk olmalı.\");\nassert(isEmpty(\"#chart\", 100, 10), \"En uzun çubuk 100 pikselden uzun olmamalı.\");\nassert(colorIs(\"#chart\", 220, 112, \"#4caf50\") && isEmpty(\"#chart\", 220, 95), \"Kısa günlerin çubukları orantılı olarak kısa olmalı (h = m / max * 100).\");\nassert(/Toplam:\\s*255\\s*dk/.test($(\"#total\").textContent), \"#total 'Toplam: 255 dk' yazmalı.\");\nminutes.length = 0;\nminutes.push(120, 30, 90, 60, 0, 15, 45);\ndrawChart();\nassert(colorIs(\"#chart\", 20, 30, \"#4caf50\") && colorIs(\"#chart\", 60, 110, \"#4caf50\"), \"Veri değişince çubuklar yeni değerlere göre çizilmeli.\");\nassert(isEmpty(\"#chart\", 60, 85) && isEmpty(\"#chart\", 100, 30) && isEmpty(\"#chart\", 180, 115), \"drawChart() önce clearRect ile temizlemeli; ölçek yeni en büyük değere (max) göre hesaplanmalı.\");\nassert(/Toplam:\\s*360\\s*dk/.test($(\"#total\").textContent), \"Toplam, dizideki değerlerden hesaplanmalı.\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<h2 class=\"app-title\">Çalışma Asistanım</h2>\n<canvas id=\"chart\" width=\"280\" height=\"120\"></canvas>\n<p id=\"total\"></p>\n",
+    "css": ".app-title{margin:0 0 8px;color:#2e7d32}canvas{background:#f1f8e9;border-radius:8px;display:block;max-width:100%}"
+   }
+  },
+  "js-quiz": {
+   "project_contribution": "Skor grafiği",
+   "project_task": {
+    "id": "js-d21-pq",
+    "title": "Tur skorları grafiği",
+    "prompt": "Her turda kaç doğru yapıldığını (`0`–`5`) çubuk grafikle göster. `drawScores()` fonksiyonunu yaz:\n\n- Tuvalin tamamını açık lila (`#f3effa`) ile boya.\n- `roundScores` dizisindeki her tur için mor (`#7e57c2`) bir çubuk çiz: `x = 10 + i * 50`, genişlik `40`, yükseklik `puan * 20`; çubuk alttan başlasın (`y = canvas.height - yükseklik`).\n- En iyi turu `#best` paragrafına `En iyi tur: 2 (5 doğru)` biçiminde yaz. Tur numarası 1'den başlar; eşitlikte ilk tur kazanır.",
+    "starter": "const canvas = document.querySelector(\"#scores\");\nconst ctx = canvas.getContext(\"2d\");\nconst roundScores = [3, 5, 2, 4];\n\nfunction drawScores() {\n  // zemin, çubuklar, en iyi tur\n}\n\ndrawScores();\n",
+    "solution": "const canvas = document.querySelector(\"#scores\");\nconst ctx = canvas.getContext(\"2d\");\nconst roundScores = [3, 5, 2, 4];\n\nfunction drawScores() {\n  // zemin, çubuklar, en iyi tur\n  ctx.fillStyle = \"#f3effa\";\n  ctx.fillRect(0, 0, canvas.width, canvas.height);\n  ctx.fillStyle = \"#7e57c2\";\n  let best = 0;\n  for (let i = 0; i < roundScores.length; i++) {\n    const h = roundScores[i] * 20;\n    ctx.fillRect(10 + i * 50, canvas.height - h, 40, h);\n    if (roundScores[i] > roundScores[best]) best = i;\n  }\n  document.querySelector(\"#best\").textContent = `En iyi tur: ${best + 1} (${roundScores[best]} doğru)`;\n}\n\ndrawScores();\n",
+    "hints": [
+     "Döngüde: const h = roundScores[i] * 20; ctx.fillRect(10 + i * 50, canvas.height - h, 40, h);",
+     "En iyi turun sırasını bir değişkende tut: if (roundScores[i] > roundScores[best]) best = i;",
+     "Tur numarası = sıra + 1"
+    ],
+    "check": {
+     "code_contains": [
+      "fillRect",
+      "for"
+     ],
+     "js": "const colorIs = (sel, x, y, hex) => { const p = pixel(sel, x, y); const n = parseInt(hex.slice(1), 16); return p[3] === 255 && p[0] === (n >> 16) && p[1] === ((n >> 8) & 255) && p[2] === (n & 255); };\nconst isEmpty = (sel, x, y) => pixel(sel, x, y)[3] === 0;\nassert(colorIs(\"#scores\", 5, 5, \"#f3effa\"), \"Zemin #f3effa ile boyanmalı.\");\nassert(colorIs(\"#scores\", 30, 90, \"#7e57c2\") && colorIs(\"#scores\", 30, 50, \"#f3effa\"), \"1. tur (3 doğru) 60 piksel yüksekliğinde mor (#7e57c2) bir çubuk olmalı.\");\nassert(colorIs(\"#scores\", 80, 30, \"#7e57c2\"), \"2. tur (5 doğru) 100 piksel yüksekliğinde olmalı.\");\nassert($(\"#best\").textContent.trim() === \"En iyi tur: 2 (5 doğru)\", \"#best 'En iyi tur: 2 (5 doğru)' yazmalı.\");\nroundScores.length = 0;\nroundScores.push(1, 4, 4, 0, 2);\ndrawScores();\nassert(colorIs(\"#scores\", 30, 90, \"#f3effa\") && colorIs(\"#scores\", 30, 110, \"#7e57c2\"), \"Veri değişince grafik baştan çizilmeli (önce zemini boya).\");\nassert(colorIs(\"#scores\", 130, 50, \"#7e57c2\") && colorIs(\"#scores\", 230, 100, \"#7e57c2\") && colorIs(\"#scores\", 180, 115, \"#f3effa\"), \"Her tur için bir çubuk çizilmeli: yükseklik = puan * 20.\");\nassert($(\"#best\").textContent.trim() === \"En iyi tur: 2 (4 doğru)\", \"En iyi tur dizideki değerlerden bulunmalı; eşitlikte ilk tur kazanır.\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<h2 class=\"quiz-title\">Bilgi Yarışması</h2>\n<canvas id=\"scores\" width=\"260\" height=\"120\"></canvas>\n<p id=\"best\"></p>\n",
+    "css": ".quiz-title{margin:0 0 8px;color:#5e35b1}canvas{border-radius:8px;display:block;max-width:100%}"
+   }
+  }
+ },
+ "available": true
+}

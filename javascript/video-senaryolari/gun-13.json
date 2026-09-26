@@ -1,0 +1,204 @@
+{
+  "kurs": "javascript",
+  "gun": 13,
+  "baslik": "DOM'a giriş",
+  "maskot": "kodi",
+  "ozet": "DOM Gezegeni'ne iniyoruz: sayfanın DOM ağacını tanıyor, querySelector ile eleman buluyor; metnini, sınıfını, stilini ve niteliklerini JavaScript ile değiştiriyoruz.",
+  "hedef_sure_sn": 165,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 11,
+      "anlatim": "Selam, ben Kodi! DOM Gezegeni'ne iniş yaptık. Buradaki her şey bir web sayfası: başlıklar, paragraflar, düğmeler. Peki JavaScript sayfaya nasıl dokunur?",
+      "ekran": {
+        "baslik": "Gün 13: DOM'a giriş",
+        "gorsel": "gorseller/javascript/bolgeler/dom.webp"
+      },
+      "maskot": { "poz": "el-sallama", "konum": "sag" },
+      "yonetmen_notu": "Roket gezegene iner; yüzeyde web sayfası parçaları parlar."
+    },
+    {
+      "no": 2,
+      "tur": "anlatim",
+      "sure_sn": 13,
+      "anlatim": "Tarayıcı bir HTML sayfasını açınca onu bir ağaca çevirir. Her etiket bir nesne olur. Bu ağacın adı DOM, kökü de document. Nesneyi değiştirdiğin an sayfa da değişir.",
+      "ekran": {
+        "baslik": "DOM nedir?",
+        "maddeler": [
+          "HTML → nesnelerden bir ağaç",
+          "Ağacın kökü: document",
+          "Nesneyi değiştir, sayfa değişsin"
+        ]
+      },
+      "maskot": { "poz": "konusma", "konum": "sag" },
+      "yonetmen_notu": "document'tan dallanan h1, p, ul ve li kutucuklarıyla bir ağaç çizilir."
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "querySelector, CSS seçicisine uyan ilk elemanı verir: id için diyez, sınıf için nokta. Hepsini almak için querySelectorAll kullanırız; dönen listeyi for of ile gezeriz.",
+      "ekran": {
+        "baslik": "querySelector ile eleman bulmak",
+        "kod": "const title = document.querySelector(\"#title\");\nconst note = document.querySelector(\".note\");\nconst planets = document.querySelectorAll(\".planet\");\nconsole.log(planets.length);\nfor (const p of planets) {\n  console.log(p.textContent);\n}\n",
+        "dil": "js",
+        "vurgu_satirlari": [1, 2, 3],
+        "html": "<h1 id=\"title\">Merhaba</h1>\n<p class=\"note\">Bir not</p>\n<ul>\n  <li class=\"planet\">Merkür</li>\n  <li class=\"planet\">Venüs</li>\n  <li class=\"planet\">Mars</li>\n</ul>",
+        "cikti": "Çıktı alanında:\n3\nMerkür\nVenüs\nMars"
+      },
+      "maskot": { "poz": "isaret", "konum": "alt-sag" },
+      "calistir": false
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "Elemanı bulduk, şimdi değiştirelim. textContent içindeki metni değiştirir, style tek bir stili verir, classList.add de bir sınıf ekler. Çalıştır'a basınca sayfa anında değişiyor!",
+      "ekran": {
+        "baslik": "Metni ve görünümü değiştirmek",
+        "kod": "const title = document.querySelector(\"#title\");\ntitle.textContent = \"Merhaba, DOM Gezegeni!\";\ntitle.style.color = \"#d63384\";\n\nconst note = document.querySelector(\".note\");\nnote.textContent = \"Bu satırı JavaScript yazdı.\";\nnote.classList.add(\"big\");\n",
+        "dil": "js",
+        "vurgu_satirlari": [2, 3, 7],
+        "html": "<h1 id=\"title\">Merhaba</h1>\n<p class=\"note\">Bu metin JavaScript ile değişecek.</p>",
+        "cikti": "Sayfada pembe renkli \"Merhaba, DOM Gezegeni!\" başlığı ve altında büyük yazılı \"Bu satırı JavaScript yazdı.\" paragrafı görünür."
+      },
+      "maskot": { "poz": "mutlu", "konum": "alt-sag" },
+      "calistir": false,
+      "yonetmen_notu": "Önizlemede eski metinler silinip yenileri yazılır, başlık pembeye döner."
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 15,
+      "anlatim": "innerHTML verdiğin metni HTML olarak yorumlar, textContent ise düz metin olarak yazar. Güvenlik kuralı: kullanıcının yazdığı metni asla innerHTML ile koyma. Metin için hep textContent.",
+      "ekran": {
+        "baslik": "textContent ve innerHTML",
+        "kod": "document.querySelector(\"#a\").innerHTML = \"<b>Kalın</b>\";\ndocument.querySelector(\"#b\").textContent = \"<b>Kalın</b>\";\n",
+        "dil": "js",
+        "vurgu_satirlari": [1, 2],
+        "html": "<p id=\"a\"></p>\n<p id=\"b\"></p>",
+        "cikti": "Birinci satırda kalın bir \"Kalın\" kelimesi; ikinci satırda etiketleriyle birlikte düz metin: <b>Kalın</b>"
+      },
+      "maskot": { "poz": "konusma", "konum": "alt-sag" },
+      "calistir": false
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "Görünümü değiştirmenin en temiz yolu sınıflar. add ekler, remove çıkarır, toggle varsa çıkarır yoksa ekler. CSS'teki tireli adlar style'da camelCase olur: backgroundColor.",
+      "ekran": {
+        "baslik": "classList ve style",
+        "kod": "const panel = document.querySelector(\"#panel\");\npanel.classList.remove(\"closed\");\npanel.classList.add(\"glow\");\npanel.classList.toggle(\"dark\");\nconsole.log(panel.classList.contains(\"glow\"));\npanel.style.backgroundColor = \"#0b1026\";\n",
+        "dil": "js",
+        "vurgu_satirlari": [2, 3, 4, 6],
+        "html": "<div id=\"panel\" class=\"box closed\">Kontrol paneli</div>",
+        "cikti": "Çıktı alanında: true\nSayfada gizli panel görünür olur; parlayan, koyu temalı ve lacivert arka planlı."
+      },
+      "maskot": { "poz": "isaret", "konum": "alt-sag" },
+      "calistir": false
+    },
+    {
+      "no": 7,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "href, src, disabled gibi niteliklere de ulaşabiliriz. setAttribute değiştirir, getAttribute okur, removeAttribute kaldırır. Kalkış düğmesi artık tıklanabilir!",
+      "ekran": {
+        "baslik": "Nitelikler",
+        "kod": "const link = document.querySelector(\"#docs\");\nlink.setAttribute(\"href\", \"https://developer.mozilla.org\");\nconsole.log(link.getAttribute(\"href\"));\nconst btn = document.querySelector(\"#launch\");\nbtn.removeAttribute(\"disabled\");\n",
+        "dil": "js",
+        "vurgu_satirlari": [2, 3, 5],
+        "html": "<a id=\"docs\" href=\"#\">Belgeler</a>\n<button id=\"launch\" disabled>Kalkış</button>",
+        "cikti": "Çıktı alanında: https://developer.mozilla.org\nSayfada Belgeler bağlantısı MDN'e gider; Kalkış düğmesi artık tıklanabilir."
+      },
+      "maskot": { "poz": "konusma", "konum": "alt-sag" },
+      "calistir": false
+    },
+    {
+      "no": 8,
+      "tur": "hata",
+      "sure_sn": 15,
+      "anlatim": "En sık hata: seçicide diyezi unutmak. status diye bir etiket yok, querySelector null döndürdü. null'ın metni değiştirilemez. Bu hatayı görürsen seçicini kontrol et: diyez mi, nokta mı?",
+      "ekran": {
+        "baslik": "Cannot set properties of null",
+        "kod": "const status = document.querySelector(\"status\");\nstatus.textContent = \"İniş tamam!\";\n",
+        "dil": "js",
+        "vurgu_satirlari": [1],
+        "html": "<p id=\"status\">Bekleniyor...</p>",
+        "cikti": "TypeError: Cannot set properties of null (setting 'textContent')"
+      },
+      "maskot": { "poz": "sasirma", "konum": "sag" },
+      "calistir": false
+    },
+    {
+      "no": 9,
+      "tur": "soru",
+      "sure_sn": 11,
+      "anlatim": "Sayfada üç gezegen var ve querySelector ile metni değiştiriyoruz. Sence kaç gezegenin yazısı değişir?",
+      "ekran": {
+        "baslik": "Sence sayfada ne olur?",
+        "kod": "const p = document.querySelector(\".planet\");\np.textContent = \"Ziyaret edildi\";\n",
+        "dil": "js",
+        "html": "<ul>\n  <li class=\"planet\">Merkür</li>\n  <li class=\"planet\">Venüs</li>\n  <li class=\"planet\">Mars</li>\n</ul>"
+      },
+      "maskot": { "poz": "dusunme", "konum": "sag" }
+    },
+    {
+      "no": 10,
+      "tur": "cikti",
+      "sure_sn": 10,
+      "anlatim": "Sadece biri! querySelector uyan ilk elemanı verir; Venüs ile Mars olduğu gibi kaldı. Hepsi için querySelectorAll gerekir.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "const p = document.querySelector(\".planet\");\np.textContent = \"Ziyaret edildi\";\n",
+        "dil": "js",
+        "html": "<ul>\n  <li class=\"planet\">Merkür</li>\n  <li class=\"planet\">Venüs</li>\n  <li class=\"planet\">Mars</li>\n</ul>",
+        "cikti": "Sayfadaki liste: Ziyaret edildi, Venüs, Mars"
+      },
+      "maskot": { "poz": "mutlu", "konum": "sag" },
+      "calistir": false
+    },
+    {
+      "no": 11,
+      "tur": "gorev",
+      "sure_sn": 12,
+      "anlatim": "Bugünden itibaren görevlerde hazır bir sayfa var; sen yalnızca JavaScript yazıyorsun. Görev merkezine ilk dokunuşu yap, paneli sınıf ve stille hazırla, sonra bütün gezegenleri işaretle.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: İlk dokunuş",
+          "Görev 2: Sınıf ve stil",
+          "Görev 3: Bütün gezegenler"
+        ]
+      },
+      "maskot": { "poz": "isaret", "konum": "sol" }
+    },
+    {
+      "no": 12,
+      "tur": "ozet",
+      "sure_sn": 11,
+      "anlatim": "Özet: sayfa bir DOM ağacıdır. querySelector ile elemanı bul, sonra metnini, sınıfını, stilini ve niteliklerini değiştir.",
+      "ekran": {
+        "baslik": "Özet",
+        "maddeler": [
+          "querySelector ilkini, querySelectorAll hepsini verir",
+          "Metin için textContent",
+          "classList, style ve setAttribute"
+        ]
+      },
+      "maskot": { "poz": "on", "konum": "sag" }
+    },
+    {
+      "no": 13,
+      "tur": "kapanis",
+      "sure_sn": 10,
+      "anlatim": "Sayfaya ilk dokunuşun tamam, tebrikler! Yarın sayfa sana tepki verecek: düğmeye basınca, kutuya yazınca. Olaylar geliyor!",
+      "ekran": {
+        "baslik": "Yarın: Olaylar",
+        "gorsel": "maskotlar/kodi-javascript/kahraman.png"
+      },
+      "maskot": { "poz": "tebrik", "konum": "sag" }
+    }
+  ]
+}

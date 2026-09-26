@@ -1,0 +1,219 @@
+{
+ "aciklama": "Video araçları için maskot pozları. Aynı poz adları iki maskotta da aynı anlamdadır.",
+ "maskotlar": {
+  "piko": {
+   "ad": "Piko",
+   "kurs": "python",
+   "pozlar": {
+    "dusunme": {
+     "dosya": "maskotlar/piko-python/pozlar/dusunme.png",
+     "boyut": [
+      249,
+      307
+     ],
+     "ne_zaman": "Düşünceli; soru sorarken, ipucu verirken."
+    },
+    "isaret": {
+     "dosya": "maskotlar/piko-python/pozlar/isaret.png",
+     "boyut": [
+      273,
+      296
+     ],
+     "ne_zaman": "Bir şeyi gösterir; kod satırını ya da çıktıyı işaret ederken."
+    },
+    "konusma": {
+     "dosya": "maskotlar/piko-python/pozlar/konusma.png",
+     "boyut": [
+      267,
+      295
+     ],
+     "ne_zaman": "Konuşurken; anlatım sahnelerinin varsayılanı."
+    },
+    "mutlu": {
+     "dosya": "maskotlar/piko-python/pozlar/mutlu.png",
+     "boyut": [
+      283,
+      292
+     ],
+     "ne_zaman": "Sevinçli; doğru cevap, güzel sonuç."
+    },
+    "on": {
+     "dosya": "maskotlar/piko-python/pozlar/on.png",
+     "boyut": [
+      222,
+      293
+     ],
+     "ne_zaman": "Önden duruş; nötr, sunum yaparken."
+    },
+    "sag": {
+     "dosya": "maskotlar/piko-python/pozlar/sag.png",
+     "boyut": [
+      199,
+      270
+     ],
+     "ne_zaman": "Sağa dönük; ekranın sağındaki bir şeye bakar."
+    },
+    "sasirma": {
+     "dosya": "maskotlar/piko-python/pozlar/sasirma.png",
+     "boyut": [
+      252,
+      296
+     ],
+     "ne_zaman": "Şaşkın; hata mesajı, beklenmedik sonuç."
+    },
+    "sol": {
+     "dosya": "maskotlar/piko-python/pozlar/sol.png",
+     "boyut": [
+      212,
+      270
+     ],
+     "ne_zaman": "Sola dönük; ekranın solundaki bir şeye bakar."
+    },
+    "tebrik": {
+     "dosya": "maskotlar/piko-python/pozlar/tebrik.png",
+     "boyut": [
+      335,
+      293
+     ],
+     "ne_zaman": "Kutlama; gün sonu, görev tamam."
+    },
+    "uzgun": {
+     "dosya": "maskotlar/piko-python/pozlar/uzgun.png",
+     "boyut": [
+      258,
+      284
+     ],
+     "ne_zaman": "Üzgün; yaygın hata örneği, yanlış cevap."
+    }
+   },
+   "dudak_senkronu": {
+    "klasor": "maskotlar/piko-python/yuzler",
+    "kareler": [
+     "a",
+     "e",
+     "i",
+     "o",
+     "u",
+     "gulus",
+     "kapali",
+     "gulumseme"
+    ],
+    "not": "Piko'nun yüz kareleri sesli harflere göre: a, e, i, o, u; kapali = ağız kapalı, gulumseme/gulus = konuşma arası."
+   },
+   "avatarlar": "maskotlar/piko-python/avatarlar"
+  },
+  "kodi": {
+   "ad": "Kodi",
+   "kurs": "javascript",
+   "pozlar": {
+    "dusunme": {
+     "dosya": "maskotlar/kodi-javascript/pozlar/dusunme.png",
+     "boyut": [
+      263,
+      357
+     ],
+     "ne_zaman": "Düşünceli; soru sorarken, ipucu verirken."
+    },
+    "el-sallama": {
+     "dosya": "maskotlar/kodi-javascript/pozlar/el-sallama.png",
+     "boyut": [
+      268,
+      366
+     ],
+     "ne_zaman": "El sallama; açılış ve kapanış."
+    },
+    "isaret": {
+     "dosya": "maskotlar/kodi-javascript/pozlar/isaret.png",
+     "boyut": [
+      284,
+      341
+     ],
+     "ne_zaman": "Bir şeyi gösterir; kod satırını ya da çıktıyı işaret ederken."
+    },
+    "konusma": {
+     "dosya": "maskotlar/kodi-javascript/pozlar/konusma.png",
+     "boyut": [
+      290,
+      354
+     ],
+     "ne_zaman": "Konuşurken; anlatım sahnelerinin varsayılanı."
+    },
+    "mutlu": {
+     "dosya": "maskotlar/kodi-javascript/pozlar/mutlu.png",
+     "boyut": [
+      314,
+      357
+     ],
+     "ne_zaman": "Sevinçli; doğru cevap, güzel sonuç."
+    },
+    "on": {
+     "dosya": "maskotlar/kodi-javascript/pozlar/on.png",
+     "boyut": [
+      198,
+      302
+     ],
+     "ne_zaman": "Önden duruş; nötr, sunum yaparken."
+    },
+    "sag": {
+     "dosya": "maskotlar/kodi-javascript/pozlar/sag.png",
+     "boyut": [
+      178,
+      303
+     ],
+     "ne_zaman": "Sağa dönük; ekranın sağındaki bir şeye bakar."
+    },
+    "sasirma": {
+     "dosya": "maskotlar/kodi-javascript/pozlar/sasirma.png",
+     "boyut": [
+      242,
+      350
+     ],
+     "ne_zaman": "Şaşkın; hata mesajı, beklenmedik sonuç."
+    },
+    "sol": {
+     "dosya": "maskotlar/kodi-javascript/pozlar/sol.png",
+     "boyut": [
+      170,
+      301
+     ],
+     "ne_zaman": "Sola dönük; ekranın solundaki bir şeye bakar."
+    },
+    "tebrik": {
+     "dosya": "maskotlar/kodi-javascript/pozlar/tebrik.png",
+     "boyut": [
+      331,
+      347
+     ],
+     "ne_zaman": "Kutlama; gün sonu, görev tamam."
+    },
+    "uzgun": {
+     "dosya": "maskotlar/kodi-javascript/pozlar/uzgun.png",
+     "boyut": [
+      244,
+      343
+     ],
+     "ne_zaman": "Üzgün; yaygın hata örneği, yanlış cevap."
+    }
+   },
+   "dudak_senkronu": {
+    "klasor": "maskotlar/kodi-javascript/konusma-kareleri",
+    "kareler": [
+     "1",
+     "2",
+     "3",
+     "4",
+     "5",
+     "6",
+     "7"
+    ],
+    "not": "Kodi'nin 7 konuşma karesi (büst). Konuşurken 1→7 arasında ~8 kare/sn döndürülebilir."
+   },
+   "kahraman": "maskotlar/kodi-javascript/kahraman.png",
+   "renkler": {
+    "sari": "#F7DF1E",
+    "lacivert": "#0B1026",
+    "beyaz": "#FFFFFF"
+   }
+  }
+ }
+}

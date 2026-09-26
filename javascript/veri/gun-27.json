@@ -1,0 +1,222 @@
+{
+ "day": 27,
+ "title": "Sınıflar ve modüller",
+ "region": "istasyon",
+ "xp_complete": 150,
+ "objective": "class ile nesne kalıpları yazmak; constructor, metot, getter, extends kullanmak ve modül fikrini anlamak",
+ "story": "İstasyonda onlarca gemi var ve hepsinin adı, hızı, yakıtı var. Her birini tek tek yazmak yerine bir kalıp yapalım: bugün **sınıflarla (class)** bir gemi fabrikası kuruyoruz.",
+ "sections": [
+  {
+   "title": "Sınıf: nesne kalıbı",
+   "body": "10. günde nesneleri elle yazdık. Aynı biçimde çok sayıda nesne gerekiyorsa **sınıf** (class) bir kalıp gibi çalışır:\n\n```js\nclass Ship {\n  constructor(name, speed) {\n    this.name = name;\n    this.speed = speed;\n  }\n}\nconst a = new Ship(\"Kartal\", 10);\nconst b = new Ship(\"Şahin\", 12);\nconsole.log(a.name, b.speed);  // Kartal 12\n```\n\n- `new Ship(...)` kalıptan yeni bir nesne üretir. Bu nesneye sınıfın bir **örneği** denir.\n- `constructor`, nesne üretilirken bir kez çalışır.\n- `this` \"şu anki nesne\" demektir: `this.name = name` yeni nesneye bir özellik ekler.\n- Sınıf adları büyük harfle başlar: `Ship`, `Planet`."
+  },
+  {
+   "title": "Metotlar ve getter",
+   "body": "Sınıfın içine fonksiyonlar yazarsın; başlarına `function` yazılmaz. Bunlara **metot** denir:\n\n```js\nclass Ship {\n  constructor(name) {\n    this.name = name;\n    this.fuel = 100;\n  }\n  fly(km) {\n    this.fuel -= km / 10;\n  }\n  get isEmpty() {\n    return this.fuel <= 0;\n  }\n}\nconst s = new Ship(\"Kartal\");\ns.fly(300);\nconsole.log(s.fuel, s.isEmpty);  // 70 false\n```\n\n`get` ile yazılan **getter** bir özellik gibi okunur (`s.isEmpty`, parantez yok) ama her okunuşta yeniden hesaplanır."
+  },
+  {
+   "title": "extends ve super",
+   "body": "Bir sınıfı genişletip yeni bir sınıf yapabilirsin. Yeni sınıf eskisinin her şeyini **miras** alır:\n\n```js\nclass CargoShip extends Ship {\n  constructor(name, cargo) {\n    super(name);         // önce Ship'in constructor'ı çalışır\n    this.cargo = cargo;\n  }\n}\nconst c = new CargoShip(\"Yük-1\", 40);\nc.fly(100);             // Ship'ten gelen metot\n```\n\n- `super(...)` üst sınıfın constructor'ını çağırır; `this`'ten önce yazılmalı.\n- `super.metot()` üst sınıftaki metodu çağırır; alt sınıfta aynı adlı bir metot yazıp onu genişletebilirsin.\n- `static` ile yazılan özellik ve metotlar örneklere değil **sınıfın kendisine** aittir: `Math.max` gibi `Ship.count` diye kullanılır."
+  },
+  {
+   "title": "Modüller: kodu dosyalara bölmek",
+   "body": "Büyük projelerde her şeyi tek dosyaya yazmayız; kodu **modüllere** böleriz. Bir dosya `export` ile paylaşır, diğeri `import` ile alır:\n\n```js\n// ship.js\nexport class Ship { /* ... */ }\nexport const MAX_SPEED = 20;\n\n// main.js\nimport { Ship, MAX_SPEED } from \"./ship.js\";\nconst s = new Ship(\"Kartal\");\n```\n\nHTML'de ana dosya `<script type=\"module\" src=\"main.js\"></script>` ile yüklenir. Bu kursun editörü her görevde tek bir betik çalıştırdığı için görevlerde `import` kullanamayız; bütün kod tek kutuda. Ama gerçek projelerde dosyalara böleriz ve sınıflar buna çok uygundur: her sınıf kendi dosyasında yaşar."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Robot sınıfı",
+   "code": "class Robot {\n  constructor(name, battery) {\n    this.name = name;\n    this.battery = battery;\n  }\n\n  work(hours) {\n    this.battery -= hours * 10;\n  }\n\n  get status() {\n    return this.battery > 20 ? \"hazır\" : \"şarj gerekli\";\n  }\n}\n\nconst r1 = new Robot(\"Tekno\", 100);\nconst r2 = new Robot(\"Bip\", 30);\nr2.work(2);\nconsole.log(r1.name, r1.status);\nconsole.log(r2.name, r2.battery, r2.status);\n",
+   "note": "status bir getter: parantezsiz okunur ama her seferinde yeniden hesaplanır."
+  },
+  {
+   "title": "extends ve super",
+   "code": "class Ship {\n  constructor(name) {\n    this.name = name;\n  }\n  describe() {\n    return `${this.name} gemisi`;\n  }\n}\n\nclass Explorer extends Ship {\n  constructor(name, planet) {\n    super(name);\n    this.planet = planet;\n  }\n  describe() {\n    return `${super.describe()}, hedef: ${this.planet}`;\n  }\n}\n\nconst e = new Explorer(\"Kaşif\", \"Mars\");\nconsole.log(e.describe());\nconsole.log(e instanceof Ship);\n",
+   "note": "instanceof bir nesnenin hangi sınıftan geldiğini söyler. Explorer da bir Ship'tir."
+  }
+ ],
+ "tasks": [
+  {
+   "id": "js-d27-t1",
+   "title": "Gezegen sınıfı",
+   "prompt": "`Planet` sınıfını tamamla:\n\n- `constructor(name, moons)`: `name` ve `moons` özelliklerini kaydetsin.\n- `describe()`: `Mars: 2 uydu` biçiminde bir metin **döndürsün**.",
+   "starter": "class Planet {\n  constructor(name, moons) {\n    // özellikleri kaydet\n  }\n\n  describe() {\n    // metni döndür\n  }\n}\n\nconst mars = new Planet(\"Mars\", 2);\nconsole.log(mars.describe());\n",
+   "solution": "class Planet {\n  constructor(name, moons) {\n    // özellikleri kaydet\n    this.name = name;\n    this.moons = moons;\n  }\n\n  describe() {\n    // metni döndür\n    return `${this.name}: ${this.moons} uydu`;\n  }\n}\n\nconst mars = new Planet(\"Mars\", 2);\nconsole.log(mars.describe());\n",
+   "hints": [
+    "this.name = name;",
+    "return `${this.name}: ${this.moons} uydu`;"
+   ],
+   "check": {
+    "code_contains": [
+     "this.name",
+     "return"
+    ],
+    "js": "assert(mars.name === \"Mars\" && mars.moons === 2, \"Planet nesnesinin name ve moons özellikleri olmalı.\");\nassert(new Planet(\"Jüpiter\", 95).describe() === \"Jüpiter: 95 uydu\", \"describe() 'Jüpiter: 95 uydu' biçiminde döndürmeli.\");\nassert(_lines.includes(\"Mars: 2 uydu\"), \"Çıktıda 'Mars: 2 uydu' görünmeli.\");"
+   },
+   "xp": 50
+  },
+  {
+   "id": "js-d27-t2",
+   "title": "Yakıt deposu",
+   "prompt": "`FuelTank` sınıfına iki şey ekle:\n\n- `use(liters)`: istenen yakıt depoda varsa `amount`'tan düşsün ve `true` döndürsün; yoksa hiçbir şeyi değiştirmeden `false` döndürsün.\n- `get percent`: deponun yüzde kaçının dolu olduğunu (`Math.round` ile tam sayı) veren bir **getter**.",
+   "starter": "class FuelTank {\n  constructor(capacity) {\n    this.capacity = capacity;\n    this.amount = capacity;\n  }\n\n  use(liters) {\n    // yeterliyse düş ve true, değilse false\n  }\n\n  get percent() {\n    // yüzde kaç dolu?\n  }\n}\n\nconst tank = new FuelTank(200);\ntank.use(50);\nconsole.log(\"Doluluk: %\" + tank.percent);\n",
+   "solution": "class FuelTank {\n  constructor(capacity) {\n    this.capacity = capacity;\n    this.amount = capacity;\n  }\n\n  use(liters) {\n    // yeterliyse düş ve true, değilse false\n    if (liters > this.amount) return false;\n    this.amount -= liters;\n    return true;\n  }\n\n  get percent() {\n    // yüzde kaç dolu?\n    return Math.round((this.amount / this.capacity) * 100);\n  }\n}\n\nconst tank = new FuelTank(200);\ntank.use(50);\nconsole.log(\"Doluluk: %\" + tank.percent);\n",
+   "hints": [
+    "use(liters) { if (liters > this.amount) return false; ... }",
+    "get percent() { return Math.round(...); }"
+   ],
+   "check": {
+    "code_contains": [
+     "this.amount -=",
+     "Math.round"
+    ],
+    "js": "const t = new FuelTank(200);\nassert(t.use(50) === true && t.amount === 150, \"use(50) true döndürmeli ve amount 150 olmalı.\");\nconst d = Object.getOwnPropertyDescriptor(FuelTank.prototype, \"percent\");\nassert(d && typeof d.get === \"function\", \"percent bir getter olmalı: get percent() { ... }\");\nassert(t.percent === 75, \"150/200 için percent 75 olmalı.\");\nassert(t.use(500) === false && t.amount === 150, \"Yetmeyen yakıt istenince false döndürmeli ve amount değişmemeli.\");\nassert(t.use(150) === true && t.percent === 0, \"Depo boşalınca percent 0 olmalı.\");\nassert(_lines.includes(\"Doluluk: %75\"), \"Çıktıda 'Doluluk: %75' görünmeli.\");"
+   },
+   "xp": 50
+  },
+  {
+   "id": "js-d27-t3",
+   "title": "Kargo gemisi",
+   "prompt": "`Ship` sınıfı hazır. Onu genişleten bir `CargoShip` sınıfı yaz:\n\n- `constructor(name, cargo)`: `super(name)` ile `Ship`'in kurulumunu yapsın, sonra `cargo`'yu kaydetsin.\n- `info()`: `Ship`'in `info()`'sunu (`super.info()`) kullanıp sonuna yükü eklesin: `Yük-1 (hız 0) - yük: 40 ton`",
+   "starter": "class Ship {\n  constructor(name) {\n    this.name = name;\n    this.speed = 0;\n  }\n  info() {\n    return `${this.name} (hız ${this.speed})`;\n  }\n}\n\n// CargoShip sınıfını yaz\n\n",
+   "solution": "class Ship {\n  constructor(name) {\n    this.name = name;\n    this.speed = 0;\n  }\n  info() {\n    return `${this.name} (hız ${this.speed})`;\n  }\n}\n\n// CargoShip sınıfını yaz\nclass CargoShip extends Ship {\n  constructor(name, cargo) {\n    super(name);\n    this.cargo = cargo;\n  }\n  info() {\n    return `${super.info()} - yük: ${this.cargo} ton`;\n  }\n}\n\nconst cargo = new CargoShip(\"Yük-1\", 40);\nconsole.log(cargo.info());\n",
+   "hints": [
+    "class CargoShip extends Ship { ... }",
+    "constructor içinde ilk satır: super(name);",
+    "return `${super.info()} - yük: ${this.cargo} ton`;"
+   ],
+   "check": {
+    "code_contains": [
+     "extends",
+     "super(",
+     "super.info()"
+    ],
+    "js": "const c = new CargoShip(\"Yük-1\", 40);\nassert(c instanceof Ship, \"CargoShip, Ship'i genişletmeli (extends).\");\nassert(c.name === \"Yük-1\" && c.speed === 0 && c.cargo === 40, \"name, speed ve cargo özellikleri doğru kurulmalı.\");\nassert(c.info() === \"Yük-1 (hız 0) - yük: 40 ton\", \"info() 'Yük-1 (hız 0) - yük: 40 ton' döndürmeli.\");\nc.speed = 5;\nassert(c.info() === \"Yük-1 (hız 5) - yük: 40 ton\", \"info() hızı Ship'in info()'sundan almalı (super.info()).\");"
+   },
+   "xp": 50
+  }
+ ],
+ "challenge": {
+  "id": "js-d27-c",
+  "title": "Astronot kayıtları",
+  "prompt": "`Astronaut` sınıfı her yeni astronota sırayla bir numara versin:\n\n- `static count = 0`: şimdiye kadar kaç astronot üretildiği (sınıfa ait).\n- `constructor(name)`: `Astronaut.count`'u 1 artırsın, `this.id`'yi bu sayı yapsın, `name`'i kaydetsin.\n- `badge()`: `#2 Can` biçiminde döndürsün.\n- `static fromList(names)`: bir ad dizisinden astronot dizisi üretsin (`map`).",
+  "starter": "class Astronaut {\n  // static count\n\n  constructor(name) {\n    // sayacı artır, id ve name\n  }\n\n  badge() {\n    // #1 Ada\n  }\n\n  static fromList(names) {\n    return [];\n  }\n}\n\nconst crew = Astronaut.fromList([\"Ada\", \"Can\", \"Ece\"]);\ncrew.forEach((a) => console.log(a.badge()));\n",
+  "solution": "class Astronaut {\n  // static count\n  static count = 0;\n\n  constructor(name) {\n    // sayacı artır, id ve name\n    Astronaut.count += 1;\n    this.id = Astronaut.count;\n    this.name = name;\n  }\n\n  badge() {\n    // #1 Ada\n    return `#${this.id} ${this.name}`;\n  }\n\n  static fromList(names) {\n    return names.map((name) => new Astronaut(name));\n  }\n}\n\nconst crew = Astronaut.fromList([\"Ada\", \"Can\", \"Ece\"]);\ncrew.forEach((a) => console.log(a.badge()));\n",
+  "hints": [
+   "static count = 0; sınıfın içinde, metotların dışında yazılır.",
+   "Sayaca sınıfın adıyla ulaşılır: Astronaut.count += 1;",
+   "return names.map((name) => new Astronaut(name));"
+  ],
+  "check": {
+   "code_contains": [
+    "static",
+    "Astronaut.count"
+   ],
+   "js": "assert(_lines.join(\"|\") === \"#1 Ada|#2 Can|#3 Ece\", \"Çıktı sırasıyla '#1 Ada', '#2 Can', '#3 Ece' olmalı.\");\nconst before = Astronaut.count;\nassert(before === 3, \"Üç astronot üretildikten sonra Astronaut.count 3 olmalı.\");\nconst a = new Astronaut(\"Mert\");\nassert(a.id === 4 && Astronaut.count === 4 && a.badge() === \"#4 Mert\", \"Yeni astronot 4 numarayı almalı: '#4 Mert'.\");\nassert(a.count === undefined, \"count örneğe değil sınıfa ait olmalı (static).\");\nconst list = Astronaut.fromList([\"X\", \"Y\"]);\nassert(Array.isArray(list) && list.length === 2 && list[1] instanceof Astronaut && list[1].id === 6, \"fromList her ad için yeni bir Astronaut üretmeli.\");"
+  },
+  "xp": 75
+ },
+ "project_contribution": "Gemi sınıfı",
+ "project_task": {
+  "id": "js-d27-p",
+  "title": "Gemi sınıfı",
+  "prompt": "Geminin bütün davranışı bir sınıfta toplansın. `Ship` sınıfını tamamla (çizim ve klavye kodu hazır):\n\n- `constructor(x, y)`: konumu kaydetsin.\n- `move(dx)`: `x`'i `dx` kadar değiştirsin ama gemi tuvalden çıkmasın: `x` en az `0`, en çok `canvas.width - SHIP_SIZE` olsun.\n- `hits(star)`: yıldızın noktası (`star.x`, `star.y`) geminin karesinin içindeyse (kenarlar dahil) `true` döndürsün.",
+  "starter": "const canvas = document.querySelector(\"#game\");\nconst ctx = canvas.getContext(\"2d\");\nconst SHIP_SIZE = 30;\n\nclass Ship {\n  constructor(x, y) {\n    // x ve y'yi sakla\n  }\n\n  move(dx) {\n    // x'i değiştir, 0 ile canvas.width - SHIP_SIZE arasında tut\n  }\n\n  hits(star) {\n    // yıldız karenin içinde mi?\n    return false;\n  }\n\n  draw() {\n    ctx.fillStyle = \"#f7df1e\";\n    ctx.fillRect(this.x, this.y, SHIP_SIZE, SHIP_SIZE);\n  }\n}\n\nconst ship = new Ship(135, 110);\n\nfunction render() {\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  ship.draw();\n}\n\ndocument.addEventListener(\"keydown\", (e) => {\n  if (e.key === \"ArrowLeft\") ship.move(-10);\n  if (e.key === \"ArrowRight\") ship.move(10);\n  render();\n});\n\nrender();\n",
+  "solution": "const canvas = document.querySelector(\"#game\");\nconst ctx = canvas.getContext(\"2d\");\nconst SHIP_SIZE = 30;\n\nclass Ship {\n  constructor(x, y) {\n    this.x = x;\n    this.y = y;\n  }\n\n  move(dx) {\n    const maxX = canvas.width - SHIP_SIZE;\n    this.x = Math.min(maxX, Math.max(0, this.x + dx));\n  }\n\n  hits(star) {\n    const insideX = star.x >= this.x && star.x <= this.x + SHIP_SIZE;\n    const insideY = star.y >= this.y && star.y <= this.y + SHIP_SIZE;\n    return insideX && insideY;\n  }\n\n  draw() {\n    ctx.fillStyle = \"#f7df1e\";\n    ctx.fillRect(this.x, this.y, SHIP_SIZE, SHIP_SIZE);\n  }\n}\n\nconst ship = new Ship(135, 110);\n\nfunction render() {\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  ship.draw();\n}\n\ndocument.addEventListener(\"keydown\", (e) => {\n  if (e.key === \"ArrowLeft\") ship.move(-10);\n  if (e.key === \"ArrowRight\") ship.move(10);\n  render();\n});\n\nrender();\n",
+  "hints": [
+   "this.x = x; this.y = y;",
+   "Sınırlamak için: Math.min(maxX, Math.max(0, this.x + dx))",
+   "hits: star.x >= this.x && star.x <= this.x + SHIP_SIZE (y için de aynısı)"
+  ],
+  "check": {
+   "code_contains": [
+    "this.x",
+    "Math.max"
+   ],
+   "js": "assert(ship.x === 135 && ship.y === 110, \"constructor x ve y'yi kaydetmeli: ship.x 135, ship.y 110.\");\nkey(\"ArrowRight\");\nassert(ship.x === 145, \"Sağ oka basınca gemi 10 piksel sağa gitmeli (move).\");\nconst [r, g, b] = pixel(\"#game\", 160, 125);\nassert(r === 247 && g === 223 && b === 30, \"Gemi yeni konumunda sarı (#f7df1e) çizilmeli.\");\nconst s = new Ship(0, 0);\ns.move(-20);\nassert(s.x === 0, \"move gemiyi 0'ın soluna götürmemeli.\");\ns.move(1000);\nassert(s.x === 270, \"move gemiyi sağ kenardan dışarı çıkarmamalı (en çok 300 - 30 = 270).\");\ns.move(-100);\nassert(s.x === 170, \"move(-100) sonrası x 170 olmalı.\");\nconst t = new Ship(100, 50);\nassert(t.hits({ x: 110, y: 60 }) === true && t.hits({ x: 100, y: 50 }) === true && t.hits({ x: 130, y: 80 }) === true, \"Karenin içindeki ya da kenarındaki yıldız için hits true olmalı.\");\nassert(t.hits({ x: 131, y: 60 }) === false && t.hits({ x: 110, y: 81 }) === false && t.hits({ x: 99, y: 60 }) === false, \"Karenin dışındaki yıldız için hits false olmalı.\");"
+  },
+  "xp": 100,
+  "mode": "page",
+  "html": "<h1 id=\"title\">Yıldız Avcısı</h1>\n<canvas id=\"game\" width=\"300\" height=\"150\"></canvas>\n",
+  "css": "#title{color:#0b1026}canvas{background:#0b1026;display:block;max-width:100%;border-radius:6px}#levels button{margin:4px}.controls button{font-size:22px;min-width:56px;min-height:48px;margin:4px}section h1,section h2{color:#0b1026}"
+ },
+ "tracks": {
+  "js-web": {
+   "project_contribution": "Proje kartı sınıfı",
+   "project_task": {
+    "id": "js-d27-pw",
+    "title": "ProjectCard sınıfı",
+    "prompt": "Projelerin kartlarını bir sınıf üretsin. `ProjectCard` sınıfının `render()` metodunu yaz ve kartları sayfaya ekle:\n\n- `render()` bir `<article class=\"card\">` oluşturup **döndürsün**. İçinde: `<h3>` (başlık), `<p class=\"tech\">` (teknolojiler virgül ve boşlukla: `Canvas, JavaScript`) ve `<a>` (`href` = `url`, metni `İncele`).\n- En altta `myProjects` içindeki her kartın `render()` sonucunu `#projects`'e ekle.\n\nMetinleri `textContent` ile yaz.",
+    "starter": "class ProjectCard {\n  constructor(title, tech, url) {\n    this.title = title;\n    this.tech = tech;\n    this.url = url;\n  }\n\n  render() {\n    // article.card oluştur; içine h3, p.tech ve a ekle; article'ı döndür\n  }\n}\n\nconst myProjects = [\n  new ProjectCard(\"Yıldız Avcısı\", [\"Canvas\", \"JavaScript\"], \"#oyun\"),\n  new ProjectCard(\"Hava Durumu\", [\"fetch\", \"JSON\"], \"#hava\"),\n  new ProjectCard(\"Not Defteri\", [\"localStorage\"], \"#notlar\"),\n];\n\nconst box = document.querySelector(\"#projects\");\n// her kartın render() sonucunu box'a ekle\n\n",
+    "solution": "class ProjectCard {\n  constructor(title, tech, url) {\n    this.title = title;\n    this.tech = tech;\n    this.url = url;\n  }\n\n  render() {\n    const card = document.createElement(\"article\");\n    card.className = \"card\";\n    const h3 = document.createElement(\"h3\");\n    h3.textContent = this.title;\n    const tech = document.createElement(\"p\");\n    tech.className = \"tech\";\n    tech.textContent = this.tech.join(\", \");\n    const link = document.createElement(\"a\");\n    link.href = this.url;\n    link.textContent = \"İncele\";\n    card.append(h3, tech, link);\n    return card;\n  }\n}\n\nconst myProjects = [\n  new ProjectCard(\"Yıldız Avcısı\", [\"Canvas\", \"JavaScript\"], \"#oyun\"),\n  new ProjectCard(\"Hava Durumu\", [\"fetch\", \"JSON\"], \"#hava\"),\n  new ProjectCard(\"Not Defteri\", [\"localStorage\"], \"#notlar\"),\n];\n\nconst box = document.querySelector(\"#projects\");\n// her kartın render() sonucunu box'a ekle\nmyProjects.forEach((project) => box.append(project.render()));\n",
+    "hints": [
+     "const card = document.createElement(\"article\"); card.className = \"card\";",
+     "Teknolojiler: this.tech.join(\", \")",
+     "render() en sonda return card; demeli. Ekleme: box.append(project.render())"
+    ],
+    "check": {
+     "code_contains": [
+      "render()",
+      "createElement",
+      "join"
+     ],
+     "js": "const cards = $$(\"#projects .card\");\nassert(cards.length === 3, \"#projects içinde 3 tane .card olmalı.\");\nconst h3 = cards[0].querySelector(\"h3\");\nassert(h3 && h3.textContent.trim() === \"Yıldız Avcısı\", \"İlk kartın <h3>'ü 'Yıldız Avcısı' olmalı.\");\nconst tech = cards[0].querySelector(\".tech\");\nassert(tech && tech.textContent.trim() === \"Canvas, JavaScript\", \"p.tech 'Canvas, JavaScript' olmalı.\");\nconst a = cards[0].querySelector(\"a\");\nassert(a && a.getAttribute(\"href\") === \"#oyun\" && a.textContent.trim() === \"İncele\", \"Kartta href'i '#oyun' olan, metni 'İncele' olan bir <a> olmalı.\");\nconst el = new ProjectCard(\"Test\", [\"A\", \"B\", \"C\"], \"#t\").render();\nassert(el && el.tagName === \"ARTICLE\" && el.classList.contains(\"card\"), \"render() bir <article class=\\\"card\\\"> döndürmeli.\");\nassert(el.querySelector(\".tech\").textContent.trim() === \"A, B, C\", \"Teknolojiler 'A, B, C' biçiminde birleştirilmeli.\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<header><h1 id=\"site-title\">Kod Günlüğüm</h1></header>\n<main><h2>Projelerim</h2>\n<div id=\"projects\"></div></main>\n",
+    "css": "header{display:flex;align-items:center;gap:12px;flex-wrap:wrap}header h1{margin:0;font-size:22px}nav a{margin-right:10px}.card{border:1px solid #ccd;border-radius:8px;padding:8px 12px;margin:8px 0}.card h3{margin:0 0 4px}.tech{color:#556;font-size:14px}body.dark{background:#0b1026;color:#eef}body.dark a{color:#9cf}form{display:grid;gap:6px;max-width:320px}"
+   }
+  },
+  "js-app": {
+   "project_contribution": "Görev sınıfı",
+   "project_task": {
+    "id": "js-d27-pa",
+    "title": "Task sınıfı",
+    "prompt": "Görevleri bir sınıfla tutalım. Listeyi çizen kod hazır; `Task` sınıfını tamamla:\n\n- `constructor(title)`: `title`'ı kaydetsin, `done` başlangıçta `false` olsun.\n- `toggle()`: `done`'ı tersine çevirsin.\n- `get label`: bitmişse `[x] Fizik tekrarı`, bitmemişse `[ ] Fizik tekrarı` döndürsün.\n\nSonra önizlemede bir göreve tıklayıp dene.",
+    "starter": "class Task {\n  constructor(title) {\n    // title ve done\n  }\n\n  toggle() {\n    // done'ı tersine çevir\n  }\n\n  get label() {\n    // [x] ya da [ ] ile başlığı döndür\n  }\n}\n\nconst tasks = [new Task(\"Matematik ödevi\"), new Task(\"Fizik tekrarı\"), new Task(\"Kitap okuma\")];\nconst list = document.querySelector(\"#tasks\");\n\nfunction render() {\n  list.innerHTML = \"\";\n  tasks.forEach((task) => {\n    const li = document.createElement(\"li\");\n    li.textContent = task.label;\n    li.classList.toggle(\"done\", task.done === true);\n    li.addEventListener(\"click\", () => {\n      task.toggle();\n      render();\n    });\n    list.append(li);\n  });\n  const left = tasks.filter((t) => !t.done).length;\n  document.querySelector(\"#count\").textContent = `${left} görev kaldı`;\n}\n\nrender();\n",
+    "solution": "class Task {\n  constructor(title) {\n    this.title = title;\n    this.done = false;\n  }\n\n  toggle() {\n    this.done = !this.done;\n  }\n\n  get label() {\n    const box = this.done ? \"[x]\" : \"[ ]\";\n    return `${box} ${this.title}`;\n  }\n}\n\nconst tasks = [new Task(\"Matematik ödevi\"), new Task(\"Fizik tekrarı\"), new Task(\"Kitap okuma\")];\nconst list = document.querySelector(\"#tasks\");\n\nfunction render() {\n  list.innerHTML = \"\";\n  tasks.forEach((task) => {\n    const li = document.createElement(\"li\");\n    li.textContent = task.label;\n    li.classList.toggle(\"done\", task.done === true);\n    li.addEventListener(\"click\", () => {\n      task.toggle();\n      render();\n    });\n    list.append(li);\n  });\n  const left = tasks.filter((t) => !t.done).length;\n  document.querySelector(\"#count\").textContent = `${left} görev kaldı`;\n}\n\nrender();\n",
+    "hints": [
+     "this.done = false;",
+     "toggle() { this.done = !this.done; }",
+     "get label() { const box = this.done ? \"[x]\" : \"[ ]\"; return ...; }"
+    ],
+    "check": {
+     "code_contains": [
+      "get label",
+      "this.done"
+     ],
+     "js": "const t = new Task(\"Deneme\");\nassert(t.title === \"Deneme\" && t.done === false, \"Yeni görevin title'ı kaydedilmeli, done false olmalı.\");\nassert(t.label === \"[ ] Deneme\", \"Bitmemiş görevin label'ı '[ ] Deneme' olmalı.\");\nt.toggle();\nassert(t.done === true && t.label === \"[x] Deneme\", \"toggle() sonrası done true, label '[x] Deneme' olmalı.\");\nt.toggle();\nassert(t.done === false, \"İkinci toggle() done'ı yeniden false yapmalı.\");\nassert($$(\"#tasks li\")[0].textContent === \"[ ] Matematik ödevi\", \"Listede görevler '[ ] Matematik ödevi' biçiminde görünmeli.\");\nclick($$(\"#tasks li\")[1]);\nconst li = $$(\"#tasks li\")[1];\nassert(li.textContent === \"[x] Fizik tekrarı\" && li.classList.contains(\"done\"), \"Bir göreve tıklayınca '[x] Fizik tekrarı' olmalı.\");\nassert($(\"#count\").textContent === \"2 görev kaldı\", \"#count '2 görev kaldı' olmalı.\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<h1>Çalışma Asistanım</h1>\n<p id=\"count\"></p>\n<ul id=\"tasks\"></ul>\n",
+    "css": "li{padding:6px;cursor:pointer}li.done{text-decoration:line-through;color:#889}li.selected{outline:2px solid #3b6ef5;border-radius:4px}.big{font-size:20px;min-width:64px;min-height:48px;margin:4px}#stats,#count{font-weight:bold}form{display:flex;gap:6px}"
+   }
+  },
+  "js-quiz": {
+   "project_contribution": "Yarışma sınıfı",
+   "project_task": {
+    "id": "js-d27-pq",
+    "title": "Quiz sınıfı",
+    "prompt": "Yarışmanın bütün kuralları bir sınıfta toplansın. `Quiz` sınıfında eksik üç parçayı yaz:\n\n- `answer(index)`: seçilen şık sorunun `dogru` değerine eşitse `score`'a 10 ekleyip `true`, değilse `false` döndürsün.\n- `next()`: bir sonraki soruya geçsin (`current` 1 artsın).\n- `get isOver`: bütün sorular bittiyse (`current`, soru sayısına ulaştıysa) `true` döndürsün.",
+    "starter": "const questions = [\n  { soru: \"Ay, hangi gezegenin uydusudur?\", secenekler: [\"Mars\", \"Dünya\", \"Jüpiter\"], dogru: 1 },\n  { soru: \"Kızıl gezegen olarak bilinen gezegen hangisidir?\", secenekler: [\"Mars\", \"Venüs\", \"Merkür\"], dogru: 0 },\n];\n\nclass Quiz {\n  constructor(questions) {\n    this.questions = questions;\n    this.current = 0;\n    this.score = 0;\n  }\n\n  get question() {\n    return this.questions[this.current];\n  }\n\n  answer(index) {\n    // doğruysa score'a 10 ekle ve true döndür, değilse false\n  }\n\n  next() {\n    // sonraki soru\n  }\n\n  get isOver() {\n    // sorular bitti mi?\n  }\n}\n\nconst quiz = new Quiz(questions);\nconsole.log(quiz.question.soru, quiz.answer(1));\nquiz.next();\nconsole.log(quiz.question.soru, quiz.answer(2));\nquiz.next();\nconsole.log(\"Bitti mi?\", quiz.isOver, \"| Puan:\", quiz.score);\n",
+    "solution": "const questions = [\n  { soru: \"Ay, hangi gezegenin uydusudur?\", secenekler: [\"Mars\", \"Dünya\", \"Jüpiter\"], dogru: 1 },\n  { soru: \"Kızıl gezegen olarak bilinen gezegen hangisidir?\", secenekler: [\"Mars\", \"Venüs\", \"Merkür\"], dogru: 0 },\n];\n\nclass Quiz {\n  constructor(questions) {\n    this.questions = questions;\n    this.current = 0;\n    this.score = 0;\n  }\n\n  get question() {\n    return this.questions[this.current];\n  }\n\n  answer(index) {\n    const correct = index === this.question.dogru;\n    if (correct) this.score += 10;\n    return correct;\n  }\n\n  next() {\n    this.current += 1;\n  }\n\n  get isOver() {\n    return this.current >= this.questions.length;\n  }\n}\n\nconst quiz = new Quiz(questions);\nconsole.log(quiz.question.soru, quiz.answer(1));\nquiz.next();\nconsole.log(quiz.question.soru, quiz.answer(2));\nquiz.next();\nconsole.log(\"Bitti mi?\", quiz.isOver, \"| Puan:\", quiz.score);\n",
+    "hints": [
+     "const correct = index === this.question.dogru;",
+     "if (correct) this.score += 10; return correct;",
+     "get isOver() { return this.current >= this.questions.length; }"
+    ],
+    "check": {
+     "code_contains": [
+      "this.score",
+      "get isOver"
+     ],
+     "js": "assert(_lines.includes(\"Bitti mi? true | Puan: 10\"), \"Çıktının son satırı 'Bitti mi? true | Puan: 10' olmalı.\");\nconst q = new Quiz([{ soru: \"A\", secenekler: [\"x\", \"y\"], dogru: 0 }, { soru: \"B\", secenekler: [\"x\", \"y\"], dogru: 1 }]);\nassert(q.isOver === false, \"Başlangıçta isOver false olmalı.\");\nassert(q.answer(0) === true && q.score === 10, \"Doğru cevapta answer true döndürmeli ve score 10 artmalı.\");\nq.next();\nassert(q.current === 1 && q.question.soru === \"B\", \"next() sonraki soruya geçmeli.\");\nassert(q.answer(0) === false && q.score === 10, \"Yanlış cevapta answer false döndürmeli, score değişmemeli.\");\nq.next();\nassert(q.isOver === true, \"Son sorudan sonra isOver true olmalı.\");"
+    },
+    "xp": 100
+   }
+  }
+ },
+ "available": true
+}

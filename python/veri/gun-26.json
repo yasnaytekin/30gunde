@@ -1,0 +1,1450 @@
+{
+ "day": 26,
+ "title": "Python ile web",
+ "region": "dag",
+ "project_contribution": "Oyunun web sayfası",
+ "game_role": "Kahramanın profil kartı senin HTML'inle çizilir.",
+ "xp_complete": 150,
+ "objective": "Web'in istek ve yanıtla nasıl çalıştığını anlamak, Python ile HTML sayfaları üretmek ve yönlendirme yapmak",
+ "story": "Python Dağı'nın eteğindeyiz! Tepede dev bir gözlem kulesi var ve dünyanın her yerinden mesajlar alıyor. Her mesaj bir istek, kulenin verdiği her cevap bir yanıt. İnternetteki web siteleri de tam böyle çalışır. Bugün Python ile kendi web sayfalarımızı üretiyoruz.",
+ "sections": [
+  {
+   "title": "İstek ve yanıt",
+   "body": "Tarayıcına bir adres yazdığında olanlar:\n\n- Tarayıcı sunucuya bir **istek** gönderir: \"Bana `/profil` sayfasını ver.\"\n- Sunucu isteği okur, sayfayı hazırlar ve bir **yanıt** döner.\n- Yanıtın içinde HTML ve bir **durum kodu** vardır.\n\nEn bilinen durum kodları: `200` her şey yolunda, `404` sayfa bulunamadı, `500` sunucuda hata oldu."
+  },
+  {
+   "title": "Flask ile bir site",
+   "body": "Python'da web sitesi yapmanın en sevilen yollarından biri **Flask** paketidir. Kendi bilgisayarında şöyle görünür:\n\n```python\nfrom flask import Flask\napp = Flask(__name__)\n\n@app.route(\"/\")\ndef home():\n    return \"<h1>Piko'nun sitesine hoş geldin!</h1>\"\n\napp.run()\n```\n\n`@app.route(\"/\")` şunu der: \"Biri `/` adresini isterse `home` fonksiyonunu çalıştır.\" Bu sitede bir sunucu başlatamıyoruz, ama aynı fikri düz Python ile deneyeceğiz."
+  },
+  {
+   "title": "HTML'i Python ile üretmek",
+   "body": "Bir web sunucusunun asıl işi, veriden HTML yazısı üretmektir. f-string ve `join` bunun için yeterli:\n\n```python\nname = \"Piko\"\npage = f\"<h1>Merhaba {name}</h1>\"\n\nitems = [\"kılıç\", \"iksir\"]\nhtml = \"<ul>\" + \"\".join(f\"<li>{i}</li>\" for i in items) + \"</ul>\"\n```"
+  },
+  {
+   "title": "Yönlendirme (routing)",
+   "body": "Hangi adresin hangi fonksiyona gideceğini bir sözlükle tutabiliriz:\n\n```python\ndef home():\n    return \"Ana sayfa\"\n\ndef about():\n    return \"Hakkında\"\n\nroutes = {\"/\": home, \"/hakkinda\": about}\nprint(routes[\"/hakkinda\"]())   # Hakkında\n```\n\nSözlükte olmayan bir adres gelirse `404` sayfasını göstermek gerekir. Flask bunu senin için yapar."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Sayfa üret",
+   "code": "name = \"Piko\"\nitems = [\"kılıç\", \"iksir\", \"harita\"]\n\npage = f\"<h1>{name}'nun çantası</h1>\"\npage += \"<ul>\" + \"\".join(f\"<li>{i}</li>\" for i in items) + \"</ul>\"\nprint(page)\n",
+   "note": ""
+  },
+  {
+   "title": "Durum kodları",
+   "code": "codes = {200: \"Tamam\", 404: \"Bulunamadı\", 500: \"Sunucu hatası\"}\nfor code in [200, 404, 500, 418]:\n    print(code, codes.get(code, \"Bilinmiyor\"))\n",
+   "note": ""
+  },
+  {
+   "title": "Mini yönlendirme",
+   "code": "def home():\n    return \"<h1>Ana sayfa</h1>\"\n\ndef about():\n    return \"<h1>Hakkında</h1>\"\n\nroutes = {\"/\": home, \"/hakkinda\": about}\n\nfor path in [\"/\", \"/hakkinda\", \"/gizli\"]:\n    view = routes.get(path)\n    print(path, \"->\", view() if view else \"404 Bulunamadı\")\n",
+   "note": ""
+  }
+ ],
+ "tasks": [
+  {
+   "id": "d26-t1",
+   "title": "Karşılama sayfası",
+   "prompt": "`page` değişkeni `<h1>Merhaba Piko</h1>` gibi bir HTML başlığı olsun. İsim `name` değişkeninden gelsin.",
+   "starter": "name = \"Piko\"\n\npage = \"\"\n\nprint(page)\n",
+   "solution": "name = \"Piko\"\n\npage = f\"<h1>Merhaba {name}</h1>\"\n\nprint(page)\n",
+   "hints": [
+    "f\"<h1>Merhaba {name}</h1>\""
+   ],
+   "check": {
+    "python": "\n_, g = _run(_set(_code, \"name\", \"Ece\"))\nassert g.get(\"page\") == \"<h1>Merhaba Ece</h1>\", \"name 'Ece' iken page '<h1>Merhaba Ece</h1>' olmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "name = \"Piko\"",
+      "notes": [
+       "`name` adında bir değişken oluşturuluyor ve içine `\"Piko\"` (metin (str)) konuyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "page = f\"<h1>Merhaba {name}</h1>\"",
+      "notes": [
+       "`page` adında bir değişken oluşturuluyor ve içine `f\"<h1>Merhaba {name}</h1>\"` (f-string ile kurulan metin) konuyor."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "print(page)",
+      "notes": [
+       "`print(page)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "name",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `\"Piko\"`."
+     },
+     {
+      "term": "page",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `f\"<h1>Merhaba {name}</h1>\"`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "f\"...{}\"",
+      "kind": "metin",
+      "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d26-t2",
+   "title": "Liste sayfası",
+   "prompt": "`items` listesinden bir HTML listesi üret: `<ul><li>kılıç</li><li>iksir</li></ul>` (boşluk ve satır sonu olmadan).",
+   "starter": "items = [\"kılıç\", \"iksir\"]\n\nhtml = \"\"\n\nprint(html)\n",
+   "solution": "items = [\"kılıç\", \"iksir\"]\n\nhtml = \"<ul>\" + \"\".join(f\"<li>{i}</li>\" for i in items) + \"</ul>\"\n\nprint(html)\n",
+   "hints": [
+    "Her eşya için f\"<li>{i}</li>\" üret.",
+    "Hepsini \"\".join(...) ile birleştir ve <ul> ile sar."
+   ],
+   "check": {
+    "python": "\n_, g = _run(_set(_code, \"items\", [\"a\", \"b\", \"c\"]))\nassert g.get(\"html\") == \"<ul><li>a</li><li>b</li><li>c</li></ul>\", \"html, <ul><li>a</li><li>b</li><li>c</li></ul> biçiminde olmalı.\"\n_, g = _run(_set(_code, \"items\", []))\nassert g.get(\"html\") == \"<ul></ul>\", \"Boş listede <ul></ul> olmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "items = [\"kılıç\", \"iksir\"]",
+      "notes": [
+       "`items` adında bir değişken oluşturuluyor ve içine `[\"kılıç\", \"iksir\"]` (liste) konuyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "html = \"<ul>\" + \"\".join(f\"<li>{i}</li>\" for i in items) + \"</ul>\"",
+      "notes": [
+       "`html` adında bir değişken oluşturuluyor ve içine `\"<ul>\" + \"\".join(f\"<li>{i}</li>\" for i in items) + \"</ul>\"` konuyor.",
+       "Tek satırda döngüyle yeni bir liste/dizi üretiliyor."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "print(html)",
+      "notes": [
+       "`print(html)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "items",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `[\"kılıç\", \"iksir\"]`."
+     },
+     {
+      "term": "html",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `\"<ul>\" + \"\".join(f\"<li>{i}</li>\" for i in items) + \"</ul>\"`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "+",
+      "kind": "operatör",
+      "desc": "Toplama; metinlerde ve listelerde uç uca ekleme."
+     },
+     {
+      "term": ".join()",
+      "kind": "metot",
+      "desc": "Listedeki metinleri aradaki yazıyla birleştirir: \", \".join(liste)"
+     },
+     {
+      "term": "[... for ... in ...]",
+      "kind": "liste üreteci",
+      "desc": "Liste üreteci: [ifade for x in liste if koşul] ile tek satırda yeni liste."
+     },
+     {
+      "term": "f\"...{}\"",
+      "kind": "metin",
+      "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d26-t3",
+   "title": "Durum kodu",
+   "prompt": "`status_text(code)` fonksiyonu 200 için `Tamam`, 404 için `Bulunamadı`, 500 için `Sunucu hatası`, diğerleri için `Bilinmiyor` döndürsün.",
+   "starter": "def status_text(code):\n    return \"\"\n\nprint(status_text(404))\n",
+   "solution": "def status_text(code):\n    texts = {200: \"Tamam\", 404: \"Bulunamadı\", 500: \"Sunucu hatası\"}\n    return texts.get(code, \"Bilinmiyor\")\n\nprint(status_text(404))\n",
+   "hints": [
+    "Bir sözlük ve get() kullanabilirsin.",
+    "texts.get(code, \"Bilinmiyor\")"
+   ],
+   "check": {
+    "python": "\nassert status_text(200) == \"Tamam\", \"200 için 'Tamam'\"\nassert status_text(404) == \"Bulunamadı\", \"404 için 'Bulunamadı'\"\nassert status_text(500) == \"Sunucu hatası\", \"500 için 'Sunucu hatası'\"\nassert status_text(302) == \"Bilinmiyor\", \"Diğer kodlar için 'Bilinmiyor'\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "def status_text(code):",
+      "notes": [
+       "`status_text` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `code`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+      ]
+     },
+     {
+      "n": 2,
+      "code": "    texts = {200: \"Tamam\", 404: \"Bulunamadı\", 500: \"Sunucu hatası\"}",
+      "notes": [
+       "`texts` adında bir değişken oluşturuluyor ve içine `{200: \"Tamam\", 404: \"Bulunamadı\", 500: \"Sunucu hatası\"}` (sözlük (anahtar: değer)) konuyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "    return texts.get(code, \"Bilinmiyor\")",
+      "notes": [
+       "Fonksiyon `texts.get(code, \"Bilinmiyor\")` değerini geri verir ve burada biter."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "print(status_text(404))",
+      "notes": [
+       "`print(status_text(404))`: parantez içindeki değeri ekrana yazdırır.",
+       "`status_text(...)`: senin tanımladığın fonksiyonu çağırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "texts",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `{200: \"Tamam\", 404: \"Bulunamadı\", 500: \"Sunucu hatası\"}`."
+     },
+     {
+      "term": "code",
+      "kind": "parametre",
+      "desc": "`status_text` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+     },
+     {
+      "term": "def",
+      "kind": "anahtar kelime",
+      "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+     },
+     {
+      "term": "status_text()",
+      "kind": "senin fonksiyonun",
+      "desc": "Kodda tanımlanan fonksiyon; parametreleri: `code`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "return",
+      "kind": "anahtar kelime",
+      "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+     },
+     {
+      "term": ".get()",
+      "kind": "metot",
+      "desc": "Sözlükten anahtarın değerini alır; anahtar yoksa hata vermez, varsayılanı verir."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "id": "d26-c",
+  "title": "Mini sunucu",
+  "prompt": "`handle(path)` fonksiyonu `(durum_kodu, html)` tuple'ı döndürsün. Adres `routes` içindeyse `(200, sayfa)`, değilse `(404, \"<h1>Bulunamadı</h1>\")`.",
+  "starter": "def home():\n    return \"<h1>Ana sayfa</h1>\"\n\ndef about():\n    return \"<h1>Hakkında</h1>\"\n\nroutes = {\"/\": home, \"/hakkinda\": about}\n\ndef handle(path):\n    pass\n\nprint(handle(\"/\"))\nprint(handle(\"/gizli\"))\n",
+  "solution": "def home():\n    return \"<h1>Ana sayfa</h1>\"\n\ndef about():\n    return \"<h1>Hakkında</h1>\"\n\nroutes = {\"/\": home, \"/hakkinda\": about}\n\ndef handle(path):\n    if path in routes:\n        return (200, routes[path]())\n    return (404, \"<h1>Bulunamadı</h1>\")\n\nprint(handle(\"/\"))\nprint(handle(\"/gizli\"))\n",
+  "hints": [
+   "if path in routes: ile kontrol et.",
+   "Fonksiyonu çağırmayı unutma: routes[path]()"
+  ],
+  "check": {
+   "python": "\nassert handle(\"/\") == (200, \"<h1>Ana sayfa</h1>\"), \"handle('/') (200, ana sayfa) döndürmeli.\"\nassert handle(\"/hakkinda\") == (200, \"<h1>Hakkında</h1>\"), \"handle('/hakkinda') (200, hakkında) döndürmeli.\"\nassert handle(\"/yok\") == (404, \"<h1>Bulunamadı</h1>\"), \"Bilinmeyen adreste (404, '<h1>Bulunamadı</h1>') döndürmeli.\"\nroutes[\"/yeni\"] = lambda: \"<p>yeni</p>\"\nassert handle(\"/yeni\") == (200, \"<p>yeni</p>\"), \"routes sözlüğüne eklenen yeni adresler de çalışmalı.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "def home():",
+     "notes": [
+      "`home` adında bir fonksiyon tanımlanıyor. Parametre almıyor. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+     ]
+    },
+    {
+     "n": 2,
+     "code": "    return \"<h1>Ana sayfa</h1>\"",
+     "notes": [
+      "Fonksiyon `\"<h1>Ana sayfa</h1>\"` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "def about():",
+     "notes": [
+      "`about` adında bir fonksiyon tanımlanıyor. Parametre almıyor. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "    return \"<h1>Hakkında</h1>\"",
+     "notes": [
+      "Fonksiyon `\"<h1>Hakkında</h1>\"` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 7,
+     "code": "routes = {\"/\": home, \"/hakkinda\": about}",
+     "notes": [
+      "`routes` adında bir değişken oluşturuluyor ve içine `{\"/\": home, \"/hakkinda\": about}` (sözlük (anahtar: değer)) konuyor."
+     ]
+    },
+    {
+     "n": 9,
+     "code": "def handle(path):",
+     "notes": [
+      "`handle` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `path`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+     ]
+    },
+    {
+     "n": 10,
+     "code": "    if path in routes:",
+     "notes": [
+      "Koşul: `path in routes` doğruysa altındaki girintili satırlar çalışır."
+     ]
+    },
+    {
+     "n": 11,
+     "code": "        return (200, routes[path]())",
+     "notes": [
+      "Fonksiyon `(200, routes[path]())` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 12,
+     "code": "    return (404, \"<h1>Bulunamadı</h1>\")",
+     "notes": [
+      "Fonksiyon `(404, \"<h1>Bulunamadı</h1>\")` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 14,
+     "code": "print(handle(\"/\"))",
+     "notes": [
+      "`print(handle(\"/\"))`: parantez içindeki değeri ekrana yazdırır.",
+      "`handle(...)`: senin tanımladığın fonksiyonu çağırır."
+     ]
+    },
+    {
+     "n": 15,
+     "code": "print(handle(\"/gizli\"))",
+     "notes": [
+      "`print(handle(\"/gizli\"))`: parantez içindeki değeri ekrana yazdırır.",
+      "`handle(...)`: senin tanımladığın fonksiyonu çağırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "routes",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"/\": home, \"/hakkinda\": about}`."
+    },
+    {
+     "term": "path",
+     "kind": "parametre",
+     "desc": "`handle` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+    },
+    {
+     "term": "def",
+     "kind": "anahtar kelime",
+     "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+    },
+    {
+     "term": "home()",
+     "kind": "senin fonksiyonun",
+     "desc": "Kodda tanımlanan fonksiyon; parametreleri: -."
+    },
+    {
+     "term": "return",
+     "kind": "anahtar kelime",
+     "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+    },
+    {
+     "term": "about()",
+     "kind": "senin fonksiyonun",
+     "desc": "Kodda tanımlanan fonksiyon; parametreleri: -."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "handle()",
+     "kind": "senin fonksiyonun",
+     "desc": "Kodda tanımlanan fonksiyon; parametreleri: `path`."
+    },
+    {
+     "term": "if",
+     "kind": "anahtar kelime",
+     "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+    },
+    {
+     "term": "in",
+     "kind": "operatör",
+     "desc": "İçinde var mı? (listede, metinde, sözlükte)"
+    },
+    {
+     "term": "[ ]",
+     "kind": "seçme",
+     "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    }
+   ]
+  }
+ },
+ "project_task": {
+  "id": "d26-p",
+  "title": "Oyunun web sayfası",
+  "prompt": "Piko'nun Macerası'nın oyuncu profili sayfasını üretelim. `render_profile(hero)` bir HTML yazısı döndürsün ve içinde şunlar olsun:\n\n- `<h1>Piko</h1>` (kahramanın adı)\n- `<p>Can: 80</p>`\n- `<p>Altın: 35</p>`",
+  "starter": "def render_profile(hero):\n    return \"\"\n\nprint(render_profile({\"name\": \"Piko\", \"hp\": 80, \"gold\": 35}))\n",
+  "solution": "def render_profile(hero):\n    html = f\"<h1>{hero['name']}</h1>\"\n    html += f\"<p>Can: {hero['hp']}</p>\"\n    html += f\"<p>Altın: {hero['gold']}</p>\"\n    return html\n\nprint(render_profile({\"name\": \"Piko\", \"hp\": 80, \"gold\": 35}))\n",
+  "hints": [
+   "f-string içinde sözlükten değer alırken farklı tırnak kullan: {hero['name']}",
+   "Üç parçayı += ile birleştir ve return et."
+  ],
+  "check": {
+   "python": "\npage = render_profile({\"name\": \"Ece\", \"hp\": 12, \"gold\": 900})\nassert isinstance(page, str), \"render_profile bir yazı döndürmeli.\"\nassert \"<h1>Ece</h1>\" in page, \"Sayfada <h1>Ece</h1> olmalı.\"\nassert \"<p>Can: 12</p>\" in page, \"Sayfada <p>Can: 12</p> olmalı.\"\nassert \"<p>Altın: 900</p>\" in page, \"Sayfada <p>Altın: 900</p> olmalı.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "def render_profile(hero):",
+     "notes": [
+      "`render_profile` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `hero`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+     ]
+    },
+    {
+     "n": 2,
+     "code": "    html = f\"<h1>{hero['name']}</h1>\"",
+     "notes": [
+      "`html` adında bir değişken oluşturuluyor ve içine `f\"<h1>{hero['name']}</h1>\"` (f-string ile kurulan metin) konuyor."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "    html += f\"<p>Can: {hero['hp']}</p>\"",
+     "notes": [
+      "`html += f\"<p>Can: {hero['hp']}</p>\"`: `html` değişkeninin değeri güncelleniyor."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "    html += f\"<p>Altın: {hero['gold']}</p>\"",
+     "notes": [
+      "`html += f\"<p>Altın: {hero['gold']}</p>\"`: `html` değişkeninin değeri güncelleniyor."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "    return html",
+     "notes": [
+      "Fonksiyon `html` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 7,
+     "code": "print(render_profile({\"name\": \"Piko\", \"hp\": 80, \"gold\": 35}))",
+     "notes": [
+      "`print(render_profile({\"name\": \"Piko\", \"hp\": 80, \"gold\": 3...`: parantez içindeki değeri ekrana yazdırır.",
+      "`render_profile(...)`: senin tanımladığın fonksiyonu çağırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "html",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `f\"<h1>{hero['name']}</h1>\"`."
+    },
+    {
+     "term": "hero",
+     "kind": "parametre",
+     "desc": "`render_profile` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+    },
+    {
+     "term": "def",
+     "kind": "anahtar kelime",
+     "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+    },
+    {
+     "term": "render_profile()",
+     "kind": "senin fonksiyonun",
+     "desc": "Kodda tanımlanan fonksiyon; parametreleri: `hero`."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "f\"...{}\"",
+     "kind": "metin",
+     "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+    },
+    {
+     "term": "[ ]",
+     "kind": "seçme",
+     "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+    },
+    {
+     "term": "+=",
+     "kind": "operatör",
+     "desc": "Değişkenin kendi değerine ekler: x += 1 → x = x + 1."
+    },
+    {
+     "term": "return",
+     "kind": "anahtar kelime",
+     "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    }
+   ]
+  }
+ },
+ "available": true,
+ "tracks": {
+  "veri": {
+   "project_task": {
+    "id": "d26-pv",
+    "title": "HTML rapor sayfası",
+    "prompt": "Raporu bir web sayfası olarak üretelim. `render_report(summary)` bir sözlük alsın (kategori -> toplam) ve bir HTML yazısı döndürsün:\n\n- `<h1>Harcama Raporu</h1>`\n- Her kategori için `<li>market: 420 TL</li>` (bir `<ul>` içinde)",
+    "starter": "def render_report(summary):\n    html = \"<h1>Harcama Raporu</h1>\"\n    return html\n",
+    "solution": "def render_report(summary):\n    html = \"<h1>Harcama Raporu</h1>\"\n    html += \"<ul>\"\n    for category, total in summary.items():\n        html += f\"<li>{category}: {total} TL</li>\"\n    html += \"</ul>\"\n    return html\n\n\nprint(render_report({\"market\": 420, \"kira\": 2000}))\n",
+    "hints": [
+     "Yazıyı += ile adım adım büyütebilirsin.",
+     "for category, total in summary.items():"
+    ],
+    "check": {
+     "python": "\npage = render_report({\"kahve\": 35, \"sinema\": 180})\nassert isinstance(page, str), \"render_report bir yazı döndürmeli.\"\nassert \"<h1>Harcama Raporu</h1>\" in page, \"Sayfada <h1>Harcama Raporu</h1> olmalı.\"\nassert \"<li>kahve: 35 TL</li>\" in page and \"<li>sinema: 180 TL</li>\" in page, \"Her kategori için <li>kahve: 35 TL</li> gibi bir satır olmalı.\"\nassert \"<ul>\" in page and \"</ul>\" in page, \"Maddeleri bir <ul> içine koy.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "def render_report(summary):",
+       "notes": [
+        "`render_report` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `summary`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "    html = \"<h1>Harcama Raporu</h1>\"",
+       "notes": [
+        "`html` adında bir değişken oluşturuluyor ve içine `\"<h1>Harcama Raporu</h1>\"` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "    html += \"<ul>\"",
+       "notes": [
+        "`html += \"<ul>\"`: `html` değişkeninin değeri güncelleniyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "    for category, total in summary.items():",
+       "notes": [
+        "Döngü: `summary.items()` içindeki her eleman sırayla `category, total` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "        html += f\"<li>{category}: {total} TL</li>\"",
+       "notes": [
+        "`html += f\"<li>{category}: {total} TL</li>\"`: `html` değişkeninin değeri güncelleniyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    html += \"</ul>\"",
+       "notes": [
+        "`html += \"</ul>\"`: `html` değişkeninin değeri güncelleniyor."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "    return html",
+       "notes": [
+        "Fonksiyon `html` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "print(render_report({\"market\": 420, \"kira\": 2000}))",
+       "notes": [
+        "`print(render_report({\"market\": 420, \"kira\": 2000}))`: parantez içindeki değeri ekrana yazdırır.",
+        "`render_report(...)`: senin tanımladığın fonksiyonu çağırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "html",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"<h1>Harcama Raporu</h1>\"`."
+      },
+      {
+       "term": "category",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `summary.items()` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "total",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `summary.items()` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "summary",
+       "kind": "parametre",
+       "desc": "`render_report` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "render_report()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `summary`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "+=",
+       "kind": "operatör",
+       "desc": "Değişkenin kendi değerine ekler: x += 1 → x = x + 1."
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": ".items()",
+       "kind": "metot",
+       "desc": "Sözlüğün (anahtar, değer) çiftlerini verir."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Rapor sayfası",
+   "game_role": "Aylık özeti bir HTML rapor sayfasına çevirir."
+  },
+  "otomasyon": {
+   "project_task": {
+    "id": "d26-po",
+    "title": "HTML yapılacaklar listesi",
+    "prompt": "Görev listesini bir web sayfası olarak gösterelim. `render_todo(tasks)` `(başlık, bitti_mi)` ikililerini alsın ve HTML döndürsün:\n\n- `<h1>Yapılacaklar</h1>`\n- Bir `<ul>` içinde her görev için `<li>Spor</li>`; biten görevlerin başlığı üstü çizili olsun: `<li><s>Kahve</s></li>`",
+    "starter": "def render_todo(tasks):\n    html = \"<h1>Yapılacaklar</h1>\"\n    return html\n",
+    "solution": "def render_todo(tasks):\n    html = \"<h1>Yapılacaklar</h1><ul>\"\n    for title, done in tasks:\n        if done:\n            html += f\"<li><s>{title}</s></li>\"\n        else:\n            html += f\"<li>{title}</li>\"\n    html += \"</ul>\"\n    return html\n\n\nprint(render_todo([(\"Kahve\", True), (\"Spor\", False)]))\n",
+    "hints": [
+     "Her görev için if done: ile iki farklı <li> yaz.",
+     "Üstü çizili: <s>...</s>"
+    ],
+    "check": {
+     "python": "\npage = render_todo([(\"A\", True), (\"B\", False)])\nassert isinstance(page, str) and \"<h1>Yapılacaklar</h1>\" in page, \"Sayfada <h1>Yapılacaklar</h1> olmalı.\"\nassert \"<li><s>A</s></li>\" in page, \"Biten görev <li><s>A</s></li> olmalı.\"\nassert \"<li>B</li>\" in page, \"Bitmemiş görev <li>B</li> olmalı.\"\nassert \"<ul>\" in page and \"</ul>\" in page, \"Maddeleri bir <ul> içine koy.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "def render_todo(tasks):",
+       "notes": [
+        "`render_todo` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `tasks`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "    html = \"<h1>Yapılacaklar</h1><ul>\"",
+       "notes": [
+        "`html` adında bir değişken oluşturuluyor ve içine `\"<h1>Yapılacaklar</h1><ul>\"` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "    for title, done in tasks:",
+       "notes": [
+        "Döngü: `tasks` içindeki her eleman sırayla `title, done` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "        if done:",
+       "notes": [
+        "Koşul: `done` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "            html += f\"<li><s>{title}</s></li>\"",
+       "notes": [
+        "`html += f\"<li><s>{title}</s></li>\"`: `html` değişkeninin değeri güncelleniyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "        else:",
+       "notes": [
+        "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "            html += f\"<li>{title}</li>\"",
+       "notes": [
+        "`html += f\"<li>{title}</li>\"`: `html` değişkeninin değeri güncelleniyor."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "    html += \"</ul>\"",
+       "notes": [
+        "`html += \"</ul>\"`: `html` değişkeninin değeri güncelleniyor."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "    return html",
+       "notes": [
+        "Fonksiyon `html` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "print(render_todo([(\"Kahve\", True), (\"Spor\", False)]))",
+       "notes": [
+        "`print(render_todo([(\"Kahve\", True), (\"Spor\", False)]))`: parantez içindeki değeri ekrana yazdırır.",
+        "`render_todo(...)`: senin tanımladığın fonksiyonu çağırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "html",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"<h1>Yapılacaklar</h1><ul>\"`."
+      },
+      {
+       "term": "title",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `tasks` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "done",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `tasks` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "tasks",
+       "kind": "parametre",
+       "desc": "`render_todo` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "render_todo()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `tasks`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "+=",
+       "kind": "operatör",
+       "desc": "Değişkenin kendi değerine ekler: x += 1 → x = x + 1."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "else",
+       "kind": "anahtar kelime",
+       "desc": "Yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "True",
+       "kind": "değer",
+       "desc": "Doğru (mantıksal değer)."
+      },
+      {
+       "term": "False",
+       "kind": "değer",
+       "desc": "Yanlış (mantıksal değer)."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Yapılacaklar sayfası",
+   "game_role": "Görev listesini bir web sayfasına çevirir."
+  },
+  "web": {
+   "project_task": {
+    "id": "d26-pw",
+    "title": "Tam HTML sayfası",
+    "prompt": "Artık her sayfayı tam bir HTML belgesi olarak üretelim. `render_page(title, content, menu)` bir HTML yazısı döndürsün:\n\n- `<!DOCTYPE html>` ile başlasın, `<html>` ile `</html>` arasında olsun.\n- `<head>` içinde `<title>başlık</title>`\n- `<body>` içinde önce `<nav>`: `menu`'deki her `(ad, dosya)` için `<a href=\"dosya\">ad</a>`, sonra `<h1>başlık</h1>` ve `<p>içerik</p>`\n\nÖrneğin `render_page(\"Hakkımda\", \"Merhaba, ben Ece!\", [(\"Ana Sayfa\", \"index.html\"), (\"Blog\", \"blog.html\")])` şöyle bir sayfa üretmeli:\n\n```\n<!DOCTYPE html>\n<html>\n<head><title>Hakkımda</title></head>\n<body>\n<nav><a href=\"index.html\">Ana Sayfa</a> <a href=\"blog.html\">Blog</a></nav>\n<h1>Hakkımda</h1>\n<p>Merhaba, ben Ece!</p>\n</body>\n</html>\n```",
+    "starter": "def render_page(title, content, menu):\n    html = \"<!DOCTYPE html>\\n\"\n    return html\n",
+    "solution": "def render_page(title, content, menu):\n    links = []\n    for name, file in menu:\n        links.append(f'<a href=\"{file}\">{name}</a>')\n    html = \"<!DOCTYPE html>\\n<html>\\n\"\n    html += f\"<head><title>{title}</title></head>\\n\"\n    html += \"<body>\\n\"\n    html += \"<nav>\" + \" \".join(links) + \"</nav>\\n\"\n    html += f\"<h1>{title}</h1>\\n\"\n    html += f\"<p>{content}</p>\\n\"\n    html += \"</body>\\n</html>\\n\"\n    return html\n\n\nprint(render_page(\"Hakkımda\", \"Merhaba, ben Ece!\", [(\"Ana Sayfa\", \"index.html\"), (\"Blog\", \"blog.html\")]))\n",
+    "hints": [
+     "Yazıyı += ile adım adım büyütebilirsin; satır sonu için \\n ekle.",
+     "Menü bağlantılarını bir listede topla, \" \".join(links) ile birleştir."
+    ],
+    "check": {
+     "python": "\npage = render_page(\"Projeler\", \"Yaptığım oyunlar\", [(\"A\", \"a.html\"), (\"B\", \"b.html\")])\nassert isinstance(page, str), \"render_page bir yazı döndürmeli.\"\nassert page.strip().startswith(\"<!DOCTYPE html>\"), \"Sayfa <!DOCTYPE html> ile başlamalı.\"\nassert \"<html>\" in page and \"</html>\" in page and \"<head>\" in page and \"<body>\" in page, \"<html>, <head> ve <body> etiketleri olmalı.\"\nassert \"<title>Projeler</title>\" in page, \"<head> içinde <title>Projeler</title> olmalı.\"\nassert \"<h1>Projeler</h1>\" in page and \"<p>Yaptığım oyunlar</p>\" in page, \"<h1>başlık</h1> ve <p>içerik</p> olmalı.\"\nassert \"<nav>\" in page and \"</nav>\" in page, \"Menü <nav> ... </nav> içinde olmalı.\"\nnav = page.split(\"<nav>\")[1].split(\"</nav>\")[0]\nassert '<a href=\"a.html\">A</a>' in nav and '<a href=\"b.html\">B</a>' in nav, \"menu'deki her sayfa için <nav> içinde <a href=\\\"a.html\\\">A</a> gibi bir bağlantı olmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "def render_page(title, content, menu):",
+       "notes": [
+        "`render_page` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `title`, `content`, `menu`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "    links = []",
+       "notes": [
+        "`links` adında bir değişken oluşturuluyor ve içine `[]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "    for name, file in menu:",
+       "notes": [
+        "Döngü: `menu` içindeki her eleman sırayla `name, file` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "        links.append(f'<a href=\"{file}\">{name}</a>')",
+       "notes": [
+        "`links.append(f'<a href=\"{file}\">{name}</a>')`: `links` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "    html = \"<!DOCTYPE html>\\n<html>\\n\"",
+       "notes": [
+        "`html` adında bir değişken oluşturuluyor ve içine `\"<!DOCTYPE html>\\n<html>\\n\"` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    html += f\"<head><title>{title}</title></head>\\n\"",
+       "notes": [
+        "`html += f\"<head><title>{title}</title></head>\\n\"`: `html` değişkeninin değeri güncelleniyor."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "    html += \"<body>\\n\"",
+       "notes": [
+        "`html += \"<body>\\n\"`: `html` değişkeninin değeri güncelleniyor."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "    html += \"<nav>\" + \" \".join(links) + \"</nav>\\n\"",
+       "notes": [
+        "`html += \"<nav>\" + \" \".join(links) + \"</nav>\\n\"`: `html` değişkeninin değeri güncelleniyor."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "    html += f\"<h1>{title}</h1>\\n\"",
+       "notes": [
+        "`html += f\"<h1>{title}</h1>\\n\"`: `html` değişkeninin değeri güncelleniyor."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "    html += f\"<p>{content}</p>\\n\"",
+       "notes": [
+        "`html += f\"<p>{content}</p>\\n\"`: `html` değişkeninin değeri güncelleniyor."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "    html += \"</body>\\n</html>\\n\"",
+       "notes": [
+        "`html += \"</body>\\n</html>\\n\"`: `html` değişkeninin değeri güncelleniyor."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "    return html",
+       "notes": [
+        "Fonksiyon `html` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 15,
+       "code": "print(render_page(\"Hakkımda\", \"Merhaba, ben Ece!\", [(\"Ana Sayfa\", \"index.html\"), (\"Blog\", \"blog.html\")]))",
+       "notes": [
+        "`print(render_page(\"Hakkımda\", \"Merhaba, ben Ece!\", [(\"Ana...`: parantez içindeki değeri ekrana yazdırır.",
+        "`render_page(...)`: senin tanımladığın fonksiyonu çağırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "links",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[]`."
+      },
+      {
+       "term": "html",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"<!DOCTYPE html>\\n<html>\\n\"`."
+      },
+      {
+       "term": "name",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `menu` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "file",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `menu` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "title",
+       "kind": "parametre",
+       "desc": "`render_page` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "content",
+       "kind": "parametre",
+       "desc": "`render_page` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "menu",
+       "kind": "parametre",
+       "desc": "`render_page` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "render_page()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `title`, `content`, `menu`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": ".append()",
+       "kind": "metot",
+       "desc": "Listenin sonuna yeni bir eleman ekler."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "+=",
+       "kind": "operatör",
+       "desc": "Değişkenin kendi değerine ekler: x += 1 → x = x + 1."
+      },
+      {
+       "term": "+",
+       "kind": "operatör",
+       "desc": "Toplama; metinlerde ve listelerde uç uca ekleme."
+      },
+      {
+       "term": ".join()",
+       "kind": "metot",
+       "desc": "Listedeki metinleri aradaki yazıyla birleştirir: \", \".join(liste)"
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Sayfa şablonu",
+   "game_role": "Her sayfayı menüsüyle birlikte tam bir HTML belgesine çevirir."
+  },
+  "bot": {
+   "project_task": {
+    "id": "d26-pb",
+    "title": "Sohbet sayfası",
+    "prompt": "Konuşmayı bir web sayfası olarak gösterelim. `render_chat(bot_name, messages)` `(gönderen, metin)` ikililerini alsın ve HTML döndürsün:\n\n- `<h1>Bilge ile sohbet</h1>` (ad `bot_name`'den)\n- Gönderen `\"bot\"` ise: `<p class=\"bot\"><b>Bilge:</b> Merhaba!</p>`\n- Değilse: `<p class=\"user\"><b>Sen:</b> selam</p>`",
+    "starter": "def render_chat(bot_name, messages):\n    html = f\"<h1>{bot_name} ile sohbet</h1>\"\n    return html\n",
+    "solution": "def render_chat(bot_name, messages):\n    html = f\"<h1>{bot_name} ile sohbet</h1>\"\n    for sender, text in messages:\n        if sender == \"bot\":\n            html += f'<p class=\"bot\"><b>{bot_name}:</b> {text}</p>'\n        else:\n            html += f'<p class=\"user\"><b>Sen:</b> {text}</p>'\n    return html\n\n\nprint(render_chat(\"Bilge\", [(\"user\", \"selam\"), (\"bot\", \"Merhaba!\")]))\n",
+    "hints": [
+     "for sender, text in messages: ile her mesajı al, html += ile ekle.",
+     "İçinde çift tırnak olan bir yazıyı tek tırnakla açabilirsin: f'<p class=\"bot\">...'"
+    ],
+    "check": {
+     "python": "\npage = render_chat(\"Robo\", [(\"user\", \"naber\"), (\"bot\", \"İyiyim!\"), (\"user\", \"süper\")])\nassert isinstance(page, str) and \"<h1>Robo ile sohbet</h1>\" in page, \"Sayfada <h1>Robo ile sohbet</h1> olmalı.\"\nassert '<p class=\"bot\"><b>Robo:</b> İyiyim!</p>' in page, \"Botun mesajı <p class=\\\"bot\\\"><b>Robo:</b> İyiyim!</p> gibi olmalı.\"\nassert '<p class=\"user\"><b>Sen:</b> naber</p>' in page and '<p class=\"user\"><b>Sen:</b> süper</p>' in page, \"Kullanıcının mesajı <p class=\\\"user\\\"><b>Sen:</b> naber</p> gibi olmalı.\"\nassert page.index(\"naber\") < page.index(\"İyiyim!\") < page.index(\"süper\"), \"Mesajlar sırasıyla gelmeli.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "def render_chat(bot_name, messages):",
+       "notes": [
+        "`render_chat` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `bot_name`, `messages`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "    html = f\"<h1>{bot_name} ile sohbet</h1>\"",
+       "notes": [
+        "`html` adında bir değişken oluşturuluyor ve içine `f\"<h1>{bot_name} ile sohbet</h1>\"` (f-string ile kurulan metin) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "    for sender, text in messages:",
+       "notes": [
+        "Döngü: `messages` içindeki her eleman sırayla `sender, text` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "        if sender == \"bot\":",
+       "notes": [
+        "Koşul: `sender == \"bot\"` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "            html += f'<p class=\"bot\"><b>{bot_name}:</b> {text}</p>'",
+       "notes": [
+        "`html += f'<p class=\"bot\"><b>{bot_name}:</b> {text}</p>'`: `html` değişkeninin değeri güncelleniyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "        else:",
+       "notes": [
+        "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "            html += f'<p class=\"user\"><b>Sen:</b> {text}</p>'",
+       "notes": [
+        "`html += f'<p class=\"user\"><b>Sen:</b> {text}</p>'`: `html` değişkeninin değeri güncelleniyor."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "    return html",
+       "notes": [
+        "Fonksiyon `html` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "print(render_chat(\"Bilge\", [(\"user\", \"selam\"), (\"bot\", \"Merhaba!\")]))",
+       "notes": [
+        "`print(render_chat(\"Bilge\", [(\"user\", \"selam\"), (\"bot\", \"M...`: parantez içindeki değeri ekrana yazdırır.",
+        "`render_chat(...)`: senin tanımladığın fonksiyonu çağırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "html",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `f\"<h1>{bot_name} ile sohbet</h1>\"`."
+      },
+      {
+       "term": "sender",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `messages` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "text",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `messages` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "bot_name",
+       "kind": "parametre",
+       "desc": "`render_chat` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "messages",
+       "kind": "parametre",
+       "desc": "`render_chat` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "render_chat()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `bot_name`, `messages`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "==",
+       "kind": "operatör",
+       "desc": "Eşit mi? (True/False)"
+      },
+      {
+       "term": "+=",
+       "kind": "operatör",
+       "desc": "Değişkenin kendi değerine ekler: x += 1 → x = x + 1."
+      },
+      {
+       "term": "else",
+       "kind": "anahtar kelime",
+       "desc": "Yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Sohbet ekranı",
+   "game_role": "Konuşmayı bir web sayfasında mesaj mesaj gösterir."
+  },
+  "okul": {
+   "project_task": {
+    "id": "d26-pn",
+    "title": "HTML karne",
+    "prompt": "Karneni bir web sayfası olarak üretelim. `render_report_card(student, grades)` öğrencinin adını ve bir sözlüğü (ders -> not) alsın ve HTML yazısı döndürsün:\n\n- `<h1>Karne: Ece</h1>`\n- Bir `<table>` içinde her ders için bir satır: `<tr><td>Matematik</td><td>85</td></tr>`\n- Notu 50'nin altındaki derslerin satırı işaretli olsun: `<tr class=\"kaldi\"><td>Fizik</td><td>40</td></tr>`",
+    "starter": "def render_report_card(student, grades):\n    html = f\"<h1>Karne: {student}</h1>\"\n    return html\n",
+    "solution": "def render_report_card(student, grades):\n    html = f\"<h1>Karne: {student}</h1>\"\n    html += \"<table>\"\n    for lesson, grade in grades.items():\n        if grade < 50:\n            html += f'<tr class=\"kaldi\"><td>{lesson}</td><td>{grade}</td></tr>'\n        else:\n            html += f\"<tr><td>{lesson}</td><td>{grade}</td></tr>\"\n    html += \"</table>\"\n    return html\n\n\nprint(render_report_card(\"Ece\", {\"Matematik\": 85, \"Fizik\": 40}))\n",
+    "hints": [
+     "for lesson, grade in grades.items(): ve içinde if grade < 50:",
+     "İçinde çift tırnak olan yazıyı tek tırnakla aç: f'<tr class=\"kaldi\">...'"
+    ],
+    "check": {
+     "python": "\npage = render_report_card(\"Deniz\", {\"Kimya\": 75, \"Fizik\": 40, \"Müzik\": 50})\nassert isinstance(page, str), \"render_report_card bir yazı döndürmeli.\"\nassert \"<h1>Karne: Deniz</h1>\" in page, \"Sayfada <h1>Karne: Deniz</h1> olmalı.\"\nassert \"<tr><td>Kimya</td><td>75</td></tr>\" in page and \"<tr><td>Müzik</td><td>50</td></tr>\" in page, \"Her ders için <tr><td>Kimya</td><td>75</td></tr> gibi bir satır olmalı.\"\nassert '<tr class=\"kaldi\"><td>Fizik</td><td>40</td></tr>' in page, \"50'nin altındaki ders <tr class=\\\"kaldi\\\"> ile işaretlenmeli.\"\nassert \"<table>\" in page and \"</table>\" in page, \"Satırları bir <table> içine koy.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "def render_report_card(student, grades):",
+       "notes": [
+        "`render_report_card` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `student`, `grades`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "    html = f\"<h1>Karne: {student}</h1>\"",
+       "notes": [
+        "`html` adında bir değişken oluşturuluyor ve içine `f\"<h1>Karne: {student}</h1>\"` (f-string ile kurulan metin) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "    html += \"<table>\"",
+       "notes": [
+        "`html += \"<table>\"`: `html` değişkeninin değeri güncelleniyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "    for lesson, grade in grades.items():",
+       "notes": [
+        "Döngü: `grades.items()` içindeki her eleman sırayla `lesson, grade` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "        if grade < 50:",
+       "notes": [
+        "Koşul: `grade < 50` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "            html += f'<tr class=\"kaldi\"><td>{lesson}</td><td>{grade}</td></tr>'",
+       "notes": [
+        "`html += f'<tr class=\"kaldi\"><td>{lesson}</td><td>{grade}</td></tr>'`: `html` değişkeninin değeri güncelleniyor."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "        else:",
+       "notes": [
+        "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "            html += f\"<tr><td>{lesson}</td><td>{grade}</td></tr>\"",
+       "notes": [
+        "`html += f\"<tr><td>{lesson}</td><td>{grade}</td></tr>\"`: `html` değişkeninin değeri güncelleniyor."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "    html += \"</table>\"",
+       "notes": [
+        "`html += \"</table>\"`: `html` değişkeninin değeri güncelleniyor."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "    return html",
+       "notes": [
+        "Fonksiyon `html` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "print(render_report_card(\"Ece\", {\"Matematik\": 85, \"Fizik\": 40}))",
+       "notes": [
+        "`print(render_report_card(\"Ece\", {\"Matematik\": 85, \"Fizik\"...`: parantez içindeki değeri ekrana yazdırır.",
+        "`render_report_card(...)`: senin tanımladığın fonksiyonu çağırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "html",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `f\"<h1>Karne: {student}</h1>\"`."
+      },
+      {
+       "term": "lesson",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `grades.items()` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "grade",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `grades.items()` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "student",
+       "kind": "parametre",
+       "desc": "`render_report_card` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "grades",
+       "kind": "parametre",
+       "desc": "`render_report_card` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "render_report_card()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `student`, `grades`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "+=",
+       "kind": "operatör",
+       "desc": "Değişkenin kendi değerine ekler: x += 1 → x = x + 1."
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": ".items()",
+       "kind": "metot",
+       "desc": "Sözlüğün (anahtar, değer) çiftlerini verir."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "<",
+       "kind": "operatör",
+       "desc": "Küçük mü?"
+      },
+      {
+       "term": "else",
+       "kind": "anahtar kelime",
+       "desc": "Yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Karne sayfası",
+   "game_role": "Notları bir HTML karne sayfasına çevirir."
+  }
+ }
+}

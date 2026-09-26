@@ -1,0 +1,569 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<title>30 Günde Python — Lansman</title>
+<style>
+  :root{
+    --blue:#2F6DB5; --blue-d:#1F528C; --navy:#14223A; --ink:#1B2B4B;
+    --sun:#FFC83D; --sun-d:#D9A11C; --leaf:#2E9E62; --coral:#E8574A; --plum:#7A5AE0; --teal:#0E8A8A;
+    --code-bg:#14223A; --code-ink:#E6EDF7;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{background:#0d1a30;overflow:hidden}
+  body{font-family:"Poppins",sans-serif;color:#fff;-webkit-font-smoothing:antialiased}
+  #stage{position:absolute;left:0;top:0;overflow:hidden;
+    background:linear-gradient(135deg,#1c4a86 0%,#2F6DB5 55%,#3d86cf 100%)}
+  .abs{position:absolute;left:0;top:0;will-change:transform,opacity}
+  .dots{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.11) 2px,transparent 2.4px);background-size:34px 34px}
+  .blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:.55}
+  .scene{position:absolute;inset:0;opacity:0}
+  .h1{font-weight:700;line-height:1.08;letter-spacing:-.5px}
+  .yellow{color:var(--sun)}
+  .kicker{display:inline-flex;align-items:center;gap:10px;background:rgba(255,255,255,.14);border:2px solid rgba(255,255,255,.22);
+    border-radius:999px;padding:8px 22px;font-weight:600;font-size:26px;letter-spacing:1.5px;text-transform:uppercase;color:#fff}
+  .kicker svg{width:26px;height:26px}
+  .sub{font-weight:500;color:rgba(255,255,255,.9)}
+  /* code window */
+  .win{background:var(--code-bg);border-radius:26px;box-shadow:0 30px 80px rgba(8,18,40,.45),0 0 0 2px rgba(255,255,255,.08);overflow:hidden}
+  .win-bar{height:64px;display:flex;align-items:center;gap:12px;padding:0 26px;background:#0f1b30}
+  .win-bar i{width:16px;height:16px;border-radius:50%;display:block}
+  .win-title{margin-left:14px;font-weight:600;font-size:22px;color:#9fb1cc}
+  .run{margin-left:auto;display:flex;align-items:center;gap:10px;background:var(--leaf);color:#fff;font-weight:700;font-size:22px;
+    padding:9px 20px;border-radius:14px;box-shadow:0 4px 0 #1F7A4A}
+  .run svg{width:22px;height:22px}
+  .code{font-family:"DejaVu Sans Mono",monospace;color:var(--code-ink);white-space:pre;line-height:1.55}
+  .kw{color:#C792EA}.fn{color:#82AAFF}.st{color:#C3E88D}.nu{color:#F78C6C}.pu{color:#89DDFF}
+  .caret{display:inline-block;width:.55em;height:1.15em;background:var(--sun);vertical-align:-.2em;margin-left:1px}
+  .out{border-top:2px solid rgba(255,255,255,.07);background:#0f1b30;font-family:"DejaVu Sans Mono",monospace;overflow:hidden;position:relative}
+  .out-label{font-family:Poppins;font-weight:600;color:#9fb1cc;font-size:20px}
+  /* browser & phone frames */
+  .browser{background:#fff;border-radius:22px;overflow:hidden;box-shadow:0 30px 80px rgba(8,18,40,.45)}
+  .browser .bar{height:52px;background:#E9EEF5;display:flex;align-items:center;gap:10px;padding:0 20px}
+  .browser .bar i{width:14px;height:14px;border-radius:50%;display:block}
+  .browser .url{margin-left:18px;flex:1;height:32px;border-radius:10px;background:#fff;color:#51607a;font-size:17px;font-weight:500;
+    display:flex;align-items:center;padding:0 16px;gap:8px}
+  .browser img{display:block;width:100%}
+  .phone{background:#0f1b30;border-radius:62px;padding:16px;box-shadow:0 30px 80px rgba(8,18,40,.5),inset 0 0 0 3px #2b3d5c}
+  .phone .screen{border-radius:48px;overflow:hidden;position:relative;background:#F3F8F6;width:100%;height:100%}
+  .phone .notch{position:absolute;top:14px;left:50%;width:34%;height:30px;border-radius:20px;background:#0f1b30;transform:translateX(-50%);z-index:3}
+  .card{background:#fff;color:var(--ink);border-radius:26px;box-shadow:0 16px 40px rgba(8,18,40,.28);display:flex;align-items:center;gap:22px;padding:24px 26px}
+  .card .ic{width:78px;height:78px;border-radius:22px;display:grid;place-items:center;color:#fff;flex:none}
+  .card .ic svg{width:42px;height:42px}
+  .card .kind{font-size:19px;font-weight:700;letter-spacing:1.4px;color:#6b7a93;text-transform:uppercase}
+  .card .name{font-size:31px;font-weight:700;line-height:1.15}
+  .chip{display:inline-flex;align-items:center;gap:12px;background:#fff;color:var(--ink);font-weight:700;border-radius:999px;padding:14px 28px;
+    box-shadow:0 10px 28px rgba(8,18,40,.25);white-space:nowrap}
+  .chip svg{width:30px;height:30px}
+  .chip.green{background:var(--leaf);color:#fff}
+  .chip.sun{background:var(--sun);color:var(--ink)}
+  .shadow-img{filter:drop-shadow(0 20px 30px rgba(8,18,40,.35))}
+  .cta-btn{background:var(--sun);color:var(--ink);font-weight:800;border-radius:999px;box-shadow:0 10px 0 var(--sun-d),0 24px 50px rgba(8,18,40,.35);
+    display:inline-flex;align-items:center;gap:16px;white-space:nowrap}
+  .url-pill{display:inline-flex;align-items:center;gap:14px;background:rgba(255,255,255,.14);border:2px solid rgba(255,255,255,.3);border-radius:999px;font-weight:600;white-space:nowrap}
+  canvas#fx{position:absolute;left:0;top:0;pointer-events:none}
+  .wipe{position:absolute;top:-20%;height:140%;}
+  .cursor{width:54px;height:54px}
+</style>
+</head>
+<body>
+<div id="stage">
+  <div class="dots"></div>
+  <div class="blob" id="b1" style="width:620px;height:620px;background:#5fb0ff"></div>
+  <div class="blob" id="b2" style="width:520px;height:520px;background:#FFC83D;opacity:.22"></div>
+  <div class="blob" id="b3" style="width:560px;height:560px;background:#7A5AE0;opacity:.3"></div>
+  <div id="scenes"></div>
+  <canvas id="fx"></canvas>
+  <div class="wipe" id="w1" style="background:var(--sun)"></div>
+  <div class="wipe" id="w2" style="background:#14223A"></div>
+</div>
+
+<script>
+const Q = new URLSearchParams(location.search);
+const V = Q.get("o") === "v";
+const W = V ? 1080 : 1920, H = V ? 1920 : 1080;
+const stage = document.getElementById("stage");
+stage.style.width = W + "px"; stage.style.height = H + "px";
+const fx = document.getElementById("fx"); fx.width = W; fx.height = H; fx.style.width = W + "px"; fx.style.height = H + "px";
+const ctx = fx.getContext("2d");
+const ICONS = __ICONS__;
+const A = "assets/";
+
+// ---------- helpers ----------
+const clamp = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const P = (t, a, b) => clamp((t - a) / (b - a));
+const eo = (x) => 1 - Math.pow(1 - x, 3);
+const eo5 = (x) => 1 - Math.pow(1 - x, 5);
+const eio = (x) => (x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2);
+const back = (x) => { const c1 = 1.9, c3 = c1 + 1; return x <= 0 ? 0 : x >= 1 ? 1 : 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2); };
+const lerp = (a, b, x) => a + (b - a) * x;
+function mk(html) { const d = document.createElement("div"); d.innerHTML = html.trim(); return d.firstElementChild; }
+function put(el, { x = 0, y = 0, s = 1, r = 0, o = 1, ax = 0, ay = 0 } = {}) {
+  // x,y = position of anchor point (ax,ay in 0..1 of element size)
+  const w = el._w || (el._w = el.offsetWidth), h = el._h || (el._h = el.offsetHeight);
+  el.style.transformOrigin = `${ax * 100}% ${ay * 100}%`;
+  el.style.transform = `translate(${x - ax * w}px, ${y - ay * h}px) rotate(${r}deg) scale(${s})`;
+  el.style.opacity = o;
+  el.style.visibility = o <= 0.001 ? "hidden" : "visible";
+}
+// pop-in helper: returns {s,o,dy}
+function pop(t, a, d = .45) { const k = P(t, a, a + d); return { s: lerp(.6, 1, back(k)), o: clamp(k * 2.5), dy: (1 - eo(k)) * 40 }; }
+function rise(t, a, d = .6, dist = 60) { const k = eo(P(t, a, a + d)); return { o: k, dy: (1 - k) * dist }; }
+const ic = (n, c = "") => ICONS[n].replace('width="24" height="24"', "").replace("<svg ", `<svg style="${c}" `);
+
+// seeded random
+function rng(seed) { let s = seed >>> 0; return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296); }
+
+const root = document.getElementById("scenes");
+function scene(html) { const el = mk(`<div class="scene">${html}</div>`); root.appendChild(el); return el; }
+const $ = (sc, sel) => sc.querySelector(sel);
+
+// ---------- SCENE TIMES ----------
+const CUTS = [0, 4, 8, 12, 16, 20, 24, 27, 30];
+
+// ================= SCENE 1: code hook =================
+const CODE = [
+  ["for", "kw"], [" gun ", ""], ["in", "kw"], [" ", ""], ["range", "fn"], ["(", "pu"], ["1", "nu"], [", ", "pu"], ["31", "nu"], ["):", "pu"], ["\n    ", ""],
+  ["print", "fn"], ["(", "pu"], ['"Gün"', "st"], [", ", "pu"], ["gun", ""], [", ", "pu"], ['"✓"', "st"], [")", "pu"],
+];
+const CODE_LEN = CODE.reduce((n, [s]) => n + s.length, 0);
+function codeHTML(n, caret) {
+  let out = "", left = n;
+  for (const [s, c] of CODE) { if (left <= 0) break; const part = s.slice(0, left); left -= part.length; out += c ? `<span class="${c}">${part}</span>` : part; }
+  return out + (caret ? '<span class="caret"></span>' : "");
+}
+const s1 = scene(`
+  <div class="abs win" id="s1win">
+    <div class="win-bar"><i style="background:#E8574A"></i><i style="background:#FFC83D"></i><i style="background:#2E9E62"></i>
+      <span class="win-title">gun1.py</span><span class="run" id="s1run">${ic("play")}Çalıştır</span></div>
+    <div class="code" id="s1code"></div>
+    <div class="out" id="s1out"><div class="out-label">Çıktı</div><div id="s1lines"></div></div>
+  </div>
+  <div class="abs h1" id="s1h1" style="text-align:center"></div>
+  <div class="abs h1 yellow" id="s1h2" style="text-align:center"></div>
+`);
+{
+  const win = $(s1, "#s1win"), code = $(s1, "#s1code"), out = $(s1, "#s1out");
+  const ww = V ? 960 : 1180, fs = V ? 38 : 44;
+  win.style.width = ww + "px";
+  code.style.fontSize = fs + "px"; code.style.padding = V ? "34px 34px" : "40px 48px"; code.style.height = (fs * 1.55 * 2 + (V ? 68 : 80)) + "px";
+  out.style.height = V ? "330px" : "300px"; out.style.padding = V ? "20px 34px" : "22px 48px";
+  $(s1, "#s1lines").style.fontSize = (V ? 34 : 34) + "px";
+  const h1 = $(s1, "#s1h1"), h2 = $(s1, "#s1h2");
+  h1.textContent = "Kod yazmayı"; h2.textContent = "oyun gibi öğren.";
+  h1.style.fontSize = h2.style.fontSize = (V ? 96 : 92) + "px";
+  h1.style.width = h2.style.width = W + "px";
+}
+function s1render(t) {
+  const win = $(s1, "#s1win");
+  const nChars = Math.round(CODE_LEN * P(t, .35, 1.75));
+  $(s1, "#s1code").innerHTML = codeHTML(nChars, t < 1.95 && (Math.floor(t * 3) % 2 === 0 || t < 1.75));
+  // run button press
+  const press = t > 1.9 && t < 2.05 ? .9 : 1;
+  $(s1, "#s1run").style.transform = `scale(${press})`;
+  // output lines
+  const k = P(t, 2.05, 3.0); const count = t < 2.05 ? 0 : Math.max(1, Math.round(lerp(1, 30, eio(k))));
+  const lines = []; for (let i = Math.max(1, count - 4); i <= count; i++) lines.push(`<div style="color:${i === 30 ? "#FFC83D" : "#E6EDF7"};line-height:1.5">Gün ${i} ✓</div>`);
+  $(s1, "#s1lines").innerHTML = count ? lines.join("") : `<div style="color:#6d7f9c;font-family:Poppins;font-size:26px;line-height:1.5">Çalıştır'a bas…</div>`;
+  const e = eo(P(t, 0, .6));
+  const wy = V ? 520 : 150;
+  const lift = V ? 0 : eio(P(t, 2.6, 3.2)) * -40;
+  put(win, { x: W / 2, y: wy + (1 - e) * 80 + lift, ax: .5, ay: 0, s: lerp(.92, 1, e), o: e });
+  const r1 = rise(t, 2.75), r2 = rise(t, 2.95);
+  const hy = V ? 1330 : 800;
+  put($(s1, "#s1h1"), { x: 0, y: hy + r1.dy + lift, o: r1.o });
+  put($(s1, "#s1h2"), { x: 0, y: hy + (V ? 108 : 100) + r2.dy + lift, o: r2.o });
+}
+
+// ================= SCENE 2: brand =================
+const s2 = scene(`
+  <img class="abs shadow-img" id="s2icon" src="${A}icon.png">
+  <div class="abs h1" id="s2name">30 Günde Python</div>
+  <div class="abs h1 yellow" id="s2big">Ücretsiz<br>Python Kursu</div>
+  <div class="abs" id="s2subs"></div>
+  <img class="abs shadow-img" id="s2piko" src="${A}piko_tebrik.webp">
+`);
+{
+  const subs = ["Sıfırdan başla", "Tarayıcıda kod yaz", "Sertifikanı al"];
+  const icons = ["rocket", "laptop", "award"];
+  const box = $(s2, "#s2subs");
+  subs.forEach((s, i) => box.appendChild(mk(`<div class="chip" style="position:absolute;font-size:${V ? 34 : 30}px">${ic(icons[i], "color:#2F6DB5")}${s}</div>`)));
+  $(s2, "#s2icon").style.width = $(s2, "#s2icon").style.height = (V ? 150 : 130) + "px";
+  $(s2, "#s2icon").style.borderRadius = "30px";
+  $(s2, "#s2name").style.fontSize = (V ? 64 : 60) + "px";
+  $(s2, "#s2big").style.fontSize = (V ? 128 : 132) + "px";
+  if (V) $(s2, "#s2big").style.textAlign = "center", $(s2, "#s2big").style.width = W + "px";
+  $(s2, "#s2piko").style.width = (V ? 440 : 520) + "px";
+}
+function s2render(t) {
+  const L = t;
+  const iconP = pop(L, .1, .5), nameR = rise(L, .3), bigR = rise(L, .5, .7, 80), pk = pop(L, .8, .6);
+  if (!V) {
+    put($(s2, "#s2icon"), { x: 150, y: 170 + iconP.dy, s: iconP.s, o: iconP.o, ax: 0, ay: 0 });
+    put($(s2, "#s2name"), { x: 310, y: 202 + nameR.dy, o: nameR.o });
+    put($(s2, "#s2big"), { x: 146, y: 350 + bigR.dy, o: bigR.o });
+    let cx = 150; [...$(s2, "#s2subs").children].forEach((c, i) => { const r = pop(L, 1.3 + i * .18, .45); put(c, { x: cx, y: 700 + r.dy, s: r.s, o: r.o }); cx += c._w + 22; });
+    const bob = Math.sin(L * 3) * 8;
+    put($(s2, "#s2piko"), { x: 1470, y: 560 + bob + pk.dy, s: pk.s, o: pk.o, ax: .5, ay: .5, r: Math.sin(L * 2) * 2 });
+  } else {
+    const bob = Math.sin(L * 3) * 8;
+    put($(s2, "#s2piko"), { x: W / 2, y: 470 + bob + pk.dy, s: pk.s, o: pk.o, ax: .5, ay: .5 });
+    const iw = 150;
+    put($(s2, "#s2icon"), { x: W / 2 - 290, y: 790 + iconP.dy, s: iconP.s, o: iconP.o });
+    put($(s2, "#s2name"), { x: W / 2 - 120, y: 826 + nameR.dy, o: nameR.o });
+    put($(s2, "#s2big"), { x: 0, y: 1000 + bigR.dy, o: bigR.o });
+    [...$(s2, "#s2subs").children].forEach((c, i) => { const r = pop(L, 1.3 + i * .18, .45); put(c, { x: W / 2, y: 1330 + i * 110 + r.dy, s: r.s, o: r.o, ax: .5, ay: 0 }); });
+  }
+}
+
+// ================= SCENE 3: map =================
+const s3 = scene(`
+  <div class="abs" id="s3kick"><span class="kicker">${ic("map")}Macera haritası</span></div>
+  <div class="abs h1" id="s3h">Her gün bir ders,<br><span class="yellow">haritada bir adım.</span></div>
+  <div class="abs sub" id="s3p">8 bölge, 30 gün. Piko ile birlikte<br>Başlangıç Kampı'ndan Python Dağı'na.</div>
+  <div class="abs phone" id="s3phone"><div class="screen"><div class="notch"></div><img id="s3map" src="${A}mappan.png" style="position:absolute;left:0;top:0;width:100%"></div></div>
+  <img class="abs shadow-img" id="s3piko" src="${A}piko_isaret.webp">
+`);
+{
+  $(s3, "#s3h").style.fontSize = (V ? 88 : 86) + "px";
+  $(s3, "#s3p").style.fontSize = (V ? 36 : 34) + "px";
+  if (V) { for (const id of ["#s3h", "#s3p", "#s3kick"]) { $(s3, id).style.textAlign = "center"; $(s3, id).style.width = W + "px"; } $(s3, "#s3p").innerHTML = "8 bölge, 30 gün. Piko ile birlikte<br>Başlangıç Kampı'ndan Python Dağı'na."; }
+  const pw = V ? 560 : 470, ph = V ? 1080 : 920;
+  const ph_ = $(s3, "#s3phone"); ph_.style.width = pw + "px"; ph_.style.height = ph + "px";
+  $(s3, "#s3piko").style.width = (V ? 250 : 260) + "px";
+}
+function s3render(t) {
+  const phone = $(s3, "#s3phone"), map = $(s3, "#s3map");
+  const pw = V ? 560 : 470, ph = V ? 1080 : 920; const iw = pw - 32, ih = 3492 * iw / 736, vh = ph - 32;
+  const pan = eio(P(t, .5, 3.6));
+  map.style.transform = `translateY(${-(ih - vh) * (1 - pan)}px)`;
+  const pr = rise(t, .1, .7, 120);
+  const k = rise(t, .15), h = rise(t, .3), p = rise(t, .55);
+  const pk = pop(t, 1.0, .5);
+  if (!V) {
+    put($(s3, "#s3kick"), { x: 150, y: 230 + k.dy, o: k.o });
+    put($(s3, "#s3h"), { x: 146, y: 320 + h.dy, o: h.o });
+    put($(s3, "#s3p"), { x: 150, y: 560 + p.dy, o: p.o });
+    put(phone, { x: 1400, y: 540 + pr.dy, ax: .5, ay: .5, o: pr.o, r: lerp(6, 3, eo(P(t, .1, 1))) });
+    put($(s3, "#s3piko"), { x: 1010, y: 1000 + pk.dy + Math.sin(t * 3) * 6, ax: .5, ay: 1, s: pk.s, o: pk.o });
+  } else {
+    put($(s3, "#s3kick"), { x: 0, y: 150 + k.dy, o: k.o });
+    put($(s3, "#s3h"), { x: 0, y: 235 + h.dy, o: h.o });
+    put($(s3, "#s3p"), { x: 0, y: 450 + p.dy, o: p.o });
+    put(phone, { x: W / 2 + 60, y: 1120 + pr.dy, ax: .5, ay: .5, o: pr.o, r: lerp(5, 2, eo(P(t, .1, 1))) });
+    put($(s3, "#s3piko"), { x: 190, y: 1640 + pk.dy + Math.sin(t * 3) * 6, ax: .5, ay: 1, s: pk.s, o: pk.o });
+  }
+}
+
+// ================= SCENE 4: code in browser =================
+const TYPE_N = 24; // print("Merhaba Python!") length
+const tag = V ? "m" : "d";
+let typeImgs = "";
+for (let i = 0; i <= TYPE_N; i++) typeImgs += `<img class="tf" data-i="${i}" src="${A}type/${tag}_${String(i).padStart(2, "0")}.png" style="position:absolute;left:0;top:0;width:100%;visibility:hidden">`;
+typeImgs += `<img class="tf" data-i="done" src="${A}type/${tag}_done.png" style="position:absolute;left:0;top:0;width:100%;visibility:hidden">`;
+const s4 = scene(`
+  <div class="abs h1" id="s4h" style="text-align:center"></div>
+  <div class="abs browser" id="s4br"><div class="bar"><i style="background:#E8574A"></i><i style="background:#FFC83D"></i><i style="background:#2E9E62"></i>
+     <div class="url">${ic("lock", "width:16px;height:16px")}30gunde.com.tr/#/ders/1</div></div>
+     <div id="s4card" style="position:relative;background:#fff">${typeImgs}</div></div>
+  <div class="abs" id="s4cur" style="width:54px;height:54px"><svg class="cursor" viewBox="0 0 24 24" style="filter:drop-shadow(0 4px 6px rgba(0,0,0,.35))"><path d="M4 2l15 9-6.5 1.6L16 20l-3 1.4-3.4-7.4L4 18.5z" fill="#fff" stroke="#14223A" stroke-width="1.5" stroke-linejoin="round"/></svg></div>
+  <div class="abs chip sun" id="s4xp" style="font-size:40px">${ic("star")}+50 XP</div>
+  <div class="abs" id="s4chips"></div>
+`);
+const S4 = V ? { iw: 736, ih: 1146, ihd: 1210, dw: 800 } : { iw: 2136, ih: 614, ihd: 614, dw: 1560 };
+{
+  const h = $(s4, "#s4h"); h.style.width = W + "px"; h.style.fontSize = (V ? 84 : 76) + "px";
+  h.innerHTML = V ? "Tarayıcıda kod yaz,<br><span class='yellow'>anında kontrol et.</span>" : "Tarayıcıda kod yaz, <span class='yellow'>anında kontrol et.</span>";
+  const br = $(s4, "#s4br"); br.style.width = S4.dw + "px";
+  $(s4, "#s4card").style.height = (S4.ihd * S4.dw / S4.iw) + "px";
+  if (!V) {
+    const labels = [["laptop", "Kurulum gerekmez"], ["check", "Anında geri bildirim"], ["lightbulb", "Takılınca ipucu"]];
+    labels.forEach(([i, l]) => $(s4, "#s4chips").appendChild(mk(`<div class="chip" style="position:absolute;font-size:30px">${ic(i, "color:#2E9E62")}${l}</div>`)));
+  }
+}
+function s4render(t) {
+  const h = rise(t, .05, .6);
+  put($(s4, "#s4h"), { x: 0, y: (V ? 150 : 90) + h.dy, o: h.o });
+  const br = $(s4, "#s4br"); const b = rise(t, .15, .7, 100);
+  const bx = W / 2, by = V ? 390 : 250;
+  put(br, { x: bx, y: by + b.dy, ax: .5, ay: 0, o: b.o });
+  // typing frames
+  const n = Math.round(TYPE_N * P(t, .55, 1.75));
+  const done = t >= 2.15;
+  const cur = done ? "done" : String(n);
+  if (br._cur !== cur) { br.querySelectorAll(".tf").forEach((im) => (im.style.visibility = im.dataset.i === cur ? "visible" : "hidden")); br._cur = cur; }
+  // cursor: moves to Kontrol et button (461, 526 d) / (461, 694 m) in image px
+  const sc = S4.dw / S4.iw;
+  const tx = bx - S4.dw / 2 + 461 * sc, ty = by + 52 + (V ? 694 : 526) * sc;
+  const m = eio(P(t, 1.55, 2.0));
+  const cx = lerp(tx + (V ? 260 : 520), tx, m), cy = lerp(ty + (V ? 260 : 300), ty, m);
+  const click = t > 2.0 && t < 2.15 ? .82 : 1;
+  const co = P(t, 1.5, 1.65) * (1 - P(t, 2.7, 2.9));
+  put($(s4, "#s4cur"), { x: cx - 8, y: cy - 4, s: click, o: co, ax: 0, ay: 0 });
+  // XP pill flies from card top right
+  const xk = P(t, 2.25, 3.1);
+  const xp = $(s4, "#s4xp");
+  const xx = bx + S4.dw / 2 - (V ? 120 : 130), xy0 = by + (V ? 150 : 110);
+  put(xp, { x: xx, y: xy0 - eo(xk) * 70, ax: .5, ay: .5, s: lerp(.5, 1, back(P(t, 2.25, 2.7))), o: clamp(xk * 4) * (1 - P(t, 3.5, 3.8)) });
+  [...$(s4, "#s4chips").children].forEach((c, i) => {
+    const r = pop(t, 2.5 + i * .15, .45);
+    if (!V) put(c, { x: W / 2 + (i - 1) * 470, y: 820 + r.dy, ax: .5, ay: 0, s: r.s, o: r.o });
+    else put(c, { x: W / 2, y: 1700 + r.dy, ax: .5, ay: 0, s: r.s, o: r.o });
+  });
+}
+
+// ================= SCENE 5: projects =================
+const TRACKS = [
+  ["gamepad", "#7A5AE0", "Oyun", "Piko'nun Macerası"],
+  ["chart", "#2E9E62", "Veri analizi", "Harcama Defteri"],
+  ["settings", "#D9A11C", "Otomasyon", "Görev Asistanı"],
+  ["globe", "#2F6DB5", "Web", "Kişisel Web Sitem"],
+  ["lightbulb", "#E8574A", "Sohbet botu", "Sohbet Botu"],
+  ["graduation", "#0E8A8A", "Okul", "Okul Not Defteri"],
+];
+const s5 = scene(`
+  <div class="abs h1" id="s5h" style="text-align:center">Kendi <span class="yellow">projeni</span> seç.</div>
+  <div class="abs sub" id="s5p" style="text-align:center">Her gün yazdığın kod projene eklenir.</div>
+  <div id="s5cards"></div>
+  <div class="abs browser" id="s5player"><div class="bar"><i style="background:#E8574A"></i><i style="background:#FFC83D"></i><i style="background:#2E9E62"></i>
+     <div class="url">${ic("lock", "width:16px;height:16px")}30gunde.com.tr/#/proje</div></div><img src="${A}player.png"></div>
+  <div class="abs chip green" id="s5chip">${ic("gamepad")}30 günün sonunda oyun senin!</div>
+`);
+{
+  $(s5, "#s5h").style.width = $(s5, "#s5p").style.width = W + "px";
+  $(s5, "#s5h").style.fontSize = (V ? 96 : 88) + "px"; $(s5, "#s5p").style.fontSize = (V ? 38 : 36) + "px";
+  const cw = V ? 470 : 500;
+  TRACKS.forEach(([i, c, k, n]) => $(s5, "#s5cards").appendChild(mk(`<div class="abs card" style="width:${cw}px"><div class="ic" style="background:${c}">${ic(i)}</div><div><div class="kind">${k}</div><div class="name">${n}</div></div></div>`)));
+  $(s5, "#s5player").style.width = (V ? 940 : 860) + "px";
+  $(s5, "#s5chip").style.fontSize = (V ? 36 : 34) + "px";
+}
+function s5render(t) {
+  const h = rise(t, .05), p = rise(t, .25);
+  put($(s5, "#s5h"), { x: 0, y: (V ? 170 : 110) + h.dy, o: h.o });
+  put($(s5, "#s5p"), { x: 0, y: (V ? 290 : 225) + p.dy, o: p.o });
+  const cards = [...$(s5, "#s5cards").children];
+  const out = eio(P(t, 2.0, 2.45));
+  cards.forEach((c, i) => {
+    const r = pop(t, .35 + i * .12, .5);
+    let x, y;
+    if (!V) { x = W / 2 + ((i % 3) - 1) * 540; y = 420 + Math.floor(i / 3) * 190; }
+    else { x = W / 2 + ((i % 2) ? 250 : -250); y = 440 + Math.floor(i / 2) * 170; }
+    const isGame = i === 0;
+    // after 1.6 highlight game card
+    const hl = P(t, 1.5, 1.8);
+    const dim = isGame ? 1 : 1 - .45 * hl;
+    const sHl = isGame ? 1 + .08 * hl : 1;
+    // exit: cards slide down/fade (except in H they move up)
+    const ox = 0, oy = (V ? 0 : -60) * out;
+    put(c, { x: x + ox, y: y + r.dy + oy, ax: .5, ay: 0, s: r.s * sHl * (1 - .1 * out), o: r.o * dim * (1 - out) });
+  });
+  const pl = $(s5, "#s5player");
+  const pk = eo5(P(t, 2.1, 2.8));
+  if (!V) put(pl, { x: W / 2, y: lerp(1100, 330, pk), ax: .5, ay: 0, o: pk, r: lerp(4, 0, pk) });
+  else put(pl, { x: W / 2, y: lerp(1950, 450, pk), ax: .5, ay: 0, o: pk, r: lerp(4, 0, pk) });
+  const ch = pop(t, 2.7, .45);
+  put($(s5, "#s5chip"), { x: W / 2, y: (V ? 1420 : 930) + ch.dy, ax: .5, ay: .5, s: ch.s, o: ch.o });
+}
+
+// ================= SCENE 6: badges + cert =================
+const BADGES = ["ilk-adim", "ilk-kod", "seri-5", "python-dostu", "challenge-master", "final-projesi", "yayinladi"];
+const s6 = scene(`
+  <div class="abs h1" id="s6h" style="text-align:center">Rozet topla, <span class="yellow">sertifikanı al.</span></div>
+  <img class="abs" id="s6cert" src="${A}cert.png" style="border-radius:18px;box-shadow:0 30px 80px rgba(8,18,40,.45)">
+  <div id="s6badges">${BADGES.map((b) => `<img class="abs shadow-img" src="${A}badge_${b}.webp">`).join("")}</div>
+  <div class="abs chip" id="s6chip">${ic("check", "color:#2E9E62")}Numarasıyla doğrulanabilir</div>
+`);
+{
+  const h = $(s6, "#s6h"); h.style.width = W + "px"; h.style.fontSize = (V ? 84 : 80) + "px";
+  if (V) h.innerHTML = "Rozet topla,<br><span class='yellow'>sertifikanı al.</span>";
+  $(s6, "#s6cert").style.width = (V ? 940 : 900) + "px";
+  [...$(s6, "#s6badges").children].forEach((b) => (b.style.width = (V ? 190 : 200) + "px"));
+  $(s6, "#s6chip").style.fontSize = (V ? 34 : 30) + "px";
+}
+function s6render(t) {
+  const h = rise(t, .05);
+  put($(s6, "#s6h"), { x: 0, y: (V ? 150 : 80) + h.dy, o: h.o });
+  const bs = [...$(s6, "#s6badges").children];
+  bs.forEach((b, i) => {
+    const r = pop(t, .3 + i * .13, .5);
+    let x, y, rot = 0;
+    if (!V) {
+      // arc on left side and right side around the certificate
+      const pos = [[250, 330], [180, 560], [250, 790], [1670, 330], [1740, 560], [1670, 790], [960, 980]];
+      [x, y] = pos[i]; rot = [-8, 4, -4, 8, -4, 6, 0][i];
+    } else {
+      const row = i < 4 ? 0 : 1; const col = row ? i - 4 : i; const n = row ? 3 : 4;
+      x = W / 2 + (col - (n - 1) / 2) * 230; y = 520 + row * 220; rot = [-6, 3, -3, 6, -4, 4, -2][i];
+    }
+    const settle = V ? 0 : eio(P(t, 1.5, 2.0));
+    const bob = Math.sin(t * 3 + i) * 5;
+    let bx = x, by = y;
+    if (!V && i === 6) by = lerp(y, 1200, settle); // bottom one leaves before cert
+    put(b, { x: bx, y: by + r.dy + bob, ax: .5, ay: .5, s: r.s, o: r.o, r: rot });
+  });
+  const c = $(s6, "#s6cert"); const ck = eo5(P(t, 1.2, 1.9));
+  if (!V) put(c, { x: W / 2, y: lerp(1200, 590, ck), ax: .5, ay: .5, s: .82, o: ck, r: lerp(-8, -2, ck) });
+  else put(c, { x: W / 2, y: lerp(2100, 1280, ck), ax: .5, ay: .5, o: ck, r: lerp(-8, -2, ck) });
+  const ch = pop(t, 2.2, .45);
+  put($(s6, "#s6chip"), { x: W / 2, y: (V ? 1740 : 985) + ch.dy, ax: .5, ay: .5, s: ch.s, o: ch.o });
+}
+
+// ================= SCENE 7: teacher & parent =================
+const s7 = scene(`
+  <div class="abs h1" id="s7h" style="text-align:center">Öğretmenler ve veliler <span class="yellow">de yanında.</span></div>
+  <div class="abs" id="s7a"></div>
+  <div class="abs" id="s7b"></div>
+  <div class="abs chip" id="s7ca">${ic("users", "color:#2F6DB5")}Sınıfını kur, ilerlemeyi izle</div>
+  <div class="abs chip" id="s7cb">${ic("heart", "color:#E8574A")}Çocuğunun gelişimini gör</div>
+`);
+{
+  const h = $(s7, "#s7h"); h.style.width = W + "px"; h.style.fontSize = (V ? 80 : 72) + "px";
+  if (V) h.innerHTML = "Öğretmenler ve veliler<br><span class='yellow'>de yanında.</span>";
+  const mkBrowser = (img, url, w) => `<div class="browser" style="width:${w}px"><div class="bar"><i style="background:#E8574A"></i><i style="background:#FFC83D"></i><i style="background:#2E9E62"></i><div class="url">${url}</div></div><img src="${A}${img}"></div>`;
+  const mkPhone = (img, w) => `<div class="phone" style="width:${w}px;height:${w * 1720 / 800 + 32}px"><div class="screen"><img src="${A}${img}" style="width:100%;display:block"></div></div>`;
+  if (!V) { $(s7, "#s7a").innerHTML = mkBrowser("group_d.png", "30gunde.com.tr/#/grup", 820); $(s7, "#s7b").innerHTML = mkBrowser("parent_d.png", "30gunde.com.tr/#/veli", 820); }
+  else { $(s7, "#s7a").innerHTML = mkPhone("group_m.png", 440); $(s7, "#s7b").innerHTML = mkPhone("parent_m.png", 440); }
+  $(s7, "#s7ca").style.fontSize = $(s7, "#s7cb").style.fontSize = (V ? 28 : 30) + "px";
+}
+function s7render(t) {
+  const h = rise(t, .05);
+  put($(s7, "#s7h"), { x: 0, y: (V ? 150 : 90) + h.dy, o: h.o });
+  const a = eo5(P(t, .2, .9)), b = eo5(P(t, .4, 1.1));
+  const drift = t * 8;
+  if (!V) {
+    put($(s7, "#s7a"), { x: lerp(-500, 510, a) - drift, y: 240, ax: .5, ay: 0, o: a, r: -3 });
+    put($(s7, "#s7b"), { x: lerp(W + 500, 1410, b) + drift, y: 270, ax: .5, ay: 0, o: b, r: 3 });
+    const ca = pop(t, 1.0, .45), cb = pop(t, 1.2, .45);
+    put($(s7, "#s7ca"), { x: 520, y: 890 + ca.dy, ax: .5, ay: 0, s: ca.s, o: ca.o });
+    put($(s7, "#s7cb"), { x: 1400, y: 910 + cb.dy, ax: .5, ay: 0, s: cb.s, o: cb.o });
+  } else {
+    put($(s7, "#s7a"), { x: lerp(-400, 290, a), y: 420 - drift, ax: .5, ay: 0, o: a, r: -4 });
+    put($(s7, "#s7b"), { x: lerp(W + 400, 790, b), y: 480 + drift, ax: .5, ay: 0, o: b, r: 4 });
+    const ca = pop(t, 1.0, .45), cb = pop(t, 1.2, .45);
+    put($(s7, "#s7ca"), { x: W / 2, y: 1540 + ca.dy, ax: .5, ay: 0, s: ca.s, o: ca.o });
+    put($(s7, "#s7cb"), { x: W / 2, y: 1640 + cb.dy, ax: .5, ay: 0, s: cb.s, o: cb.o });
+  }
+}
+
+// ================= SCENE 8: CTA =================
+const s8 = scene(`
+  <img class="abs shadow-img" id="s8piko" src="${A}piko_mutlu.webp">
+  <div class="abs" id="s8brand" style="display:flex;align-items:center;gap:22px"><img src="${A}icon.png" style="border-radius:24px" id="s8icon"><span class="h1" id="s8name">30 Günde Python</span></div>
+  <div class="abs h1" id="s8big" style="text-align:center">Hemen <span class="yellow">ücretsiz</span> başla!</div>
+  <div class="abs url-pill" id="s8url">${ic("globe")}30gunde.com.tr</div>
+  <div class="abs sub" id="s8fine" style="text-align:center">Türkçe · Kurulum yok · Kredi kartı yok</div>
+`);
+{
+  $(s8, "#s8piko").style.width = (V ? 420 : 330) + "px";
+  $(s8, "#s8icon").style.width = $(s8, "#s8icon").style.height = (V ? 110 : 96) + "px";
+  $(s8, "#s8name").style.fontSize = (V ? 60 : 56) + "px";
+  const b = $(s8, "#s8big"); b.style.width = W + "px"; b.style.fontSize = (V ? 104 : 110) + "px";
+  if (V) b.innerHTML = "Hemen <span class='yellow'>ücretsiz</span><br>başla!";
+  const u = $(s8, "#s8url"); u.style.fontSize = (V ? 54 : 52) + "px"; u.style.padding = V ? "22px 48px" : "20px 46px";
+  u.querySelector("svg").style.cssText = "width:50px;height:50px";
+  u.style.background = "#FFC83D"; u.style.color = "#14223A"; u.style.borderColor = "#FFC83D"; u.style.fontWeight = 700;
+  u.style.boxShadow = "0 10px 0 #D9A11C, 0 24px 50px rgba(8,18,40,.35)";
+  const f = $(s8, "#s8fine"); f.style.width = W + "px"; f.style.fontSize = (V ? 36 : 34) + "px";
+}
+function s8render(t) {
+  const pk = pop(t, .05, .6), br = rise(t, .2), bg = rise(t, .35, .6, 80), u = pop(t, .7, .5), f = rise(t, .95);
+  const bob = Math.sin(t * 3.2) * 10;
+  const pulse = 1 + .035 * Math.max(0, Math.sin((t - 1.2) * Math.PI * 2)) * P(t, 1.2, 1.4);
+  if (!V) {
+    put($(s8, "#s8piko"), { x: W / 2, y: 330 + bob + pk.dy, ax: .5, ay: 1, s: pk.s, o: pk.o });
+    put($(s8, "#s8brand"), { x: W / 2, y: 360 + br.dy, ax: .5, ay: 0, o: br.o });
+    put($(s8, "#s8big"), { x: 0, y: 510 + bg.dy, o: bg.o });
+    put($(s8, "#s8url"), { x: W / 2, y: 760 + u.dy, ax: .5, ay: .5, s: u.s * pulse, o: u.o });
+    put($(s8, "#s8fine"), { x: 0, y: 880 + f.dy, o: f.o });
+  } else {
+    put($(s8, "#s8piko"), { x: W / 2, y: 690 + bob + pk.dy, ax: .5, ay: 1, s: pk.s, o: pk.o });
+    put($(s8, "#s8brand"), { x: W / 2, y: 730 + br.dy, ax: .5, ay: 0, o: br.o });
+    put($(s8, "#s8big"), { x: 0, y: 900 + bg.dy, o: bg.o });
+    put($(s8, "#s8url"), { x: W / 2, y: 1270 + u.dy, ax: .5, ay: .5, s: u.s * pulse, o: u.o });
+    put($(s8, "#s8fine"), { x: 0, y: 1400 + f.dy, o: f.o });
+  }
+}
+
+const SCENES = [[s1, s1render], [s2, s2render], [s3, s3render], [s4, s4render], [s5, s5render], [s6, s6render], [s7, s7render], [s8, s8render]];
+
+// ---------- confetti ----------
+const COLORS = ["#FFC83D", "#E8574A", "#2E9E62", "#7A5AE0", "#5fb0ff", "#ffffff"];
+function burst(seed, t0, x, y, n, spread, power) {
+  const r = rng(seed), ps = [];
+  for (let i = 0; i < n; i++) {
+    const a = -Math.PI / 2 + (r() - .5) * spread, v = power * (.55 + r() * .6);
+    ps.push({ t0, x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, c: COLORS[Math.floor(r() * COLORS.length)], w: 10 + r() * 12, h: 6 + r() * 8, rot: r() * 6, vr: (r() - .5) * 14, life: 1.8 + r() * 1.2 });
+  }
+  return ps;
+}
+let BURSTS = [];
+function setupBursts() {
+  BURSTS = [];
+  if (!V) {
+    BURSTS.push(...burst(11, 4.85, 1470, 520, 110, 2.4, 1500));
+    BURSTS.push(...burst(12, 14.25, 1610, 300, 60, 2.6, 900));
+    BURSTS.push(...burst(13, 21.5, 960, 420, 140, 2.8, 1600));
+    BURSTS.push(...burst(14, 27.25, 520, 1080, 90, .9, 2000), ...burst(15, 27.25, 1400, 1080, 90, .9, 2000));
+  } else {
+    BURSTS.push(...burst(11, 4.85, 540, 450, 110, 2.4, 1500));
+    BURSTS.push(...burst(12, 14.25, 820, 480, 60, 2.6, 900));
+    BURSTS.push(...burst(13, 21.5, 540, 1100, 140, 2.8, 1700));
+    BURSTS.push(...burst(14, 27.25, 200, 1920, 90, .8, 2400), ...burst(15, 27.25, 880, 1920, 90, .8, 2400));
+  }
+}
+setupBursts();
+function drawFx(t) {
+  ctx.clearRect(0, 0, W, H);
+  for (const p of BURSTS) {
+    const dt = t - p.t0; if (dt < 0 || dt > p.life) continue;
+    const drag = Math.exp(-1.6 * dt);
+    const x = p.x + p.vx * (1 - drag) / 1.6 + Math.sin(dt * 6 + p.rot) * 12;
+    const y = p.y + p.vy * (1 - drag) / 1.6 + 420 * dt * dt;
+    const o = 1 - P(dt, p.life - .5, p.life);
+    ctx.save(); ctx.globalAlpha = o; ctx.translate(x, y); ctx.rotate(p.rot + p.vr * dt);
+    ctx.scale(1, Math.cos(dt * 9 + p.rot)); ctx.fillStyle = p.c; ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h); ctx.restore();
+  }
+}
+
+// ---------- background ----------
+function drawBg(t) {
+  const b1 = document.getElementById("b1"), b2 = document.getElementById("b2"), b3 = document.getElementById("b3");
+  b1.style.transform = `translate(${W * .6 + Math.sin(t * .4) * 120}px, ${-200 + Math.cos(t * .3) * 80}px)`;
+  b2.style.transform = `translate(${-200 + Math.cos(t * .35) * 100}px, ${H * .55 + Math.sin(t * .5) * 90}px)`;
+  b3.style.transform = `translate(${W * .35 + Math.sin(t * .25 + 1) * 160}px, ${H * .8 + Math.cos(t * .4) * 60}px)`;
+  document.querySelector(".dots").style.transform = `translateY(${(t * 12) % 34}px)`;
+}
+
+// ---------- wipes ----------
+function drawWipes(t) {
+  const w1 = document.getElementById("w1"), w2 = document.getElementById("w2");
+  const bw = W * 1.25;
+  w1.style.width = w2.style.width = bw + "px";
+  let best = null;
+  for (const c of CUTS.slice(1, -1)) if (Math.abs(t - c) < .4) best = c;
+  if (best === null) { w1.style.visibility = w2.style.visibility = "hidden"; return; }
+  w1.style.visibility = w2.style.visibility = "visible";
+  const k1 = eio(P(t, best - .32, best + .18)), k2 = eio(P(t, best - .24, best + .28));
+  const x1 = lerp(-bw - W * .3, W + W * .3, k1), x2 = lerp(-bw - W * .3, W + W * .3, k2);
+  w1.style.transform = `translateX(${x1}px) skewX(-14deg)`;
+  w2.style.transform = `translateX(${x2}px) skewX(-14deg)`;
+}
+
+// ---------- main ----------
+window.renderAt = function (t) {
+  drawBg(t);
+  for (let i = 0; i < SCENES.length; i++) {
+    const [el, fn] = SCENES[i]; const a = CUTS[i], b = CUTS[i + 1];
+    // scene visible during [a, b) (cut hidden behind wipe)
+    const vis = t >= a - (i === 0 ? 1 : 0) && t < b;
+    if (!vis) { el.style.opacity = 0; el.style.visibility = "hidden"; continue; }
+    el.style.visibility = "visible"; el.style.opacity = i === 0 ? eo(P(t, 0, .3)) : 1;
+    fn(t - a);
+  }
+  drawFx(t);
+  drawWipes(t);
+};
+window.ready = Promise.all([...document.images].map((im) => im.decode().catch(() => {}))).then(() => document.fonts.ready).then(() => { window.renderAt(0); return true; });
+</script>
+</body>
+</html>

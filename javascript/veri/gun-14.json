@@ -1,0 +1,241 @@
+{
+ "day": 14,
+ "title": "Olaylar",
+ "region": "dom",
+ "xp_complete": 150,
+ "objective": "addEventListener ile tıklama ve yazma olaylarını dinlemek, e.target ve olay yetkilendirmeyi kullanmak",
+ "story": "DOM Gezegeni'nde her şey sana tepki vermeyi bekliyor. Bir düğmeye basılması, bir kutuya harf yazılması: bunların hepsi birer **olay**. Bugün sayfanı olaylara kulak veren canlı bir kontrol paneline çeviriyorsun.",
+ "sections": [
+  {
+   "title": "addEventListener: olayı dinle",
+   "body": "Tıklama, tuşa basma, bir kutuya yazma... Sayfada olan her şey bir **olaydır** (event). `addEventListener` bir elemana \"bu olay olunca şu fonksiyonu çalıştır\" der:\n\n```js\nconst btn = document.querySelector(\"#start\");\nbtn.addEventListener(\"click\", () => {\n  console.log(\"Tıklandı!\");\n});\n```\n\nFonksiyon hemen çalışmaz; olay **her olduğunda** çalışır. Kodu çalıştırdıktan sonra önizlemedeki düğmeye kendin tıklayıp dene.\n\nDikkat: adı olan bir fonksiyon verirken parantez koyma. `btn.addEventListener(\"click\", launch)` doğru; `launch()` yazarsan fonksiyon hemen bir kez çalışır ve tıklamayı dinlemez."
+  },
+  {
+   "title": "Olay nesnesi ve e.target",
+   "body": "Dinleyici fonksiyona tarayıcı bir **olay nesnesi** verir; genelde `e` diye adlandırılır. En çok kullanılan özelliği `e.target`: olayın olduğu eleman.\n\n```js\nconst buttons = document.querySelectorAll(\".planet-btn\");\nfor (const b of buttons) {\n  b.addEventListener(\"click\", (e) => {\n    console.log(\"Seçilen:\", e.target.textContent);\n  });\n}\n```\n\n`e.type` olayın adını (`\"click\"`) verir. Aynı fonksiyonu birçok düğmeye bağlayıp hangisine tıklandığını `e.target` ile anlayabilirsin."
+  },
+  {
+   "title": "input olayı ve durum",
+   "body": "Bir `<input>` kutusuna her harf yazıldığında `input` olayı olur. Kutudaki metin `value` özelliğindedir:\n\n```js\nconst nameBox = document.querySelector(\"#name\");\nnameBox.addEventListener(\"input\", () => {\n  document.querySelector(\"#hello\").textContent = \"Merhaba, \" + nameBox.value;\n});\n```\n\nEtkileşimli sayfalarda veriyi bir değişkende tutarız; buna **durum** (state) denir. Olay durumu değiştirir, sonra ekranı durumdan güncelleriz:\n\n```js\nlet lives = 3;\nhitBtn.addEventListener(\"click\", () => {\n  lives--;                                  // 1) durumu değiştir\n  livesText.textContent = \"Can: \" + lives; // 2) ekranı güncelle\n});\n```"
+  },
+  {
+   "title": "Dinleyiciyi kaldırmak ve olay yetkilendirme",
+   "body": "Bir dinleyiciyi kaldırmak için `removeEventListener` aynı olay adı ve **aynı fonksiyonla** çağrılır; bu yüzden fonksiyona bir ad veririz:\n\n```js\nfunction onLaunch() {\n  console.log(\"Kalkış!\");\n  btn.removeEventListener(\"click\", onLaunch); // bir daha çalışmaz\n}\nbtn.addEventListener(\"click\", onLaunch);\n```\n\nKısa yolu: `btn.addEventListener(\"click\", onLaunch, { once: true })`.\n\n**Olay yetkilendirme** (event delegation): tıklama olayı tıklanan elemandan başlayıp onu kapsayan elemanlara doğru **kabarcık gibi yükselir**. Bu yüzden her düğmeye ayrı dinleyici eklemek yerine, onları kapsayan elemana **tek** dinleyici ekleyebilirsin:\n\n```js\nconst menu = document.querySelector(\"#menu\");\nmenu.addEventListener(\"click\", (e) => {\n  if (e.target.tagName !== \"BUTTON\") return; // düğme değilse boş ver\n  console.log(\"Rota:\", e.target.textContent);\n});\n```\n\nGüzel yanı: menüye **sonradan eklenen** düğmeler de çalışır. Yarın elemanları kodla oluştururken çok işine yarayacak."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Sayaç düğmesi",
+   "code": "let count = 0;\nconst btn = document.querySelector(\"#btn\");\n\nbtn.addEventListener(\"click\", (e) => {\n  count++;\n  document.querySelector(\"#info\").textContent = `${count} tıklama`;\n  console.log(\"Tıklanan:\", e.target.textContent);\n});\n",
+   "note": "Çalıştır'a bastıktan sonra önizlemedeki düğmeye birkaç kez tıkla.",
+   "mode": "page",
+   "html": "<button id=\"btn\">Tıkla</button>\n<p id=\"info\">0 tıklama</p>\n",
+   "css": ""
+  },
+  {
+   "title": "Canlı önizleme ve renkler",
+   "code": "const input = document.querySelector(\"#name\");\nconst hello = document.querySelector(\"#hello\");\n\ninput.addEventListener(\"input\", () => {\n  hello.textContent = \"Merhaba, \" + input.value + \"!\";\n});\n\nconst colors = { \"kırmızı\": \"#d1242f\", \"mavi\": \"#1f6feb\", \"yeşil\": \"#1a7f37\" };\ndocument.querySelector(\"#colors\").addEventListener(\"click\", (e) => {\n  if (e.target.tagName !== \"BUTTON\") return;\n  hello.style.color = colors[e.target.textContent];\n});\n",
+   "note": "Kutuya yaz, sonra renk düğmelerine tıkla. Renk düğmelerinin hepsini tek dinleyici yönetiyor.",
+   "mode": "page",
+   "html": "<input id=\"name\" placeholder=\"Adını yaz\">\n<p id=\"hello\">Merhaba!</p>\n<div id=\"colors\"><button>kırmızı</button> <button>mavi</button> <button>yeşil</button></div>\n",
+   "css": "#hello{font-size:22px;font-weight:bold}"
+  }
+ ],
+ "tasks": [
+  {
+   "id": "js-d14-t1",
+   "title": "Hız kontrolü",
+   "prompt": "`speed` durumunu düğmelerle yönet:\n\n- `#boost` (Hızlan) tıklanınca `speed` 10 artsın.\n- `#brake` (Yavaşla) tıklanınca 10 azalsın ama **0'ın altına inmesin**.\n- Her tıklamadan sonra `#speed` yeni hızı göstersin.",
+   "starter": "let speed = 0;\nconst speedText = document.querySelector(\"#speed\");\n\n// #boost ve #brake düğmelerini dinle\n\n",
+   "solution": "let speed = 0;\nconst speedText = document.querySelector(\"#speed\");\n\n// #boost ve #brake düğmelerini dinle\ndocument.querySelector(\"#boost\").addEventListener(\"click\", () => {\n  speed += 10;\n  speedText.textContent = speed;\n});\n\ndocument.querySelector(\"#brake\").addEventListener(\"click\", () => {\n  speed = Math.max(0, speed - 10);\n  speedText.textContent = speed;\n});\n",
+   "hints": [
+    "document.querySelector(\"#boost\").addEventListener(\"click\", () => { ... })",
+    "0'ın altına inmemek için: if (speed > 0) speed -= 10;",
+    "Sonra speedText.textContent = speed;"
+   ],
+   "check": {
+    "code_contains": [
+     "addEventListener"
+    ],
+    "js": "assert($(\"#speed\").textContent.trim() === \"0\", \"Başlangıçta #speed 0 göstermeli.\");\nclick(\"#boost\"); click(\"#boost\"); click(\"#boost\");\nassert(speed === 30 && $(\"#speed\").textContent.trim() === \"30\", \"3 kez Hızlan'a tıklayınca speed 30 olmalı ve #speed '30' göstermeli.\");\nclick(\"#brake\");\nassert(speed === 20 && $(\"#speed\").textContent.trim() === \"20\", \"Yavaşla'ya tıklayınca hız 10 azalmalı.\");\nclick(\"#brake\"); click(\"#brake\"); click(\"#brake\");\nassert(speed === 0 && $(\"#speed\").textContent.trim() === \"0\", \"Hız 0'ın altına inmemeli.\");"
+   },
+   "xp": 50,
+   "mode": "page",
+   "html": "<h1 id=\"title\">Kontrol Paneli</h1>\n<p id=\"info\">Hazır.</p>\n<p>Hız: <span id=\"speed\">0</span></p>\n<p><button id=\"boost\">Hızlan</button> <button id=\"brake\">Yavaşla</button> <button id=\"launch\">Kalkış</button></p>\n<p><input id=\"call-sign\" placeholder=\"Çağrı adın\"></p>\n<p id=\"preview\"></p>\n<ul id=\"menu\">\n  <li><button>Mars</button></li>\n  <li><button>Venüs</button></li>\n  <li><button>Jüpiter</button></li>\n</ul>\n",
+   "css": "#menu{list-style:none;padding:0;display:flex;gap:6px}.selected{background:#f7df1e;font-weight:bold}#info{font-weight:bold}"
+  },
+  {
+   "id": "js-d14-t2",
+   "title": "Çağrı adı",
+   "prompt": "`#call-sign` kutusuna her yazıldığında (`input` olayı) `#preview` paragrafı çağrı adını **büyük harflerle** göstersin:\n\n`kartal` yazılınca → `Çağrı adı: KARTAL`\n\nİpucu: metni büyük harfe çeviren `toUpperCase()` metodunu 3. günden hatırla.",
+   "starter": "const callSign = document.querySelector(\"#call-sign\");\nconst preview = document.querySelector(\"#preview\");\n\n// input olayını dinle\n\n",
+   "solution": "const callSign = document.querySelector(\"#call-sign\");\nconst preview = document.querySelector(\"#preview\");\n\n// input olayını dinle\ncallSign.addEventListener(\"input\", () => {\n  preview.textContent = \"Çağrı adı: \" + callSign.value.toUpperCase();\n});\n",
+   "hints": [
+    "callSign.addEventListener(\"input\", () => { ... })",
+    "Kutudaki metin: callSign.value",
+    "callSign.value.toUpperCase()"
+   ],
+   "check": {
+    "code_contains": [
+     "addEventListener",
+     "input",
+     "value"
+    ],
+    "js": "assert($(\"#preview\").textContent.trim() === \"\", \"Yazmadan önce #preview boş olmalı.\");\ntype(\"#call-sign\", \"kartal\");\nassert($(\"#preview\").textContent.trim() === \"Çağrı adı: KARTAL\", \"'kartal' yazılınca #preview 'Çağrı adı: KARTAL' olmalı.\");\ntype(\"#call-sign\", \"yunus\");\nassert($(\"#preview\").textContent.trim() === \"Çağrı adı: YUNUS\", \"Her yazışta güncellenmeli: 'yunus' → 'Çağrı adı: YUNUS'.\");"
+   },
+   "xp": 50,
+   "mode": "page",
+   "html": "<h1 id=\"title\">Kontrol Paneli</h1>\n<p id=\"info\">Hazır.</p>\n<p>Hız: <span id=\"speed\">0</span></p>\n<p><button id=\"boost\">Hızlan</button> <button id=\"brake\">Yavaşla</button> <button id=\"launch\">Kalkış</button></p>\n<p><input id=\"call-sign\" placeholder=\"Çağrı adın\"></p>\n<p id=\"preview\"></p>\n<ul id=\"menu\">\n  <li><button>Mars</button></li>\n  <li><button>Venüs</button></li>\n  <li><button>Jüpiter</button></li>\n</ul>\n",
+   "css": "#menu{list-style:none;padding:0;display:flex;gap:6px}.selected{background:#f7df1e;font-weight:bold}#info{font-weight:bold}"
+  },
+  {
+   "id": "js-d14-t3",
+   "title": "Tek seferlik kalkış",
+   "prompt": "Kalkış yalnızca **bir kez** yapılabilir. `onLaunch` fonksiyonunu tamamla:\n\n- `launches` 1 artsın ve `#info`'ya `Kalkış! Motorlar çalıştı.` yazsın.\n- Sonra `removeEventListener` ile kendini kaldırsın; ikinci tıklama hiçbir şey yapmasın.",
+   "starter": "let launches = 0;\nconst launchBtn = document.querySelector(\"#launch\");\n\nfunction onLaunch() {\n  // launches'ı artır, #info'ya yaz, dinleyiciyi kaldır\n}\n\nlaunchBtn.addEventListener(\"click\", onLaunch);\n",
+   "solution": "let launches = 0;\nconst launchBtn = document.querySelector(\"#launch\");\n\nfunction onLaunch() {\n  // launches'ı artır, #info'ya yaz, dinleyiciyi kaldır\n  launches++;\n  document.querySelector(\"#info\").textContent = \"Kalkış! Motorlar çalıştı.\";\n  launchBtn.removeEventListener(\"click\", onLaunch);\n}\n\nlaunchBtn.addEventListener(\"click\", onLaunch);\n",
+   "hints": [
+    "launches++;",
+    "launchBtn.removeEventListener(\"click\", onLaunch);"
+   ],
+   "check": {
+    "code_contains": [
+     "removeEventListener"
+    ],
+    "js": "assert(launches === 0, \"Tıklamadan önce launches 0 olmalı.\");\nclick(\"#launch\");\nassert(launches === 1 && $(\"#info\").textContent.trim() === \"Kalkış! Motorlar çalıştı.\", \"Tıklayınca launches 1 olmalı ve #info 'Kalkış! Motorlar çalıştı.' yazmalı.\");\nclick(\"#launch\"); click(\"#launch\");\nassert(launches === 1, \"İkinci tıklama sayılmamalı; dinleyiciyi removeEventListener ile kaldır.\");"
+   },
+   "xp": 50,
+   "mode": "page",
+   "html": "<h1 id=\"title\">Kontrol Paneli</h1>\n<p id=\"info\">Hazır.</p>\n<p>Hız: <span id=\"speed\">0</span></p>\n<p><button id=\"boost\">Hızlan</button> <button id=\"brake\">Yavaşla</button> <button id=\"launch\">Kalkış</button></p>\n<p><input id=\"call-sign\" placeholder=\"Çağrı adın\"></p>\n<p id=\"preview\"></p>\n<ul id=\"menu\">\n  <li><button>Mars</button></li>\n  <li><button>Venüs</button></li>\n  <li><button>Jüpiter</button></li>\n</ul>\n",
+   "css": "#menu{list-style:none;padding:0;display:flex;gap:6px}.selected{background:#f7df1e;font-weight:bold}#info{font-weight:bold}"
+  }
+ ],
+ "challenge": {
+  "id": "js-d14-c",
+  "title": "Tek dinleyici",
+  "prompt": "Rota menüsü (`#menu`) için **olay yetkilendirme** kullan: düğmelere değil, `#menu`'ye **tek** bir `click` dinleyicisi ekle.\n\n- Tıklanan bir düğmeyse `#info`'ya `Rota: Mars` biçiminde yaz (düğmenin metninden).\n- Tıklanan düğmeye `selected` sınıfını ekle, menüdeki diğer düğmelerden kaldır.\n- Düğme dışında bir yere tıklanırsa hiçbir şey yapma.\n\nKontrol, menüye sonradan yeni bir düğme ekleyip ona da tıklayacak!",
+  "starter": "const menu = document.querySelector(\"#menu\");\n\n// menu'ye TEK bir click dinleyicisi ekle; e.target ile tıklanan düğmeyi bul\n\n",
+  "solution": "const menu = document.querySelector(\"#menu\");\n\n// menu'ye TEK bir click dinleyicisi ekle; e.target ile tıklanan düğmeyi bul\nmenu.addEventListener(\"click\", (e) => {\n  if (e.target.tagName !== \"BUTTON\") return;\n  for (const b of menu.querySelectorAll(\"button\")) {\n    b.classList.remove(\"selected\");\n  }\n  e.target.classList.add(\"selected\");\n  document.querySelector(\"#info\").textContent = `Rota: ${e.target.textContent}`;\n});\n",
+  "hints": [
+   "menu.addEventListener(\"click\", (e) => { ... })",
+   "if (e.target.tagName !== \"BUTTON\") return;",
+   "Önce bütün düğmelerden selected'ı kaldır, sonra e.target'a ekle."
+  ],
+  "check": {
+   "code_contains": [
+    "addEventListener",
+    "e.target"
+   ],
+   "js": "const btns = $$(\"#menu button\");\nclick(btns[1]);\nassert($(\"#info\").textContent.trim() === \"Rota: Venüs\", \"Venüs'e tıklayınca #info 'Rota: Venüs' olmalı.\");\nassert(btns[1].classList.contains(\"selected\"), \"Tıklanan düğmeye selected sınıfı eklenmeli.\");\nclick(btns[2]);\nassert(btns[2].classList.contains(\"selected\") && !btns[1].classList.contains(\"selected\"), \"Yalnızca son tıklanan düğmede selected olmalı.\");\nconst li = document.createElement(\"li\");\nconst extra = document.createElement(\"button\");\nextra.textContent = \"Satürn\";\nli.append(extra);\n$(\"#menu\").append(li);\nclick(extra);\nassert($(\"#info\").textContent.trim() === \"Rota: Satürn\", \"Sonradan eklenen düğmeler de çalışmalı: dinleyiciyi tek tek düğmelere değil #menu'ye ekle.\");\nclick(\"#menu\");\nassert($(\"#info\").textContent.trim() === \"Rota: Satürn\", \"Düğme dışında bir yere tıklanınca hiçbir şey değişmemeli.\");"
+  },
+  "xp": 75,
+  "mode": "page",
+  "html": "<h1 id=\"title\">Kontrol Paneli</h1>\n<p id=\"info\">Hazır.</p>\n<p>Hız: <span id=\"speed\">0</span></p>\n<p><button id=\"boost\">Hızlan</button> <button id=\"brake\">Yavaşla</button> <button id=\"launch\">Kalkış</button></p>\n<p><input id=\"call-sign\" placeholder=\"Çağrı adın\"></p>\n<p id=\"preview\"></p>\n<ul id=\"menu\">\n  <li><button>Mars</button></li>\n  <li><button>Venüs</button></li>\n  <li><button>Jüpiter</button></li>\n</ul>\n",
+  "css": "#menu{list-style:none;padding:0;display:flex;gap:6px}.selected{background:#f7df1e;font-weight:bold}#info{font-weight:bold}"
+ },
+ "project_contribution": "Başla düğmesi",
+ "project_task": {
+  "id": "js-d14-p",
+  "title": "Başla düğmesi",
+  "prompt": "Başla düğmesi (`#start-btn`) artık çalışsın. Tıklanınca:\n\n- `#start-screen`'e `hidden` sınıfı eklensin (başlangıç ekranı kaybolsun),\n- `#game-panel`'den `hidden` sınıfı kaldırılsın (oyun paneli görünsün),\n- `#hud`'a `Skor: 0 | Pilot: Ada` yazılsın (pilot adı `game.pilot`'tan gelsin).",
+  "starter": "const game = { title: \"Yıldız Avcısı\", pilot: \"Ada\", level: 1 };\n\nfunction showStart(g) {\n  document.querySelector(\"#game-title\").textContent = g.title;\n  document.querySelector(\"#pilot\").textContent = g.pilot;\n  document.querySelector(\"#level\").textContent = g.level;\n  document.querySelector(\"#start-btn\").classList.add(\"ready\");\n}\nshowStart(game);\n\n// Başla düğmesine tıklanınca ekranları değiştir\n\n",
+  "solution": "const game = { title: \"Yıldız Avcısı\", pilot: \"Ada\", level: 1 };\n\nfunction showStart(g) {\n  document.querySelector(\"#game-title\").textContent = g.title;\n  document.querySelector(\"#pilot\").textContent = g.pilot;\n  document.querySelector(\"#level\").textContent = g.level;\n  document.querySelector(\"#start-btn\").classList.add(\"ready\");\n}\nshowStart(game);\n\n// Başla düğmesine tıklanınca ekranları değiştir\ndocument.querySelector(\"#start-btn\").addEventListener(\"click\", () => {\n  document.querySelector(\"#start-screen\").classList.add(\"hidden\");\n  document.querySelector(\"#game-panel\").classList.remove(\"hidden\");\n  document.querySelector(\"#hud\").textContent = `Skor: 0 | Pilot: ${game.pilot}`;\n});\n",
+  "hints": [
+   "document.querySelector(\"#start-btn\").addEventListener(\"click\", () => { ... })",
+   "classList.add(\"hidden\") ve classList.remove(\"hidden\")",
+   "`Skor: 0 | Pilot: ${game.pilot}`"
+  ],
+  "check": {
+   "code_contains": [
+    "addEventListener",
+    "classList"
+   ],
+   "js": "assert(!$(\"#start-screen\").classList.contains(\"hidden\") && $(\"#game-panel\").classList.contains(\"hidden\"), \"Tıklamadan önce başlangıç ekranı görünmeli, oyun paneli gizli kalmalı.\");\ngame.pilot = \"Efe\";\nclick(\"#start-btn\");\nassert($(\"#start-screen\").classList.contains(\"hidden\"), \"Tıklayınca #start-screen'e hidden sınıfı eklenmeli.\");\nassert(!$(\"#game-panel\").classList.contains(\"hidden\"), \"Tıklayınca #game-panel'den hidden sınıfı kaldırılmalı.\");\nassert($(\"#hud\").textContent.trim() === \"Skor: 0 | Pilot: Efe\", \"#hud 'Skor: 0 | Pilot: Ada' biçiminde olmalı ve pilot adı tıklama anında game.pilot'tan gelmeli.\");"
+  },
+  "xp": 100,
+  "mode": "page",
+  "html": "<div id=\"start-screen\" class=\"screen\">\n  <h1 id=\"game-title\">Oyun</h1>\n  <p>Pilot: <span id=\"pilot\">?</span></p>\n  <p>Seviye: <span id=\"level\">?</span></p>\n  <button id=\"start-btn\">Başla</button>\n</div>\n<div id=\"game-panel\" class=\"screen hidden\">\n  <p id=\"hud\">Skor: 0</p>\n  <h2>Envanter</h2>\n  <ul id=\"inventory\"></ul>\n</div>\n",
+  "css": "html,body{background:#0b1026;color:#e8ecff}.screen{padding:12px;border:1px solid #2c3566;border-radius:10px}.hidden{display:none}#game-title{color:#f7df1e;margin-top:0}#start-btn{padding:6px 14px;border-radius:6px;border:1px solid #7a86b8}.ready{background:#f7df1e;color:#0b1026;font-weight:bold}.item{margin:4px 0}"
+ },
+ "tracks": {
+  "js-web": {
+   "project_contribution": "Tema düğmesi",
+   "project_task": {
+    "id": "js-d14-pw",
+    "title": "Tema düğmesi",
+    "prompt": "Siteye koyu tema ekle. `#theme-btn` tıklanınca:\n\n- `body`'deki `dark` sınıfı `toggle` ile açılıp kapansın,\n- Düğmenin yazısı koyu temadayken `Açık tema`, açık temadayken `Koyu tema` olsun.",
+    "starter": "document.querySelector(\"#site-name\").textContent = \"Deniz Yıldız\";\ndocument.querySelector(\"#tagline\").textContent = \"Kod yazan, oyun tasarlayan bir kaşif\";\n\nconst themeBtn = document.querySelector(\"#theme-btn\");\n\n// tıklanınca body'de dark sınıfını aç/kapat, düğme yazısını güncelle\n\n",
+    "solution": "document.querySelector(\"#site-name\").textContent = \"Deniz Yıldız\";\ndocument.querySelector(\"#tagline\").textContent = \"Kod yazan, oyun tasarlayan bir kaşif\";\n\nconst themeBtn = document.querySelector(\"#theme-btn\");\n\n// tıklanınca body'de dark sınıfını aç/kapat, düğme yazısını güncelle\nthemeBtn.addEventListener(\"click\", () => {\n  document.body.classList.toggle(\"dark\");\n  const isDark = document.body.classList.contains(\"dark\");\n  themeBtn.textContent = isDark ? \"Açık tema\" : \"Koyu tema\";\n});\n",
+    "hints": [
+     "body elemanına document.body ile ulaşılır.",
+     "document.body.classList.toggle(\"dark\");",
+     "classList.contains(\"dark\") ? \"Açık tema\" : \"Koyu tema\""
+    ],
+    "check": {
+     "code_contains": [
+      "addEventListener",
+      "toggle"
+     ],
+     "js": "assert(!document.body.classList.contains(\"dark\"), \"Başlangıçta koyu tema kapalı olmalı.\");\nclick(\"#theme-btn\");\nassert(document.body.classList.contains(\"dark\"), \"Tıklayınca body'ye dark sınıfı eklenmeli.\");\nassert($(\"#theme-btn\").textContent.trim() === \"Açık tema\", \"Koyu temadayken düğmede 'Açık tema' yazmalı.\");\nclick(\"#theme-btn\");\nassert(!document.body.classList.contains(\"dark\") && $(\"#theme-btn\").textContent.trim() === \"Koyu tema\", \"İkinci tıklamada koyu tema kapanmalı ve düğmede 'Koyu tema' yazmalı.\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<header id=\"site-header\">\n  <h1 id=\"site-name\">Adın</h1>\n  <p id=\"tagline\">Kısa bir cümle</p>\n  <button id=\"theme-btn\">Koyu tema</button>\n</header>\n<main>\n  <h2>Projelerim</h2>\n  <div id=\"projects\"></div>\n</main>\n",
+    "css": "html:has(body.dark){background:#0b1026}body.dark{background:#0b1026;color:#e8ecff}#site-header{padding:10px 0;border-bottom:3px solid #c9cfe8}#site-header.filled{border-bottom-color:#f7df1e}#site-name{margin:0}.card{border:1px solid #c9cfe8;border-radius:8px;padding:6px 10px;margin:6px 0}.card h3{margin:0}.tag{margin:2px 0 0;font-size:13px;color:#7a86b8}"
+   }
+  },
+  "js-app": {
+   "project_contribution": "Tamamla düğmeleri",
+   "project_task": {
+    "id": "js-d14-pa",
+    "title": "Tamamla düğmeleri",
+    "prompt": "Her görevin yanındaki `.done-btn` düğmesi çalışsın. Bir döngüyle her düğmeye `click` dinleyicisi ekle. Tıklanınca:\n\n- Düğmenin içinde olduğu `<li>`'de (`btn.parentElement`) `done` sınıfı `toggle` ile açılıp kapansın,\n- Düğme yazısı görev tamamlandıysa `Geri al`, değilse `Tamamla` olsun,\n- `updateSummary()` çağrılsın.",
+    "starter": "function updateSummary() {\n  const all = document.querySelectorAll(\".task\").length;\n  const done = document.querySelectorAll(\".task.done\").length;\n  document.querySelector(\"#summary\").textContent = `${done}/${all} görev tamamlandı`;\n}\nupdateSummary();\n\n// her .done-btn düğmesine click dinleyicisi ekle\n\n",
+    "solution": "function updateSummary() {\n  const all = document.querySelectorAll(\".task\").length;\n  const done = document.querySelectorAll(\".task.done\").length;\n  document.querySelector(\"#summary\").textContent = `${done}/${all} görev tamamlandı`;\n}\nupdateSummary();\n\n// her .done-btn düğmesine click dinleyicisi ekle\nfor (const btn of document.querySelectorAll(\".done-btn\")) {\n  btn.addEventListener(\"click\", () => {\n    const li = btn.parentElement;\n    li.classList.toggle(\"done\");\n    btn.textContent = li.classList.contains(\"done\") ? \"Geri al\" : \"Tamamla\";\n    updateSummary();\n  });\n}\n",
+    "hints": [
+     "for (const btn of document.querySelectorAll(\".done-btn\")) { ... }",
+     "const li = btn.parentElement; li.classList.toggle(\"done\");",
+     "Sonunda updateSummary(); çağır."
+    ],
+    "check": {
+     "code_contains": [
+      "addEventListener",
+      "toggle"
+     ],
+     "js": "const btns = $$(\".done-btn\");\nconst items = $$(\".task\");\nassert($(\"#summary\").textContent.trim() === \"1/4 görev tamamlandı\", \"Başlangıçta özet '1/4 görev tamamlandı' olmalı.\");\nclick(btns[1]);\nassert(items[1].classList.contains(\"done\") && btns[1].textContent.trim() === \"Geri al\", \"Tamamla'ya tıklayınca görev done olmalı ve düğmede 'Geri al' yazmalı.\");\nassert($(\"#summary\").textContent.trim() === \"2/4 görev tamamlandı\", \"Tıklayınca özet güncellenmeli: '2/4 görev tamamlandı'.\");\nclick(btns[1]);\nassert(!items[1].classList.contains(\"done\") && btns[1].textContent.trim() === \"Tamamla\", \"İkinci tıklamada görev geri alınmalı ve düğmede 'Tamamla' yazmalı.\");\nclick(btns[0]);\nassert(!items[0].classList.contains(\"done\") && $(\"#summary\").textContent.trim() === \"0/4 görev tamamlandı\", \"Bütün düğmeler çalışmalı: ilk görev geri alınınca '0/4 görev tamamlandı'.\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<h1>Çalışma Asistanım</h1>\n<p id=\"summary\">...</p>\n<ul id=\"task-list\">\n  <li class=\"task done\"><span class=\"name\">Matematik ödevi</span> <button class=\"done-btn\">Geri al</button></li>\n  <li class=\"task\"><span class=\"name\">Fizik tekrarı</span> <button class=\"done-btn\">Tamamla</button></li>\n  <li class=\"task\"><span class=\"name\">İngilizce kelimeler</span> <button class=\"done-btn\">Tamamla</button></li>\n  <li class=\"task\"><span class=\"name\">Kitap okuma</span> <button class=\"done-btn\">Tamamla</button></li>\n</ul>\n<p><input id=\"new-task\" placeholder=\"Yeni görev\"> <button id=\"add-btn\">Ekle</button></p>\n",
+    "css": "#summary{font-weight:bold}.task{margin:4px 0}.done .name{text-decoration:line-through;color:#7a86b8}.done-btn{font-size:13px;margin-left:6px}"
+   }
+  },
+  "js-quiz": {
+   "project_contribution": "Seçeneğe tıklama",
+   "project_task": {
+    "id": "js-d14-pq",
+    "title": "Seçeneğe tıklama",
+    "prompt": "Seçenek düğmelerine tıklanabilsin. `forEach((btn, i) => ...)` ile her düğmeye `click` dinleyicisi ekle. Tıklanınca:\n\n- Düğmenin sırası `i`, `question.answer`'a eşitse `#feedback`'e `Doğru!` yaz, `score`'u 10 artır.\n- Değilse `#feedback`'e `Yanlış` yaz.\n- `#score` her seferinde `Puan: 10` biçiminde güncellensin.\n\nDoğru cevabı tıklama anında `question.answer`'dan oku.",
+    "starter": "const question = { text: \"Kızıl gezegen hangisi?\", options: [\"Mars\", \"Venüs\", \"Merkür\"], answer: 0 };\nlet score = 0;\n\nfunction showQuestion(q) {\n  document.querySelector(\"#question\").textContent = q.text;\n  document.querySelectorAll(\".option\").forEach((btn, i) => {\n    btn.textContent = q.options[i];\n  });\n}\nshowQuestion(question);\n\n// seçenek düğmelerine click dinleyicisi ekle\n\n",
+    "solution": "const question = { text: \"Kızıl gezegen hangisi?\", options: [\"Mars\", \"Venüs\", \"Merkür\"], answer: 0 };\nlet score = 0;\n\nfunction showQuestion(q) {\n  document.querySelector(\"#question\").textContent = q.text;\n  document.querySelectorAll(\".option\").forEach((btn, i) => {\n    btn.textContent = q.options[i];\n  });\n}\nshowQuestion(question);\n\n// seçenek düğmelerine click dinleyicisi ekle\nconst feedback = document.querySelector(\"#feedback\");\ndocument.querySelectorAll(\".option\").forEach((btn, i) => {\n  btn.addEventListener(\"click\", () => {\n    if (i === question.answer) {\n      feedback.textContent = \"Doğru!\";\n      score += 10;\n    } else {\n      feedback.textContent = \"Yanlış\";\n    }\n    document.querySelector(\"#score\").textContent = `Puan: ${score}`;\n  });\n});\n",
+    "hints": [
+     "document.querySelectorAll(\".option\").forEach((btn, i) => { btn.addEventListener(\"click\", () => { ... }); });",
+     "if (i === question.answer) { ... }",
+     "`Puan: ${score}`"
+    ],
+    "check": {
+     "code_contains": [
+      "addEventListener",
+      "forEach"
+     ],
+     "js": "const btns = $$(\".option\");\nclick(btns[1]);\nassert($(\"#feedback\").textContent.trim() === \"Yanlış\", \"Yanlış seçeneğe tıklayınca #feedback 'Yanlış' olmalı.\");\nassert(score === 0 && $(\"#score\").textContent.trim() === \"Puan: 0\", \"Yanlış cevap puanı artırmamalı; #score 'Puan: 0' olmalı.\");\nclick(btns[0]);\nassert($(\"#feedback\").textContent.trim() === \"Doğru!\" && score === 10 && $(\"#score\").textContent.trim() === \"Puan: 10\", \"Doğru seçeneğe tıklayınca 'Doğru!' yazmalı, puan 10 olmalı ve #score 'Puan: 10' göstermeli.\");\nquestion.answer = 2;\nclick(btns[2]);\nassert($(\"#feedback\").textContent.trim() === \"Doğru!\" && score === 20, \"Doğru cevabı tıklama anında question.answer'dan oku (elle 0 yazma).\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<h1>Bilgi Yarışması</h1>\n<p id=\"question\">Soru yükleniyor...</p>\n<div id=\"options\">\n  <button class=\"option\">?</button>\n  <button class=\"option\">?</button>\n  <button class=\"option\">?</button>\n</div>\n<p id=\"feedback\"></p>\n<p id=\"score\">Puan: 0</p>\n",
+    "css": "#question{font-size:18px;font-weight:bold}.option{display:block;margin:6px 0;padding:6px 12px;min-width:180px;text-align:left}#feedback{font-weight:bold}"
+   }
+  }
+ },
+ "available": true
+}

@@ -1,0 +1,236 @@
+{
+  "kurs": "python",
+  "gun": 26,
+  "baslik": "Python ile web",
+  "maskot": "piko",
+  "ozet": "Piko, Python Dağı'ndaki gözlem kulesi üzerinden web'in istek ve yanıtla çalışmasını, durum kodlarını, Python ile HTML üretmeyi ve sözlükle yönlendirmeyi anlatıyor.",
+  "hedef_sure_sn": 156,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 14,
+      "anlatim": "Selam, ben Piko! Son bölgeye, Python Dağı'nın eteğine geldik! Tepede dev bir gözlem kulesi var ve dünyanın her yerinden mesaj alıyor. Her mesaj bir istek, kulenin her cevabı bir yanıt. Web siteleri de tam böyle çalışır!",
+      "ekran": {
+        "baslik": "Gün 26: Python ile web",
+        "maddeler": [
+          "Yeni bölge: Python Dağı",
+          "İstek, yanıt, HTML üretmek"
+        ]
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "yonetmen_notu": "Arka plan: Python Dağı bölge görseli (gorseller/python/harita/dag.webp). Dosya repoda henüz yok; eklenince ekran.gorsel alanına yazılmalı. Dağın tepesindeki gözlem kulesine ışıklı mesajlar gidip gelir."
+    },
+    {
+      "no": 2,
+      "tur": "anlatim",
+      "sure_sn": 16,
+      "anlatim": "Tarayıcına bir adres yazınca tarayıcı sunucuya bir istek gönderir: bana profil sayfasını ver. Sunucu sayfayı hazırlar ve bir yanıt döner. Yanıtta HTML ve bir durum kodu vardır.",
+      "ekran": {
+        "baslik": "İstek ve yanıt",
+        "maddeler": [
+          "Tarayıcı → istek: GET /profil",
+          "Sunucu → yanıt: HTML + durum kodu",
+          "200 tamam, 404 bulunamadı, 500 sunucu hatası"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "Durum kodlarını bir sözlükte tutuyorum. get ile sorarken sözlükte olmayan bir kod gelirse Bilinmiyor diyor. Dört yüz on sekiz gerçekten var: ben bir çaydanlığım demek!",
+      "ekran": {
+        "baslik": "Durum kodları",
+        "kod": "codes = {200: \"Tamam\", 404: \"Bulunamadı\", 500: \"Sunucu hatası\"}\nfor code in [200, 404, 500, 418]:\n    print(code, codes.get(code, \"Bilinmiyor\"))\n",
+        "vurgu_satirlari": [
+          3
+        ],
+        "dil": "python",
+        "cikti": "200 Tamam\n404 Bulunamadı\n500 Sunucu hatası\n418 Bilinmiyor"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "anlatim",
+      "sure_sn": 17,
+      "anlatim": "Python'da web sitesi yapmanın sevilen yollarından biri Flask. route satırı şunu söyler: biri ana adresi isterse home fonksiyonunu çalıştır. Bu sitede sunucu başlatamıyoruz, o yüzden aynı fikri düz Python ile deneyeceğiz.",
+      "ekran": {
+        "baslik": "Flask ile bir site (kendi bilgisayarında)",
+        "kod": "from flask import Flask\napp = Flask(__name__)\n\n@app.route(\"/\")\ndef home():\n    return \"<h1>Piko'nun sitesine hoş geldin!</h1>\"\n\napp.run()\n",
+        "vurgu_satirlari": [
+          4
+        ],
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": false,
+      "yonetmen_notu": "Sunucu başlattığı için çalıştırılmaz; sadece yapıyı gösterir."
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "Bir sunucunun asıl işi veriden HTML yazısı üretmek. Başlığı f-string ile kuruyorum. Listeyi de her eşya için bir li etiketi yapıp join ile birleştiriyorum. İşte tarayıcıya gidecek sayfa!",
+      "ekran": {
+        "baslik": "HTML üretmek",
+        "kod": "name = \"Piko\"\nitems = [\"kılıç\", \"iksir\", \"harita\"]\n\npage = f\"<h1>{name}'nun çantası</h1>\"\npage += \"<ul>\" + \"\".join(f\"<li>{i}</li>\" for i in items) + \"</ul>\"\nprint(page)\n",
+        "vurgu_satirlari": [
+          4,
+          5
+        ],
+        "dil": "python",
+        "cikti": "<h1>Piko'nun çantası</h1><ul><li>kılıç</li><li>iksir</li><li>harita</li></ul>"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 6,
+      "tur": "anlatim",
+      "sure_sn": 12,
+      "anlatim": "Hangi adresin hangi fonksiyona gideceğine yönlendirme denir. Bunu bir sözlükle kurabiliriz: anahtar adres, değer de o sayfayı üreten fonksiyon.",
+      "ekran": {
+        "baslik": "Yönlendirme (routing)",
+        "kod": "def home():\n    return \"<h1>Ana sayfa</h1>\"\n\ndef about():\n    return \"<h1>Hakkında</h1>\"\n\nroutes = {\"/\": home, \"/hakkinda\": about}\n",
+        "vurgu_satirlari": [
+          7
+        ],
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 7,
+      "tur": "soru",
+      "sure_sn": 10,
+      "anlatim": "Üç adres deniyorum: ana sayfa, hakkında ve gizli. Sözlükte olmayan adres gelince ne olur? Sence ekranda ne görürüz?",
+      "ekran": {
+        "baslik": "Sence ne yazdırır?",
+        "kod": "def home():\n    return \"<h1>Ana sayfa</h1>\"\n\ndef about():\n    return \"<h1>Hakkında</h1>\"\n\nroutes = {\"/\": home, \"/hakkinda\": about}\n\nfor path in [\"/\", \"/hakkinda\", \"/gizli\"]:\n    view = routes.get(path)\n    print(path, \"->\", view() if view else \"404 Bulunamadı\")\n",
+        "vurgu_satirlari": [
+          10,
+          11
+        ],
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 8,
+      "tur": "cikti",
+      "sure_sn": 11,
+      "anlatim": "İlk iki adres kendi sayfalarını getirdi. Gizli sözlükte yok, get None verdi ve biz de dört yüz dört Bulunamadı gösterdik. Flask bunu senin yerine yapar.",
+      "ekran": {
+        "baslik": "Cevap: mini yönlendirme",
+        "kod": "def home():\n    return \"<h1>Ana sayfa</h1>\"\n\ndef about():\n    return \"<h1>Hakkında</h1>\"\n\nroutes = {\"/\": home, \"/hakkinda\": about}\n\nfor path in [\"/\", \"/hakkinda\", \"/gizli\"]:\n    view = routes.get(path)\n    print(path, \"->\", view() if view else \"404 Bulunamadı\")\n",
+        "dil": "python",
+        "cikti": "/ -> <h1>Ana sayfa</h1>\n/hakkinda -> <h1>Hakkında</h1>\n/gizli -> 404 Bulunamadı"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "hata",
+      "sure_sn": 12,
+      "anlatim": "Sık hata: sözlükte olmayan adresi doğrudan köşeli parantezle istemek. Python KeyError verir ve sunucu çöker. get kullanıp olmayan adreslere dört yüz dört dön.",
+      "ekran": {
+        "baslik": "Sık hata: olmayan adres",
+        "kod": "routes = {\"/\": \"Ana sayfa\"}\nprint(routes[\"/gizli\"])\n",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "KeyError: '/gizli'",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "uzgun",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 10,
+      "tur": "gorev",
+      "sure_sn": 13,
+      "anlatim": "Görevlerde bir karşılama sayfası ve bir liste sayfası üretecek, durum kodlarını yazıya çeviren bir fonksiyon yazacaksın. Projede de Piko'nun profil sayfasını oluşturuyorsun.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Karşılama sayfası",
+          "Görev 2: Liste sayfası",
+          "Görev 3: Durum kodu",
+          "Challenge: Mini sunucu",
+          "Proje: Oyunun web sayfası"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "ozet",
+      "sure_sn": 11,
+      "anlatim": "Özetle: web istek ve yanıtla çalışır, sunucu veriden HTML üretir, yönlendirme de adresi doğru fonksiyona götürür.",
+      "ekran": {
+        "baslik": "Bugün öğrendiklerin",
+        "maddeler": [
+          "İstek, yanıt ve durum kodları",
+          "f-string ve join ile HTML",
+          "Sözlükle yönlendirme, yoksa 404"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 12,
+      "tur": "kapanis",
+      "sure_sn": 12,
+      "anlatim": "Kulenin ilk mesajlarını cevapladın, tebrikler! Yarın dağın arşivine iniyoruz. Belge tabanlı veritabanı MongoDB'yi ve insert, find, update işlemlerini keşfedeceğiz. Görüşürüz!",
+      "ekran": {
+        "baslik": "Yarın: Python ve MongoDB",
+        "maddeler": [
+          "Belge tabanlı veritabanı",
+          "insert, find, update"
+        ]
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

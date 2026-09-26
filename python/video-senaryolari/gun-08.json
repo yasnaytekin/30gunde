@@ -1,0 +1,232 @@
+{
+  "kurs": "python",
+  "gun": 8,
+  "baslik": "Dictionary",
+  "maskot": "piko",
+  "ozet": "Piko, Veri Ormanı'ndaki canlıların kimlik kartlarını sözlüklerle tutuyor: anahtarla değere ulaşmak, eklemek, değiştirmek, silmek, get() ile güvenli bakış ve iç içe veriler.",
+  "hedef_sure_sn": 122,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 12,
+      "anlatim": "Selam, ben Piko! Veri Ormanı'nda yaşayan her canlının bir kimlik kartı var: adı, canı, gücü. Bunları bir listede tutarsak hangisi hangisiydi karışır. Bugün Python'ın sözlükleriyle tanışıyoruz!",
+      "ekran": {
+        "baslik": "Gün 8: Dictionary",
+        "gorsel": "gorseller/python/harita/orman.webp"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "Gerçek sözlükte kelimeye bakıp anlamını bulursun. Python sözlüğünde de anahtara bakıp değeri bulursun. Listede sıra numarası kullanırdık, sözlükte ise isim kullanıyoruz.",
+      "ekran": {
+        "baslik": "Anahtar ve değer",
+        "kod": "player = {\"name\": \"Piko\", \"hp\": 100, \"gold\": 50}\nprint(player[\"name\"])\nprint(player[\"gold\"])\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          1
+        ],
+        "cikti": "Piko\n50"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true,
+      "yonetmen_notu": "Kimlik kartı çizimi: sol sütunda anahtarlar, sağ sütunda değerler."
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "Yeni bir anahtar eklemek için köşeli parantezle adını yazıp değer koyarsın. Aynı yolla bir değeri değiştirirsin. del ise anahtarı değeriyle birlikte siler.",
+      "ekran": {
+        "baslik": "Ekle, değiştir, sil",
+        "kod": "player = {\"name\": \"Piko\", \"hp\": 100, \"gold\": 50}\nplayer[\"level\"] = 1\nplayer[\"hp\"] = player[\"hp\"] - 10\ndel player[\"gold\"]\nprint(player)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2,
+          3,
+          4
+        ],
+        "cikti": "{'name': 'Piko', 'hp': 90, 'level': 1}"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "hata",
+      "sure_sn": 9,
+      "anlatim": "Olmayan bir anahtarı sorarsan Python KeyError verir. Mesaj çok net: sözlükte shield diye bir anahtar yok.",
+      "ekran": {
+        "baslik": "KeyError",
+        "kod": "player = {\"name\": \"Piko\", \"hp\": 100}\nprint(player[\"shield\"])\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "KeyError: 'shield'"
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 11,
+      "anlatim": "Kurtarıcımız get! Hata vermez. Anahtar varsa değerini, yoksa senin belirlediğin yedek değeri döndürür. Goblinin adı var ama kalkanı yok.",
+      "ekran": {
+        "baslik": "Güvenli bakış: get()",
+        "kod": "enemy = {\"name\": \"Goblin\", \"hp\": 30}\nprint(enemy.get(\"name\"))\nprint(enemy.get(\"shield\", \"Kalkanı yok!\"))\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          3
+        ],
+        "cikti": "Goblin\nKalkanı yok!"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 11,
+      "anlatim": "keys tüm anahtarları, values tüm değerleri verir. in bir anahtar var mı diye sorar, len de kaç anahtar olduğunu söyler.",
+      "ekran": {
+        "baslik": "Sözlüğü incelemek",
+        "kod": "player = {\"name\": \"Piko\", \"hp\": 100}\nprint(player.keys())\nprint(player.values())\nprint(\"hp\" in player, len(player))\n",
+        "dil": "python",
+        "cikti": "dict_keys(['name', 'hp'])\ndict_values(['Piko', 100])\nTrue 2"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "kod",
+      "sure_sn": 10,
+      "anlatim": "Değer olarak liste bile koyabilirsin. Kahramanın çantası artık kimlik kartının içinde! Çantaya append ile yeni bir eşya ekliyoruz.",
+      "ekran": {
+        "baslik": "İç içe veriler",
+        "kod": "hero = {\"name\": \"Piko\", \"inventory\": [\"kılıç\", \"iksir\"]}\nhero[\"inventory\"].append(\"harita\")\nprint(hero[\"inventory\"])\nprint(len(hero[\"inventory\"]), \"eşya\")\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "['kılıç', 'iksir', 'harita']\n3 eşya"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "soru",
+      "sure_sn": 10,
+      "anlatim": "Dikkatli bak! İkinci satır yeni bir anahtar mı ekliyor, yoksa başka bir şey mi yapıyor? Bu kod ne yazdırır?",
+      "ekran": {
+        "baslik": "Sence ne yazar?",
+        "kod": "hero = {\"name\": \"Piko\", \"hp\": 100}\nhero[\"hp\"] = 80\nprint(len(hero), hero[\"hp\"])\n",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "cikti",
+      "sure_sn": 9,
+      "anlatim": "İki ve seksen! hp anahtarı zaten vardı, bu yüzden yeni anahtar eklenmedi. Sadece değeri değişti.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "hero = {\"name\": \"Piko\", \"hp\": 100}\nhero[\"hp\"] = 80\nprint(len(hero), hero[\"hp\"])\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "2 80"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 10,
+      "tur": "gorev",
+      "sure_sn": 11,
+      "anlatim": "Görevlerde oyuncuya altın ekleyecek, goblinin canını azaltacak ve kalkanı güvenle okuyacaksın. Challenge'da bir fiyat sözlüğüyle sepetin hesabını çıkaracaksın. Fiyatları elle yazmak yok!",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Altın ekle",
+          "Görev 2: Hasar al",
+          "Görev 3: Güvenli bakış",
+          "Challenge: Market hesabı"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "ozet",
+      "sure_sn": 6,
+      "anlatim": "Bugün bilgileri isimle sakladık, güncelledik ve hata almadan güvenle okumayı öğrendik.",
+      "ekran": {
+        "baslik": "Bugün öğrendiklerin",
+        "maddeler": [
+          "Sözlük: {anahtar: değer}, isimle ulaşılır",
+          "sozluk[anahtar] = değer ekler ya da değiştirir",
+          "get() ile hata olmadan bak; keys, values, in"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 12,
+      "tur": "kapanis",
+      "sure_sn": 9,
+      "anlatim": "Veri Ormanı'nı tamamladın, tebrikler! Yarın Mantık Kalesi'ne varıyoruz. Kapısı sadece anahtarı olanlara açılan kalede programa karar vermeyi öğreteceğiz.",
+      "ekran": {
+        "baslik": "Yarın: Koşullar",
+        "gorsel": "gorseller/python/harita/kale.webp"
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      },
+      "yonetmen_notu": "Harita ormandan kaleye doğru kayar."
+    }
+  ]
+}

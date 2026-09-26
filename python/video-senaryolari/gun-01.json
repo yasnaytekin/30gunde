@@ -1,0 +1,234 @@
+{
+  "kurs": "python",
+  "gun": 1,
+  "baslik": "Python ile tanışma",
+  "maskot": "piko",
+  "ozet": "Piko, Başlangıç Kampı'nda print() ile ekrana yazı yazmayı, Python'ı hesap makinesi gibi kullanmayı, yorumları ve ilk hata mesajını anlatıyor.",
+  "hedef_sure_sn": 133,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 12,
+      "anlatim": "Selam, ben Piko! Başlangıç Kampı'na hoş geldin. Bilgisayarlar çok hızlıdır ama ne yapacaklarını kendileri bilmez. Onlara ne yapacaklarını sen söyleyeceksin. Hazır mısın? Bugün bilgisayarla ilk kez konuşuyoruz!",
+      "ekran": {
+        "baslik": "Gün 1: Python ile tanışma",
+        "gorsel": "gorseller/python/harita/kamp.webp"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "yonetmen_notu": "Harita üzerinde kamp bölgesine yakınlaşma; Piko kamp ateşinin yanından kafasını uzatır."
+    },
+    {
+      "no": 2,
+      "tur": "anlatim",
+      "sure_sn": 10,
+      "anlatim": "Kod, bilgisayara verdiğin talimatların listesi. Python bu talimatları yukarıdan aşağıya, satır satır okur ve sırayla yapar. Oyunlarda, web sitelerinde, yapay zekâda hep Python var.",
+      "ekran": {
+        "baslik": "Kod nedir?",
+        "maddeler": [
+          "Kod: bilgisayara verilen talimatlar",
+          "Python yukarıdan aşağıya, satır satır okur",
+          "Oyunlar, web siteleri, yapay zekâ"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "İlk sihirli sözcüğümüz print. Parantezin içine ne koyarsan ekrana onu yazar. Yazıları tırnak içine alırız, sayıları almayız. Çalıştır'a basınca iki satır beliriyor.",
+      "ekran": {
+        "baslik": "print() ile konuş",
+        "kod": "print(\"Merhaba Dünya!\")\nprint(42)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          1,
+          2
+        ],
+        "cikti": "Merhaba Dünya!\n42"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "Python aynı zamanda kocaman bir hesap makinesi. Artı toplar, yıldız çarpar, iki yıldız da üs alır. İkinin onuncu kuvveti tam bin yirmi dört eder!",
+      "ekran": {
+        "baslik": "Python bir hesap makinesi",
+        "kod": "print(3 + 4)\nprint(10 * 5)\nprint(2 ** 10)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          3
+        ],
+        "cikti": "7\n50\n1024"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "Kare işaretiyle başlayan satır bir yorum. Python onu okumaz, sen kendine not bırakırsın. Virgülle birden çok şeyi yan yana yazdırabilirsin; Python aralarına kendiliğinden boşluk koyar.",
+      "ekran": {
+        "baslik": "Yorumlar ve virgül",
+        "kod": "# Bu bir yorum, Python bunu okumaz\nprint(\"Piko\", \"diyor ki:\", \"Selam!\")\nprint(\"Yaşım:\", 12)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          1,
+          2
+        ],
+        "cikti": "Piko diyor ki: Selam!\nYaşım: 12"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 10,
+      "anlatim": "Bazı görevlerde yazdırdığın şey sahnede resme dönüşür. Her yıldız bir Piko, her kare işareti bir duvar olur. İşte beş Piko ve altında beş duvar!",
+      "ekran": {
+        "baslik": "Sahnede çizim",
+        "kod": "print(\"*****\")\nprint(\"#####\")\n",
+        "dil": "python",
+        "cikti": "*****\n#####"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "alt-sag"
+      },
+      "calistir": true,
+      "yonetmen_notu": "Çıktının yanında sahne ızgarası: yıldızlar Piko figürlerine, # işaretleri duvar karelerine dönüşür."
+    },
+    {
+      "no": 7,
+      "tur": "hata",
+      "sure_sn": 14,
+      "anlatim": "Şimdi bir harfi unutalım. Python kırmızı bir mesajla NameError diyor: prin diye bir şey tanımıyorum. Hatta print'i mi demek istedin diye soruyor! Korkma, hata mesajı sorunun yerini gösterir. Harfi düzelt, tekrar çalıştır.",
+      "ekran": {
+        "baslik": "İlk hatamız",
+        "kod": "prin(\"Merhaba!\")\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          1
+        ],
+        "cikti": "NameError: name 'prin' is not defined. Did you mean: 'print'?"
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sag"
+      },
+      "calistir": true,
+      "yonetmen_notu": "Hata satırı kırmızı yanıp söner; eksik 't' harfi yerine yerleşince yeşile döner."
+    },
+    {
+      "no": 8,
+      "tur": "soru",
+      "sure_sn": 8,
+      "anlatim": "Sıra sende. Sence bu iki satır aynı şeyi mi yazar? Bir saniye düşün...",
+      "ekran": {
+        "baslik": "Sence ne yazar?",
+        "kod": "print(3 + 4)\nprint(\"3 + 4\")\n",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      },
+      "calistir": true,
+      "yonetmen_notu": "Ekranda 3 saniyelik geri sayım."
+    },
+    {
+      "no": 9,
+      "tur": "cikti",
+      "sure_sn": 10,
+      "anlatim": "Hayır! İlk satır hesaplar ve yedi yazar. İkinci satırdaki işlem tırnak içinde, yani bir yazı. Python onu hesaplamaz, olduğu gibi ekrana basar.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "print(3 + 4)\nprint(\"3 + 4\")\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "7\n3 + 4"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 10,
+      "tur": "gorev",
+      "sure_sn": 14,
+      "anlatim": "Şimdi sahne senin! Önce ekrana ilk sözünü yazdıracak, sonra kendini tanıtacaksın. Bir yılda kaç saat olduğunu da bulacaksın, ama hesabı sen yapma, Python'a yaptır. Sahne görevinde de kendi Piko ordunu dizeceksin.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: İlk sözün",
+          "Görev 2: Kendini tanıt",
+          "Görev 3: Bir yılda kaç saat?",
+          "Sahne görevi: Piko ordusu",
+          "Challenge: Yıldızlı afiş"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "ozet",
+      "sure_sn": 10,
+      "anlatim": "Bugün print ile ekrana yazdık, Python'a hesap yaptırdık, yorum bıraktık ve ilk hata mesajımızı okuduk. Fena değil, değil mi?",
+      "ekran": {
+        "baslik": "Bugün öğrendiklerin",
+        "maddeler": [
+          "print() ekrana yazar; yazılar tırnak içinde",
+          "+ - * / ** ile hesap yapılır",
+          "# ile yorum yazılır; hata mesajı yol gösterir"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 12,
+      "tur": "kapanis",
+      "sure_sn": 9,
+      "anlatim": "İlk kodunu yazdın, tebrikler! Yarın bilgisayarın hafızasında etiketli kutular açacağız. Kahramanımızın adını ve canını bu kutularda saklayacağız. Görüşürüz!",
+      "ekran": {
+        "baslik": "Yarın: Değişkenler",
+        "gorsel": "gorseller/python/rozetler/ilk-kod.webp"
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      },
+      "yonetmen_notu": "İlk Kod rozeti ekrana süzülür, ardından kamp haritası yavaşça kararır."
+    }
+  ]
+}

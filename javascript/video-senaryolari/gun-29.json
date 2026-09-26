@@ -1,0 +1,251 @@
+{
+  "kurs": "javascript",
+  "gun": 29,
+  "baslik": "Projeyi toparlama",
+  "maskot": "kodi",
+  "ozet": "Kodi, JavaScript Yıldızı yolunda projeyi herkes için kullanışlı yapmayı anlatıyor: düğme ve klavyeyi aynı fonksiyona bağlamak, küçük ekranlar için matchMedia, aria-label, aria-expanded, aria-live ve focus ile erişilebilirlik, init/update/render düzeni.",
+  "hedef_sure_sn": 178,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 13,
+      "anlatim": "Selam, ben Kodi! Projen neredeyse hazır, kaptan. Ama arkadaşın onu telefonda açınca klavye yok, ekran küçük. Peki herkes oynayabilir mi? Bugün projeni herkes için kullanışlı yapıyoruz!",
+      "ekran": {
+        "baslik": "Gün 29: Projeyi toparlama",
+        "gorsel": "gorseller/javascript/bolgeler/yildiz.webp"
+      },
+      "maskot": {
+        "poz": "el-sallama",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 18,
+      "anlatim": "Çözüm: ekrana düğmeler koy ve hem tuşlar hem düğmeler aynı fonksiyonu çağırsın. Hareketin tek bir yeri olur: move. click hem fareyle hem dokunmayla çalışır.",
+      "ekran": {
+        "baslik": "Düğme ve tuş, tek fonksiyon",
+        "kod": "function move(dx) {\n  x = Math.min(10, Math.max(0, x + dx));\n  pos.textContent = `Konum: ${x}`;\n}\nleftBtn.addEventListener(\"click\", () => move(-1));\nrightBtn.addEventListener(\"click\", () => move(1));\ndocument.addEventListener(\"keydown\", (e) => {\n  if (e.key === \"ArrowLeft\") move(-1);\n  if (e.key === \"ArrowRight\") move(1);\n});\n",
+        "vurgu_satirlari": [
+          1,
+          5,
+          8
+        ],
+        "cikti": "◀ düğmesi de sol ok tuşu da \"Konum: 4\" yazdırır.",
+        "html": "<p id=\"pos\">Konum: 5</p>\n<button id=\"left\" aria-label=\"Sola git\">◀</button> <button id=\"right\" aria-label=\"Sağa git\">▶</button>",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 3,
+      "tur": "anlatim",
+      "sure_sn": 14,
+      "anlatim": "Basılı tutmayı algılamak istersen pointerdown ve pointerup kullan; fare, parmak ve kalemin hepsinde çalışırlar. Parmak imleçten büyüktür: düğmeler en az 44 piksel olsun.",
+      "ekran": {
+        "baslik": "Dokunmatik kontroller",
+        "maddeler": [
+          "click: fare + dokunma",
+          "pointerdown / pointerup: basılı tutma",
+          "Dokunulacak düğmeler en az 44–48 piksel"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 13,
+      "anlatim": "Düzeni çoğunlukla CSS'teki media kuralları ayarlar. JavaScript'te de ekranı sorabilirsin: matchMedia'nın matches değeri o anki durumu true ya da false verir.",
+      "ekran": {
+        "baslik": "Küçük ekranlar: matchMedia",
+        "kod": "const isSmall = window.matchMedia(\"(max-width: 600px)\").matches;\nif (isSmall) {\n  console.log(\"Küçük ekran: dokunmatik düğmeleri göster\");\n}\n",
+        "vurgu_satirlari": [
+          1
+        ],
+        "cikti": "Telefonda: Küçük ekran: dokunmatik düğmeleri göster",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 5,
+      "tur": "anlatim",
+      "sure_sn": 18,
+      "anlatim": "Bazı kullanıcılar ekran okuyucu kullanır, bazıları yalnızca klavyeyle gezinir. Tıklanan şey için button kullan. Simge düğmelerine aria-label ver, değişen mesajlara aria-live ekle, focus ile odağı doğru yere taşı.",
+      "ekran": {
+        "baslik": "Erişilebilirlik: herkes kullanabilsin",
+        "maddeler": [
+          "<div> değil <button>: Tab, Enter, Boşluk kendiliğinden",
+          "aria-label=\"Sola git\" (◀ yerine okunur)",
+          "aria-live=\"polite\": değişen mesajlar okunur",
+          "element.focus(): odağı taşı"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "Açılır menüde düğme, menünün açık mı kapalı mı olduğunu aria-expanded ile söyler. Ekran okuyucu önce daraltılmış, açınca genişletilmiş diye okur.",
+      "ekran": {
+        "baslik": "Örnek: açılır menü",
+        "kod": "btn.addEventListener(\"click\", () => {\n  const open = nav.hidden; // gizliyse şimdi açılacak\n  nav.hidden = !open;\n  btn.setAttribute(\"aria-expanded\", String(open));\n  btn.setAttribute(\"aria-label\", open ? \"Menüyü kapat\" : \"Menüyü aç\");\n});\n",
+        "vurgu_satirlari": [
+          4,
+          5
+        ],
+        "cikti": "Menü açılır; ekran okuyucu: \"Menüyü kapat, genişletilmiş\"",
+        "html": "<button id=\"menu-btn\" aria-expanded=\"false\" aria-label=\"Menüyü aç\">☰</button>\n<nav id=\"nav\" hidden><a href=\"#a\">Ana sayfa</a> <a href=\"#b\">Blog</a></nav>",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 7,
+      "tur": "kod",
+      "sure_sn": 18,
+      "anlatim": "Proje büyüdükçe kod dağılır. Üç parçalı düzen işini kolaylaştırır: veriler tek bir state nesnesinde, update yalnızca veriyi değiştirir, render yalnızca ekrana çizer. init ise olayları bağlar ve ilk çizimi yapar.",
+      "ekran": {
+        "baslik": "init, update, render",
+        "kod": "const state = { score: 0 };\nfunction update(action) {\n  if (action === \"star\") state.score += 10;\n}\nfunction render() {\n  console.log(`Skor: ${state.score}`); // sayfada: scoreEl.textContent\n}\nrender();\nupdate(\"star\");\nupdate(\"star\");\nrender();\n",
+        "vurgu_satirlari": [
+          2,
+          5
+        ],
+        "cikti": "Skor: 0\nSkor: 20",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "hata",
+      "sure_sn": 14,
+      "anlatim": "Sık hata: tıklanan şeyi div ile yapmak. Fareyle çalışır ama Tab ile seçilemez, Enter ile basılamaz. Ekran okuyucu da onun bir düğme olduğunu bilmez!",
+      "ekran": {
+        "baslik": "Sık hata: düğme yerine div",
+        "kod": "<div id=\"left\">◀</div>                            <!-- klavyeyle kullanılamaz -->\n<button id=\"left\" aria-label=\"Sola git\">◀</button> <!-- doğrusu -->\n",
+        "dil": "html",
+        "vurgu_satirlari": [
+          1
+        ]
+      },
+      "maskot": {
+        "poz": "uzgun",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 9,
+      "tur": "soru",
+      "sure_sn": 10,
+      "anlatim": "Soru zamanı! update iki kez çağrıldı ama render hiç çağrılmadı. Sence skor ve ekrandaki yazı ne olur?",
+      "ekran": {
+        "baslik": "Sence ne yazar?",
+        "kod": "const state = { score: 0 };\nlet screen = \"Skor: 0\"; // ekrandaki yazı\nfunction update(action) { if (action === \"star\") state.score += 10; }\nfunction render() { screen = `Skor: ${state.score}`; }\nupdate(\"star\");\nupdate(\"star\");\nconsole.log(state.score, screen);\n",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 10,
+      "tur": "cikti",
+      "sure_sn": 10,
+      "anlatim": "Cevap: skor 20 ama ekranda hâlâ Skor sıfır yazıyor! Ekrana yalnızca render dokunur. Veriyi değiştirince render'ı çağırmayı unutma.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "const state = { score: 0 };\nlet screen = \"Skor: 0\"; // ekrandaki yazı\nfunction update(action) { if (action === \"star\") state.score += 10; }\nfunction render() { screen = `Skor: ${state.score}`; }\nupdate(\"star\");\nupdate(\"star\");\nconsole.log(state.score, screen);\n",
+        "vurgu_satirlari": [
+          7
+        ],
+        "cikti": "20 Skor: 0",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 11,
+      "tur": "gorev",
+      "sure_sn": 13,
+      "anlatim": "Görev zamanı! Düğmelerin ve ok tuşlarının aynı fonksiyonu çağırdığı bir kontrol, etiketli ve odağı taşıyan simge düğmeleri ve init, update, render düzeninde bir yakıt göstergesi yapacaksın.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Tek fonksiyon, iki yol",
+          "Görev 2: Etiket ve odak",
+          "Görev 3: init, update, render"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 12,
+      "tur": "ozet",
+      "sure_sn": 12,
+      "anlatim": "Özetleyelim: düğme ve klavye aynı fonksiyonu çağırsın. button, aria-label ve focus ile herkes kullanabilsin. Veriyi update değiştirsin, ekrana render çizsin.",
+      "ekran": {
+        "baslik": "Özet",
+        "maddeler": [
+          "Tek fonksiyon: move(dx) ← düğme + tuş",
+          "button, aria-label, aria-expanded, aria-live, focus()",
+          "state + update + render + init"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 13,
+      "tur": "kapanis",
+      "sure_sn": 11,
+      "anlatim": "Projen artık herkes için hazır! Yarın yolculuğumuzun son günü: parçaları birleştirecek, projeni yayınlamayı öğrenecek ve JavaScript Yıldızı'na ulaşacağız. Görüşürüz!",
+      "ekran": {
+        "baslik": "Yarın: Final",
+        "gorsel": "gorseller/javascript/arka-plan/bg-space-wide.webp"
+      },
+      "maskot": {
+        "poz": "el-sallama",
+        "konum": "orta"
+      }
+    }
+  ]
+}

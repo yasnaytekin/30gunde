@@ -1,0 +1,2340 @@
+{
+ "day": 29,
+ "title": "API yapmak",
+ "region": "dag",
+ "project_contribution": "Oyun API'si",
+ "game_role": "Skorun oyun sonunda senin API'ne gönderilir.",
+ "xp_complete": 150,
+ "objective": "Kendi API'ni tasarlamak: GET, POST, PUT ve DELETE isteklerini karşılayan fonksiyonlar yazmak",
+ "story": "Zirveye çok az kaldı! Dün başka istasyonlara soru sorduk; bugün soruları cevaplayan istasyon **biz** oluyoruz. Arkadaşlarının oyunları, Piko'nun Macerası'nın skorlarını senin yazacağın API'den okuyabilecek.",
+ "sections": [
+  {
+   "title": "HTTP metotları",
+   "body": "Bir API'ye gelen her isteğin bir **metodu** vardır. Metot ne yapılmak istendiğini söyler:\n\n- `GET`: veriyi getir (oku)\n- `POST`: yeni veri ekle\n- `PUT`: var olan veriyi güncelle\n- `DELETE`: veriyi sil\n\nBu dört işleme kısaca **CRUD** denir: Create, Read, Update, Delete."
+  },
+  {
+   "title": "Adresler ve kimlikler",
+   "body": "API adresleri genellikle şöyle düzenlenir:\n\n- `GET /players` tüm oyuncular\n- `GET /players/2` kimliği 2 olan oyuncu\n- `POST /players` yeni oyuncu ekle\n- `DELETE /players/2` 2 numaralı oyuncuyu sil\n\nAdresi parçalamak için `split` işe yarar: `\"/players/2\".split(\"/\")` sonucu `['', 'players', '2']`"
+  },
+  {
+   "title": "Flask ile gerçek bir API",
+   "body": "```python\nfrom flask import Flask, jsonify, request\napp = Flask(__name__)\nplayers = []\n\n@app.route(\"/players\", methods=[\"GET\"])\ndef list_players():\n    return jsonify(players), 200\n\n@app.route(\"/players\", methods=[\"POST\"])\ndef create_player():\n    data = request.get_json()\n    players.append(data)\n    return jsonify(data), 201\n```\n\nBu sitede bir sunucu çalıştıramadığımız için aynı mantığı düz fonksiyonlarla kuracağız: her fonksiyon `(durum_kodu, cevap)` döndürecek."
+  },
+  {
+   "title": "Doğru durum kodu",
+   "body": "- `200` Tamam (GET ve PUT başarılı)\n- `201` Oluşturuldu (POST başarılı)\n- `204` İçerik yok (DELETE başarılı)\n- `400` Hatalı istek (eksik bilgi)\n- `404` Bulunamadı\n\nİyi bir API, her zaman anlaşılır bir durum kodu ve hata mesajı döndürür."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Adresi parçala",
+   "code": "for path in [\"/players\", \"/players/2\", \"/scores/10\"]:\n    parts = path.strip(\"/\").split(\"/\")\n    print(path, \"->\", parts)\n",
+   "note": ""
+  },
+  {
+   "title": "Mini API",
+   "code": "players = [{\"id\": 1, \"name\": \"Piko\"}]\n\ndef get_players():\n    return 200, players\n\ndef create_player(body):\n    if \"name\" not in body:\n        return 400, {\"hata\": \"isim gerekli\"}\n    player = {\"id\": len(players) + 1, \"name\": body[\"name\"]}\n    players.append(player)\n    return 201, player\n\nprint(create_player({\"name\": \"Ece\"}))\nprint(create_player({}))\nprint(get_players())\n",
+   "note": ""
+  },
+  {
+   "title": "Bul ya da 404",
+   "code": "players = [{\"id\": 1, \"name\": \"Piko\"}, {\"id\": 2, \"name\": \"Ece\"}]\n\ndef get_player(pid):\n    for p in players:\n        if p[\"id\"] == pid:\n            return 200, p\n    return 404, {\"hata\": \"oyuncu bulunamadı\"}\n\nprint(get_player(2))\nprint(get_player(9))\n",
+   "note": ""
+  }
+ ],
+ "tasks": [
+  {
+   "id": "d29-t1",
+   "title": "GET: tek oyuncu",
+   "prompt": "`get_player(pid)` kimliği `pid` olan oyuncuyu bulursa `(200, oyuncu)`, bulamazsa `(404, {\"hata\": \"bulunamadı\"})` döndürsün.",
+   "starter": "players = [{\"id\": 1, \"name\": \"Piko\"}, {\"id\": 2, \"name\": \"Ece\"}]\n\ndef get_player(pid):\n    pass\n\nprint(get_player(2))\nprint(get_player(7))\n",
+   "solution": "players = [{\"id\": 1, \"name\": \"Piko\"}, {\"id\": 2, \"name\": \"Ece\"}]\n\ndef get_player(pid):\n    for p in players:\n        if p[\"id\"] == pid:\n            return 200, p\n    return 404, {\"hata\": \"bulunamadı\"}\n\nprint(get_player(2))\nprint(get_player(7))\n",
+   "hints": [
+    "Oyuncuları dolaş, id eşleşince return 200, p",
+    "Döngü bitince return 404, {\"hata\": \"bulunamadı\"}"
+   ],
+   "check": {
+    "python": "\nassert get_player(1) == (200, {\"id\": 1, \"name\": \"Piko\"}), \"get_player(1) (200, Piko) döndürmeli.\"\nassert get_player(2)[1][\"name\"] == \"Ece\", \"get_player(2) Ece'yi döndürmeli.\"\nassert get_player(99) == (404, {\"hata\": \"bulunamadı\"}), \"Olmayan oyuncuda (404, {'hata': 'bulunamadı'}) döndürmeli.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "players = [{\"id\": 1, \"name\": \"Piko\"}, {\"id\": 2, \"name\": \"Ece\"}]",
+      "notes": [
+       "`players` adında bir değişken oluşturuluyor ve içine `[{\"id\": 1, \"name\": \"Piko\"}, {\"id\": 2, \"name\": \"Ece\"}]` (liste) konuyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "def get_player(pid):",
+      "notes": [
+       "`get_player` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `pid`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "    for p in players:",
+      "notes": [
+       "Döngü: `players` içindeki her eleman sırayla `p` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "        if p[\"id\"] == pid:",
+      "notes": [
+       "Koşul: `p[\"id\"] == pid` doğruysa altındaki girintili satırlar çalışır."
+      ]
+     },
+     {
+      "n": 6,
+      "code": "            return 200, p",
+      "notes": [
+       "Fonksiyon `200, p` değerini geri verir ve burada biter."
+      ]
+     },
+     {
+      "n": 7,
+      "code": "    return 404, {\"hata\": \"bulunamadı\"}",
+      "notes": [
+       "Fonksiyon `404, {\"hata\": \"bulunamadı\"}` değerini geri verir ve burada biter."
+      ]
+     },
+     {
+      "n": 9,
+      "code": "print(get_player(2))",
+      "notes": [
+       "`print(get_player(2))`: parantez içindeki değeri ekrana yazdırır.",
+       "`get_player(...)`: senin tanımladığın fonksiyonu çağırır."
+      ]
+     },
+     {
+      "n": 10,
+      "code": "print(get_player(7))",
+      "notes": [
+       "`print(get_player(7))`: parantez içindeki değeri ekrana yazdırır.",
+       "`get_player(...)`: senin tanımladığın fonksiyonu çağırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "players",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `[{\"id\": 1, \"name\": \"Piko\"}, {\"id\": 2, \"name\": \"Ece\"}]`."
+     },
+     {
+      "term": "p",
+      "kind": "döngü değişkeni",
+      "desc": "Döngünün her turunda `players` içindeki sıradaki elemanı tutar."
+     },
+     {
+      "term": "pid",
+      "kind": "parametre",
+      "desc": "`get_player` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "def",
+      "kind": "anahtar kelime",
+      "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+     },
+     {
+      "term": "get_player()",
+      "kind": "senin fonksiyonun",
+      "desc": "Kodda tanımlanan fonksiyon; parametreleri: `pid`."
+     },
+     {
+      "term": "for",
+      "kind": "anahtar kelime",
+      "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+     },
+     {
+      "term": "if",
+      "kind": "anahtar kelime",
+      "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+     },
+     {
+      "term": "==",
+      "kind": "operatör",
+      "desc": "Eşit mi? (True/False)"
+     },
+     {
+      "term": "[ ]",
+      "kind": "seçme",
+      "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+     },
+     {
+      "term": "return",
+      "kind": "anahtar kelime",
+      "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d29-t2",
+   "title": "POST: yeni oyuncu",
+   "prompt": "`create_player(body)`:\n\n- `body` içinde `name` yoksa `(400, {\"hata\": \"isim gerekli\"})` döndürsün.\n- Varsa yeni oyuncuyu `{\"id\": sıradaki_numara, \"name\": ...}` olarak ekleyip `(201, oyuncu)` döndürsün. Sıradaki numara, en büyük kimliğin bir fazlasıdır.",
+   "starter": "players = [{\"id\": 1, \"name\": \"Piko\"}, {\"id\": 4, \"name\": \"Ece\"}]\n\ndef create_player(body):\n    pass\n\nprint(create_player({\"name\": \"Can\"}))\nprint(create_player({}))\n",
+   "solution": "players = [{\"id\": 1, \"name\": \"Piko\"}, {\"id\": 4, \"name\": \"Ece\"}]\n\ndef create_player(body):\n    if \"name\" not in body:\n        return 400, {\"hata\": \"isim gerekli\"}\n    next_id = max([p[\"id\"] for p in players], default=0) + 1\n    player = {\"id\": next_id, \"name\": body[\"name\"]}\n    players.append(player)\n    return 201, player\n\nprint(create_player({\"name\": \"Can\"}))\nprint(create_player({}))\n",
+   "hints": [
+    "Önce kontrol: if \"name\" not in body:",
+    "En büyük kimlik: max([p[\"id\"] for p in players])",
+    "Liste boşsa max hata verir; max(..., default=0) kullanabilirsin."
+   ],
+   "check": {
+    "python": "\nplayers.clear()\nplayers.append({\"id\": 3, \"name\": \"Ada\"})\nassert create_player({\"name\": \"Efe\"}) == (201, {\"id\": 4, \"name\": \"Efe\"}), \"Yeni oyuncunun id'si en büyük id + 1 olmalı ve (201, oyuncu) dönmeli.\"\nassert players[-1] == {\"id\": 4, \"name\": \"Efe\"}, \"Yeni oyuncu players listesine eklenmeli.\"\nassert create_player({\"yas\": 9}) == (400, {\"hata\": \"isim gerekli\"}), \"İsim yoksa (400, {'hata': 'isim gerekli'}) dönmeli.\"\nassert len(players) == 2, \"Hatalı istekte oyuncu eklenmemeli.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "players = [{\"id\": 1, \"name\": \"Piko\"}, {\"id\": 4, \"name\": \"Ece\"}]",
+      "notes": [
+       "`players` adında bir değişken oluşturuluyor ve içine `[{\"id\": 1, \"name\": \"Piko\"}, {\"id\": 4, \"name\": \"Ece\"}]` (liste) konuyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "def create_player(body):",
+      "notes": [
+       "`create_player` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `body`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "    if \"name\" not in body:",
+      "notes": [
+       "Koşul: `\"name\" not in body` doğruysa altındaki girintili satırlar çalışır."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "        return 400, {\"hata\": \"isim gerekli\"}",
+      "notes": [
+       "Fonksiyon `400, {\"hata\": \"isim gerekli\"}` değerini geri verir ve burada biter."
+      ]
+     },
+     {
+      "n": 6,
+      "code": "    next_id = max([p[\"id\"] for p in players], default=0) + 1",
+      "notes": [
+       "`next_id` adında bir değişken oluşturuluyor ve içine `max([p[\"id\"] for p in players], default=0) + 1` konuyor.",
+       "Tek satırda döngüyle yeni bir liste/dizi üretiliyor."
+      ]
+     },
+     {
+      "n": 7,
+      "code": "    player = {\"id\": next_id, \"name\": body[\"name\"]}",
+      "notes": [
+       "`player` adında bir değişken oluşturuluyor ve içine `{\"id\": next_id, \"name\": body[\"name\"]}` (sözlük (anahtar: değer)) konuyor."
+      ]
+     },
+     {
+      "n": 8,
+      "code": "    players.append(player)",
+      "notes": [
+       "`players.append(player)`: `players` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+      ]
+     },
+     {
+      "n": 9,
+      "code": "    return 201, player",
+      "notes": [
+       "Fonksiyon `201, player` değerini geri verir ve burada biter."
+      ]
+     },
+     {
+      "n": 11,
+      "code": "print(create_player({\"name\": \"Can\"}))",
+      "notes": [
+       "`print(create_player({\"name\": \"Can\"}))`: parantez içindeki değeri ekrana yazdırır.",
+       "`create_player(...)`: senin tanımladığın fonksiyonu çağırır."
+      ]
+     },
+     {
+      "n": 12,
+      "code": "print(create_player({}))",
+      "notes": [
+       "`print(create_player({}))`: parantez içindeki değeri ekrana yazdırır.",
+       "`create_player(...)`: senin tanımladığın fonksiyonu çağırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "players",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `[{\"id\": 1, \"name\": \"Piko\"}, {\"id\": 4, \"name\": \"Ece\"}]`."
+     },
+     {
+      "term": "next_id",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `max([p[\"id\"] for p in players], default=0) + 1`."
+     },
+     {
+      "term": "player",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"id\": next_id, \"name\": body[\"name\"]}`."
+     },
+     {
+      "term": "body",
+      "kind": "parametre",
+      "desc": "`create_player` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "def",
+      "kind": "anahtar kelime",
+      "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+     },
+     {
+      "term": "create_player()",
+      "kind": "senin fonksiyonun",
+      "desc": "Kodda tanımlanan fonksiyon; parametreleri: `body`."
+     },
+     {
+      "term": "if",
+      "kind": "anahtar kelime",
+      "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+     },
+     {
+      "term": "not in",
+      "kind": "operatör",
+      "desc": "İçinde yok mu?"
+     },
+     {
+      "term": "return",
+      "kind": "anahtar kelime",
+      "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+     },
+     {
+      "term": "+",
+      "kind": "operatör",
+      "desc": "Toplama; metinlerde ve listelerde uç uca ekleme."
+     },
+     {
+      "term": "max()",
+      "kind": "fonksiyon",
+      "desc": "En büyük değeri verir."
+     },
+     {
+      "term": "[... for ... in ...]",
+      "kind": "liste üreteci",
+      "desc": "Liste üreteci: [ifade for x in liste if koşul] ile tek satırda yeni liste."
+     },
+     {
+      "term": "[ ]",
+      "kind": "seçme",
+      "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+     },
+     {
+      "term": ".append()",
+      "kind": "metot",
+      "desc": "Listenin sonuna yeni bir eleman ekler."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d29-t3",
+   "title": "DELETE: oyuncu sil",
+   "prompt": "`delete_player(pid)` oyuncuyu bulup silerse `(204, None)`, bulamazsa `(404, {\"hata\": \"bulunamadı\"})` döndürsün.",
+   "starter": "players = [{\"id\": 1, \"name\": \"Piko\"}, {\"id\": 2, \"name\": \"Ece\"}]\n\ndef delete_player(pid):\n    pass\n\nprint(delete_player(1))\nprint(players)\n",
+   "solution": "players = [{\"id\": 1, \"name\": \"Piko\"}, {\"id\": 2, \"name\": \"Ece\"}]\n\ndef delete_player(pid):\n    for p in players:\n        if p[\"id\"] == pid:\n            players.remove(p)\n            return 204, None\n    return 404, {\"hata\": \"bulunamadı\"}\n\nprint(delete_player(1))\nprint(players)\n",
+   "hints": [
+    "Oyuncuyu bulunca players.remove(p)",
+    "Sonra return 204, None"
+   ],
+   "check": {
+    "python": "\nplayers.clear()\nplayers.extend([{\"id\": 5, \"name\": \"a\"}, {\"id\": 6, \"name\": \"b\"}])\nassert delete_player(5) == (204, None), \"Silme başarılıysa (204, None) dönmeli.\"\nassert players == [{\"id\": 6, \"name\": \"b\"}], \"Silinen oyuncu listeden çıkmalı.\"\nassert delete_player(5) == (404, {\"hata\": \"bulunamadı\"}), \"Olmayan oyuncuda (404, ...) dönmeli.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "players = [{\"id\": 1, \"name\": \"Piko\"}, {\"id\": 2, \"name\": \"Ece\"}]",
+      "notes": [
+       "`players` adında bir değişken oluşturuluyor ve içine `[{\"id\": 1, \"name\": \"Piko\"}, {\"id\": 2, \"name\": \"Ece\"}]` (liste) konuyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "def delete_player(pid):",
+      "notes": [
+       "`delete_player` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `pid`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "    for p in players:",
+      "notes": [
+       "Döngü: `players` içindeki her eleman sırayla `p` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "        if p[\"id\"] == pid:",
+      "notes": [
+       "Koşul: `p[\"id\"] == pid` doğruysa altındaki girintili satırlar çalışır."
+      ]
+     },
+     {
+      "n": 6,
+      "code": "            players.remove(p)",
+      "notes": [
+       "`players.remove(p)`: `players` üzerinde `remove` metodunu çalıştırır. Listeden (ya da setten) verilen elemanı çıkarır."
+      ]
+     },
+     {
+      "n": 7,
+      "code": "            return 204, None",
+      "notes": [
+       "Fonksiyon `204, None` değerini geri verir ve burada biter."
+      ]
+     },
+     {
+      "n": 8,
+      "code": "    return 404, {\"hata\": \"bulunamadı\"}",
+      "notes": [
+       "Fonksiyon `404, {\"hata\": \"bulunamadı\"}` değerini geri verir ve burada biter."
+      ]
+     },
+     {
+      "n": 10,
+      "code": "print(delete_player(1))",
+      "notes": [
+       "`print(delete_player(1))`: parantez içindeki değeri ekrana yazdırır.",
+       "`delete_player(...)`: senin tanımladığın fonksiyonu çağırır."
+      ]
+     },
+     {
+      "n": 11,
+      "code": "print(players)",
+      "notes": [
+       "`print(players)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "players",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `[{\"id\": 1, \"name\": \"Piko\"}, {\"id\": 2, \"name\": \"Ece\"}]`."
+     },
+     {
+      "term": "p",
+      "kind": "döngü değişkeni",
+      "desc": "Döngünün her turunda `players` içindeki sıradaki elemanı tutar."
+     },
+     {
+      "term": "pid",
+      "kind": "parametre",
+      "desc": "`delete_player` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "def",
+      "kind": "anahtar kelime",
+      "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+     },
+     {
+      "term": "delete_player()",
+      "kind": "senin fonksiyonun",
+      "desc": "Kodda tanımlanan fonksiyon; parametreleri: `pid`."
+     },
+     {
+      "term": "for",
+      "kind": "anahtar kelime",
+      "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+     },
+     {
+      "term": "if",
+      "kind": "anahtar kelime",
+      "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+     },
+     {
+      "term": "==",
+      "kind": "operatör",
+      "desc": "Eşit mi? (True/False)"
+     },
+     {
+      "term": "[ ]",
+      "kind": "seçme",
+      "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+     },
+     {
+      "term": ".remove()",
+      "kind": "metot",
+      "desc": "Listeden (ya da setten) verilen elemanı çıkarır."
+     },
+     {
+      "term": "return",
+      "kind": "anahtar kelime",
+      "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+     },
+     {
+      "term": "None",
+      "kind": "değer",
+      "desc": "\"Hiçbir şey / boş\" anlamına gelen özel değer."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "id": "d29-c",
+  "title": "Yönlendirici",
+  "prompt": "`handle(method, path, body=None)` gelen isteği doğru fonksiyona göndersin:\n\n- `GET /players` için `(200, players)`\n- `GET /players/2` için `get_player(2)`\n- `POST /players` için `create_player(body)`\n- Diğer her şey için `(404, {\"hata\": \"yol yok\"})`",
+  "starter": "players = [{\"id\": 1, \"name\": \"Piko\"}]\n\ndef get_player(pid):\n    for p in players:\n        if p[\"id\"] == pid:\n            return 200, p\n    return 404, {\"hata\": \"bulunamadı\"}\n\ndef create_player(body):\n    player = {\"id\": len(players) + 1, \"name\": body[\"name\"]}\n    players.append(player)\n    return 201, player\n\ndef handle(method, path, body=None):\n    pass\n\nprint(handle(\"GET\", \"/players\"))\nprint(handle(\"GET\", \"/players/1\"))\n",
+  "solution": "players = [{\"id\": 1, \"name\": \"Piko\"}]\n\ndef get_player(pid):\n    for p in players:\n        if p[\"id\"] == pid:\n            return 200, p\n    return 404, {\"hata\": \"bulunamadı\"}\n\ndef create_player(body):\n    player = {\"id\": len(players) + 1, \"name\": body[\"name\"]}\n    players.append(player)\n    return 201, player\n\ndef handle(method, path, body=None):\n    parts = path.strip(\"/\").split(\"/\")\n    if parts[0] != \"players\":\n        return 404, {\"hata\": \"yol yok\"}\n    if method == \"GET\" and len(parts) == 1:\n        return 200, players\n    if method == \"GET\" and len(parts) == 2 and parts[1].isdigit():\n        return get_player(int(parts[1]))\n    if method == \"POST\" and len(parts) == 1:\n        return create_player(body)\n    return 404, {\"hata\": \"yol yok\"}\n\nprint(handle(\"GET\", \"/players\"))\nprint(handle(\"GET\", \"/players/1\"))\n",
+  "hints": [
+   "Adresi parçala: path.strip(\"/\").split(\"/\")",
+   "Parça sayısına ve metoda göre karar ver.",
+   "Kimliği int() ile sayıya çevir."
+  ],
+  "check": {
+   "python": "\nassert handle(\"GET\", \"/players\") == (200, players), \"GET /players tüm oyuncuları döndürmeli.\"\nassert handle(\"GET\", \"/players/1\") == (200, {\"id\": 1, \"name\": \"Piko\"}), \"GET /players/1 get_player(1) sonucunu döndürmeli.\"\nassert handle(\"GET\", \"/players/9\")[0] == 404, \"Olmayan oyuncu 404 olmalı.\"\ncode, p = handle(\"POST\", \"/players\", {\"name\": \"Ece\"})\nassert code == 201 and p[\"name\"] == \"Ece\", \"POST /players yeni oyuncu eklemeli.\"\nassert handle(\"DELETE\", \"/players/1\") == (404, {\"hata\": \"yol yok\"}), \"Tanımsız metot (404, {'hata': 'yol yok'}) olmalı.\"\nassert handle(\"GET\", \"/uzay\") == (404, {\"hata\": \"yol yok\"}), \"Bilinmeyen yol (404, {'hata': 'yol yok'}) olmalı.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "players = [{\"id\": 1, \"name\": \"Piko\"}]",
+     "notes": [
+      "`players` adında bir değişken oluşturuluyor ve içine `[{\"id\": 1, \"name\": \"Piko\"}]` (liste) konuyor."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "def get_player(pid):",
+     "notes": [
+      "`get_player` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `pid`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "    for p in players:",
+     "notes": [
+      "Döngü: `players` içindeki her eleman sırayla `p` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "        if p[\"id\"] == pid:",
+     "notes": [
+      "Koşul: `p[\"id\"] == pid` doğruysa altındaki girintili satırlar çalışır."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "            return 200, p",
+     "notes": [
+      "Fonksiyon `200, p` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 7,
+     "code": "    return 404, {\"hata\": \"bulunamadı\"}",
+     "notes": [
+      "Fonksiyon `404, {\"hata\": \"bulunamadı\"}` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 9,
+     "code": "def create_player(body):",
+     "notes": [
+      "`create_player` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `body`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+     ]
+    },
+    {
+     "n": 10,
+     "code": "    player = {\"id\": len(players) + 1, \"name\": body[\"name\"]}",
+     "notes": [
+      "`player` adında bir değişken oluşturuluyor ve içine `{\"id\": len(players) + 1, \"name\": body[\"name\"]}` (sözlük (anahtar: değer)) konuyor."
+     ]
+    },
+    {
+     "n": 11,
+     "code": "    players.append(player)",
+     "notes": [
+      "`players.append(player)`: `players` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+     ]
+    },
+    {
+     "n": 12,
+     "code": "    return 201, player",
+     "notes": [
+      "Fonksiyon `201, player` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 14,
+     "code": "def handle(method, path, body=None):",
+     "notes": [
+      "`handle` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `method`, `path`, `body`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+     ]
+    },
+    {
+     "n": 15,
+     "code": "    parts = path.strip(\"/\").split(\"/\")",
+     "notes": [
+      "`parts` adında bir değişken oluşturuluyor ve içine `path.strip(\"/\").split(\"/\")` konuyor."
+     ]
+    },
+    {
+     "n": 16,
+     "code": "    if parts[0] != \"players\":",
+     "notes": [
+      "Koşul: `parts[0] != \"players\"` doğruysa altındaki girintili satırlar çalışır."
+     ]
+    },
+    {
+     "n": 17,
+     "code": "        return 404, {\"hata\": \"yol yok\"}",
+     "notes": [
+      "Fonksiyon `404, {\"hata\": \"yol yok\"}` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 18,
+     "code": "    if method == \"GET\" and len(parts) == 1:",
+     "notes": [
+      "Koşul: `method == \"GET\" and len(parts) == 1` doğruysa altındaki girintili satırlar çalışır."
+     ]
+    },
+    {
+     "n": 19,
+     "code": "        return 200, players",
+     "notes": [
+      "Fonksiyon `200, players` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 20,
+     "code": "    if method == \"GET\" and len(parts) == 2 and parts[1].isdigit():",
+     "notes": [
+      "Koşul: `method == \"GET\" and len(parts) == 2 and parts[1].isdigit()` doğruysa altındaki girintili satırlar çalışır."
+     ]
+    },
+    {
+     "n": 21,
+     "code": "        return get_player(int(parts[1]))",
+     "notes": [
+      "Fonksiyon `get_player(int(parts[1]))` değerini geri verir ve burada biter.",
+      "`get_player(...)`: senin tanımladığın fonksiyonu çağırır."
+     ]
+    },
+    {
+     "n": 22,
+     "code": "    if method == \"POST\" and len(parts) == 1:",
+     "notes": [
+      "Koşul: `method == \"POST\" and len(parts) == 1` doğruysa altındaki girintili satırlar çalışır."
+     ]
+    },
+    {
+     "n": 23,
+     "code": "        return create_player(body)",
+     "notes": [
+      "Fonksiyon `create_player(body)` değerini geri verir ve burada biter.",
+      "`create_player(...)`: senin tanımladığın fonksiyonu çağırır."
+     ]
+    },
+    {
+     "n": 24,
+     "code": "    return 404, {\"hata\": \"yol yok\"}",
+     "notes": [
+      "Fonksiyon `404, {\"hata\": \"yol yok\"}` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 26,
+     "code": "print(handle(\"GET\", \"/players\"))",
+     "notes": [
+      "`print(handle(\"GET\", \"/players\"))`: parantez içindeki değeri ekrana yazdırır.",
+      "`handle(...)`: senin tanımladığın fonksiyonu çağırır."
+     ]
+    },
+    {
+     "n": 27,
+     "code": "print(handle(\"GET\", \"/players/1\"))",
+     "notes": [
+      "`print(handle(\"GET\", \"/players/1\"))`: parantez içindeki değeri ekrana yazdırır.",
+      "`handle(...)`: senin tanımladığın fonksiyonu çağırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "players",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `[{\"id\": 1, \"name\": \"Piko\"}]`."
+    },
+    {
+     "term": "player",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"id\": len(players) + 1, \"name\": body[\"name\"]}`."
+    },
+    {
+     "term": "parts",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `path.strip(\"/\").split(\"/\")`."
+    },
+    {
+     "term": "p",
+     "kind": "döngü değişkeni",
+     "desc": "Döngünün her turunda `players` içindeki sıradaki elemanı tutar."
+    },
+    {
+     "term": "pid",
+     "kind": "parametre",
+     "desc": "`get_player` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+    },
+    {
+     "term": "body",
+     "kind": "parametre",
+     "desc": "`create_player` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+    },
+    {
+     "term": "method",
+     "kind": "parametre",
+     "desc": "`handle` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+    },
+    {
+     "term": "path",
+     "kind": "parametre",
+     "desc": "`handle` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "def",
+     "kind": "anahtar kelime",
+     "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+    },
+    {
+     "term": "get_player()",
+     "kind": "senin fonksiyonun",
+     "desc": "Kodda tanımlanan fonksiyon; parametreleri: `pid`."
+    },
+    {
+     "term": "for",
+     "kind": "anahtar kelime",
+     "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+    },
+    {
+     "term": "if",
+     "kind": "anahtar kelime",
+     "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+    },
+    {
+     "term": "==",
+     "kind": "operatör",
+     "desc": "Eşit mi? (True/False)"
+    },
+    {
+     "term": "[ ]",
+     "kind": "seçme",
+     "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+    },
+    {
+     "term": "return",
+     "kind": "anahtar kelime",
+     "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+    },
+    {
+     "term": "create_player()",
+     "kind": "senin fonksiyonun",
+     "desc": "Kodda tanımlanan fonksiyon; parametreleri: `body`."
+    },
+    {
+     "term": "+",
+     "kind": "operatör",
+     "desc": "Toplama; metinlerde ve listelerde uç uca ekleme."
+    },
+    {
+     "term": "len()",
+     "kind": "fonksiyon",
+     "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+    },
+    {
+     "term": ".append()",
+     "kind": "metot",
+     "desc": "Listenin sonuna yeni bir eleman ekler."
+    },
+    {
+     "term": "handle()",
+     "kind": "senin fonksiyonun",
+     "desc": "Kodda tanımlanan fonksiyon; parametreleri: `method`, `path`, `body`."
+    },
+    {
+     "term": "None",
+     "kind": "değer",
+     "desc": "\"Hiçbir şey / boş\" anlamına gelen özel değer."
+    },
+    {
+     "term": ".split()",
+     "kind": "metot",
+     "desc": "Metni parçalara böler ve liste yapar (varsayılan: boşluklardan)."
+    },
+    {
+     "term": ".strip()",
+     "kind": "metot",
+     "desc": "Metnin başındaki ve sonundaki boşlukları siler."
+    },
+    {
+     "term": "!=",
+     "kind": "operatör",
+     "desc": "Eşit değil mi?"
+    },
+    {
+     "term": "and",
+     "kind": "operatör",
+     "desc": "\"ve\": iki koşul da doğruysa True."
+    },
+    {
+     "term": ".isdigit()",
+     "kind": "metot",
+     "desc": "Metin yalnızca rakamlardan mı oluşuyor? (True/False)"
+    },
+    {
+     "term": "int()",
+     "kind": "fonksiyon",
+     "desc": "Bir değeri tam sayıya çevirir, örneğin \"42\" yazısını 42 sayısına."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    }
+   ]
+  }
+ },
+ "project_task": {
+  "id": "d29-p",
+  "title": "Oyun API'si",
+  "prompt": "Piko'nun Macerası'nın skor API'sini yazalım. `handle(method, path, body=None)`:\n\n- `GET /scores`: skorları **büyükten küçüğe** sıralı döndürsün: `(200, liste)`\n- `POST /scores`: `body`'de `name` ve `score` varsa ekleyip `(201, yeni_kayıt)` döndürsün, eksikse `(400, {\"hata\": \"eksik bilgi\"})`\n- Başka her şey: `(404, {\"hata\": \"yol yok\"})`",
+  "starter": "scores = [{\"name\": \"Piko\", \"score\": 300}, {\"name\": \"Ece\", \"score\": 450}]\n\ndef handle(method, path, body=None):\n    pass\n\nprint(handle(\"GET\", \"/scores\"))\nprint(handle(\"POST\", \"/scores\", {\"name\": \"Can\", \"score\": 120}))\n",
+  "solution": "scores = [{\"name\": \"Piko\", \"score\": 300}, {\"name\": \"Ece\", \"score\": 450}]\n\ndef handle(method, path, body=None):\n    if path != \"/scores\":\n        return 404, {\"hata\": \"yol yok\"}\n    if method == \"GET\":\n        return 200, sorted(scores, key=lambda s: s[\"score\"], reverse=True)\n    if method == \"POST\":\n        if not body or \"name\" not in body or \"score\" not in body:\n            return 400, {\"hata\": \"eksik bilgi\"}\n        entry = {\"name\": body[\"name\"], \"score\": body[\"score\"]}\n        scores.append(entry)\n        return 201, entry\n    return 404, {\"hata\": \"yol yok\"}\n\nprint(handle(\"GET\", \"/scores\"))\nprint(handle(\"POST\", \"/scores\", {\"name\": \"Can\", \"score\": 120}))\n",
+  "hints": [
+   "Önce yolu kontrol et: if path != \"/scores\":",
+   "GET için: sorted(scores, key=lambda s: s[\"score\"], reverse=True)",
+   "POST için önce eksik bilgi var mı bak."
+  ],
+  "check": {
+   "python": "\nscores.clear()\nscores.extend([{\"name\": \"a\", \"score\": 5}, {\"name\": \"b\", \"score\": 50}])\nassert handle(\"GET\", \"/scores\") == (200, [{\"name\": \"b\", \"score\": 50}, {\"name\": \"a\", \"score\": 5}]), \"GET /scores büyükten küçüğe sıralı liste döndürmeli.\"\nassert handle(\"POST\", \"/scores\", {\"name\": \"c\", \"score\": 20}) == (201, {\"name\": \"c\", \"score\": 20}), \"POST yeni kaydı (201, kayıt) olarak döndürmeli.\"\nassert [s[\"name\"] for s in handle(\"GET\", \"/scores\")[1]] == [\"b\", \"c\", \"a\"], \"Eklenen skor sıralamada yerini almalı.\"\nassert handle(\"POST\", \"/scores\", {\"name\": \"d\"}) == (400, {\"hata\": \"eksik bilgi\"}), \"Eksik bilgide (400, {'hata': 'eksik bilgi'}) dönmeli.\"\nassert handle(\"POST\", \"/scores\") == (400, {\"hata\": \"eksik bilgi\"}), \"body hiç yoksa da (400, ...) dönmeli.\"\nassert handle(\"GET\", \"/oyuncular\") == (404, {\"hata\": \"yol yok\"}), \"Bilinmeyen yol 404 olmalı.\"\nassert handle(\"DELETE\", \"/scores\") == (404, {\"hata\": \"yol yok\"}), \"Tanımsız metot 404 olmalı.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "scores = [{\"name\": \"Piko\", \"score\": 300}, {\"name\": \"Ece\", \"score\": 450}]",
+     "notes": [
+      "`scores` adında bir değişken oluşturuluyor ve içine `[{\"name\": \"Piko\", \"score\": 300}, {\"name\": \"Ece\", \"score\":...` (liste) konuyor."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "def handle(method, path, body=None):",
+     "notes": [
+      "`handle` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `method`, `path`, `body`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "    if path != \"/scores\":",
+     "notes": [
+      "Koşul: `path != \"/scores\"` doğruysa altındaki girintili satırlar çalışır."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "        return 404, {\"hata\": \"yol yok\"}",
+     "notes": [
+      "Fonksiyon `404, {\"hata\": \"yol yok\"}` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "    if method == \"GET\":",
+     "notes": [
+      "Koşul: `method == \"GET\"` doğruysa altındaki girintili satırlar çalışır."
+     ]
+    },
+    {
+     "n": 7,
+     "code": "        return 200, sorted(scores, key=lambda s: s[\"score\"], reverse=True)",
+     "notes": [
+      "Fonksiyon `200, sorted(scores, key=lambda s: s[\"score\"], reverse=True)` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 8,
+     "code": "    if method == \"POST\":",
+     "notes": [
+      "Koşul: `method == \"POST\"` doğruysa altındaki girintili satırlar çalışır."
+     ]
+    },
+    {
+     "n": 9,
+     "code": "        if not body or \"name\" not in body or \"score\" not in body:",
+     "notes": [
+      "Koşul: `not body or \"name\" not in body or \"score\" not in body` doğruysa altındaki girintili satırlar çalışır."
+     ]
+    },
+    {
+     "n": 10,
+     "code": "            return 400, {\"hata\": \"eksik bilgi\"}",
+     "notes": [
+      "Fonksiyon `400, {\"hata\": \"eksik bilgi\"}` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 11,
+     "code": "        entry = {\"name\": body[\"name\"], \"score\": body[\"score\"]}",
+     "notes": [
+      "`entry` adında bir değişken oluşturuluyor ve içine `{\"name\": body[\"name\"], \"score\": body[\"score\"]}` (sözlük (anahtar: değer)) konuyor."
+     ]
+    },
+    {
+     "n": 12,
+     "code": "        scores.append(entry)",
+     "notes": [
+      "`scores.append(entry)`: `scores` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+     ]
+    },
+    {
+     "n": 13,
+     "code": "        return 201, entry",
+     "notes": [
+      "Fonksiyon `201, entry` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 14,
+     "code": "    return 404, {\"hata\": \"yol yok\"}",
+     "notes": [
+      "Fonksiyon `404, {\"hata\": \"yol yok\"}` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 16,
+     "code": "print(handle(\"GET\", \"/scores\"))",
+     "notes": [
+      "`print(handle(\"GET\", \"/scores\"))`: parantez içindeki değeri ekrana yazdırır.",
+      "`handle(...)`: senin tanımladığın fonksiyonu çağırır."
+     ]
+    },
+    {
+     "n": 17,
+     "code": "print(handle(\"POST\", \"/scores\", {\"name\": \"Can\", \"score\": 120}))",
+     "notes": [
+      "`print(handle(\"POST\", \"/scores\", {\"name\": \"Can\", \"score\": ...`: parantez içindeki değeri ekrana yazdırır.",
+      "`handle(...)`: senin tanımladığın fonksiyonu çağırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "scores",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `[{\"name\": \"Piko\", \"score\": 300}, {\"name\": \"Ece\", \"score\":...`."
+    },
+    {
+     "term": "entry",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"name\": body[\"name\"], \"score\": body[\"score\"]}`."
+    },
+    {
+     "term": "method",
+     "kind": "parametre",
+     "desc": "`handle` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+    },
+    {
+     "term": "path",
+     "kind": "parametre",
+     "desc": "`handle` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+    },
+    {
+     "term": "body",
+     "kind": "parametre",
+     "desc": "`handle` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "def",
+     "kind": "anahtar kelime",
+     "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+    },
+    {
+     "term": "handle()",
+     "kind": "senin fonksiyonun",
+     "desc": "Kodda tanımlanan fonksiyon; parametreleri: `method`, `path`, `body`."
+    },
+    {
+     "term": "None",
+     "kind": "değer",
+     "desc": "\"Hiçbir şey / boş\" anlamına gelen özel değer."
+    },
+    {
+     "term": "if",
+     "kind": "anahtar kelime",
+     "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+    },
+    {
+     "term": "!=",
+     "kind": "operatör",
+     "desc": "Eşit değil mi?"
+    },
+    {
+     "term": "return",
+     "kind": "anahtar kelime",
+     "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+    },
+    {
+     "term": "==",
+     "kind": "operatör",
+     "desc": "Eşit mi? (True/False)"
+    },
+    {
+     "term": "sorted()",
+     "kind": "fonksiyon",
+     "desc": "Sıralanmış yeni bir liste verir; asıl liste değişmez."
+    },
+    {
+     "term": "lambda",
+     "kind": "anahtar kelime",
+     "desc": "Tek satırlık isimsiz küçük fonksiyon."
+    },
+    {
+     "term": "True",
+     "kind": "değer",
+     "desc": "Doğru (mantıksal değer)."
+    },
+    {
+     "term": "[ ]",
+     "kind": "seçme",
+     "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+    },
+    {
+     "term": "or",
+     "kind": "operatör",
+     "desc": "\"veya\": koşullardan biri doğruysa True."
+    },
+    {
+     "term": "not",
+     "kind": "operatör",
+     "desc": "Koşulu tersine çevirir (True ↔ False)."
+    },
+    {
+     "term": "not in",
+     "kind": "operatör",
+     "desc": "İçinde yok mu?"
+    },
+    {
+     "term": ".append()",
+     "kind": "metot",
+     "desc": "Listenin sonuna yeni bir eleman ekler."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    }
+   ]
+  }
+ },
+ "available": true,
+ "tracks": {
+  "veri": {
+   "project_task": {
+    "id": "d29-pv",
+    "title": "Harcama API'si",
+    "prompt": "Telefonundaki bir uygulama harcama ekleyebilsin diye küçük bir API yazalım. `handle(method, path, body=None)`:\n\n- `GET /expenses`: `(200, expenses)` döndürsün.\n- `POST /expenses`: `body`'de `category` ve **0'dan büyük** bir `amount` varsa belgeyi ekleyip `(201, body)` döndürsün; yoksa `(400, {\"hata\": \"geçersiz harcama\"})`.\n- Başka her istek için `(404, {\"hata\": \"bulunamadı\"})`.",
+    "starter": "expenses = []\n\n\ndef handle(method, path, body=None):\n    pass\n",
+    "solution": "expenses = []\n\n\ndef handle(method, path, body=None):\n    if path == \"/expenses\" and method == \"GET\":\n        return (200, expenses)\n    if path == \"/expenses\" and method == \"POST\":\n        if body and body.get(\"category\") and body.get(\"amount\", 0) > 0:\n            expenses.append(body)\n            return (201, body)\n        return (400, {\"hata\": \"geçersiz harcama\"})\n    return (404, {\"hata\": \"bulunamadı\"})\n",
+    "hints": [
+     "Önce path'e, sonra method'a bak.",
+     "body.get(\"amount\", 0) > 0 tutarın pozitif olduğunu kontrol eder."
+    ],
+    "check": {
+     "python": "\nexpenses.clear()\nassert handle(\"GET\", \"/expenses\") == (200, []), \"GET /expenses (200, []) döndürmeli.\"\nitem = {\"category\": \"kahve\", \"amount\": 35}\nassert handle(\"POST\", \"/expenses\", item) == (201, item), \"Geçerli harcama (201, body) ile eklenmeli.\"\nassert handle(\"POST\", \"/expenses\", {\"category\": \"x\", \"amount\": 0})[0] == 400, \"Tutar 0 ise 400 döndürmeli.\"\nassert handle(\"POST\", \"/expenses\", {\"amount\": 5})[0] == 400, \"Kategori yoksa 400 döndürmeli.\"\nassert handle(\"GET\", \"/expenses\") == (200, [item]), \"Eklenen harcama listede görünmeli.\"\nassert handle(\"DELETE\", \"/expenses\")[0] == 404 and handle(\"GET\", \"/x\")[0] == 404, \"Başka istekler 404 olmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "expenses = []",
+       "notes": [
+        "`expenses` adında bir değişken oluşturuluyor ve içine `[]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "def handle(method, path, body=None):",
+       "notes": [
+        "`handle` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `method`, `path`, `body`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "    if path == \"/expenses\" and method == \"GET\":",
+       "notes": [
+        "Koşul: `path == \"/expenses\" and method == \"GET\"` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "        return (200, expenses)",
+       "notes": [
+        "Fonksiyon `(200, expenses)` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "    if path == \"/expenses\" and method == \"POST\":",
+       "notes": [
+        "Koşul: `path == \"/expenses\" and method == \"POST\"` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "        if body and body.get(\"category\") and body.get(\"amount\", 0) > 0:",
+       "notes": [
+        "Koşul: `body and body.get(\"category\") and body.get(\"amount\", 0) > 0` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "            expenses.append(body)",
+       "notes": [
+        "`expenses.append(body)`: `expenses` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "            return (201, body)",
+       "notes": [
+        "Fonksiyon `(201, body)` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "        return (400, {\"hata\": \"geçersiz harcama\"})",
+       "notes": [
+        "Fonksiyon `(400, {\"hata\": \"geçersiz harcama\"})` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "    return (404, {\"hata\": \"bulunamadı\"})",
+       "notes": [
+        "Fonksiyon `(404, {\"hata\": \"bulunamadı\"})` değerini geri verir ve burada biter."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "expenses",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[]`."
+      },
+      {
+       "term": "method",
+       "kind": "parametre",
+       "desc": "`handle` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "path",
+       "kind": "parametre",
+       "desc": "`handle` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "body",
+       "kind": "parametre",
+       "desc": "`handle` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "handle()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `method`, `path`, `body`."
+      },
+      {
+       "term": "None",
+       "kind": "değer",
+       "desc": "\"Hiçbir şey / boş\" anlamına gelen özel değer."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "and",
+       "kind": "operatör",
+       "desc": "\"ve\": iki koşul da doğruysa True."
+      },
+      {
+       "term": "==",
+       "kind": "operatör",
+       "desc": "Eşit mi? (True/False)"
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": ".get()",
+       "kind": "metot",
+       "desc": "Sözlükten anahtarın değerini alır; anahtar yoksa hata vermez, varsayılanı verir."
+      },
+      {
+       "term": ">",
+       "kind": "operatör",
+       "desc": "Büyük mü?"
+      },
+      {
+       "term": ".append()",
+       "kind": "metot",
+       "desc": "Listenin sonuna yeni bir eleman ekler."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Harcama API'si",
+   "game_role": "Harcamaları başka uygulamalara açan küçük bir API."
+  },
+  "otomasyon": {
+   "project_task": {
+    "id": "d29-po",
+    "title": "Görev API'si",
+    "prompt": "Asistana telefondan görev eklenebilsin diye küçük bir API yazalım. `handle(method, path, body=None)`:\n\n- `GET /tasks`: `(200, tasks)` döndürsün.\n- `POST /tasks`: `body`'de boş olmayan bir `title` varsa `{\"id\": ..., \"title\": ...}` görevini ekleyip `(201, görev)` döndürsün (`id` 1'den başlayıp artsın); yoksa `(400, {\"hata\": \"başlık gerekli\"})`.\n- `DELETE /tasks/<id>`: o id'li görevi silip `(204, None)`, yoksa `(404, {\"hata\": \"bulunamadı\"})`.\n- Başka her şey: `(404, {\"hata\": \"bulunamadı\"})`.",
+    "starter": "tasks = []\n\n\ndef handle(method, path, body=None):\n    pass\n",
+    "solution": "tasks = []\n\n\ndef handle(method, path, body=None):\n    if path == \"/tasks\" and method == \"GET\":\n        return (200, tasks)\n    if path == \"/tasks\" and method == \"POST\":\n        if body and body.get(\"title\"):\n            task = {\"id\": len(tasks) + 1, \"title\": body[\"title\"]}\n            tasks.append(task)\n            return (201, task)\n        return (400, {\"hata\": \"başlık gerekli\"})\n    if method == \"DELETE\" and path.startswith(\"/tasks/\"):\n        task_id = path.split(\"/\")[-1]\n        for task in tasks:\n            if str(task[\"id\"]) == task_id:\n                tasks.remove(task)\n                return (204, None)\n    return (404, {\"hata\": \"bulunamadı\"})\n",
+    "hints": [
+     "path.startswith(\"/tasks/\") ve path.split(\"/\")[-1] id'yi verir.",
+     "id'leri karşılaştırırken yazı/sayı farkına dikkat: str(task[\"id\"])"
+    ],
+    "check": {
+     "python": "\ntasks.clear()\nassert handle(\"GET\", \"/tasks\") == (200, []), \"GET /tasks (200, []) döndürmeli.\"\nassert handle(\"POST\", \"/tasks\", {\"title\": \"Spor\"}) == (201, {\"id\": 1, \"title\": \"Spor\"}), \"POST ile görev id 1 ile eklenmeli.\"\nassert handle(\"POST\", \"/tasks\", {\"title\": \"Kahve\"})[1][\"id\"] == 2, \"id her eklemede artmalı.\"\nassert handle(\"POST\", \"/tasks\", {\"title\": \"\"})[0] == 400 and handle(\"POST\", \"/tasks\", {})[0] == 400, \"Başlık yoksa 400.\"\nassert handle(\"DELETE\", \"/tasks/1\") == (204, None), \"DELETE /tasks/1 (204, None) döndürmeli.\"\nassert handle(\"GET\", \"/tasks\") == (200, [{\"id\": 2, \"title\": \"Kahve\"}]), \"Silinen görev listeden çıkmalı.\"\nassert handle(\"DELETE\", \"/tasks/9\")[0] == 404 and handle(\"PUT\", \"/tasks\")[0] == 404, \"Olmayan görev ve başka istekler 404.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "tasks = []",
+       "notes": [
+        "`tasks` adında bir değişken oluşturuluyor ve içine `[]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "def handle(method, path, body=None):",
+       "notes": [
+        "`handle` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `method`, `path`, `body`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "    if path == \"/tasks\" and method == \"GET\":",
+       "notes": [
+        "Koşul: `path == \"/tasks\" and method == \"GET\"` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "        return (200, tasks)",
+       "notes": [
+        "Fonksiyon `(200, tasks)` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "    if path == \"/tasks\" and method == \"POST\":",
+       "notes": [
+        "Koşul: `path == \"/tasks\" and method == \"POST\"` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "        if body and body.get(\"title\"):",
+       "notes": [
+        "Koşul: `body and body.get(\"title\")` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "            task = {\"id\": len(tasks) + 1, \"title\": body[\"title\"]}",
+       "notes": [
+        "`task` adında bir değişken oluşturuluyor ve içine `{\"id\": len(tasks) + 1, \"title\": body[\"title\"]}` (sözlük (anahtar: değer)) konuyor."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "            tasks.append(task)",
+       "notes": [
+        "`tasks.append(task)`: `tasks` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "            return (201, task)",
+       "notes": [
+        "Fonksiyon `(201, task)` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "        return (400, {\"hata\": \"başlık gerekli\"})",
+       "notes": [
+        "Fonksiyon `(400, {\"hata\": \"başlık gerekli\"})` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "    if method == \"DELETE\" and path.startswith(\"/tasks/\"):",
+       "notes": [
+        "Koşul: `method == \"DELETE\" and path.startswith(\"/tasks/\")` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 14,
+       "code": "        task_id = path.split(\"/\")[-1]",
+       "notes": [
+        "`task_id` adında bir değişken oluşturuluyor ve içine `path.split(\"/\")[-1]` konuyor."
+       ]
+      },
+      {
+       "n": 15,
+       "code": "        for task in tasks:",
+       "notes": [
+        "Döngü: `tasks` içindeki her eleman sırayla `task` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 16,
+       "code": "            if str(task[\"id\"]) == task_id:",
+       "notes": [
+        "Koşul: `str(task[\"id\"]) == task_id` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 17,
+       "code": "                tasks.remove(task)",
+       "notes": [
+        "`tasks.remove(task)`: `tasks` üzerinde `remove` metodunu çalıştırır. Listeden (ya da setten) verilen elemanı çıkarır."
+       ]
+      },
+      {
+       "n": 18,
+       "code": "                return (204, None)",
+       "notes": [
+        "Fonksiyon `(204, None)` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 19,
+       "code": "    return (404, {\"hata\": \"bulunamadı\"})",
+       "notes": [
+        "Fonksiyon `(404, {\"hata\": \"bulunamadı\"})` değerini geri verir ve burada biter."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "tasks",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[]`."
+      },
+      {
+       "term": "task",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"id\": len(tasks) + 1, \"title\": body[\"title\"]}`."
+      },
+      {
+       "term": "task_id",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `path.split(\"/\")[-1]`."
+      },
+      {
+       "term": "method",
+       "kind": "parametre",
+       "desc": "`handle` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "path",
+       "kind": "parametre",
+       "desc": "`handle` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "body",
+       "kind": "parametre",
+       "desc": "`handle` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "handle()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `method`, `path`, `body`."
+      },
+      {
+       "term": "None",
+       "kind": "değer",
+       "desc": "\"Hiçbir şey / boş\" anlamına gelen özel değer."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "and",
+       "kind": "operatör",
+       "desc": "\"ve\": iki koşul da doğruysa True."
+      },
+      {
+       "term": "==",
+       "kind": "operatör",
+       "desc": "Eşit mi? (True/False)"
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": ".get()",
+       "kind": "metot",
+       "desc": "Sözlükten anahtarın değerini alır; anahtar yoksa hata vermez, varsayılanı verir."
+      },
+      {
+       "term": "+",
+       "kind": "operatör",
+       "desc": "Toplama; metinlerde ve listelerde uç uca ekleme."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      },
+      {
+       "term": ".append()",
+       "kind": "metot",
+       "desc": "Listenin sonuna yeni bir eleman ekler."
+      },
+      {
+       "term": ".startswith()",
+       "kind": "metot",
+       "desc": "Metin verilen yazıyla mı başlıyor? (True/False)"
+      },
+      {
+       "term": ".split()",
+       "kind": "metot",
+       "desc": "Metni parçalara böler ve liste yapar (varsayılan: boşluklardan)."
+      },
+      {
+       "term": "-",
+       "kind": "operatör",
+       "desc": "Sayının önündeki eksi işareti."
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": "str()",
+       "kind": "fonksiyon",
+       "desc": "Bir değeri metne (yazıya) çevirir."
+      },
+      {
+       "term": ".remove()",
+       "kind": "metot",
+       "desc": "Listeden (ya da setten) verilen elemanı çıkarır."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Görev API'si",
+   "game_role": "Görevleri telefon ya da başka uygulamalarla paylaşan küçük bir API."
+  },
+  "web": {
+   "project_task": {
+    "id": "d29-pw",
+    "title": "Blog API'si",
+    "prompt": "Sitene başka uygulamalardan da yazı eklenebilsin diye küçük bir blog API'si yazalım. `handle(method, path, body=None)`:\n\n- `GET /posts`: `(200, posts)` döndürsün.\n- `POST /posts`: `body`'de boş olmayan bir `title` varsa `{\"id\": ..., \"title\": ..., \"slug\": ...}` belgesini oluştursun (`id` 1'den başlar; `slug` başlığın küçük harfli, boşlukları `-` olan hâli), listeye ekleyip `(201, belge)` döndürsün. Yoksa `(400, {\"hata\": \"başlık gerekli\"})`.\n- `GET /posts/2` gibi bir adres: o `id`'li yazıyı `(200, yazı)` ile döndürsün.\n- Başka her istek (ya da bulunamayan yazı) için `(404, {\"hata\": \"bulunamadı\"})`.",
+    "starter": "posts = []\n\n\ndef handle(method, path, body=None):\n    pass\n",
+    "solution": "posts = []\n\n\ndef handle(method, path, body=None):\n    if method == \"GET\" and path == \"/posts\":\n        return (200, posts)\n    if method == \"POST\" and path == \"/posts\":\n        if body and body.get(\"title\"):\n            title = body[\"title\"]\n            post = {\"id\": len(posts) + 1, \"title\": title, \"slug\": title.lower().replace(\" \", \"-\")}\n            posts.append(post)\n            return (201, post)\n        return (400, {\"hata\": \"başlık gerekli\"})\n    if method == \"GET\" and path.startswith(\"/posts/\"):\n        post_id = path.split(\"/\")[-1]\n        for post in posts:\n            if str(post[\"id\"]) == post_id:\n                return (200, post)\n    return (404, {\"hata\": \"bulunamadı\"})\n",
+    "hints": [
+     "path.startswith(\"/posts/\") ve path.split(\"/\")[-1] adresteki id'yi verir.",
+     "id'leri karşılaştırırken yazı/sayı farkına dikkat: str(post[\"id\"]) == post_id"
+    ],
+    "check": {
+     "python": "\nposts.clear()\nassert handle(\"GET\", \"/posts\") == (200, []), \"GET /posts (200, []) döndürmeli.\"\ncode, doc = handle(\"POST\", \"/posts\", {\"title\": \"Kodla Oyna\"})\nassert code == 201 and doc == {\"id\": 1, \"title\": \"Kodla Oyna\", \"slug\": \"kodla-oyna\"}, \"Geçerli yazı (201, {'id': 1, 'title': 'Kodla Oyna', 'slug': 'kodla-oyna'}) ile eklenmeli.\"\ncode2, doc2 = handle(\"POST\", \"/posts\", {\"title\": \"Merhaba Dünya\"})\nassert code2 == 201 and doc2[\"id\"] == 2, \"İkinci yazının id'si 2 olmalı.\"\nassert handle(\"POST\", \"/posts\", {\"title\": \"\"})[0] == 400, \"Başlık boşsa 400 döndürmeli.\"\nassert handle(\"POST\", \"/posts\", {})[0] == 400 and handle(\"POST\", \"/posts\")[0] == 400, \"Başlık yoksa 400 döndürmeli.\"\nassert handle(\"GET\", \"/posts/2\") == (200, doc2), \"GET /posts/2 ikinci yazıyı (200, yazı) ile döndürmeli.\"\nassert handle(\"GET\", \"/posts/9\")[0] == 404, \"Olmayan yazı için 404 döndürmeli.\"\nassert handle(\"DELETE\", \"/posts\")[0] == 404 and handle(\"GET\", \"/x\")[0] == 404, \"Başka istekler 404 olmalı.\"\nassert handle(\"GET\", \"/posts\") == (200, [doc, doc2]), \"Eklenen yazılar listede görünmeli.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "posts = []",
+       "notes": [
+        "`posts` adında bir değişken oluşturuluyor ve içine `[]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "def handle(method, path, body=None):",
+       "notes": [
+        "`handle` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `method`, `path`, `body`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "    if method == \"GET\" and path == \"/posts\":",
+       "notes": [
+        "Koşul: `method == \"GET\" and path == \"/posts\"` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "        return (200, posts)",
+       "notes": [
+        "Fonksiyon `(200, posts)` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "    if method == \"POST\" and path == \"/posts\":",
+       "notes": [
+        "Koşul: `method == \"POST\" and path == \"/posts\"` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "        if body and body.get(\"title\"):",
+       "notes": [
+        "Koşul: `body and body.get(\"title\")` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "            title = body[\"title\"]",
+       "notes": [
+        "`title` adında bir değişken oluşturuluyor ve içine `body[\"title\"]` konuyor."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "            post = {\"id\": len(posts) + 1, \"title\": title, \"slug\": title.lower().replace(\" \", \"-\")}",
+       "notes": [
+        "`post` adında bir değişken oluşturuluyor ve içine `{\"id\": len(posts) + 1, \"title\": title, \"slug\": title.lowe...` (sözlük (anahtar: değer)) konuyor."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "            posts.append(post)",
+       "notes": [
+        "`posts.append(post)`: `posts` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "            return (201, post)",
+       "notes": [
+        "Fonksiyon `(201, post)` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "        return (400, {\"hata\": \"başlık gerekli\"})",
+       "notes": [
+        "Fonksiyon `(400, {\"hata\": \"başlık gerekli\"})` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 14,
+       "code": "    if method == \"GET\" and path.startswith(\"/posts/\"):",
+       "notes": [
+        "Koşul: `method == \"GET\" and path.startswith(\"/posts/\")` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 15,
+       "code": "        post_id = path.split(\"/\")[-1]",
+       "notes": [
+        "`post_id` adında bir değişken oluşturuluyor ve içine `path.split(\"/\")[-1]` konuyor."
+       ]
+      },
+      {
+       "n": 16,
+       "code": "        for post in posts:",
+       "notes": [
+        "Döngü: `posts` içindeki her eleman sırayla `post` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 17,
+       "code": "            if str(post[\"id\"]) == post_id:",
+       "notes": [
+        "Koşul: `str(post[\"id\"]) == post_id` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 18,
+       "code": "                return (200, post)",
+       "notes": [
+        "Fonksiyon `(200, post)` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 19,
+       "code": "    return (404, {\"hata\": \"bulunamadı\"})",
+       "notes": [
+        "Fonksiyon `(404, {\"hata\": \"bulunamadı\"})` değerini geri verir ve burada biter."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "posts",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[]`."
+      },
+      {
+       "term": "title",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `body[\"title\"]`."
+      },
+      {
+       "term": "post",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"id\": len(posts) + 1, \"title\": title, \"slug\": title.lowe...`."
+      },
+      {
+       "term": "post_id",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `path.split(\"/\")[-1]`."
+      },
+      {
+       "term": "method",
+       "kind": "parametre",
+       "desc": "`handle` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "path",
+       "kind": "parametre",
+       "desc": "`handle` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "body",
+       "kind": "parametre",
+       "desc": "`handle` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "handle()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `method`, `path`, `body`."
+      },
+      {
+       "term": "None",
+       "kind": "değer",
+       "desc": "\"Hiçbir şey / boş\" anlamına gelen özel değer."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "and",
+       "kind": "operatör",
+       "desc": "\"ve\": iki koşul da doğruysa True."
+      },
+      {
+       "term": "==",
+       "kind": "operatör",
+       "desc": "Eşit mi? (True/False)"
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": ".get()",
+       "kind": "metot",
+       "desc": "Sözlükten anahtarın değerini alır; anahtar yoksa hata vermez, varsayılanı verir."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": "+",
+       "kind": "operatör",
+       "desc": "Toplama; metinlerde ve listelerde uç uca ekleme."
+      },
+      {
+       "term": ".replace()",
+       "kind": "metot",
+       "desc": "Metindeki bir parçayı başkasıyla değiştirir."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      },
+      {
+       "term": ".lower()",
+       "kind": "metot",
+       "desc": "Metni küçük harfe çevirir."
+      },
+      {
+       "term": ".append()",
+       "kind": "metot",
+       "desc": "Listenin sonuna yeni bir eleman ekler."
+      },
+      {
+       "term": ".startswith()",
+       "kind": "metot",
+       "desc": "Metin verilen yazıyla mı başlıyor? (True/False)"
+      },
+      {
+       "term": ".split()",
+       "kind": "metot",
+       "desc": "Metni parçalara böler ve liste yapar (varsayılan: boşluklardan)."
+      },
+      {
+       "term": "-",
+       "kind": "operatör",
+       "desc": "Sayının önündeki eksi işareti."
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": "str()",
+       "kind": "fonksiyon",
+       "desc": "Bir değeri metne (yazıya) çevirir."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Blog API'si",
+   "game_role": "Yazıları başka uygulamalara açan küçük bir API."
+  },
+  "bot": {
+   "project_task": {
+    "id": "d29-pb",
+    "title": "Sohbet API'si",
+    "prompt": "Botla bir telefon uygulaması da konuşabilsin diye küçük bir API yazalım. `handle(method, path, body=None)`:\n\n- `POST /chat`: `body`'de boş olmayan bir `message` varsa cevabı bul: `replies` içindeki anahtar kelimelerden mesajda geçen ilkinin cevabı, hiçbiri yoksa `\"Bunu anlamadım.\"`. `{\"user\": mesaj, \"bot\": cevap}` kaydını `history`'ye ekle ve `(200, {\"reply\": cevap})` döndür. Mesaj yoksa ya da boşsa `(400, {\"hata\": \"mesaj boş\"})`.\n- `GET /history`: `(200, history)`\n- `DELETE /history`: geçmişi temizle (`history.clear()`) ve `(204, None)` döndür.\n- Başka her istek: `(404, {\"hata\": \"bulunamadı\"})`.",
+    "starter": "replies = {\"merhaba\": \"Merhaba!\", \"hava\": \"Bugün hava güneşli.\"}\nhistory = []\n\n\ndef handle(method, path, body=None):\n    pass\n",
+    "solution": "replies = {\"merhaba\": \"Merhaba!\", \"hava\": \"Bugün hava güneşli.\"}\nhistory = []\n\n\ndef handle(method, path, body=None):\n    if path == \"/chat\" and method == \"POST\":\n        if not body or not body.get(\"message\"):\n            return (400, {\"hata\": \"mesaj boş\"})\n        message = body[\"message\"]\n        reply = \"Bunu anlamadım.\"\n        for keyword in replies:\n            if keyword in message:\n                reply = replies[keyword]\n                break\n        history.append({\"user\": message, \"bot\": reply})\n        return (200, {\"reply\": reply})\n    if path == \"/history\" and method == \"GET\":\n        return (200, history)\n    if path == \"/history\" and method == \"DELETE\":\n        history.clear()\n        return (204, None)\n    return (404, {\"hata\": \"bulunamadı\"})\n",
+    "hints": [
+     "Önce path'e ve method'a bak: if path == \"/chat\" and method == \"POST\":",
+     "not body or not body.get(\"message\") mesajın olmadığını ya da boş olduğunu yakalar."
+    ],
+    "check": {
+     "python": "\nhandle.__globals__[\"history\"].clear()\nassert handle(\"GET\", \"/history\") == (200, []), \"GET /history (200, []) döndürmeli.\"\nassert handle(\"POST\", \"/chat\", {\"message\": \"yarın hava nasıl\"}) == (200, {\"reply\": \"Bugün hava güneşli.\"}), \"POST /chat mesajın cevabını (200, {\\\"reply\\\": ...}) olarak döndürmeli.\"\nassert handle(\"POST\", \"/chat\", {\"message\": \"pizza\"}) == (200, {\"reply\": \"Bunu anlamadım.\"}), \"Anahtar kelime yoksa cevap \\\"Bunu anlamadım.\\\" olmalı.\"\nassert handle(\"POST\", \"/chat\", {\"message\": \"\"})[0] == 400 and handle(\"POST\", \"/chat\", {})[0] == 400 and handle(\"POST\", \"/chat\")[0] == 400, \"Mesaj yoksa ya da boşsa 400 döndürmeli.\"\nassert handle(\"GET\", \"/history\") == (200, [{\"user\": \"yarın hava nasıl\", \"bot\": \"Bugün hava güneşli.\"}, {\"user\": \"pizza\", \"bot\": \"Bunu anlamadım.\"}]), \"Her sohbet history'ye {user, bot} olarak eklenmeli.\"\nassert handle(\"DELETE\", \"/history\") == (204, None) and handle(\"GET\", \"/history\") == (200, []), \"DELETE /history geçmişi temizleyip (204, None) döndürmeli.\"\nassert handle(\"PUT\", \"/chat\")[0] == 404 and handle(\"GET\", \"/x\")[0] == 404, \"Başka istekler 404 olmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "replies = {\"merhaba\": \"Merhaba!\", \"hava\": \"Bugün hava güneşli.\"}",
+       "notes": [
+        "`replies` adında bir değişken oluşturuluyor ve içine `{\"merhaba\": \"Merhaba!\", \"hava\": \"Bugün hava güneşli.\"}` (sözlük (anahtar: değer)) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "history = []",
+       "notes": [
+        "`history` adında bir değişken oluşturuluyor ve içine `[]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "def handle(method, path, body=None):",
+       "notes": [
+        "`handle` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `method`, `path`, `body`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    if path == \"/chat\" and method == \"POST\":",
+       "notes": [
+        "Koşul: `path == \"/chat\" and method == \"POST\"` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "        if not body or not body.get(\"message\"):",
+       "notes": [
+        "Koşul: `not body or not body.get(\"message\")` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "            return (400, {\"hata\": \"mesaj boş\"})",
+       "notes": [
+        "Fonksiyon `(400, {\"hata\": \"mesaj boş\"})` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "        message = body[\"message\"]",
+       "notes": [
+        "`message` adında bir değişken oluşturuluyor ve içine `body[\"message\"]` konuyor."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "        reply = \"Bunu anlamadım.\"",
+       "notes": [
+        "`reply` adında bir değişken oluşturuluyor ve içine `\"Bunu anlamadım.\"` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "        for keyword in replies:",
+       "notes": [
+        "Döngü: `replies` içindeki her eleman sırayla `keyword` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "            if keyword in message:",
+       "notes": [
+        "Koşul: `keyword in message` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "                reply = replies[keyword]",
+       "notes": [
+        "`reply` değişkenine yeni değer veriliyor: `replies[keyword]`."
+       ]
+      },
+      {
+       "n": 14,
+       "code": "                break",
+       "notes": [
+        "`break`: Döngüden hemen çıkar."
+       ]
+      },
+      {
+       "n": 15,
+       "code": "        history.append({\"user\": message, \"bot\": reply})",
+       "notes": [
+        "`history.append({\"user\": message, \"bot\": reply})`: `history` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 16,
+       "code": "        return (200, {\"reply\": reply})",
+       "notes": [
+        "Fonksiyon `(200, {\"reply\": reply})` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 17,
+       "code": "    if path == \"/history\" and method == \"GET\":",
+       "notes": [
+        "Koşul: `path == \"/history\" and method == \"GET\"` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 18,
+       "code": "        return (200, history)",
+       "notes": [
+        "Fonksiyon `(200, history)` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 19,
+       "code": "    if path == \"/history\" and method == \"DELETE\":",
+       "notes": [
+        "Koşul: `path == \"/history\" and method == \"DELETE\"` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 20,
+       "code": "        history.clear()",
+       "notes": [
+        "`history.clear()`: `history` üzerinde `clear` metodunu çalıştırır."
+       ]
+      },
+      {
+       "n": 21,
+       "code": "        return (204, None)",
+       "notes": [
+        "Fonksiyon `(204, None)` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 22,
+       "code": "    return (404, {\"hata\": \"bulunamadı\"})",
+       "notes": [
+        "Fonksiyon `(404, {\"hata\": \"bulunamadı\"})` değerini geri verir ve burada biter."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "replies",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"merhaba\": \"Merhaba!\", \"hava\": \"Bugün hava güneşli.\"}`."
+      },
+      {
+       "term": "history",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[]`."
+      },
+      {
+       "term": "message",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `body[\"message\"]`."
+      },
+      {
+       "term": "reply",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"Bunu anlamadım.\"`."
+      },
+      {
+       "term": "keyword",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `replies` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "method",
+       "kind": "parametre",
+       "desc": "`handle` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "path",
+       "kind": "parametre",
+       "desc": "`handle` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "body",
+       "kind": "parametre",
+       "desc": "`handle` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "handle()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `method`, `path`, `body`."
+      },
+      {
+       "term": "None",
+       "kind": "değer",
+       "desc": "\"Hiçbir şey / boş\" anlamına gelen özel değer."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "and",
+       "kind": "operatör",
+       "desc": "\"ve\": iki koşul da doğruysa True."
+      },
+      {
+       "term": "==",
+       "kind": "operatör",
+       "desc": "Eşit mi? (True/False)"
+      },
+      {
+       "term": "or",
+       "kind": "operatör",
+       "desc": "\"veya\": koşullardan biri doğruysa True."
+      },
+      {
+       "term": "not",
+       "kind": "operatör",
+       "desc": "Koşulu tersine çevirir (True ↔ False)."
+      },
+      {
+       "term": ".get()",
+       "kind": "metot",
+       "desc": "Sözlükten anahtarın değerini alır; anahtar yoksa hata vermez, varsayılanı verir."
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": "in",
+       "kind": "operatör",
+       "desc": "İçinde var mı? (listede, metinde, sözlükte)"
+      },
+      {
+       "term": "break",
+       "kind": "anahtar kelime",
+       "desc": "Döngüden hemen çıkar."
+      },
+      {
+       "term": ".append()",
+       "kind": "metot",
+       "desc": "Listenin sonuna yeni bir eleman ekler."
+      },
+      {
+       "term": ".clear()",
+       "kind": "metot",
+       "desc": "`history` nesnesinin `clear` metodunu çağırır."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Sohbet API'si",
+   "game_role": "Botu başka uygulamaların da konuşabileceği bir API'ye çevirir."
+  },
+  "okul": {
+   "project_task": {
+    "id": "d29-pn",
+    "title": "Not API'si",
+    "prompt": "Telefonundaki bir uygulama notlarını görebilsin ve not ekleyebilsin diye küçük bir API yazalım. Notlar `grades` sözlüğünde (ders -> not). `handle(method, path, body=None)`:\n\n- `GET /grades`: `(200, grades)` döndürsün.\n- `GET /grades/Fizik`: ders varsa `(200, {\"lesson\": \"Fizik\", \"grade\": 70})`, yoksa `(404, {\"hata\": \"ders bulunamadı\"})`.\n- `POST /grades`: `body`'de `lesson` ve **0 ile 100 arasında** bir `grade` varsa notu kaydedip `(201, body)` döndürsün; yoksa `(400, {\"hata\": \"geçersiz not\"})`.\n- Başka her istek için `(404, {\"hata\": \"bulunamadı\"})`.",
+    "starter": "grades = {}\n\n\ndef handle(method, path, body=None):\n    pass\n",
+    "solution": "grades = {}\n\n\ndef handle(method, path, body=None):\n    parts = path.split(\"/\")\n    if path == \"/grades\" and method == \"GET\":\n        return (200, grades)\n    if path == \"/grades\" and method == \"POST\":\n        if body and body.get(\"lesson\") and 0 <= body.get(\"grade\", -1) <= 100:\n            grades[body[\"lesson\"]] = body[\"grade\"]\n            return (201, body)\n        return (400, {\"hata\": \"geçersiz not\"})\n    if len(parts) == 3 and parts[1] == \"grades\" and method == \"GET\":\n        lesson = parts[2]\n        if lesson in grades:\n            return (200, {\"lesson\": lesson, \"grade\": grades[lesson]})\n        return (404, {\"hata\": \"ders bulunamadı\"})\n    return (404, {\"hata\": \"bulunamadı\"})\n",
+    "hints": [
+     "\"/grades/Fizik\".split(\"/\") sonucu ['', 'grades', 'Fizik'] olur.",
+     "0 <= body.get(\"grade\", -1) <= 100 notun geçerli olup olmadığını kontrol eder."
+    ],
+    "check": {
+     "python": "\ngrades.clear()\nassert handle(\"GET\", \"/grades\") == (200, {}), \"GET /grades (200, {}) döndürmeli.\"\nitem = {\"lesson\": \"Fizik\", \"grade\": 70}\nassert handle(\"POST\", \"/grades\", item) == (201, item), \"Geçerli not (201, body) ile eklenmeli.\"\nassert handle(\"GET\", \"/grades\") == (200, {\"Fizik\": 70}), \"Eklenen not grades sözlüğünde görünmeli.\"\nassert handle(\"GET\", \"/grades/Fizik\") == (200, {\"lesson\": \"Fizik\", \"grade\": 70}), \"GET /grades/Fizik (200, {'lesson': 'Fizik', 'grade': 70}) döndürmeli.\"\nassert handle(\"GET\", \"/grades/Tarih\")[0] == 404, \"Olmayan ders için 404 döndürmeli.\"\nassert handle(\"POST\", \"/grades\", {\"lesson\": \"Tarih\", \"grade\": 101})[0] == 400, \"Not 100'den büyükse 400 döndürmeli.\"\nassert handle(\"POST\", \"/grades\", {\"grade\": 50})[0] == 400, \"Ders adı yoksa 400 döndürmeli.\"\nassert handle(\"POST\", \"/grades\", {\"lesson\": \"Tarih\"})[0] == 400, \"Not yoksa 400 döndürmeli.\"\nassert handle(\"DELETE\", \"/grades\")[0] == 404 and handle(\"GET\", \"/x\")[0] == 404, \"Başka istekler 404 olmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "grades = {}",
+       "notes": [
+        "`grades` adında bir değişken oluşturuluyor ve içine `{}` (sözlük (anahtar: değer)) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "def handle(method, path, body=None):",
+       "notes": [
+        "`handle` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `method`, `path`, `body`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "    parts = path.split(\"/\")",
+       "notes": [
+        "`parts` adında bir değişken oluşturuluyor ve içine `path.split(\"/\")` konuyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    if path == \"/grades\" and method == \"GET\":",
+       "notes": [
+        "Koşul: `path == \"/grades\" and method == \"GET\"` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "        return (200, grades)",
+       "notes": [
+        "Fonksiyon `(200, grades)` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "    if path == \"/grades\" and method == \"POST\":",
+       "notes": [
+        "Koşul: `path == \"/grades\" and method == \"POST\"` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "        if body and body.get(\"lesson\") and 0 <= body.get(\"grade\", -1) <= 100:",
+       "notes": [
+        "Koşul: `body and body.get(\"lesson\") and 0 <= body.get(\"grade\", -1...` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "            grades[body[\"lesson\"]] = body[\"grade\"]",
+       "notes": [
+        "`grades[...]` konumundaki değer `body[\"grade\"]` ile değiştiriliyor."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "            return (201, body)",
+       "notes": [
+        "Fonksiyon `(201, body)` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "        return (400, {\"hata\": \"geçersiz not\"})",
+       "notes": [
+        "Fonksiyon `(400, {\"hata\": \"geçersiz not\"})` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "    if len(parts) == 3 and parts[1] == \"grades\" and method == \"GET\":",
+       "notes": [
+        "Koşul: `len(parts) == 3 and parts[1] == \"grades\" and method == \"GET\"` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 14,
+       "code": "        lesson = parts[2]",
+       "notes": [
+        "`lesson` adında bir değişken oluşturuluyor ve içine `parts[2]` konuyor."
+       ]
+      },
+      {
+       "n": 15,
+       "code": "        if lesson in grades:",
+       "notes": [
+        "Koşul: `lesson in grades` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 16,
+       "code": "            return (200, {\"lesson\": lesson, \"grade\": grades[lesson]})",
+       "notes": [
+        "Fonksiyon `(200, {\"lesson\": lesson, \"grade\": grades[lesson]})` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 17,
+       "code": "        return (404, {\"hata\": \"ders bulunamadı\"})",
+       "notes": [
+        "Fonksiyon `(404, {\"hata\": \"ders bulunamadı\"})` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 18,
+       "code": "    return (404, {\"hata\": \"bulunamadı\"})",
+       "notes": [
+        "Fonksiyon `(404, {\"hata\": \"bulunamadı\"})` değerini geri verir ve burada biter."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "grades",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `{}`."
+      },
+      {
+       "term": "parts",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `path.split(\"/\")`."
+      },
+      {
+       "term": "lesson",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `parts[2]`."
+      },
+      {
+       "term": "method",
+       "kind": "parametre",
+       "desc": "`handle` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "path",
+       "kind": "parametre",
+       "desc": "`handle` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "body",
+       "kind": "parametre",
+       "desc": "`handle` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "handle()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `method`, `path`, `body`."
+      },
+      {
+       "term": "None",
+       "kind": "değer",
+       "desc": "\"Hiçbir şey / boş\" anlamına gelen özel değer."
+      },
+      {
+       "term": ".split()",
+       "kind": "metot",
+       "desc": "Metni parçalara böler ve liste yapar (varsayılan: boşluklardan)."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "and",
+       "kind": "operatör",
+       "desc": "\"ve\": iki koşul da doğruysa True."
+      },
+      {
+       "term": "==",
+       "kind": "operatör",
+       "desc": "Eşit mi? (True/False)"
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": ".get()",
+       "kind": "metot",
+       "desc": "Sözlükten anahtarın değerini alır; anahtar yoksa hata vermez, varsayılanı verir."
+      },
+      {
+       "term": "<=",
+       "kind": "operatör",
+       "desc": "Küçük ya da eşit mi?"
+      },
+      {
+       "term": "-",
+       "kind": "operatör",
+       "desc": "Sayının önündeki eksi işareti."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      },
+      {
+       "term": "in",
+       "kind": "operatör",
+       "desc": "İçinde var mı? (listede, metinde, sözlükte)"
+      }
+     ]
+    }
+   },
+   "project_contribution": "Not API'si",
+   "game_role": "Notlarını başka uygulamalara açan küçük bir API."
+  }
+ }
+}

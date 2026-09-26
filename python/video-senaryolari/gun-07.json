@@ -1,0 +1,216 @@
+{
+  "kurs": "python",
+  "gun": 7,
+  "baslik": "Set'ler",
+  "maskot": "piko",
+  "ozet": "Piko, Veri Ormanı'nda gezdiği yerleri tekrarsız tutmak için set'leri kullanıyor: tekrarları atmak, eleman eklemek ve çıkarmak, birleşim, kesişim ve fark işlemleri.",
+  "hedef_sure_sn": 118,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 12,
+      "anlatim": "Selam, ben Piko! Ormanda dolaşırken aynı yerlerden defalarca geçtim. Her geçişi haritaya yazarsam sayfa dolacak! Aslında bana sadece hangi yerleri gördüğüm lazım. Bugün tekrarları kendiliğinden atan set'lerle tanışıyoruz.",
+      "ekran": {
+        "baslik": "Gün 7: Set'ler",
+        "gorsel": "gorseller/python/harita/orman.webp"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "Set süslü parantezle yazılır ve içinde aynı eleman iki kez bulunamaz. Kampı iki kez yazdık ama set bir tane tuttu. Set'in sırası yoktur; düzenli görmek istersen sorted kullan.",
+      "ekran": {
+        "baslik": "Set nedir?",
+        "kod": "places = {\"kamp\", \"köy\", \"kamp\"}\nprint(len(places))\nprint(sorted(places))\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          1
+        ],
+        "cikti": "2\n['kamp', 'köy']"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 10,
+      "anlatim": "Bir listeyi set içine koyarsan tekrarlar kaybolur. Beş renk yazılmış ama aslında sadece üç farklı renk var.",
+      "ekran": {
+        "baslik": "Listeden tekrarları atmak",
+        "kod": "colors = [\"mavi\", \"sarı\", \"mavi\", \"yeşil\", \"sarı\"]\nunique = set(colors)\nprint(len(colors), \"renk yazıldı\")\nprint(len(unique), \"farklı renk\")\nprint(sorted(unique))\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "5 renk yazıldı\n3 farklı renk\n['mavi', 'sarı', 'yeşil']"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "add bir eleman ekler. İksiri iki kez eklemeye çalıştık ama set'te hâlâ bir tane var. discard siler, eleman yoksa sessizce geçer. in ile sormak da set'lerde çok hızlıdır.",
+      "ekran": {
+        "baslik": "Ekle ve çıkar",
+        "kod": "bag = {\"kılıç\", \"iksir\"}\nbag.add(\"harita\")\nbag.add(\"iksir\")\nbag.discard(\"kılıç\")\nprint(sorted(bag))\nprint(\"iksir\" in bag)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2,
+          3,
+          4
+        ],
+        "cikti": "['harita', 'iksir']\nTrue"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "hata",
+      "sure_sn": 12,
+      "anlatim": "remove da siler ama olmayan bir elemanı silmeye çalışırsan KeyError verir: çantada kalkan yok! Emin değilsen discard kullan, o hiç şikâyet etmez.",
+      "ekran": {
+        "baslik": "remove ve KeyError",
+        "kod": "bag = {\"kılıç\", \"iksir\"}\nbag.remove(\"kalkan\")\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "KeyError: 'kalkan'"
+      },
+      "maskot": {
+        "poz": "uzgun",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 13,
+      "anlatim": "Matematikteki kümeler gibi iki set'i karşılaştırabilirsin. Dikey çizgi birleşim, ve işareti kesişim, eksi ise fark verir. Ece ile ikimizin de gezdiği yerler kale ve köy.",
+      "ekran": {
+        "baslik": "Küme işlemleri",
+        "kod": "piko = {\"orman\", \"köy\", \"kale\"}\nece = {\"köy\", \"kale\", \"liman\"}\nprint(\"İkisi de:\", sorted(piko & ece))\nprint(\"Hepsi:\", sorted(piko | ece))\nprint(\"Sadece Piko:\", sorted(piko - ece))\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          3,
+          4,
+          5
+        ],
+        "cikti": "İkisi de: ['kale', 'köy']\nHepsi: ['kale', 'köy', 'liman', 'orman']\nSadece Piko: ['orman']"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true,
+      "yonetmen_notu": "İki kesişen daire: ortak bölgede kale ve köy parlar."
+    },
+    {
+      "no": 7,
+      "tur": "soru",
+      "sure_sn": 8,
+      "anlatim": "Boş bir set yapmak istiyoruz. İki yol denedik. Sence ikisinin tipi ne çıkar?",
+      "ekran": {
+        "baslik": "Sence ne yazar?",
+        "kod": "a = {}\nb = set()\nprint(type(a))\nprint(type(b))\n",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "cikti",
+      "sure_sn": 10,
+      "anlatim": "Süslü parantezin boşu set değil, boş bir sözlük! Boş set için set yazmalısın. Sözlükle de yarın tanışacağız.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "a = {}\nb = set()\nprint(type(a))\nprint(type(b))\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "<class 'dict'>\n<class 'set'>"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "gorev",
+      "sure_sn": 11,
+      "anlatim": "Görevlerde ziyaret listesindeki tekrarları silecek, haritana yeni bir yer ekleyecek ve iki arkadaşın ortak oyunlarını bulacaksın. Challenge'da da henüz kazanılmamış rozetlerin peşine düşeceksin.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Tekrarları sil",
+          "Görev 2: Yeni yer keşfet",
+          "Görev 3: Ortak oyunlar",
+          "Challenge: Eksik rozetler"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 10,
+      "tur": "ozet",
+      "sure_sn": 7,
+      "anlatim": "Bugün tekrarları kendiliğinden atan koleksiyonları ve iki set'i karşılaştıran küme işlemlerini öğrendik.",
+      "ekran": {
+        "baslik": "Bugün öğrendiklerin",
+        "maddeler": [
+          "Set: tekrarsız ve sırasız; boş set = set()",
+          "add, discard, remove ve hızlı in",
+          "| birleşim, & kesişim, - fark"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "kapanis",
+      "sure_sn": 7,
+      "anlatim": "Haritan tertemiz! Yarın ormandaki canlıların kimlik kartlarını hazırlayacağız: anahtar ve değerlerle çalışan sözlükler.",
+      "ekran": {
+        "baslik": "Yarın: Dictionary",
+        "gorsel": "gorseller/python/harita/orman.webp"
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

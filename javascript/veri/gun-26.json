@@ -1,0 +1,243 @@
+{
+ "day": 26,
+ "title": "fetch ve API",
+ "region": "istasyon",
+ "xp_complete": 150,
+ "objective": "fetch ile bir API'den JSON veri almak, hataları yönetmek ve gelen veriyi sayfada göstermek",
+ "story": "Async İstasyonu'nun dev anteni açıldı, kaptan! Artık uzaktaki sunuculardan veri isteyebiliriz. Bugün **fetch** ile bir **API**'ye soru soracak, gelen cevabı sayfaya dökeceğiz.",
+ "sections": [
+  {
+   "title": "API nedir?",
+   "body": "**API**, bir programın başka programlara açtığı kapıdır. Belli bir adrese istek gönderirsin, sunucu sana veri döndürür. Hava durumu uygulaması sıcaklığı, harita uygulaması konumları böyle alır.\n\nÇoğu API cevabı **JSON** biçiminde verir (12. günü hatırla). Bu kursta önizleme gerçek internete çıkmaz; senin için hazırlanmış bir deneme API'si var:\n\n| Adres | Ne döndürür? |\n| --- | --- |\n| `/demo-api/sehirler` | 8 şehir: `ad`, `bolge`, `nufus`, `sicaklik` |\n| `/demo-api/sorular` | 5 soru: `soru`, `secenekler`, `dogru` |\n| `/demo-api/seviyeler/1` (2, 3) | Bir oyun seviyesi: `seviye`, `yildiz`, `dusman`, `hiz` |\n| `/demo-api/gorevler` | 4 görev: `id`, `baslik`, `bitti` |\n| `/demo-api/yazilar` | 3 blog yazısı: `id`, `baslik`, `ozet` |\n| `/demo-api/hata` | Her zaman hata (500) verir: denemek için |"
+  },
+  {
+   "title": "fetch ve res.json()",
+   "body": "```js\nasync function loadCities() {\n  const res = await fetch(\"/demo-api/sehirler\");\n  const cities = await res.json();\n  console.log(cities.length, \"şehir geldi\");\n}\nloadCities();\n```\n\n- `fetch(adres)` isteği gönderir ve bir **Promise** döndürür (25. gün!). `await` ile cevabı bekleriz.\n- Gelen cevap (`res`) bir zarf gibidir. İçindeki veriyi okumak için bir kez daha bekleriz: `await res.json()`.\n- İki `await` var, çünkü önce cevabın başlığı, sonra gövdesi gelir."
+  },
+  {
+   "title": "res.ok ve durum kodları",
+   "body": "Her cevabın bir **durum kodu** (status) vardır:\n\n| Kod | Anlamı |\n| --- | --- |\n| `200` | Tamam |\n| `404` | Bulunamadı (adres yanlış) |\n| `500` | Sunucuda bir sorun var |\n\nDikkat: `fetch`, 404 ya da 500 gelince hata **fırlatmaz**! Kontrol etmek senin işin:\n\n```js\nconst res = await fetch(\"/demo-api/hata\");\nif (!res.ok) {\n  console.log(\"Olmadı, durum kodu:\", res.status);\n  return;\n}\n```\n\n`res.ok`, kod 200 ile 299 arasındaysa `true` olur. Bağlantı hiç kurulamazsa `fetch` gerçekten hata fırlatır; onu `try/catch` ile yakalarsın (24. gün)."
+  },
+  {
+   "title": "Sorgu metni ve yükleniyor durumu",
+   "body": "Adresin sonuna `?anahtar=değer` ekleyerek sunucudan süzülmüş veri isteyebilirsin: `/demo-api/sehirler?bolge=Ege` yalnızca Ege'deki şehirleri getirir. Değerde boşluk ya da Türkçe harf varsa `encodeURIComponent` ile güvenli hale getir:\n\n```js\nconst region = \"İç Anadolu\";\nconst url = `/demo-api/sehirler?bolge=${encodeURIComponent(region)}`;\n```\n\nİyi bir sayfa kullanıcıyı bekletirken bilgilendirir. Her istekte üç durumu düşün:\n\n- **Yükleniyor**: istekten önce `Yükleniyor...` yaz.\n- **Başarılı**: veriyi sayfada göster.\n- **Hata**: anlaşılır bir mesaj ver, sayfayı boş bırakma."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Şehirleri getir",
+   "code": "const info = document.querySelector(\"#info\");\nconst list = document.querySelector(\"#list\");\n\nasync function loadCities() {\n  const res = await fetch(\"/demo-api/sehirler\");\n  const cities = await res.json();\n  for (const city of cities) {\n    const li = document.createElement(\"li\");\n    li.textContent = `${city.ad}: ${city.sicaklik}°C`;\n    list.append(li);\n  }\n  info.textContent = `${cities.length} şehir geldi.`;\n}\n\nloadCities();\n",
+   "note": "Önce 'Yükleniyor...' görünür, kısa bir süre sonra liste gelir.",
+   "mode": "page",
+   "html": "<p id=\"info\">Yükleniyor...</p>\n<ul id=\"list\"></ul>\n",
+   "css": ""
+  },
+  {
+   "title": "Hata durumunu yakala",
+   "code": "const info = document.querySelector(\"#info\");\n\nasync function load(url) {\n  info.textContent = \"Yükleniyor...\";\n  try {\n    const res = await fetch(url);\n    if (!res.ok) {\n      info.textContent = `Hata! Durum kodu: ${res.status}`;\n      return;\n    }\n    const posts = await res.json();\n    info.textContent = `Başarılı: ${posts.length} yazı geldi.`;\n  } catch (err) {\n    info.textContent = \"Bağlantı kurulamadı.\";\n  }\n}\n\ndocument.querySelector(\"#good\").addEventListener(\"click\", () => load(\"/demo-api/yazilar\"));\ndocument.querySelector(\"#bad\").addEventListener(\"click\", () => load(\"/demo-api/hata\"));\n",
+   "note": "İki düğmeyi de dene: hatalı adres 500 durum kodunu gösterir.",
+   "mode": "page",
+   "html": "<button id=\"good\">Doğru adres</button> <button id=\"bad\">Hatalı adres</button>\n<p id=\"info\">Bir düğmeye bas.</p>\n",
+   "css": ""
+  }
+ ],
+ "tasks": [
+  {
+   "id": "js-d26-t1",
+   "title": "Şehir listesi",
+   "prompt": "`loadCities()` fonksiyonunu tamamla:\n\n- `/demo-api/sehirler` adresinden şehirleri `fetch` ile al.\n- Her şehir için `#list`'e `İstanbul (19°C)` biçiminde bir `<li>` ekle.\n- Sonunda `#info`'ya kaç şehir geldiğini yaz: `8 şehir yüklendi` (sayı veriden gelsin).",
+   "starter": "const list = document.querySelector(\"#list\");\nconst info = document.querySelector(\"#info\");\n\nasync function loadCities() {\n  // 1) fetch ile iste  2) res.json() ile oku  3) her şehir için <li> ekle\n}\n\nloadCities();\n",
+   "solution": "const list = document.querySelector(\"#list\");\nconst info = document.querySelector(\"#info\");\n\nasync function loadCities() {\n  // 1) fetch ile iste  2) res.json() ile oku  3) her şehir için <li> ekle\n  const res = await fetch(\"/demo-api/sehirler\");\n  const cities = await res.json();\n  for (const city of cities) {\n    const li = document.createElement(\"li\");\n    li.textContent = `${city.ad} (${city.sicaklik}°C)`;\n    list.append(li);\n  }\n  info.textContent = `${cities.length} şehir yüklendi`;\n}\n\nloadCities();\n",
+   "hints": [
+    "const res = await fetch(\"/demo-api/sehirler\");",
+    "const cities = await res.json(); sonra for...of ile dolaş.",
+    "Sayı için cities.length kullan."
+   ],
+   "check": {
+    "code_contains": [
+     "fetch",
+     "await",
+     ".json()"
+    ],
+    "js": "await sleep(400); // deneme API'si ~120 ms'de yanıt verir\nconst items = $$(\"#list li\").map((li) => li.textContent.trim());\nassert(items.length === 8, \"#list içinde 8 tane <li> olmalı (her şehir için bir tane).\");\nassert(items[0] === \"İstanbul (19°C)\" && items[7] === \"Eskişehir (13°C)\", \"Her satır 'İstanbul (19°C)' biçiminde olmalı.\");\nassert($(\"#info\").textContent.trim() === \"8 şehir yüklendi\", \"#info '8 şehir yüklendi' olmalı.\");\nassert(!/[\"'`]8 şehir/.test(_code), \"Sayıyı elle yazma; cities.length kullan.\");"
+   },
+   "xp": 50,
+   "mode": "page",
+   "html": "<h2>Şehir İstasyonu</h2>\n<p id=\"info\">Hazır.</p>\n<ul id=\"list\"></ul>\n",
+   "css": "#list li{padding:2px 0}#regions button{margin:4px}"
+  },
+  {
+   "id": "js-d26-t2",
+   "title": "Bölge filtresi",
+   "prompt": "Düğmeler hazır: her biri `loadRegion(bölge)` fonksiyonunu çağırıyor. Fonksiyonu sen yaz:\n\n- Adrese sorgu metni ekleyerek iste: `/demo-api/sehirler?bolge=...` (değeri `encodeURIComponent` ile ver).\n- Önce `#list`'i temizle, sonra her şehrin **adını** bir `<li>` olarak ekle.\n- `#info`'ya `İç Anadolu: 2 şehir` biçiminde özet yaz.\n\nSüzmeyi sunucu yapsın: `?bolge=Anadolu` adında Anadolu geçen 4 şehri getirir.",
+   "starter": "const list = document.querySelector(\"#list\");\nconst info = document.querySelector(\"#info\");\n\nasync function loadRegion(region) {\n  // sorgu metniyle iste, listeyi temizle, adları ekle, özeti yaz\n}\n\nfor (const btn of document.querySelectorAll(\"#regions button\")) {\n  btn.addEventListener(\"click\", () => loadRegion(btn.dataset.region));\n}\n",
+   "solution": "const list = document.querySelector(\"#list\");\nconst info = document.querySelector(\"#info\");\n\nasync function loadRegion(region) {\n  // sorgu metniyle iste, listeyi temizle, adları ekle, özeti yaz\n  const res = await fetch(`/demo-api/sehirler?bolge=${encodeURIComponent(region)}`);\n  const cities = await res.json();\n  list.innerHTML = \"\";\n  for (const city of cities) {\n    const li = document.createElement(\"li\");\n    li.textContent = city.ad;\n    list.append(li);\n  }\n  info.textContent = `${region}: ${cities.length} şehir`;\n}\n\nfor (const btn of document.querySelectorAll(\"#regions button\")) {\n  btn.addEventListener(\"click\", () => loadRegion(btn.dataset.region));\n}\n",
+   "hints": [
+    "fetch(`/demo-api/sehirler?bolge=${encodeURIComponent(region)}`)",
+    "Listeyi temizlemek için: list.innerHTML = \"\";"
+   ],
+   "check": {
+    "code_contains": [
+     "?bolge=",
+     "encodeURIComponent"
+    ],
+    "js": "click('[data-region=\"İç Anadolu\"]');\nawait sleep(350);\nconst names = () => $$(\"#list li\").map((li) => li.textContent.trim()).join(\",\");\nassert(names() === \"Ankara,Eskişehir\", \"İç Anadolu düğmesine basınca listede Ankara ve Eskişehir olmalı.\");\nassert($(\"#info\").textContent.trim() === \"İç Anadolu: 2 şehir\", \"#info 'İç Anadolu: 2 şehir' olmalı.\");\nloadRegion(\"Ege\");\nawait sleep(350);\nassert(names() === \"İzmir\", \"Yeni bölge seçilince liste önce temizlenmeli; Ege için yalnızca İzmir kalmalı.\");\nloadRegion(\"Anadolu\");\nawait sleep(350);\nassert($$(\"#list li\").length === 4 && $(\"#info\").textContent.trim() === \"Anadolu: 4 şehir\", \"Süzmeyi sunucu yapmalı: ?bolge=Anadolu 4 şehir getirir.\");"
+   },
+   "xp": 50,
+   "mode": "page",
+   "html": "<h2>Şehir İstasyonu</h2>\n<p id=\"info\">Hazır.</p>\n<ul id=\"list\"></ul>\n\n<div id=\"regions\"><button data-region=\"Ege\">Ege</button><button data-region=\"İç Anadolu\">İç Anadolu</button><button data-region=\"Karadeniz\">Karadeniz</button></div>\n",
+   "css": "#list li{padding:2px 0}#regions button{margin:4px}"
+  },
+  {
+   "id": "js-d26-t3",
+   "title": "Yükleniyor ve hata",
+   "prompt": "`loadData(url)` üç durumu da göstersin (`#info`'da):\n\n- İstekten önce: `Yükleniyor...` (bu satır hazır)\n- Cevap başarılıysa: `Tamam: 4 kayıt` (gelen dizinin uzunluğu)\n- `res.ok` değilse: `Hata: 404` (durum kodu `res.status`'tan gelsin)\n- Bağlantı hiç kurulamazsa (`catch`): `Bağlantı kurulamadı`",
+   "starter": "const info = document.querySelector(\"#info\");\n\nasync function loadData(url) {\n  info.textContent = \"Yükleniyor...\";\n  // try içinde fetch et; res.ok değilse durum kodunu, başarılıysa kayıt sayısını yaz\n  // catch içinde bağlantı hatasını yaz\n}\n\nloadData(\"/demo-api/gorevler\");\n",
+   "solution": "const info = document.querySelector(\"#info\");\n\nasync function loadData(url) {\n  info.textContent = \"Yükleniyor...\";\n  // try içinde fetch et; res.ok değilse durum kodunu, başarılıysa kayıt sayısını yaz\n  // catch içinde bağlantı hatasını yaz\n  try {\n    const res = await fetch(url);\n    if (!res.ok) {\n      info.textContent = `Hata: ${res.status}`;\n      return;\n    }\n    const data = await res.json();\n    info.textContent = `Tamam: ${data.length} kayıt`;\n  } catch (err) {\n    info.textContent = \"Bağlantı kurulamadı\";\n  }\n}\n\nloadData(\"/demo-api/gorevler\");\n",
+   "hints": [
+    "if (!res.ok) { info.textContent = `Hata: ${res.status}`; return; }",
+    "Bütün isteği try { ... } catch (err) { ... } içine al."
+   ],
+   "check": {
+    "code_contains": [
+     "res.ok",
+     "res.status",
+     "catch"
+    ],
+    "js": "const info = () => $(\"#info\").textContent.trim();\nloadData(\"/demo-api/gorevler\");\nassert(info() === \"Yükleniyor...\", \"İstek biterken #info 'Yükleniyor...' göstermeli.\");\nawait sleep(300);\nassert(info() === \"Tamam: 4 kayıt\", \"Başarılı cevapta #info 'Tamam: 4 kayıt' olmalı.\");\nloadData(\"/demo-api/gezegenler\");\nawait sleep(300);\nassert(info() === \"Hata: 404\", \"Olmayan adreste #info 'Hata: 404' olmalı (res.status).\");\nloadData(\"/demo-api/hata\");\nawait sleep(300);\nassert(info() === \"Hata: 500\", \"/demo-api/hata için #info 'Hata: 500' olmalı.\");\nloadData(\"https://ornek.com/veri\");\nawait sleep(300);\nassert(info() === \"Bağlantı kurulamadı\", \"Bağlantı kurulamayınca (catch) #info 'Bağlantı kurulamadı' olmalı.\");"
+   },
+   "xp": 50,
+   "mode": "page",
+   "html": "<h2>Veri İstasyonu</h2>\n<p id=\"info\">Hazır.</p>\n",
+   "css": ""
+  }
+ ],
+ "challenge": {
+  "id": "js-d26-c",
+  "title": "En sıcak şehir",
+  "prompt": "`showHottest(region)` bir bölgedeki **en sıcak** şehri bulsun:\n\n- `/demo-api/sehirler?bolge=...` ile şehirleri iste (boş bölge `\"\"` bütün şehirleri getirir).\n- En yüksek `sicaklik`'lı şehri bul (`reduce` ya da döngüyle).\n- `#info`'ya `En sıcak: Antalya (26°C)` yaz. Hiç şehir gelmezse `Şehir bulunamadı` yaz.\n\nŞehir adını elle yazma: sonuç veriden gelsin.",
+  "starter": "const info = document.querySelector(\"#info\");\n\nasync function showHottest(region) {\n  // iste, en sıcak şehri bul, yaz\n}\n\nshowHottest(\"\");\n",
+  "solution": "const info = document.querySelector(\"#info\");\n\nasync function showHottest(region) {\n  // iste, en sıcak şehri bul, yaz\n  const res = await fetch(`/demo-api/sehirler?bolge=${encodeURIComponent(region)}`);\n  const cities = await res.json();\n  if (cities.length === 0) {\n    info.textContent = \"Şehir bulunamadı\";\n    return;\n  }\n  const hottest = cities.reduce((best, city) => (city.sicaklik > best.sicaklik ? city : best));\n  info.textContent = `En sıcak: ${hottest.ad} (${hottest.sicaklik}°C)`;\n}\n\nshowHottest(\"\");\n",
+  "hints": [
+   "cities.reduce((best, city) => (city.sicaklik > best.sicaklik ? city : best))",
+   "Boş diziyle reduce hata verir: önce cities.length === 0 durumunu kontrol et."
+  ],
+  "check": {
+   "code_contains": [
+    "fetch",
+    "sicaklik"
+   ],
+   "js": "const info = () => $(\"#info\").textContent.trim();\nshowHottest(\"\");\nawait sleep(300);\nassert(info() === \"En sıcak: Antalya (26°C)\", \"Bütün şehirlerde #info 'En sıcak: Antalya (26°C)' olmalı.\");\nshowHottest(\"Anadolu\");\nawait sleep(300);\nassert(info() === \"En sıcak: Gaziantep (21°C)\", \"'Anadolu' için en sıcak şehir Gaziantep (21°C) olmalı.\");\nshowHottest(\"Mars\");\nawait sleep(300);\nassert(info() === \"Şehir bulunamadı\", \"Şehir gelmeyince #info 'Şehir bulunamadı' olmalı.\");\nassert(!/Antalya|Gaziantep/.test(_code), \"Şehir adlarını elle yazma; veriden bul.\");"
+  },
+  "xp": 75,
+  "mode": "page",
+  "html": "<h2>Şehir İstasyonu</h2>\n<p id=\"info\">Hazır.</p>\n<ul id=\"list\"></ul>\n",
+  "css": "#list li{padding:2px 0}#regions button{margin:4px}"
+ },
+ "project_contribution": "Seviyeleri sunucudan almak",
+ "project_task": {
+  "id": "js-d26-p",
+  "title": "Seviyeleri sunucudan al",
+  "prompt": "Oyunun seviyeleri artık sunucuda! Seviye düğmeleri hazır; `loadLevel(n)` fonksiyonunu yaz:\n\n- `/demo-api/seviyeler/` adresinin sonuna `n` ekleyerek iste.\n- Başarılıysa seviyeyi `currentLevel`'a kaydet ve `#info`'ya yaz: `Seviye 2: 8 yıldız, 3 düşman, hız 3`\n- `res.ok` değilse (4. seviye henüz yok, 404 gelir): `Seviye 4 henüz hazır değil.` yaz; `currentLevel` değişmesin.",
+  "starter": "let currentLevel = null;\nconst info = document.querySelector(\"#info\");\n\nasync function loadLevel(n) {\n  info.textContent = \"Yükleniyor...\";\n  // /demo-api/seviyeler/n adresini iste\n  // res.ok değilse: Seviye n henüz hazır değil.\n  // başarılıysa: currentLevel = seviye; bilgiyi yaz\n}\n\nfor (const btn of document.querySelectorAll(\"#levels button\")) {\n  btn.addEventListener(\"click\", () => loadLevel(Number(btn.dataset.level)));\n}\n",
+  "solution": "let currentLevel = null;\nconst info = document.querySelector(\"#info\");\n\nasync function loadLevel(n) {\n  info.textContent = \"Yükleniyor...\";\n  const res = await fetch(`/demo-api/seviyeler/${n}`);\n  if (!res.ok) {\n    info.textContent = `Seviye ${n} henüz hazır değil.`;\n    return;\n  }\n  const level = await res.json();\n  currentLevel = level;\n  info.textContent = `Seviye ${level.seviye}: ${level.yildiz} yıldız, ${level.dusman} düşman, hız ${level.hiz}`;\n}\n\nfor (const btn of document.querySelectorAll(\"#levels button\")) {\n  btn.addEventListener(\"click\", () => loadLevel(Number(btn.dataset.level)));\n}\n",
+  "hints": [
+   "const res = await fetch(`/demo-api/seviyeler/${n}`);",
+   "if (!res.ok) { ...; return; } ile hatalı seviyeyi erkenden ele.",
+   "const level = await res.json(); sonra level.yildiz, level.dusman, level.hiz"
+  ],
+  "check": {
+   "code_contains": [
+    "fetch",
+    "res.ok"
+   ],
+   "js": "const info = () => $(\"#info\").textContent.trim();\nclick('[data-level=\"2\"]');\nawait sleep(300);\nassert(info() === \"Seviye 2: 8 yıldız, 3 düşman, hız 3\", \"Seviye 2 düğmesiyle #info 'Seviye 2: 8 yıldız, 3 düşman, hız 3' olmalı.\");\nassert(currentLevel && currentLevel.seviye === 2, \"Gelen seviye currentLevel'a kaydedilmeli.\");\nloadLevel(3);\nawait sleep(300);\nassert(info() === \"Seviye 3: 12 yıldız, 5 düşman, hız 4\", \"loadLevel(3) sonrası #info 'Seviye 3: 12 yıldız, 5 düşman, hız 4' olmalı.\");\nclick('[data-level=\"4\"]');\nawait sleep(300);\nassert(info() === \"Seviye 4 henüz hazır değil.\", \"Seviye 4 (404) için #info 'Seviye 4 henüz hazır değil.' olmalı.\");\nassert(currentLevel.seviye === 3, \"Hatalı seviye currentLevel'ı değiştirmemeli.\");"
+  },
+  "xp": 100,
+  "mode": "page",
+  "html": "<h1 id=\"title\">Yıldız Avcısı</h1>\n<p id=\"info\">Bir seviye seç.</p>\n<div id=\"levels\"><button data-level=\"1\">Seviye 1</button><button data-level=\"2\">Seviye 2</button><button data-level=\"3\">Seviye 3</button><button data-level=\"4\">Seviye 4</button></div>\n",
+  "css": "#title{color:#0b1026}canvas{background:#0b1026;display:block;max-width:100%;border-radius:6px}#levels button{margin:4px}.controls button{font-size:22px;min-width:56px;min-height:48px;margin:4px}section h1,section h2{color:#0b1026}"
+ },
+ "tracks": {
+  "js-web": {
+   "project_contribution": "Blog yazıları",
+   "project_task": {
+    "id": "js-d26-pw",
+    "title": "Blog yazılarını getir",
+    "prompt": "Sitenin blog bölümü yazıları sunucudan alsın. `loadPosts(url)` fonksiyonunu tamamla:\n\n- `url` adresinden yazıları iste (varsayılan: `/demo-api/yazilar`).\n- Başarılıysa `#posts`'u temizle ve her yazı için bir kart ekle: `<article class=\"card\">` içinde `<h3>` (başlık) ve `<p>` (özet).\n- Cevap başarısızsa ya da bağlantı kurulamazsa `#posts`'a `Yazılar yüklenemedi.` yaz.",
+    "starter": "const posts = document.querySelector(\"#posts\");\n\nasync function loadPosts(url = \"/demo-api/yazilar\") {\n  posts.textContent = \"Yükleniyor...\";\n  // iste; başarılıysa kartları çiz, değilse hata mesajı yaz\n}\n\nloadPosts();\n",
+    "solution": "const posts = document.querySelector(\"#posts\");\n\nasync function loadPosts(url = \"/demo-api/yazilar\") {\n  posts.textContent = \"Yükleniyor...\";\n  try {\n    const res = await fetch(url);\n    if (!res.ok) throw new Error(`Durum kodu ${res.status}`);\n    const data = await res.json();\n    posts.textContent = \"\";\n    for (const post of data) {\n      const card = document.createElement(\"article\");\n      card.className = \"card\";\n      const title = document.createElement(\"h3\");\n      title.textContent = post.baslik;\n      const summary = document.createElement(\"p\");\n      summary.textContent = post.ozet;\n      card.append(title, summary);\n      posts.append(card);\n    }\n  } catch (err) {\n    posts.textContent = \"Yazılar yüklenemedi.\";\n  }\n}\n\nloadPosts();\n",
+    "hints": [
+     "if (!res.ok) throw new Error(...) yazarsan hatalı cevap da catch'e düşer.",
+     "Kart: document.createElement(\"article\"), card.className = \"card\"",
+     "card.append(title, summary); posts.append(card);"
+    ],
+    "check": {
+     "code_contains": [
+      "fetch",
+      "res.ok",
+      "catch"
+     ],
+     "js": "await sleep(350);\nconst cards = $$(\"#posts .card\");\nassert(cards.length === 3, \"#posts içinde 3 tane .card olmalı.\");\nassert(cards[0].querySelector(\"h3\") && cards[0].querySelector(\"h3\").textContent.trim() === \"İlk kodum\", \"İlk kartın <h3>'ü 'İlk kodum' olmalı.\");\nassert(cards[0].querySelector(\"p\") && cards[0].querySelector(\"p\").textContent.trim() === \"console.log ile başladığım gün.\", \"Kartın <p>'si yazının özeti olmalı.\");\nassert(!$(\"#posts\").textContent.includes(\"Yükleniyor\"), \"Yazılar gelince 'Yükleniyor...' yazısı kalkmalı.\");\nloadPosts(\"/demo-api/hata\");\nawait sleep(350);\nassert($$(\"#posts .card\").length === 0 && $(\"#posts\").textContent.trim() === \"Yazılar yüklenemedi.\", \"Hatalı cevapta #posts yalnızca 'Yazılar yüklenemedi.' göstermeli.\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<header><h1 id=\"site-title\">Kod Günlüğüm</h1></header>\n<main><h2>Blog</h2>\n<div id=\"posts\"></div></main>\n",
+    "css": "header{display:flex;align-items:center;gap:12px;flex-wrap:wrap}header h1{margin:0;font-size:22px}nav a{margin-right:10px}.card{border:1px solid #ccd;border-radius:8px;padding:8px 12px;margin:8px 0}.card h3{margin:0 0 4px}.tech{color:#556;font-size:14px}body.dark{background:#0b1026;color:#eef}body.dark a{color:#9cf}form{display:grid;gap:6px;max-width:320px}"
+   }
+  },
+  "js-app": {
+   "project_contribution": "Görevleri sunucudan almak",
+   "project_task": {
+    "id": "js-d26-pa",
+    "title": "Görevleri getir",
+    "prompt": "Asistan görevleri sunucudan alsın. İki fonksiyonu tamamla:\n\n- `renderTasks(tasks)`: `#tasks` listesini temizlesin, her görev için `baslik`'ı yazan bir `<li>` eklesin; `bitti` olanlara `done` sınıfı versin. `#count`'a kalan görev sayısını yazsın: `2 görev kaldı`.\n- `loadTasks()`: `/demo-api/gorevler` adresinden görevleri alıp `renderTasks`'e versin.",
+    "starter": "const list = document.querySelector(\"#tasks\");\nconst count = document.querySelector(\"#count\");\n\nfunction renderTasks(tasks) {\n  // listeyi temizle, her görev için <li> ekle (bitti ise done sınıfı), kalanı yaz\n}\n\nasync function loadTasks() {\n  // /demo-api/gorevler adresinden al, renderTasks'e ver\n}\n\nloadTasks();\n",
+    "solution": "const list = document.querySelector(\"#tasks\");\nconst count = document.querySelector(\"#count\");\n\nfunction renderTasks(tasks) {\n  list.innerHTML = \"\";\n  for (const task of tasks) {\n    const li = document.createElement(\"li\");\n    li.textContent = task.baslik;\n    if (task.bitti) li.classList.add(\"done\");\n    list.append(li);\n  }\n  const left = tasks.filter((t) => !t.bitti).length;\n  count.textContent = `${left} görev kaldı`;\n}\n\nasync function loadTasks() {\n  count.textContent = \"Yükleniyor...\";\n  const res = await fetch(\"/demo-api/gorevler\");\n  if (!res.ok) {\n    count.textContent = \"Görevler alınamadı.\";\n    return;\n  }\n  const tasks = await res.json();\n  renderTasks(tasks);\n}\n\nloadTasks();\n",
+    "hints": [
+     "if (task.bitti) li.classList.add(\"done\");",
+     "Kalan: tasks.filter((t) => !t.bitti).length",
+     "loadTasks içinde: const tasks = await res.json(); renderTasks(tasks);"
+    ],
+    "check": {
+     "code_contains": [
+      "fetch",
+      "filter"
+     ],
+     "js": "await sleep(350);\nconst items = $$(\"#tasks li\");\nassert(items.length === 4, \"#tasks içinde 4 görev olmalı.\");\nassert(items[1].textContent.trim() === \"Fizik tekrarı\", \"Her <li> görevin başlığını göstermeli.\");\nassert(items[0].classList.contains(\"done\") && !items[1].classList.contains(\"done\") && items[3].classList.contains(\"done\"), \"Bitmiş görevlerin <li>'sinde done sınıfı olmalı, diğerlerinde olmamalı.\");\nassert($(\"#count\").textContent.trim() === \"2 görev kaldı\", \"#count '2 görev kaldı' olmalı.\");\nrenderTasks([{ id: 7, baslik: \"Deneme\", bitti: false }, { id: 8, baslik: \"Proje\", bitti: false }, { id: 9, baslik: \"Tekrar\", bitti: false }]);\nassert($$(\"#tasks li\").length === 3, \"renderTasks listeyi önce temizlemeli.\");\nassert($(\"#count\").textContent.trim() === \"3 görev kaldı\", \"Kalan sayısı verilen görevlerden hesaplanmalı.\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<h1>Çalışma Asistanım</h1>\n<p id=\"count\"></p>\n<ul id=\"tasks\"></ul>\n",
+    "css": "li{padding:6px;cursor:pointer}li.done{text-decoration:line-through;color:#889}li.selected{outline:2px solid #3b6ef5;border-radius:4px}.big{font-size:20px;min-width:64px;min-height:48px;margin:4px}#stats,#count{font-weight:bold}form{display:flex;gap:6px}"
+   }
+  },
+  "js-quiz": {
+   "project_contribution": "Soruları sunucudan almak",
+   "project_task": {
+    "id": "js-d26-pq",
+    "title": "Soruları getir",
+    "prompt": "Sorular artık sunucuda. İki fonksiyonu tamamla:\n\n- `loadQuestions()`: `/demo-api/sorular` adresinden soruları alıp `questions` değişkenine koysun, sonra `showQuestion(0)` çağırsın.\n- `showQuestion(index)`: `#question`'a `Soru 1: Ay, hangi gezegenin uydusudur?` biçiminde soruyu yazsın; `#options`'ı temizleyip her seçenek için bir `<button>` eklesin.",
+    "starter": "let questions = [];\nconst questionEl = document.querySelector(\"#question\");\nconst options = document.querySelector(\"#options\");\n\nfunction showQuestion(index) {\n  // soruyu yaz, seçenek düğmelerini ekle\n}\n\nasync function loadQuestions() {\n  // soruları al, questions'a koy, ilk soruyu göster\n}\n\nloadQuestions();\n",
+    "solution": "let questions = [];\nconst questionEl = document.querySelector(\"#question\");\nconst options = document.querySelector(\"#options\");\n\nfunction showQuestion(index) {\n  const q = questions[index];\n  questionEl.textContent = `Soru ${index + 1}: ${q.soru}`;\n  options.innerHTML = \"\";\n  q.secenekler.forEach((text) => {\n    const btn = document.createElement(\"button\");\n    btn.textContent = text;\n    options.append(btn);\n  });\n}\n\nasync function loadQuestions() {\n  const res = await fetch(\"/demo-api/sorular\");\n  if (!res.ok) {\n    questionEl.textContent = \"Sorular yüklenemedi.\";\n    return;\n  }\n  questions = await res.json();\n  showQuestion(0);\n}\n\nloadQuestions();\n",
+    "hints": [
+     "questions = await res.json(); (let ile tanımlı olduğu için yeniden atanabilir)",
+     "Soru metni: `Soru ${index + 1}: ${q.soru}`",
+     "Her seçenek için document.createElement(\"button\")"
+    ],
+    "check": {
+     "code_contains": [
+      "fetch",
+      "createElement"
+     ],
+     "js": "await sleep(350);\nassert(Array.isArray(questions) && questions.length === 5, \"Gelen 5 soru questions değişkenine konmalı.\");\nassert($(\"#question\").textContent.trim() === \"Soru 1: Ay, hangi gezegenin uydusudur?\", \"#question 'Soru 1: Ay, hangi gezegenin uydusudur?' olmalı.\");\nconst texts = () => $$(\"#options button\").map((b) => b.textContent.trim()).join(\",\");\nassert(texts() === \"Mars,Dünya,Jüpiter\", \"#options içinde Mars, Dünya, Jüpiter düğmeleri olmalı.\");\nshowQuestion(3);\nassert($(\"#question\").textContent.trim() === \"Soru 4: Güneş'e en yakın gezegen hangisidir?\", \"showQuestion(3) dördüncü soruyu göstermeli.\");\nassert(texts() === \"Venüs,Dünya,Merkür\", \"Yeni soruda eski düğmeler temizlenmeli, yenileri eklenmeli.\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<h1>Bilgi Yarışması</h1>\n<p id=\"question\">Sorular yükleniyor...</p>\n<div id=\"options\"></div>\n<p id=\"feedback\"></p>\n",
+    "css": "#options button{display:block;width:100%;max-width:320px;margin:6px 0;padding:10px;font-size:18px}#feedback{font-weight:bold}"
+   }
+  }
+ },
+ "available": true
+}

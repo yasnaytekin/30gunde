@@ -1,0 +1,244 @@
+{
+ "day": 17,
+ "title": "Klavye ve ses",
+ "region": "kusak",
+ "xp_complete": 150,
+ "objective": "keydown/keyup ile tuşlara tepki vermek, bir elemanı klavyeyle hareket ettirmek ve Web Audio ile bip sesi çalmak",
+ "story": "Olay Kuşağı'na girdin! Burada her şey bir sinyale tepki veriyor. Bugün gemini **klavyeyle** yöneteceksin, üstüne bir de ses ekleyeceksin.",
+ "sections": [
+  {
+   "title": "keydown ve keyup",
+   "body": "Bir tuşa bastığın an `keydown`, bıraktığın an `keyup` olayı olur. Tuşları bütün sayfada dinlemek için olayı `document`'a bağlarız. Hangi tuşa basıldığı `e.key`'dedir:\n\n```js\ndocument.addEventListener(\"keydown\", (e) => {\n  console.log(\"Basıldı:\", e.key);\n});\n```\n\n| Tuş | e.key |\n|---|---|\n| Sol / sağ ok | `\"ArrowLeft\"` / `\"ArrowRight\"` |\n| Yukarı / aşağı ok | `\"ArrowUp\"` / `\"ArrowDown\"` |\n| Enter | `\"Enter\"` |\n| Boşluk | `\" \"` (içinde tek boşluk olan metin) |\n| Esc | `\"Escape\"` |\n| Harf ve rakamlar | `\"a\"`, `\"A\"`, `\"1\"` |\n\nÖnizleme tuşları duysun diye önce önizlemenin içine bir kez tıkla."
+  },
+  {
+   "title": "Bir elemanı hareket ettirmek",
+   "body": "Bir elemanın yerini değiştirmek için konumunu bir değişkende tut; değişince CSS'ini güncelle. Eleman `position: absolute` ise `style.left` kullanılabilir, `transform` ise her elemanda çalışır:\n\n```js\nlet x = 0;\nfunction move(dx) {\n  x = Math.max(0, Math.min(260, x + dx)); // 0 ile 260 arasında tut\n  rocket.style.left = x + \"px\";\n  // ya da: rocket.style.transform = `translateX(${x}px)`;\n}\n```\n\n`Math.min(260, ...)` 260'tan büyük sayıyı 260 yapar, `Math.max(0, ...)` sıfırdan küçüğünü 0 yapar. Böylece roket alanın dışına kaçmaz. Buna **sınırlamak** denir."
+  },
+  {
+   "title": "Varsayılan davranışı durdurmak",
+   "body": "Ok tuşları ve boşluk normalde sayfayı kaydırır. Oyunda bunu istemeyiz: yalnızca **kendi kullandığın** tuşlar için `e.preventDefault()` çağır.\n\nKullanıcı bir kutuya yazı yazıyorsa kısayollar çalışmamalı. Olayın hangi elemanda olduğunu `e.target` söyler:\n\n```js\ndocument.addEventListener(\"keydown\", (e) => {\n  if (e.target.tagName === \"INPUT\") return; // kutuya yazılıyor\n  if (e.key === \"ArrowLeft\" || e.key === \"ArrowRight\") {\n    e.preventDefault(); // sayfa kaymasın\n  }\n});\n```"
+  },
+  {
+   "title": "Ses: Web Audio ile bip",
+   "body": "Tarayıcı kendi başına ses üretebilir! `AudioContext` küçük bir ses stüdyosu, `oscillator` ise ton üreten bir hoparlör gibidir:\n\n```js\nfunction beep(freq = 440) {\n  try {\n    const audio = new AudioContext();\n    const osc = audio.createOscillator();\n    osc.frequency.value = freq; // büyüdükçe ses incelir\n    osc.connect(audio.destination);\n    osc.start();\n    osc.stop(audio.currentTime + 0.15); // 0,15 saniye çal\n  } catch (err) {\n    console.log(\"Ses çalınamadı.\");\n  }\n}\n```\n\n`try { ... } catch (err) { ... }`: içerideki kod hata verirse program durmaz, `catch` kısmı çalışır (24. günde ayrıntısıyla göreceğiz).\n\nTarayıcılar sesi ancak kullanıcı bir yere tıkladıktan ya da bir tuşa bastıktan sonra çalar. Ses her cihazda çalışmayabilir; bu yüzden oyunun geri kalanı sese **bağlı olmamalı**."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Ok tuşlarıyla nokta",
+   "code": "const dot = document.querySelector(\"#dot\");\nlet x = 0;\nlet y = 0;\ndocument.addEventListener(\"keydown\", (e) => {\n  if (e.key === \"ArrowRight\") x += 20;\n  else if (e.key === \"ArrowLeft\") x -= 20;\n  else if (e.key === \"ArrowDown\") y += 20;\n  else if (e.key === \"ArrowUp\") y -= 20;\n  else return;\n  e.preventDefault();\n  x = Math.max(0, Math.min(220, x));\n  y = Math.max(0, Math.min(100, y));\n  dot.style.left = x + \"px\";\n  dot.style.top = y + \"px\";\n  document.querySelector(\"#info\").textContent = `${e.key} → x: ${x}, y: ${y}`;\n});\n",
+   "note": "Nokta alanın kenarından dışarı çıkabiliyor mu? Dene.",
+   "mode": "page",
+   "html": "<div id=\"area\"><div id=\"dot\"></div></div>\n<p id=\"info\">Önizlemeye tıkla, sonra ok tuşlarına bas.</p>\n",
+   "css": "#area{position:relative;width:240px;height:120px;background:#0b1026;border-radius:8px}#dot{position:absolute;left:0;top:0;width:20px;height:20px;border-radius:50%;background:#f7df1e}"
+  },
+  {
+   "title": "Bip sesi",
+   "code": "let audio = null;\nfunction beep(freq = 440) {\n  try {\n    audio = audio || new AudioContext();\n    const osc = audio.createOscillator();\n    const gain = audio.createGain();\n    osc.frequency.value = freq;\n    gain.gain.value = 0.1; // ses düzeyi\n    osc.connect(gain);\n    gain.connect(audio.destination);\n    osc.start();\n    osc.stop(audio.currentTime + 0.15);\n  } catch (err) {\n    console.log(\"Ses çalınamadı:\", err.message);\n  }\n}\n\ndocument.querySelector(\"#beep\").addEventListener(\"click\", () => beep());\ndocument.addEventListener(\"keydown\", (e) => {\n  if (e.key === \"b\") beep(660);\n});\n",
+   "note": "Sesin açık olsun. Ses çalmazsa sorun değil; görevlerde ses gerekmiyor.",
+   "mode": "page",
+   "html": "<button id=\"beep\">Bip!</button>\n<p>Ya da önizlemeye tıklayıp <b>b</b> tuşuna bas.</p>\n",
+   "css": ""
+  }
+ ],
+ "tasks": [
+  {
+   "id": "js-d17-t1",
+   "title": "Tuş dedektörü",
+   "prompt": "Bir tuşa basılınca (`keydown`) `#key` paragrafına `Basılan tuş: a` biçiminde tuşun adını yaz.\n\nBoşluk tuşunun `e.key` değeri görünmez bir `\" \"` olduğu için onun yerine `Boşluk` yaz: `Basılan tuş: Boşluk`.",
+   "starter": "// keydown olayını document üzerinde dinle\n\n",
+   "solution": "// keydown olayını document üzerinde dinle\ndocument.addEventListener(\"keydown\", (e) => {\n  const name = e.key === \" \" ? \"Boşluk\" : e.key;\n  document.querySelector(\"#key\").textContent = `Basılan tuş: ${name}`;\n});\n",
+   "hints": [
+    "document.addEventListener(\"keydown\", (e) => { ... })",
+    "const name = e.key === \" \" ? \"Boşluk\" : e.key;"
+   ],
+   "check": {
+    "code_contains": [
+     "keydown",
+     "e.key"
+    ],
+    "js": "key(\"a\");\nassert($(\"#key\").textContent === \"Basılan tuş: a\", \"'a' tuşuna basınca #key 'Basılan tuş: a' olmalı.\");\nkey(\"Enter\");\nassert($(\"#key\").textContent === \"Basılan tuş: Enter\", \"Enter'a basınca 'Basılan tuş: Enter' olmalı.\");\nkey(\" \");\nassert($(\"#key\").textContent === \"Basılan tuş: Boşluk\", \"Boşluk tuşunda 'Basılan tuş: Boşluk' yazmalı.\");"
+   },
+   "xp": 50,
+   "mode": "page",
+   "html": "<p id=\"key\">Önizlemeye tıkla ve bir tuşa bas.</p>",
+   "css": ""
+  },
+  {
+   "id": "js-d17-t2",
+   "title": "Roketi kaydır",
+   "prompt": "Sağ ok (`ArrowRight`) `x`'i 20 artırsın, sol ok (`ArrowLeft`) 20 azaltsın. `x` hep **0 ile 260 arasında** kalsın.\n\nHer hareketten sonra:\n\n- roketi `transform` ile taşı: `rocket.style.transform` değeri `translateX(40px)` biçiminde olsun,\n- `#pos`'a `x: 40` yaz.\n\nOklarda `e.preventDefault()` çağır; başka tuşlar hiçbir şeyi değiştirmesin.",
+   "starter": "const rocket = document.querySelector(\"#rocket\");\nlet x = 0;\n\n// keydown dinle\n\n",
+   "solution": "const rocket = document.querySelector(\"#rocket\");\nlet x = 0;\n\n// keydown dinle\ndocument.addEventListener(\"keydown\", (e) => {\n  if (e.key === \"ArrowRight\") x += 20;\n  else if (e.key === \"ArrowLeft\") x -= 20;\n  else return;\n  e.preventDefault();\n  x = Math.max(0, Math.min(260, x));\n  rocket.style.transform = `translateX(${x}px)`;\n  document.querySelector(\"#pos\").textContent = `x: ${x}`;\n});\n",
+   "hints": [
+    "x = Math.max(0, Math.min(260, x)); x'i sınırlar.",
+    "rocket.style.transform = `translateX(${x}px)`;"
+   ],
+   "check": {
+    "code_contains": [
+     "keydown",
+     "Math.min",
+     "Math.max",
+     "transform"
+    ],
+    "js": "const moved = () => (rocket.style.transform || \"\").replace(/\\s/g, \"\");\nkey(\"ArrowRight\");\nkey(\"ArrowRight\");\nassert(x === 40, \"İki kez sağ oka basınca x 40 olmalı.\");\nassert(moved() === \"translateX(40px)\", \"Roket translateX(40px) ile taşınmalı.\");\nassert($(\"#pos\").textContent === \"x: 40\", \"#pos 'x: 40' olmalı.\");\nfor (let i = 0; i < 5; i++) key(\"ArrowLeft\");\nassert(x === 0 && moved() === \"translateX(0px)\", \"Sol ok x'i 0'ın altına indirmemeli.\");\nfor (let i = 0; i < 20; i++) key(\"ArrowRight\");\nassert(x === 260 && $(\"#pos\").textContent === \"x: 260\", \"Sağ ok x'i 260'ın üstüne çıkarmamalı.\");\nkey(\"a\");\nkey(\"ArrowUp\");\nassert(x === 260, \"Başka tuşlar x'i değiştirmemeli.\");"
+   },
+   "xp": 50,
+   "mode": "page",
+   "html": "<div id=\"track\"><div id=\"rocket\"></div></div>\n<p id=\"pos\">x: 0</p>\n",
+   "css": "#track{width:300px;height:50px;background:#0b1026;border-radius:8px}#rocket{width:40px;height:40px;margin-top:5px;background:#f7df1e;border-radius:50%}"
+  },
+  {
+   "id": "js-d17-t3",
+   "title": "Motor düğmesi",
+   "prompt": "Boşluk tuşu basılı tutulduğu sürece motor çalışsın:\n\n- Boşluk basılınca (`keydown`): `#engine` metni `Motor: AÇIK` olsun ve `on` sınıfı eklensin.\n- Boşluk bırakılınca (`keyup`): `Motor: KAPALI` olsun ve `on` sınıfı kaldırılsın.\n\nBoşlukta `e.preventDefault()` çağırmayı unutma; diğer tuşlar motoru etkilemesin.",
+   "starter": "const engine = document.querySelector(\"#engine\");\n\n// keydown ve keyup dinle\n\n",
+   "solution": "const engine = document.querySelector(\"#engine\");\n\n// keydown ve keyup dinle\ndocument.addEventListener(\"keydown\", (e) => {\n  if (e.key !== \" \") return;\n  e.preventDefault();\n  engine.textContent = \"Motor: AÇIK\";\n  engine.classList.add(\"on\");\n});\n\ndocument.addEventListener(\"keyup\", (e) => {\n  if (e.key !== \" \") return;\n  engine.textContent = \"Motor: KAPALI\";\n  engine.classList.remove(\"on\");\n});\n",
+   "hints": [
+    "if (e.key !== \" \") return; diğer tuşları atlar.",
+    "İki ayrı dinleyici yaz: biri keydown, biri keyup."
+   ],
+   "check": {
+    "code_contains": [
+     "keydown",
+     "keyup"
+    ],
+    "js": "const send = (type, k) => document.dispatchEvent(new KeyboardEvent(type, { key: k, bubbles: true }));\nsend(\"keydown\", \" \");\nassert($(\"#engine\").textContent === \"Motor: AÇIK\" && $(\"#engine\").classList.contains(\"on\"), \"Boşluk basılınca 'Motor: AÇIK' yazmalı ve on sınıfı eklenmeli.\");\nsend(\"keyup\", \"a\");\nassert($(\"#engine\").textContent === \"Motor: AÇIK\", \"Başka bir tuşu bırakmak motoru kapatmamalı.\");\nsend(\"keyup\", \" \");\nassert($(\"#engine\").textContent === \"Motor: KAPALI\" && !$(\"#engine\").classList.contains(\"on\"), \"Boşluk bırakılınca 'Motor: KAPALI' yazmalı ve on sınıfı kalkmalı.\");\nsend(\"keydown\", \"Enter\");\nassert($(\"#engine\").textContent === \"Motor: KAPALI\", \"Enter motoru açmamalı.\");"
+   },
+   "xp": 50,
+   "mode": "page",
+   "html": "<p id=\"engine\">Motor: KAPALI</p><p>Önizlemeye tıkla, sonra boşluk tuşunu basılı tut.</p>",
+   "css": "#engine{font-size:20px}#engine.on{color:#e65100;font-weight:700}"
+  }
+ ],
+ "challenge": {
+  "id": "js-d17-c",
+  "title": "Gizli kod",
+  "prompt": "Oyunlarda gizli kodlar vardır! Basılan tuşları `pressed` dizisinde tut, ama dizide hep **en son 4 tuş** kalsın (`slice(-4)`).\n\nSon 4 tuş sırasıyla `ArrowUp`, `ArrowUp`, `ArrowDown`, `ArrowDown` olunca `#secret`'e `Gizli mod açıldı!` yaz.",
+  "starter": "const CODE = [\"ArrowUp\", \"ArrowUp\", \"ArrowDown\", \"ArrowDown\"];\nlet pressed = [];\n\n// keydown dinle: tuşu ekle, son 4 tuşu tut, kodla karşılaştır\n\n",
+  "solution": "const CODE = [\"ArrowUp\", \"ArrowUp\", \"ArrowDown\", \"ArrowDown\"];\nlet pressed = [];\n\n// keydown dinle: tuşu ekle, son 4 tuşu tut, kodla karşılaştır\ndocument.addEventListener(\"keydown\", (e) => {\n  pressed.push(e.key);\n  pressed = pressed.slice(-4);\n  if (pressed.join(\",\") === CODE.join(\",\")) {\n    document.querySelector(\"#secret\").textContent = \"Gizli mod açıldı!\";\n  }\n});\n",
+  "hints": [
+   "pressed.push(e.key); sonra pressed = pressed.slice(-4);",
+   "İki diziyi karşılaştırmak için metne çevir: pressed.join(\",\") === CODE.join(\",\")"
+  ],
+  "check": {
+   "code_contains": [
+    "keydown",
+    "slice",
+    "push"
+   ],
+   "js": "[\"ArrowUp\", \"ArrowDown\", \"ArrowUp\", \"a\", \"ArrowDown\", \"ArrowUp\", \"ArrowDown\", \"ArrowDown\"].forEach((k) => key(k));\nassert($(\"#secret\").textContent === \"Kodu gir...\", \"Sıra yanlışken gizli mod açılmamalı.\");\nassert(Array.isArray(pressed) && pressed.length === 4, \"pressed dizisinde en fazla son 4 tuş kalmalı.\");\n[\"ArrowUp\", \"ArrowUp\", \"ArrowDown\", \"ArrowDown\"].forEach((k) => key(k));\nassert($(\"#secret\").textContent === \"Gizli mod açıldı!\", \"Son 4 tuş Yukarı, Yukarı, Aşağı, Aşağı olunca 'Gizli mod açıldı!' yazmalı.\");"
+  },
+  "xp": 75,
+  "mode": "page",
+  "html": "<p id=\"secret\">Kodu gir...</p>",
+  "css": ""
+ },
+ "project_contribution": "Klavye kontrolü ve sesler",
+ "project_task": {
+  "id": "js-d17-p",
+  "title": "Klavye kontrolü",
+  "prompt": "Gemiyi ok tuşlarıyla yönetelim. `moveShip(dx)` fonksiyonunu yaz:\n\n- `x`'i `dx` kadar değiştirsin ve **0 ile `MAX_X` (270) arasında** tutsun,\n- gemiyi yerleştirsin: `ship.style.left = x + \"px\"`,\n- istersen gemi duvara çarpınca hazır `beep()` fonksiyonuyla ses çalsın (zorunlu değil).\n\nSonra `keydown` dinle: sol ok `moveShip(-STEP)`, sağ ok `moveShip(STEP)` çağırsın ve `e.preventDefault()` ile sayfa kaymasın. Pilot adı kutusuna yazı yazılırken oklar gemiyi oynatmasın.",
+  "starter": "const ship = document.querySelector(\"#ship\");\nconst STEP = 20;\nconst MAX_X = 270; // alan 300px, gemi 30px genişliğinde\nlet x = 0;\n\n// Bip sesi (hazır): ses çalamazsa oyun sessizce devam eder\nlet audio = null;\nfunction beep(freq = 440) {\n  try {\n    audio = audio || new AudioContext();\n    const osc = audio.createOscillator();\n    const gain = audio.createGain();\n    osc.frequency.value = freq;\n    gain.gain.value = 0.05;\n    osc.connect(gain);\n    gain.connect(audio.destination);\n    osc.start();\n    osc.stop(audio.currentTime + 0.1);\n  } catch (err) {\n    // ses yoksa sorun değil\n  }\n}\n\nfunction moveShip(dx) {\n  // x'i değiştir, 0 ile MAX_X arasında tut, gemiyi yerleştir\n}\n\n// keydown dinle\n\n",
+  "solution": "const ship = document.querySelector(\"#ship\");\nconst STEP = 20;\nconst MAX_X = 270; // alan 300px, gemi 30px genişliğinde\nlet x = 0;\n\n// Bip sesi (hazır): ses çalamazsa oyun sessizce devam eder\nlet audio = null;\nfunction beep(freq = 440) {\n  try {\n    audio = audio || new AudioContext();\n    const osc = audio.createOscillator();\n    const gain = audio.createGain();\n    osc.frequency.value = freq;\n    gain.gain.value = 0.05;\n    osc.connect(gain);\n    gain.connect(audio.destination);\n    osc.start();\n    osc.stop(audio.currentTime + 0.1);\n  } catch (err) {\n    // ses yoksa sorun değil\n  }\n}\n\nfunction moveShip(dx) {\n  // x'i değiştir, 0 ile MAX_X arasında tut, gemiyi yerleştir\n  x = x + dx;\n  if (x < 0 || x > MAX_X) beep(220); // duvara çarptı\n  x = Math.max(0, Math.min(MAX_X, x));\n  ship.style.left = x + \"px\";\n}\n\n// keydown dinle\ndocument.addEventListener(\"keydown\", (e) => {\n  if (e.target.tagName === \"INPUT\") return;\n  if (e.key === \"ArrowLeft\") {\n    e.preventDefault();\n    moveShip(-STEP);\n  } else if (e.key === \"ArrowRight\") {\n    e.preventDefault();\n    moveShip(STEP);\n  }\n});\n",
+  "hints": [
+   "x = Math.max(0, Math.min(MAX_X, x));",
+   "ship.style.left = x + \"px\";",
+   "Kutuya yazılıyorsa çık: if (e.target.tagName === \"INPUT\") return;"
+  ],
+  "check": {
+   "code_contains": [
+    "keydown",
+    "preventDefault",
+    "style.left"
+   ],
+   "js": "key(\"ArrowRight\");\nkey(\"ArrowRight\");\nkey(\"ArrowRight\");\nassert(x === 60, \"Üç kez sağ oka basınca x 60 olmalı.\");\nassert(ship.style.left === \"60px\", \"Gemi style.left ile 60px'e taşınmalı.\");\nfor (let i = 0; i < 5; i++) key(\"ArrowLeft\");\nassert(x === 0 && ship.style.left === \"0px\", \"Gemi 0'ın soluna çıkmamalı.\");\nmoveShip(1000);\nassert(x === 270 && ship.style.left === \"270px\", \"moveShip(1000) gemiyi MAX_X'e (270) götürmeli, dışarı çıkarmamalı.\");\nmoveShip(-50);\nassert(x === 220, \"moveShip(-50) x'i 220 yapmalı.\");\nkey(\"ArrowLeft\", \"#pilot-name\");\nassert(x === 220, \"Pilot adı kutusuna yazarken oklar gemiyi oynatmamalı.\");\nkey(\"a\");\nassert(x === 220, \"Başka tuşlar gemiyi oynatmamalı.\");"
+  },
+  "xp": 100,
+  "mode": "page",
+  "html": "<h2 id=\"title\">Yıldız Avcısı</h2>\n<form id=\"pilot-form\"><input id=\"pilot-name\" placeholder=\"Pilot adı\" autocomplete=\"off\"> <button>Başla</button></form>\n<p id=\"info\">Pilot adını yaz ve başla.</p>\n<p id=\"hud\">Skor: <span id=\"score\">0</span> · Süre: <span id=\"time\">10</span> · En yüksek: <span id=\"best\">0</span></p>\n<div id=\"field\"><div id=\"ship\"></div></div>\n<div id=\"colors\"><button data-color=\"#f7df1e\">Sarı</button> <button data-color=\"#4dd0e1\">Turkuaz</button> <button data-color=\"#ff6b6b\">Kırmızı</button></div>\n",
+  "css": ":root{--ship-color:#f7df1e}#title{margin:0 0 6px;color:#0b1026}#info.error{color:#c0392b;font-weight:600}#hud{margin:4px 0}#field{position:relative;width:300px;height:70px;background:#0b1026;border-radius:8px;overflow:hidden}#field.hit{background:#8e1b2b}#ship{position:absolute;left:0;bottom:10px;width:30px;height:30px;border-radius:50% 50% 6px 6px;background:var(--ship-color)}#colors{margin-top:8px}"
+ },
+ "tracks": {
+  "js-web": {
+   "project_contribution": "Klavye kısayolları",
+   "project_task": {
+    "id": "js-d17-pw",
+    "title": "Klavye kısayolları",
+    "prompt": "Sitene klavye kısayolları ekle:\n\n- `t`: `body`'deki `dark` sınıfını aç/kapat (tema değişsin).\n- `/`: arama kutusuna (`#search`) odaklan (`search.focus()`). `/` kutuya yazılmasın diye `e.preventDefault()` çağır.\n- Arama kutusundayken `Escape`: kutuyu boşalt ve odaktan çıkar (`search.blur()`).\n\nBir kutuya yazı yazılırken (`e.target.tagName === \"INPUT\"`) `t` ve `/` kısayolları çalışmasın.",
+    "starter": "const search = document.querySelector(\"#search\");\n\n// keydown dinle\n\n",
+    "solution": "const search = document.querySelector(\"#search\");\n\n// keydown dinle\ndocument.addEventListener(\"keydown\", (e) => {\n  if (e.key === \"Escape\" && e.target === search) {\n    search.value = \"\";\n    search.blur();\n    return;\n  }\n  if (e.target.tagName === \"INPUT\") return; // yazı yazılıyor\n  if (e.key === \"t\") {\n    document.body.classList.toggle(\"dark\");\n  } else if (e.key === \"/\") {\n    e.preventDefault();\n    search.focus();\n  }\n});\n",
+    "hints": [
+     "document.body.classList.toggle(\"dark\");",
+     "if (e.target.tagName === \"INPUT\") return;",
+     "Escape kontrolünü INPUT kontrolünden ÖNCE yaz; yoksa kutudayken hiç çalışmaz."
+    ],
+    "check": {
+     "code_contains": [
+      "keydown",
+      "focus",
+      "toggle"
+     ],
+     "js": "key(\"t\");\nassert(document.body.classList.contains(\"dark\"), \"'t' tuşu body'ye dark sınıfını eklemeli.\");\nkey(\"t\");\nassert(!document.body.classList.contains(\"dark\"), \"'t' tuşuna tekrar basınca dark sınıfı kalkmalı.\");\nkey(\"/\");\nassert(document.activeElement === $(\"#search\"), \"'/' tuşu arama kutusuna odaklanmalı (search.focus()).\");\nkey(\"t\", \"#search\");\nassert(!document.body.classList.contains(\"dark\"), \"Arama kutusuna yazarken 't' temayı değiştirmemeli.\");\ntype(\"#search\", \"oyun\");\nkey(\"Escape\", \"#search\");\nassert($(\"#search\").value === \"\", \"Arama kutusunda Escape kutuyu boşaltmalı.\");\nassert(document.activeElement !== $(\"#search\"), \"Escape'ten sonra arama kutusu odaktan çıkmalı (blur).\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<header id=\"top\"><h2 id=\"site-title\">Deniz Yıldız</h2> <input id=\"search\" placeholder=\"Sitede ara ( / )\" autocomplete=\"off\"> <span id=\"clock\">--:--:--</span></header>\n<nav id=\"accents\"><button data-accent=\"#f7df1e\">Sarı</button> <button data-accent=\"#26c6da\">Turkuaz</button> <button data-accent=\"#b388ff\">Mor</button> <button id=\"theme-btn\">Tema değiştir</button></nav>\n<form id=\"contact\"><input id=\"c-name\" placeholder=\"Adın\" autocomplete=\"off\"> <input id=\"c-email\" placeholder=\"E-posta adresin\" autocomplete=\"off\"> <button>Gönder</button></form>\n<p id=\"form-msg\"></p>\n",
+    "css": ":root{--accent:#f7df1e}body.dark{background:#0b1026;color:#eef1ff}#site-title{display:inline-block;margin:0 8px 6px 0;border-bottom:4px solid var(--accent)}#clock{font-family:monospace;margin-left:8px}nav{margin:6px 0}nav button.active{outline:3px solid var(--accent)}#contact input{margin:4px 4px 4px 0}#form-msg.error{color:#c0392b;font-weight:600}"
+   }
+  },
+  "js-app": {
+   "project_contribution": "Kısayollar",
+   "project_task": {
+    "id": "js-d17-pa",
+    "title": "Kısayollar",
+    "prompt": "Asistanını klavyeyle hızlı kullanmak için kısayollar ekle (Enter'a basınca form zaten gönderiliyor):\n\n- `Escape`: görev kutusunu (`input`) ve `#task-msg`'yi boşalt. Bu kısayol kutudayken de çalışsın.\n- `n`: görev kutusuna odaklan (`input.focus()`) ve `e.preventDefault()` çağır.\n- `Delete`: listedeki **son** görevi sil (`list.lastElementChild`); liste boşsa hiçbir şey yapma.\n\nKutuya yazı yazılırken (`e.target === input`) `n` ve `Delete` çalışmasın.",
+    "starter": "const form = document.querySelector(\"#task-form\");\nconst input = document.querySelector(\"#task-input\");\nconst msg = document.querySelector(\"#task-msg\");\nconst list = document.querySelector(\"#task-list\");\n\nfunction addTask(text) {\n  const li = document.createElement(\"li\");\n  li.textContent = text;\n  list.append(li);\n}\n\nform.addEventListener(\"submit\", (e) => {\n  e.preventDefault();\n  const text = input.value.trim();\n  if (text === \"\") {\n    msg.textContent = \"Görev boş olamaz.\";\n    return;\n  }\n  msg.textContent = \"\";\n  addTask(text);\n  form.reset();\n});\n\naddTask(\"Matematik ödevi\");\naddTask(\"Fizik tekrarı\");\n\n// Kısayollar: keydown dinle\n\n",
+    "solution": "const form = document.querySelector(\"#task-form\");\nconst input = document.querySelector(\"#task-input\");\nconst msg = document.querySelector(\"#task-msg\");\nconst list = document.querySelector(\"#task-list\");\n\nfunction addTask(text) {\n  const li = document.createElement(\"li\");\n  li.textContent = text;\n  list.append(li);\n}\n\nform.addEventListener(\"submit\", (e) => {\n  e.preventDefault();\n  const text = input.value.trim();\n  if (text === \"\") {\n    msg.textContent = \"Görev boş olamaz.\";\n    return;\n  }\n  msg.textContent = \"\";\n  addTask(text);\n  form.reset();\n});\n\naddTask(\"Matematik ödevi\");\naddTask(\"Fizik tekrarı\");\n\n// Kısayollar: keydown dinle\ndocument.addEventListener(\"keydown\", (e) => {\n  if (e.key === \"Escape\") {\n    input.value = \"\";\n    msg.textContent = \"\";\n    return;\n  }\n  if (e.target === input) return; // yazı yazılıyor\n  if (e.key === \"n\") {\n    e.preventDefault();\n    input.focus();\n  } else if (e.key === \"Delete\") {\n    const last = list.lastElementChild;\n    if (last) last.remove();\n  }\n});\n",
+    "hints": [
+     "if (e.key === \"Escape\") { input.value = \"\"; ... }",
+     "const last = list.lastElementChild; if (last) last.remove();",
+     "if (e.target === input) return;"
+    ],
+    "check": {
+     "code_contains": [
+      "keydown",
+      "focus",
+      "remove"
+     ],
+     "js": "key(\"n\");\nassert(document.activeElement === $(\"#task-input\"), \"'n' tuşu görev kutusuna odaklanmalı.\");\ntype(\"#task-input\", \"deneme\");\n$(\"#task-msg\").textContent = \"Görev boş olamaz.\";\nkey(\"Escape\", \"#task-input\");\nassert($(\"#task-input\").value === \"\" && $(\"#task-msg\").textContent === \"\", \"Escape görev kutusunu ve #task-msg'yi boşaltmalı (kutudayken de).\");\nkey(\"Delete\", \"#task-input\");\nassert($$(\"#task-list li\").length === 2, \"Kutuya yazarken Delete görev silmemeli.\");\nkey(\"Delete\");\nconst items = $$(\"#task-list li\");\nassert(items.length === 1 && items[0].textContent === \"Matematik ödevi\", \"Delete son görevi (Fizik tekrarı) silmeli.\");\nkey(\"Delete\");\nkey(\"Delete\");\nassert($$(\"#task-list li\").length === 0, \"Liste boşken Delete hata vermemeli.\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<h2 id=\"app-title\">Çalışma Asistanım</h2>\n<form id=\"task-form\"><input id=\"task-input\" placeholder=\"Yeni görev\" autocomplete=\"off\"> <button>Ekle</button></form>\n<p id=\"task-msg\"></p>\n<ul id=\"task-list\"></ul>\n<div id=\"progress\"><div id=\"progress-bar\"></div></div> <span id=\"progress-text\">0 / 0</span>\n<p id=\"focus\"><strong id=\"focus-time\">25:00</strong> <button id=\"focus-start\">Başlat</button> <button id=\"focus-pause\">Duraklat</button> <span id=\"focus-msg\"></span></p>\n",
+    "css": "#app-title{margin:0 0 6px}#task-msg.error{color:#c0392b;font-weight:600}#task-list li{cursor:pointer;padding:2px 0}#task-list li.done{text-decoration:line-through;opacity:.55}#progress{display:inline-block;vertical-align:middle;width:200px;height:10px;background:#e3e6f0;border-radius:5px;overflow:hidden}#progress-bar{width:var(--progress,0%);height:100%;background:#43a047}#focus-time{font-family:monospace;font-size:20px}"
+   }
+  },
+  "js-quiz": {
+   "project_contribution": "Tuşlarla cevap",
+   "project_task": {
+    "id": "js-d17-pq",
+    "title": "Tuşlarla cevap",
+    "prompt": "Yarışmacılar fareye uzanmadan cevap versin: `1`, `2`, `3` tuşları sırasıyla 1., 2. ve 3. seçeneği seçsin. Bunun için hazır `answer(index)` fonksiyonunu çağır (index 0'dan başlar: `1` tuşu → `answer(0)`).\n\n- Başka tuşlar hiçbir şey yapmasın.\n- Yarışmacı adı kutusuna yazı yazılırken rakam tuşları cevap vermesin.\n- Tuşu sayıya çevirmek için `Number(e.key)` kullan; her rakam için ayrı `if` yazma.",
+    "starter": "const question = { text: \"Ay, hangi gezegenin uydusudur?\", options: [\"Mars\", \"Dünya\", \"Jüpiter\"], correct: 1 };\nconst buttons = document.querySelectorAll(\".option\");\nconst feedback = document.querySelector(\"#feedback\");\nlet score = 0;\nlet answered = false;\n\nfunction answer(index) {\n  if (answered) return;\n  answered = true;\n  if (index === question.correct) {\n    score += 10;\n    document.querySelector(\"#score\").textContent = score;\n    feedback.textContent = \"Doğru!\";\n  } else {\n    feedback.textContent = `Yanlış! Doğru cevap: ${question.options[question.correct]}`;\n  }\n}\nbuttons.forEach((btn, i) => btn.addEventListener(\"click\", () => answer(i)));\n\n// keydown dinle: 1, 2, 3 tuşları\n\n",
+    "solution": "const question = { text: \"Ay, hangi gezegenin uydusudur?\", options: [\"Mars\", \"Dünya\", \"Jüpiter\"], correct: 1 };\nconst buttons = document.querySelectorAll(\".option\");\nconst feedback = document.querySelector(\"#feedback\");\nlet score = 0;\nlet answered = false;\n\nfunction answer(index) {\n  if (answered) return;\n  answered = true;\n  if (index === question.correct) {\n    score += 10;\n    document.querySelector(\"#score\").textContent = score;\n    feedback.textContent = \"Doğru!\";\n  } else {\n    feedback.textContent = `Yanlış! Doğru cevap: ${question.options[question.correct]}`;\n  }\n}\nbuttons.forEach((btn, i) => btn.addEventListener(\"click\", () => answer(i)));\n\n// keydown dinle: 1, 2, 3 tuşları\ndocument.addEventListener(\"keydown\", (e) => {\n  if (e.target.tagName === \"INPUT\") return;\n  if ([\"1\", \"2\", \"3\"].includes(e.key)) {\n    answer(Number(e.key) - 1);\n  }\n});\n",
+    "hints": [
+     "[\"1\", \"2\", \"3\"].includes(e.key) doğru tuş mu diye bakar.",
+     "answer(Number(e.key) - 1);"
+    ],
+    "check": {
+     "code_contains": [
+      "keydown",
+      "Number(e.key)"
+     ],
+     "js": "key(\"2\", \"#player-name\");\nassert(score === 0 && feedback.textContent === \"\", \"İsim kutusuna yazarken rakamlar cevap vermemeli.\");\nkey(\"4\");\nkey(\"a\");\nassert(feedback.textContent === \"\", \"1, 2, 3 dışındaki tuşlar cevap vermemeli.\");\nkey(\"2\");\nassert(score === 10 && feedback.textContent === \"Doğru!\", \"'2' tuşu 2. seçeneği (Dünya) seçmeli: puan 10, 'Doğru!'.\");\nanswered = false;\nkey(\"3\");\nassert(feedback.textContent.startsWith(\"Yanlış\") && score === 10, \"'3' tuşu 3. seçeneği seçmeli (yanlış cevap).\");\nanswered = false;\nkey(\"1\");\nassert(feedback.textContent.startsWith(\"Yanlış\") && score === 10, \"'1' tuşu 1. seçeneği seçmeli (yanlış cevap).\");\nanswered = false;\nkey(\"2\");\nassert(score === 20, \"'2' tuşuyla doğru cevap puanı yine artırmalı.\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<h2 id=\"quiz-title\">Bilgi Yarışması</h2>\n<form id=\"player-form\"><input id=\"player-name\" placeholder=\"Yarışmacı adı\" autocomplete=\"off\"> <button>Katıl</button></form>\n<p id=\"welcome\"></p>\n<p id=\"question\">Ay, hangi gezegenin uydusudur?</p>\n<div id=\"options\"><button class=\"option\">1) Mars</button> <button class=\"option\">2) Dünya</button> <button class=\"option\">3) Jüpiter</button></div>\n<p id=\"feedback\"></p>\n<p id=\"status\">Puan: <span id=\"score\">0</span> · Süre: <span id=\"time\">10</span> · Rekor: <span id=\"best\">0</span></p>\n",
+    "css": "#quiz-title{margin:0 0 6px}#welcome.error{color:#c0392b;font-weight:600}.option{margin:2px;padding:6px 10px;border:1px solid #9aa3c0;border-radius:6px;background:#f4f6fb;color:#1b1f33}.option.correct{background:#2e7d32;color:#fff}.option.wrong{background:#c62828;color:#fff}"
+   }
+  }
+ },
+ "available": true
+}

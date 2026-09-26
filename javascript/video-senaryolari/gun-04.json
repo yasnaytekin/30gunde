@@ -1,0 +1,181 @@
+{
+  "kurs": "javascript",
+  "gun": 4,
+  "baslik": "Metinlerle çalışmak",
+  "maskot": "kodi",
+  "ozet": "Roketin istasyonlarla mesajlaşması için şablon metinleri, metnin uzunluğunu ve harflerini, metin metotlarını ve Türkçe harflerle büyük-küçük dönüşümü öğreniyoruz.",
+  "hedef_sure_sn": 150,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 10,
+      "anlatim": "Selam, ben Kodi! Kalkış Üssü'ndeki son günümüz. Roket uzaydaki istasyonlarla mesajlaşacak. Mesajları nasıl birleştirir, büyütür, içinde kelime ararız?",
+      "ekran": {
+        "baslik": "Gün 4: Metinlerle çalışmak",
+        "gorsel": "gorseller/javascript/bolgeler/kalkis.webp"
+      },
+      "maskot": { "poz": "el-sallama", "konum": "sag" }
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "Şablon metin, tırnak yerine ters tırnakla yazılır. Değişkenleri dolar ve süslü parantez içine koyarsın, yerine değeri gelir. İçine işlem bile yazabilirsin: üç artı dört, yedi oldu.",
+      "ekran": {
+        "baslik": "Şablon metin: ters tırnak ve ${ }",
+        "kod": "const pilot = \"Deniz\";\nconst planet = \"Mars\";\nconsole.log(`Merhaba ${pilot}, hedef: ${planet}!`);\nconsole.log(`Toplam: ${3 + 4}`);\n",
+        "dil": "js",
+        "vurgu_satirlari": [3, 4],
+        "cikti": "Merhaba Deniz, hedef: Mars!\nToplam: 7"
+      },
+      "maskot": { "poz": "isaret", "konum": "alt-sag" },
+      "calistir": true,
+      "yonetmen_notu": "Ters tırnak karakteri büyütülüp klavyedeki yeri gösterilir."
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "length metnin kaç karakter olduğunu söyler. Köşeli parantezle tek bir harfe ulaşırsın. Dikkat: sayma sıfırdan başlar, yani ilk harf sıfırıncı!",
+      "ekran": {
+        "baslik": "Uzunluk ve harfler",
+        "kod": "const word = \"roket\";\nconsole.log(word.length);\nconsole.log(word[0]);\n",
+        "dil": "js",
+        "vurgu_satirlari": [2, 3],
+        "cikti": "5\nr"
+      },
+      "maskot": { "poz": "isaret", "konum": "alt-sag" },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "Metinlerin hazır metotları var. trim baştaki ve sondaki boşlukları siler, toUpperCase büyük harfe çevirir, includes içinde bir kelime var mı diye bakar. Temizlenen mesaj 18 karakter.",
+      "ekran": {
+        "baslik": "Metin metotları",
+        "kod": "const message = \"  Acil: Yakıt Azaldı  \";\nconst clean = message.trim();\nconsole.log(clean.toUpperCase());\nconsole.log(clean.includes(\"Yakıt\"));\nconsole.log(clean.length);\n",
+        "dil": "js",
+        "vurgu_satirlari": [2, 3, 4],
+        "cikti": "ACIL: YAKIT AZALDI\ntrue\n18"
+      },
+      "maskot": { "poz": "konusma", "konum": "alt-sag" },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "slice bir metinden parça keser: sıfırdan üçe kadar, yani ilk üç harf. replace bir kelimeyi başkasıyla değiştirir. Metotlar asıl metni bozmaz, hep yeni bir metin verir.",
+      "ekran": {
+        "baslik": "slice ve replace",
+        "kod": "const star = \"yıldız\";\nconsole.log(star.slice(0, 3));\nconsole.log(\"Hedef: Ay\".replace(\"Ay\", \"Mars\"));\n",
+        "dil": "js",
+        "vurgu_satirlari": [2, 3],
+        "cikti": "yıl\nHedef: Mars"
+      },
+      "maskot": { "poz": "isaret", "konum": "alt-sag" },
+      "calistir": true
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 13,
+      "anlatim": "Türkçe için bir ipucu! toUpperCase noktasız I yazar. Türkçe kurallarıyla çevirmek için toLocaleUpperCase'e tr ver. Artık İstanbul noktalı İ ile yazılıyor.",
+      "ekran": {
+        "baslik": "Türkçe harfler",
+        "kod": "console.log(\"istanbul\".toUpperCase());\nconsole.log(\"istanbul\".toLocaleUpperCase(\"tr\"));\nconsole.log(\"IŞIK\".toLocaleLowerCase(\"tr\"));\n",
+        "dil": "js",
+        "vurgu_satirlari": [2],
+        "cikti": "ISTANBUL\nİSTANBUL\nışık"
+      },
+      "maskot": { "poz": "konusma", "konum": "alt-sag" },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "hata",
+      "sure_sn": 14,
+      "anlatim": "En sık hata: şablon metni normal tırnakla yazmak. Hata mesajı çıkmaz ama değişkenin adı olduğu gibi ekrana düşer. Dolar süslü parantez sadece ters tırnak içinde çalışır.",
+      "ekran": {
+        "baslik": "Tırnak mı, ters tırnak mı?",
+        "kod": "const pilot = \"Deniz\";\nconsole.log(\"Merhaba ${pilot}\");\n",
+        "dil": "js",
+        "vurgu_satirlari": [2],
+        "cikti": "Merhaba ${pilot}"
+      },
+      "maskot": { "poz": "uzgun", "konum": "sag" },
+      "calistir": false
+    },
+    {
+      "no": 8,
+      "tur": "soru",
+      "sure_sn": 10,
+      "anlatim": "Şimdi sen söyle: bu kod iki satır yazdırıyor. İkinci satırdaki sayı kaç olur? Boşluklara dikkat!",
+      "ekran": {
+        "baslik": "Sence ne yazdırır?",
+        "kod": "const code = \"  mars  \";\nconsole.log(code.trim().toUpperCase());\nconsole.log(code.length);\n",
+        "dil": "js"
+      },
+      "maskot": { "poz": "dusunme", "konum": "sag" }
+    },
+    {
+      "no": 9,
+      "tur": "cikti",
+      "sure_sn": 10,
+      "anlatim": "Önce temiz ve büyük harfli MARS. Sonra 8, çünkü trim asıl metni değiştirmedi; boşluklar hâlâ orada ve onlar da sayılır.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "const code = \"  mars  \";\nconsole.log(code.trim().toUpperCase());\nconsole.log(code.length);\n",
+        "dil": "js",
+        "vurgu_satirlari": [3],
+        "cikti": "MARS\n8"
+      },
+      "maskot": { "poz": "mutlu", "konum": "sag" },
+      "calistir": true
+    },
+    {
+      "no": 10,
+      "tur": "gorev",
+      "sure_sn": 12,
+      "anlatim": "Görevlerin: şablon metinle bir karşılama mesajı yaz, gemi için bir çağrı kodu üret ve gelen mesajı tarayıp acil olup olmadığını bul.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Karşılama mesajı",
+          "Görev 2: Çağrı kodu",
+          "Görev 3: Mesaj tarayıcı"
+        ]
+      },
+      "maskot": { "poz": "isaret", "konum": "sol" }
+    },
+    {
+      "no": 11,
+      "tur": "ozet",
+      "sure_sn": 11,
+      "anlatim": "Bugün ters tırnakla şablon metin yazmayı, length ve indeksle harflere ulaşmayı ve metin metotlarını öğrendik.",
+      "ekran": {
+        "baslik": "Özet",
+        "maddeler": [
+          "`...${değişken}...` ile şablon metin",
+          "length ve text[0]: sayma 0'dan başlar",
+          "trim, toUpperCase, includes, slice, replace"
+        ]
+      },
+      "maskot": { "poz": "on", "konum": "sag" }
+    },
+    {
+      "no": 12,
+      "tur": "kapanis",
+      "sure_sn": 10,
+      "anlatim": "Kalkış Üssü tamamlandı, roket havalanıyor! Yarın Döngü Ayı'na iniyoruz ve programımız kendi kararlarını vermeyi öğreniyor: koşullar.",
+      "ekran": {
+        "baslik": "Yarın: Koşullar",
+        "gorsel": "gorseller/javascript/bolgeler/ay.webp"
+      },
+      "maskot": { "poz": "tebrik", "konum": "sag" },
+      "yonetmen_notu": "Roket kalkar, kamera Döngü Ayı görseline geçer."
+    }
+  ]
+}

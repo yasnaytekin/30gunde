@@ -1,0 +1,1108 @@
+{
+ "day": 4,
+ "title": "Stringler",
+ "region": "koy",
+ "project_contribution": "Karakter konuşmaları",
+ "game_role": "Oyun başlarken Piko senin yazdığın cümleyle kendini tanıtır.",
+ "xp_complete": 150,
+ "objective": "Stringleri birleştirmek, parçalamak ve f-string ile biçimlendirmek",
+ "story": "Köyde her yerde tabelalar, konuşmalar, mektuplar var. Oyunlarda da karakterler konuşur, isimler ekranda parlar. Bugün yazılarla, yani **string**'lerle oynayacağız!",
+ "sections": [
+  {
+   "title": "String nedir?",
+   "body": "String, tırnak içindeki karakterler dizisidir. Tek tırnak da çift tırnak da olur: `'Piko'` ya da `\"Piko\"`.\n\n- `+` ile birleştir: `\"Pi\" + \"ko\"` sonucu `\"Piko\"`\n- `*` ile tekrarla: `\"ha\" * 3` sonucu `\"hahaha\"`\n- `len()` ile uzunluğunu ölç: `len(\"Piko\")` sonucu `4`"
+  },
+  {
+   "title": "Harflere tek tek ulaşmak",
+   "body": "Her harfin bir sıra numarası (indeks) vardır ve sayma **0'dan başlar**.\n\n```python\nword = \"Python\"\nprint(word[0])    # P\nprint(word[-1])   # n (sondan birinci)\nprint(word[0:3])  # Pyt (0, 1 ve 2)\nprint(word[::-1]) # nohtyP (ters çevir)\n```"
+  },
+  {
+   "title": "String metotları",
+   "body": "- `upper()` hepsi büyük, `lower()` hepsi küçük\n- `title()` Kelimelerin Baş Harfi Büyük\n- `replace(\"a\", \"e\")` harf değiştir\n- `strip()` baştaki ve sondaki boşlukları sil\n- `count(\"a\")` kaç tane var say\n\nKüçük bir not: `upper()` İngilizce kurallarını kullanır, yani `\"istanbul\".upper()` sonucu `ISTANBUL` olur, `İSTANBUL` değil."
+  },
+  {
+   "title": "f-string: yazının içine değişken koy",
+   "body": "Başına `f` koyduğun bir yazıda süslü parantez içindeki değişkenler değerleriyle yer değiştirir:\n\n```python\nname = \"Piko\"\nlevel = 3\nprint(f\"{name} seviye {level} oldu!\")\n```\n\nOyunlarda mesaj yazmanın en kolay yolu budur."
+  },
+  {
+   "title": "İçinde var mı?",
+   "body": "`in` ile bir yazının içinde başka bir yazı var mı diye bakabilirsin: `\"ko\" in \"Piko\"` sonucu `True`.\n\nİki şeyin aynı olup olmadığını da `==` ile sorarsın: `\"ada\" == \"ada\"` sonucu `True`."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Birleştir ve tekrarla",
+   "code": "first = \"Pi\"\nsecond = \"ko\"\nprint(first + second)\nprint(\"ha\" * 3)\nprint(len(\"Piko'nun Macerası\"))\n",
+   "note": ""
+  },
+  {
+   "title": "Dilimleme",
+   "code": "word = \"Python\"\nprint(word[0], word[-1])\nprint(word[0:3])\nprint(word[::-1])\n",
+   "note": ""
+  },
+  {
+   "title": "f-string",
+   "code": "name = \"Piko\"\ngold = 42\nprint(f\"{name} cebinde {gold} altın taşıyor.\")\nprint(f\"{name.upper()} geliyor!\")\n",
+   "note": ""
+  }
+ ],
+ "tasks": [
+  {
+   "id": "d4-t1",
+   "title": "Tabela",
+   "prompt": "`word` içindeki yazıyı büyük harfe çevir, sonuna `!` ekle ve `shout` değişkenine koy. Sonuç `PYTHON!` olmalı.",
+   "starter": "word = \"python\"\n\nshout = \"\"  # word'ün büyük harfli hali + \"!\"\nprint(shout)\n",
+   "solution": "word = \"python\"\n\nshout = word.upper() + \"!\"\nprint(shout)\n",
+   "hints": [
+    "word.upper() büyük harfli halini verir.",
+    "+ \"!\" ile sonuna ünlem eklenir."
+   ],
+   "check": {
+    "code_contains": [
+     "upper()"
+    ],
+    "python": "assert shout == \"PYTHON!\", \"shout tam olarak PYTHON! olmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "word = \"python\"",
+      "notes": [
+       "`word` adında bir değişken oluşturuluyor ve içine `\"python\"` (metin (str)) konuyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "shout = word.upper() + \"!\"",
+      "notes": [
+       "`shout` adında bir değişken oluşturuluyor ve içine `word.upper() + \"!\"` konuyor."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "print(shout)",
+      "notes": [
+       "`print(shout)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "word",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `\"python\"`."
+     },
+     {
+      "term": "shout",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `word.upper() + \"!\"`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "+",
+      "kind": "operatör",
+      "desc": "Toplama; metinlerde ve listelerde uç uca ekleme."
+     },
+     {
+      "term": ".upper()",
+      "kind": "metot",
+      "desc": "Metni BÜYÜK harfe çevirir."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d4-t2",
+   "title": "İlk ve son harf",
+   "prompt": "`name` değişkeninin ilk harfini `first`, son harfini `last` değişkenine koy. Son harf için negatif indeks kullan.",
+   "starter": "name = \"Piko\"\n\nfirst = \"\"\nlast = \"\"\nprint(first, last)\n",
+   "solution": "name = \"Piko\"\n\nfirst = name[0]\nlast = name[-1]\nprint(first, last)\n",
+   "hints": [
+    "İlk harf: name[0]",
+    "Son harf: name[-1]"
+   ],
+   "check": {
+    "code_contains": [
+     "[-1]"
+    ],
+    "python": "\nassert first == \"P\" and last == \"o\", \"first 'P', last 'o' olmalı.\"\n_, g = _run(_set(_code, \"name\", \"Mars\"))\nassert g[\"first\"] == \"M\" and g[\"last\"] == \"s\", \"Harfleri elle yazma, name'den al.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "name = \"Piko\"",
+      "notes": [
+       "`name` adında bir değişken oluşturuluyor ve içine `\"Piko\"` (metin (str)) konuyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "first = name[0]",
+      "notes": [
+       "`first` adında bir değişken oluşturuluyor ve içine `name[0]` konuyor."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "last = name[-1]",
+      "notes": [
+       "`last` adında bir değişken oluşturuluyor ve içine `name[-1]` konuyor."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "print(first, last)",
+      "notes": [
+       "`print(first, last)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "name",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `\"Piko\"`."
+     },
+     {
+      "term": "first",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `name[0]`."
+     },
+     {
+      "term": "last",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `name[-1]`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "[ ]",
+      "kind": "seçme",
+      "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+     },
+     {
+      "term": "-",
+      "kind": "operatör",
+      "desc": "Sayının önündeki eksi işareti."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d4-t3",
+   "title": "Seviye mesajı",
+   "prompt": "f-string kullanarak `message` değişkenini oluştur. Sonuç tam olarak `Ayla seviye 7!` olmalı, ama isim ve sayı değişkenlerden gelsin.",
+   "starter": "name = \"Ayla\"\nlevel = 7\n\nmessage = \"\"\nprint(message)\n",
+   "solution": "name = \"Ayla\"\nlevel = 7\n\nmessage = f\"{name} seviye {level}!\"\nprint(message)\n",
+   "hints": [
+    "f-string'in başında f olur: f\"...\"",
+    "Değişkenleri süslü paranteze koy: {name}"
+   ],
+   "check": {
+    "python": "\nassert 'f\"' in _code or \"f'\" in _code, 'f-string kullan: f\"...\"'\nassert message == \"Ayla seviye 7!\", \"message tam olarak 'Ayla seviye 7!' olmalı.\"\n_, g = _run(_set(_code, \"level\", 9))\nassert g[\"message\"] == \"Ayla seviye 9!\", \"level değişkenini süslü paranteze koymalısın.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "name = \"Ayla\"",
+      "notes": [
+       "`name` adında bir değişken oluşturuluyor ve içine `\"Ayla\"` (metin (str)) konuyor."
+      ]
+     },
+     {
+      "n": 2,
+      "code": "level = 7",
+      "notes": [
+       "`level` adında bir değişken oluşturuluyor ve içine `7` (tam sayı) konuyor."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "message = f\"{name} seviye {level}!\"",
+      "notes": [
+       "`message` adında bir değişken oluşturuluyor ve içine `f\"{name} seviye {level}!\"` (f-string ile kurulan metin) konuyor."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "print(message)",
+      "notes": [
+       "`print(message)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "name",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `\"Ayla\"`."
+     },
+     {
+      "term": "level",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `7`."
+     },
+     {
+      "term": "message",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `f\"{name} seviye {level}!\"`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "f\"...{}\"",
+      "kind": "metin",
+      "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "id": "d4-c",
+  "title": "Palindrom avcısı",
+  "prompt": "Tersten okunuşu da aynı olan kelimelere palindrom denir: kabak, ada, kek. `word` bir palindromsa `is_palindrome` değişkeni `True`, değilse `False` olsun. `True` yazmak yok; karşılaştırarak bul!",
+  "starter": "word = \"kabak\"\n\nis_palindrome = False\nprint(is_palindrome)\n",
+  "solution": "word = \"kabak\"\n\nis_palindrome = word == word[::-1]\nprint(is_palindrome)\n",
+  "hints": [
+   "Kelimenin tersi: word[::-1]",
+   "İki şey aynı mı? == ile sor."
+  ],
+  "check": {
+   "python": "\nassert is_palindrome is True, \"kabak bir palindrom, is_palindrome True olmalı.\"\n_, g = _run(_set(_code, \"word\", \"piko\"))\nassert g[\"is_palindrome\"] is False, \"piko palindrom değil; sonucu karşılaştırarak bul.\"\n_, g = _run(_set(_code, \"word\", \"ada\"))\nassert g[\"is_palindrome\"] is True, \"ada için True çıkmalı.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "word = \"kabak\"",
+     "notes": [
+      "`word` adında bir değişken oluşturuluyor ve içine `\"kabak\"` (metin (str)) konuyor."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "is_palindrome = word == word[::-1]",
+     "notes": [
+      "`is_palindrome` adında bir değişken oluşturuluyor ve içine `word == word[::-1]` konuyor."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "print(is_palindrome)",
+     "notes": [
+      "`print(is_palindrome)`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "word",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `\"kabak\"`."
+    },
+    {
+     "term": "is_palindrome",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `word == word[::-1]`."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "==",
+     "kind": "operatör",
+     "desc": "Eşit mi? (True/False)"
+    },
+    {
+     "term": "[a:b]",
+     "kind": "seçme",
+     "desc": "Dilimleme: a'dan başlayıp b'ye kadar (b hariç) olan parçayı alır."
+    },
+    {
+     "term": "-",
+     "kind": "operatör",
+     "desc": "Sayının önündeki eksi işareti."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    }
+   ]
+  }
+ },
+ "project_task": {
+  "id": "d4-p",
+  "title": "Karakter konuşması",
+  "prompt": "Oyunun açılışında kahraman kendini tanıtsın.\n\n- Önce 30 tane `=` işaretinden oluşan bir çizgi yazdır\n- Sonra f-string ile `intro` değişkenini oluştur: `Ben Piko, macera başlıyor!` (Piko yerine `player_name` kullan)\n- `intro`'yu yazdır",
+  "starter": "player_name = \"Piko\"\n\n# 1) 30 tane \"=\" işaretinden oluşan bir çizgi yazdır\n\n# 2) f-string ile tanıtım cümlesi oluştur\nintro = \"\"\nprint(intro)\n",
+  "solution": "player_name = \"Piko\"\n\nprint(\"=\" * 30)\n\nintro = f\"Ben {player_name}, macera başlıyor!\"\nprint(intro)\n",
+  "hints": [
+   "Çizgi için: print(\"=\" * 30)",
+   "intro = f\"Ben {player_name}, macera başlıyor!\""
+  ],
+  "check": {
+   "python": "\nassert \"=\" * 30 in _output, \"30 tane = işaretinden oluşan çizgiyi yazdır.\"\nassert intro == \"Ben \" + player_name + \", macera başlıyor!\", \"intro tam olarak 'Ben Piko, macera başlıyor!' olmalı.\"\n_, g = _run(_set(_code, \"player_name\", \"Zeynep\"))\nassert g[\"intro\"] == \"Ben Zeynep, macera başlıyor!\", \"İsmi player_name değişkeninden al.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "player_name = \"Piko\"",
+     "notes": [
+      "`player_name` adında bir değişken oluşturuluyor ve içine `\"Piko\"` (metin (str)) konuyor."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "print(\"=\" * 30)",
+     "notes": [
+      "`print(\"=\" * 30)`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "intro = f\"Ben {player_name}, macera başlıyor!\"",
+     "notes": [
+      "`intro` adında bir değişken oluşturuluyor ve içine `f\"Ben {player_name}, macera başlıyor!\"` (f-string ile kurulan metin) konuyor."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "print(intro)",
+     "notes": [
+      "`print(intro)`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "player_name",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `\"Piko\"`."
+    },
+    {
+     "term": "intro",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `f\"Ben {player_name}, macera başlıyor!\"`."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    },
+    {
+     "term": "*",
+     "kind": "operatör",
+     "desc": "Çarpma; metni ya da listeyi tekrarlama (\"*\" * 3 → \"***\")."
+    },
+    {
+     "term": "f\"...{}\"",
+     "kind": "metin",
+     "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+    }
+   ]
+  }
+ },
+ "available": true,
+ "visual_task": {
+  "id": "d4-v",
+  "title": "Piko kalede",
+  "prompt": "Piko'yu duvarlarla çevrili bir odaya koyalım. `bosluk`, Piko'nun iki yanındaki boş kare sayısı.\n\n- `duvar`: `\"#\"` işaretini `bosluk * 2 + 3` kez tekrarla\n- `oda`: `\"#\"` + `bosluk` kadar boşluk + `\"*\"` + `bosluk` kadar boşluk + `\"#\"`\n- Sonra `duvar`, `oda`, `duvar` yazdır.\n\n`bosluk = 3` olunca oda kendiliğinden büyümeli.",
+  "starter": "bosluk = 2\nduvar = \"#\" * 7\noda = \"\"\n\nprint(duvar)\n",
+  "solution": "bosluk = 2\nduvar = \"#\" * (bosluk * 2 + 3)\noda = \"#\" + \" \" * bosluk + \"*\" + \" \" * bosluk + \"#\"\n\nprint(duvar)\nprint(oda)\nprint(duvar)\n",
+  "hints": [
+   "Boşluk da bir yazıdır: \" \" * bosluk",
+   "oda = \"#\" + \" \" * bosluk + \"*\" + \" \" * bosluk + \"#\""
+  ],
+  "check": {
+   "python": "\ndef _satirlar(text):\n    return [l.rstrip() for l in text.strip(\"\\n\").split(\"\\n\")] if text.strip() else []\n\ndef _beklenen(b):\n    d = \"#\" * (b * 2 + 3)\n    return [d, \"#\" + \" \" * b + \"*\" + \" \" * b + \"#\", d]\nassert _satirlar(_output) == _beklenen(2), \"Çıktı şöyle olmalı:\\n#######\\n#  *  #\\n#######\"\nout, _ = _run(_set(_code, \"bosluk\", 3))\nassert _satirlar(out) == _beklenen(3), \"bosluk = 3 iken oda büyümeli. Sayıları elle yazmak yerine bosluk değişkenini kullan.\"\n"
+  },
+  "xp": 40,
+  "scene": {
+   "target": [
+    "#######",
+    "#  *  #",
+    "#######"
+   ]
+  },
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "bosluk = 2",
+     "notes": [
+      "`bosluk` adında bir değişken oluşturuluyor ve içine `2` (tam sayı) konuyor."
+     ]
+    },
+    {
+     "n": 2,
+     "code": "duvar = \"#\" * (bosluk * 2 + 3)",
+     "notes": [
+      "`duvar` adında bir değişken oluşturuluyor ve içine `\"#\" * (bosluk * 2 + 3)` konuyor."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "oda = \"#\" + \" \" * bosluk + \"*\" + \" \" * bosluk + \"#\"",
+     "notes": [
+      "`oda` adında bir değişken oluşturuluyor ve içine `\"#\" + \" \" * bosluk + \"*\" + \" \" * bosluk + \"#\"` konuyor."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "print(duvar)",
+     "notes": [
+      "`print(duvar)`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "print(oda)",
+     "notes": [
+      "`print(oda)`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 7,
+     "code": "print(duvar)",
+     "notes": [
+      "`print(duvar)`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "bosluk",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `2`."
+    },
+    {
+     "term": "duvar",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `\"#\" * (bosluk * 2 + 3)`."
+    },
+    {
+     "term": "oda",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `\"#\" + \" \" * bosluk + \"*\" + \" \" * bosluk + \"#\"`."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "*",
+     "kind": "operatör",
+     "desc": "Çarpma; metni ya da listeyi tekrarlama (\"*\" * 3 → \"***\")."
+    },
+    {
+     "term": "+",
+     "kind": "operatör",
+     "desc": "Toplama; metinlerde ve listelerde uç uca ekleme."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    }
+   ]
+  }
+ },
+ "tracks": {
+  "veri": {
+   "project_task": {
+    "id": "d4-pv",
+    "title": "Kategori etiketi",
+    "prompt": "Harcamaları girerken kategori adları dağınık yazılabiliyor: `\"  MARKET \"` gibi. Bunu düzeltelim:\n\n- `clean`: baştaki ve sondaki boşlukları at, sadece ilk harfi büyük yap (`strip()` ve `capitalize()`)\n- `label`: f-string ile `Market: 120 TL` biçiminde bir yazı (tutar `amount` değişkeninden)\n- `label`'ı yazdır.",
+    "starter": "category = \"  MARKET \"\namount = 120\n",
+    "solution": "category = \"  MARKET \"\namount = 120\nclean = category.strip().capitalize()\nlabel = f\"{clean}: {amount} TL\"\nprint(label)\n",
+    "hints": [
+     "category.strip() boşlukları atar, .capitalize() ilk harfi büyük yapar.",
+     "label = f\"{clean}: {amount} TL\""
+    ],
+    "check": {
+     "python": "\nassert clean == \"Market\", \"clean, \\\"Market\\\" olmalı: strip() ve capitalize()\"\nout, g = _run(_set(_set(_code, \"category\", \"   kIRA\"), \"amount\", 2000))\nassert g[\"clean\"] == \"Kira\", \"Başka bir kategoriyle de çalışmalı: \\\"   kIRA\\\" -> \\\"Kira\\\"\"\nassert g[\"label\"] == \"Kira: 2000 TL\", \"label, f-string ile \\\"Kira: 2000 TL\\\" biçiminde olmalı.\"\nassert \"Kira: 2000 TL\" in out, \"label'ı yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "category = \"  MARKET \"",
+       "notes": [
+        "`category` adında bir değişken oluşturuluyor ve içine `\" MARKET \"` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "amount = 120",
+       "notes": [
+        "`amount` adında bir değişken oluşturuluyor ve içine `120` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "clean = category.strip().capitalize()",
+       "notes": [
+        "`clean` adında bir değişken oluşturuluyor ve içine `category.strip().capitalize()` konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "label = f\"{clean}: {amount} TL\"",
+       "notes": [
+        "`label` adında bir değişken oluşturuluyor ve içine `f\"{clean}: {amount} TL\"` (f-string ile kurulan metin) konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "print(label)",
+       "notes": [
+        "`print(label)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "category",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\" MARKET \"`."
+      },
+      {
+       "term": "amount",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `120`."
+      },
+      {
+       "term": "clean",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `category.strip().capitalize()`."
+      },
+      {
+       "term": "label",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `f\"{clean}: {amount} TL\"`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": ".capitalize()",
+       "kind": "metot",
+       "desc": "`category.strip()` nesnesinin `capitalize` metodunu çağırır."
+      },
+      {
+       "term": ".strip()",
+       "kind": "metot",
+       "desc": "Metnin başındaki ve sonundaki boşlukları siler."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Kategori etiketi",
+   "game_role": "Dağınık yazılmış kategori adlarını düzgün etikete çevirir."
+  },
+  "otomasyon": {
+   "project_task": {
+    "id": "d4-po",
+    "title": "Görev başlığı düzeltme",
+    "prompt": "Görevler aceleyle yazılınca dağınık oluyor: `\"  rapor YAZ \"`. Asistan bunu düzeltsin:\n\n- `title`: boşlukları at, ilk harfi büyük yap (`strip()`, `capitalize()`)\n- `slug`: başlığı küçük harfe çevir, boşlukları `-` yap (dosya adı için)\n- `Görev: Rapor yaz (rapor-yaz)` gibi yazdır (f-string).",
+    "starter": "raw = \"  rapor YAZ \"\n",
+    "solution": "raw = \"  rapor YAZ \"\ntitle = raw.strip().capitalize()\nslug = title.lower().replace(\" \", \"-\")\nprint(f\"Görev: {title} ({slug})\")\n",
+    "hints": [
+     "raw.strip().capitalize()",
+     "title.lower().replace(\" \", \"-\")"
+    ],
+    "check": {
+     "python": "\nassert title == \"Rapor yaz\" and slug == \"rapor-yaz\", \"title \\\"Rapor yaz\\\", slug \\\"rapor-yaz\\\" olmalı.\"\nout, g = _run(_set(_code, \"raw\", \"   fatura ÖDE\"))\nassert g[\"title\"] == \"Fatura öde\", \"Başka bir görevle de çalışmalı.\"\nassert g[\"slug\"] == \"fatura-öde\", \"slug küçük harf ve - ile olmalı.\"\nassert \"Görev: Fatura öde (fatura-öde)\" in out, \"f-string ile yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "raw = \"  rapor YAZ \"",
+       "notes": [
+        "`raw` adında bir değişken oluşturuluyor ve içine `\" rapor YAZ \"` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "title = raw.strip().capitalize()",
+       "notes": [
+        "`title` adında bir değişken oluşturuluyor ve içine `raw.strip().capitalize()` konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "slug = title.lower().replace(\" \", \"-\")",
+       "notes": [
+        "`slug` adında bir değişken oluşturuluyor ve içine `title.lower().replace(\" \", \"-\")` konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "print(f\"Görev: {title} ({slug})\")",
+       "notes": [
+        "`print(f\"Görev: {title} ({slug})\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "raw",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\" rapor YAZ \"`."
+      },
+      {
+       "term": "title",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `raw.strip().capitalize()`."
+      },
+      {
+       "term": "slug",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `title.lower().replace(\" \", \"-\")`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": ".capitalize()",
+       "kind": "metot",
+       "desc": "`raw.strip()` nesnesinin `capitalize` metodunu çağırır."
+      },
+      {
+       "term": ".strip()",
+       "kind": "metot",
+       "desc": "Metnin başındaki ve sonundaki boşlukları siler."
+      },
+      {
+       "term": ".replace()",
+       "kind": "metot",
+       "desc": "Metindeki bir parçayı başkasıyla değiştirir."
+      },
+      {
+       "term": ".lower()",
+       "kind": "metot",
+       "desc": "Metni küçük harfe çevirir."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Görev başlığı",
+   "game_role": "Dağınık yazılmış görev adlarını düzeltir ve dosya adına çevirir."
+  },
+  "web": {
+   "project_task": {
+    "id": "d4-pw",
+    "title": "Başlıktan bağlantı",
+    "prompt": "Yazı başlıkları bazen boşluklarla geliyor: `\"  Merhaba Dünya  \"`. Bundan yazının bağlantısını üretelim:\n\n- `title`: baştaki ve sondaki boşlukları at (`strip()`)\n- `slug`: başlığı küçük harfe çevir, boşlukları `-` yap (`lower()` ve `replace()`)\n- `link`: f-string ile şu biçimde bir yazı: `<a href=\"/blog/merhaba-dünya.html\">Merhaba Dünya</a>`\n- `link`'i yazdır.",
+    "starter": "raw = \"  Merhaba Dünya  \"\n",
+    "solution": "raw = \"  Merhaba Dünya  \"\ntitle = raw.strip()\nslug = title.lower().replace(\" \", \"-\")\nlink = f'<a href=\"/blog/{slug}.html\">{title}</a>'\nprint(link)\n",
+    "hints": [
+     "title.lower().replace(\" \", \"-\") küçük harf yapar ve boşlukları - ile değiştirir.",
+     "Yazının içinde \" olacağı için f-string'i tek tırnakla aç: f'<a href=\"/blog/{slug}.html\">{title}</a>'"
+    ],
+    "check": {
+     "python": "\nassert title == \"Merhaba Dünya\", \"title, boşlukları atılmış başlık olmalı: raw.strip()\"\nassert slug == \"merhaba-dünya\", \"slug \\\"merhaba-dünya\\\" olmalı: lower() ve replace()\"\nout, g = _run(_set(_code, \"raw\", \"   Kodla Oyna \"))\nassert g[\"title\"] == \"Kodla Oyna\" and g[\"slug\"] == \"kodla-oyna\", \"Başka bir başlıkla da çalışmalı: \\\"   Kodla Oyna \\\" -> kodla-oyna\"\nassert g[\"link\"] == '<a href=\"/blog/kodla-oyna.html\">Kodla Oyna</a>', \"link, f-string ile <a href=\\\"/blog/kodla-oyna.html\\\">Kodla Oyna</a> biçiminde olmalı.\"\nassert g[\"link\"] in out, \"link'i yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "raw = \"  Merhaba Dünya  \"",
+       "notes": [
+        "`raw` adında bir değişken oluşturuluyor ve içine `\" Merhaba Dünya \"` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "title = raw.strip()",
+       "notes": [
+        "`title` adında bir değişken oluşturuluyor ve içine `raw.strip()` konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "slug = title.lower().replace(\" \", \"-\")",
+       "notes": [
+        "`slug` adında bir değişken oluşturuluyor ve içine `title.lower().replace(\" \", \"-\")` konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "link = f'<a href=\"/blog/{slug}.html\">{title}</a>'",
+       "notes": [
+        "`link` adında bir değişken oluşturuluyor ve içine `f'<a href=\"/blog/{slug}.html\">{title}</a>'` (f-string ile kurulan metin) konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "print(link)",
+       "notes": [
+        "`print(link)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "raw",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\" Merhaba Dünya \"`."
+      },
+      {
+       "term": "title",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `raw.strip()`."
+      },
+      {
+       "term": "slug",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `title.lower().replace(\" \", \"-\")`."
+      },
+      {
+       "term": "link",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `f'<a href=\"/blog/{slug}.html\">{title}</a>'`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": ".strip()",
+       "kind": "metot",
+       "desc": "Metnin başındaki ve sonundaki boşlukları siler."
+      },
+      {
+       "term": ".replace()",
+       "kind": "metot",
+       "desc": "Metindeki bir parçayı başkasıyla değiştirir."
+      },
+      {
+       "term": ".lower()",
+       "kind": "metot",
+       "desc": "Metni küçük harfe çevirir."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Yazı bağlantısı",
+   "game_role": "Yazı başlığından slug ve bağlantı üretir."
+  },
+  "bot": {
+   "project_task": {
+    "id": "d4-pb",
+    "title": "Mesaj temizleme",
+    "prompt": "Kullanıcılar bazen büyük harfle ve fazla boşlukla yazar: `\"   MERHABA BOT   \"`. Bot anlamaya çalışmadan önce mesajı temizleyelim:\n\n- `clean`: baştaki ve sondaki boşlukları at, hepsini küçük harf yap (`strip()` ve `lower()`)\n- `has_greeting`: `clean` içinde `\"merhaba\"` geçiyor mu? (`in`)\n- `reply`: f-string ile `Bilge: 'merhaba bot' mesajını aldım.` biçiminde bir yazı (botun adı `bot_name`'den)\n\nSonra `reply`'ı ve `Selam var mı: True` satırını yazdır.",
+    "starter": "bot_name = \"Bilge\"\nmessage = \"   MERHABA BOT   \"\n",
+    "solution": "bot_name = \"Bilge\"\nmessage = \"   MERHABA BOT   \"\nclean = message.strip().lower()\nhas_greeting = \"merhaba\" in clean\nreply = f\"{bot_name}: '{clean}' mesajını aldım.\"\nprint(reply)\nprint(\"Selam var mı:\", has_greeting)\n",
+    "hints": [
+     "message.strip() boşlukları atar, .lower() hepsini küçük harf yapar: message.strip().lower()",
+     "reply = f\"{bot_name}: '{clean}' mesajını aldım.\""
+    ],
+    "check": {
+     "python": "\nassert clean == \"merhaba bot\", \"clean \\\"merhaba bot\\\" olmalı: strip() ve lower()\"\nout, g = _run(_set(_set(_code, \"message\", \"  SELAM DOSTUM \"), \"bot_name\", \"Robo\"))\nassert g[\"clean\"] == \"selam dostum\", \"Başka bir mesajla da çalışmalı: \\\"  SELAM DOSTUM \\\" -> \\\"selam dostum\\\"\"\nassert g[\"has_greeting\"] is False, \"has_greeting, clean içinde \\\"merhaba\\\" olup olmadığını söylemeli.\"\nassert g[\"reply\"] == \"Robo: 'selam dostum' mesajını aldım.\", \"reply, f-string ile \\\"Robo: 'selam dostum' mesajını aldım.\\\" biçiminde olmalı.\"\nassert \"Robo: 'selam dostum' mesajını aldım.\" in out and \"Selam var mı: False\" in out, \"reply'ı ve Selam var mı satırını yazdır.\"\n_, g = _run(_set(_code, \"message\", \"HEY MERHABA  \"))\nassert g[\"has_greeting\"] is True, \"Mesajda merhaba varsa has_greeting True olmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "bot_name = \"Bilge\"",
+       "notes": [
+        "`bot_name` adında bir değişken oluşturuluyor ve içine `\"Bilge\"` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "message = \"   MERHABA BOT   \"",
+       "notes": [
+        "`message` adında bir değişken oluşturuluyor ve içine `\" MERHABA BOT \"` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "clean = message.strip().lower()",
+       "notes": [
+        "`clean` adında bir değişken oluşturuluyor ve içine `message.strip().lower()` konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "has_greeting = \"merhaba\" in clean",
+       "notes": [
+        "`has_greeting` adında bir değişken oluşturuluyor ve içine `\"merhaba\" in clean` konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "reply = f\"{bot_name}: '{clean}' mesajını aldım.\"",
+       "notes": [
+        "`reply` adında bir değişken oluşturuluyor ve içine `f\"{bot_name}: '{clean}' mesajını aldım.\"` (f-string ile kurulan metin) konuyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "print(reply)",
+       "notes": [
+        "`print(reply)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "print(\"Selam var mı:\", has_greeting)",
+       "notes": [
+        "`print(\"Selam var mı:\", has_greeting)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "bot_name",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"Bilge\"`."
+      },
+      {
+       "term": "message",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\" MERHABA BOT \"`."
+      },
+      {
+       "term": "clean",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `message.strip().lower()`."
+      },
+      {
+       "term": "has_greeting",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"merhaba\" in clean`."
+      },
+      {
+       "term": "reply",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `f\"{bot_name}: '{clean}' mesajını aldım.\"`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": ".lower()",
+       "kind": "metot",
+       "desc": "Metni küçük harfe çevirir."
+      },
+      {
+       "term": ".strip()",
+       "kind": "metot",
+       "desc": "Metnin başındaki ve sonundaki boşlukları siler."
+      },
+      {
+       "term": "in",
+       "kind": "operatör",
+       "desc": "İçinde var mı? (listede, metinde, sözlükte)"
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Mesaj temizleyici",
+   "game_role": "Dağınık yazılmış mesajları düzeltir ve içinde selam olup olmadığına bakar."
+  },
+  "okul": {
+   "project_task": {
+    "id": "d4-pn",
+    "title": "Ders etiketi",
+    "prompt": "Ders adları bazen dağınık kaydediliyor: `\"  Türk_Dili  \"` gibi. Bunu düzeltelim:\n\n- `clean`: baştaki ve sondaki boşlukları at (`strip()`), alt çizgileri boşluğa çevir (`replace()`)\n- `label`: f-string ile `Türk Dili: 88 puan` biçiminde bir yazı (not `grade` değişkeninden)\n- `label`'ı yazdır.",
+    "starter": "lesson = \"  Türk_Dili  \"\ngrade = 88\n",
+    "solution": "lesson = \"  Türk_Dili  \"\ngrade = 88\nclean = lesson.strip().replace(\"_\", \" \")\nlabel = f\"{clean}: {grade} puan\"\nprint(label)\n",
+    "hints": [
+     "lesson.strip() boşlukları atar, .replace(\"_\", \" \") alt çizgiyi boşluk yapar.",
+     "label = f\"{clean}: {grade} puan\""
+    ],
+    "check": {
+     "python": "\nassert clean == \"Türk Dili\", \"clean, \\\"Türk Dili\\\" olmalı: strip() ve replace()\"\nout, g = _run(_set(_set(_code, \"lesson\", \"   Beden_Eğitimi \"), \"grade\", 95))\nassert g[\"clean\"] == \"Beden Eğitimi\", \"Başka bir dersle de çalışmalı: \\\"   Beden_Eğitimi \\\" -> \\\"Beden Eğitimi\\\"\"\nassert g[\"label\"] == \"Beden Eğitimi: 95 puan\", \"label, f-string ile \\\"Beden Eğitimi: 95 puan\\\" biçiminde olmalı.\"\nassert \"Beden Eğitimi: 95 puan\" in out, \"label'ı yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "lesson = \"  Türk_Dili  \"",
+       "notes": [
+        "`lesson` adında bir değişken oluşturuluyor ve içine `\" Türk_Dili \"` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "grade = 88",
+       "notes": [
+        "`grade` adında bir değişken oluşturuluyor ve içine `88` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "clean = lesson.strip().replace(\"_\", \" \")",
+       "notes": [
+        "`clean` adında bir değişken oluşturuluyor ve içine `lesson.strip().replace(\"_\", \" \")` konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "label = f\"{clean}: {grade} puan\"",
+       "notes": [
+        "`label` adında bir değişken oluşturuluyor ve içine `f\"{clean}: {grade} puan\"` (f-string ile kurulan metin) konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "print(label)",
+       "notes": [
+        "`print(label)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "lesson",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\" Türk_Dili \"`."
+      },
+      {
+       "term": "grade",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `88`."
+      },
+      {
+       "term": "clean",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `lesson.strip().replace(\"_\", \" \")`."
+      },
+      {
+       "term": "label",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `f\"{clean}: {grade} puan\"`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": ".replace()",
+       "kind": "metot",
+       "desc": "Metindeki bir parçayı başkasıyla değiştirir."
+      },
+      {
+       "term": ".strip()",
+       "kind": "metot",
+       "desc": "Metnin başındaki ve sonundaki boşlukları siler."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Ders etiketi",
+   "game_role": "Dağınık yazılmış ders adlarını düzgün bir etikete çevirir."
+  }
+ }
+}

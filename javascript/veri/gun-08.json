@@ -1,0 +1,212 @@
+{
+ "day": 8,
+ "title": "Fonksiyonlar",
+ "region": "ay",
+ "xp_complete": 150,
+ "objective": "Fonksiyon tanımlamak, parametre almak, return ile değer döndürmek ve varsayılan parametre kullanmak",
+ "story": "Döngü Ayı'ndan ayrılmadan önce roketine yeni bir yetenek kazandırıyoruz: sık kullandığın komutları bir ad altında paketlemek. Bu paketlere **fonksiyon** denir; bir kez yaz, istediğin kadar çağır.",
+ "sections": [
+  {
+   "title": "Fonksiyon tanımlamak ve çağırmak",
+   "body": "`function` kelimesiyle bir fonksiyon tanımlarsın. Tanımlamak onu çalıştırmaz; adını parantezle yazıp **çağırınca** çalışır:\n\n```js\nfunction countdown() {\n  console.log(\"3... 2... 1...\");\n  console.log(\"Ateşle!\");\n}\n\ncountdown();  // çalışır\ncountdown();  // bir daha çalışır\n```\n\nPython bildiysen: `def countdown():` yerine `function countdown() { ... }` yazıyoruz."
+  },
+  {
+   "title": "Parametreler",
+   "body": "Parantezin içine **parametre** yazarsan fonksiyon her çağrıldığında farklı bir değerle çalışabilir:\n\n```js\nfunction greet(name, planet) {\n  console.log(`Merhaba ${name}, ${planet}'a hoş geldin!`);\n}\n\ngreet(\"Deniz\", \"Mars\");\ngreet(\"Ada\", \"Ay\");\n```\n\nÇağırırken verdiğin değerler (`\"Deniz\"`, `\"Mars\"`) sırayla parametrelere yerleşir."
+  },
+  {
+   "title": "return: sonucu geri vermek",
+   "body": "`return` fonksiyonun sonucunu çağırdığı yere **geri verir**. Sonucu bir değişkene koyabilir, başka bir hesapta kullanabilirsin:\n\n```js\nfunction travelTime(distance, speed) {\n  return distance / speed;\n}\n\nconst hours = travelTime(384400, 40000);\nconsole.log(Math.round(hours));  // 10\n```\n\n- `return` çalışınca fonksiyon **hemen biter**; altındaki satırlar çalışmaz.\n- `console.log` sadece ekrana yazar, sonucu geri vermez. `return` yazmayan fonksiyon `undefined` döndürür."
+  },
+  {
+   "title": "Varsayılan parametre",
+   "body": "Bir parametre verilmezse kullanılacak değeri `=` ile yazabilirsin:\n\n```js\nfunction launch(ship, fuel = 100) {\n  return `${ship} ${fuel} litre yakıtla kalkıyor.`;\n}\n\nconsole.log(launch(\"Kartal\"));      // Kartal 100 litre yakıtla kalkıyor.\nconsole.log(launch(\"Şahin\", 60));   // Şahin 60 litre yakıtla kalkıyor.\n```\n\nİyi bir fonksiyon **tek bir iş** yapar ve adı o işi anlatır: `travelTime`, `launch`, `attack`..."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Yolculuk süresi",
+   "code": "function travelTime(distance, speed) {\n  return distance / speed;\n}\n\nconsole.log(\"Ay:\", travelTime(384400, 40000), \"saat\");\nconsole.log(\"İstasyon:\", travelTime(400, 25), \"saat\");\n",
+   "note": "Aynı fonksiyon, farklı değerler: bir kez yazdık, iki kez kullandık."
+  },
+  {
+   "title": "Varsayılan değer",
+   "code": "function welcome(name = \"Kaptan\") {\n  return `Hoş geldin, ${name}!`;\n}\n\nconsole.log(welcome(\"Deniz\"));\nconsole.log(welcome());\n",
+   "note": "İkinci çağrıda ad verilmediği için varsayılan \"Kaptan\" kullanıldı."
+  }
+ ],
+ "tasks": [
+  {
+   "id": "js-d8-t1",
+   "title": "Alan hesaplayıcı",
+   "prompt": "`area(width, height)` fonksiyonu dikdörtgen bir güneş panelinin alanını (**en × boy**) **döndürsün** (`return`).\n\nKontrol, fonksiyonunu farklı sayılarla da çağıracak.",
+   "starter": "function area(width, height) {\n  // alanı döndür\n}\n\nconsole.log(area(3, 4));\n",
+   "solution": "function area(width, height) {\n  // alanı döndür\n  return width * height;\n}\n\nconsole.log(area(3, 4));\n",
+   "hints": [
+    "Alan = en * boy",
+    "return width * height;"
+   ],
+   "check": {
+    "code_contains": [
+     "return"
+    ],
+    "js": "assert(area(3, 4) === 12, \"area(3, 4) 12 döndürmeli. return yazdın mı?\");\nassert(area(7, 5) === 35 && area(0, 9) === 0 && area(2.5, 2) === 5, \"area farklı sayılarla da doğru sonuç vermeli (ör. area(7, 5) → 35).\");"
+   },
+   "xp": 50
+  },
+  {
+   "id": "js-d8-t2",
+   "title": "Yakıt göstergesi",
+   "prompt": "`fuelStatus(fuel)` fonksiyonu yakıt durumunu metin olarak döndürsün:\n\n- yakıt `0` ise: `\"boş\"`\n- 30'dan az ise: `\"az\"`\n- diğer durumda: `\"yeterli\"`\n\nİpucu: `return` fonksiyonu hemen bitirdiği için `else` yazmana gerek kalmayabilir.",
+   "starter": "function fuelStatus(fuel) {\n  // koşullara göre bir metin döndür\n}\n\nconsole.log(fuelStatus(0));\nconsole.log(fuelStatus(15));\nconsole.log(fuelStatus(80));\n",
+   "solution": "function fuelStatus(fuel) {\n  // koşullara göre bir metin döndür\n  if (fuel === 0) {\n    return \"boş\";\n  }\n  if (fuel < 30) {\n    return \"az\";\n  }\n  return \"yeterli\";\n}\n\nconsole.log(fuelStatus(0));\nconsole.log(fuelStatus(15));\nconsole.log(fuelStatus(80));\n",
+   "hints": [
+    "İlk kontrol: if (fuel === 0) { return \"boş\"; }",
+    "Sonra if (fuel < 30) { return \"az\"; }",
+    "En sonda: return \"yeterli\";"
+   ],
+   "check": {
+    "code_contains": [
+     "return",
+     "if"
+    ],
+    "js": "assert(fuelStatus(0) === \"boş\", \"fuelStatus(0) \\\"boş\\\" döndürmeli.\");\nassert(fuelStatus(15) === \"az\" && fuelStatus(29) === \"az\" && fuelStatus(1) === \"az\", \"30'dan az yakıt için \\\"az\\\" döndürmeli.\");\nassert(fuelStatus(30) === \"yeterli\" && fuelStatus(100) === \"yeterli\", \"30 ve üstü için \\\"yeterli\\\" döndürmeli.\");"
+   },
+   "xp": 50
+  },
+  {
+   "id": "js-d8-t3",
+   "title": "Kalkış mesajı",
+   "prompt": "`launchMessage(ship, countdown)` fonksiyonu şu metni döndürsün: `Kartal 3 saniye içinde kalkıyor!`\n\n`countdown` verilmezse **varsayılan olarak 3** olsun. Yani `launchMessage(\"Kartal\")` yukarıdaki metni, `launchMessage(\"Şahin\", 10)` ise `Şahin 10 saniye içinde kalkıyor!` metnini vermeli.",
+   "starter": "function launchMessage(ship, countdown) {\n  // metni döndür\n}\n\nconsole.log(launchMessage(\"Kartal\"));\nconsole.log(launchMessage(\"Şahin\", 10));\n",
+   "solution": "function launchMessage(ship, countdown = 3) {\n  // metni döndür\n  return `${ship} ${countdown} saniye içinde kalkıyor!`;\n}\n\nconsole.log(launchMessage(\"Kartal\"));\nconsole.log(launchMessage(\"Şahin\", 10));\n",
+   "hints": [
+    "Varsayılan değer parametre listesinde yazılır: countdown = 3",
+    "return ile şablon metin döndür."
+   ],
+   "check": {
+    "code_contains": [
+     "return"
+    ],
+    "js": "assert(launchMessage(\"Kartal\") === \"Kartal 3 saniye içinde kalkıyor!\", \"launchMessage(\\\"Kartal\\\") 'Kartal 3 saniye içinde kalkıyor!' döndürmeli. Varsayılan değeri verdin mi?\");\nassert(launchMessage(\"Şahin\", 10) === \"Şahin 10 saniye içinde kalkıyor!\", \"launchMessage(\\\"Şahin\\\", 10) 'Şahin 10 saniye içinde kalkıyor!' döndürmeli.\");\nassert(launchMessage(\"Atmaca\", 7) === \"Atmaca 7 saniye içinde kalkıyor!\" && launchMessage(\"Nova\") === \"Nova 3 saniye içinde kalkıyor!\", \"Fonksiyon başka gemi adları ve sürelerle de çalışmalı.\");"
+   },
+   "xp": 50
+  }
+ ],
+ "challenge": {
+  "id": "js-d8-c",
+  "title": "En parlak yıldız",
+  "prompt": "`maxOf(numbers)` fonksiyonu bir sayı dizisindeki **en büyük** sayıyı döndürsün. `Math.max` kullanmadan, bir döngüyle bul.\n\nDikkat: dizideki bütün sayılar negatif olabilir! Başlangıç değerini `0` değil, dizinin ilk elemanı seç.",
+  "starter": "function maxOf(numbers) {\n  // döngüyle en büyük sayıyı bul ve döndür\n}\n\nconsole.log(maxOf([4, 18, 7, 12]));\n",
+  "solution": "function maxOf(numbers) {\n  // döngüyle en büyük sayıyı bul ve döndür\n  let max = numbers[0];\n  for (const n of numbers) {\n    if (n > max) {\n      max = n;\n    }\n  }\n  return max;\n}\n\nconsole.log(maxOf([4, 18, 7, 12]));\n",
+  "hints": [
+   "let max = numbers[0]; ile başla.",
+   "Döngüde daha büyük bir sayı görürsen max'ı güncelle.",
+   "Döngü bitince return max;"
+  ],
+  "check": {
+   "code_contains": [
+    "return"
+   ],
+   "js": "assert(!/Math\\.max/.test(_code), \"Math.max kullanmadan, döngüyle bul.\");\nassert(maxOf([4, 18, 7, 12]) === 18, \"maxOf([4, 18, 7, 12]) 18 döndürmeli.\");\nassert(maxOf([3, 9, 2]) === 9 && maxOf([7]) === 7 && maxOf([1, 2, 3, 50]) === 50, \"maxOf başka dizilerle de doğru çalışmalı.\");\nassert(maxOf([-5, -2, -9]) === -2, \"maxOf([-5, -2, -9]) -2 döndürmeli; başlangıç değerine dikkat.\");"
+  },
+  "xp": 75
+ },
+ "project_contribution": "Saldırı fonksiyonu",
+ "project_task": {
+  "id": "js-d8-p",
+  "title": "Saldırı fonksiyonu",
+  "prompt": "Gemin artık düşmanlara ateş edebiliyor! `attack(enemyHealth, damage)` fonksiyonunu yaz:\n\n- Düşmanın yeni canını döndürsün: `enemyHealth - damage`\n- `damage` verilmezse **varsayılan olarak 10** olsun.\n- Can **0'ın altına düşmesin**: sonuç eksi çıkarsa `0` döndür.\n\nSonra `boss`'a önce 35 hasarlık, sonra varsayılan hasarla saldır (`boss = attack(boss, 35);` gibi). Beklenen çıktı: `Boss canı: 55`",
+  "starter": "// attack fonksiyonunu yaz\n\nlet boss = 100;\n// boss'a iki kez saldır\n\nconsole.log(\"Boss canı:\", boss);\n",
+  "solution": "// attack fonksiyonunu yaz\nfunction attack(enemyHealth, damage = 10) {\n  const result = enemyHealth - damage;\n  if (result < 0) {\n    return 0;\n  }\n  return result;\n}\n\nlet boss = 100;\n// boss'a iki kez saldır\nboss = attack(boss, 35);\nboss = attack(boss);\n\nconsole.log(\"Boss canı:\", boss);\n",
+  "hints": [
+   "function attack(enemyHealth, damage = 10) { ... }",
+   "const result = enemyHealth - damage; eksi ise 0 döndür.",
+   "boss = attack(boss, 35); sonra boss = attack(boss);"
+  ],
+  "check": {
+   "code_contains": [
+    "function",
+    "return"
+   ],
+   "js": "assert(attack(50, 25) === 25 && attack(80, 30) === 50, \"attack(50, 25) 25 döndürmeli.\");\nassert(attack(50) === 40, \"damage verilmezse 10 olmalı: attack(50) 40 döndürmeli.\");\nassert(attack(5) === 0 && attack(20, 50) === 0 && attack(30, 30) === 0, \"Can 0'ın altına düşmemeli: attack(5) 0 döndürmeli.\");\nassert(boss === 55, \"İki saldırıdan sonra boss 55 olmalı.\");\nassert(!/boss\\s*=\\s*55/.test(_code) && /attack\\s*\\(\\s*boss\\s*\\)/.test(_code), \"Boss'a attack(boss, 35) ve attack(boss) ile saldır; sonucu elle yazma.\");\nassert(_lines.includes(\"Boss canı: 55\"), \"Çıktıda 'Boss canı: 55' görünmeli.\");"
+  },
+  "xp": 100
+ },
+ "tracks": {
+  "js-web": {
+   "project_contribution": "Başlık fonksiyonu",
+   "project_task": {
+    "id": "js-d8-pw",
+    "title": "Başlık fonksiyonu",
+    "prompt": "Sitenin her bölümüne süslü bir başlık lazım. `makeTitle(text, symbol)` fonksiyonu:\n\n- Metni **Türkçe kurallarıyla büyük harfe** çevirsin (`toLocaleUpperCase(\"tr\")`),\n- İki yanına `symbol`'ü koysun; `symbol` verilmezse varsayılan `\"*\"` olsun,\n- Sonucu döndürsün: `makeTitle(\"iletişim\")` → `* İLETİŞİM *`, `makeTitle(\"hakkımda\", \"#\")` → `# HAKKIMDA #`\n\nSonra `menu` dizisindeki her bölümün başlığını döngüyle yazdır ve en sona `makeTitle(\"hakkımda\", \"#\")` sonucunu yazdır.",
+    "starter": "// makeTitle fonksiyonunu yaz\n\nconst menu = [\"ana sayfa\", \"projeler\", \"iletişim\"];\n// her bölümün başlığını yazdır\n\n// hakkımda başlığını # ile yazdır\n",
+    "solution": "// makeTitle fonksiyonunu yaz\nfunction makeTitle(text, symbol = \"*\") {\n  return `${symbol} ${text.toLocaleUpperCase(\"tr\")} ${symbol}`;\n}\n\nconst menu = [\"ana sayfa\", \"projeler\", \"iletişim\"];\n// her bölümün başlığını yazdır\nfor (const item of menu) {\n  console.log(makeTitle(item));\n}\n\n// hakkımda başlığını # ile yazdır\nconsole.log(makeTitle(\"hakkımda\", \"#\"));\n",
+    "hints": [
+     "function makeTitle(text, symbol = \"*\") { ... }",
+     "return ile şablon metin: sembol, boşluk, büyük harfli metin, boşluk, sembol",
+     "for (const item of menu) { console.log(makeTitle(item)); }"
+    ],
+    "check": {
+     "code_contains": [
+      "function",
+      "return",
+      "toLocaleUpperCase"
+     ],
+     "js": "assert(makeTitle(\"blog\") === \"* BLOG *\", \"makeTitle(\\\"blog\\\") '* BLOG *' döndürmeli.\");\nassert(makeTitle(\"iletişim\") === \"* İLETİŞİM *\", \"makeTitle(\\\"iletişim\\\") '* İLETİŞİM *' döndürmeli; Türkçe büyük harf için toLocaleUpperCase(\\\"tr\\\") kullan.\");\nassert(makeTitle(\"oyunlar\", \"~\") === \"~ OYUNLAR ~\", \"makeTitle(\\\"oyunlar\\\", \\\"~\\\") '~ OYUNLAR ~' döndürmeli.\");\nassert([\"* ANA SAYFA *\", \"* PROJELER *\", \"* İLETİŞİM *\", \"# HAKKIMDA #\"].every((t) => _lines.includes(t)), \"Çıktıda menüdeki üç başlık ve '# HAKKIMDA #' görünmeli.\");\nassert((_code.match(/console\\.log/g) || []).length <= 2, \"Her başlık için ayrı console.log yazma; döngü kullan.\");"
+    },
+    "xp": 100
+   }
+  },
+  "js-app": {
+   "project_contribution": "Görev fonksiyonları",
+   "project_task": {
+    "id": "js-d8-pa",
+    "title": "Görev ekle ve bitir",
+    "prompt": "Asistana iki fonksiyon yazalım:\n\n- `addTask(title)`: görevi `tasks` dizisinin sonuna eklesin ve **yeni görev sayısını** döndürsün.\n- `completeTask(title)`: görev `tasks` içindeyse oradan çıkarsın, `done` dizisine eklesin ve `true` döndürsün. Görev listede yoksa hiçbir şeyi değiştirmeden `false` döndürsün.\n\nAlttaki hazır satırlar fonksiyonlarını kullanıyor. Beklenen çıktı: `Kalan: Kitap okuma | Biten: Matematik ödevi`",
+    "starter": "const tasks = [];\nconst done = [];\n\nfunction addTask(title) {\n  // ...\n}\n\nfunction completeTask(title) {\n  // ...\n}\n\naddTask(\"Matematik ödevi\");\naddTask(\"Kitap okuma\");\ncompleteTask(\"Matematik ödevi\");\nconsole.log(\"Kalan:\", tasks.join(\", \"), \"| Biten:\", done.join(\", \"));\n",
+    "solution": "const tasks = [];\nconst done = [];\n\nfunction addTask(title) {\n  tasks.push(title);\n  return tasks.length;\n}\n\nfunction completeTask(title) {\n  const index = tasks.indexOf(title);\n  if (index === -1) {\n    return false;\n  }\n  tasks.splice(index, 1);\n  done.push(title);\n  return true;\n}\n\naddTask(\"Matematik ödevi\");\naddTask(\"Kitap okuma\");\ncompleteTask(\"Matematik ödevi\");\nconsole.log(\"Kalan:\", tasks.join(\", \"), \"| Biten:\", done.join(\", \"));\n",
+    "hints": [
+     "addTask: tasks.push(title); return tasks.length;",
+     "completeTask: önce const index = tasks.indexOf(title); bul. -1 ise return false;",
+     "Bulduysan tasks.splice(index, 1); done.push(title); return true;"
+    ],
+    "check": {
+     "code_contains": [
+      "push",
+      "indexOf",
+      "splice",
+      "return"
+     ],
+     "js": "assert(same(tasks, [\"Kitap okuma\"]) && same(done, [\"Matematik ödevi\"]), \"Kod çalıştıktan sonra tasks ['Kitap okuma'], done ['Matematik ödevi'] olmalı.\");\nassert(_lines.includes(\"Kalan: Kitap okuma | Biten: Matematik ödevi\"), \"Çıktıda 'Kalan: Kitap okuma | Biten: Matematik ödevi' görünmeli.\");\nconst before = tasks.length;\nassert(addTask(\"Deneme görevi\") === before + 1 && tasks[tasks.length - 1] === \"Deneme görevi\", \"addTask görevi sona eklemeli ve yeni görev sayısını döndürmeli.\");\nassert(completeTask(\"Deneme görevi\") === true && !tasks.includes(\"Deneme görevi\") && done.includes(\"Deneme görevi\"), \"completeTask görevi tasks'tan çıkarıp done'a eklemeli ve true döndürmeli.\");\nconst snapshot = tasks.join(\"|\");\nassert(completeTask(\"Olmayan görev\") === false && tasks.join(\"|\") === snapshot && !done.includes(\"Olmayan görev\"), \"Listede olmayan bir görev için completeTask hiçbir şeyi değiştirmeden false döndürmeli.\");"
+    },
+    "xp": 100
+   }
+  },
+  "js-quiz": {
+   "project_contribution": "Cevap kontrol fonksiyonu",
+   "project_task": {
+    "id": "js-d8-pq",
+    "title": "Cevap kontrol fonksiyonu",
+    "prompt": "`checkAnswer(answer, correct)` fonksiyonu iki cevabı karşılaştırıp `true` ya da `false` döndürsün. Yarışmacı boşluk bırakabilir ya da büyük harf kullanabilir: karşılaştırmadan önce iki metnin de boşluklarını sil (`trim`) ve **Türkçe kurallarıyla küçük harfe** çevir (`toLocaleLowerCase(\"tr\")`).\n\nSonra bir döngüyle yarışmacının cevaplarını kontrol et; her doğru cevap için `score`'a 10 ekle. Beklenen çıktı: `Puan: 20`",
+    "starter": "function checkAnswer(answer, correct) {\n  // ...\n}\n\nconst correctAnswers = [\"Dünya\", \"Jüpiter\", \"Mars\"];\nconst userAnswers = [\" dünya\", \"SATÜRN\", \"mars \"];\nlet score = 0;\n\n// Döngüyle cevapları kontrol et\n\nconsole.log(\"Puan:\", score);\n",
+    "solution": "function checkAnswer(answer, correct) {\n  const a = answer.trim().toLocaleLowerCase(\"tr\");\n  const c = correct.trim().toLocaleLowerCase(\"tr\");\n  return a === c;\n}\n\nconst correctAnswers = [\"Dünya\", \"Jüpiter\", \"Mars\"];\nconst userAnswers = [\" dünya\", \"SATÜRN\", \"mars \"];\nlet score = 0;\n\n// Döngüyle cevapları kontrol et\nfor (let i = 0; i < userAnswers.length; i++) {\n  if (checkAnswer(userAnswers[i], correctAnswers[i])) {\n    score += 10;\n  }\n}\n\nconsole.log(\"Puan:\", score);\n",
+    "hints": [
+     "const a = answer.trim().toLocaleLowerCase(\"tr\");",
+     "return a === c; karşılaştırmanın sonucu zaten true/false",
+     "if (checkAnswer(userAnswers[i], correctAnswers[i])) { score += 10; }"
+    ],
+    "check": {
+     "code_contains": [
+      "return",
+      "trim",
+      "toLocaleLowerCase"
+     ],
+     "js": "assert(checkAnswer(\"Mars\", \"Mars\") === true && checkAnswer(\"Mars\", \"Venüs\") === false, \"checkAnswer aynı cevaplar için true, farklı cevaplar için false döndürmeli.\");\nassert(checkAnswer(\"  mars \", \"Mars\") === true, \"checkAnswer(\\\"  mars \\\", \\\"Mars\\\") true döndürmeli (boşluk ve büyük/küçük harf fark etmemeli).\");\nassert(checkAnswer(\"JÜPİTER\", \"Jüpiter\") === true && checkAnswer(\"IŞIK\", \"ışık\") === true, \"Türkçe harfler için toLocaleLowerCase(\\\"tr\\\") kullan: checkAnswer(\\\"IŞIK\\\", \\\"ışık\\\") true olmalı.\");\nassert(score === 20, \"score 20 olmalı (3 cevaptan 2'si doğru).\");\nassert(!/score\\s*=\\s*20/.test(_code), \"Puanı elle yazma; döngüde checkAnswer ile hesapla.\");\nassert(_lines.includes(\"Puan: 20\"), \"Çıktıda 'Puan: 20' görünmeli.\");"
+    },
+    "xp": 100
+   }
+  }
+ },
+ "available": true
+}

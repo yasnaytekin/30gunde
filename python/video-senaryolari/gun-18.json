@@ -1,0 +1,236 @@
+{
+  "kurs": "python",
+  "gun": 18,
+  "baslik": "Düzenli ifadeler",
+  "maskot": "piko",
+  "ozet": "Piko, Keşif Adası'nın yazılı mağarasında re modülüyle desen kurmayı; findall, search, fullmatch, sub ve gruplarla metinden bilgi çekmeyi anlatıyor.",
+  "hedef_sure_sn": 152,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 13,
+      "anlatim": "Selam, ben Piko! Keşif Adası'nın mağarasındayız. Duvarlar yazılarla dolu, bir yerlerde gizli sayılar ve şifreler saklı. Hepsini tek tek okumak günler sürer! Neyse ki Python'ın bir büyüteci var: düzenli ifadeler.",
+      "ekran": {
+        "baslik": "Gün 18: Düzenli ifadeler",
+        "maddeler": [
+          "Keşif Adası",
+          "re modülü (regex)"
+        ]
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sag"
+      },
+      "yonetmen_notu": "Arka plan: Keşif Adası bölge görseli (gorseller/python/harita/ada.webp). Dosya repoda henüz yok; eklenince ekran.gorsel alanına yazılmalı. Mağara duvarında yazılar, Piko elinde büyüteçle."
+    },
+    {
+      "no": 2,
+      "tur": "anlatim",
+      "sure_sn": 13,
+      "anlatim": "Düzenli ifade, aradığın şeyin tarifidir. Yan yana rakamlar ya da içinde e harfi olan kelime gibi. Tarifi sen yazarsın, re modülü onu metnin içinde bulur.",
+      "ekran": {
+        "baslik": "Desen nedir?",
+        "maddeler": [
+          "Desen = aradığın şeyin tarifi",
+          "import re",
+          "Desenin başına r koy: r\"...\""
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 3,
+      "tur": "anlatim",
+      "sure_sn": 15,
+      "anlatim": "Tarif yazarken özel karakterler kullanırız. Ters eğik çizgi d bir rakam, ters eğik çizgi w bir harf ya da rakam demek. Artı işareti bir ya da daha fazla, süslü parantezdeki sayı ise tam kaç tane olduğunu söyler.",
+      "ekran": {
+        "baslik": "Özel karakterler",
+        "maddeler": [
+          "\\d rakam, \\w harf/rakam, \\s boşluk",
+          ". herhangi bir karakter",
+          "+ bir ya da daha fazla, * sıfır ya da daha fazla",
+          "{3} tam 3 tane, [0-9] aralık",
+          "^ başlangıç, $ son"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "findall eşleşen her parçayı liste olarak verir. Artılı desen yan yana rakamları tek parça sayıyor, on iki bir bütün. Artısız desen ise her rakamı ayrı ayrı topluyor.",
+      "ekran": {
+        "baslik": "Sayıları bul: findall",
+        "kod": "import re\n\ntext = \"Piko 3 elma, 12 altın ve 7 iksir buldu\"\nprint(re.findall(r\"\\d+\", text))\nprint(re.findall(r\"\\d\", text))\n",
+        "vurgu_satirlari": [
+          4,
+          5
+        ],
+        "dil": "python",
+        "cikti": "['3', '12', '7']\n['3', '1', '2', '7']"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "search ilk eşleşmeyi bulur; burada ilk dört yan yana rakam, yani şifre. sub ise eşleşen her şeyi değiştirir. Tüm rakamları yıldıza çevirip bilgileri gizledim.",
+      "ekran": {
+        "baslik": "Ara ve değiştir: search, sub",
+        "kod": "import re\n\nmsg = \"Şifrem 4821, telefonum 05321234567\"\nprint(re.search(r\"\\d{4}\", msg).group())\nprint(re.sub(r\"\\d\", \"*\", msg))\n",
+        "vurgu_satirlari": [
+          4,
+          5
+        ],
+        "dil": "python",
+        "cikti": "4821\nŞifrem ****, telefonum ***********"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "Parantezler deseni gruplara ayırır. İlk grup ismi, ikinci grup sayıyı yakalıyor ve group ile alıyorum. Desene uymayan satırda search None veriyor, if de bunu yakalıyor.",
+      "ekran": {
+        "baslik": "Gruplarla parçala",
+        "kod": "import re\n\nfor line in [\"Ece 45 altın\", \"Can 7 altın\", \"yanlış satır\"]:\n    m = re.search(r\"(\\w+) (\\d+) altın\", line)\n    if m:\n        print(m.group(1), \"->\", int(m.group(2)))\n    else:\n        print(\"Eşleşme yok:\", line)\n",
+        "vurgu_satirlari": [
+          4,
+          6
+        ],
+        "dil": "python",
+        "cikti": "Ece -> 45\nCan -> 7\nEşleşme yok: yanlış satır"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "hata",
+      "sure_sn": 12,
+      "anlatim": "En sık hata şu: eşleşme yokken doğrudan group çağırmak. search bir şey bulamazsa None döner ve None'ın group'u olmadığı için AttributeError alırsın. Önce if m ile kontrol et!",
+      "ekran": {
+        "baslik": "Sık hata: None.group()",
+        "kod": "import re\n\nm = re.search(r\"\\d+\", \"burada sayı yok\")\nprint(m.group())\n",
+        "vurgu_satirlari": [
+          4
+        ],
+        "cikti": "AttributeError: 'NoneType' object has no attribute 'group'",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "uzgun",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "soru",
+      "sure_sn": 10,
+      "anlatim": "Sıra sende! fullmatch metnin tamamı desene uyuyor mu diye bakar. Desen tam üç rakam istiyor. Sence iki satır ne yazdırır?",
+      "ekran": {
+        "baslik": "Sence ne yazdırır?",
+        "kod": "import re\n\nprint(bool(re.fullmatch(r\"\\d{3}\", \"123\")))\nprint(bool(re.fullmatch(r\"\\d{3}\", \"1234\")))\n",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 9,
+      "tur": "cikti",
+      "sure_sn": 9,
+      "anlatim": "İlki True, çünkü tam üç rakam. İkincisi False: dört rakam var ve fullmatch fazlasını kabul etmez.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "import re\n\nprint(bool(re.fullmatch(r\"\\d{3}\", \"123\")))\nprint(bool(re.fullmatch(r\"\\d{3}\", \"1234\")))\n",
+        "dil": "python",
+        "cikti": "True\nFalse"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 10,
+      "tur": "gorev",
+      "sure_sn": 13,
+      "anlatim": "Görevlerde metindeki sayıları bulup toplayacak, bir e-posta adresi arayacak ve şifreyi gizleyeceksin. Projede de git kuzey üç gibi komutları çözen bir fonksiyon yazıyorsun.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Sayıları topla",
+          "Görev 2: E-posta var mı?",
+          "Görev 3: Şifreyi gizle",
+          "Challenge: Telefon numarası",
+          "Proje: Komut çözücü"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "ozet",
+      "sure_sn": 11,
+      "anlatim": "Özetle: deseni tarif et, findall ile hepsini bul, search ile ilkini yakala, sub ile değiştir.",
+      "ekran": {
+        "baslik": "Bugün öğrendiklerin",
+        "maddeler": [
+          "\\d, \\w, +, {n} ile desen kurulur",
+          "findall, search, fullmatch, sub",
+          "Parantezli gruplar group(1), group(2) ile alınır"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 12,
+      "tur": "kapanis",
+      "sure_sn": 12,
+      "anlatim": "Mağaranın şifrelerini çözdük, tebrikler! Yarın bulduklarımızı kaybetmemek için dosyalara yazmayı ve JSON ile oyunu kaydetmeyi öğreneceğiz. Görüşürüz!",
+      "ekran": {
+        "baslik": "Yarın: Dosya işlemleri",
+        "maddeler": [
+          "Dosyaya yaz, dosyadan oku",
+          "JSON ile kaydet"
+        ]
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

@@ -1,0 +1,959 @@
+{
+ "day": 8,
+ "title": "Dictionary",
+ "region": "orman",
+ "project_contribution": "Kahraman kaydı",
+ "game_role": "Kahraman sözlüğün oyunun kahramanı olur.",
+ "xp_complete": 150,
+ "objective": "Anahtar-değer yapısını öğrenmek",
+ "story": "Ormanda yaşayan her canlının bir kimlik kartı var: adı, canı, gücü... Bugün oyundaki karakterlerin bilgilerini saklamayı öğreneceğiz. Bunun için Python'ın **sözlüklerini** (dictionary) kullanacağız.",
+ "sections": [
+  {
+   "title": "Sözlük nedir?",
+   "body": "Gerçek bir sözlükte kelimeye bakıp anlamını bulursun. Python sözlüğünde de **anahtara** bakıp **değeri** bulursun.\n\n```python\nplayer = {\"name\": \"Piko\", \"hp\": 100, \"gold\": 50}\nprint(player[\"name\"])  # Piko\n```\n\nListede elemanlara sıra numarasıyla (0, 1, 2) ulaşırız, sözlükte ise isimle (`\"name\"`, `\"hp\"`)."
+  },
+  {
+   "title": "Ekle, değiştir, sil",
+   "body": "```python\nplayer[\"level\"] = 1                # yeni anahtar ekle\nplayer[\"hp\"] = player[\"hp\"] - 10   # değiştir\ndel player[\"gold\"]                 # sil\n```"
+  },
+  {
+   "title": "Güvenli bakış: get()",
+   "body": "Olmayan bir anahtarı `player[\"shield\"]` diye sorarsan Python `KeyError` hatası verir. `get()` ise hata vermez, senin belirlediğin yedek değeri döndürür:\n\n```python\nshield = player.get(\"shield\", 0)  # yoksa 0\n```"
+  },
+  {
+   "title": "Sözlüğü incelemek",
+   "body": "- `player.keys()` tüm anahtarlar\n- `player.values()` tüm değerler\n- `\"hp\" in player` bu anahtar var mı?\n- `len(player)` kaç anahtar var?\n\nDeğer olarak liste bile koyabilirsin: `{\"inventory\": [\"kılıç\", \"iksir\"]}`"
+  }
+ ],
+ "examples": [
+  {
+   "title": "Kimlik kartı",
+   "code": "player = {\"name\": \"Piko\", \"hp\": 100, \"gold\": 50}\nprint(player[\"name\"])\nplayer[\"level\"] = 1\nprint(player)\nprint(player.keys())\n",
+   "note": ""
+  },
+  {
+   "title": "Düşmana saldır",
+   "code": "enemy = {\"name\": \"Goblin\", \"hp\": 30}\nenemy[\"hp\"] -= 12\nprint(enemy[\"name\"], \"canı:\", enemy[\"hp\"])\nprint(enemy.get(\"shield\", \"Kalkanı yok!\"))\n",
+   "note": ""
+  },
+  {
+   "title": "İç içe",
+   "code": "hero = {\"name\": \"Piko\", \"inventory\": [\"kılıç\", \"iksir\"]}\nhero[\"inventory\"].append(\"harita\")\nprint(hero[\"inventory\"])\nprint(len(hero[\"inventory\"]), \"eşya\")\n",
+   "note": ""
+  }
+ ],
+ "tasks": [
+  {
+   "id": "d8-t1",
+   "title": "Altın ekle",
+   "prompt": "Oyuncunun sözlüğüne `\"gold\"` anahtarını `50` değeriyle ekle.",
+   "starter": "player = {\"name\": \"Piko\", \"hp\": 100}\n\n# \"gold\" anahtarını 50 değeriyle ekle\n\nprint(player)\n",
+   "solution": "player = {\"name\": \"Piko\", \"hp\": 100}\n\nplayer[\"gold\"] = 50\n\nprint(player)\n",
+   "hints": [
+    "Yeni anahtar eklemek: sozluk[anahtar] = deger",
+    "player[\"gold\"] = 50"
+   ],
+   "check": {
+    "python": "assert player == {\"name\": \"Piko\", \"hp\": 100, \"gold\": 50}, \"player sözlüğünde gold: 50 olmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "player = {\"name\": \"Piko\", \"hp\": 100}",
+      "notes": [
+       "`player` adında bir değişken oluşturuluyor ve içine `{\"name\": \"Piko\", \"hp\": 100}` (sözlük (anahtar: değer)) konuyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "player[\"gold\"] = 50",
+      "notes": [
+       "`player[...]` konumundaki değer `50` ile değiştiriliyor."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "print(player)",
+      "notes": [
+       "`print(player)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "player",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"name\": \"Piko\", \"hp\": 100}`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d8-t2",
+   "title": "Hasar al",
+   "prompt": "Goblin 12 hasar aldı. Canını 12 azalt. Yeni sayıyı elle yazma, `enemy[\"hp\"]` değerini değiştir.",
+   "starter": "enemy = {\"name\": \"Goblin\", \"hp\": 30}\n\n# Goblin 12 hasar aldı\n\nprint(enemy[\"name\"], \"canı:\", enemy[\"hp\"])\n",
+   "solution": "enemy = {\"name\": \"Goblin\", \"hp\": 30}\n\nenemy[\"hp\"] -= 12\n\nprint(enemy[\"name\"], \"canı:\", enemy[\"hp\"])\n",
+   "hints": [
+    "enemy[\"hp\"] ile değere ulaşırsın.",
+    "enemy[\"hp\"] -= 12"
+   ],
+   "check": {
+    "python": "\nassert enemy[\"hp\"] == 18, \"Goblin'in canı 18 olmalı.\"\nassert \"18\" not in _code, \"18'i elle yazma, Python hesaplasın.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "enemy = {\"name\": \"Goblin\", \"hp\": 30}",
+      "notes": [
+       "`enemy` adında bir değişken oluşturuluyor ve içine `{\"name\": \"Goblin\", \"hp\": 30}` (sözlük (anahtar: değer)) konuyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "enemy[\"hp\"] -= 12",
+      "notes": [
+       "`enemy[...] -= 12`: `enemy[...]` değişkeninin değeri güncelleniyor."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "print(enemy[\"name\"], \"canı:\", enemy[\"hp\"])",
+      "notes": [
+       "`print(enemy[\"name\"], \"canı:\", enemy[\"hp\"])`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "enemy",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"name\": \"Goblin\", \"hp\": 30}`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "-=",
+      "kind": "operatör",
+      "desc": "Değişkenin değerinden çıkarır: x -= 1 → x = x - 1."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     },
+     {
+      "term": "[ ]",
+      "kind": "seçme",
+      "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d8-t3",
+   "title": "Güvenli bakış",
+   "prompt": "`get()` kullanarak oyuncunun kalkanını oku. Sözlükte `\"shield\"` yoksa sonuç `0` olsun.",
+   "starter": "player = {\"name\": \"Piko\", \"hp\": 100}\n\nshield = None  # get() ile oku\nprint(\"Kalkan:\", shield)\n",
+   "solution": "player = {\"name\": \"Piko\", \"hp\": 100}\n\nshield = player.get(\"shield\", 0)\nprint(\"Kalkan:\", shield)\n",
+   "hints": [
+    "get() iki şey alır: anahtar ve yedek değer.",
+    "shield = player.get(\"shield\", 0)"
+   ],
+   "check": {
+    "python": "\nassert re.search(r\"get\\(\\s*['\\\"]shield['\\\"]\", _code), 'get(\"shield\", 0) kullanmalısın.'\nassert shield == 0, \"Kalkan yoksa shield 0 olmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "player = {\"name\": \"Piko\", \"hp\": 100}",
+      "notes": [
+       "`player` adında bir değişken oluşturuluyor ve içine `{\"name\": \"Piko\", \"hp\": 100}` (sözlük (anahtar: değer)) konuyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "shield = player.get(\"shield\", 0)",
+      "notes": [
+       "`shield` adında bir değişken oluşturuluyor ve içine `player.get(\"shield\", 0)` konuyor."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "print(\"Kalkan:\", shield)",
+      "notes": [
+       "`print(\"Kalkan:\", shield)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "player",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"name\": \"Piko\", \"hp\": 100}`."
+     },
+     {
+      "term": "shield",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `player.get(\"shield\", 0)`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": ".get()",
+      "kind": "metot",
+      "desc": "Sözlükten anahtarın değerini alır; anahtar yoksa hata vermez, varsayılanı verir."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "id": "d8-c",
+  "title": "Market hesabı",
+  "prompt": "Sepetteki eşyaların toplam fiyatını `prices` sözlüğünü kullanarak hesapla ve `total`'a koy. Fiyatları elle yazmak yok! İpucu: `prices[cart[0]]` ilk eşyanın fiyatını verir.",
+  "starter": "prices = {\"iksir\": 25, \"kılıç\": 120, \"kalkan\": 80}\ncart = [\"iksir\", \"iksir\", \"kalkan\"]\n\ntotal = 0\nprint(\"Toplam:\", total)\n",
+  "solution": "prices = {\"iksir\": 25, \"kılıç\": 120, \"kalkan\": 80}\ncart = [\"iksir\", \"iksir\", \"kalkan\"]\n\ntotal = prices[cart[0]] + prices[cart[1]] + prices[cart[2]]\nprint(\"Toplam:\", total)\n",
+  "hints": [
+   "cart[0] ilk eşyanın adı.",
+   "O adı prices sözlüğünde anahtar olarak kullan."
+  ],
+  "check": {
+   "python": "\nassert total == 130, \"Toplam 130 olmalı.\"\n_, g = _run(_set(_code, \"prices\", {\"iksir\": 10, \"kılıç\": 1, \"kalkan\": 5}))\nassert g[\"total\"] == 25, \"Fiyatları elle yazma, prices sözlüğünden al.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "prices = {\"iksir\": 25, \"kılıç\": 120, \"kalkan\": 80}",
+     "notes": [
+      "`prices` adında bir değişken oluşturuluyor ve içine `{\"iksir\": 25, \"kılıç\": 120, \"kalkan\": 80}` (sözlük (anahtar: değer)) konuyor."
+     ]
+    },
+    {
+     "n": 2,
+     "code": "cart = [\"iksir\", \"iksir\", \"kalkan\"]",
+     "notes": [
+      "`cart` adında bir değişken oluşturuluyor ve içine `[\"iksir\", \"iksir\", \"kalkan\"]` (liste) konuyor."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "total = prices[cart[0]] + prices[cart[1]] + prices[cart[2]]",
+     "notes": [
+      "`total` adında bir değişken oluşturuluyor ve içine `prices[cart[0]] + prices[cart[1]] + prices[cart[2]]` konuyor."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "print(\"Toplam:\", total)",
+     "notes": [
+      "`print(\"Toplam:\", total)`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "prices",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"iksir\": 25, \"kılıç\": 120, \"kalkan\": 80}`."
+    },
+    {
+     "term": "cart",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `[\"iksir\", \"iksir\", \"kalkan\"]`."
+    },
+    {
+     "term": "total",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `prices[cart[0]] + prices[cart[1]] + prices[cart[2]]`."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "+",
+     "kind": "operatör",
+     "desc": "Toplama; metinlerde ve listelerde uç uca ekleme."
+    },
+    {
+     "term": "[ ]",
+     "kind": "seçme",
+     "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    }
+   ]
+  }
+ },
+ "project_task": {
+  "id": "d8-p",
+  "title": "Kahraman kaydı",
+  "prompt": "Önceki günlerde kahramanın bilgilerini ayrı değişkenlerde tutmuştuk. Şimdi hepsini tek bir `hero` sözlüğünde toplayalım:\n\n- `\"name\"`: kahramanın adı\n- `\"hp\"`: 100\n- `\"gold\"`: 0\n- `\"inventory\"`: içinde `\"fener\"` olan bir liste\n\nSonra `Piko - Can: 100` biçiminde bir satır yazdır. Ad ve can sözlükten gelsin.",
+  "starter": "# Kahramanın tüm bilgileri tek bir sözlükte\nhero = {\n    \"name\": \"Piko\",\n}\n\n",
+  "solution": "hero = {\n    \"name\": \"Piko\",\n    \"hp\": 100,\n    \"gold\": 0,\n    \"inventory\": [\"fener\"],\n}\n\nprint(f\"{hero['name']} - Can: {hero['hp']}\")\n",
+  "hints": [
+   "Anahtar-değer çiftlerini virgülle ayır.",
+   "\"inventory\": [\"fener\"]",
+   "print(hero[\"name\"], \"- Can:\", hero[\"hp\"])"
+  ],
+  "check": {
+   "python": "\nassert isinstance(hero, dict), \"hero bir sözlük olmalı.\"\nfor key in [\"name\", \"hp\", \"gold\", \"inventory\"]:\n    assert key in hero, 'hero sözlüğünde \"' + key + '\" anahtarı yok.'\nassert isinstance(hero[\"hp\"], int) and not isinstance(hero[\"hp\"], bool) and hero[\"hp\"] > 0, \"hp 0'dan büyük bir tam sayı olmalı (örneğin 100).\"\nassert isinstance(hero[\"gold\"], int) and not isinstance(hero[\"gold\"], bool), \"gold bir tam sayı olmalı (örneğin 0).\"\nassert isinstance(hero[\"inventory\"], list) and \"fener\" in hero[\"inventory\"], \"inventory, içinde fener olan bir liste olmalı.\"\nassert str(hero[\"name\"]) + \" - Can: \" + str(hero[\"hp\"]) in _output, \"Çıktıda 'Piko - Can: 100' biçiminde bir satır olmalı.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "hero = {",
+     "notes": [
+      "`hero` adında bir değişken oluşturuluyor ve içine `{ \"name\": \"Piko\", \"hp\": 100, \"gold\": 0, \"inventory\": [\"fe...` (sözlük (anahtar: değer)) konuyor."
+     ]
+    },
+    {
+     "n": 2,
+     "code": "    \"name\": \"Piko\",",
+     "notes": [
+      "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "    \"hp\": 100,",
+     "notes": [
+      "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "    \"gold\": 0,",
+     "notes": [
+      "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "    \"inventory\": [\"fener\"],",
+     "notes": [
+      "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "}",
+     "notes": [
+      "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+     ]
+    },
+    {
+     "n": 8,
+     "code": "print(f\"{hero['name']} - Can: {hero['hp']}\")",
+     "notes": [
+      "`print(f\"{hero['name']} - Can: {hero['hp']}\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "hero",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `{ \"name\": \"Piko\", \"hp\": 100, \"gold\": 0, \"inventory\": [\"fe...`."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    },
+    {
+     "term": "f\"...{}\"",
+     "kind": "metin",
+     "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+    },
+    {
+     "term": "[ ]",
+     "kind": "seçme",
+     "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+    }
+   ]
+  }
+ },
+ "available": true,
+ "tracks": {
+  "veri": {
+   "project_task": {
+    "id": "d8-pv",
+    "title": "Kategori limitleri",
+    "prompt": "Her kategori için bir harcama sınırı koyalım. `limits` sözlüğü kategori -> limit.\n\n- `\"eğlence\"` için `300` limitini ekle.\n- `\"market\"` limitini `1600`'e çıkar.\n- Sonra `total_limit`: tüm limitlerin toplamı (`sum(limits.values())`)\n- `Market limiti: 1600 TL` ve `Toplam limit: 4400 TL` yazdır.",
+    "starter": "limits = {\"kira\": 2000, \"market\": 1500, \"ulaşım\": 500}\n",
+    "solution": "limits = {\"kira\": 2000, \"market\": 1500, \"ulaşım\": 500}\nlimits[\"eğlence\"] = 300\nlimits[\"market\"] = 1600\ntotal_limit = sum(limits.values())\nprint(f\"Market limiti: {limits['market']} TL\")\nprint(f\"Toplam limit: {total_limit} TL\")\n",
+    "hints": [
+     "Yeni anahtar eklemek ve değeri değiştirmek aynı yazılır: limits[\"eğlence\"] = 300",
+     "sum(limits.values()) tüm değerleri toplar."
+    ],
+    "check": {
+     "python": "\nassert limits.get(\"eğlence\") == 300, \"\\\"eğlence\\\" için 300 limitini ekle.\"\nassert limits.get(\"market\") == 1600, \"market limiti 1600 olmalı.\"\nout, g = _run(_set(_code, \"limits\", {\"kira\": 100, \"market\": 10}))\nassert g[\"total_limit\"] == 2000, \"total_limit, sum(limits.values()) ile hesaplanmalı.\"\nassert \"Market limiti: 1600 TL\" in out and \"Toplam limit: 2000 TL\" in out, \"İki satırı da sözlükten gelen değerlerle yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "limits = {\"kira\": 2000, \"market\": 1500, \"ulaşım\": 500}",
+       "notes": [
+        "`limits` adında bir değişken oluşturuluyor ve içine `{\"kira\": 2000, \"market\": 1500, \"ulaşım\": 500}` (sözlük (anahtar: değer)) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "limits[\"eğlence\"] = 300",
+       "notes": [
+        "`limits[...]` konumundaki değer `300` ile değiştiriliyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "limits[\"market\"] = 1600",
+       "notes": [
+        "`limits[...]` konumundaki değer `1600` ile değiştiriliyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "total_limit = sum(limits.values())",
+       "notes": [
+        "`total_limit` adında bir değişken oluşturuluyor ve içine `sum(limits.values())` konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "print(f\"Market limiti: {limits['market']} TL\")",
+       "notes": [
+        "`print(f\"Market limiti: {limits['market']} TL\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "print(f\"Toplam limit: {total_limit} TL\")",
+       "notes": [
+        "`print(f\"Toplam limit: {total_limit} TL\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "limits",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"kira\": 2000, \"market\": 1500, \"ulaşım\": 500}`."
+      },
+      {
+       "term": "total_limit",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `sum(limits.values())`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "sum()",
+       "kind": "fonksiyon",
+       "desc": "Listedeki sayıları toplar."
+      },
+      {
+       "term": ".values()",
+       "kind": "metot",
+       "desc": "Sözlüğün değerlerini verir."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Kategori limitleri",
+   "game_role": "Her kategori için harcama sınırını sözlükte tutar."
+  },
+  "otomasyon": {
+   "project_task": {
+    "id": "d8-po",
+    "title": "Görev kartı",
+    "prompt": "Her görevi bir sözlükle tutalım: `task`.\n\n- Göreve `\"priority\"` anahtarıyla `\"yüksek\"` önceliğini ekle.\n- Görevi bitmiş işaretle: `\"done\"` değeri `True` olsun.\n- Sonra `Rapor yaz [yüksek] - bitti: True` yazdır (değerler sözlükten gelsin).",
+    "starter": "task = {\"title\": \"Rapor yaz\", \"done\": False}\n",
+    "solution": "task = {\"title\": \"Rapor yaz\", \"done\": False}\ntask[\"priority\"] = \"yüksek\"\ntask[\"done\"] = True\nprint(f\"{task['title']} [{task['priority']}] - bitti: {task['done']}\")\n",
+    "hints": [
+     "task[\"priority\"] = \"yüksek\" yeni anahtar ekler.",
+     "Değer değiştirmek de aynı: task[\"done\"] = True"
+    ],
+    "check": {
+     "python": "\nassert task.get(\"priority\") == \"yüksek\" and task.get(\"done\") is True, \"priority \\\"yüksek\\\", done True olmalı.\"\nout, g = _run(_set(_code, \"task\", {\"title\": \"Spor\", \"done\": False}))\nassert \"Spor [yüksek] - bitti: True\" in out, \"Başlığı sözlükten al: 'Spor [yüksek] - bitti: True'\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "task = {\"title\": \"Rapor yaz\", \"done\": False}",
+       "notes": [
+        "`task` adında bir değişken oluşturuluyor ve içine `{\"title\": \"Rapor yaz\", \"done\": False}` (sözlük (anahtar: değer)) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "task[\"priority\"] = \"yüksek\"",
+       "notes": [
+        "`task[...]` konumundaki değer `\"yüksek\"` ile değiştiriliyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "task[\"done\"] = True",
+       "notes": [
+        "`task[...]` konumundaki değer `True` ile değiştiriliyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "print(f\"{task['title']} [{task['priority']}] - bitti: {task['done']}\")",
+       "notes": [
+        "`print(f\"{task['title']} [{task['priority']}] - bitti: {ta...`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "task",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"title\": \"Rapor yaz\", \"done\": False}`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "False",
+       "kind": "değer",
+       "desc": "Yanlış (mantıksal değer)."
+      },
+      {
+       "term": "True",
+       "kind": "değer",
+       "desc": "Doğru (mantıksal değer)."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Görev kartı",
+   "game_role": "Bir görevin başlığını, önceliğini ve durumunu sözlükte tutar."
+  },
+  "web": {
+   "project_task": {
+    "id": "d8-pw",
+    "title": "Yazı sözlüğü",
+    "prompt": "Bir yazının bütün bilgilerini tek bir sözlükte tutalım.\n\n- `\"tags\"` anahtarıyla `[\"python\", \"blog\"]` listesini ekle.\n- `\"words\"` değerini `420` yap (yazıyı uzattın).\n- `draft`: yazının `\"draft\"` değeri; sözlükte yoksa `False` olsun (`get()` ile).\n- Sonra şöyle yazdır:\n\n```\nMerhaba Dünya - 420 kelime\nTaslak mı: False\n```",
+    "starter": "post = {\"title\": \"Merhaba Dünya\", \"slug\": \"merhaba-dunya\", \"words\": 350}\n",
+    "solution": "post = {\"title\": \"Merhaba Dünya\", \"slug\": \"merhaba-dunya\", \"words\": 350}\npost[\"tags\"] = [\"python\", \"blog\"]\npost[\"words\"] = 420\ndraft = post.get(\"draft\", False)\nprint(f\"{post['title']} - {post['words']} kelime\")\nprint(\"Taslak mı:\", draft)\n",
+    "hints": [
+     "Yeni anahtar eklemek ve değeri değiştirmek aynı yazılır: post[\"words\"] = 420",
+     "post.get(\"draft\", False) anahtar yoksa False verir."
+    ],
+    "check": {
+     "python": "\nassert post.get(\"tags\") == [\"python\", \"blog\"], \"\\\"tags\\\" anahtarıyla [\\\"python\\\", \\\"blog\\\"] listesini ekle.\"\nassert post.get(\"words\") == 420, \"words değeri 420 olmalı.\"\nassert draft is False, \"draft, post.get(\\\"draft\\\", False) ile alınmalı.\"\nout, g = _run(_set(_code, \"post\", {\"title\": \"Oyun Notları\", \"slug\": \"oyun\", \"words\": 5, \"draft\": True}))\nassert g[\"draft\"] is True, \"Sözlükte draft varsa draft onun değeri olmalı: get() kullan.\"\nassert \"Oyun Notları - 420 kelime\" in out, \"Başlığı ve kelime sayısını sözlükten alarak yazdır.\"\nassert \"Taslak mı: True\" in out, \"draft'ı yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "post = {\"title\": \"Merhaba Dünya\", \"slug\": \"merhaba-dunya\", \"words\": 350}",
+       "notes": [
+        "`post` adında bir değişken oluşturuluyor ve içine `{\"title\": \"Merhaba Dünya\", \"slug\": \"merhaba-dunya\", \"word...` (sözlük (anahtar: değer)) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "post[\"tags\"] = [\"python\", \"blog\"]",
+       "notes": [
+        "`post[...]` konumundaki değer `[\"python\", \"blog\"]` ile değiştiriliyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "post[\"words\"] = 420",
+       "notes": [
+        "`post[...]` konumundaki değer `420` ile değiştiriliyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "draft = post.get(\"draft\", False)",
+       "notes": [
+        "`draft` adında bir değişken oluşturuluyor ve içine `post.get(\"draft\", False)` konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "print(f\"{post['title']} - {post['words']} kelime\")",
+       "notes": [
+        "`print(f\"{post['title']} - {post['words']} kelime\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "print(\"Taslak mı:\", draft)",
+       "notes": [
+        "`print(\"Taslak mı:\", draft)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "post",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"title\": \"Merhaba Dünya\", \"slug\": \"merhaba-dunya\", \"word...`."
+      },
+      {
+       "term": "draft",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `post.get(\"draft\", False)`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": ".get()",
+       "kind": "metot",
+       "desc": "Sözlükten anahtarın değerini alır; anahtar yoksa hata vermez, varsayılanı verir."
+      },
+      {
+       "term": "False",
+       "kind": "değer",
+       "desc": "Yanlış (mantıksal değer)."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Yazı sözlüğü",
+   "game_role": "Bir yazının başlığını, kelime sayısını, etiketlerini ve taslak durumunu tek sözlükte tutar."
+  },
+  "bot": {
+   "project_task": {
+    "id": "d8-pb",
+    "title": "Cevap sözlüğü",
+    "prompt": "Niyet -> cevap eşleşmelerini bir sözlükte tutmak çok daha kolay.\n\n- `\"veda\"` niyeti için `\"Görüşürüz!\"` cevabını ekle.\n- `\"selam\"` cevabını `\"Selam, hoş geldin!\"` olarak değiştir.\n- `answer`: `intent` niyetinin cevabı; sözlükte yoksa `\"Bunu anlamadım.\"` (`get()` ile)\n- `answer`'ı ve `3 cevap biliyorum` satırını yazdır (`len()`).",
+    "starter": "replies = {\"selam\": \"Merhaba!\", \"hava\": \"Bugün hava güneşli.\"}\nintent = \"veda\"\n",
+    "solution": "replies = {\"selam\": \"Merhaba!\", \"hava\": \"Bugün hava güneşli.\"}\nintent = \"veda\"\nreplies[\"veda\"] = \"Görüşürüz!\"\nreplies[\"selam\"] = \"Selam, hoş geldin!\"\nanswer = replies.get(intent, \"Bunu anlamadım.\")\nprint(answer)\nprint(f\"{len(replies)} cevap biliyorum\")\n",
+    "hints": [
+     "Eklemek ve değiştirmek aynı yazılır: replies[\"veda\"] = \"Görüşürüz!\"",
+     "replies.get(intent, \"Bunu anlamadım.\") anahtar yoksa ikinci değeri verir."
+    ],
+    "check": {
+     "python": "\nassert replies.get(\"veda\") == \"Görüşürüz!\", \"\\\"veda\\\" için \\\"Görüşürüz!\\\" cevabını ekle.\"\nassert replies.get(\"selam\") == \"Selam, hoş geldin!\", \"selam cevabı \\\"Selam, hoş geldin!\\\" olmalı.\"\nout, g = _run(_set(_code, \"intent\", \"yemek\"))\nassert g[\"answer\"] == \"Bunu anlamadım.\" and \"Bunu anlamadım.\" in out, \"Sözlükte olmayan niyet için get() ile \\\"Bunu anlamadım.\\\" ver.\"\nout, g = _run(_set(_code, \"intent\", \"selam\"))\nassert g[\"answer\"] == \"Selam, hoş geldin!\" and \"Selam, hoş geldin!\" in out, \"answer, sözlükten get() ile alınıp yazdırılmalı.\"\nout, _ = _run(_set(_code, \"replies\", {\"şaka\": \"Hah!\"}))\nassert \"3 cevap biliyorum\" in out, \"Cevap sayısını len(replies) ile yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "replies = {\"selam\": \"Merhaba!\", \"hava\": \"Bugün hava güneşli.\"}",
+       "notes": [
+        "`replies` adında bir değişken oluşturuluyor ve içine `{\"selam\": \"Merhaba!\", \"hava\": \"Bugün hava güneşli.\"}` (sözlük (anahtar: değer)) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "intent = \"veda\"",
+       "notes": [
+        "`intent` adında bir değişken oluşturuluyor ve içine `\"veda\"` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "replies[\"veda\"] = \"Görüşürüz!\"",
+       "notes": [
+        "`replies[...]` konumundaki değer `\"Görüşürüz!\"` ile değiştiriliyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "replies[\"selam\"] = \"Selam, hoş geldin!\"",
+       "notes": [
+        "`replies[...]` konumundaki değer `\"Selam, hoş geldin!\"` ile değiştiriliyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "answer = replies.get(intent, \"Bunu anlamadım.\")",
+       "notes": [
+        "`answer` adında bir değişken oluşturuluyor ve içine `replies.get(intent, \"Bunu anlamadım.\")` konuyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "print(answer)",
+       "notes": [
+        "`print(answer)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "print(f\"{len(replies)} cevap biliyorum\")",
+       "notes": [
+        "`print(f\"{len(replies)} cevap biliyorum\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "replies",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"selam\": \"Merhaba!\", \"hava\": \"Bugün hava güneşli.\"}`."
+      },
+      {
+       "term": "intent",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"veda\"`."
+      },
+      {
+       "term": "answer",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `replies.get(intent, \"Bunu anlamadım.\")`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": ".get()",
+       "kind": "metot",
+       "desc": "Sözlükten anahtarın değerini alır; anahtar yoksa hata vermez, varsayılanı verir."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Cevap sözlüğü",
+   "game_role": "Her niyetin cevabını bir sözlükte tutar ve güvenle bakar."
+  },
+  "okul": {
+   "project_task": {
+    "id": "d8-pn",
+    "title": "Not sözlüğü",
+    "prompt": "Her dersin notunu bir sözlükte tutalım: `grades` ders -> not.\n\n- `\"Kimya\"` için `75` notunu ekle.\n- Fizik sınavına itiraz ettin ve notun `70` oldu: `\"Fizik\"` notunu güncelle.\n- `average`: tüm notların ortalaması (`sum(grades.values()) / len(grades)`), `round()` ile 1 basamağa yuvarla.\n- `Fizik: 70` ve `Ortalama: 80.0` yazdır.",
+    "starter": "grades = {\"Matematik\": 85, \"Fizik\": 60, \"Tarih\": 90}\n",
+    "solution": "grades = {\"Matematik\": 85, \"Fizik\": 60, \"Tarih\": 90}\ngrades[\"Kimya\"] = 75\ngrades[\"Fizik\"] = 70\naverage = round(sum(grades.values()) / len(grades), 1)\nprint(f\"Fizik: {grades['Fizik']}\")\nprint(f\"Ortalama: {average}\")\n",
+    "hints": [
+     "Yeni anahtar eklemek ve değeri değiştirmek aynı yazılır: grades[\"Kimya\"] = 75",
+     "sum(grades.values()) tüm notları toplar, len(grades) kaç ders olduğunu verir."
+    ],
+    "check": {
+     "python": "\nassert grades.get(\"Kimya\") == 75, \"\\\"Kimya\\\" için 75 notunu ekle.\"\nassert grades.get(\"Fizik\") == 70, \"Fizik notu 70 olmalı.\"\nout, g = _run(_set(_code, \"grades\", {\"Fizik\": 10, \"Tarih\": 20}))\nassert g[\"average\"] == 55.0, \"average, sözlükteki notlardan hesaplanmalı: sum(grades.values()) / len(grades)\"\nassert \"Fizik: 70\" in out and \"Ortalama: 55.0\" in out, \"İki satırı da sözlükten gelen değerlerle yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "grades = {\"Matematik\": 85, \"Fizik\": 60, \"Tarih\": 90}",
+       "notes": [
+        "`grades` adında bir değişken oluşturuluyor ve içine `{\"Matematik\": 85, \"Fizik\": 60, \"Tarih\": 90}` (sözlük (anahtar: değer)) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "grades[\"Kimya\"] = 75",
+       "notes": [
+        "`grades[...]` konumundaki değer `75` ile değiştiriliyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "grades[\"Fizik\"] = 70",
+       "notes": [
+        "`grades[...]` konumundaki değer `70` ile değiştiriliyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "average = round(sum(grades.values()) / len(grades), 1)",
+       "notes": [
+        "`average` adında bir değişken oluşturuluyor ve içine `round(sum(grades.values()) / len(grades), 1)` konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "print(f\"Fizik: {grades['Fizik']}\")",
+       "notes": [
+        "`print(f\"Fizik: {grades['Fizik']}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "print(f\"Ortalama: {average}\")",
+       "notes": [
+        "`print(f\"Ortalama: {average}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "grades",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"Matematik\": 85, \"Fizik\": 60, \"Tarih\": 90}`."
+      },
+      {
+       "term": "average",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `round(sum(grades.values()) / len(grades), 1)`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "round()",
+       "kind": "fonksiyon",
+       "desc": "Sayıyı yuvarlar. round(3.14159, 2) → 3.14"
+      },
+      {
+       "term": "/",
+       "kind": "operatör",
+       "desc": "Bölme; sonuç her zaman ondalıklı sayıdır."
+      },
+      {
+       "term": "sum()",
+       "kind": "fonksiyon",
+       "desc": "Listedeki sayıları toplar."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      },
+      {
+       "term": ".values()",
+       "kind": "metot",
+       "desc": "Sözlüğün değerlerini verir."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Ders notları",
+   "game_role": "Her dersin notunu sözlükte tutar ve genel ortalamayı hesaplar."
+  }
+ }
+}

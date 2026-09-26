@@ -1,0 +1,237 @@
+{
+  "kurs": "python",
+  "gun": 17,
+  "baslik": "Hata yönetimi",
+  "maskot": "piko",
+  "ozet": "Piko, Keşif Adası'nın çürük köprülerinde try, except, else ve finally ile hataları yakalamayı, raise ile de kendi hatasını fırlatmayı gösteriyor.",
+  "hedef_sure_sn": 147,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 13,
+      "anlatim": "Selam, ben Piko! Keşif Adası'nda köprüler çürük olabilir. Akıllı bir kaşif her adımda beline bir ip bağlar. Peki programın bir hataya çarpınca çökmek yerine ipe tutunabilir mi? Evet! Bugün hata yönetimini öğreniyoruz.",
+      "ekran": {
+        "baslik": "Gün 17: Hata yönetimi",
+        "maddeler": [
+          "Keşif Adası",
+          "try, except, else, finally, raise"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "yonetmen_notu": "Arka plan: Keşif Adası bölge görseli (gorseller/python/harita/ada.webp). Dosya repoda henüz yok; eklenince ekran.gorsel alanına yazılmalı. Sallanan bir ip köprü ve beline ip bağlamış Piko."
+    },
+    {
+      "no": 2,
+      "tur": "hata",
+      "sure_sn": 11,
+      "anlatim": "Önce ipsiz hâlini görelim. Yazıyla yazılmış on iki sayısını int ile sayıya çevirmeye çalışıyorum. Python ValueError verip programı olduğu yerde durduruyor.",
+      "ekran": {
+        "baslik": "İpsiz geçiş: program çöker",
+        "kod": "text = \"on iki\"\nage = int(text)\nprint(\"Yaşın:\", age)\n",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "ValueError: invalid literal for int() with base 10: 'on iki'",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "uzgun",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 15,
+      "anlatim": "Şimdi ipi bağlıyorum. Hata çıkabilecek kodu try içine, hata olursa yapılacak işi except içine yazıyorum. Çevirme başarısız olunca except çalışıyor ve program çökmeden yoluna devam ediyor.",
+      "ekran": {
+        "baslik": "try ve except",
+        "kod": "text = \"on iki\"\ntry:\n    age = int(text)\n    print(\"Yaşın:\", age)\nexcept ValueError:\n    print(\"Lütfen rakamla yaz.\")\nprint(\"Program devam ediyor.\")\n",
+        "vurgu_satirlari": [
+          2,
+          5
+        ],
+        "dil": "python",
+        "cikti": "Lütfen rakamla yaz.\nProgram devam ediyor."
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 15,
+      "anlatim": "Her hatanın bir adı var. Burada iki ayrı except yazdım: sayı olmayan yazı için ValueError, sıfıra bölme için ZeroDivisionError. Her birine kendi cevabını veriyorum.",
+      "ekran": {
+        "baslik": "Hangi hatayı yakalıyorsun?",
+        "kod": "for text in [\"5\", \"0\", \"beş\"]:\n    try:\n        print(100 / int(text))\n    except ValueError:\n        print(\"Sayı değil!\")\n    except ZeroDivisionError:\n        print(\"Sıfıra bölünmez!\")\n",
+        "vurgu_satirlari": [
+          4,
+          6
+        ],
+        "dil": "python",
+        "cikti": "20.0\nSıfıra bölünmez!\nSayı değil!"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "anlatim",
+      "sure_sn": 10,
+      "anlatim": "Bir uyarı: sadece except yazıp her hatayı yakalamak kolaydır ama gerçek hataları da gizler. Beklediğin hatanın adını mutlaka yaz.",
+      "ekran": {
+        "baslik": "İpucu",
+        "maddeler": [
+          "except: her şeyi yakalar, hataları saklar",
+          "except ValueError: sadece beklediğini yakalar",
+          "Mesajı görmek için: except ValueError as err"
+        ]
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "İki yardımcı daha var. else, hiç hata olmazsa çalışır. finally ise hata olsa da olmasa da her zaman çalışır; kapanış işleri için birebir.",
+      "ekran": {
+        "baslik": "else ve finally",
+        "kod": "try:\n    n = int(\"5\")\nexcept ValueError:\n    print(\"Hata!\")\nelse:\n    print(\"Başarılı:\", n)\nfinally:\n    print(\"Kontrol bitti.\")\n",
+        "vurgu_satirlari": [
+          5,
+          7
+        ],
+        "dil": "python",
+        "cikti": "Başarılı: 5\nKontrol bitti."
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "kod",
+      "sure_sn": 15,
+      "anlatim": "Bazen hatayı biz bilerek fırlatırız. set_hp fonksiyonu negatif bir can gelirse raise ile ValueError fırlatıyor. Dışarıda yakalayıp as err ile mesajını ekrana yazıyorum.",
+      "ekran": {
+        "baslik": "raise: kendi hatanı fırlat",
+        "kod": "def set_hp(value):\n    if value < 0:\n        raise ValueError(\"Can negatif olamaz\")\n    return value\n\ntry:\n    set_hp(-5)\nexcept ValueError as err:\n    print(\"Yakalandı:\", err)\n",
+        "vurgu_satirlari": [
+          3,
+          8
+        ],
+        "dil": "python",
+        "cikti": "Yakalandı: Can negatif olamaz"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "soru",
+      "sure_sn": 9,
+      "anlatim": "Mini soru! Burada hata yok, sayı sorunsuz çevriliyor. Sence ekranda hangi satırlar görünür?",
+      "ekran": {
+        "baslik": "Sence ne yazdırır?",
+        "kod": "try:\n    n = int(\"7\")\nexcept ValueError:\n    print(\"Hata!\")\nelse:\n    print(\"Sayı:\", n)\nfinally:\n    print(\"Bitti.\")\n",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 9,
+      "tur": "cikti",
+      "sure_sn": 9,
+      "anlatim": "Hata olmadığı için except atlandı, else çalıştı. finally ise her zamanki gibi en sonda geldi.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "try:\n    n = int(\"7\")\nexcept ValueError:\n    print(\"Hata!\")\nelse:\n    print(\"Sayı:\", n)\nfinally:\n    print(\"Bitti.\")\n",
+        "dil": "python",
+        "cikti": "Sayı: 7\nBitti."
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 10,
+      "tur": "gorev",
+      "sure_sn": 13,
+      "anlatim": "Görevlerin hazır! Çökmeyen bir sayı çevirici, try kullanan güvenli bir bölme ve yaşını soran bir program yazacaksın. Projede de oyuncunun yanlış yazdığı komutlar oyunu bozmayacak.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Güvenli sayı",
+          "Görev 2: Güvenli bölme",
+          "Görev 3: Yaşını sor",
+          "Challenge: raise ile koru",
+          "Proje: Sağlam komutlar"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "ozet",
+      "sure_sn": 11,
+      "anlatim": "Özetle: try ile dene, except ile yakala, else ve finally ile toparla, gerekirse raise ile kendin uyar.",
+      "ekran": {
+        "baslik": "Bugün öğrendiklerin",
+        "maddeler": [
+          "try içindeki hata except ile yakalanır",
+          "else hata yoksa, finally her zaman çalışır",
+          "raise ile anlaşılır bir hata fırlatırsın"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 12,
+      "tur": "kapanis",
+      "sure_sn": 12,
+      "anlatim": "Süpersin! Yarın adanın mağarasına giriyoruz. Duvarlarda gizli sayılar ve şifreler var. Onları bulmak için Python'ın büyütecini, düzenli ifadeleri kullanacağız. Görüşürüz!",
+      "ekran": {
+        "baslik": "Yarın: Düzenli ifadeler",
+        "maddeler": [
+          "re modülü",
+          "Metinde desen aramak"
+        ]
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

@@ -1,0 +1,269 @@
+{
+ "day": 30,
+ "title": "Final",
+ "region": "yildiz",
+ "xp_complete": 150,
+ "objective": "Öğrendiklerini tek bir projede birleştirmek, projeni yayınlamayı ve sonraki adımları öğrenmek",
+ "story": "Karşında parıldayan ışık **JavaScript Yıldızı**, kaptan! 30 günlük yolculuğun son durağındasın. Bugün parçaları birleştirip projeni bitiriyor ve onu dünyaya göstermeye hazırlanıyorsun.",
+ "sections": [
+  {
+   "title": "Neler öğrendin?",
+   "body": "| Bölge | Öğrendiklerin |\n| --- | --- |\n| Kalkış Üssü | değişkenler, veri türleri, operatörler, metinler |\n| Döngü Ayı | koşullar, diziler, döngüler, fonksiyonlar |\n| Fonksiyon Nebulası | kapsam, nesneler, map/filter/reduce, JSON |\n| DOM Gezegeni | sayfayı değiştirmek, olaylar, eleman oluşturmak, formlar |\n| Olay Kuşağı | klavye, zamanlayıcılar, CSS, localStorage |\n| Piksel Gezegeni | canvas, animasyon, oyun döngüsü |\n| Async İstasyonu | hatalar, Promise, fetch, sınıflar |\n| JavaScript Yıldızı | temiz kod, erişilebilirlik, final projesi |\n\nBu, bir web geliştiricisinin her gün kullandığı temel araç kutusu. Artık sıfırdan etkileşimli bir sayfa yazabilirsin!"
+  },
+  {
+   "title": "Projeni yayınla",
+   "body": "Kursta kodun tek bir kutuda çalıştı. Gerçek bir sitede genelde üç dosya olur:\n\n- `index.html`: sayfanın iskeleti (görevlerdeki HTML)\n- `style.css`: görünüş\n- `script.js`: davranış, yani bugüne kadar yazdığın kod\n\n`index.html`, bu ikisini şöyle bağlar: `<link rel=\"stylesheet\" href=\"style.css\">` ve `<script src=\"script.js\" defer></script>`.\n\nBu dosyaları bir **statik site** servisine yükleyince herkesin açabileceği bir adresin olur. Yaygın iki seçenek: **GitHub Pages** (dosyaları bir GitHub deposuna koyup ayarlardan Pages'i açarsın) ve **Netlify** (klasörü sürükleyip bırakırsın). Adımlar kabaca şöyle:\n\n1. Bilgisayarında bir klasör aç, üç dosyayı içine koy.\n2. `index.html`'i tarayıcıda açıp dene; Konsol'da kırmızı hata olmasın.\n3. Bir yetişkinle birlikte servise hesap aç (çoğu servis 13 yaş ve üstünü ister).\n4. Dosyaları yükle, sana verilen adresi aç ve arkadaşlarınla paylaş.\n\nPaylaşmadan önce sayfada tam adın, okulun, adresin ya da telefonun gibi **kişisel bilgiler** olmadığından emin ol."
+  },
+  {
+   "title": "Sıradaki durak",
+   "body": "- **Daha çok proje**: En iyi öğrenme yolu yapmaktır. Bir hesap makinesi, bir çizim uygulaması, sınıfın için bir yarışma...\n- **TypeScript**: JavaScript'e tür denetimi ekler; bazı hataları kod çalışmadan yakalar.\n- **React, Vue, Svelte**: büyük arayüzleri bileşenlerle kurmaya yarar. `render()` fikrini hatırla: bu araçlar onu senin yerine akıllıca yapar.\n- **Node.js**: JavaScript'i tarayıcının dışında, sunucuda çalıştırır. Bu kursta kullandığın `/demo-api` gibi bir API'yi kendin yazabilirsin!\n- **Oyun kütüphaneleri**: Phaser gibi kütüphanelerle canvas oyunlarını daha hızlı yaparsın.\n- Python kursunu da bitirdiysen artık iki dil biliyorsun: kavramlar (değişken, döngü, fonksiyon, sınıf) aynı, yalnızca yazılış farklı."
+  },
+  {
+   "title": "Son kontrol listesi",
+   "body": "Projeni paylaşmadan önce kendine sor:\n\n- Konsolda kırmızı bir hata var mı?\n- Telefonda (küçük ekranda) açılıyor ve kullanılabiliyor mu?\n- Her şey klavyeyle de yapılabiliyor mu? Simge düğmelerin `aria-label`'ı var mı?\n- Değişken ve fonksiyon adları anlaşılır mı? Tekrarlanan kod kaldı mı?\n- Veri gelmezse (fetch hatası) kullanıcı ne görüyor?\n\nTebrikler, kaptan: 30 günde sıfırdan çalışan projeler yazan bir JavaScript geliştiricisi oldun. Bu bir son değil, yeni bir **kalkış**!"
+  }
+ ],
+ "examples": [
+  {
+   "title": "Hepsi bir arada: yıldız sayacı",
+   "code": "const COUNT_KEY = \"stars\";\nconst state = { stars: Number(localStorage.getItem(COUNT_KEY)) || 0 };\nconst countEl = document.querySelector(\"#count\");\n\nfunction update(action) {\n  if (action === \"plus\") state.stars += 1;\n  if (action === \"reset\") state.stars = 0;\n  localStorage.setItem(COUNT_KEY, String(state.stars));\n}\n\nfunction render() {\n  countEl.textContent = `${state.stars} yıldız`;\n}\n\nfunction init() {\n  document.querySelector(\"#plus\").addEventListener(\"click\", () => {\n    update(\"plus\");\n    render();\n  });\n  document.querySelector(\"#reset\").addEventListener(\"click\", () => {\n    update(\"reset\");\n    render();\n  });\n  render();\n}\n\ninit();\n",
+   "note": "Birkaç kez tıkla, sonra yeniden Çalıştır: sayı kaldığı yerden devam eder.",
+   "mode": "page",
+   "html": "<p id=\"count\" aria-live=\"polite\"></p>\n<button id=\"plus\">Yıldız topla</button> <button id=\"reset\">Sıfırla</button>\n",
+   "css": ""
+  },
+  {
+   "title": "Sınıf ve fetch: yazı kartları",
+   "code": "class PostCard {\n  constructor({ baslik, ozet }) {\n    this.title = baslik;\n    this.summary = ozet;\n  }\n\n  render() {\n    const card = document.createElement(\"article\");\n    card.className = \"card\";\n    const h3 = document.createElement(\"h3\");\n    h3.textContent = this.title;\n    const p = document.createElement(\"p\");\n    p.textContent = this.summary;\n    card.append(h3, p);\n    return card;\n  }\n}\n\nasync function init() {\n  const box = document.querySelector(\"#posts\");\n  try {\n    const res = await fetch(\"/demo-api/yazilar\");\n    if (!res.ok) throw new Error(`Durum kodu ${res.status}`);\n    const posts = await res.json();\n    box.textContent = \"\";\n    posts.forEach((post) => box.append(new PostCard(post).render()));\n  } catch (err) {\n    box.textContent = \"Yazılar yüklenemedi.\";\n  }\n}\n\ninit();\n",
+   "note": "Sınıf, parçalama, fetch, hata yakalama ve DOM: hepsi bir arada.",
+   "mode": "page",
+   "html": "<div id=\"posts\">Yükleniyor...</div>",
+   "css": "header{display:flex;align-items:center;gap:12px;flex-wrap:wrap}header h1{margin:0;font-size:22px}nav a{margin-right:10px}.card{border:1px solid #ccd;border-radius:8px;padding:8px 12px;margin:8px 0}.card h3{margin:0 0 4px}.tech{color:#556;font-size:14px}body.dark{background:#0b1026;color:#eef}body.dark a{color:#9cf}form{display:grid;gap:6px;max-width:320px}"
+  }
+ ],
+ "tasks": [
+  {
+   "id": "js-d30-t1",
+   "title": "Mezuniyet kartı",
+   "prompt": "Kurs bitti, kartını oluştur! Form ve `localStorage` birlikte çalışsın:\n\n- `showCard(name)`: `#card`'ın içine `<h2>` (`Tebrikler, Ada!`) ve `<p>` (`30 Günde JavaScript yolculuğunu tamamladı.`) koysun.\n- Sayfa açılınca `localStorage`'da `graduate` anahtarı varsa kart hemen görünsün.\n- Form gönderilince: sayfa yenilenmesin, ad `trim` ile temizlensin; boşsa hiçbir şey yapılmasın; değilse ad `graduate` anahtarına kaydedilsin ve kart gösterilsin.",
+   "starter": "const form = document.querySelector(\"#f\");\nconst card = document.querySelector(\"#card\");\n\nfunction showCard(name) {\n  // h2 ve p\n}\n\n// açılışta kayıtlı ad varsa göster\n\n// form gönderilince\n\n",
+   "solution": "const form = document.querySelector(\"#f\");\nconst card = document.querySelector(\"#card\");\n\nfunction showCard(name) {\n  card.innerHTML = \"\";\n  const title = document.createElement(\"h2\");\n  title.textContent = `Tebrikler, ${name}!`;\n  const text = document.createElement(\"p\");\n  text.textContent = \"30 Günde JavaScript yolculuğunu tamamladı.\";\n  card.append(title, text);\n}\n\n// açılışta kayıtlı ad varsa göster\nconst saved = localStorage.getItem(\"graduate\");\nif (saved) showCard(saved);\n\n// form gönderilince\nform.addEventListener(\"submit\", (e) => {\n  e.preventDefault();\n  const name = document.querySelector(\"#name\").value.trim();\n  if (!name) return;\n  localStorage.setItem(\"graduate\", name);\n  showCard(name);\n});\n",
+   "hints": [
+    "const saved = localStorage.getItem(\"graduate\"); if (saved) showCard(saved);",
+    "Formda: e.preventDefault(); sonra if (!name) return;",
+    "localStorage.setItem(\"graduate\", name);"
+   ],
+   "check": {
+    "code_contains": [
+     "preventDefault",
+     "localStorage.setItem",
+     "localStorage.getItem"
+    ],
+    "js": "const h2 = () => $(\"#card h2\");\nassert(h2() && h2().textContent.trim() === \"Tebrikler, Deniz!\", \"Açılışta kayıtlı ad (Deniz) ile kart görünmeli: 'Tebrikler, Deniz!'.\");\nconst p = $(\"#card p\");\nassert(p && p.textContent.trim() === \"30 Günde JavaScript yolculuğunu tamamladı.\", \"Kartta '30 Günde JavaScript yolculuğunu tamamladı.' paragrafı olmalı.\");\ntype(\"#name\", \"  Ada \");\nsubmit(\"#f\");\nassert(h2().textContent.trim() === \"Tebrikler, Ada!\" && $$(\"#card h2\").length === 1, \"Form gönderilince kart 'Tebrikler, Ada!' olmalı (tek kart).\");\nassert(localStorage.getItem(\"graduate\") === \"Ada\", \"Ad temizlenip graduate anahtarına kaydedilmeli.\");\ntype(\"#name\", \"   \");\nsubmit(\"#f\");\nassert(h2().textContent.trim() === \"Tebrikler, Ada!\" && localStorage.getItem(\"graduate\") === \"Ada\", \"Boş ad gönderilince hiçbir şey değişmemeli.\");"
+   },
+   "xp": 50,
+   "mode": "page",
+   "html": "<form id=\"f\"><input id=\"name\" placeholder=\"Adın\" aria-label=\"Adın\"><button>Kartımı oluştur</button></form>\n<div id=\"card\"></div>\n",
+   "css": "#card{border:2px solid #f7df1e;border-radius:10px;padding:8px 14px;margin-top:10px}#card:empty{display:none}form{display:flex;gap:6px}",
+   "storage": {
+    "graduate": "Deniz"
+   }
+  },
+  {
+   "id": "js-d30-t2",
+   "title": "Canlı arama",
+   "prompt": "Şehirleri bir kez getir, sonra kutuya yazıldıkça listeyi süz:\n\n- Açılışta `/demo-api/sehirler`'i `fetch` ile al, `cities`'e koy ve hepsini göster.\n- `render(list)`: `#list`'i temizleyip her şehrin adını bir `<li>` olarak eklesin; `#count`'a `8 sonuç` yazsın.\n- `#search` kutusunda `input` olayı olunca adı, yazılanı içeren şehirleri göster (büyük/küçük harf fark etmesin: `toLocaleLowerCase(\"tr\")`).",
+   "starter": "let cities = [];\nconst list = document.querySelector(\"#list\");\nconst search = document.querySelector(\"#search\");\n\nfunction render(items) {\n  // listeyi temizle, adları ekle, sonuç sayısını yaz\n}\n\nasync function init() {\n  // şehirleri al, cities'e koy, hepsini göster\n}\n\n// input olayında süz\n\ninit();\n",
+   "solution": "let cities = [];\nconst list = document.querySelector(\"#list\");\nconst search = document.querySelector(\"#search\");\n\nfunction render(items) {\n  list.innerHTML = \"\";\n  items.forEach((city) => {\n    const li = document.createElement(\"li\");\n    li.textContent = city.ad;\n    list.append(li);\n  });\n  document.querySelector(\"#count\").textContent = `${items.length} sonuç`;\n}\n\nasync function init() {\n  const res = await fetch(\"/demo-api/sehirler\");\n  cities = await res.json();\n  render(cities);\n}\n\n// input olayında süz\nsearch.addEventListener(\"input\", () => {\n  const text = search.value.trim().toLocaleLowerCase(\"tr\");\n  render(cities.filter((city) => city.ad.toLocaleLowerCase(\"tr\").includes(text)));\n});\n\ninit();\n",
+   "hints": [
+    "cities = await res.json(); render(cities);",
+    "search.addEventListener(\"input\", () => { ... })",
+    "cities.filter((city) => city.ad.toLocaleLowerCase(\"tr\").includes(text))"
+   ],
+   "check": {
+    "code_contains": [
+     "fetch",
+     "input",
+     "filter"
+    ],
+    "js": "await sleep(350);\nconst names = () => $$(\"#list li\").map((li) => li.textContent.trim());\nassert(names().length === 8 && $(\"#count\").textContent.trim() === \"8 sonuç\", \"Açılışta 8 şehir ve '8 sonuç' görünmeli.\");\ntype(\"#search\", \"an\");\nassert(names().join(\",\") === \"İstanbul,Ankara,Antalya,Gaziantep\" && $(\"#count\").textContent.trim() === \"4 sonuç\", \"'an' yazınca İstanbul, Ankara, Antalya, Gaziantep kalmalı (4 sonuç).\");\ntype(\"#search\", \"ZON\");\nassert(names().join(\",\") === \"Trabzon\", \"Büyük harfle 'ZON' yazınca Trabzon bulunmalı.\");\ntype(\"#search\", \"\");\nassert(names().length === 8, \"Kutu boşalınca bütün şehirler geri gelmeli.\");"
+   },
+   "xp": 50,
+   "mode": "page",
+   "html": "<input id=\"search\" placeholder=\"Şehir ara\" aria-label=\"Şehir ara\">\n<p id=\"count\"></p>\n<ul id=\"list\"></ul>\n",
+   "css": "#search{padding:6px;font-size:16px}"
+  },
+  {
+   "id": "js-d30-t3",
+   "title": "Skor tablosu sınıfı",
+   "prompt": "`Scoreboard` sınıfı skorları `localStorage`'da tutuyor. Eksik iki metodu yaz:\n\n- `save()`: `this.items`'ı JSON olarak `this.key` anahtarına yazsın.\n- `add(name, score)`: `{ name, score }` eklesin, listeyi büyükten küçüğe sıralasın, yalnızca ilk 3'ü tutsun, sonra `save()` çağırsın.",
+   "starter": "class Scoreboard {\n  constructor(key) {\n    this.key = key;\n    this.items = JSON.parse(localStorage.getItem(key) || \"[]\");\n  }\n\n  add(name, score) {\n    // ekle, sırala, ilk 3, kaydet\n  }\n\n  save() {\n    // JSON olarak kaydet\n  }\n\n  render(listEl) {\n    listEl.innerHTML = \"\";\n    for (const item of this.items) {\n      const li = document.createElement(\"li\");\n      li.textContent = `${item.name}: ${item.score}`;\n      listEl.append(li);\n    }\n  }\n}\n\nconst board = new Scoreboard(\"scores\");\nboard.render(document.querySelector(\"#scores\"));\n",
+   "solution": "class Scoreboard {\n  constructor(key) {\n    this.key = key;\n    this.items = JSON.parse(localStorage.getItem(key) || \"[]\");\n  }\n\n  add(name, score) {\n    this.items.push({ name, score });\n    this.items.sort((a, b) => b.score - a.score);\n    this.items = this.items.slice(0, 3);\n    this.save();\n  }\n\n  save() {\n    localStorage.setItem(this.key, JSON.stringify(this.items));\n  }\n\n  render(listEl) {\n    listEl.innerHTML = \"\";\n    for (const item of this.items) {\n      const li = document.createElement(\"li\");\n      li.textContent = `${item.name}: ${item.score}`;\n      listEl.append(li);\n    }\n  }\n}\n\nconst board = new Scoreboard(\"scores\");\nboard.render(document.querySelector(\"#scores\"));\n",
+   "hints": [
+    "Büyükten küçüğe: this.items.sort((a, b) => b.score - a.score);",
+    "İlk 3: this.items = this.items.slice(0, 3);",
+    "localStorage.setItem(this.key, JSON.stringify(this.items));"
+   ],
+   "check": {
+    "code_contains": [
+     "JSON.stringify",
+     "sort",
+     "slice"
+    ],
+    "js": "assert($$(\"#scores li\").length === 2 && $$(\"#scores li\")[0].textContent === \"Ada: 40\", \"Açılışta kayıtlı iki skor görünmeli.\");\nboard.add(\"Ece\", 55);\nconst saved = () => JSON.parse(localStorage.getItem(\"scores\") || \"[]\");\nassert(board.items[0].name === \"Ece\" && board.items.length === 3, \"Ece 55 ile en üste çıkmalı.\");\nassert(saved().length === 3 && saved()[0].name === \"Ece\", \"add sonrası liste localStorage'a (scores) kaydedilmeli.\");\nboard.add(\"Deniz\", 10);\nassert(board.items.length === 3 && !board.items.some((i) => i.name === \"Deniz\"), \"Yalnızca ilk 3 tutulmalı; 10 puan listeye girmemeli.\");\nboard.add(\"Mert\", 30);\nassert(board.items.map((i) => i.name).join(\",\") === \"Ece,Ada,Mert\", \"Mert 30 ile Can'ı (25) listeden çıkarmalı: Ece, Ada, Mert.\");\nassert(new Scoreboard(\"scores\").items.map((i) => i.score).join(\",\") === \"55,40,30\", \"Yeni bir Scoreboard kaydedilen listeyi okumalı.\");"
+   },
+   "xp": 50,
+   "mode": "page",
+   "html": "<h2>En iyi pilotlar</h2>\n<ol id=\"scores\"></ol>\n",
+   "css": "#scores li{padding:2px 0}",
+   "storage": {
+    "scores": "[{\"name\":\"Ada\",\"score\":40},{\"name\":\"Can\",\"score\":25}]"
+   }
+  }
+ ],
+ "challenge": {
+  "id": "js-d30-c",
+  "title": "Bütün seviyeler",
+  "prompt": "Üç seviyeyi **aynı anda** iste ve bir tabloda göster:\n\n- `Promise.all` ile `/demo-api/seviyeler/1`, `2` ve `3`'ü birlikte iste (`[1, 2, 3].map(...)`).\n- `#levels tbody`'ye her seviye için bir satır ekle: seviye, yıldız, düşman (üç `<td>`).\n- `#total`'a toplam yıldızı yaz: `Toplam: 25 yıldız` (`reduce` ile hesapla).",
+  "starter": "const tbody = document.querySelector(\"#levels tbody\");\n\nasync function loadAllLevels() {\n  // Promise.all ile üç seviyeyi iste, satırları ekle, toplamı yaz\n}\n\nloadAllLevels();\n",
+  "solution": "const tbody = document.querySelector(\"#levels tbody\");\n\nasync function getLevel(n) {\n  const res = await fetch(`/demo-api/seviyeler/${n}`);\n  return res.json();\n}\n\nasync function loadAllLevels() {\n  const levels = await Promise.all([1, 2, 3].map(getLevel));\n  for (const level of levels) {\n    const row = document.createElement(\"tr\");\n    for (const value of [level.seviye, level.yildiz, level.dusman]) {\n      const cell = document.createElement(\"td\");\n      cell.textContent = value;\n      row.append(cell);\n    }\n    tbody.append(row);\n  }\n  const total = levels.reduce((sum, level) => sum + level.yildiz, 0);\n  document.querySelector(\"#total\").textContent = `Toplam: ${total} yıldız`;\n}\n\nloadAllLevels();\n",
+  "hints": [
+   "const levels = await Promise.all([1, 2, 3].map(getLevel));",
+   "Her seviye için bir tr, içine üç td.",
+   "levels.reduce((sum, level) => sum + level.yildiz, 0)"
+  ],
+  "check": {
+   "code_contains": [
+    "Promise.all",
+    "reduce"
+   ],
+   "js": "await sleep(400);\nconst rows = $$(\"#levels tbody tr\").map((tr) => [...tr.querySelectorAll(\"td\")].map((td) => td.textContent.trim()).join(\",\"));\nassert(rows.length === 3, \"Tabloda 3 satır olmalı.\");\nassert(rows.join(\"|\") === \"1,5,1|2,8,3|3,12,5\", \"Satırlar sırasıyla seviye, yıldız, düşman göstermeli: 1,5,1 / 2,8,3 / 3,12,5.\");\nassert($(\"#total\").textContent.trim() === \"Toplam: 25 yıldız\", \"#total 'Toplam: 25 yıldız' olmalı.\");\nassert(!/\\b25\\b/.test(_code), \"25'i elle yazma; reduce ile hesapla.\");"
+  },
+  "xp": 75,
+  "mode": "page",
+  "html": "<table id=\"levels\"><thead><tr><th>Seviye</th><th>Yıldız</th><th>Düşman</th></tr></thead><tbody></tbody></table>\n<p id=\"total\"></p>\n",
+  "css": "td,th{border:1px solid #ccd;padding:4px 10px}table{border-collapse:collapse}"
+ },
+ "project_contribution": "Yayınla ve paylaş",
+ "project_task": {
+  "id": "js-d30-p",
+  "title": "Yıldız Avcısı: final",
+  "prompt": "Oyunun son hali! Ekranlar, oyun döngüsü (`update`) ve çizim hazır. Parçaları birbirine bağla:\n\n- `showScreen(name)`: `screens` içindeki bütün ekranları gizlesin (`hidden = true`), yalnızca `name` olanı göstersin.\n- `startGame()`: `state`'i sıfırlasın (`score` 0, `time` 0, `running` true) ve `game` ekranını göstersin.\n- `endGame()`: `running` false olsun, `over` ekranı görünsün; `#final-score`'a `Skor: 30` yazsın. En iyi skoru `localStorage`'daki `best` anahtarından okusun; yeni skor daha büyükse kaydetsin. `#best`'e `En iyi: 30` yazsın.\n- `#start-btn` ve `#again-btn` tıklanınca `startGame()` çağrılsın.",
+  "starter": "const BEST_KEY = \"best\";\nconst GAME_LENGTH = 100;\nconst canvas = document.querySelector(\"#game\");\nconst ctx = canvas.getContext(\"2d\");\nconst state = { score: 0, time: 0, running: false };\nconst screens = {\n  start: document.querySelector(\"#start-screen\"),\n  game: document.querySelector(\"#game-screen\"),\n  over: document.querySelector(\"#over-screen\"),\n};\n\n// Hazır: her karede çağrılır, süre dolunca endGame() çağırır\nfunction update() {\n  if (!state.running) return;\n  state.time += 1;\n  if (state.time % 10 === 0) state.score += 10; // (basitleştirilmiş) bir yıldız toplandı\n  document.querySelector(\"#hud\").textContent = `Skor: ${state.score}`;\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  ctx.fillStyle = \"#f7df1e\";\n  ctx.fillRect(135, 110, 30, 30);\n  if (state.time >= GAME_LENGTH) endGame();\n}\n\nfunction showScreen(name) {\n  // bütün ekranları gizle, yalnızca name olanı göster\n}\n\nfunction startGame() {\n  // state'i sıfırla ve oyun ekranını göster\n}\n\nfunction endGame() {\n  // bitiş ekranı, skor, en iyi skor (localStorage)\n}\n\n// Başla ve Tekrar oyna düğmeleri\n\nfunction loop() {\n  update();\n  requestAnimationFrame(loop);\n}\nloop();\n",
+  "solution": "const BEST_KEY = \"best\";\nconst GAME_LENGTH = 100;\nconst canvas = document.querySelector(\"#game\");\nconst ctx = canvas.getContext(\"2d\");\nconst state = { score: 0, time: 0, running: false };\nconst screens = {\n  start: document.querySelector(\"#start-screen\"),\n  game: document.querySelector(\"#game-screen\"),\n  over: document.querySelector(\"#over-screen\"),\n};\n\n// Hazır: her karede çağrılır, süre dolunca endGame() çağırır\nfunction update() {\n  if (!state.running) return;\n  state.time += 1;\n  if (state.time % 10 === 0) state.score += 10; // (basitleştirilmiş) bir yıldız toplandı\n  document.querySelector(\"#hud\").textContent = `Skor: ${state.score}`;\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  ctx.fillStyle = \"#f7df1e\";\n  ctx.fillRect(135, 110, 30, 30);\n  if (state.time >= GAME_LENGTH) endGame();\n}\n\nfunction showScreen(name) {\n  for (const id in screens) {\n    screens[id].hidden = id !== name;\n  }\n}\n\nfunction startGame() {\n  state.score = 0;\n  state.time = 0;\n  state.running = true;\n  showScreen(\"game\");\n}\n\nfunction endGame() {\n  state.running = false;\n  showScreen(\"over\");\n  document.querySelector(\"#final-score\").textContent = `Skor: ${state.score}`;\n  const best = Math.max(Number(localStorage.getItem(BEST_KEY)) || 0, state.score);\n  localStorage.setItem(BEST_KEY, String(best));\n  document.querySelector(\"#best\").textContent = `En iyi: ${best}`;\n}\n\n// Başla ve Tekrar oyna düğmeleri\ndocument.querySelector(\"#start-btn\").addEventListener(\"click\", startGame);\ndocument.querySelector(\"#again-btn\").addEventListener(\"click\", startGame);\n\nfunction loop() {\n  update();\n  requestAnimationFrame(loop);\n}\nloop();\n",
+  "hints": [
+   "showScreen: for (const id in screens) { screens[id].hidden = id !== name; }",
+   "En iyi: Math.max(Number(localStorage.getItem(BEST_KEY)) || 0, state.score)",
+   "document.querySelector(\"#start-btn\").addEventListener(\"click\", startGame);"
+  ],
+  "check": {
+   "code_contains": [
+    "function showScreen",
+    "localStorage.setItem",
+    "addEventListener"
+   ],
+   "js": "const visible = (id) => !$(id).hidden;\nassert(visible(\"#start-screen\") && !visible(\"#game-screen\") && !visible(\"#over-screen\"), \"Açılışta yalnızca başlangıç ekranı görünmeli.\");\nclick(\"#start-btn\");\nassert(!visible(\"#start-screen\") && visible(\"#game-screen\") && !visible(\"#over-screen\"), \"Başla'ya tıklayınca yalnızca oyun ekranı görünmeli.\");\nassert(state.running === true && state.score === 0 && state.time === 0, \"startGame state'i sıfırlamalı ve running'i true yapmalı.\");\nfor (let i = 0; i < 10; i++) update();\nassert(state.score === 10 && $(\"#hud\").textContent === \"Skor: 10\", \"Oyun başladıktan sonra update skoru artırmalı.\");\nstate.time = 99;\nupdate();\nassert(state.running === false && visible(\"#over-screen\") && !visible(\"#game-screen\"), \"Süre dolunca endGame bitiş ekranını göstermeli ve running false olmalı.\");\nassert($(\"#final-score\").textContent.trim() === \"Skor: 20\", \"#final-score 'Skor: 20' olmalı.\");\nassert($(\"#best\").textContent.trim() === \"En iyi: 20\" && localStorage.getItem(\"best\") === \"20\", \"Kayıtlı en iyi skor (20) geçilmediyse 'En iyi: 20' kalmalı.\");\nclick(\"#again-btn\");\nassert(visible(\"#game-screen\") && !visible(\"#over-screen\") && state.score === 0, \"Tekrar oyna yeni bir oyun başlatmalı.\");\nstate.score = 45;\nendGame();\nassert($(\"#final-score\").textContent.trim() === \"Skor: 45\" && $(\"#best\").textContent.trim() === \"En iyi: 45\", \"Yeni rekor 'Skor: 45' ve 'En iyi: 45' olarak görünmeli.\");\nassert(localStorage.getItem(\"best\") === \"45\", \"Yeni rekor localStorage'daki best anahtarına kaydedilmeli.\");"
+  },
+  "xp": 100,
+  "mode": "page",
+  "html": "<section id=\"start-screen\"><h1>Yıldız Avcısı</h1><p>Yıldızları topla, en iyi skoru geç!</p><button id=\"start-btn\">Başla</button></section>\n<section id=\"game-screen\" hidden><p id=\"hud\">Skor: 0</p><canvas id=\"game\" width=\"300\" height=\"150\"></canvas></section>\n<section id=\"over-screen\" hidden><h2>Oyun bitti!</h2><p id=\"final-score\"></p><p id=\"best\"></p><button id=\"again-btn\">Tekrar oyna</button></section>\n",
+  "css": "#title{color:#0b1026}canvas{background:#0b1026;display:block;max-width:100%;border-radius:6px}#levels button{margin:4px}.controls button{font-size:22px;min-width:56px;min-height:48px;margin:4px}section h1,section h2{color:#0b1026}",
+  "storage": {
+   "best": "20"
+  }
+ },
+ "tracks": {
+  "js-web": {
+   "project_contribution": "Sitenin son hali",
+   "project_task": {
+    "id": "js-d30-pw",
+    "title": "Kişisel Web Sitem: final",
+    "prompt": "Sitenin bütün parçaları hazır: `ProjectCard` sınıfı, `applyTheme` ve `contactMessage`. `init()` fonksiyonunda hepsini bağla:\n\n1. Kayıtlı temayı uygula: `localStorage`'daki `theme` (yoksa `\"light\"`).\n2. `#theme-btn` tıklanınca tema `dark` ile `light` arasında değişsin, uygulansın ve kaydedilsin.\n3. `myProjects`'teki her kartın `render()` sonucunu `#projects`'e ekle.\n4. `#contact` gönderilince sayfa yenilenmesin; ad ve mesajı `trim` ile alıp `contactMessage` sonucunu `#form-status`'a yaz. Mesaj başarılıysa formu temizle (`form.reset()`).",
+    "starter": "const THEME_KEY = \"theme\";\n\nclass ProjectCard {\n  constructor(title, tech, url) {\n    this.title = title;\n    this.tech = tech;\n    this.url = url;\n  }\n\n  render() {\n    const card = document.createElement(\"article\");\n    card.className = \"card\";\n    const h3 = document.createElement(\"h3\");\n    h3.textContent = this.title;\n    const tech = document.createElement(\"p\");\n    tech.className = \"tech\";\n    tech.textContent = this.tech.join(\", \");\n    const link = document.createElement(\"a\");\n    link.href = this.url;\n    link.textContent = \"İncele\";\n    card.append(h3, tech, link);\n    return card;\n  }\n}\n\nconst myProjects = [\n  new ProjectCard(\"Yıldız Avcısı\", [\"Canvas\", \"JavaScript\"], \"#oyun\"),\n  new ProjectCard(\"Hava Durumu\", [\"fetch\", \"JSON\"], \"#hava\"),\n  new ProjectCard(\"Not Defteri\", [\"localStorage\"], \"#notlar\"),\n];\n\nfunction applyTheme(theme) {\n  document.body.classList.toggle(\"dark\", theme === \"dark\");\n  document.querySelector(\"#theme-btn\").textContent = theme === \"dark\" ? \"Açık tema\" : \"Koyu tema\";\n}\n\nfunction contactMessage(name, message) {\n  if (!name || !message) return \"Lütfen adını ve mesajını yaz.\";\n  return `Teşekkürler, ${name}! Mesajın alındı.`;\n}\n\nfunction init() {\n  // 1) kayıtlı tema  2) tema düğmesi  3) projeler  4) iletişim formu\n}\n\ninit();\n",
+    "solution": "const THEME_KEY = \"theme\";\n\nclass ProjectCard {\n  constructor(title, tech, url) {\n    this.title = title;\n    this.tech = tech;\n    this.url = url;\n  }\n\n  render() {\n    const card = document.createElement(\"article\");\n    card.className = \"card\";\n    const h3 = document.createElement(\"h3\");\n    h3.textContent = this.title;\n    const tech = document.createElement(\"p\");\n    tech.className = \"tech\";\n    tech.textContent = this.tech.join(\", \");\n    const link = document.createElement(\"a\");\n    link.href = this.url;\n    link.textContent = \"İncele\";\n    card.append(h3, tech, link);\n    return card;\n  }\n}\n\nconst myProjects = [\n  new ProjectCard(\"Yıldız Avcısı\", [\"Canvas\", \"JavaScript\"], \"#oyun\"),\n  new ProjectCard(\"Hava Durumu\", [\"fetch\", \"JSON\"], \"#hava\"),\n  new ProjectCard(\"Not Defteri\", [\"localStorage\"], \"#notlar\"),\n];\n\nfunction applyTheme(theme) {\n  document.body.classList.toggle(\"dark\", theme === \"dark\");\n  document.querySelector(\"#theme-btn\").textContent = theme === \"dark\" ? \"Açık tema\" : \"Koyu tema\";\n}\n\nfunction contactMessage(name, message) {\n  if (!name || !message) return \"Lütfen adını ve mesajını yaz.\";\n  return `Teşekkürler, ${name}! Mesajın alındı.`;\n}\n\nfunction init() {\n  // 1) kayıtlı tema\n  let theme = localStorage.getItem(THEME_KEY) || \"light\";\n  applyTheme(theme);\n\n  // 2) tema düğmesi\n  document.querySelector(\"#theme-btn\").addEventListener(\"click\", () => {\n    theme = theme === \"dark\" ? \"light\" : \"dark\";\n    applyTheme(theme);\n    localStorage.setItem(THEME_KEY, theme);\n  });\n\n  // 3) projeler\n  const box = document.querySelector(\"#projects\");\n  myProjects.forEach((project) => box.append(project.render()));\n\n  // 4) iletişim formu\n  const form = document.querySelector(\"#contact\");\n  form.addEventListener(\"submit\", (e) => {\n    e.preventDefault();\n    const name = document.querySelector(\"#c-name\").value.trim();\n    const message = document.querySelector(\"#c-msg\").value.trim();\n    document.querySelector(\"#form-status\").textContent = contactMessage(name, message);\n    if (name && message) form.reset();\n  });\n}\n\ninit();\n",
+    "hints": [
+     "let theme = localStorage.getItem(THEME_KEY) || \"light\";",
+     "Düğmede: theme = theme === \"dark\" ? \"light\" : \"dark\"; sonra applyTheme ve setItem",
+     "Formda: e.preventDefault(); ... if (name && message) form.reset();"
+    ],
+    "check": {
+     "code_contains": [
+      "localStorage.getItem",
+      "localStorage.setItem",
+      "preventDefault",
+      "render()"
+     ],
+     "js": "assert(document.body.classList.contains(\"dark\") && $(\"#theme-btn\").textContent === \"Açık tema\", \"Açılışta kayıtlı tema (dark) uygulanmalı.\");\nassert($$(\"#projects .card\").length === 3, \"#projects içinde 3 proje kartı olmalı.\");\nclick(\"#theme-btn\");\nassert(!document.body.classList.contains(\"dark\") && localStorage.getItem(\"theme\") === \"light\", \"Tema düğmesi açık temaya geçmeli ve 'light' kaydetmeli.\");\nclick(\"#theme-btn\");\nassert(document.body.classList.contains(\"dark\") && localStorage.getItem(\"theme\") === \"dark\", \"İkinci tıklama koyu temaya dönmeli ve 'dark' kaydetmeli.\");\nsubmit(\"#contact\");\nassert($(\"#form-status\").textContent.trim() === \"Lütfen adını ve mesajını yaz.\", \"Boş form gönderilince uyarı yazmalı.\");\ntype(\"#c-name\", \" Ada \");\ntype(\"#c-msg\", \"Sitene bayıldım!\");\nsubmit(\"#contact\");\nassert($(\"#form-status\").textContent.trim() === \"Teşekkürler, Ada! Mesajın alındı.\", \"Dolu form gönderilince 'Teşekkürler, Ada! Mesajın alındı.' yazmalı.\");\nassert($(\"#c-name\").value === \"\" && $(\"#c-msg\").value === \"\", \"Başarılı gönderimden sonra form temizlenmeli.\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<header><h1 id=\"site-title\">Kod Günlüğüm</h1><button id=\"theme-btn\">Tema</button></header>\n<main><h2>Projelerim</h2><div id=\"projects\"></div>\n<h2>İletişim</h2><form id=\"contact\"><input id=\"c-name\" placeholder=\"Adın\" aria-label=\"Adın\"><textarea id=\"c-msg\" placeholder=\"Mesajın\" aria-label=\"Mesajın\"></textarea><button>Gönder</button></form>\n<p id=\"form-status\" aria-live=\"polite\"></p></main>\n",
+    "css": "header{display:flex;align-items:center;gap:12px;flex-wrap:wrap}header h1{margin:0;font-size:22px}nav a{margin-right:10px}.card{border:1px solid #ccd;border-radius:8px;padding:8px 12px;margin:8px 0}.card h3{margin:0 0 4px}.tech{color:#556;font-size:14px}body.dark{background:#0b1026;color:#eef}body.dark a{color:#9cf}form{display:grid;gap:6px;max-width:320px}",
+    "storage": {
+     "theme": "dark"
+    }
+   }
+  },
+  "js-app": {
+   "project_contribution": "Uygulamanın son hali",
+   "project_task": {
+    "id": "js-d30-pa",
+    "title": "Çalışma Asistanım: final",
+    "prompt": "Asistanın son hali! `Task` sınıfı, `load()` ve `render()` hazır. Uygulamayı çalışır hale getir:\n\n- `save()`: `tasks`'ı JSON olarak `localStorage`'daki `tasks` anahtarına yazsın.\n- `addTask(title)`: başlığı `trim` ile temizlesin; boşsa hiçbir şey yapmasın. Değilse yeni bir `Task` eklesin, kaydetsin, çizsin.\n- `toggleTask(index)`: görevi değiştirsin (`toggle()`), kaydetsin, çizsin.\n- `#add-form` gönderilince (sayfa yenilenmeden) `addTask` çağrılsın ve kutu temizlensin.",
+    "starter": "const STORAGE_KEY = \"tasks\";\n\nclass Task {\n  constructor(title, done = false) {\n    this.title = title;\n    this.done = done;\n  }\n  toggle() {\n    this.done = !this.done;\n  }\n}\n\nconst list = document.querySelector(\"#tasks\");\nconst input = document.querySelector(\"#new-task\");\n\nfunction load() {\n  const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || \"[]\");\n  return saved.map((t) => new Task(t.title, t.done));\n}\n\nlet tasks = load();\n\nfunction render() {\n  list.innerHTML = \"\";\n  tasks.forEach((task, i) => {\n    const li = document.createElement(\"li\");\n    li.textContent = task.title;\n    li.classList.toggle(\"done\", task.done);\n    li.addEventListener(\"click\", () => toggleTask(i));\n    list.append(li);\n  });\n  const done = tasks.filter((t) => t.done).length;\n  document.querySelector(\"#stats\").textContent = `${done}/${tasks.length} tamamlandı`;\n}\n\nfunction save() {\n  // JSON olarak kaydet\n}\n\nfunction addTask(title) {\n  // temizle, boşsa çık, ekle, kaydet, çiz\n}\n\nfunction toggleTask(index) {\n  // değiştir, kaydet, çiz\n}\n\n// form gönderilince\n\nrender();\n",
+    "solution": "const STORAGE_KEY = \"tasks\";\n\nclass Task {\n  constructor(title, done = false) {\n    this.title = title;\n    this.done = done;\n  }\n  toggle() {\n    this.done = !this.done;\n  }\n}\n\nconst list = document.querySelector(\"#tasks\");\nconst input = document.querySelector(\"#new-task\");\n\nfunction load() {\n  const saved = JSON.parse(localStorage.getItem(STORAGE_KEY) || \"[]\");\n  return saved.map((t) => new Task(t.title, t.done));\n}\n\nlet tasks = load();\n\nfunction render() {\n  list.innerHTML = \"\";\n  tasks.forEach((task, i) => {\n    const li = document.createElement(\"li\");\n    li.textContent = task.title;\n    li.classList.toggle(\"done\", task.done);\n    li.addEventListener(\"click\", () => toggleTask(i));\n    list.append(li);\n  });\n  const done = tasks.filter((t) => t.done).length;\n  document.querySelector(\"#stats\").textContent = `${done}/${tasks.length} tamamlandı`;\n}\n\nfunction save() {\n  localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));\n}\n\nfunction addTask(title) {\n  const clean = title.trim();\n  if (!clean) return;\n  tasks.push(new Task(clean));\n  save();\n  render();\n}\n\nfunction toggleTask(index) {\n  tasks[index].toggle();\n  save();\n  render();\n}\n\n// form gönderilince\ndocument.querySelector(\"#add-form\").addEventListener(\"submit\", (e) => {\n  e.preventDefault();\n  addTask(input.value);\n  input.value = \"\";\n});\n\nrender();\n",
+    "hints": [
+     "localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));",
+     "addTask: const clean = title.trim(); if (!clean) return; tasks.push(new Task(clean));",
+     "Formda: e.preventDefault(); addTask(input.value); input.value = \"\";"
+    ],
+    "check": {
+     "code_contains": [
+      "JSON.stringify",
+      "preventDefault",
+      "new Task("
+     ],
+     "js": "const saved = () => JSON.parse(localStorage.getItem(\"tasks\") || \"[]\");\nassert($$(\"#tasks li\").length === 2 && $(\"#stats\").textContent === \"1/2 tamamlandı\", \"Açılışta kayıtlı 2 görev ve '1/2 tamamlandı' görünmeli.\");\ntype(\"#new-task\", \"  Kitap okuma \");\nsubmit(\"#add-form\");\nconst items = $$(\"#tasks li\");\nassert(items.length === 3 && items[2].textContent === \"Kitap okuma\", \"Formla eklenen görev (boşlukları temizlenmiş) listenin sonunda görünmeli.\");\nassert($(\"#new-task\").value === \"\", \"Eklemeden sonra kutu temizlenmeli.\");\nassert(saved().length === 3 && saved()[2].title === \"Kitap okuma\" && saved()[2].done === false, \"Yeni görev localStorage'a (tasks) kaydedilmeli.\");\nassert($(\"#stats\").textContent === \"1/3 tamamlandı\", \"#stats '1/3 tamamlandı' olmalı.\");\nclick($$(\"#tasks li\")[1]);\nassert($$(\"#tasks li\")[1].classList.contains(\"done\") && $(\"#stats\").textContent === \"2/3 tamamlandı\", \"Göreve tıklayınca tamamlanmalı: '2/3 tamamlandı'.\");\nassert(saved()[1].done === true, \"Değişiklik kaydedilmeli.\");\ntype(\"#new-task\", \"   \");\nsubmit(\"#add-form\");\nassert($$(\"#tasks li\").length === 3 && saved().length === 3, \"Boş görev eklenmemeli.\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<h1>Çalışma Asistanım</h1>\n<form id=\"add-form\"><input id=\"new-task\" placeholder=\"Yeni görev\" aria-label=\"Yeni görev\"><button>Ekle</button></form>\n<ul id=\"tasks\"></ul>\n<p id=\"stats\"></p>\n",
+    "css": "li{padding:6px;cursor:pointer}li.done{text-decoration:line-through;color:#889}li.selected{outline:2px solid #3b6ef5;border-radius:4px}.big{font-size:20px;min-width:64px;min-height:48px;margin:4px}#stats,#count{font-weight:bold}form{display:flex;gap:6px}",
+    "storage": {
+     "tasks": "[{\"title\":\"Matematik ödevi\",\"done\":true},{\"title\":\"Fizik tekrarı\",\"done\":false}]"
+    }
+   }
+  },
+  "js-quiz": {
+   "project_contribution": "Yarışmanın son hali",
+   "project_task": {
+    "id": "js-d30-pq",
+    "title": "Bilgi Yarışması: final",
+    "prompt": "Yarışmanın son hali! `Quiz` sınıfı ve `showQuestion()` hazır. Oyunun akışını yaz:\n\n- `start()`: `/demo-api/sorular`'dan soruları alsın, `quiz = new Quiz(sorular)` yapsın; `#play`'i göstersin, `#result`'ı gizlesin ve `showQuestion()` çağırsın.\n- `choose(i)`: `quiz.answer(i)`, sonra `quiz.next()`. Sorular bittiyse `showResult()`, bitmediyse `showQuestion()`.\n- `showResult()`: `#play`'i gizleyip `#result`'ı göstersin; `#result-text`'e `Puanın: 40 / 50` yazsın (en yüksek puan soru sayısı × 10). En iyi puanı `localStorage`'daki `quizBest` anahtarında tutsun ve `#best`'e `En iyi: 40` yazsın.",
+    "starter": "const BEST_KEY = \"quizBest\";\n\nclass Quiz {\n  constructor(questions) {\n    this.questions = questions;\n    this.current = 0;\n    this.score = 0;\n  }\n\n  get question() {\n    return this.questions[this.current];\n  }\n\n  answer(index) {\n    const correct = index === this.question.dogru;\n    if (correct) this.score += 10;\n    return correct;\n  }\n\n  next() {\n    this.current += 1;\n  }\n\n  get isOver() {\n    return this.current >= this.questions.length;\n  }\n}\n\nlet quiz = null;\nconst options = document.querySelector(\"#options\");\nconst play = document.querySelector(\"#play\");\nconst result = document.querySelector(\"#result\");\n\nfunction showQuestion() {\n  const q = quiz.question;\n  document.querySelector(\"#question\").textContent = `Soru ${quiz.current + 1}/${quiz.questions.length}: ${q.soru}`;\n  options.innerHTML = \"\";\n  q.secenekler.forEach((text, i) => {\n    const btn = document.createElement(\"button\");\n    btn.textContent = text;\n    btn.addEventListener(\"click\", () => choose(i));\n    options.append(btn);\n  });\n  document.querySelector(\"#score\").textContent = `Puan: ${quiz.score}`;\n}\n\nasync function start() {\n  // soruları al, quiz oluştur, bölümleri ayarla, ilk soruyu göster\n}\n\nfunction choose(i) {\n  // cevapla, ilerle; bittiyse sonuç, değilse sıradaki soru\n}\n\nfunction showResult() {\n  // sonuç bölümü, puan, en iyi puan (localStorage)\n}\n\ndocument.querySelector(\"#again\").addEventListener(\"click\", start);\n\nstart();\n",
+    "solution": "const BEST_KEY = \"quizBest\";\n\nclass Quiz {\n  constructor(questions) {\n    this.questions = questions;\n    this.current = 0;\n    this.score = 0;\n  }\n\n  get question() {\n    return this.questions[this.current];\n  }\n\n  answer(index) {\n    const correct = index === this.question.dogru;\n    if (correct) this.score += 10;\n    return correct;\n  }\n\n  next() {\n    this.current += 1;\n  }\n\n  get isOver() {\n    return this.current >= this.questions.length;\n  }\n}\n\nlet quiz = null;\nconst options = document.querySelector(\"#options\");\nconst play = document.querySelector(\"#play\");\nconst result = document.querySelector(\"#result\");\n\nfunction showQuestion() {\n  const q = quiz.question;\n  document.querySelector(\"#question\").textContent = `Soru ${quiz.current + 1}/${quiz.questions.length}: ${q.soru}`;\n  options.innerHTML = \"\";\n  q.secenekler.forEach((text, i) => {\n    const btn = document.createElement(\"button\");\n    btn.textContent = text;\n    btn.addEventListener(\"click\", () => choose(i));\n    options.append(btn);\n  });\n  document.querySelector(\"#score\").textContent = `Puan: ${quiz.score}`;\n}\n\nasync function start() {\n  const res = await fetch(\"/demo-api/sorular\");\n  if (!res.ok) {\n    document.querySelector(\"#question\").textContent = \"Sorular yüklenemedi.\";\n    return;\n  }\n  quiz = new Quiz(await res.json());\n  play.hidden = false;\n  result.hidden = true;\n  showQuestion();\n}\n\nfunction choose(i) {\n  quiz.answer(i);\n  quiz.next();\n  if (quiz.isOver) {\n    showResult();\n    return;\n  }\n  showQuestion();\n}\n\nfunction showResult() {\n  play.hidden = true;\n  result.hidden = false;\n  const max = quiz.questions.length * 10;\n  document.querySelector(\"#result-text\").textContent = `Puanın: ${quiz.score} / ${max}`;\n  const best = Math.max(Number(localStorage.getItem(BEST_KEY)) || 0, quiz.score);\n  localStorage.setItem(BEST_KEY, String(best));\n  document.querySelector(\"#best\").textContent = `En iyi: ${best}`;\n}\n\ndocument.querySelector(\"#again\").addEventListener(\"click\", start);\n\nstart();\n",
+    "hints": [
+     "quiz = new Quiz(await res.json());",
+     "choose: quiz.answer(i); quiz.next(); if (quiz.isOver) { showResult(); return; } showQuestion();",
+     "En iyi: Math.max(Number(localStorage.getItem(BEST_KEY)) || 0, quiz.score)"
+    ],
+    "check": {
+     "code_contains": [
+      "fetch",
+      "new Quiz(",
+      "localStorage.setItem"
+     ],
+     "js": "await sleep(400);\nassert(quiz instanceof Quiz, \"start() soruları alıp quiz = new Quiz(...) yapmalı.\");\nassert($(\"#question\").textContent.includes(\"Ay, hangi gezegenin uydusudur?\") && $$(\"#options button\").length === 3, \"İlk soru ve üç seçenek görünmeli.\");\nconst pick = (i) => click($$(\"#options button\")[i]);\n[1, 1, 0, 2, 1].forEach(pick); // son cevap yanlış\nassert($(\"#result\").hidden === false && $(\"#play\").hidden === true, \"Sorular bitince #play gizlenmeli, #result görünmeli.\");\nassert($(\"#result-text\").textContent.trim() === \"Puanın: 40 / 50\", \"#result-text 'Puanın: 40 / 50' olmalı.\");\nassert($(\"#best\").textContent.trim() === \"En iyi: 40\" && localStorage.getItem(\"quizBest\") === \"40\", \"Yeni rekor (40) quizBest'e kaydedilmeli ve 'En iyi: 40' yazmalı.\");\nclick(\"#again\");\nawait sleep(400);\nassert($(\"#play\").hidden === false && $(\"#result\").hidden === true && quiz.score === 0 && quiz.current === 0, \"Tekrar oyna yeni bir yarışma başlatmalı.\");\n[0, 0, 1, 0, 1].forEach(pick);\nassert($(\"#result-text\").textContent.trim() === \"Puanın: 0 / 50\", \"Hepsi yanlışsa 'Puanın: 0 / 50' olmalı.\");\nassert($(\"#best\").textContent.trim() === \"En iyi: 40\" && localStorage.getItem(\"quizBest\") === \"40\", \"Düşük puan en iyi puanı değiştirmemeli.\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<h1>Bilgi Yarışması</h1>\n<section id=\"play\"><p id=\"question\">Sorular yükleniyor...</p><div id=\"options\"></div><p id=\"score\">Puan: 0</p></section>\n<section id=\"result\" hidden><h2 id=\"result-text\"></h2><p id=\"best\"></p><button id=\"again\">Tekrar oyna</button></section>\n",
+    "css": "#options button{display:block;width:100%;max-width:320px;margin:6px 0;padding:10px;font-size:18px}#feedback{font-weight:bold}",
+    "storage": {
+     "quizBest": "30"
+    }
+   }
+  }
+ },
+ "available": true
+}

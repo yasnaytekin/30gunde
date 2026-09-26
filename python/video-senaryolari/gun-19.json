@@ -1,0 +1,239 @@
+{
+  "kurs": "python",
+  "gun": 19,
+  "baslik": "Dosya işlemleri",
+  "maskot": "piko",
+  "ozet": "Piko, Keşif Adası'nın deniz fenerinde bulunan kaptan günlüğünden yola çıkarak dosyaya yazmayı, dosyadan okumayı ve JSON ile oyun kaydetmeyi anlatıyor.",
+  "hedef_sure_sn": 155,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 14,
+      "anlatim": "Selam, ben Piko! Keşif Adası'nın deniz fenerinde eski bir kaptan günlüğü bulduk. Kaptan her akşam olanları yazmış, biz de yıllar sonra okuyabiliyoruz. Programların da böyle bir defteri var: dosyalar. Bugün oyunumuzu kaydetmeyi öğreniyoruz!",
+      "ekran": {
+        "baslik": "Gün 19: Dosya işlemleri",
+        "maddeler": [
+          "Keşif Adası",
+          "Yaz, oku, JSON ile kaydet"
+        ]
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "yonetmen_notu": "Arka plan: Keşif Adası bölge görseli (gorseller/python/harita/ada.webp). Dosya repoda henüz yok; eklenince ekran.gorsel alanına yazılmalı. Deniz fenerinde tozlu bir kaptan günlüğü açılır."
+    },
+    {
+      "no": 2,
+      "tur": "anlatim",
+      "sure_sn": 15,
+      "anlatim": "open fonksiyonu bir dosyayı açar. İkinci bilgi moddur: r okumak, a sonuna eklemek için. w yazmak içindir ama dikkat, dosya varsa içini siler! with ise işimiz bitince dosyayı kendisi kapatır.",
+      "ekran": {
+        "baslik": "Dosya açmak: open ve modlar",
+        "maddeler": [
+          "\"r\" oku (varsayılan)",
+          "\"w\" yaz: varsa içini siler",
+          "\"a\" sonuna ekle",
+          "with dosyayı otomatik kapatır"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "Önce w moduyla iki satır yazıyorum. Satır sonlarındaki ters eğik çizgi n yeni satır demek, çünkü write kendiliğinden alt satıra geçmez. Sonra dosyayı açıp read ile hepsini okuyorum.",
+      "ekran": {
+        "baslik": "Yaz ve oku",
+        "kod": "with open(\"gunluk.txt\", \"w\") as f:\n    f.write(\"1. gün: Kampa vardık\\n\")\n    f.write(\"2. gün: Köyü gezdik\\n\")\n\nwith open(\"gunluk.txt\") as f:\n    print(f.read())\n",
+        "vurgu_satirlari": [
+          1,
+          5
+        ],
+        "cikti": "1. gün: Kampa vardık\n2. gün: Köyü gezdik",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": false,
+      "yonetmen_notu": "Dosya kullandığı için doğrulayıcıda çalıştırılmaz; çıktı geçici bir klasörde çalıştırılarak alındı."
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "a moduyla açınca eski satırlar silinmiyor, yenisi sona ekleniyor. Okurken dosyayı satır satır dolaşıyorum. strip satır sonundaki fazlalığı temizliyor, enumerate de numara veriyor.",
+      "ekran": {
+        "baslik": "Sonuna ekle",
+        "kod": "with open(\"liste.txt\", \"w\") as f:\n    f.write(\"kılıç\\n\")\n\nwith open(\"liste.txt\", \"a\") as f:\n    f.write(\"iksir\\n\")\n\nwith open(\"liste.txt\") as f:\n    for i, line in enumerate(f, 1):\n        print(i, line.strip())\n",
+        "vurgu_satirlari": [
+          4,
+          8
+        ],
+        "cikti": "1 kılıç\n2 iksir",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      },
+      "calistir": false,
+      "yonetmen_notu": "Dosya kullandığı için doğrulayıcıda çalıştırılmaz; çıktı geçici bir klasörde çalıştırılarak alındı."
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 17,
+      "anlatim": "Sözlük ve listeleri kaydetmenin en kolay yolu JSON. json.dump sözlüğü dosyaya yazıyor, json.load da onu geri sözlük olarak okuyor. os.path.exists ile dosyanın var olup olmadığına da bakabilirsin.",
+      "ekran": {
+        "baslik": "JSON ile kaydet",
+        "kod": "import json, os\n\nhero = {\"name\": \"Piko\", \"hp\": 80, \"bag\": [\"harita\"]}\nwith open(\"kayit.json\", \"w\") as f:\n    json.dump(hero, f)\n\nprint(\"Dosya var mı?\", os.path.exists(\"kayit.json\"))\nwith open(\"kayit.json\") as f:\n    print(json.load(f))\n",
+        "vurgu_satirlari": [
+          5,
+          9
+        ],
+        "cikti": "Dosya var mı? True\n{'name': 'Piko', 'hp': 80, 'bag': ['harita']}",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": false,
+      "yonetmen_notu": "Dosya kullandığı için doğrulayıcıda çalıştırılmaz; çıktı geçici bir klasörde çalıştırılarak alındı."
+    },
+    {
+      "no": 6,
+      "tur": "anlatim",
+      "sure_sn": 10,
+      "anlatim": "Bu sitede yazdığın dosyalar sadece o çalıştırma boyunca yaşar. Kendi bilgisayarında ise diske yazılır ve program kapansa da kalır.",
+      "ekran": {
+        "baslik": "Bu sitede dosyalar",
+        "maddeler": [
+          "Sitede: sadece o çalıştırma boyunca",
+          "Kendi bilgisayarında: kalıcı",
+          "Görevlerde önce yaz, sonra aynı kodda oku"
+        ]
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 7,
+      "tur": "hata",
+      "sure_sn": 11,
+      "anlatim": "Sık hata: olmayan bir dosyayı okumaya çalışmak. Python FileNotFoundError verir. Dosya adını kontrol et ya da önce os.path.exists ile bak.",
+      "ekran": {
+        "baslik": "Sık hata: dosya yok",
+        "kod": "with open(\"kayip-harita.txt\") as f:\n    print(f.read())\n",
+        "vurgu_satirlari": [
+          1
+        ],
+        "cikti": "FileNotFoundError: [Errno 2] No such file or directory: 'kayip-harita.txt'",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sol"
+      },
+      "calistir": false
+    },
+    {
+      "no": 8,
+      "tur": "soru",
+      "sure_sn": 10,
+      "anlatim": "Mini soru! Aynı dosyayı iki kez w moduyla açıp önce kılıç, sonra iksir yazıyorum. Sence en sonda dosyada ne var?",
+      "ekran": {
+        "baslik": "Sence ne yazdırır?",
+        "kod": "with open(\"canta.txt\", \"w\") as f:\n    f.write(\"kılıç\\n\")\n\nwith open(\"canta.txt\", \"w\") as f:\n    f.write(\"iksir\\n\")\n\nwith open(\"canta.txt\") as f:\n    print(f.read())\n",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 9,
+      "tur": "cikti",
+      "sure_sn": 10,
+      "anlatim": "Sadece iksir! w modu dosyayı her açılışta sıfırlar, kılıç silindi. İkisi de kalsın istiyorsan ikinci kez a moduyla açmalısın.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "with open(\"canta.txt\", \"w\") as f:\n    f.write(\"kılıç\\n\")\n\nwith open(\"canta.txt\", \"w\") as f:\n    f.write(\"iksir\\n\")\n\nwith open(\"canta.txt\") as f:\n    print(f.read())\n",
+        "cikti": "iksir",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "uzgun",
+        "konum": "sol"
+      },
+      "calistir": false,
+      "yonetmen_notu": "Dosya kullandığı için doğrulayıcıda çalıştırılmaz; çıktı geçici bir klasörde çalıştırılarak alındı."
+    },
+    {
+      "no": 10,
+      "tur": "gorev",
+      "sure_sn": 13,
+      "anlatim": "Görevlerde bir günlük yazıp okuyacak, çantadaki eşyaları dosyaya yazıp satırları sayacak ve bir skoru sona ekleyeceksin. Projede de oyunu JSON ile kaydedip geri yüklüyorsun.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Günlük yaz",
+          "Görev 2: Satırları say",
+          "Görev 3: Sonuna ekle",
+          "Challenge: JSON kaydet ve yükle",
+          "Proje: Oyunu kaydetme"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "ozet",
+      "sure_sn": 11,
+      "anlatim": "Özetle: with open ile dosyayı aç, modu doğru seç, sözlükleri de JSON ile sakla.",
+      "ekran": {
+        "baslik": "Bugün öğrendiklerin",
+        "maddeler": [
+          "with open(ad, mod): \"r\", \"w\", \"a\"",
+          "write yazar, read ve for line okur",
+          "json.dump kaydeder, json.load yükler"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 12,
+      "tur": "kapanis",
+      "sure_sn": 12,
+      "anlatim": "Oyunumuz artık kaydedilebiliyor, harika! Yarın limana gemiler yanaşıyor. Başkalarının yazdığı hazır paketleri ve onları getiren pip'i tanıyacağız. Görüşürüz!",
+      "ekran": {
+        "baslik": "Yarın: Paket yöneticisi pip",
+        "maddeler": [
+          "Paket ve PyPI",
+          "requirements.txt"
+        ]
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

@@ -1,0 +1,180 @@
+{
+  "kurs": "javascript",
+  "gun": 10,
+  "baslik": "Nesneler",
+  "maskot": "kodi",
+  "ozet": "Nebuladaki istasyonda geminin kimlik kartını hazırlıyoruz: nesne oluşturmak, özellikleri okuyup değiştirmek, this ile metot yazmak, nesneleri dolaşmak ve nesne dizilerini parçalamak.",
+  "hedef_sure_sn": 155,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 11,
+      "anlatim": "Selam, ben Kodi! Nebuladaki bir uzay istasyonuna yanaştık. Görevli geminin kimlik kartını istiyor: adı, hızı, yakıtı, mürettebatı. Bunları tek pakette nasıl tutarız?",
+      "ekran": {
+        "baslik": "Gün 10: Nesneler",
+        "gorsel": "gorseller/javascript/bolgeler/nebula.webp"
+      },
+      "maskot": { "poz": "el-sallama", "konum": "sag" }
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 17,
+      "anlatim": "Nesne süslü parantezle yazılır; içinde anahtar ve değer çiftleri var. Değere noktayla ya da köşeli parantezle ulaşırız. Anahtar bir değişkenin içindeyse köşeli parantez şarttır.",
+      "ekran": {
+        "baslik": "Nesne: anahtar ve değer",
+        "kod": "const ship = {\n  name: \"Kartal\",\n  speed: 40000,\n  crew: [\"Deniz\", \"Ada\"],\n};\nconsole.log(ship.name);\nconsole.log(ship[\"speed\"]);\nconst key = \"crew\";\nconsole.log(ship[key]);\n",
+        "dil": "js",
+        "vurgu_satirlari": [6, 7, 9],
+        "cikti": "Kartal\n40000\n[ 'Deniz', 'Ada' ]"
+      },
+      "maskot": { "poz": "isaret", "konum": "alt-sag" },
+      "calistir": true,
+      "yonetmen_notu": "Nesne bir kimlik kartı gibi çizilir; her anahtar kartın bir satırı."
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "Değeri değiştirmek de, yeni anahtar eklemek de kolay. delete ile anahtarı sileriz. Olmayan bir anahtarı okursak undefined gelir.",
+      "ekran": {
+        "baslik": "Değiştir, ekle, sil",
+        "kod": "const ship = { name: \"Kartal\", fuel: 80 };\nship.fuel -= 20;\nship.color = \"gümüş\";\nconsole.log(ship);\ndelete ship.color;\nconsole.log(ship.color);\n",
+        "dil": "js",
+        "vurgu_satirlari": [2, 3, 5],
+        "cikti": "{ name: 'Kartal', fuel: 60, color: 'gümüş' }\nundefined"
+      },
+      "maskot": { "poz": "konusma", "konum": "alt-sag" },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "Nesnenin içindeki fonksiyona metot denir. Metodun içinde this, metodu çağıran nesnenin kendisidir. rocket.refuel dediğimiz için this burada rocket. Yakıt yetmiş oldu.",
+      "ekran": {
+        "baslik": "Metotlar ve this",
+        "kod": "const rocket = {\n  name: \"Kartal\",\n  fuel: 50,\n  refuel(amount) {\n    this.fuel += amount;\n    return this.fuel;\n  },\n};\n\nconsole.log(rocket.refuel(20));\n",
+        "dil": "js",
+        "vurgu_satirlari": [4, 5],
+        "cikti": "70"
+      },
+      "maskot": { "poz": "isaret", "konum": "alt-sag" },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 15,
+      "anlatim": "Object.keys anahtarları, Object.values değerleri dizi olarak verir. for in ise nesnenin anahtarlarını sırayla dolaşır. Unutma: diziler için for of, nesneler için for in.",
+      "ekran": {
+        "baslik": "Nesneleri dolaşmak",
+        "kod": "const ship = { name: \"Kartal\", speed: 40000 };\nconsole.log(Object.keys(ship));\nconsole.log(Object.values(ship));\nfor (const key in ship) {\n  console.log(key, \"→\", ship[key]);\n}\n",
+        "dil": "js",
+        "vurgu_satirlari": [2, 3, 4],
+        "cikti": "[ 'name', 'speed' ]\n[ 'Kartal', 40000 ]\nname → Kartal\nspeed → 40000"
+      },
+      "maskot": { "poz": "konusma", "konum": "alt-sag" },
+      "calistir": true
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 17,
+      "anlatim": "Gerçek programlarda nesnelerden oluşan diziler kullanırız. Döngünün başında süslü parantez yazarak her nesneyi parçaladık: name, role ve hours tek satırda değişken oldu.",
+      "ekran": {
+        "baslik": "Nesne dizileri ve parçalama",
+        "kod": "const crew = [\n  { name: \"Deniz\", role: \"pilot\", hours: 120 },\n  { name: \"Ada\", role: \"mühendis\", hours: 95 },\n];\nlet total = 0;\nfor (const { name, role, hours } of crew) {\n  console.log(`${name} (${role}): ${hours} saat`);\n  total += hours;\n}\nconsole.log(\"Toplam uçuş:\", total, \"saat\");\n",
+        "dil": "js",
+        "vurgu_satirlari": [6],
+        "cikti": "Deniz (pilot): 120 saat\nAda (mühendis): 95 saat\nToplam uçuş: 215 saat"
+      },
+      "maskot": { "poz": "isaret", "konum": "alt-sag" },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "hata",
+      "sure_sn": 15,
+      "anlatim": "İki sık hata var. Anahtarı yanlış yazarsan hata çıkmaz, sessizce undefined gelir. Olmayan bir anahtarın içine girmeye çalışırsan ise kod çöker: undefined'ın özelliği okunamaz.",
+      "ekran": {
+        "baslik": "Olmayan anahtar",
+        "kod": "const ship = { name: \"Kartal\", speed: 40000 };\nconsole.log(ship.nmae);\nconsole.log(ship.engine.power);\n",
+        "dil": "js",
+        "vurgu_satirlari": [2, 3],
+        "cikti": "undefined\nTypeError: Cannot read properties of undefined (reading 'power')"
+      },
+      "maskot": { "poz": "sasirma", "konum": "sag" },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "soru",
+      "sure_sn": 10,
+      "anlatim": "Şahin 30 yakıtla başlıyor. refuel'i iki kez çağırıyoruz. Sence son satır kaç yazdırır?",
+      "ekran": {
+        "baslik": "Sence ne yazdırır?",
+        "kod": "const rocket = {\n  name: \"Şahin\",\n  fuel: 30,\n  refuel(amount) {\n    this.fuel += amount;\n    return this.fuel;\n  },\n};\nrocket.refuel(10);\nconsole.log(rocket.refuel(5));\n",
+        "dil": "js"
+      },
+      "maskot": { "poz": "dusunme", "konum": "sag" }
+    },
+    {
+      "no": 9,
+      "tur": "cikti",
+      "sure_sn": 9,
+      "anlatim": "45! İlk çağrı yakıtı 40 yaptı ve nesne bunu hatırladı. İkinci çağrı 5 daha ekledi.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "const rocket = {\n  name: \"Şahin\",\n  fuel: 30,\n  refuel(amount) {\n    this.fuel += amount;\n    return this.fuel;\n  },\n};\nrocket.refuel(10);\nconsole.log(rocket.refuel(5));\n",
+        "dil": "js",
+        "vurgu_satirlari": [9, 10],
+        "cikti": "45"
+      },
+      "maskot": { "poz": "mutlu", "konum": "sag" },
+      "calistir": true
+    },
+    {
+      "no": 10,
+      "tur": "gorev",
+      "sure_sn": 12,
+      "anlatim": "Görevlerin: Mars için bir gezegen kartı hazırla, bir geminin bilgilerini okuyup dolaş ve rokete yakıt ile durum metotları kazandır.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Gezegen kartı",
+          "Görev 2: Bilgi okuyucu",
+          "Görev 3: Roket metotları"
+        ]
+      },
+      "maskot": { "poz": "isaret", "konum": "sol" }
+    },
+    {
+      "no": 11,
+      "tur": "ozet",
+      "sure_sn": 11,
+      "anlatim": "Özet: nesne, birbirine ait bilgileri anahtar ve değerle tutar. Metotlar this ile nesneye ulaşır. Nesne dizilerini parçalayarak kolayca dolaşırız.",
+      "ekran": {
+        "baslik": "Özet",
+        "maddeler": [
+          "{ anahtar: değer }, nokta ve [ ] ile erişim",
+          "Metot içinde this = nesnenin kendisi",
+          "Object.keys, for...in ve parçalama"
+        ]
+      },
+      "maskot": { "poz": "on", "konum": "sag" }
+    },
+    {
+      "no": 12,
+      "tur": "kapanis",
+      "sure_sn": 10,
+      "anlatim": "Kimlik kartı hazır, tebrikler! Yarın radarımız yüzlerce yıldız gösterecek. Dizilere map, filter ve reduce süper güçlerini vereceğiz.",
+      "ekran": {
+        "baslik": "Yarın: map, filter, reduce",
+        "gorsel": "maskotlar/kodi-javascript/kahraman.png"
+      },
+      "maskot": { "poz": "tebrik", "konum": "sag" }
+    }
+  ]
+}

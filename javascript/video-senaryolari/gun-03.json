@@ -1,0 +1,181 @@
+{
+  "kurs": "javascript",
+  "gun": 3,
+  "baslik": "Operatörler ve Math",
+  "maskot": "kodi",
+  "ozet": "Kalkıştan önceki hesapları yapıyoruz: aritmetik, karşılaştırma ve mantıksal operatörler ile Math'in yuvarlama, en büyük ve rastgele sayı araçları.",
+  "hedef_sure_sn": 150,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 10,
+      "anlatim": "Selam, ben Kodi! Roket kalkmak üzere ama önce hesap lazım. Ay'a kaç saatte varırız? Yakıt yeter mi? Bugün JavaScript'i bir hesap makinesine çeviriyoruz.",
+      "ekran": {
+        "baslik": "Gün 3: Operatörler ve Math",
+        "gorsel": "gorseller/javascript/bolgeler/kalkis.webp"
+      },
+      "maskot": { "poz": "el-sallama", "konum": "sag" }
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "Toplama, çıkarma, çarpma, bölme bildiğin gibi. Yüzde işareti bölmeden kalanı verir, iki yıldız üs alır. Artı eşittir 5 ekler, artı artı ise bir artırır. Skor 16 oldu!",
+      "ekran": {
+        "baslik": "Aritmetik operatörler",
+        "kod": "console.log(7 / 2);\nconsole.log(7 % 2);\nconsole.log(2 ** 3);\nlet score = 10;\nscore += 5;\nscore++;\nconsole.log(score);\n",
+        "dil": "js",
+        "vurgu_satirlari": [2, 5, 6],
+        "cikti": "3.5\n1\n8\n16"
+      },
+      "maskot": { "poz": "isaret", "konum": "alt-sag" },
+      "calistir": true
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 15,
+      "anlatim": "Karşılaştırmaların sonucu hep true ya da false olur. Eşitlik için üç eşittir kullan. Son satıra bak: biri metin, biri sayı, bu yüzden eşit değiller.",
+      "ekran": {
+        "baslik": "Karşılaştırma: === ve arkadaşları",
+        "kod": "console.log(10 > 3);\nconsole.log(5 === 5);\nconsole.log(5 !== 5);\nconsole.log(\"5\" === 5);\n",
+        "dil": "js",
+        "vurgu_satirlari": [4],
+        "cikti": "true\ntrue\nfalse\nfalse"
+      },
+      "maskot": { "poz": "isaret", "konum": "alt-sag" },
+      "calistir": true,
+      "yonetmen_notu": "Ekranın köşesinde küçük bir uyarı: '== yerine hep === kullan'."
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 15,
+      "anlatim": "Ve işareti iki şartın ikisi de doğruysa true verir. Veya işareti birinin doğru olması yeterli der. Ünlem ise tersine çevirir. Kalkış için yakıt da hava da tamam!",
+      "ekran": {
+        "baslik": "Mantıksal operatörler: && || !",
+        "kod": "const fuel = 80;\nconst weather = \"açık\";\nconsole.log(fuel >= 50 && weather === \"açık\");\nconsole.log(fuel > 90 || weather === \"açık\");\nconsole.log(!true);\n",
+        "dil": "js",
+        "vurgu_satirlari": [3, 4, 5],
+        "cikti": "true\ntrue\nfalse"
+      },
+      "maskot": { "poz": "konusma", "konum": "alt-sag" },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 13,
+      "anlatim": "Math, JavaScript'in hazır hesap kutusu. round en yakın tam sayıya yuvarlar, floor aşağı yuvarlar, max da en büyüğünü bulur.",
+      "ekran": {
+        "baslik": "Math ile hesap",
+        "kod": "console.log(Math.round(4.6));\nconsole.log(Math.floor(4.6));\nconsole.log(Math.max(3, 9, 5));\n",
+        "dil": "js",
+        "vurgu_satirlari": [1, 2, 3],
+        "cikti": "5\n4\n9"
+      },
+      "maskot": { "poz": "isaret", "konum": "alt-sag" },
+      "calistir": true
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "Math.random sıfır ile bir arasında rastgele bir sayı verir. Altıyla çarpıp aşağı yuvarlar, bir eklersek bir ile altı arasında bir zar elde ederiz. Her çalıştırmada farklı!",
+      "ekran": {
+        "baslik": "Zar at",
+        "kod": "const dice = Math.floor(Math.random() * 6) + 1;\nconsole.log(\"Zar:\", dice);\n",
+        "dil": "js",
+        "vurgu_satirlari": [1],
+        "cikti": "Zar: 4   (her çalıştırmada 1 ile 6 arasında değişir)"
+      },
+      "maskot": { "poz": "mutlu", "konum": "alt-sag" },
+      "calistir": false,
+      "yonetmen_notu": "Çıktı alanında sayı birkaç kez hızla değişir, sonra durur."
+    },
+    {
+      "no": 7,
+      "tur": "hata",
+      "sure_sn": 14,
+      "anlatim": "Sık yapılan bir hata: Math'i küçük harfle yazmak. JavaScript math diye bir şey tanımıyor. Unutma, büyük küçük harf fark eder: Math büyük M ile yazılır.",
+      "ekran": {
+        "baslik": "Büyük harf önemli",
+        "kod": "console.log(math.round(4.6));\n",
+        "dil": "js",
+        "vurgu_satirlari": [1],
+        "cikti": "ReferenceError: math is not defined"
+      },
+      "maskot": { "poz": "uzgun", "konum": "sag" },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "soru",
+      "sure_sn": 10,
+      "anlatim": "20 malzemeyi altışarlı kutulara yerleştiriyoruz. Kaç kutu dolar, kaç malzeme artar? Durdur ve hesapla.",
+      "ekran": {
+        "baslik": "Sence ne yazdırır?",
+        "kod": "const items = 20;\nconst perBox = 6;\nconsole.log(\"Dolu kutu:\", Math.floor(items / perBox));\nconsole.log(\"Artan:\", items % perBox);\n",
+        "dil": "js"
+      },
+      "maskot": { "poz": "dusunme", "konum": "sag" }
+    },
+    {
+      "no": 9,
+      "tur": "cikti",
+      "sure_sn": 10,
+      "anlatim": "Üç kutu dolar, iki malzeme artar. floor bölümü aşağı yuvarladı, yüzde işareti de kalanı verdi.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "const items = 20;\nconst perBox = 6;\nconsole.log(\"Dolu kutu:\", Math.floor(items / perBox));\nconsole.log(\"Artan:\", items % perBox);\n",
+        "dil": "js",
+        "vurgu_satirlari": [3, 4],
+        "cikti": "Dolu kutu: 3\nArtan: 2"
+      },
+      "maskot": { "poz": "mutlu", "konum": "sag" },
+      "calistir": true
+    },
+    {
+      "no": 10,
+      "tur": "gorev",
+      "sure_sn": 13,
+      "anlatim": "Görevlerin hazır! Ay yolculuğunun kaç saat süreceğini hesapla, kargo kutularını say ve iki şartı birleştirerek kalkış iznini ver.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Ay yolculuğu",
+          "Görev 2: Kargo kutuları",
+          "Görev 3: Kalkış izni"
+        ]
+      },
+      "maskot": { "poz": "isaret", "konum": "sol" }
+    },
+    {
+      "no": 11,
+      "tur": "ozet",
+      "sure_sn": 11,
+      "anlatim": "Bugün hesap yapmayı, üç eşittirle karşılaştırmayı, şartları ve ile veya ile birleştirmeyi ve Math araçlarını öğrendik.",
+      "ekran": {
+        "baslik": "Özet",
+        "maddeler": [
+          "+ - * / % ** ve += ile hesap",
+          "=== ile karşılaştır, sonuç true/false",
+          "&& || ! ve Math.round, floor, max, random"
+        ]
+      },
+      "maskot": { "poz": "on", "konum": "sag" }
+    },
+    {
+      "no": 12,
+      "tur": "kapanis",
+      "sure_sn": 10,
+      "anlatim": "Hesaplar tamam kaptan! Yarın roketimiz istasyonlarla mesajlaşacak. Metinleri birleştirmeyi ve dönüştürmeyi öğreneceğiz.",
+      "ekran": {
+        "baslik": "Yarın: Metinlerle çalışmak",
+        "gorsel": "maskotlar/kodi-javascript/kahraman.png"
+      },
+      "maskot": { "poz": "tebrik", "konum": "sag" }
+    }
+  ]
+}

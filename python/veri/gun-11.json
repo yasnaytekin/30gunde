@@ -1,0 +1,1394 @@
+{
+ "day": 11,
+ "title": "Fonksiyonlar",
+ "region": "atolye",
+ "project_contribution": "Hareket etme",
+ "game_role": "Yön tuşlarına her basışta Piko senin move() fonksiyonunla yürür.",
+ "xp_complete": 150,
+ "objective": "Kendi fonksiyonlarını yazmak, parametre almak ve sonuç döndürmek",
+ "story": "Alet Atölyesi'ne hoş geldin! Burada her aletin bir işi var: çekiç çakar, testere keser. Bir kere yapılan alet defalarca kullanılır. Kodda da aynısı mümkün: bir işi bir kez yazıp istediğin kadar çağırabilirsin. Bu aletlere **fonksiyon** diyoruz.",
+ "sections": [
+  {
+   "title": "Fonksiyon tanımlamak",
+   "body": "`def` ile kendi fonksiyonunu yaparsın. Fonksiyonun içindeki satırlar girintili yazılır ve fonksiyon **çağrılana kadar** çalışmaz:\n\n```python\ndef greet():\n    print(\"Merhaba!\")\n\ngreet()\ngreet()\n```\n\nFonksiyonlara ne yaptıklarını anlatan isimler ver: `greet`, `attack`, `calculate_score`."
+  },
+  {
+   "title": "Parametreler",
+   "body": "Parantezin içine yazdığın isimler **parametredir**. Fonksiyonu çağırırken bu kutulara değer koyarsın:\n\n```python\ndef greet(name):\n    print(f\"Merhaba {name}!\")\n\ngreet(\"Piko\")\ngreet(\"Ece\")\n```\n\nBirden fazla parametre virgülle ayrılır: `def add(a, b):`"
+  },
+  {
+   "title": "return: sonucu geri ver",
+   "body": "`print` sonucu sadece ekrana yazar. `return` ise sonucu **çağıran yere geri verir**, böylece onu bir değişkene koyup kullanabilirsin:\n\n```python\ndef add(a, b):\n    return a + b\n\ntotal = add(3, 4)\nprint(total * 2)   # 14\n```\n\n`return` çalışınca fonksiyon orada biter; altındaki satırlar çalışmaz."
+  },
+  {
+   "title": "Varsayılan değerler",
+   "body": "Bir parametreye varsayılan değer verirsen, çağırırken o değeri yazmak zorunda kalmazsın:\n\n```python\ndef attack(hp, damage=10):\n    return hp - damage\n\nprint(attack(50))       # 40\nprint(attack(50, 25))   # 25\nprint(attack(hp=50, damage=5))  # isimle de verebilirsin\n```\n\nİstediğin kadar değer alan fonksiyonlar için `*args` kullanılır: `def total(*numbers):`"
+  }
+ ],
+ "examples": [
+  {
+   "title": "İlk fonksiyon",
+   "code": "def greet(name):\n    print(f\"Merhaba {name}, atölyeye hoş geldin!\")\n\ngreet(\"Piko\")\ngreet(\"Deniz\")\n",
+   "note": ""
+  },
+  {
+   "title": "return ile hesap",
+   "code": "def area(width, height):\n    return width * height\n\nroom = area(4, 5)\ngarden = area(10, 3)\nprint(\"Oda:\", room)\nprint(\"Bahçe:\", garden)\nprint(\"Toplam:\", room + garden)\n",
+   "note": ""
+  },
+  {
+   "title": "Varsayılan ve *args",
+   "code": "def attack(hp, damage=10):\n    return hp - damage\n\nprint(attack(50))\nprint(attack(50, 25))\n\ndef total(*numbers):\n    result = 0\n    for n in numbers:\n        result += n\n    return result\n\nprint(total(1, 2, 3, 4))\n",
+   "note": ""
+  }
+ ],
+ "tasks": [
+  {
+   "id": "d11-t1",
+   "title": "Selam fonksiyonu",
+   "prompt": "`greet` adında, `name` parametresi alan ve `Merhaba Piko!` gibi selam yazdıran bir fonksiyon yaz. Sonra `greet(\"Piko\")` ile çağır.",
+   "starter": "# greet fonksiyonunu yaz\n\n\n# Fonksiyonu çağır\n",
+   "solution": "def greet(name):\n    print(f\"Merhaba {name}!\")\n\ngreet(\"Piko\")\n",
+   "hints": [
+    "def greet(name): ile başla.",
+    "İçinde print(f\"Merhaba {name}!\") yaz.",
+    "En altta greet(\"Piko\") ile çağır."
+   ],
+   "check": {
+    "python": "\nassert \"Merhaba Piko!\" in _output, \"greet(\\\"Piko\\\") çağrıldığında 'Merhaba Piko!' yazmalı.\"\nout, _ = _run(_code + '\\ngreet(\"Zeynep\")\\n')\nassert \"Merhaba Zeynep!\" in out, \"greet farklı isimlerle de çalışmalı: parametreyi kullan.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "def greet(name):",
+      "notes": [
+       "`greet` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `name`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+      ]
+     },
+     {
+      "n": 2,
+      "code": "    print(f\"Merhaba {name}!\")",
+      "notes": [
+       "`print(f\"Merhaba {name}!\")`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "greet(\"Piko\")",
+      "notes": [
+       "`greet(\"Piko\")`: tanımladığın `greet` fonksiyonunu çalıştırır.",
+       "`greet(...)`: senin tanımladığın fonksiyonu çağırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "name",
+      "kind": "parametre",
+      "desc": "`greet` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+     },
+     {
+      "term": "def",
+      "kind": "anahtar kelime",
+      "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+     },
+     {
+      "term": "greet()",
+      "kind": "senin fonksiyonun",
+      "desc": "Kodda tanımlanan fonksiyon; parametreleri: `name`."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     },
+     {
+      "term": "f\"...{}\"",
+      "kind": "metin",
+      "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d11-t2",
+   "title": "Alan hesaplayıcı",
+   "prompt": "`area(width, height)` fonksiyonu dikdörtgenin alanını **return** ile döndürsün (yazdırmasın).",
+   "starter": "def area(width, height):\n    # alanı döndür\n    pass\n\nprint(area(4, 5))\n",
+   "solution": "def area(width, height):\n    return width * height\n\nprint(area(4, 5))\n",
+   "hints": [
+    "Alan = genişlik x yükseklik",
+    "print yerine return width * height"
+   ],
+   "check": {
+    "python": "\nassert area(3, 4) == 12, \"area(3, 4) 12 döndürmeli.\"\nassert area(10, 2) == 20, \"area(10, 2) 20 döndürmeli.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "def area(width, height):",
+      "notes": [
+       "`area` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `width`, `height`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+      ]
+     },
+     {
+      "n": 2,
+      "code": "    return width * height",
+      "notes": [
+       "Fonksiyon `width * height` değerini geri verir ve burada biter."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "print(area(4, 5))",
+      "notes": [
+       "`print(area(4, 5))`: parantez içindeki değeri ekrana yazdırır.",
+       "`area(...)`: senin tanımladığın fonksiyonu çağırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "width",
+      "kind": "parametre",
+      "desc": "`area` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+     },
+     {
+      "term": "height",
+      "kind": "parametre",
+      "desc": "`area` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+     },
+     {
+      "term": "def",
+      "kind": "anahtar kelime",
+      "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+     },
+     {
+      "term": "area()",
+      "kind": "senin fonksiyonun",
+      "desc": "Kodda tanımlanan fonksiyon; parametreleri: `width`, `height`."
+     },
+     {
+      "term": "return",
+      "kind": "anahtar kelime",
+      "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+     },
+     {
+      "term": "*",
+      "kind": "operatör",
+      "desc": "Çarpma; metni ya da listeyi tekrarlama (\"*\" * 3 → \"***\")."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d11-t3",
+   "title": "Varsayılan hasar",
+   "prompt": "`attack(hp, damage)` fonksiyonu kalan canı döndürsün. `damage` verilmezse 10 olsun.",
+   "starter": "def attack(hp, damage):\n    return hp - damage\n\nprint(attack(50, 25))\nprint(attack(50))\n",
+   "solution": "def attack(hp, damage=10):\n    return hp - damage\n\nprint(attack(50, 25))\nprint(attack(50))\n",
+   "hints": [
+    "Varsayılan değer parametrenin yanına yazılır: damage=10"
+   ],
+   "check": {
+    "python": "\nassert attack(50) == 40, \"attack(50) 40 döndürmeli (varsayılan hasar 10).\"\nassert attack(50, 25) == 25, \"attack(50, 25) 25 döndürmeli.\"\nassert attack(hp=30, damage=5) == 25, \"İsimle çağrılınca da çalışmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "def attack(hp, damage=10):",
+      "notes": [
+       "`attack` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `hp`, `damage`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+      ]
+     },
+     {
+      "n": 2,
+      "code": "    return hp - damage",
+      "notes": [
+       "Fonksiyon `hp - damage` değerini geri verir ve burada biter."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "print(attack(50, 25))",
+      "notes": [
+       "`print(attack(50, 25))`: parantez içindeki değeri ekrana yazdırır.",
+       "`attack(...)`: senin tanımladığın fonksiyonu çağırır."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "print(attack(50))",
+      "notes": [
+       "`print(attack(50))`: parantez içindeki değeri ekrana yazdırır.",
+       "`attack(...)`: senin tanımladığın fonksiyonu çağırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "hp",
+      "kind": "parametre",
+      "desc": "`attack` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+     },
+     {
+      "term": "damage",
+      "kind": "parametre",
+      "desc": "`attack` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+     },
+     {
+      "term": "def",
+      "kind": "anahtar kelime",
+      "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+     },
+     {
+      "term": "attack()",
+      "kind": "senin fonksiyonun",
+      "desc": "Kodda tanımlanan fonksiyon; parametreleri: `hp`, `damage`."
+     },
+     {
+      "term": "return",
+      "kind": "anahtar kelime",
+      "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+     },
+     {
+      "term": "-",
+      "kind": "operatör",
+      "desc": "Çıkarma."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "id": "d11-c",
+  "title": "En büyük skor",
+  "prompt": "`biggest(numbers)` listedeki en büyük sayıyı döndürsün. `max()` kullanmadan, bir döngüyle bul.",
+  "starter": "def biggest(numbers):\n    # max() kullanmadan en büyüğü bul\n    pass\n\nprint(biggest([3, 17, 8]))\n",
+  "solution": "def biggest(numbers):\n    best = numbers[0]\n    for n in numbers:\n        if n > best:\n            best = n\n    return best\n\nprint(biggest([3, 17, 8]))\n",
+  "hints": [
+   "İlk elemanı en büyük kabul et: best = numbers[0]",
+   "Döngüde daha büyüğünü görünce best'i güncelle."
+  ],
+  "check": {
+   "python": "\nassert \"max(\" not in _code, \"Bu görevde max() kullanmadan bul.\"\nassert biggest([3, 17, 8]) == 17, \"biggest([3, 17, 8]) 17 döndürmeli.\"\nassert biggest([-5, -2, -9]) == -2, \"Negatif sayılarda da çalışmalı. İpucu: best = numbers[0] ile başla.\"\nassert biggest([42]) == 42, \"Tek elemanlı listede o elemanı döndürmeli.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "def biggest(numbers):",
+     "notes": [
+      "`biggest` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `numbers`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+     ]
+    },
+    {
+     "n": 2,
+     "code": "    best = numbers[0]",
+     "notes": [
+      "`best` adında bir değişken oluşturuluyor ve içine `numbers[0]` konuyor."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "    for n in numbers:",
+     "notes": [
+      "Döngü: `numbers` içindeki her eleman sırayla `n` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "        if n > best:",
+     "notes": [
+      "Koşul: `n > best` doğruysa altındaki girintili satırlar çalışır."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "            best = n",
+     "notes": [
+      "`best` değişkenine yeni değer veriliyor: `n`."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "    return best",
+     "notes": [
+      "Fonksiyon `best` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 8,
+     "code": "print(biggest([3, 17, 8]))",
+     "notes": [
+      "`print(biggest([3, 17, 8]))`: parantez içindeki değeri ekrana yazdırır.",
+      "`biggest(...)`: senin tanımladığın fonksiyonu çağırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "best",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `numbers[0]`."
+    },
+    {
+     "term": "n",
+     "kind": "döngü değişkeni",
+     "desc": "Döngünün her turunda `numbers` içindeki sıradaki elemanı tutar."
+    },
+    {
+     "term": "numbers",
+     "kind": "parametre",
+     "desc": "`biggest` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+    },
+    {
+     "term": "def",
+     "kind": "anahtar kelime",
+     "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+    },
+    {
+     "term": "biggest()",
+     "kind": "senin fonksiyonun",
+     "desc": "Kodda tanımlanan fonksiyon; parametreleri: `numbers`."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "[ ]",
+     "kind": "seçme",
+     "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+    },
+    {
+     "term": "for",
+     "kind": "anahtar kelime",
+     "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+    },
+    {
+     "term": "if",
+     "kind": "anahtar kelime",
+     "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+    },
+    {
+     "term": ">",
+     "kind": "operatör",
+     "desc": "Büyük mü?"
+    },
+    {
+     "term": "return",
+     "kind": "anahtar kelime",
+     "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    }
+   ]
+  }
+ },
+ "project_task": {
+  "id": "d11-p",
+  "title": "Hareket etme",
+  "prompt": "Piko'yu yönlerle hareket ettirelim. `move(pos, direction)` yeni konumu **tuple** olarak döndürsün:\n\n- `\"kuzey\"`: y bir artar\n- `\"güney\"`: y bir azalır\n- `\"doğu\"`: x bir artar\n- `\"batı\"`: x bir azalır\n- Başka bir yön gelirse konum değişmez.",
+  "starter": "def move(pos, direction):\n    x, y = pos\n    # yöne göre x veya y'yi değiştir\n    return (x, y)\n\nprint(move((0, 0), \"kuzey\"))\n",
+  "solution": "def move(pos, direction):\n    x, y = pos\n    if direction == \"kuzey\":\n        y += 1\n    elif direction == \"güney\":\n        y -= 1\n    elif direction == \"doğu\":\n        x += 1\n    elif direction == \"batı\":\n        x -= 1\n    return (x, y)\n\nprint(move((0, 0), \"kuzey\"))\n",
+  "hints": [
+   "Önce konumu aç: x, y = pos",
+   "if/elif ile her yönü kontrol et.",
+   "Sonunda return (x, y)"
+  ],
+  "check": {
+   "python": "\nassert move((0, 0), \"kuzey\") == (0, 1), \"kuzey: y bir artmalı.\"\nassert move((2, 2), \"güney\") == (2, 1), \"güney: y bir azalmalı.\"\nassert move((2, 2), \"doğu\") == (3, 2), \"doğu: x bir artmalı.\"\nassert move((2, 2), \"batı\") == (1, 2), \"batı: x bir azalmalı.\"\nassert move((5, 5), \"yukarı\") == (5, 5), \"Bilinmeyen yönde konum değişmemeli.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "def move(pos, direction):",
+     "notes": [
+      "`move` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `pos`, `direction`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+     ]
+    },
+    {
+     "n": 2,
+     "code": "    x, y = pos",
+     "notes": [
+      "`x, y`: sağdaki değerler sırayla bu değişkenlere dağıtılıyor (açma / unpacking)."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "    if direction == \"kuzey\":",
+     "notes": [
+      "Koşul: `direction == \"kuzey\"` doğruysa altındaki girintili satırlar çalışır."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "        y += 1",
+     "notes": [
+      "`y += 1`: `y` değişkeninin değeri güncelleniyor."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "    elif direction == \"güney\":",
+     "notes": [
+      "`elif`: yukarıdaki koşul yanlışsa `direction == \"güney\"` koşuluna bakılır."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "        y -= 1",
+     "notes": [
+      "`y -= 1`: `y` değişkeninin değeri güncelleniyor."
+     ]
+    },
+    {
+     "n": 7,
+     "code": "    elif direction == \"doğu\":",
+     "notes": [
+      "`elif`: yukarıdaki koşul yanlışsa `direction == \"doğu\"` koşuluna bakılır."
+     ]
+    },
+    {
+     "n": 8,
+     "code": "        x += 1",
+     "notes": [
+      "`x += 1`: `x` değişkeninin değeri güncelleniyor."
+     ]
+    },
+    {
+     "n": 9,
+     "code": "    elif direction == \"batı\":",
+     "notes": [
+      "`elif`: yukarıdaki koşul yanlışsa `direction == \"batı\"` koşuluna bakılır."
+     ]
+    },
+    {
+     "n": 10,
+     "code": "        x -= 1",
+     "notes": [
+      "`x -= 1`: `x` değişkeninin değeri güncelleniyor."
+     ]
+    },
+    {
+     "n": 11,
+     "code": "    return (x, y)",
+     "notes": [
+      "Fonksiyon `(x, y)` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 13,
+     "code": "print(move((0, 0), \"kuzey\"))",
+     "notes": [
+      "`print(move((0, 0), \"kuzey\"))`: parantez içindeki değeri ekrana yazdırır.",
+      "`move(...)`: senin tanımladığın fonksiyonu çağırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "x",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `pos`."
+    },
+    {
+     "term": "y",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `pos`."
+    },
+    {
+     "term": "pos",
+     "kind": "parametre",
+     "desc": "`move` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+    },
+    {
+     "term": "direction",
+     "kind": "parametre",
+     "desc": "`move` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+    },
+    {
+     "term": "def",
+     "kind": "anahtar kelime",
+     "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+    },
+    {
+     "term": "move()",
+     "kind": "senin fonksiyonun",
+     "desc": "Kodda tanımlanan fonksiyon; parametreleri: `pos`, `direction`."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "if",
+     "kind": "anahtar kelime",
+     "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+    },
+    {
+     "term": "==",
+     "kind": "operatör",
+     "desc": "Eşit mi? (True/False)"
+    },
+    {
+     "term": "+=",
+     "kind": "operatör",
+     "desc": "Değişkenin kendi değerine ekler: x += 1 → x = x + 1."
+    },
+    {
+     "term": "elif",
+     "kind": "anahtar kelime",
+     "desc": "Önceki koşullar yanlışsa bu koşula bakılır (\"değilse eğer\")."
+    },
+    {
+     "term": "-=",
+     "kind": "operatör",
+     "desc": "Değişkenin değerinden çıkarır: x -= 1 → x = x - 1."
+    },
+    {
+     "term": "return",
+     "kind": "anahtar kelime",
+     "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    }
+   ]
+  }
+ },
+ "available": true,
+ "visual_task": {
+  "id": "d11-v",
+  "title": "Ordu fabrikası",
+  "prompt": "`ordu(satir, sutun)` fonksiyonu `satir` kadar satır yazdırsın, her satırda `sutun` kadar Piko olsun. Sonra fonksiyonu `ordu(2, 5)` diye çağır.\n\nFonksiyonun farklı sayılarla da denenecek.",
+  "starter": "def ordu(satir, sutun):\n    pass\n\nordu(2, 5)\n",
+  "solution": "def ordu(satir, sutun):\n    for i in range(satir):\n        print(\"*\" * sutun)\n\nordu(2, 5)\n",
+  "hints": [
+   "Fonksiyonun içinde for i in range(satir):",
+   "Döngüde print(\"*\" * sutun)"
+  ],
+  "check": {
+   "python": "\ndef _satirlar(text):\n    return [l.rstrip() for l in text.strip(\"\\n\").split(\"\\n\")] if text.strip() else []\n\nimport contextlib as _c, io as _io\nassert _satirlar(_output) == [\"*****\", \"*****\"], \"ordu(2, 5) 2 satır, her satırda 5 Piko yazdırmalı.\"\n_b = _io.StringIO()\nwith _c.redirect_stdout(_b):\n    ordu(3, 3)\nassert _satirlar(_b.getvalue()) == [\"***\"] * 3, \"ordu(3, 3) 3x3'lük bir ordu yazdırmalı.\"\n"
+  },
+  "xp": 40,
+  "scene": {
+   "target": [
+    "*****",
+    "*****"
+   ]
+  },
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "def ordu(satir, sutun):",
+     "notes": [
+      "`ordu` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `satir`, `sutun`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+     ]
+    },
+    {
+     "n": 2,
+     "code": "    for i in range(satir):",
+     "notes": [
+      "Döngü: `range(satir)` içindeki her eleman sırayla `i` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "        print(\"*\" * sutun)",
+     "notes": [
+      "`print(\"*\" * sutun)`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "ordu(2, 5)",
+     "notes": [
+      "`ordu(2, 5)`: tanımladığın `ordu` fonksiyonunu çalıştırır.",
+      "`ordu(...)`: senin tanımladığın fonksiyonu çağırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "i",
+     "kind": "döngü değişkeni",
+     "desc": "Döngünün her turunda `range(satir)` içindeki sıradaki elemanı tutar."
+    },
+    {
+     "term": "satir",
+     "kind": "parametre",
+     "desc": "`ordu` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+    },
+    {
+     "term": "sutun",
+     "kind": "parametre",
+     "desc": "`ordu` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+    },
+    {
+     "term": "def",
+     "kind": "anahtar kelime",
+     "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+    },
+    {
+     "term": "ordu()",
+     "kind": "senin fonksiyonun",
+     "desc": "Kodda tanımlanan fonksiyon; parametreleri: `satir`, `sutun`."
+    },
+    {
+     "term": "for",
+     "kind": "anahtar kelime",
+     "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+    },
+    {
+     "term": "range()",
+     "kind": "fonksiyon",
+     "desc": "Sayı dizisi üretir: range(5) → 0, 1, 2, 3, 4. Son sayı dahil değildir."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    },
+    {
+     "term": "*",
+     "kind": "operatör",
+     "desc": "Çarpma; metni ya da listeyi tekrarlama (\"*\" * 3 → \"***\")."
+    }
+   ]
+  }
+ },
+ "tracks": {
+  "veri": {
+   "project_task": {
+    "id": "d11-pv",
+    "title": "Hesap fonksiyonları",
+    "prompt": "Hesapları fonksiyonlara taşıyalım:\n\n- `total(amounts)`: listedeki tutarların toplamını **döndürsün**.\n- `remaining(budget, amounts)`: bütçeden toplamı çıkarıp kalanı döndürsün. İçinde `total()`'ı kullan.",
+    "starter": "def total(amounts):\n    pass\n\n\ndef remaining(budget, amounts):\n    pass\n",
+    "solution": "def total(amounts):\n    result = 0\n    for amount in amounts:\n        result += amount\n    return result\n\n\ndef remaining(budget, amounts):\n    return budget - total(amounts)\n",
+    "hints": [
+     "Fonksiyonun sonucu return ile döner: return result",
+     "remaining içinde: return budget - total(amounts)"
+    ],
+    "check": {
+     "python": "\nassert total([120, 45, 300]) == 465, \"total([120, 45, 300]) 465 döndürmeli.\"\nassert total([]) == 0, \"Boş listenin toplamı 0 olmalı.\"\nassert remaining(1000, [100, 250]) == 650, \"remaining(1000, [100, 250]) 650 döndürmeli.\"\nassert remaining(50, [80]) == -30, \"Bütçe aşılınca kalan eksi olabilir.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "def total(amounts):",
+       "notes": [
+        "`total` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `amounts`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "    result = 0",
+       "notes": [
+        "`result` adında bir değişken oluşturuluyor ve içine `0` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "    for amount in amounts:",
+       "notes": [
+        "Döngü: `amounts` içindeki her eleman sırayla `amount` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "        result += amount",
+       "notes": [
+        "`result += amount`: `result` değişkeninin değeri güncelleniyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "    return result",
+       "notes": [
+        "Fonksiyon `result` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "def remaining(budget, amounts):",
+       "notes": [
+        "`remaining` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `budget`, `amounts`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "    return budget - total(amounts)",
+       "notes": [
+        "Fonksiyon `budget - total(amounts)` değerini geri verir ve burada biter.",
+        "`total(...)`: senin tanımladığın fonksiyonu çağırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "result",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `0`."
+      },
+      {
+       "term": "amount",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `amounts` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "amounts",
+       "kind": "parametre",
+       "desc": "`total` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "budget",
+       "kind": "parametre",
+       "desc": "`remaining` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "total()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `amounts`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": "+=",
+       "kind": "operatör",
+       "desc": "Değişkenin kendi değerine ekler: x += 1 → x = x + 1."
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": "remaining()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `budget`, `amounts`."
+      },
+      {
+       "term": "-",
+       "kind": "operatör",
+       "desc": "Çıkarma."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Hesap fonksiyonları",
+   "game_role": "Toplamı ve kalan bütçeyi hesaplayan fonksiyonlar."
+  },
+  "otomasyon": {
+   "project_task": {
+    "id": "d11-po",
+    "title": "Ekle ve tamamla",
+    "prompt": "Görev işlerini fonksiyonlara taşıyalım:\n\n- `add_task(tasks, title)`: görev listede yoksa ekleyip `True`, zaten varsa eklemeden `False` döndürsün.\n- `complete_task(tasks, title)`: görev listedeyse çıkarıp `True`, yoksa `False` döndürsün.",
+    "starter": "def add_task(tasks, title):\n    pass\n\n\ndef complete_task(tasks, title):\n    pass\n",
+    "solution": "def add_task(tasks, title):\n    if title in tasks:\n        return False\n    tasks.append(title)\n    return True\n\n\ndef complete_task(tasks, title):\n    if title not in tasks:\n        return False\n    tasks.remove(title)\n    return True\n",
+    "hints": [
+     "title in tasks listede olup olmadığını söyler.",
+     "tasks.remove(title) görevi çıkarır."
+    ],
+    "check": {
+     "python": "\nt = []\nassert add_task(t, \"Spor\") is True and t == [\"Spor\"], \"Yeni görev eklenip True dönmeli.\"\nassert add_task(t, \"Spor\") is False and t == [\"Spor\"], \"Aynı görev ikinci kez eklenmemeli, False dönmeli.\"\nadd_task(t, \"Kahve\")\nassert complete_task(t, \"Spor\") is True and t == [\"Kahve\"], \"Tamamlanan görev listeden çıkmalı, True dönmeli.\"\nassert complete_task(t, \"Yok\") is False, \"Olmayan görev için False dönmeli.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "def add_task(tasks, title):",
+       "notes": [
+        "`add_task` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `tasks`, `title`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "    if title in tasks:",
+       "notes": [
+        "Koşul: `title in tasks` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "        return False",
+       "notes": [
+        "Fonksiyon `False` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "    tasks.append(title)",
+       "notes": [
+        "`tasks.append(title)`: `tasks` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "    return True",
+       "notes": [
+        "Fonksiyon `True` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "def complete_task(tasks, title):",
+       "notes": [
+        "`complete_task` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `tasks`, `title`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "    if title not in tasks:",
+       "notes": [
+        "Koşul: `title not in tasks` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "        return False",
+       "notes": [
+        "Fonksiyon `False` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "    tasks.remove(title)",
+       "notes": [
+        "`tasks.remove(title)`: `tasks` üzerinde `remove` metodunu çalıştırır. Listeden (ya da setten) verilen elemanı çıkarır."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "    return True",
+       "notes": [
+        "Fonksiyon `True` değerini geri verir ve burada biter."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "tasks",
+       "kind": "parametre",
+       "desc": "`add_task` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "title",
+       "kind": "parametre",
+       "desc": "`add_task` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "add_task()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `tasks`, `title`."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "in",
+       "kind": "operatör",
+       "desc": "İçinde var mı? (listede, metinde, sözlükte)"
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": "False",
+       "kind": "değer",
+       "desc": "Yanlış (mantıksal değer)."
+      },
+      {
+       "term": ".append()",
+       "kind": "metot",
+       "desc": "Listenin sonuna yeni bir eleman ekler."
+      },
+      {
+       "term": "True",
+       "kind": "değer",
+       "desc": "Doğru (mantıksal değer)."
+      },
+      {
+       "term": "complete_task()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `tasks`, `title`."
+      },
+      {
+       "term": "not in",
+       "kind": "operatör",
+       "desc": "İçinde yok mu?"
+      },
+      {
+       "term": ".remove()",
+       "kind": "metot",
+       "desc": "Listeden (ya da setten) verilen elemanı çıkarır."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Görev fonksiyonları",
+   "game_role": "Görev ekleyen ve tamamlayan fonksiyonlar."
+  },
+  "web": {
+   "project_task": {
+    "id": "d11-pw",
+    "title": "Slug fonksiyonları",
+    "prompt": "Slug ve adres üretmeyi fonksiyonlara taşıyalım:\n\n- `make_slug(title)`: başlığın baştaki ve sondaki boşluklarını at, küçük harfe çevir, boşlukları `-` yap ve sonucu **döndür**.\n- `post_url(title, folder=\"blog\")`: `/blog/kodla-oyna.html` gibi bir adres döndürsün. İçinde `make_slug()`'ı kullan; `folder` verilmezse `\"blog\"` olsun.",
+    "starter": "def make_slug(title):\n    pass\n\n\ndef post_url(title, folder=\"blog\"):\n    pass\n",
+    "solution": "def make_slug(title):\n    return title.strip().lower().replace(\" \", \"-\")\n\n\ndef post_url(title, folder=\"blog\"):\n    return f\"/{folder}/{make_slug(title)}.html\"\n",
+    "hints": [
+     "return title.strip().lower().replace(\" \", \"-\")",
+     "post_url içinde: return f\"/{folder}/{make_slug(title)}.html\""
+    ],
+    "check": {
+     "python": "\nassert make_slug(\"  Kodla Oyna \") == \"kodla-oyna\", \"make_slug(\\\"  Kodla Oyna \\\") \\\"kodla-oyna\\\" döndürmeli.\"\nassert make_slug(\"Merhaba Dünya\") == \"merhaba-dünya\", \"make_slug(\\\"Merhaba Dünya\\\") \\\"merhaba-dünya\\\" döndürmeli.\"\nassert post_url(\"Kodla Oyna\") == \"/blog/kodla-oyna.html\", \"post_url(\\\"Kodla Oyna\\\") \\\"/blog/kodla-oyna.html\\\" döndürmeli.\"\nassert post_url(\"Oyun Kodlama\", \"notlar\") == \"/notlar/oyun-kodlama.html\", \"folder verilince adres o klasörde olmalı: /notlar/oyun-kodlama.html\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "def make_slug(title):",
+       "notes": [
+        "`make_slug` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `title`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "    return title.strip().lower().replace(\" \", \"-\")",
+       "notes": [
+        "Fonksiyon `title.strip().lower().replace(\" \", \"-\")` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "def post_url(title, folder=\"blog\"):",
+       "notes": [
+        "`post_url` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `title`, `folder`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    return f\"/{folder}/{make_slug(title)}.html\"",
+       "notes": [
+        "Fonksiyon `f\"/{folder}/{make_slug(title)}.html\"` değerini geri verir ve burada biter.",
+        "`make_slug(...)`: senin tanımladığın fonksiyonu çağırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "title",
+       "kind": "parametre",
+       "desc": "`make_slug` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "folder",
+       "kind": "parametre",
+       "desc": "`post_url` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "make_slug()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `title`."
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": ".replace()",
+       "kind": "metot",
+       "desc": "Metindeki bir parçayı başkasıyla değiştirir."
+      },
+      {
+       "term": ".lower()",
+       "kind": "metot",
+       "desc": "Metni küçük harfe çevirir."
+      },
+      {
+       "term": ".strip()",
+       "kind": "metot",
+       "desc": "Metnin başındaki ve sonundaki boşlukları siler."
+      },
+      {
+       "term": "post_url()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `title`, `folder`."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Adres fonksiyonları",
+   "game_role": "Başlıktan slug ve yazı adresi üreten fonksiyonlar."
+  },
+  "bot": {
+   "project_task": {
+    "id": "d11-pb",
+    "title": "Cevap fonksiyonu",
+    "prompt": "Cevap verme işini fonksiyonlara taşıyalım:\n\n- `clean(message)`: mesajın baştaki ve sondaki boşlukları atılmış, küçük harfe çevrilmiş hâlini **döndürsün**.\n- `get_reply(message, bot_name=\"Bilge\")`: mesajı önce `clean()` ile temizlesin, sonra:\n  - içinde `\"merhaba\"` varsa `Merhaba, ben Bilge!` (ad `bot_name`'den)\n  - içinde `\"hava\"` varsa `Bugün hava güneşli.`\n  - hiçbiri yoksa `Bunu anlamadım.` döndürsün.",
+    "starter": "def clean(message):\n    pass\n\n\ndef get_reply(message, bot_name=\"Bilge\"):\n    pass\n",
+    "solution": "def clean(message):\n    return message.strip().lower()\n\n\ndef get_reply(message, bot_name=\"Bilge\"):\n    text = clean(message)\n    if \"merhaba\" in text:\n        return f\"Merhaba, ben {bot_name}!\"\n    elif \"hava\" in text:\n        return \"Bugün hava güneşli.\"\n    else:\n        return \"Bunu anlamadım.\"\n",
+    "hints": [
+     "clean içinde: return message.strip().lower()",
+     "get_reply içinde önce text = clean(message), sonra if / elif / else ile return."
+    ],
+    "check": {
+     "python": "\nassert clean(\"   MERHABA  \") == \"merhaba\", \"clean(\\\"   MERHABA  \\\") \\\"merhaba\\\" döndürmeli.\"\nassert clean(\" SELAM DOSTUM \") == \"selam dostum\", \"clean hem boşlukları atmalı hem küçük harfe çevirmeli.\"\nassert get_reply(\"  MERHABA  \") == \"Merhaba, ben Bilge!\", \"get_reply(\\\"  MERHABA  \\\") \\\"Merhaba, ben Bilge!\\\" döndürmeli (önce clean() kullan).\"\nassert get_reply(\"merhaba\", \"Robo\") == \"Merhaba, ben Robo!\", \"Bot adı bot_name parametresinden gelmeli.\"\nassert get_reply(\"yarın HAVA nasıl\") == \"Bugün hava güneşli.\", \"Mesajda hava geçiyorsa \\\"Bugün hava güneşli.\\\" döndürmeli.\"\nassert get_reply(\"pizza sever misin\") == \"Bunu anlamadım.\", \"Tanımadığı mesajda \\\"Bunu anlamadım.\\\" döndürmeli.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "def clean(message):",
+       "notes": [
+        "`clean` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `message`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "    return message.strip().lower()",
+       "notes": [
+        "Fonksiyon `message.strip().lower()` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "def get_reply(message, bot_name=\"Bilge\"):",
+       "notes": [
+        "`get_reply` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `message`, `bot_name`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    text = clean(message)",
+       "notes": [
+        "`text` adında bir değişken oluşturuluyor ve içine `clean(message)` konuyor.",
+        "`clean(...)`: senin tanımladığın fonksiyonu çağırır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "    if \"merhaba\" in text:",
+       "notes": [
+        "Koşul: `\"merhaba\" in text` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "        return f\"Merhaba, ben {bot_name}!\"",
+       "notes": [
+        "Fonksiyon `f\"Merhaba, ben {bot_name}!\"` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "    elif \"hava\" in text:",
+       "notes": [
+        "`elif`: yukarıdaki koşul yanlışsa `\"hava\" in text` koşuluna bakılır."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "        return \"Bugün hava güneşli.\"",
+       "notes": [
+        "Fonksiyon `\"Bugün hava güneşli.\"` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "    else:",
+       "notes": [
+        "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "        return \"Bunu anlamadım.\"",
+       "notes": [
+        "Fonksiyon `\"Bunu anlamadım.\"` değerini geri verir ve burada biter."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "text",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `clean(message)`."
+      },
+      {
+       "term": "message",
+       "kind": "parametre",
+       "desc": "`clean` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "bot_name",
+       "kind": "parametre",
+       "desc": "`get_reply` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "clean()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `message`."
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": ".lower()",
+       "kind": "metot",
+       "desc": "Metni küçük harfe çevirir."
+      },
+      {
+       "term": ".strip()",
+       "kind": "metot",
+       "desc": "Metnin başındaki ve sonundaki boşlukları siler."
+      },
+      {
+       "term": "get_reply()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `message`, `bot_name`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "in",
+       "kind": "operatör",
+       "desc": "İçinde var mı? (listede, metinde, sözlükte)"
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "elif",
+       "kind": "anahtar kelime",
+       "desc": "Önceki koşullar yanlışsa bu koşula bakılır (\"değilse eğer\")."
+      },
+      {
+       "term": "else",
+       "kind": "anahtar kelime",
+       "desc": "Yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Cevap fonksiyonları",
+   "game_role": "Mesajı temizleyip cevabını döndüren fonksiyonlar."
+  },
+  "okul": {
+   "project_task": {
+    "id": "d11-pn",
+    "title": "Ortalama fonksiyonları",
+    "prompt": "Hesapları fonksiyonlara taşıyalım:\n\n- `average(grades)`: notların ortalamasını 2 basamağa yuvarlayıp **döndürsün** (`round(..., 2)`). Liste boşsa `0` döndürsün.\n- `passed(grades, pass_mark=50)`: ortalama `pass_mark` veya üstüyse `True`, değilse `False` döndürsün. İçinde `average()`'ı kullan.",
+    "starter": "def average(grades):\n    pass\n\n\ndef passed(grades, pass_mark=50):\n    pass\n",
+    "solution": "def average(grades):\n    if len(grades) == 0:\n        return 0\n    return round(sum(grades) / len(grades), 2)\n\n\ndef passed(grades, pass_mark=50):\n    return average(grades) >= pass_mark\n",
+    "hints": [
+     "Önce boş liste mi diye bak: if len(grades) == 0: return 0",
+     "passed içinde: return average(grades) >= pass_mark"
+    ],
+    "check": {
+     "python": "\nassert average([70, 85, 90]) == 81.67, \"average([70, 85, 90]) 81.67 döndürmeli.\"\nassert average([]) == 0, \"Boş listenin ortalaması 0 olmalı.\"\nassert passed([40, 60]) is True, \"Ortalama tam 50 ise geçer: passed([40, 60]) True olmalı.\"\nassert passed([40, 55]) is False, \"passed([40, 55]) False olmalı.\"\nassert passed([60, 65], 70) is False and passed([80, 70], 70) is True, \"pass_mark verilince o sınırı kullanmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "def average(grades):",
+       "notes": [
+        "`average` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `grades`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "    if len(grades) == 0:",
+       "notes": [
+        "Koşul: `len(grades) == 0` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "        return 0",
+       "notes": [
+        "Fonksiyon `0` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "    return round(sum(grades) / len(grades), 2)",
+       "notes": [
+        "Fonksiyon `round(sum(grades) / len(grades), 2)` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "def passed(grades, pass_mark=50):",
+       "notes": [
+        "`passed` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `grades`, `pass_mark`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "    return average(grades) >= pass_mark",
+       "notes": [
+        "Fonksiyon `average(grades) >= pass_mark` değerini geri verir ve burada biter.",
+        "`average(...)`: senin tanımladığın fonksiyonu çağırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "grades",
+       "kind": "parametre",
+       "desc": "`average` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "pass_mark",
+       "kind": "parametre",
+       "desc": "`passed` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "average()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `grades`."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "==",
+       "kind": "operatör",
+       "desc": "Eşit mi? (True/False)"
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": "round()",
+       "kind": "fonksiyon",
+       "desc": "Sayıyı yuvarlar. round(3.14159, 2) → 3.14"
+      },
+      {
+       "term": "/",
+       "kind": "operatör",
+       "desc": "Bölme; sonuç her zaman ondalıklı sayıdır."
+      },
+      {
+       "term": "sum()",
+       "kind": "fonksiyon",
+       "desc": "Listedeki sayıları toplar."
+      },
+      {
+       "term": "passed()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `grades`, `pass_mark`."
+      },
+      {
+       "term": ">=",
+       "kind": "operatör",
+       "desc": "Büyük ya da eşit mi?"
+      }
+     ]
+    }
+   },
+   "project_contribution": "Ortalama fonksiyonları",
+   "game_role": "Ortalamayı hesaplayan ve dersi geçip geçmediğini söyleyen fonksiyonlar."
+  }
+ }
+}

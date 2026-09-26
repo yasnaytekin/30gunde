@@ -1,0 +1,231 @@
+{
+ "day": 25,
+ "title": "Promise ve async/await",
+ "region": "istasyon",
+ "xp_complete": 150,
+ "objective": "Promise oluşturmak, then/catch ve async/await ile beklemek, hataları yakalamak ve Promise.all ile işleri birlikte yürütmek",
+ "story": "İstasyonda hiçbir iş anında bitmiyor: yakıt dolumu sürüyor, sinyaller gecikiyor. Bugün JavaScript'e **beklemeyi** öğreteceksin: Promise ve async/await ile iş bitince kaldığı yerden devam eden kod yazacaksın.",
+ "sections": [
+  {
+   "title": "Neden bekleme gerekir?",
+   "body": "Bazı işler zaman alır: sunucudan veri gelmesi, bir dosyanın okunması, bir zamanlayıcı. JavaScript bu sırada **durup beklemez**; diğer işlere devam eder, uzun iş bitince haber alır:\n\n```js\nconsole.log(\"1. Sinyal gönderildi\");\nsetTimeout(() => console.log(\"3. Cevap geldi\"), 100);\nconsole.log(\"2. Beklerken başka işler\");\n```\n\nÇıktı sırası 1, 2, 3'tür. Bu tür işlere **asenkron** (eşzamansız) denir. Sayfa donmaz ama \"bitince şunu yap\" demenin düzenli bir yoluna ihtiyacımız var: **Promise**."
+  },
+  {
+   "title": "Promise: bir söz",
+   "body": "Promise, \"iş bitince sana sonucu vereceğim\" sözüdür. Üç hali vardır: *bekliyor* (pending), *tamamlandı* (fulfilled), *reddedildi* (rejected).\n\n```js\nfunction wait(ms) {\n  return new Promise((resolve) => {\n    setTimeout(() => resolve(\"hazır\"), ms);\n  });\n}\n\nwait(100)\n  .then((result) => console.log(\"Sonuç:\", result))\n  .catch((error) => console.log(\"Hata:\", error.message));\n```\n\n- `resolve(değer)` sözü tutar; `.then` içindeki fonksiyon o değerle çalışır.\n- `reject(new Error(\"...\"))` sözü bozar; `.catch` içindeki fonksiyon hatayla çalışır."
+  },
+  {
+   "title": "async ve await",
+   "body": "`.then` zincirleri uzayınca okumak zorlaşır. `async` bir fonksiyonun içinde `await`, Promise bitene kadar **bekler** ve sonucunu verir. Kod yukarıdan aşağı okunur:\n\n```js\nasync function countdown() {\n  console.log(\"Geri sayım...\");\n  await wait(100);\n  console.log(\"Kalkış!\");\n  return \"yörüngede\";\n}\n\nconst result = await countdown(); // async fonksiyon da bir Promise döndürür\n```\n\nReddedilen bir Promise'i `await` edersen hata fırlatılır; dün öğrendiğin `try/catch` ile yakalarsın:\n\n```js\ntry {\n  const level = await loadLevel(7);\n} catch (error) {\n  console.log(\"Sorun:\", error.message);\n}\n```\n\n`await` yalnızca `async` fonksiyonların içinde (ve bu editördeki gibi en üst seviyede) kullanılabilir."
+  },
+  {
+   "title": "Promise.all: birlikte bekle",
+   "body": "Birbirini beklemesi gerekmeyen işleri sırayla beklemek zaman kaybıdır:\n\n```js\n// Sırayla: 100 + 150 = yaklaşık 250 ms\nconst a = await wait(100);\nconst b = await wait(150);\n\n// Birlikte: yaklaşık 150 ms (en uzunu kadar)\nconst [x, y] = await Promise.all([wait(100), wait(150)]);\n```\n\n`Promise.all` bir Promise dizisi alır; hepsi bitince sonuçları **aynı sırayla** bir dizi olarak verir. İçlerinden biri bile reddedilirse bütünü reddedilir."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Sıra kimde?",
+   "code": "function wait(ms) {\n  return new Promise((resolve) => setTimeout(resolve, ms));\n}\n\n\nconsole.log(\"1. Sinyal gönderildi\");\nwait(100).then(() => console.log(\"3. Cevap geldi\"));\nconsole.log(\"2. Beklerken başka işler\");\nawait wait(150);\nconsole.log(\"4. Hepsi bitti\");\n",
+   "note": "wait(100) satırı ikinci sırada ama çıktısı üçüncü geliyor."
+  },
+  {
+   "title": "Birlikte yükle",
+   "code": "function loadPart(name, ms) {\n  return new Promise((resolve) => setTimeout(() => resolve(name + \" hazır\"), ms));\n}\n\nconst start = Date.now();\nconst parts = await Promise.all([loadPart(\"Motor\", 150), loadPart(\"Kanat\", 100), loadPart(\"Kokpit\", 120)]);\nconsole.log(parts);\nconsole.log(\"Süre (ms):\", Date.now() - start);\n",
+   "note": "Toplam süre 370 değil, yaklaşık 150 ms: parçalar aynı anda yüklendi."
+  }
+ ],
+ "tasks": [
+  {
+   "id": "js-d25-t1",
+   "title": "Bekleme sözü",
+   "prompt": "`wait(ms)` fonksiyonunu yaz: `ms` milisaniye sonra tamamlanan bir **Promise** döndürsün (`new Promise` ve `setTimeout`).\n\nSonra `wait(100).then(...)` ile, bekleme bitince `Motorlar ısındı` yazdır.",
+   "starter": "function wait(ms) {\n  // new Promise döndür\n}\n\n// wait(100).then(...) ile mesaj yazdır\n\n",
+   "solution": "function wait(ms) {\n  // new Promise döndür\n  return new Promise((resolve) => {\n    setTimeout(resolve, ms);\n  });\n}\n\n// wait(100).then(...) ile mesaj yazdır\nwait(100).then(() => console.log(\"Motorlar ısındı\"));\n",
+   "hints": [
+    "return new Promise((resolve) => { ... });",
+    "İçeride: setTimeout(resolve, ms);",
+    "wait(100).then(() => console.log(\"Motorlar ısındı\"));"
+   ],
+   "check": {
+    "code_contains": [
+     "new Promise",
+     "setTimeout",
+     ".then"
+    ],
+    "js": "const p = wait(10);\nassert(p && typeof p.then === \"function\", \"wait(ms) bir Promise döndürmeli: return new Promise(...)\");\nconst t0 = Date.now();\nawait wait(120);\nconst passed = Date.now() - t0;\nassert(passed >= 100, \"wait(120) yaklaşık 120 ms sonra tamamlanmalı; setTimeout'a ms'yi ver.\");\nassert(passed < 1000, \"wait(120) çok uzun sürdü.\");\nassert(/wait\\s*\\(\\s*100\\s*\\)\\s*\\.then\\s*\\(/.test(_code), \"wait(100).then(...) ile mesajı yazdır.\");"
+   },
+   "xp": 50
+  },
+  {
+   "id": "js-d25-t2",
+   "title": "Yakıt dolumu",
+   "prompt": "`refuel()` adında bir `async` fonksiyon yaz:\n\n1. `Dolum başladı` yazdırsın,\n2. `await wait(100)` ile beklesin,\n3. `Dolum bitti` yazdırsın ve `100` döndürsün (depo yüzdesi).\n\nSonra en altta `const fuel = await refuel();` ile çağır ve `Yakıt: 100` yazdır.",
+   "starter": "function wait(ms) {\n  return new Promise((resolve) => setTimeout(resolve, ms));\n}\n\n\n// async function refuel() { ... }\n\n// const fuel = await refuel();\n\n",
+   "solution": "function wait(ms) {\n  return new Promise((resolve) => setTimeout(resolve, ms));\n}\n\n\nasync function refuel() {\n  console.log(\"Dolum başladı\");\n  await wait(100);\n  console.log(\"Dolum bitti\");\n  return 100;\n}\n\nconst fuel = await refuel();\nconsole.log(\"Yakıt:\", fuel);\n",
+   "hints": [
+    "async function refuel() { ... }",
+    "İçeride: await wait(100);",
+    "Çağırırken de bekle: const fuel = await refuel();"
+   ],
+   "check": {
+    "code_contains": [
+     "async",
+     "await"
+    ],
+    "js": "const a = _lines.indexOf(\"Dolum başladı\");\nconst b = _lines.indexOf(\"Dolum bitti\");\nconst c = _lines.indexOf(\"Yakıt: 100\");\nassert(a >= 0 && b > a, \"Çıktıda önce 'Dolum başladı', sonra 'Dolum bitti' görünmeli.\");\nassert(c > b, \"En sonda 'Yakıt: 100' görünmeli: const fuel = await refuel(); ile bekle.\");\nassert(fuel === 100, \"fuel 100 olmalı: refuel() 100 döndürmeli ve await ile beklenmeli.\");\nconst t0 = Date.now();\nconst r = await refuel();\nassert(r === 100 && Date.now() - t0 >= 80, \"refuel() içinde await wait(100) ile beklemelisin.\");"
+   },
+   "xp": 50
+  },
+  {
+   "id": "js-d25-t3",
+   "title": "Motor kontrolü",
+   "prompt": "`checkEngine(temp)` hazır: 50 ms sonra, sıcaklık 90'dan büyükse `Motor çok sıcak!` hatasıyla **reddedilir**, değilse `Motor hazır` ile tamamlanır.\n\n`preflight(temp)` adında bir `async` fonksiyon yaz:\n\n- `await checkEngine(temp)` sonucunu döndürsün.\n- Hata olursa `try/catch` ile yakalayıp `\"Uyarı: \" + error.message` döndürsün (`Uyarı: Motor çok sıcak!`).",
+   "starter": "function checkEngine(temp) {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      if (temp > 90) reject(new Error(\"Motor çok sıcak!\"));\n      else resolve(\"Motor hazır\");\n    }, 50);\n  });\n}\n\nasync function preflight(temp) {\n  // try / catch ile await checkEngine(temp)\n}\n\nconsole.log(await preflight(60));\nconsole.log(await preflight(120));\n",
+   "solution": "function checkEngine(temp) {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      if (temp > 90) reject(new Error(\"Motor çok sıcak!\"));\n      else resolve(\"Motor hazır\");\n    }, 50);\n  });\n}\n\nasync function preflight(temp) {\n  // try / catch ile await checkEngine(temp)\n  try {\n    return await checkEngine(temp);\n  } catch (error) {\n    return \"Uyarı: \" + error.message;\n  }\n}\n\nconsole.log(await preflight(60));\nconsole.log(await preflight(120));\n",
+   "hints": [
+    "try { return await checkEngine(temp); } catch (error) { ... }",
+    "catch içinde: return \"Uyarı: \" + error.message;"
+   ],
+   "check": {
+    "code_contains": [
+     "try",
+     "catch",
+     "await"
+    ],
+    "js": "assert(await preflight(60) === \"Motor hazır\", \"preflight(60) 'Motor hazır' döndürmeli.\");\nlet hot;\ntry {\n  hot = await preflight(120);\n} catch (e) {\n  assert(false, \"preflight hatayı dışarı fırlatmamalı; try/catch ile yakala.\");\n}\nassert(hot === \"Uyarı: Motor çok sıcak!\", \"preflight(120) 'Uyarı: Motor çok sıcak!' döndürmeli.\");\nassert(await preflight(90) === \"Motor hazır\" && await preflight(91) === \"Uyarı: Motor çok sıcak!\", \"Sonuç checkEngine'den gelmeli.\");\nassert(_lines.includes(\"Uyarı: Motor çok sıcak!\"), \"Çıktıda 'Uyarı: Motor çok sıcak!' görünmeli.\");"
+   },
+   "xp": 50
+  }
+ ],
+ "challenge": {
+  "id": "js-d25-c",
+  "title": "Paralel yükleme",
+  "prompt": "`loadPart(name, ms)` hazır. `loadAll()` adında bir `async` fonksiyon yaz:\n\n- `Motor` (150 ms), `Kanat` (100 ms) ve `Kokpit` (120 ms) parçalarını `Promise.all` ile **aynı anda** yüklesin,\n- sonuç dizisini (`[\"Motor\", \"Kanat\", \"Kokpit\"]`) döndürsün.\n\nSırayla beklersen 370 ms sürer; birlikte yüklersen 150 ms civarı.",
+  "starter": "function loadPart(name, ms) {\n  return new Promise((resolve) => setTimeout(() => resolve(name), ms));\n}\n\nasync function loadAll() {\n  // Promise.all ile üç parçayı birlikte yükle\n  return [];\n}\n\nconst start = Date.now();\nconsole.log(await loadAll());\nconsole.log(\"Süre:\", Date.now() - start, \"ms\");\n",
+  "solution": "function loadPart(name, ms) {\n  return new Promise((resolve) => setTimeout(() => resolve(name), ms));\n}\n\nasync function loadAll() {\n  // Promise.all ile üç parçayı birlikte yükle\n  const parts = await Promise.all([\n    loadPart(\"Motor\", 150),\n    loadPart(\"Kanat\", 100),\n    loadPart(\"Kokpit\", 120),\n  ]);\n  return parts;\n}\n\nconst start = Date.now();\nconsole.log(await loadAll());\nconsole.log(\"Süre:\", Date.now() - start, \"ms\");\n",
+  "hints": [
+   "Promise.all bir dizi alır: Promise.all([loadPart(\"Motor\", 150), ...])",
+   "const parts = await Promise.all([...]); return parts;"
+  ],
+  "check": {
+   "code_contains": [
+    "Promise.all",
+    "await"
+   ],
+   "js": "const t0 = Date.now();\nconst r = await loadAll();\nconst passed = Date.now() - t0;\nassert(same(r, [\"Motor\", \"Kanat\", \"Kokpit\"]), \"loadAll() ['Motor', 'Kanat', 'Kokpit'] döndürmeli (sıra korunmalı).\");\nassert(passed >= 130, \"Parçalar gerçekten loadPart ile yüklenmeli.\");\nassert(passed < 300, \"Parçalar aynı anda yüklenmeli (Promise.all); sırayla beklersen 370 ms sürer.\");"
+  },
+  "xp": 75
+ },
+ "project_contribution": "Seviye yükleme",
+ "project_task": {
+  "id": "js-d25-p",
+  "title": "Seviye yükleme",
+  "prompt": "Seviyeler bir sunucudan geliyormuş gibi biraz gecikmeyle yüklenecek.\n\n- `loadLevel(n)`: bir **Promise** döndürsün. 100 ms sonra `LEVELS[n]` ile tamamlansın; böyle bir seviye yoksa `new Error(\"Seviye bulunamadı: 7\")` ile reddedilsin (sayı `n` olsun).\n- `startLevel(n)`: `async` bir fonksiyon. Önce `#info`'ya `Seviye yükleniyor…` yazsın, `await loadLevel(n)` ile beklesin, sonra `Seviye 2: 8 yıldız, hız 3` biçiminde bilgiyi yazsın. Hata olursa `#info`'ya `Hata: Seviye bulunamadı: 7` yazsın.",
+  "starter": "const LEVELS = {\n  1: { seviye: 1, yildiz: 5, hiz: 2 },\n  2: { seviye: 2, yildiz: 8, hiz: 3 },\n  3: { seviye: 3, yildiz: 12, hiz: 4 },\n};\n\nfunction loadLevel(n) {\n  // 100 ms sonra LEVELS[n] ile tamamlanan (yoksa reddedilen) bir Promise döndür\n}\n\nasync function startLevel(n) {\n  const info = document.querySelector(\"#info\");\n  // yükleniyor yaz, await loadLevel(n), bilgiyi yaz; hatayı yakala\n}\n\nstartLevel(1);\n",
+  "solution": "const LEVELS = {\n  1: { seviye: 1, yildiz: 5, hiz: 2 },\n  2: { seviye: 2, yildiz: 8, hiz: 3 },\n  3: { seviye: 3, yildiz: 12, hiz: 4 },\n};\n\nfunction loadLevel(n) {\n  // 100 ms sonra LEVELS[n] ile tamamlanan (yoksa reddedilen) bir Promise döndür\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      if (LEVELS[n]) resolve(LEVELS[n]);\n      else reject(new Error(`Seviye bulunamadı: ${n}`));\n    }, 100);\n  });\n}\n\nasync function startLevel(n) {\n  const info = document.querySelector(\"#info\");\n  // yükleniyor yaz, await loadLevel(n), bilgiyi yaz; hatayı yakala\n  info.textContent = \"Seviye yükleniyor…\";\n  try {\n    const level = await loadLevel(n);\n    info.textContent = `Seviye ${level.seviye}: ${level.yildiz} yıldız, hız ${level.hiz}`;\n  } catch (error) {\n    info.textContent = `Hata: ${error.message}`;\n  }\n}\n\nstartLevel(1);\n",
+  "hints": [
+   "return new Promise((resolve, reject) => { setTimeout(() => { ... }, 100); });",
+   "if (LEVELS[n]) resolve(LEVELS[n]); else reject(new Error(`Seviye bulunamadı: ${n}`));",
+   "startLevel içinde try { const level = await loadLevel(n); ... } catch (error) { ... }"
+  ],
+  "check": {
+   "code_contains": [
+    "new Promise",
+    "reject",
+    "await",
+    "catch"
+   ],
+   "js": "await sleep(150);\nconst p = loadLevel(2);\nassert(p && typeof p.then === \"function\", \"loadLevel(n) bir Promise döndürmeli.\");\nconst t0 = Date.now();\nconst lv = await p;\nassert(same(lv, LEVELS[2]), \"loadLevel(2) LEVELS[2] ile tamamlanmalı.\");\nassert(Date.now() - t0 >= 60, \"loadLevel 100 ms sonra tamamlanmalı (setTimeout).\");\nlet err = null;\nawait loadLevel(7).then(() => {}, (e) => { err = e; });\nassert(err && err.message === \"Seviye bulunamadı: 7\", \"Olmayan seviye 'Seviye bulunamadı: 7' hatasıyla reddedilmeli (reject(new Error(...))).\");\nconst q = startLevel(3);\nassert(/yükleniyor/.test($(\"#info\").textContent), \"startLevel önce #info'ya 'Seviye yükleniyor…' yazmalı.\");\nawait q;\nassert($(\"#info\").textContent.trim() === \"Seviye 3: 12 yıldız, hız 4\", \"Yüklenince #info 'Seviye 3: 12 yıldız, hız 4' yazmalı.\");\nawait startLevel(9);\nassert($(\"#info\").textContent.trim() === \"Hata: Seviye bulunamadı: 9\", \"Hata olursa #info 'Hata: Seviye bulunamadı: 9' yazmalı.\");"
+  },
+  "xp": 100,
+  "mode": "page",
+  "html": "<canvas id=\"game\" width=\"300\" height=\"200\"></canvas>\n<p id=\"info\">Skor: 0</p>\n",
+  "css": "canvas{background:#0b1026;display:block;max-width:100%;border-radius:8px}#info{font-weight:600;margin:8px 0 0}"
+ },
+ "tracks": {
+  "js-web": {
+   "project_contribution": "Yükleniyor ekranı",
+   "project_task": {
+    "id": "js-d25-pw",
+    "title": "Yükleniyor ekranı",
+    "prompt": "Site açılırken kısa bir yükleniyor ekranı göster.\n\n- `wait(ms)`: `ms` milisaniye sonra tamamlanan bir Promise döndürsün.\n- `showPage()`: `async` bir fonksiyon. Önce `#content`'i boşaltsın ve `#loader`'dan `hidden` sınıfını kaldırsın; `await wait(150)` ile beklesin; sonra `posts` dizisindeki her başlık için `#content`'e bir `<h3>` eklesin ve `#loader`'a tekrar `hidden` sınıfı versin.",
+    "starter": "const posts = [\"İlk kodum\", \"Döngüler neden harika?\", \"Sitemi yayınladım\"];\n\nfunction wait(ms) {\n  // Promise döndür\n}\n\nasync function showPage() {\n  // boşalt, yükleniyor göster, bekle, yazıları ekle, yükleniyor gizle\n}\n\nshowPage();\n",
+    "solution": "const posts = [\"İlk kodum\", \"Döngüler neden harika?\", \"Sitemi yayınladım\"];\n\nfunction wait(ms) {\n  // Promise döndür\n  return new Promise((resolve) => setTimeout(resolve, ms));\n}\n\nasync function showPage() {\n  // boşalt, yükleniyor göster, bekle, yazıları ekle, yükleniyor gizle\n  const loader = document.querySelector(\"#loader\");\n  const content = document.querySelector(\"#content\");\n  content.innerHTML = \"\";\n  loader.classList.remove(\"hidden\");\n  await wait(150);\n  for (const title of posts) {\n    const h3 = document.createElement(\"h3\");\n    h3.textContent = title;\n    content.append(h3);\n  }\n  loader.classList.add(\"hidden\");\n}\n\nshowPage();\n",
+    "hints": [
+     "wait: return new Promise((resolve) => setTimeout(resolve, ms));",
+     "loader.classList.remove(\"hidden\"); await wait(150);",
+     "Her başlık için document.createElement(\"h3\") ve content.append(h3)"
+    ],
+    "check": {
+     "code_contains": [
+      "new Promise",
+      "async",
+      "await"
+     ],
+     "js": "await sleep(250);\nconst w = wait(10);\nassert(w && typeof w.then === \"function\", \"wait(ms) bir Promise döndürmeli.\");\nconst t0 = Date.now();\nawait wait(100);\nassert(Date.now() - t0 >= 80, \"wait(100) yaklaşık 100 ms sonra tamamlanmalı.\");\nconst p = showPage();\nassert(!$(\"#loader\").classList.contains(\"hidden\"), \"Beklerken #loader görünmeli (hidden sınıfını kaldır).\");\nassert($$(\"#content h3\").length === 0, \"Beklerken #content boş olmalı: önce boşalt, yazıları beklemeden sonra ekle.\");\nawait p;\nassert($(\"#loader\").classList.contains(\"hidden\"), \"Yükleme bitince #loader'a tekrar hidden sınıfı verilmeli.\");\nconst titles = $$(\"#content h3\").map((h) => h.textContent.trim());\nassert(same(titles, posts), \"#content'te posts dizisindeki her başlık için bir <h3> olmalı.\");\nposts.push(\"Yeni yazı\");\nawait showPage();\nassert($$(\"#content h3\").length === 4, \"showPage() her çağrıda içeriği baştan kurmalı (önce #content'i boşalt).\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<header><h1 id=\"site-title\">Ada'nın Sitesi</h1><nav><a href=\"#\">Ana sayfa</a> · <a href=\"#\">Galeri</a> · <a href=\"#\">İletişim</a></nav></header>\n<div id=\"loader\" class=\"hidden\">Yükleniyor…</div>\n<main id=\"content\"></main>\n",
+    "css": "header{border-bottom:3px solid #7e57c2;margin-bottom:10px;padding-bottom:4px}#site-title{margin:0;color:#4a2f8a;font-size:22px}nav a{color:#7e57c2}.hidden{display:none}#loader{padding:12px;background:#ede7f6;border-radius:6px}#content h3{margin:6px 0}"
+   }
+  },
+  "js-app": {
+   "project_contribution": "Async kaydetme",
+   "project_task": {
+    "id": "js-d25-pa",
+    "title": "Kaydediliyor…",
+    "prompt": "Kaydetme biraz zaman alıyormuş gibi davranalım.\n\n- `saveTasks(tasks)`: bir Promise döndürsün; 100 ms sonra `tasks`'ı JSON olarak `localStorage`'da `tasks` anahtarına yazıp tamamlansın.\n- `#save` tıklanınca `async` bir fonksiyon çalışsın: görevleri listedeki `<li>`'lerin metninden topla; `#status` `Kaydediliyor…` olsun ve düğme devre dışı kalsın (`disabled = true`); `await saveTasks(...)` bitince `#status` `Kaydedildi` olsun ve düğme tekrar açılsın.",
+    "starter": "const saveBtn = document.querySelector(\"#save\");\nconst statusText = document.querySelector(\"#status\");\n\nfunction saveTasks(tasks) {\n  // 100 ms sonra localStorage'a yazan bir Promise döndür\n}\n\n// #save tıklanınca: topla, Kaydediliyor…, await, Kaydedildi\n\n",
+    "solution": "const saveBtn = document.querySelector(\"#save\");\nconst statusText = document.querySelector(\"#status\");\n\nfunction saveTasks(tasks) {\n  // 100 ms sonra localStorage'a yazan bir Promise döndür\n  return new Promise((resolve) => {\n    setTimeout(() => {\n      localStorage.setItem(\"tasks\", JSON.stringify(tasks));\n      resolve();\n    }, 100);\n  });\n}\n\n// #save tıklanınca: topla, Kaydediliyor…, await, Kaydedildi\nsaveBtn.addEventListener(\"click\", async () => {\n  const tasks = Array.from(document.querySelectorAll(\"#list li\")).map((li) => li.textContent);\n  statusText.textContent = \"Kaydediliyor…\";\n  saveBtn.disabled = true;\n  await saveTasks(tasks);\n  statusText.textContent = \"Kaydedildi\";\n  saveBtn.disabled = false;\n});\n",
+    "hints": [
+     "return new Promise((resolve) => { setTimeout(() => { localStorage.setItem(...); resolve(); }, 100); });",
+     "Dinleyici async olabilir: saveBtn.addEventListener(\"click\", async () => { ... });",
+     "Görevler: Array.from(document.querySelectorAll(\"#list li\")).map((li) => li.textContent)"
+    ],
+    "check": {
+     "code_contains": [
+      "new Promise",
+      "async",
+      "await",
+      "localStorage.setItem"
+     ],
+     "js": "localStorage.removeItem(\"tasks\");\nconst p = saveTasks([\"X\"]);\nassert(p && typeof p.then === \"function\", \"saveTasks bir Promise döndürmeli.\");\nassert(localStorage.getItem(\"tasks\") === null, \"Kayıt hemen değil, 100 ms sonra yapılmalı (setTimeout).\");\nawait p;\nassert(localStorage.getItem(\"tasks\") === '[\"X\"]', \"saveTasks görevleri JSON olarak 'tasks' anahtarına yazmalı.\");\nlocalStorage.removeItem(\"tasks\");\nclick(\"#save\");\nassert(/Kaydediliyor/.test($(\"#status\").textContent), \"Tıklayınca #status 'Kaydediliyor…' olmalı.\");\nassert($(\"#save\").disabled === true, \"Kaydederken düğme devre dışı olmalı (disabled = true).\");\nawait sleep(250);\nassert($(\"#status\").textContent.trim() === \"Kaydedildi\", \"Kayıt bitince #status 'Kaydedildi' olmalı.\");\nassert($(\"#save\").disabled === false, \"Kayıt bitince düğme tekrar açılmalı.\");\nassert(same(JSON.parse(localStorage.getItem(\"tasks\") || \"null\"), [\"Fizik tekrarı\", \"Kitap okuma\"]), \"Listedeki görevler kaydedilmeli: [\\\"Fizik tekrarı\\\", \\\"Kitap okuma\\\"].\");\nconst li = document.createElement(\"li\");\nli.textContent = \"Kimya\";\n$(\"#list\").append(li);\nclick(\"#save\");\nawait sleep(250);\nassert(JSON.parse(localStorage.getItem(\"tasks\") || \"[]\").length === 3, \"Görevler her tıklamada listeden yeniden toplanmalı.\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<h2 class=\"app-title\">Çalışma Asistanım</h2>\n<ul id=\"list\"><li>Fizik tekrarı</li><li>Kitap okuma</li></ul>\n<button id=\"save\">Kaydet</button>\n<p id=\"status\"></p>\n",
+    "css": ".app-title{margin:0 0 8px;color:#2e7d32}"
+   }
+  },
+  "js-quiz": {
+   "project_contribution": "Async soru yükleme",
+   "project_task": {
+    "id": "js-d25-pq",
+    "title": "Sorular yükleniyor",
+    "prompt": "Sorular bir sunucudan geliyormuş gibi gecikmeyle yüklensin.\n\n- `loadQuestions()`: bir Promise döndürsün; 150 ms sonra `QUESTIONS` dizisiyle tamamlansın.\n- `start()`: `async` bir fonksiyon. `#question`'a `Sorular yükleniyor…` yazsın ve `#start` düğmesini gizlesin (`hidden = true`); soruları `await` ile alsın; sonra `#question`'a ilk sorunun metnini (`soru`), `#count`'a `3 soru` biçiminde soru sayısını yazsın.\n- `#start` düğmesi `start()`'ı çalıştırsın.",
+    "starter": "const QUESTIONS = [\n  { soru: \"Ay, hangi gezegenin uydusudur?\", secenekler: [\"Mars\", \"Dünya\", \"Jüpiter\"], dogru: 1 },\n  { soru: \"Kızıl gezegen hangisidir?\", secenekler: [\"Venüs\", \"Mars\", \"Merkür\"], dogru: 1 },\n  { soru: \"Halkalarıyla ünlü gezegen hangisidir?\", secenekler: [\"Satürn\", \"Mars\", \"Uranüs\"], dogru: 0 },\n];\n\nfunction loadQuestions() {\n  // 150 ms sonra QUESTIONS ile tamamlanan bir Promise döndür\n}\n\nasync function start() {\n  // yükleniyor yaz, düğmeyi gizle, await, ilk soruyu ve sayıyı yaz\n}\n\n// #start düğmesini bağla\n\n",
+    "solution": "const QUESTIONS = [\n  { soru: \"Ay, hangi gezegenin uydusudur?\", secenekler: [\"Mars\", \"Dünya\", \"Jüpiter\"], dogru: 1 },\n  { soru: \"Kızıl gezegen hangisidir?\", secenekler: [\"Venüs\", \"Mars\", \"Merkür\"], dogru: 1 },\n  { soru: \"Halkalarıyla ünlü gezegen hangisidir?\", secenekler: [\"Satürn\", \"Mars\", \"Uranüs\"], dogru: 0 },\n];\n\nfunction loadQuestions() {\n  // 150 ms sonra QUESTIONS ile tamamlanan bir Promise döndür\n  return new Promise((resolve) => {\n    setTimeout(() => resolve(QUESTIONS), 150);\n  });\n}\n\nasync function start() {\n  // yükleniyor yaz, düğmeyi gizle, await, ilk soruyu ve sayıyı yaz\n  const question = document.querySelector(\"#question\");\n  question.textContent = \"Sorular yükleniyor…\";\n  document.querySelector(\"#start\").hidden = true;\n  const questions = await loadQuestions();\n  question.textContent = questions[0].soru;\n  document.querySelector(\"#count\").textContent = `${questions.length} soru`;\n}\n\n// #start düğmesini bağla\ndocument.querySelector(\"#start\").addEventListener(\"click\", start);\n",
+    "hints": [
+     "return new Promise((resolve) => { setTimeout(() => resolve(QUESTIONS), 150); });",
+     "const questions = await loadQuestions();",
+     "Sayı: `${questions.length} soru`"
+    ],
+    "check": {
+     "code_contains": [
+      "new Promise",
+      "async",
+      "await"
+     ],
+     "js": "const p = loadQuestions();\nassert(p && typeof p.then === \"function\", \"loadQuestions() bir Promise döndürmeli.\");\nconst t0 = Date.now();\nconst qs = await p;\nassert(qs === QUESTIONS || same(qs, QUESTIONS), \"loadQuestions() QUESTIONS dizisiyle tamamlanmalı.\");\nassert(Date.now() - t0 >= 100, \"Sorular 150 ms sonra gelmeli (setTimeout).\");\nclick(\"#start\");\nassert(/yükleniyor/.test($(\"#question\").textContent), \"Başlatınca #question 'Sorular yükleniyor…' yazmalı.\");\nassert($(\"#start\").hidden === true, \"Başlatınca #start düğmesi gizlenmeli (hidden = true).\");\nawait sleep(300);\nassert($(\"#question\").textContent.trim() === QUESTIONS[0].soru, \"Yüklenince #question ilk sorunun metnini göstermeli.\");\nassert($(\"#count\").textContent.trim() === \"3 soru\", \"#count '3 soru' yazmalı.\");\nQUESTIONS.unshift({ soru: \"Güneş bir yıldız mıdır?\", secenekler: [\"Evet\", \"Hayır\"], dogru: 0 });\nawait start();\nassert($(\"#question\").textContent.trim() === \"Güneş bir yıldız mıdır?\" && $(\"#count\").textContent.trim() === \"4 soru\", \"İlk soru ve sayı yüklenen diziden gelmeli (elle yazma).\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<h2 class=\"quiz-title\">Bilgi Yarışması</h2>\n<p id=\"question\">Hazır olduğunda başlat.</p>\n<p id=\"count\"></p>\n<button id=\"start\">Yarışmayı başlat</button>\n",
+    "css": ".quiz-title{margin:0 0 8px;color:#5e35b1}#question{font-weight:600}"
+   }
+  }
+ },
+ "available": true
+}

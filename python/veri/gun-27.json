@@ -1,0 +1,2155 @@
+{
+ "day": 27,
+ "title": "Python ve MongoDB",
+ "region": "dag",
+ "project_contribution": "Oyuncu veritabanı",
+ "game_role": "Oyuncu veritabanın seni kaydeder ve oyun sonunda seviye atlatır.",
+ "xp_complete": 150,
+ "objective": "Belge tabanlı veritabanı fikrini öğrenmek: MongoDB'deki insert, find ve update işlemlerini Python ile canlandırmak",
+ "story": "Dağın yamacındaki kütüphanede her oyuncunun bir dosyası var. Kütüphaneci bir isim söylediğinde saniyeler içinde doğru dosyayı buluyor, yeni oyuncular için dosya açıyor, seviyesi artanları güncelliyor. Bilgisayar dünyasında bu kütüphanecinin adı **veritabanı**. Bugün MongoDB'nin nasıl düşündüğünü öğreniyoruz.",
+ "sections": [
+  {
+   "title": "Veritabanı nedir?",
+   "body": "Programlar kapanınca değişkenlerdeki bilgiler kaybolur. Dosyaya yazmak küçük işler için yeter ama binlerce oyuncunun verisini hızlıca aramak, güncellemek ve güvende tutmak için **veritabanı** kullanılır.\n\nMongoDB bir **belge veritabanıdır**. Her kayıt bir Python sözlüğüne çok benzeyen bir **belgedir** (document). Belgeler **koleksiyonlarda** (collection) toplanır:\n\n```python\n{\"name\": \"Piko\", \"level\": 3, \"items\": [\"kılıç\"]}\n```"
+  },
+  {
+   "title": "pymongo ile gerçek MongoDB",
+   "body": "Kendi bilgisayarında `pymongo` paketiyle şöyle çalışırsın:\n\n```python\nfrom pymongo import MongoClient\nclient = MongoClient(\"mongodb://localhost:27017\")\ndb = client[\"oyun\"]\n\ndb.players.insert_one({\"name\": \"Piko\", \"level\": 3})\nfor p in db.players.find({\"level\": 3}):\n    print(p[\"name\"])\ndb.players.update_one({\"name\": \"Piko\"}, {\"$set\": {\"level\": 4}})\ndb.players.delete_one({\"name\": \"Piko\"})\n```\n\nBu sitede gerçek bir veritabanına bağlanamıyoruz. Onun yerine koleksiyonu bir **sözlük listesi** olarak tutup aynı işlemleri kendimiz yazacağız. Böylece MongoDB'nin içinde neler olduğunu da anlamış olacağız."
+  },
+  {
+   "title": "Sorgu (query) nedir?",
+   "body": "`find({\"level\": 3})` şunu der: \"`level` alanı 3 olan tüm belgeleri getir.\" Sorgu da bir sözlüktür ve belgenin **tüm** alanları sorgudaki değerlerle eşleşmelidir.\n\nBoş sorgu `{}` tüm belgeleri getirir. MongoDB'de `{\"level\": {\"$gt\": 3}}` gibi özel işaretler de vardır: `$gt` büyüktür, `$lt` küçüktür demektir."
+  },
+  {
+   "title": "all() ile hepsi mi?",
+   "body": "Bir koşulun **hepsi** için doğru olup olmadığını `all()` hızlıca söyler:\n\n```python\ndoc = {\"name\": \"Piko\", \"level\": 3}\nquery = {\"level\": 3, \"name\": \"Piko\"}\nprint(all(doc.get(k) == v for k, v in query.items()))   # True\n```\n\nTersine, en az birinin doğru olmasını `any()` kontrol eder."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Koleksiyon ve belgeler",
+   "code": "players = [\n    {\"name\": \"Piko\", \"level\": 3},\n    {\"name\": \"Ece\", \"level\": 5},\n]\nplayers.append({\"name\": \"Can\", \"level\": 1})\nfor p in players:\n    print(p[\"name\"], \"seviye\", p[\"level\"])\n",
+   "note": ""
+  },
+  {
+   "title": "Sorguya uyuyor mu?",
+   "code": "doc = {\"name\": \"Piko\", \"level\": 3, \"club\": \"mavi\"}\nfor query in [{\"level\": 3}, {\"level\": 3, \"club\": \"mavi\"}, {\"level\": 4}, {}]:\n    ok = all(doc.get(k) == v for k, v in query.items())\n    print(query, \"->\", ok)\n",
+   "note": "Boş sorgu her belgeye uyar."
+  },
+  {
+   "title": "Güncelleme",
+   "code": "players = [{\"name\": \"Piko\", \"level\": 3}, {\"name\": \"Ece\", \"level\": 5}]\nfor p in players:\n    if p[\"name\"] == \"Piko\":\n        p.update({\"level\": 4})\n        break\nprint(players)\n",
+   "note": ""
+  }
+ ],
+ "tasks": [
+  {
+   "id": "d27-t1",
+   "title": "insert_one",
+   "prompt": "`insert_one(collection, doc)` belgeyi koleksiyonun sonuna eklesin. Sonra `players` koleksiyonuna `{\"name\": \"Ece\", \"level\": 5}` belgesini ekle.",
+   "starter": "def insert_one(collection, doc):\n    pass\n\nplayers = [{\"name\": \"Piko\", \"level\": 3}]\n\n# Ece'yi ekle\n\nprint(players)\n",
+   "solution": "def insert_one(collection, doc):\n    collection.append(doc)\n\nplayers = [{\"name\": \"Piko\", \"level\": 3}]\n\ninsert_one(players, {\"name\": \"Ece\", \"level\": 5})\n\nprint(players)\n",
+   "hints": [
+    "insert_one içinde: collection.append(doc)",
+    "insert_one(players, {\"name\": \"Ece\", \"level\": 5})"
+   ],
+   "check": {
+    "python": "\nassert players == [{\"name\": \"Piko\", \"level\": 3}, {\"name\": \"Ece\", \"level\": 5}], \"players'ta Piko ve Ece olmalı.\"\nc = []\ninsert_one(c, {\"a\": 1}); insert_one(c, {\"b\": 2})\nassert c == [{\"a\": 1}, {\"b\": 2}], \"insert_one belgeleri sırayla eklemeli.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "def insert_one(collection, doc):",
+      "notes": [
+       "`insert_one` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `collection`, `doc`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+      ]
+     },
+     {
+      "n": 2,
+      "code": "    collection.append(doc)",
+      "notes": [
+       "`collection.append(doc)`: `collection` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "players = [{\"name\": \"Piko\", \"level\": 3}]",
+      "notes": [
+       "`players` adında bir değişken oluşturuluyor ve içine `[{\"name\": \"Piko\", \"level\": 3}]` (liste) konuyor."
+      ]
+     },
+     {
+      "n": 6,
+      "code": "insert_one(players, {\"name\": \"Ece\", \"level\": 5})",
+      "notes": [
+       "`insert_one(players, {\"name\": \"Ece\", \"level\": 5})`: tanımladığın `insert_one` fonksiyonunu çalıştırır.",
+       "`insert_one(...)`: senin tanımladığın fonksiyonu çağırır."
+      ]
+     },
+     {
+      "n": 8,
+      "code": "print(players)",
+      "notes": [
+       "`print(players)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "players",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `[{\"name\": \"Piko\", \"level\": 3}]`."
+     },
+     {
+      "term": "collection",
+      "kind": "parametre",
+      "desc": "`insert_one` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+     },
+     {
+      "term": "doc",
+      "kind": "parametre",
+      "desc": "`insert_one` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+     },
+     {
+      "term": "def",
+      "kind": "anahtar kelime",
+      "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+     },
+     {
+      "term": "insert_one()",
+      "kind": "senin fonksiyonun",
+      "desc": "Kodda tanımlanan fonksiyon; parametreleri: `collection`, `doc`."
+     },
+     {
+      "term": ".append()",
+      "kind": "metot",
+      "desc": "Listenin sonuna yeni bir eleman ekler."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d27-t2",
+   "title": "find",
+   "prompt": "`find(collection, query)` sorgudaki **tüm** alanları eşleşen belgelerin listesini döndürsün. Boş sorgu hepsini getirsin.",
+   "starter": "def find(collection, query):\n    return []\n\nplayers = [\n    {\"name\": \"Piko\", \"level\": 3, \"club\": \"mavi\"},\n    {\"name\": \"Ece\", \"level\": 5, \"club\": \"mavi\"},\n    {\"name\": \"Can\", \"level\": 3, \"club\": \"sarı\"},\n]\nprint(find(players, {\"level\": 3}))\n",
+   "solution": "def find(collection, query):\n    return [doc for doc in collection if all(doc.get(k) == v for k, v in query.items())]\n\nplayers = [\n    {\"name\": \"Piko\", \"level\": 3, \"club\": \"mavi\"},\n    {\"name\": \"Ece\", \"level\": 5, \"club\": \"mavi\"},\n    {\"name\": \"Can\", \"level\": 3, \"club\": \"sarı\"},\n]\nprint(find(players, {\"level\": 3}))\n",
+   "hints": [
+    "Her belge için sorgunun tüm alanlarını kontrol et: all(doc.get(k) == v for k, v in query.items())",
+    "Uyanları bir listeye topla."
+   ],
+   "check": {
+    "python": "\nc = [{\"n\": \"a\", \"x\": 1, \"y\": 2}, {\"n\": \"b\", \"x\": 1, \"y\": 3}, {\"n\": \"c\", \"x\": 2, \"y\": 2}]\nassert [d[\"n\"] for d in find(c, {\"x\": 1})] == [\"a\", \"b\"], \"find(c, {'x': 1}) a ve b'yi getirmeli.\"\nassert [d[\"n\"] for d in find(c, {\"x\": 1, \"y\": 2})] == [\"a\"], \"Sorgudaki TÜM alanlar eşleşmeli.\"\nassert find(c, {\"x\": 9}) == [], \"Eşleşme yoksa boş liste dönmeli.\"\nassert len(find(c, {})) == 3, \"Boş sorgu tüm belgeleri getirmeli.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "def find(collection, query):",
+      "notes": [
+       "`find` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `collection`, `query`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+      ]
+     },
+     {
+      "n": 2,
+      "code": "    return [doc for doc in collection if all(doc.get(k) == v for k, v in query.items())]",
+      "notes": [
+       "Fonksiyon `[doc for doc in collection if all(doc.get(k) == v for k, ...` değerini geri verir ve burada biter.",
+       "Tek satırda döngüyle yeni bir liste/dizi üretiliyor."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "players = [",
+      "notes": [
+       "`players` adında bir değişken oluşturuluyor ve içine `[ {\"name\": \"Piko\", \"level\": 3, \"club\": \"mavi\"}, {\"name\": ...` (liste) konuyor."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "    {\"name\": \"Piko\", \"level\": 3, \"club\": \"mavi\"},",
+      "notes": [
+       "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+      ]
+     },
+     {
+      "n": 6,
+      "code": "    {\"name\": \"Ece\", \"level\": 5, \"club\": \"mavi\"},",
+      "notes": [
+       "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+      ]
+     },
+     {
+      "n": 7,
+      "code": "    {\"name\": \"Can\", \"level\": 3, \"club\": \"sarı\"},",
+      "notes": [
+       "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+      ]
+     },
+     {
+      "n": 8,
+      "code": "]",
+      "notes": [
+       "Yukarıda başlayan çok satırlı değerin (metin, liste ya da sözlük) devamı."
+      ]
+     },
+     {
+      "n": 9,
+      "code": "print(find(players, {\"level\": 3}))",
+      "notes": [
+       "`print(find(players, {\"level\": 3}))`: parantez içindeki değeri ekrana yazdırır.",
+       "`find(...)`: senin tanımladığın fonksiyonu çağırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "players",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `[ {\"name\": \"Piko\", \"level\": 3, \"club\": \"mavi\"}, {\"name\": ...`."
+     },
+     {
+      "term": "collection",
+      "kind": "parametre",
+      "desc": "`find` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+     },
+     {
+      "term": "query",
+      "kind": "parametre",
+      "desc": "`find` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+     },
+     {
+      "term": "def",
+      "kind": "anahtar kelime",
+      "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+     },
+     {
+      "term": "find()",
+      "kind": "senin fonksiyonun",
+      "desc": "Kodda tanımlanan fonksiyon; parametreleri: `collection`, `query`."
+     },
+     {
+      "term": "return",
+      "kind": "anahtar kelime",
+      "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+     },
+     {
+      "term": "[... for ... in ...]",
+      "kind": "liste üreteci",
+      "desc": "Liste üreteci: [ifade for x in liste if koşul] ile tek satırda yeni liste."
+     },
+     {
+      "term": "all()",
+      "kind": "fonksiyon",
+      "desc": "Hepsi doğruysa True verir."
+     },
+     {
+      "term": "==",
+      "kind": "operatör",
+      "desc": "Eşit mi? (True/False)"
+     },
+     {
+      "term": ".get()",
+      "kind": "metot",
+      "desc": "Sözlükten anahtarın değerini alır; anahtar yoksa hata vermez, varsayılanı verir."
+     },
+     {
+      "term": ".items()",
+      "kind": "metot",
+      "desc": "Sözlüğün (anahtar, değer) çiftlerini verir."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d27-t3",
+   "title": "update_one",
+   "prompt": "`update_one(collection, query, changes)` sorguya uyan **ilk** belgeyi `changes` sözlüğüyle güncellesin ve `True` döndürsün. Hiç belge uymazsa `False` döndürsün.",
+   "starter": "def update_one(collection, query, changes):\n    return False\n\nplayers = [{\"name\": \"Piko\", \"level\": 3}, {\"name\": \"Ece\", \"level\": 5}]\nprint(update_one(players, {\"name\": \"Piko\"}, {\"level\": 4}))\nprint(players)\n",
+   "solution": "def update_one(collection, query, changes):\n    for doc in collection:\n        if all(doc.get(k) == v for k, v in query.items()):\n            doc.update(changes)\n            return True\n    return False\n\nplayers = [{\"name\": \"Piko\", \"level\": 3}, {\"name\": \"Ece\", \"level\": 5}]\nprint(update_one(players, {\"name\": \"Piko\"}, {\"level\": 4}))\nprint(players)\n",
+   "hints": [
+    "Belgeleri dolaş, ilk uyanı bulunca doc.update(changes) yap ve return True",
+    "Döngü bitince return False"
+   ],
+   "check": {
+    "python": "\nc = [{\"n\": \"a\", \"lv\": 1}, {\"n\": \"a\", \"lv\": 7}, {\"n\": \"b\", \"lv\": 2}]\nassert update_one(c, {\"n\": \"a\"}, {\"lv\": 99, \"yeni\": True}) is True, \"Eşleşme varsa True döndürmeli.\"\nassert c[0] == {\"n\": \"a\", \"lv\": 99, \"yeni\": True} and c[1][\"lv\"] == 7, \"Sadece İLK eşleşen belge güncellenmeli.\"\nassert update_one(c, {\"n\": \"z\"}, {\"lv\": 0}) is False, \"Eşleşme yoksa False döndürmeli.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "def update_one(collection, query, changes):",
+      "notes": [
+       "`update_one` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `collection`, `query`, `changes`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+      ]
+     },
+     {
+      "n": 2,
+      "code": "    for doc in collection:",
+      "notes": [
+       "Döngü: `collection` içindeki her eleman sırayla `doc` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "        if all(doc.get(k) == v for k, v in query.items()):",
+      "notes": [
+       "Koşul: `all(doc.get(k) == v for k, v in query.items())` doğruysa altındaki girintili satırlar çalışır.",
+       "Tek satırda döngüyle yeni bir liste/dizi üretiliyor."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "            doc.update(changes)",
+      "notes": [
+       "`doc.update(changes)`: `doc` üzerinde `update` metodunu çalıştırır. Sözlüğe yeni anahtar-değerler ekler ya da var olanları değiştirir."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "            return True",
+      "notes": [
+       "Fonksiyon `True` değerini geri verir ve burada biter."
+      ]
+     },
+     {
+      "n": 6,
+      "code": "    return False",
+      "notes": [
+       "Fonksiyon `False` değerini geri verir ve burada biter."
+      ]
+     },
+     {
+      "n": 8,
+      "code": "players = [{\"name\": \"Piko\", \"level\": 3}, {\"name\": \"Ece\", \"level\": 5}]",
+      "notes": [
+       "`players` adında bir değişken oluşturuluyor ve içine `[{\"name\": \"Piko\", \"level\": 3}, {\"name\": \"Ece\", \"level\": 5}]` (liste) konuyor."
+      ]
+     },
+     {
+      "n": 9,
+      "code": "print(update_one(players, {\"name\": \"Piko\"}, {\"level\": 4}))",
+      "notes": [
+       "`print(update_one(players, {\"name\": \"Piko\"}, {\"level\": 4}))`: parantez içindeki değeri ekrana yazdırır.",
+       "`update_one(...)`: senin tanımladığın fonksiyonu çağırır."
+      ]
+     },
+     {
+      "n": 10,
+      "code": "print(players)",
+      "notes": [
+       "`print(players)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "players",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `[{\"name\": \"Piko\", \"level\": 3}, {\"name\": \"Ece\", \"level\": 5}]`."
+     },
+     {
+      "term": "doc",
+      "kind": "döngü değişkeni",
+      "desc": "Döngünün her turunda `collection` içindeki sıradaki elemanı tutar."
+     },
+     {
+      "term": "collection",
+      "kind": "parametre",
+      "desc": "`update_one` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+     },
+     {
+      "term": "query",
+      "kind": "parametre",
+      "desc": "`update_one` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+     },
+     {
+      "term": "changes",
+      "kind": "parametre",
+      "desc": "`update_one` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+     },
+     {
+      "term": "def",
+      "kind": "anahtar kelime",
+      "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+     },
+     {
+      "term": "update_one()",
+      "kind": "senin fonksiyonun",
+      "desc": "Kodda tanımlanan fonksiyon; parametreleri: `collection`, `query`, `changes`."
+     },
+     {
+      "term": "for",
+      "kind": "anahtar kelime",
+      "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+     },
+     {
+      "term": "if",
+      "kind": "anahtar kelime",
+      "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+     },
+     {
+      "term": "all()",
+      "kind": "fonksiyon",
+      "desc": "Hepsi doğruysa True verir."
+     },
+     {
+      "term": "[... for ... in ...]",
+      "kind": "liste üreteci",
+      "desc": "Liste üreteci: [ifade for x in liste if koşul] ile tek satırda yeni liste."
+     },
+     {
+      "term": "==",
+      "kind": "operatör",
+      "desc": "Eşit mi? (True/False)"
+     },
+     {
+      "term": ".get()",
+      "kind": "metot",
+      "desc": "Sözlükten anahtarın değerini alır; anahtar yoksa hata vermez, varsayılanı verir."
+     },
+     {
+      "term": ".items()",
+      "kind": "metot",
+      "desc": "Sözlüğün (anahtar, değer) çiftlerini verir."
+     },
+     {
+      "term": ".update()",
+      "kind": "metot",
+      "desc": "Sözlüğe yeni anahtar-değerler ekler ya da var olanları değiştirir."
+     },
+     {
+      "term": "return",
+      "kind": "anahtar kelime",
+      "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+     },
+     {
+      "term": "True",
+      "kind": "değer",
+      "desc": "Doğru (mantıksal değer)."
+     },
+     {
+      "term": "False",
+      "kind": "değer",
+      "desc": "Yanlış (mantıksal değer)."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "id": "d27-c",
+  "title": "$gt işareti",
+  "prompt": "`find` fonksiyonunu geliştir: sorgudaki değer `{\"$gt\": 3}` gibi bir sözlükse, belgedeki değer ondan **büyük** olmalı. Diğer değerlerde eşitlik kontrolü devam etsin.",
+  "starter": "def matches(doc, query):\n    return all(doc.get(k) == v for k, v in query.items())\n\ndef find(collection, query):\n    return [doc for doc in collection if matches(doc, query)]\n\nplayers = [{\"name\": \"Piko\", \"level\": 3}, {\"name\": \"Ece\", \"level\": 5}, {\"name\": \"Can\", \"level\": 8}]\nprint(find(players, {\"level\": {\"$gt\": 4}}))\n",
+  "solution": "def matches(doc, query):\n    for key, value in query.items():\n        if isinstance(value, dict) and \"$gt\" in value:\n            if key not in doc or not doc[key] > value[\"$gt\"]:\n                return False\n        elif doc.get(key) != value:\n            return False\n    return True\n\ndef find(collection, query):\n    return [doc for doc in collection if matches(doc, query)]\n\nplayers = [{\"name\": \"Piko\", \"level\": 3}, {\"name\": \"Ece\", \"level\": 5}, {\"name\": \"Can\", \"level\": 8}]\nprint(find(players, {\"level\": {\"$gt\": 4}}))\n",
+  "hints": [
+   "matches içinde her anahtarı tek tek kontrol et.",
+   "Değer sözlükse ve \"$gt\" içeriyorsa doc[key] > value[\"$gt\"] olmalı.",
+   "Bir koşul tutmazsa hemen return False"
+  ],
+  "check": {
+   "python": "\nc = [{\"n\": \"a\", \"lv\": 3}, {\"n\": \"b\", \"lv\": 5}, {\"n\": \"c\", \"lv\": 8}, {\"n\": \"d\"}]\nassert [d[\"n\"] for d in find(c, {\"lv\": {\"$gt\": 4}})] == [\"b\", \"c\"], \"{'lv': {'$gt': 4}} seviyesi 4'ten büyük olanları getirmeli.\"\nassert [d[\"n\"] for d in find(c, {\"lv\": {\"$gt\": 4}, \"n\": \"c\"})] == [\"c\"], \"$gt ile normal eşitlik birlikte çalışmalı.\"\nassert [d[\"n\"] for d in find(c, {\"lv\": 3})] == [\"a\"], \"Normal eşitlik sorguları çalışmaya devam etmeli.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "def matches(doc, query):",
+     "notes": [
+      "`matches` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `doc`, `query`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+     ]
+    },
+    {
+     "n": 2,
+     "code": "    for key, value in query.items():",
+     "notes": [
+      "Döngü: `query.items()` içindeki her eleman sırayla `key, value` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "        if isinstance(value, dict) and \"$gt\" in value:",
+     "notes": [
+      "Koşul: `isinstance(value, dict) and \"$gt\" in value` doğruysa altındaki girintili satırlar çalışır."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "            if key not in doc or not doc[key] > value[\"$gt\"]:",
+     "notes": [
+      "Koşul: `key not in doc or not doc[key] > value[\"$gt\"]` doğruysa altındaki girintili satırlar çalışır."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "                return False",
+     "notes": [
+      "Fonksiyon `False` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "        elif doc.get(key) != value:",
+     "notes": [
+      "`elif`: yukarıdaki koşul yanlışsa `doc.get(key) != value` koşuluna bakılır."
+     ]
+    },
+    {
+     "n": 7,
+     "code": "            return False",
+     "notes": [
+      "Fonksiyon `False` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 8,
+     "code": "    return True",
+     "notes": [
+      "Fonksiyon `True` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 10,
+     "code": "def find(collection, query):",
+     "notes": [
+      "`find` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `collection`, `query`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+     ]
+    },
+    {
+     "n": 11,
+     "code": "    return [doc for doc in collection if matches(doc, query)]",
+     "notes": [
+      "Fonksiyon `[doc for doc in collection if matches(doc, query)]` değerini geri verir ve burada biter.",
+      "Tek satırda döngüyle yeni bir liste/dizi üretiliyor.",
+      "`matches(...)`: senin tanımladığın fonksiyonu çağırır."
+     ]
+    },
+    {
+     "n": 13,
+     "code": "players = [{\"name\": \"Piko\", \"level\": 3}, {\"name\": \"Ece\", \"level\": 5}, {\"name\": \"Can\", \"level\": 8}]",
+     "notes": [
+      "`players` adında bir değişken oluşturuluyor ve içine `[{\"name\": \"Piko\", \"level\": 3}, {\"name\": \"Ece\", \"level\": 5...` (liste) konuyor."
+     ]
+    },
+    {
+     "n": 14,
+     "code": "print(find(players, {\"level\": {\"$gt\": 4}}))",
+     "notes": [
+      "`print(find(players, {\"level\": {\"$gt\": 4}}))`: parantez içindeki değeri ekrana yazdırır.",
+      "`find(...)`: senin tanımladığın fonksiyonu çağırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "players",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `[{\"name\": \"Piko\", \"level\": 3}, {\"name\": \"Ece\", \"level\": 5...`."
+    },
+    {
+     "term": "key",
+     "kind": "döngü değişkeni",
+     "desc": "Döngünün her turunda `query.items()` içindeki sıradaki elemanı tutar."
+    },
+    {
+     "term": "value",
+     "kind": "döngü değişkeni",
+     "desc": "Döngünün her turunda `query.items()` içindeki sıradaki elemanı tutar."
+    },
+    {
+     "term": "doc",
+     "kind": "parametre",
+     "desc": "`matches` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+    },
+    {
+     "term": "query",
+     "kind": "parametre",
+     "desc": "`matches` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+    },
+    {
+     "term": "collection",
+     "kind": "parametre",
+     "desc": "`find` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+    },
+    {
+     "term": "def",
+     "kind": "anahtar kelime",
+     "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+    },
+    {
+     "term": "matches()",
+     "kind": "senin fonksiyonun",
+     "desc": "Kodda tanımlanan fonksiyon; parametreleri: `doc`, `query`."
+    },
+    {
+     "term": "for",
+     "kind": "anahtar kelime",
+     "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+    },
+    {
+     "term": ".items()",
+     "kind": "metot",
+     "desc": "Sözlüğün (anahtar, değer) çiftlerini verir."
+    },
+    {
+     "term": "if",
+     "kind": "anahtar kelime",
+     "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+    },
+    {
+     "term": "and",
+     "kind": "operatör",
+     "desc": "\"ve\": iki koşul da doğruysa True."
+    },
+    {
+     "term": "isinstance()",
+     "kind": "fonksiyon",
+     "desc": "Bir değerin belirli bir türden olup olmadığını sorar (True/False)."
+    },
+    {
+     "term": "in",
+     "kind": "operatör",
+     "desc": "İçinde var mı? (listede, metinde, sözlükte)"
+    },
+    {
+     "term": "or",
+     "kind": "operatör",
+     "desc": "\"veya\": koşullardan biri doğruysa True."
+    },
+    {
+     "term": "not in",
+     "kind": "operatör",
+     "desc": "İçinde yok mu?"
+    },
+    {
+     "term": "not",
+     "kind": "operatör",
+     "desc": "Koşulu tersine çevirir (True ↔ False)."
+    },
+    {
+     "term": ">",
+     "kind": "operatör",
+     "desc": "Büyük mü?"
+    },
+    {
+     "term": "[ ]",
+     "kind": "seçme",
+     "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+    },
+    {
+     "term": "return",
+     "kind": "anahtar kelime",
+     "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+    },
+    {
+     "term": "False",
+     "kind": "değer",
+     "desc": "Yanlış (mantıksal değer)."
+    },
+    {
+     "term": "elif",
+     "kind": "anahtar kelime",
+     "desc": "Önceki koşullar yanlışsa bu koşula bakılır (\"değilse eğer\")."
+    },
+    {
+     "term": "!=",
+     "kind": "operatör",
+     "desc": "Eşit değil mi?"
+    },
+    {
+     "term": ".get()",
+     "kind": "metot",
+     "desc": "Sözlükten anahtarın değerini alır; anahtar yoksa hata vermez, varsayılanı verir."
+    },
+    {
+     "term": "True",
+     "kind": "değer",
+     "desc": "Doğru (mantıksal değer)."
+    },
+    {
+     "term": "find()",
+     "kind": "senin fonksiyonun",
+     "desc": "Kodda tanımlanan fonksiyon; parametreleri: `collection`, `query`."
+    },
+    {
+     "term": "[... for ... in ...]",
+     "kind": "liste üreteci",
+     "desc": "Liste üreteci: [ifade for x in liste if koşul] ile tek satırda yeni liste."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    }
+   ]
+  }
+ },
+ "project_task": {
+  "id": "d27-p",
+  "title": "Oyuncu veritabanı",
+  "prompt": "Piko'nun Macerası'nın oyuncu kayıtlarını yönetelim. `players` koleksiyonu için:\n\n- `add_player(name)`: aynı isimde oyuncu varsa `False` döndürsün. Yoksa `{\"name\": name, \"level\": 1, \"xp\": 0}` belgesini ekleyip `True` döndürsün.\n- `level_up(name)`: oyuncunun seviyesini 1 artırıp yeni seviyeyi döndürsün. Oyuncu yoksa `None` döndürsün.",
+  "starter": "players = []\n\ndef add_player(name):\n    pass\n\ndef level_up(name):\n    pass\n\nprint(add_player(\"Piko\"))\nprint(add_player(\"Piko\"))\nprint(level_up(\"Piko\"))\nprint(players)\n",
+  "solution": "players = []\n\ndef add_player(name):\n    for p in players:\n        if p[\"name\"] == name:\n            return False\n    players.append({\"name\": name, \"level\": 1, \"xp\": 0})\n    return True\n\ndef level_up(name):\n    for p in players:\n        if p[\"name\"] == name:\n            p[\"level\"] += 1\n            return p[\"level\"]\n    return None\n\nprint(add_player(\"Piko\"))\nprint(add_player(\"Piko\"))\nprint(level_up(\"Piko\"))\nprint(players)\n",
+  "hints": [
+   "add_player: önce aynı isim var mı diye dolaş.",
+   "level_up: oyuncuyu bulunca p[\"level\"] += 1 ve return p[\"level\"]"
+  ],
+  "check": {
+   "python": "\nplayers.clear()\nassert add_player(\"Ada\") is True, \"Yeni oyuncu eklenince True döndürmeli.\"\nassert add_player(\"Ada\") is False, \"Aynı isim ikinci kez eklenemez, False döndürmeli.\"\nassert add_player(\"Efe\") is True\nassert players == [{\"name\": \"Ada\", \"level\": 1, \"xp\": 0}, {\"name\": \"Efe\", \"level\": 1, \"xp\": 0}], \"Yeni oyuncular level 1 ve xp 0 ile eklenmeli.\"\nassert level_up(\"Efe\") == 2 and level_up(\"Efe\") == 3, \"level_up seviyeyi artırıp yeni seviyeyi döndürmeli.\"\nassert players[0][\"level\"] == 1, \"Sadece istenen oyuncunun seviyesi artmalı.\"\nassert level_up(\"Yok\") is None, \"Olmayan oyuncu için None döndürmeli.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "players = []",
+     "notes": [
+      "`players` adında bir değişken oluşturuluyor ve içine `[]` (liste) konuyor."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "def add_player(name):",
+     "notes": [
+      "`add_player` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `name`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "    for p in players:",
+     "notes": [
+      "Döngü: `players` içindeki her eleman sırayla `p` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "        if p[\"name\"] == name:",
+     "notes": [
+      "Koşul: `p[\"name\"] == name` doğruysa altındaki girintili satırlar çalışır."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "            return False",
+     "notes": [
+      "Fonksiyon `False` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 7,
+     "code": "    players.append({\"name\": name, \"level\": 1, \"xp\": 0})",
+     "notes": [
+      "`players.append({\"name\": name, \"level\": 1, \"xp\": 0})`: `players` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+     ]
+    },
+    {
+     "n": 8,
+     "code": "    return True",
+     "notes": [
+      "Fonksiyon `True` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 10,
+     "code": "def level_up(name):",
+     "notes": [
+      "`level_up` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `name`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+     ]
+    },
+    {
+     "n": 11,
+     "code": "    for p in players:",
+     "notes": [
+      "Döngü: `players` içindeki her eleman sırayla `p` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+     ]
+    },
+    {
+     "n": 12,
+     "code": "        if p[\"name\"] == name:",
+     "notes": [
+      "Koşul: `p[\"name\"] == name` doğruysa altındaki girintili satırlar çalışır."
+     ]
+    },
+    {
+     "n": 13,
+     "code": "            p[\"level\"] += 1",
+     "notes": [
+      "`p[...] += 1`: `p[...]` değişkeninin değeri güncelleniyor."
+     ]
+    },
+    {
+     "n": 14,
+     "code": "            return p[\"level\"]",
+     "notes": [
+      "Fonksiyon `p[\"level\"]` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 15,
+     "code": "    return None",
+     "notes": [
+      "Fonksiyon `None` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 17,
+     "code": "print(add_player(\"Piko\"))",
+     "notes": [
+      "`print(add_player(\"Piko\"))`: parantez içindeki değeri ekrana yazdırır.",
+      "`add_player(...)`: senin tanımladığın fonksiyonu çağırır."
+     ]
+    },
+    {
+     "n": 18,
+     "code": "print(add_player(\"Piko\"))",
+     "notes": [
+      "`print(add_player(\"Piko\"))`: parantez içindeki değeri ekrana yazdırır.",
+      "`add_player(...)`: senin tanımladığın fonksiyonu çağırır."
+     ]
+    },
+    {
+     "n": 19,
+     "code": "print(level_up(\"Piko\"))",
+     "notes": [
+      "`print(level_up(\"Piko\"))`: parantez içindeki değeri ekrana yazdırır.",
+      "`level_up(...)`: senin tanımladığın fonksiyonu çağırır."
+     ]
+    },
+    {
+     "n": 20,
+     "code": "print(players)",
+     "notes": [
+      "`print(players)`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "players",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `[]`."
+    },
+    {
+     "term": "p",
+     "kind": "döngü değişkeni",
+     "desc": "Döngünün her turunda `players` içindeki sıradaki elemanı tutar."
+    },
+    {
+     "term": "name",
+     "kind": "parametre",
+     "desc": "`add_player` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "def",
+     "kind": "anahtar kelime",
+     "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+    },
+    {
+     "term": "add_player()",
+     "kind": "senin fonksiyonun",
+     "desc": "Kodda tanımlanan fonksiyon; parametreleri: `name`."
+    },
+    {
+     "term": "for",
+     "kind": "anahtar kelime",
+     "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+    },
+    {
+     "term": "if",
+     "kind": "anahtar kelime",
+     "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+    },
+    {
+     "term": "==",
+     "kind": "operatör",
+     "desc": "Eşit mi? (True/False)"
+    },
+    {
+     "term": "[ ]",
+     "kind": "seçme",
+     "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+    },
+    {
+     "term": "return",
+     "kind": "anahtar kelime",
+     "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+    },
+    {
+     "term": "False",
+     "kind": "değer",
+     "desc": "Yanlış (mantıksal değer)."
+    },
+    {
+     "term": ".append()",
+     "kind": "metot",
+     "desc": "Listenin sonuna yeni bir eleman ekler."
+    },
+    {
+     "term": "True",
+     "kind": "değer",
+     "desc": "Doğru (mantıksal değer)."
+    },
+    {
+     "term": "level_up()",
+     "kind": "senin fonksiyonun",
+     "desc": "Kodda tanımlanan fonksiyon; parametreleri: `name`."
+    },
+    {
+     "term": "+=",
+     "kind": "operatör",
+     "desc": "Değişkenin kendi değerine ekler: x += 1 → x = x + 1."
+    },
+    {
+     "term": "None",
+     "kind": "değer",
+     "desc": "\"Hiçbir şey / boş\" anlamına gelen özel değer."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    }
+   ]
+  }
+ },
+ "available": true,
+ "tracks": {
+  "veri": {
+   "project_task": {
+    "id": "d27-pv",
+    "title": "Harcama veritabanı",
+    "prompt": "Harcamaları MongoDB'deki gibi belgeler olarak `expenses` koleksiyonunda (listesinde) tutalım:\n\n- `insert(category, amount)`: `{\"id\": ..., \"category\": ..., \"amount\": ...}` belgesini eklesin. `id` 1'den başlayıp her eklemede bir artsın. Eklenen belgeyi döndürsün.\n- `find(category)`: o kategorideki belgelerin listesini döndürsün.\n- `update_amount(id, amount)`: o `id`'li belgenin tutarını değiştirip `True`, bulamazsa `False` döndürsün.",
+    "starter": "expenses = []\n\n\ndef insert(category, amount):\n    pass\n\n\ndef find(category):\n    pass\n\n\ndef update_amount(id, amount):\n    pass\n",
+    "solution": "expenses = []\n\n\ndef insert(category, amount):\n    doc = {\"id\": len(expenses) + 1, \"category\": category, \"amount\": amount}\n    expenses.append(doc)\n    return doc\n\n\ndef find(category):\n    return [doc for doc in expenses if doc[\"category\"] == category]\n\n\ndef update_amount(id, amount):\n    for doc in expenses:\n        if doc[\"id\"] == id:\n            doc[\"amount\"] = amount\n            return True\n    return False\n",
+    "hints": [
+     "id için len(expenses) + 1 kullanabilirsin.",
+     "find için list comprehension: [doc for doc in expenses if doc[\"category\"] == category]"
+    ],
+    "check": {
+     "python": "\nexpenses.clear()\na = insert(\"market\", 120)\nb = insert(\"kahve\", 35)\nc = insert(\"market\", 80)\nassert a == {\"id\": 1, \"category\": \"market\", \"amount\": 120}, \"İlk belge id 1 ile eklenmeli ve döndürülmeli.\"\nassert c[\"id\"] == 3, \"id her eklemede bir artmalı.\"\nassert [d[\"id\"] for d in find(\"market\")] == [1, 3], \"find('market') market belgelerini döndürmeli.\"\nassert find(\"yok\") == [], \"Bulunamazsa boş liste.\"\nassert update_amount(2, 40) is True and expenses[1][\"amount\"] == 40, \"update_amount tutarı değiştirip True döndürmeli.\"\nassert update_amount(99, 1) is False, \"Olmayan id için False döndürmeli.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "expenses = []",
+       "notes": [
+        "`expenses` adında bir değişken oluşturuluyor ve içine `[]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "def insert(category, amount):",
+       "notes": [
+        "`insert` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `category`, `amount`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "    doc = {\"id\": len(expenses) + 1, \"category\": category, \"amount\": amount}",
+       "notes": [
+        "`doc` adında bir değişken oluşturuluyor ve içine `{\"id\": len(expenses) + 1, \"category\": category, \"amount\":...` (sözlük (anahtar: değer)) konuyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    expenses.append(doc)",
+       "notes": [
+        "`expenses.append(doc)`: `expenses` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "    return doc",
+       "notes": [
+        "Fonksiyon `doc` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "def find(category):",
+       "notes": [
+        "`find` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `category`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "    return [doc for doc in expenses if doc[\"category\"] == category]",
+       "notes": [
+        "Fonksiyon `[doc for doc in expenses if doc[\"category\"] == category]` değerini geri verir ve burada biter.",
+        "Tek satırda döngüyle yeni bir liste/dizi üretiliyor."
+       ]
+      },
+      {
+       "n": 14,
+       "code": "def update_amount(id, amount):",
+       "notes": [
+        "`update_amount` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `id`, `amount`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 15,
+       "code": "    for doc in expenses:",
+       "notes": [
+        "Döngü: `expenses` içindeki her eleman sırayla `doc` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 16,
+       "code": "        if doc[\"id\"] == id:",
+       "notes": [
+        "Koşul: `doc[\"id\"] == id` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 17,
+       "code": "            doc[\"amount\"] = amount",
+       "notes": [
+        "`doc[...]` konumundaki değer `amount` ile değiştiriliyor."
+       ]
+      },
+      {
+       "n": 18,
+       "code": "            return True",
+       "notes": [
+        "Fonksiyon `True` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 19,
+       "code": "    return False",
+       "notes": [
+        "Fonksiyon `False` değerini geri verir ve burada biter."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "expenses",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[]`."
+      },
+      {
+       "term": "doc",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"id\": len(expenses) + 1, \"category\": category, \"amount\":...`."
+      },
+      {
+       "term": "category",
+       "kind": "parametre",
+       "desc": "`insert` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "amount",
+       "kind": "parametre",
+       "desc": "`insert` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "id",
+       "kind": "parametre",
+       "desc": "`update_amount` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "insert()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `category`, `amount`."
+      },
+      {
+       "term": "+",
+       "kind": "operatör",
+       "desc": "Toplama; metinlerde ve listelerde uç uca ekleme."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      },
+      {
+       "term": ".append()",
+       "kind": "metot",
+       "desc": "Listenin sonuna yeni bir eleman ekler."
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": "find()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `category`."
+      },
+      {
+       "term": "[... for ... in ...]",
+       "kind": "liste üreteci",
+       "desc": "Liste üreteci: [ifade for x in liste if koşul] ile tek satırda yeni liste."
+      },
+      {
+       "term": "==",
+       "kind": "operatör",
+       "desc": "Eşit mi? (True/False)"
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": "update_amount()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `id`, `amount`."
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "True",
+       "kind": "değer",
+       "desc": "Doğru (mantıksal değer)."
+      },
+      {
+       "term": "False",
+       "kind": "değer",
+       "desc": "Yanlış (mantıksal değer)."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Harcama veritabanı",
+   "game_role": "Harcamaları belge veritabanı gibi ekler, bulur ve günceller."
+  },
+  "otomasyon": {
+   "project_task": {
+    "id": "d27-po",
+    "title": "Hatırlatma veritabanı",
+    "prompt": "Hatırlatmaları MongoDB'deki gibi belgeler olarak `reminders` koleksiyonunda tutalım:\n\n- `add_reminder(text, hour)`: `{\"text\": ..., \"hour\": ..., \"sent\": False}` belgesini eklesin.\n- `due(hour)`: saati `hour` veya daha erken olan ve **gönderilmemiş** hatırlatmaların metinlerini liste olarak döndürsün.\n- `mark_sent(text)`: o metindeki hatırlatmanın `sent` değerini `True` yapıp `True`, bulamazsa `False` döndürsün.",
+    "starter": "reminders = []\n\n\ndef add_reminder(text, hour):\n    pass\n\n\ndef due(hour):\n    pass\n\n\ndef mark_sent(text):\n    pass\n",
+    "solution": "reminders = []\n\n\ndef add_reminder(text, hour):\n    reminders.append({\"text\": text, \"hour\": hour, \"sent\": False})\n\n\ndef due(hour):\n    return [r[\"text\"] for r in reminders if r[\"hour\"] <= hour and not r[\"sent\"]]\n\n\ndef mark_sent(text):\n    for r in reminders:\n        if r[\"text\"] == text:\n            r[\"sent\"] = True\n            return True\n    return False\n",
+    "hints": [
+     "due için list comprehension: iki koşul, r[\"hour\"] <= hour and not r[\"sent\"]",
+     "mark_sent içinde döngüyle belgeyi bul."
+    ],
+    "check": {
+     "python": "\nreminders.clear()\nadd_reminder(\"İlaç\", 9)\nadd_reminder(\"Toplantı\", 14)\nadd_reminder(\"Spor\", 18)\nassert reminders[0] == {\"text\": \"İlaç\", \"hour\": 9, \"sent\": False}, \"Belge {text, hour, sent: False} olmalı.\"\nassert due(14) == [\"İlaç\", \"Toplantı\"], \"due(14) saati 14 veya daha erken olanları döndürmeli.\"\nassert mark_sent(\"İlaç\") is True, \"mark_sent bulduğunda True döndürmeli.\"\nassert due(14) == [\"Toplantı\"], \"Gönderilen hatırlatma tekrar gelmemeli.\"\nassert mark_sent(\"Yok\") is False, \"Olmayan hatırlatma için False.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "reminders = []",
+       "notes": [
+        "`reminders` adında bir değişken oluşturuluyor ve içine `[]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "def add_reminder(text, hour):",
+       "notes": [
+        "`add_reminder` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `text`, `hour`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "    reminders.append({\"text\": text, \"hour\": hour, \"sent\": False})",
+       "notes": [
+        "`reminders.append({\"text\": text, \"hour\": hour, \"sent\": Fal...`: `reminders` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "def due(hour):",
+       "notes": [
+        "`due` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `hour`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "    return [r[\"text\"] for r in reminders if r[\"hour\"] <= hour and not r[\"sent\"]]",
+       "notes": [
+        "Fonksiyon `[r[\"text\"] for r in reminders if r[\"hour\"] <= hour and no...` değerini geri verir ve burada biter.",
+        "Tek satırda döngüyle yeni bir liste/dizi üretiliyor."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "def mark_sent(text):",
+       "notes": [
+        "`mark_sent` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `text`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "    for r in reminders:",
+       "notes": [
+        "Döngü: `reminders` içindeki her eleman sırayla `r` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 14,
+       "code": "        if r[\"text\"] == text:",
+       "notes": [
+        "Koşul: `r[\"text\"] == text` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 15,
+       "code": "            r[\"sent\"] = True",
+       "notes": [
+        "`r[...]` konumundaki değer `True` ile değiştiriliyor."
+       ]
+      },
+      {
+       "n": 16,
+       "code": "            return True",
+       "notes": [
+        "Fonksiyon `True` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 17,
+       "code": "    return False",
+       "notes": [
+        "Fonksiyon `False` değerini geri verir ve burada biter."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "reminders",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[]`."
+      },
+      {
+       "term": "r",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `reminders` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "text",
+       "kind": "parametre",
+       "desc": "`add_reminder` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "hour",
+       "kind": "parametre",
+       "desc": "`add_reminder` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "add_reminder()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `text`, `hour`."
+      },
+      {
+       "term": ".append()",
+       "kind": "metot",
+       "desc": "Listenin sonuna yeni bir eleman ekler."
+      },
+      {
+       "term": "False",
+       "kind": "değer",
+       "desc": "Yanlış (mantıksal değer)."
+      },
+      {
+       "term": "due()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `hour`."
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": "[... for ... in ...]",
+       "kind": "liste üreteci",
+       "desc": "Liste üreteci: [ifade for x in liste if koşul] ile tek satırda yeni liste."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": "and",
+       "kind": "operatör",
+       "desc": "\"ve\": iki koşul da doğruysa True."
+      },
+      {
+       "term": "<=",
+       "kind": "operatör",
+       "desc": "Küçük ya da eşit mi?"
+      },
+      {
+       "term": "not",
+       "kind": "operatör",
+       "desc": "Koşulu tersine çevirir (True ↔ False)."
+      },
+      {
+       "term": "mark_sent()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `text`."
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "==",
+       "kind": "operatör",
+       "desc": "Eşit mi? (True/False)"
+      },
+      {
+       "term": "True",
+       "kind": "değer",
+       "desc": "Doğru (mantıksal değer)."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Hatırlatma veritabanı",
+   "game_role": "Hatırlatmaları belge veritabanı gibi saklar ve zamanı gelenleri bulur."
+  },
+  "web": {
+   "project_task": {
+    "id": "d27-pw",
+    "title": "Yazı veritabanı",
+    "prompt": "Yazıları MongoDB'deki gibi belgeler olarak `posts` koleksiyonunda (listesinde) tutalım:\n\n- `insert_post(title, tags)`: `{\"id\": ..., \"title\": ..., \"tags\": ..., \"views\": 0}` belgesini eklesin. `id` 1'den başlayıp her eklemede bir artsın. Eklenen belgeyi döndürsün.\n- `find_by_tag(tag)`: `tags` listesinde `tag` olan belgelerin listesini döndürsün.\n- `add_view(id)`: o `id`'li belgenin `views` değerini 1 artırıp `True`, bulamazsa `False` döndürsün.",
+    "starter": "posts = []\n\n\ndef insert_post(title, tags):\n    pass\n\n\ndef find_by_tag(tag):\n    pass\n\n\ndef add_view(id):\n    pass\n",
+    "solution": "posts = []\n\n\ndef insert_post(title, tags):\n    doc = {\"id\": len(posts) + 1, \"title\": title, \"tags\": tags, \"views\": 0}\n    posts.append(doc)\n    return doc\n\n\ndef find_by_tag(tag):\n    return [doc for doc in posts if tag in doc[\"tags\"]]\n\n\ndef add_view(id):\n    for doc in posts:\n        if doc[\"id\"] == id:\n            doc[\"views\"] += 1\n            return True\n    return False\n",
+    "hints": [
+     "id için len(posts) + 1 kullanabilirsin.",
+     "find_by_tag için: [doc for doc in posts if tag in doc[\"tags\"]]"
+    ],
+    "check": {
+     "python": "\nposts.clear()\na = insert_post(\"Merhaba Dünya\", [\"python\", \"blog\"])\nb = insert_post(\"Kodla Oyna\", [\"oyun\"])\nc = insert_post(\"Python Notlarım\", [\"python\"])\nassert a == {\"id\": 1, \"title\": \"Merhaba Dünya\", \"tags\": [\"python\", \"blog\"], \"views\": 0}, \"İlk belge id 1 ve views 0 ile eklenmeli ve döndürülmeli.\"\nassert c[\"id\"] == 3 and len(posts) == 3, \"id her eklemede bir artmalı.\"\nassert [d[\"id\"] for d in find_by_tag(\"python\")] == [1, 3], \"find_by_tag('python') etiketinde python olan belgeleri döndürmeli.\"\nassert find_by_tag(\"yok\") == [], \"Bulunamazsa boş liste döndürmeli.\"\nassert add_view(2) is True and add_view(2) is True and posts[1][\"views\"] == 2, \"add_view views'i 1 artırıp True döndürmeli.\"\nassert add_view(99) is False, \"Olmayan id için False döndürmeli.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "posts = []",
+       "notes": [
+        "`posts` adında bir değişken oluşturuluyor ve içine `[]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "def insert_post(title, tags):",
+       "notes": [
+        "`insert_post` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `title`, `tags`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "    doc = {\"id\": len(posts) + 1, \"title\": title, \"tags\": tags, \"views\": 0}",
+       "notes": [
+        "`doc` adında bir değişken oluşturuluyor ve içine `{\"id\": len(posts) + 1, \"title\": title, \"tags\": tags, \"vie...` (sözlük (anahtar: değer)) konuyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    posts.append(doc)",
+       "notes": [
+        "`posts.append(doc)`: `posts` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "    return doc",
+       "notes": [
+        "Fonksiyon `doc` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "def find_by_tag(tag):",
+       "notes": [
+        "`find_by_tag` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `tag`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "    return [doc for doc in posts if tag in doc[\"tags\"]]",
+       "notes": [
+        "Fonksiyon `[doc for doc in posts if tag in doc[\"tags\"]]` değerini geri verir ve burada biter.",
+        "Tek satırda döngüyle yeni bir liste/dizi üretiliyor."
+       ]
+      },
+      {
+       "n": 14,
+       "code": "def add_view(id):",
+       "notes": [
+        "`add_view` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `id`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 15,
+       "code": "    for doc in posts:",
+       "notes": [
+        "Döngü: `posts` içindeki her eleman sırayla `doc` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 16,
+       "code": "        if doc[\"id\"] == id:",
+       "notes": [
+        "Koşul: `doc[\"id\"] == id` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 17,
+       "code": "            doc[\"views\"] += 1",
+       "notes": [
+        "`doc[...] += 1`: `doc[...]` değişkeninin değeri güncelleniyor."
+       ]
+      },
+      {
+       "n": 18,
+       "code": "            return True",
+       "notes": [
+        "Fonksiyon `True` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 19,
+       "code": "    return False",
+       "notes": [
+        "Fonksiyon `False` değerini geri verir ve burada biter."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "posts",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[]`."
+      },
+      {
+       "term": "doc",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"id\": len(posts) + 1, \"title\": title, \"tags\": tags, \"vie...`."
+      },
+      {
+       "term": "title",
+       "kind": "parametre",
+       "desc": "`insert_post` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "tags",
+       "kind": "parametre",
+       "desc": "`insert_post` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "tag",
+       "kind": "parametre",
+       "desc": "`find_by_tag` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "id",
+       "kind": "parametre",
+       "desc": "`add_view` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "insert_post()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `title`, `tags`."
+      },
+      {
+       "term": "+",
+       "kind": "operatör",
+       "desc": "Toplama; metinlerde ve listelerde uç uca ekleme."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      },
+      {
+       "term": ".append()",
+       "kind": "metot",
+       "desc": "Listenin sonuna yeni bir eleman ekler."
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": "find_by_tag()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `tag`."
+      },
+      {
+       "term": "[... for ... in ...]",
+       "kind": "liste üreteci",
+       "desc": "Liste üreteci: [ifade for x in liste if koşul] ile tek satırda yeni liste."
+      },
+      {
+       "term": "in",
+       "kind": "operatör",
+       "desc": "İçinde var mı? (listede, metinde, sözlükte)"
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": "add_view()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `id`."
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "==",
+       "kind": "operatör",
+       "desc": "Eşit mi? (True/False)"
+      },
+      {
+       "term": "+=",
+       "kind": "operatör",
+       "desc": "Değişkenin kendi değerine ekler: x += 1 → x = x + 1."
+      },
+      {
+       "term": "True",
+       "kind": "değer",
+       "desc": "Doğru (mantıksal değer)."
+      },
+      {
+       "term": "False",
+       "kind": "değer",
+       "desc": "Yanlış (mantıksal değer)."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Yazı veritabanı",
+   "game_role": "Yazıları belge veritabanı gibi ekler, etikete göre bulur ve okunma sayısını günceller."
+  },
+  "bot": {
+   "project_task": {
+    "id": "d27-pb",
+    "title": "Botun hafızası",
+    "prompt": "Bot, kullanıcılar hakkında öğrendiklerini hatırlasın. Bilgileri MongoDB'deki gibi belgeler olarak `memory` koleksiyonunda (listesinde) tutalım; her belge `{\"user\": ..., \"key\": ..., \"value\": ...}`.\n\n- `remember(user, key, value)`: aynı `user` ve `key` ile bir belge varsa değerini güncellesin, yoksa yeni belge eklesin. Belgeyi döndürsün.\n- `recall(user, key)`: o bilginin değerini döndürsün, yoksa `None`.\n- `forget(user)`: o kullanıcının bütün belgelerini silsin ve kaç belge sildiğini döndürsün.",
+    "starter": "memory = []\n\n\ndef remember(user, key, value):\n    pass\n\n\ndef recall(user, key):\n    pass\n\n\ndef forget(user):\n    pass\n",
+    "solution": "memory = []\n\n\ndef remember(user, key, value):\n    for doc in memory:\n        if doc[\"user\"] == user and doc[\"key\"] == key:\n            doc[\"value\"] = value\n            return doc\n    doc = {\"user\": user, \"key\": key, \"value\": value}\n    memory.append(doc)\n    return doc\n\n\ndef recall(user, key):\n    for doc in memory:\n        if doc[\"user\"] == user and doc[\"key\"] == key:\n            return doc[\"value\"]\n    return None\n\n\ndef forget(user):\n    removed = 0\n    for doc in list(memory):\n        if doc[\"user\"] == user:\n            memory.remove(doc)\n            removed += 1\n    return removed\n",
+    "hints": [
+     "remember ve recall aynı koşulla arar: doc[\"user\"] == user and doc[\"key\"] == key",
+     "Silerken listenin bir kopyasında dolaş: for doc in list(memory):"
+    ],
+    "check": {
+     "python": "\nmem = remember.__globals__[\"memory\"]\nmem.clear()\na = remember(\"ece\", \"renk\", \"mavi\")\nremember(\"ece\", \"şehir\", \"İzmir\")\nremember(\"can\", \"renk\", \"yeşil\")\nassert a == {\"user\": \"ece\", \"key\": \"renk\", \"value\": \"mavi\"}, \"remember yeni belgeyi {user, key, value} olarak eklemeli ve döndürmeli.\"\nb = remember(\"ece\", \"renk\", \"mor\")\nmem = remember.__globals__[\"memory\"]\nassert len(mem) == 3 and b[\"value\"] == \"mor\", \"Aynı user ve key için yeni belge eklenmemeli, değer güncellenmeli.\"\nassert recall(\"ece\", \"renk\") == \"mor\" and recall(\"can\", \"renk\") == \"yeşil\", \"recall kaydedilen değeri döndürmeli.\"\nassert recall(\"can\", \"şehir\") is None, \"Bilgi yoksa recall None döndürmeli.\"\nassert forget(\"ece\") == 2, \"forget(\\\"ece\\\") ece'nin 2 belgesini silip 2 döndürmeli.\"\nmem = remember.__globals__[\"memory\"]\nassert mem == [{\"user\": \"can\", \"key\": \"renk\", \"value\": \"yeşil\"}], \"forget'tan sonra sadece can'in belgesi kalmalı.\"\nassert forget(\"yok\") == 0, \"Belgesi olmayan kullanıcı için 0 döndürmeli.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "memory = []",
+       "notes": [
+        "`memory` adında bir değişken oluşturuluyor ve içine `[]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "def remember(user, key, value):",
+       "notes": [
+        "`remember` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `user`, `key`, `value`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "    for doc in memory:",
+       "notes": [
+        "Döngü: `memory` içindeki her eleman sırayla `doc` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "        if doc[\"user\"] == user and doc[\"key\"] == key:",
+       "notes": [
+        "Koşul: `doc[\"user\"] == user and doc[\"key\"] == key` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "            doc[\"value\"] = value",
+       "notes": [
+        "`doc[...]` konumundaki değer `value` ile değiştiriliyor."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "            return doc",
+       "notes": [
+        "Fonksiyon `doc` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "    doc = {\"user\": user, \"key\": key, \"value\": value}",
+       "notes": [
+        "`doc` değişkenine yeni değer veriliyor: `{\"user\": user, \"key\": key, \"value\": value}`."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "    memory.append(doc)",
+       "notes": [
+        "`memory.append(doc)`: `memory` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "    return doc",
+       "notes": [
+        "Fonksiyon `doc` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 14,
+       "code": "def recall(user, key):",
+       "notes": [
+        "`recall` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `user`, `key`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 15,
+       "code": "    for doc in memory:",
+       "notes": [
+        "Döngü: `memory` içindeki her eleman sırayla `doc` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 16,
+       "code": "        if doc[\"user\"] == user and doc[\"key\"] == key:",
+       "notes": [
+        "Koşul: `doc[\"user\"] == user and doc[\"key\"] == key` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 17,
+       "code": "            return doc[\"value\"]",
+       "notes": [
+        "Fonksiyon `doc[\"value\"]` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 18,
+       "code": "    return None",
+       "notes": [
+        "Fonksiyon `None` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 21,
+       "code": "def forget(user):",
+       "notes": [
+        "`forget` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `user`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 22,
+       "code": "    removed = 0",
+       "notes": [
+        "`removed` adında bir değişken oluşturuluyor ve içine `0` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 23,
+       "code": "    for doc in list(memory):",
+       "notes": [
+        "Döngü: `list(memory)` içindeki her eleman sırayla `doc` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 24,
+       "code": "        if doc[\"user\"] == user:",
+       "notes": [
+        "Koşul: `doc[\"user\"] == user` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 25,
+       "code": "            memory.remove(doc)",
+       "notes": [
+        "`memory.remove(doc)`: `memory` üzerinde `remove` metodunu çalıştırır. Listeden (ya da setten) verilen elemanı çıkarır."
+       ]
+      },
+      {
+       "n": 26,
+       "code": "            removed += 1",
+       "notes": [
+        "`removed += 1`: `removed` değişkeninin değeri güncelleniyor."
+       ]
+      },
+      {
+       "n": 27,
+       "code": "    return removed",
+       "notes": [
+        "Fonksiyon `removed` değerini geri verir ve burada biter."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "memory",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[]`."
+      },
+      {
+       "term": "removed",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `0`."
+      },
+      {
+       "term": "doc",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `memory` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "user",
+       "kind": "parametre",
+       "desc": "`remember` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "key",
+       "kind": "parametre",
+       "desc": "`remember` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "value",
+       "kind": "parametre",
+       "desc": "`remember` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "remember()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `user`, `key`, `value`."
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "and",
+       "kind": "operatör",
+       "desc": "\"ve\": iki koşul da doğruysa True."
+      },
+      {
+       "term": "==",
+       "kind": "operatör",
+       "desc": "Eşit mi? (True/False)"
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": ".append()",
+       "kind": "metot",
+       "desc": "Listenin sonuna yeni bir eleman ekler."
+      },
+      {
+       "term": "recall()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `user`, `key`."
+      },
+      {
+       "term": "None",
+       "kind": "değer",
+       "desc": "\"Hiçbir şey / boş\" anlamına gelen özel değer."
+      },
+      {
+       "term": "forget()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `user`."
+      },
+      {
+       "term": "list()",
+       "kind": "fonksiyon",
+       "desc": "Bir değerden liste oluşturur ya da boş liste yapar."
+      },
+      {
+       "term": ".remove()",
+       "kind": "metot",
+       "desc": "Listeden (ya da setten) verilen elemanı çıkarır."
+      },
+      {
+       "term": "+=",
+       "kind": "operatör",
+       "desc": "Değişkenin kendi değerine ekler: x += 1 → x = x + 1."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Hafıza veritabanı",
+   "game_role": "Kullanıcılar hakkında öğrendiklerini belge veritabanı gibi saklar."
+  },
+  "okul": {
+   "project_task": {
+    "id": "d27-pn",
+    "title": "Ödev veritabanı",
+    "prompt": "Ödevlerini MongoDB'deki gibi belgeler olarak `homework` koleksiyonunda (listesinde) tutalım:\n\n- `insert(lesson, title)`: `{\"id\": ..., \"lesson\": ..., \"title\": ..., \"done\": False}` belgesini eklesin. `id` 1'den başlayıp her eklemede bir artsın. Eklenen belgeyi döndürsün.\n- `find(query)`: sorgu sözlüğündeki **tüm** alanları eşleşen belgelerin listesini döndürsün (`all()` kullan). `find({})` hepsini döndürür.\n- `mark_done(id)`: o `id`'li ödevin `done` alanını `True` yapıp `True`, bulamazsa `False` döndürsün.",
+    "starter": "homework = []\n\n\ndef insert(lesson, title):\n    pass\n\n\ndef find(query):\n    pass\n\n\ndef mark_done(id):\n    pass\n",
+    "solution": "homework = []\n\n\ndef insert(lesson, title):\n    doc = {\"id\": len(homework) + 1, \"lesson\": lesson, \"title\": title, \"done\": False}\n    homework.append(doc)\n    return doc\n\n\ndef find(query):\n    return [doc for doc in homework if all(doc.get(k) == v for k, v in query.items())]\n\n\ndef mark_done(id):\n    for doc in homework:\n        if doc[\"id\"] == id:\n            doc[\"done\"] = True\n            return True\n    return False\n",
+    "hints": [
+     "id için len(homework) + 1 kullanabilirsin.",
+     "find için: [doc for doc in homework if all(doc.get(k) == v for k, v in query.items())]"
+    ],
+    "check": {
+     "python": "\nhomework.clear()\na = insert(\"Matematik\", \"Sayfa 42\")\ninsert(\"Fizik\", \"Deney raporu\")\nc = insert(\"Matematik\", \"Test 3\")\nassert a == {\"id\": 1, \"lesson\": \"Matematik\", \"title\": \"Sayfa 42\", \"done\": False}, \"İlk belge id 1 ve done False ile eklenmeli ve döndürülmeli.\"\nassert c[\"id\"] == 3, \"id her eklemede bir artmalı.\"\nassert [d[\"id\"] for d in find({\"lesson\": \"Matematik\"})] == [1, 3], \"find({'lesson': 'Matematik'}) Matematik ödevlerini döndürmeli.\"\nassert len(find({})) == 3, \"find({}) tüm belgeleri döndürmeli.\"\nassert find({\"lesson\": \"Tarih\"}) == [], \"Eşleşen yoksa boş liste.\"\nassert mark_done(1) is True and homework[0][\"done\"] is True, \"mark_done(1) ödevi tamamlayıp True döndürmeli.\"\nassert [d[\"id\"] for d in find({\"lesson\": \"Matematik\", \"done\": False})] == [3], \"Sorgudaki tüm alanlar eşleşmeli: all() kullan.\"\nassert mark_done(99) is False, \"Olmayan id için False döndürmeli.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "homework = []",
+       "notes": [
+        "`homework` adında bir değişken oluşturuluyor ve içine `[]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "def insert(lesson, title):",
+       "notes": [
+        "`insert` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `lesson`, `title`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "    doc = {\"id\": len(homework) + 1, \"lesson\": lesson, \"title\": title, \"done\": False}",
+       "notes": [
+        "`doc` adında bir değişken oluşturuluyor ve içine `{\"id\": len(homework) + 1, \"lesson\": lesson, \"title\": titl...` (sözlük (anahtar: değer)) konuyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    homework.append(doc)",
+       "notes": [
+        "`homework.append(doc)`: `homework` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "    return doc",
+       "notes": [
+        "Fonksiyon `doc` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "def find(query):",
+       "notes": [
+        "`find` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `query`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "    return [doc for doc in homework if all(doc.get(k) == v for k, v in query.items())]",
+       "notes": [
+        "Fonksiyon `[doc for doc in homework if all(doc.get(k) == v for k, v ...` değerini geri verir ve burada biter.",
+        "Tek satırda döngüyle yeni bir liste/dizi üretiliyor."
+       ]
+      },
+      {
+       "n": 14,
+       "code": "def mark_done(id):",
+       "notes": [
+        "`mark_done` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `id`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 15,
+       "code": "    for doc in homework:",
+       "notes": [
+        "Döngü: `homework` içindeki her eleman sırayla `doc` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 16,
+       "code": "        if doc[\"id\"] == id:",
+       "notes": [
+        "Koşul: `doc[\"id\"] == id` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 17,
+       "code": "            doc[\"done\"] = True",
+       "notes": [
+        "`doc[...]` konumundaki değer `True` ile değiştiriliyor."
+       ]
+      },
+      {
+       "n": 18,
+       "code": "            return True",
+       "notes": [
+        "Fonksiyon `True` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 19,
+       "code": "    return False",
+       "notes": [
+        "Fonksiyon `False` değerini geri verir ve burada biter."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "homework",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[]`."
+      },
+      {
+       "term": "doc",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"id\": len(homework) + 1, \"lesson\": lesson, \"title\": titl...`."
+      },
+      {
+       "term": "lesson",
+       "kind": "parametre",
+       "desc": "`insert` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "title",
+       "kind": "parametre",
+       "desc": "`insert` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "query",
+       "kind": "parametre",
+       "desc": "`find` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "id",
+       "kind": "parametre",
+       "desc": "`mark_done` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "insert()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `lesson`, `title`."
+      },
+      {
+       "term": "+",
+       "kind": "operatör",
+       "desc": "Toplama; metinlerde ve listelerde uç uca ekleme."
+      },
+      {
+       "term": "False",
+       "kind": "değer",
+       "desc": "Yanlış (mantıksal değer)."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      },
+      {
+       "term": ".append()",
+       "kind": "metot",
+       "desc": "Listenin sonuna yeni bir eleman ekler."
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": "find()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `query`."
+      },
+      {
+       "term": "[... for ... in ...]",
+       "kind": "liste üreteci",
+       "desc": "Liste üreteci: [ifade for x in liste if koşul] ile tek satırda yeni liste."
+      },
+      {
+       "term": "all()",
+       "kind": "fonksiyon",
+       "desc": "Hepsi doğruysa True verir."
+      },
+      {
+       "term": "==",
+       "kind": "operatör",
+       "desc": "Eşit mi? (True/False)"
+      },
+      {
+       "term": ".get()",
+       "kind": "metot",
+       "desc": "Sözlükten anahtarın değerini alır; anahtar yoksa hata vermez, varsayılanı verir."
+      },
+      {
+       "term": ".items()",
+       "kind": "metot",
+       "desc": "Sözlüğün (anahtar, değer) çiftlerini verir."
+      },
+      {
+       "term": "mark_done()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `id`."
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": "True",
+       "kind": "değer",
+       "desc": "Doğru (mantıksal değer)."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Ödev veritabanı",
+   "game_role": "Ödevleri belge veritabanı gibi ekler, sorgular ve tamamlandı olarak işaretler."
+  }
+ }
+}

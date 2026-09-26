@@ -1,0 +1,210 @@
+{
+ "day": 5,
+ "title": "Koşullar",
+ "region": "ay",
+ "xp_complete": 150,
+ "objective": "if, else if, else, üçlü operatör ve switch ile karar vermek",
+ "story": "Döngü Ayı'na yaklaşıyoruz! Uzayda her an bir karar vermek gerekiyor: yakıt azsa uyar, hava kötüyse bekle. Bugün koduna **karar verme** yeteneği kazandıracağız.",
+ "sections": [
+  {
+   "title": "if ve else",
+   "body": "`if` (eğer) parantezdeki koşul doğruysa süslü parantezin içini çalıştırır. `else` (değilse) koşul yanlışsa çalışır:\n\n```js\nconst fuel = 15;\nif (fuel < 20) {\n  console.log(\"Uyarı: yakıt az!\");\n} else {\n  console.log(\"Yakıt yeterli.\");\n}\n```\n\nSüslü parantezin içindeki satırlar iki boşlukla içeri yazılır; okuması kolay olsun diye."
+  },
+  {
+   "title": "else if: birden fazla seçenek",
+   "body": "Koşullar yukarıdan aşağı sınanır; ilk doğru olan çalışır, gerisine bakılmaz:\n\n```js\nconst speed = 70;\nif (speed > 100) {\n  console.log(\"Çok hızlı!\");\n} else if (speed > 50) {\n  console.log(\"İyi hız.\");\n} else {\n  console.log(\"Yavaş.\");\n}\n```"
+  },
+  {
+   "title": "Üçlü operatör: kısa karar",
+   "body": "İki seçenekten birini seçip bir değişkene koymanın kısa yolu: `koşul ? doğruysa : yanlışsa`\n\n```js\nconst lives = 0;\nconst message = lives > 0 ? \"Devam!\" : \"Oyun bitti\";\n```"
+  },
+  {
+   "title": "switch ve doğruluk",
+   "body": "Bir değeri birçok seçenekle karşılaştırırken `switch` düzenli görünür:\n\n```js\nswitch (planet) {\n  case \"Mars\":\n    info = \"Kızıl gezegen\";\n    break;\n  default:\n    info = \"Bilinmiyor\";\n}\n```\n\n`break` unutulursa bir alttaki seçenek de çalışır!\n\nBilgi: `if` içinde yalnızca `true`/`false` değil her değer kullanılabilir. `0`, `\"\"` (boş metin), `null`, `undefined` ve `NaN` **yanlış** sayılır; geri kalan her şey **doğru** sayılır."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Yakıt uyarısı",
+   "code": "const fuel = 15;\nif (fuel < 20) {\n  console.log(\"Uyarı: yakıt az!\");\n} else {\n  console.log(\"Yakıt yeterli.\");\n}\n",
+   "note": "fuel'i 50 yapıp tekrar çalıştır."
+  },
+  {
+   "title": "Üçlü operatör",
+   "code": "const hour = 21;\nconst mode = hour >= 7 && hour < 19 ? \"gündüz\" : \"gece\";\nconsole.log(\"Kokpit modu:\", mode);\n",
+   "note": ""
+  }
+ ],
+ "tasks": [
+  {
+   "id": "js-d5-t1",
+   "title": "Oksijen alarmı",
+   "prompt": "`oxygen` 30'dan **küçükse** `status` \"alarm\", değilse \"normal\" olsun. `if`/`else` kullan.\n\n(Kod önce `status`'u boş oluşturuyor; sen koşula göre değerini ver.)",
+   "starter": "const oxygen = 24;\nlet status = \"\";\n\n// if / else ile status'a değer ver\n\nconsole.log(\"Oksijen durumu:\", status);\n",
+   "solution": "const oxygen = 24;\nlet status = \"\";\n\n// if / else ile status'a değer ver\nif (oxygen < 30) {\n  status = \"alarm\";\n} else {\n  status = \"normal\";\n}\n\nconsole.log(\"Oksijen durumu:\", status);\n",
+   "hints": [
+    "if (oxygen < 30) { ... } else { ... }",
+    "İçeride let yazma: status = \"alarm\";"
+   ],
+   "check": {
+    "code_contains": [
+     "if",
+     "else"
+    ],
+    "js": "assert(status === \"alarm\", \"oxygen 24 olduğu için status 'alarm' olmalı.\");\nassert(_code.includes(\"normal\"), \"else kısmında status'a \\\"normal\\\" vermeyi unutma.\");"
+   },
+   "xp": 50
+  },
+  {
+   "id": "js-d5-t2",
+   "title": "Not hesaplayıcı",
+   "prompt": "`score`'a göre `grade` harfini belirle:\n\n- 85 ve üstü: `\"A\"`\n- 70 ve üstü: `\"B\"`\n- 50 ve üstü: `\"C\"`\n- diğer: `\"D\"`",
+   "starter": "const score = 78;\nlet grade = \"\";\n\n// if / else if / else ile grade'i belirle\n\nconsole.log(\"Not:\", grade);\n",
+   "solution": "const score = 78;\nlet grade = \"\";\n\n// if / else if / else ile grade'i belirle\nif (score >= 85) {\n  grade = \"A\";\n} else if (score >= 70) {\n  grade = \"B\";\n} else if (score >= 50) {\n  grade = \"C\";\n} else {\n  grade = \"D\";\n}\n\nconsole.log(\"Not:\", grade);\n",
+   "hints": [
+    "En büyük sınırdan başla: if (score >= 85)",
+    "Sonra else if (score >= 70) ..."
+   ],
+   "check": {
+    "code_contains": [
+     "else if",
+     ">="
+    ],
+    "js": "assert(grade === \"B\", \"78 puan 'B' olmalı.\");\nassert([\"A\", \"C\", \"D\"].every((g) => new RegExp(\"[\\\"'`]\" + g + \"[\\\"'`]\").test(_code)), \"Tüm harfler (A, B, C, D) kodda yer almalı.\");"
+   },
+   "xp": 50
+  },
+  {
+   "id": "js-d5-t3",
+   "title": "Gece mi gündüz mü?",
+   "prompt": "Saat 7 ile 19 arasındaysa (7 dahil, 19 hariç) `mode` \"gündüz\", değilse \"gece\" olsun. Bu sefer **üçlü operatör** (`? :`) kullan.",
+   "starter": "const hour = 21;\n\n// mode'u üçlü operatörle belirle\n\nconsole.log(\"Kokpit modu:\", mode);\n",
+   "solution": "const hour = 21;\n\n// mode'u üçlü operatörle belirle\nconst mode = hour >= 7 && hour < 19 ? \"gündüz\" : \"gece\";\n\nconsole.log(\"Kokpit modu:\", mode);\n",
+   "hints": [
+    "Koşul: hour >= 7 && hour < 19",
+    "const mode = koşul ? \"gündüz\" : \"gece\";"
+   ],
+   "check": {
+    "code_contains": [
+     "?",
+     ":"
+    ],
+    "js": "assert(mode === \"gece\", \"Saat 21'de mode 'gece' olmalı.\");\nassert(_code.includes(\"gündüz\"), \"Doğru durumda \\\"gündüz\\\" seçeneği de olmalı.\");"
+   },
+   "xp": 50
+  }
+ ],
+ "challenge": {
+  "id": "js-d5-c",
+  "title": "Gezegen rehberi",
+  "prompt": "`switch` kullanarak `planet`'e göre `info` değişkenine değer ver:\n\n- `\"Merkür\"` → `\"En yakın gezegen\"`\n- `\"Mars\"` → `\"Kızıl gezegen\"`\n- `\"Jüpiter\"` → `\"En büyük gezegen\"`\n- diğer: `\"Bilinmeyen gezegen\"`",
+  "starter": "const planet = \"Mars\";\nlet info = \"\";\n\n// switch ile info'ya değer ver\n\nconsole.log(planet, \"→\", info);\n",
+  "solution": "const planet = \"Mars\";\nlet info = \"\";\n\n// switch ile info'ya değer ver\nswitch (planet) {\n  case \"Merkür\":\n    info = \"En yakın gezegen\";\n    break;\n  case \"Mars\":\n    info = \"Kızıl gezegen\";\n    break;\n  case \"Jüpiter\":\n    info = \"En büyük gezegen\";\n    break;\n  default:\n    info = \"Bilinmeyen gezegen\";\n}\n\nconsole.log(planet, \"→\", info);\n",
+  "hints": [
+   "Her case'in sonunda break; olmalı.",
+   "default: diğer bütün durumlar için çalışır."
+  ],
+  "check": {
+   "code_contains": [
+    "switch",
+    "case",
+    "default",
+    "break"
+   ],
+   "js": "assert(info === \"Kızıl gezegen\", \"Mars için info 'Kızıl gezegen' olmalı.\");\nassert(_code.includes(\"En büyük gezegen\") && _code.includes(\"Bilinmeyen gezegen\"), \"Bütün seçenekleri yazmalısın.\");"
+  },
+  "xp": 75
+ },
+ "project_contribution": "Oyunun durumu",
+ "project_task": {
+  "id": "js-d5-p",
+  "title": "Oyun durumu",
+  "prompt": "Oyunun her anında üç durumdan biri var. `message` değişkenine koşullarla değer ver:\n\n- Can `0` ise: `\"Oyun bitti!\"`\n- Değilse ve yıldız `10` ya da daha fazlaysa: `\"Tebrikler, kazandın!\"`\n- Diğer durumda: kaç yıldız kaldığını söyle, örneğin `\"Devam! 2 yıldız kaldı.\"` (sayıyı hesapla)",
+  "starter": "let lives = 1;\nlet stars = 8;\nlet message = \"\";\n\n// if / else if / else ile message'a değer ver\n\nconsole.log(message);\n",
+  "solution": "let lives = 1;\nlet stars = 8;\nlet message = \"\";\n\n// if / else if / else ile message'a değer ver\nif (lives === 0) {\n  message = \"Oyun bitti!\";\n} else if (stars >= 10) {\n  message = \"Tebrikler, kazandın!\";\n} else {\n  message = `Devam! ${10 - stars} yıldız kaldı.`;\n}\n\nconsole.log(message);\n",
+  "hints": [
+   "Önce can kontrolü: if (lives === 0)",
+   "Kalan yıldız: 10 - stars; şablon metinle yaz."
+  ],
+  "check": {
+   "code_contains": [
+    "if",
+    "else if",
+    "else"
+   ],
+   "js": "assert(message === \"Devam! 2 yıldız kaldı.\", \"Can 1, yıldız 8 iken message 'Devam! 2 yıldız kaldı.' olmalı.\");\nassert(_code.includes(\"Oyun bitti!\") && _code.includes(\"Tebrikler, kazandın!\"), \"Diğer iki durumun mesajları da kodda olmalı.\");\nassert(!_code.includes(\"2 yıldız kaldı\"), \"Kalan yıldız sayısını elle yazma; 10 - stars ile hesapla.\");"
+  },
+  "xp": 100
+ },
+ "tracks": {
+  "js-web": {
+   "project_contribution": "Saate göre karşılama",
+   "project_task": {
+    "id": "js-d5-pw",
+    "title": "Saate göre karşılama",
+    "prompt": "Site, ziyaretçiyi saate göre karşılasın. `greeting` değişkenine değer ver:\n\n- 12'den önce: `\"Günaydın\"`\n- 18'den önce: `\"İyi günler\"`\n- diğer: `\"İyi akşamlar\"`\n\nSonra `Günaydın, siteme hoş geldin!` biçiminde yazdır.",
+    "starter": "const hour = 9;\nlet greeting = \"\";\n\n// greeting'e değer ver\n\nconsole.log(`${greeting}, siteme hoş geldin!`);\n",
+    "solution": "const hour = 9;\nlet greeting = \"\";\n\n// greeting'e değer ver\nif (hour < 12) {\n  greeting = \"Günaydın\";\n} else if (hour < 18) {\n  greeting = \"İyi günler\";\n} else {\n  greeting = \"İyi akşamlar\";\n}\n\nconsole.log(`${greeting}, siteme hoş geldin!`);\n",
+    "hints": [
+     "if (hour < 12) { ... } else if (hour < 18) { ... } else { ... }"
+    ],
+    "check": {
+     "code_contains": [
+      "if",
+      "else if",
+      "else"
+     ],
+     "js": "assert(greeting === \"Günaydın\", \"Saat 9'da greeting 'Günaydın' olmalı.\");\nassert(_code.includes(\"İyi günler\") && _code.includes(\"İyi akşamlar\"), \"Diğer iki karşılama da kodda olmalı.\");\nassert(_lines.includes(\"Günaydın, siteme hoş geldin!\"), \"Çıktıda 'Günaydın, siteme hoş geldin!' görünmeli.\");"
+    },
+    "xp": 100
+   }
+  },
+  "js-app": {
+   "project_contribution": "Günlük hedef kontrolü",
+   "project_task": {
+    "id": "js-d5-pa",
+    "title": "Hedef kontrolü",
+    "prompt": "Asistan günlük hedefe göre mesaj versin. `message` değişkenine değer ver:\n\n- Tamamlanan görev hedefe ulaştıysa: `\"Bugünün hedefi tamam!\"`\n- Hiç görev yapılmadıysa: `\"Hadi başlayalım!\"`\n- Diğer durumda kaç görev kaldığını söyle: `\"2 görev kaldı\"` (sayıyı hesapla)",
+    "starter": "const dailyGoal = 3;\nlet tasksDone = 1;\nlet message = \"\";\n\n// message'a değer ver\n\nconsole.log(message);\n",
+    "solution": "const dailyGoal = 3;\nlet tasksDone = 1;\nlet message = \"\";\n\n// message'a değer ver\nif (tasksDone >= dailyGoal) {\n  message = \"Bugünün hedefi tamam!\";\n} else if (tasksDone === 0) {\n  message = \"Hadi başlayalım!\";\n} else {\n  message = `${dailyGoal - tasksDone} görev kaldı`;\n}\n\nconsole.log(message);\n",
+    "hints": [
+     "Önce hedef kontrolü: if (tasksDone >= dailyGoal)",
+     "Kalan: dailyGoal - tasksDone"
+    ],
+    "check": {
+     "code_contains": [
+      "if",
+      "else if",
+      "else"
+     ],
+     "js": "assert(message === \"2 görev kaldı\", \"1 görev yapılmışken message '2 görev kaldı' olmalı.\");\nassert(_code.includes(\"Bugünün hedefi tamam!\") && _code.includes(\"Hadi başlayalım!\"), \"Diğer iki mesaj da kodda olmalı.\");\nassert(!/[\"'`]2 görev/.test(_code), \"Kalan görev sayısını elle yazma; hesapla.\");"
+    },
+    "xp": 100
+   }
+  },
+  "js-quiz": {
+   "project_contribution": "Cevabı değerlendirme",
+   "project_task": {
+    "id": "js-d5-pq",
+    "title": "Cevabı değerlendir",
+    "prompt": "Yarışmacının cevabını değerlendir:\n\n- Cevap doğruysa `score`'a 10 ekle ve `Doğru! +10 puan` yazdır.\n- Yanlışsa `Yanlış. Doğru cevap: Pasifik` yazdır (doğru cevap `correct`'ten gelsin).\n- En sonda `Puan: 50` biçiminde puanı yazdır.",
+    "starter": "const correct = \"Pasifik\";\nconst answer = \"Pasifik\";\nlet score = 40;\n\n// Cevabı değerlendir\n\nconsole.log(\"Puan:\", score);\n",
+    "solution": "const correct = \"Pasifik\";\nconst answer = \"Pasifik\";\nlet score = 40;\n\n// Cevabı değerlendir\nif (answer === correct) {\n  score += 10;\n  console.log(\"Doğru! +10 puan\");\n} else {\n  console.log(`Yanlış. Doğru cevap: ${correct}`);\n}\n\nconsole.log(\"Puan:\", score);\n",
+    "hints": [
+     "if (answer === correct) { ... } else { ... }",
+     "score += 10; puanı 10 artırır."
+    ],
+    "check": {
+     "code_contains": [
+      "if",
+      "else",
+      "==="
+     ],
+     "js": "assert(score === 50, \"Doğru cevaptan sonra score 50 olmalı.\");\nassert(_lines[0] === \"Doğru! +10 puan\" && _lines.includes(\"Puan: 50\"), \"Çıktı 'Doğru! +10 puan' ve 'Puan: 50' olmalı.\");\nassert(_code.includes(\"Yanlış. Doğru cevap:\"), \"Yanlış cevap durumu da kodda olmalı.\");"
+    },
+    "xp": 100
+   }
+  }
+ },
+ "available": true
+}

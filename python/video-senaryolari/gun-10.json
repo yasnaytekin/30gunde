@@ -1,0 +1,219 @@
+{
+  "kurs": "python",
+  "gun": 10,
+  "baslik": "Döngüler",
+  "maskot": "piko",
+  "ozet": "Piko, Mantık Kalesi'nin kulesinde while ve for döngülerini anlatıyor: range(), listelerde gezinmek, enumerate, break, continue ve sonsuz döngü tuzağı.",
+  "hedef_sure_sn": 125,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 12,
+      "anlatim": "Selam, ben Piko! Mantık Kalesi'nin kulesinde yüz basamak var. Her basamak için ayrı print yazsaydık parmaklarımız yorulurdu! Bilgisayarlar tekrar eden işleri hiç sıkılmadan yapar. Bugün döngüleri öğreniyoruz.",
+      "ekran": {
+        "baslik": "Gün 10: Döngüler",
+        "gorsel": "gorseller/python/harita/kale.webp"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "yonetmen_notu": "Kulenin sarmal merdiveni yukarı doğru uzar."
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "while, koşul doğru oldukça içindeki kodu tekrar tekrar çalıştırır. Her turda sayı bir azalıyor. Beş, dört, üç, iki, bir... ve sıfıra gelince koşul yanlış olur, döngü biter.",
+      "ekran": {
+        "baslik": "while: koşul doğru oldukça",
+        "kod": "count = 5\nwhile count > 0:\n    print(count)\n    count -= 1\nprint(\"Kalk!\")\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2,
+          4
+        ],
+        "cikti": "5\n4\n3\n2\n1\nKalk!"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "Belli sayıda tekrar için for ve range kullanılır. range bir, dört dediğinde dört dahil değil. Üçüncü sayı ise adım: ikişer ikişer sayar.",
+      "ekran": {
+        "baslik": "for ve range()",
+        "kod": "for i in range(1, 4):\n    print(\"Tur\", i)\nprint(list(range(0, 10, 2)))\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          1,
+          3
+        ],
+        "cikti": "Tur 1\nTur 2\nTur 3\n[0, 2, 4, 6, 8]"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "Birden yüze kadar sayıları elle toplamak ne kadar sürerdi? Python her turda sayıyı toplama ekliyor ve göz açıp kapayıncaya kadar bitiriyor.",
+      "ekran": {
+        "baslik": "Toplama makinesi",
+        "kod": "total = 0\nfor n in range(1, 101):\n    total += n\nprint(\"1'den 100'e toplam:\", total)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          3
+        ],
+        "cikti": "1'den 100'e toplam: 5050"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "for bir listenin her elemanını sırayla verir. enumerate yanına sıra numarasını da ekler. break ise döngüden hemen çıkar: harita bulununca anahtara hiç bakılmadı.",
+      "ekran": {
+        "baslik": "Listede gezinmek ve break",
+        "kod": "bag = [\"kılıç\", \"iksir\", \"harita\", \"anahtar\"]\nfor i, item in enumerate(bag, 1):\n    print(f\"{i}. {item}\")\n    if item == \"harita\":\n        print(\"Harita bulundu, aramayı bırakıyorum.\")\n        break\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2,
+          6
+        ],
+        "cikti": "1. kılıç\n2. iksir\n3. harita\nHarita bulundu, aramayı bırakıyorum."
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 6,
+      "tur": "soru",
+      "sure_sn": 10,
+      "anlatim": "continue bu turu atlar ve sıradakine geçer. Peki break ve continue birlikteyken bu kod hangi sayıları yazdırır?",
+      "ekran": {
+        "baslik": "Sence ne yazar?",
+        "kod": "for n in range(1, 10):\n    if n == 5:\n        break\n    if n % 2 == 0:\n        continue\n    print(n)\n",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "cikti",
+      "sure_sn": 10,
+      "anlatim": "Bir ve üç! Çift sayılarda continue turu atladı. Beşe gelince de break döngüyü bitirdi, yani beş bile yazılmadı.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "for n in range(1, 10):\n    if n == 5:\n        break\n    if n % 2 == 0:\n        continue\n    print(n)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          3,
+          5
+        ],
+        "cikti": "1\n3"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "hata",
+      "sure_sn": 12,
+      "anlatim": "En sık hata: koşulu değiştirmeyi unutmak. count hep üç kalır, koşul hep doğru olur ve döngü hiç bitmez. Buna sonsuz döngü denir; bu sitede altı saniye sonra durdurulur.",
+      "ekran": {
+        "baslik": "Sonsuz döngü",
+        "kod": "count = 3\nwhile count > 0:\n    print(count)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "3\n3\n3\n3\n..."
+      },
+      "maskot": {
+        "poz": "uzgun",
+        "konum": "sag"
+      },
+      "calistir": false,
+      "yonetmen_notu": "Çıktı penceresi durmadan 3 yazarak kayar, sonra 'durduruldu' uyarısı belirir."
+    },
+    {
+      "no": 9,
+      "tur": "gorev",
+      "sure_sn": 14,
+      "anlatim": "Görevlerde while ile geri sayacak, bir sayının çarpım tablosunu yazdıracak ve altınları sum kullanmadan toplayacaksın. Sahne görevinde bir Piko piramidi kuracaksın. Challenge'da da üçe ve beşe bölünen sayılara özel isimler vereceksin.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Geri sayım",
+          "Görev 2: Çarpım tablosu",
+          "Görev 3: Altınları topla",
+          "Sahne görevi: Piko piramidi",
+          "Challenge: PiKo sayıları"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 10,
+      "tur": "ozet",
+      "sure_sn": 8,
+      "anlatim": "Bugün tekrar eden işleri döngülere yaptırdık. Yüz basamak da olsa bin basamak da olsa, artık tek bir döngü yeter.",
+      "ekran": {
+        "baslik": "Bugün öğrendiklerin",
+        "maddeler": [
+          "while: koşul doğru oldukça; koşulu değiştirmeyi unutma",
+          "for + range(başla, bitir, adım)",
+          "enumerate sıra numarası verir; break çıkar, continue atlar"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "kapanis",
+      "sure_sn": 9,
+      "anlatim": "Kule fethedildi, tebrikler! Yarın Alet Atölyesi'ne gidiyoruz. Bir kez yazıp istediğin kadar kullanabileceğin kendi aletlerini, yani fonksiyonlarını yapacaksın.",
+      "ekran": {
+        "baslik": "Yarın: Fonksiyonlar",
+        "gorsel": "gorseller/python/harita/atolye.webp"
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      },
+      "yonetmen_notu": "Harita kaleden atölyeye doğru kayar."
+    }
+  ]
+}

@@ -1,0 +1,180 @@
+{
+  "kurs": "javascript",
+  "gun": 11,
+  "baslik": "map, filter, reduce",
+  "maskot": "kodi",
+  "ozet": "Nebulanın derinlerinde radar yüzlerce yıldız listeliyor: map ile dönüştürmek, filter ve find ile süzmek, reduce ile tek değere indirmek, sort ile doğru sıralamak ve metotları zincirlemek.",
+  "hedef_sure_sn": 160,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 11,
+      "anlatim": "Selam, ben Kodi! Fonksiyon Nebulası'nın derinlerindeyiz. Radar yüzlerce yıldız listeliyor. Hepsini tek tek döngüyle mi gezeceğiz? Hayır, dizilere süper güçler vereceğiz!",
+      "ekran": {
+        "baslik": "Gün 11: map, filter, reduce",
+        "gorsel": "gorseller/javascript/bolgeler/nebula.webp"
+      },
+      "maskot": { "poz": "el-sallama", "konum": "sag" },
+      "yonetmen_notu": "Radar ekranında çok sayıda yıldız noktası belirir."
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 17,
+      "anlatim": "map, dizinin her elemanına bir fonksiyon uygular ve sonuçlardan yeni bir dizi yapar. Asıl dizi değişmez, bak tanks aynı kaldı. Fonksiyon ikinci değer olarak elemanın sırasını da alabilir.",
+      "ekran": {
+        "baslik": "map: her elemanı dönüştür",
+        "kod": "const tanks = [80, 15, 60];\nconst percent = tanks.map((t) => t + \"%\");\nconsole.log(percent);\nconsole.log(tanks);\n\nconst names = [\"Ada\", \"Can\"];\nconsole.log(names.map((name, i) => (i + 1) + \". \" + name));\n",
+        "dil": "js",
+        "vurgu_satirlari": [2, 7],
+        "cikti": "[ '80%', '15%', '60%' ]\n[ 80, 15, 60 ]\n[ '1. Ada', '2. Can' ]"
+      },
+      "maskot": { "poz": "isaret", "konum": "alt-sag" },
+      "calistir": true
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 18,
+      "anlatim": "filter, koşula uyanlardan yeni bir dizi yapar. find ise dizi değil, ilk uyan elemanı verir; hiçbiri uymazsa undefined. some en az biri uyuyor mu, every hepsi uyuyor mu diye sorar.",
+      "ekran": {
+        "baslik": "filter, find, some, every",
+        "kod": "const fuel = [80, 15, 60, 5];\nconsole.log(fuel.filter((f) => f < 20));\nconsole.log(fuel.find((f) => f < 20));\nconsole.log(fuel.find((f) => f > 100));\nconsole.log(fuel.some((f) => f < 10));\nconsole.log(fuel.every((f) => f > 0));\n",
+        "dil": "js",
+        "vurgu_satirlari": [2, 3, 5, 6],
+        "cikti": "[ 15, 5 ]\n15\nundefined\ntrue\ntrue"
+      },
+      "maskot": { "poz": "konusma", "konum": "alt-sag" },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 17,
+      "anlatim": "reduce bütün diziyi tek bir değere indirger. sum şimdiye kadar biriken değer, s sıradaki eleman. Sıfırdan başlar: üç, sekiz, on. Başlangıç değerini yazmayı unutma!",
+      "ekran": {
+        "baslik": "reduce: tek bir değere indirgemek",
+        "kod": "const stars = [3, 5, 2];\nconst total = stars.reduce((sum, s) => sum + s, 0);\nconsole.log(total);\n",
+        "dil": "js",
+        "vurgu_satirlari": [2],
+        "cikti": "10"
+      },
+      "maskot": { "poz": "isaret", "konum": "alt-sag" },
+      "calistir": true,
+      "yonetmen_notu": "Adımlar animasyonla belirir: 0 + 3 = 3, 3 + 5 = 8, 8 + 2 = 10."
+    },
+    {
+      "no": 5,
+      "tur": "hata",
+      "sure_sn": 14,
+      "anlatim": "Tuzağa dikkat! sort elemanları metin gibi karşılaştırır. Metinde bir, dokuzdan önce gelir; bu yüzden yüz, dokuzun önüne geçti. Hata mesajı yok ama sonuç yanlış.",
+      "ekran": {
+        "baslik": "sort sayıları metin gibi sıralar",
+        "kod": "console.log([10, 9, 100].sort());\n",
+        "dil": "js",
+        "vurgu_satirlari": [1],
+        "cikti": "[ 10, 100, 9 ]"
+      },
+      "maskot": { "poz": "sasirma", "konum": "sag" },
+      "calistir": false
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "Çözüm: bir karşılaştırma fonksiyonu vermek. a eksi b küçükten büyüğe, b eksi a büyükten küçüğe sıralar. sort asıl diziyi değiştirdiği için önce slice ile kopyaladık.",
+      "ekran": {
+        "baslik": "Sayıları doğru sıralamak",
+        "kod": "const nums = [10, 9, 100];\nconsole.log(nums.slice().sort((a, b) => a - b));\nconsole.log(nums.slice().sort((a, b) => b - a));\nconsole.log(nums);\n",
+        "dil": "js",
+        "vurgu_satirlari": [2, 3],
+        "cikti": "[ 9, 10, 100 ]\n[ 100, 10, 9 ]\n[ 10, 9, 100 ]"
+      },
+      "maskot": { "poz": "mutlu", "konum": "alt-sag" },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "Bu metotlar dizi döndürdüğü için arka arkaya zincirlenebilir. Kopyaladık, uzaklığa göre sıraladık, sadece adları aldık ve okla birleştirdik. Uzaklıklar milyon kilometre.",
+      "ekran": {
+        "baslik": "Zincirleme",
+        "kod": "const planets = [\n  { name: \"Mars\", distance: 228 },\n  { name: \"Merkür\", distance: 58 },\n  { name: \"Venüs\", distance: 108 },\n];\nconst order = planets\n  .slice()\n  .sort((a, b) => a.distance - b.distance)\n  .map((p) => p.name);\nconsole.log(order.join(\" → \"));\n",
+        "dil": "js",
+        "vurgu_satirlari": [7, 8, 9],
+        "cikti": "Merkür → Venüs → Mars"
+      },
+      "maskot": { "poz": "isaret", "konum": "alt-sag" },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "soru",
+      "sure_sn": 10,
+      "anlatim": "Önce elliden büyük skorları süzüyoruz, sonra her birini beşe bölüyoruz. Sence sonuç dizisi ne olur?",
+      "ekran": {
+        "baslik": "Sence ne yazdırır?",
+        "kod": "const scores = [40, 75, 90, 20];\nconst result = scores\n  .filter((s) => s > 50)\n  .map((s) => s / 5);\nconsole.log(result);\n",
+        "dil": "js"
+      },
+      "maskot": { "poz": "dusunme", "konum": "sag" }
+    },
+    {
+      "no": 9,
+      "tur": "cikti",
+      "sure_sn": 9,
+      "anlatim": "On beş ve on sekiz! filter yetmiş beş ile doksanı bıraktı, map de ikisini beşe böldü.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "const scores = [40, 75, 90, 20];\nconst result = scores\n  .filter((s) => s > 50)\n  .map((s) => s / 5);\nconsole.log(result);\n",
+        "dil": "js",
+        "cikti": "[ 15, 18 ]"
+      },
+      "maskot": { "poz": "mutlu", "konum": "sag" },
+      "calistir": true
+    },
+    {
+      "no": 10,
+      "tur": "gorev",
+      "sure_sn": 12,
+      "anlatim": "Görevlerin: hızları iki katına çıkaran yeni bir dizi yap, radar sinyallerini ayıkla ve depolardaki yakıtın toplamını ve ortalamasını bul.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: İki kat hız",
+          "Görev 2: Sinyal ayıklama",
+          "Görev 3: Toplam yakıt"
+        ]
+      },
+      "maskot": { "poz": "isaret", "konum": "sol" }
+    },
+    {
+      "no": 11,
+      "tur": "ozet",
+      "sure_sn": 11,
+      "anlatim": "Özet: map dönüştürür, filter süzer, reduce tek değere indirir. Sayıları sıralarken sort'a mutlaka karşılaştırma fonksiyonu ver.",
+      "ekran": {
+        "baslik": "Özet",
+        "maddeler": [
+          "map dönüştürür, filter süzer, find ilkini bulur",
+          "reduce tek değer üretir: başlangıç değerini yaz",
+          "sort((a, b) => a - b) ve zincirleme"
+        ]
+      },
+      "maskot": { "poz": "on", "konum": "sag" }
+    },
+    {
+      "no": 12,
+      "tur": "kapanis",
+      "sure_sn": 10,
+      "anlatim": "Radar ustası oldun, bravo! Yarın nebulanın ucundaki istasyona kenetleniyoruz. Set, Map ve verinin ortak dili JSON bizi bekliyor.",
+      "ekran": {
+        "baslik": "Yarın: Set, Map ve JSON",
+        "gorsel": "maskotlar/kodi-javascript/kahraman.png"
+      },
+      "maskot": { "poz": "tebrik", "konum": "sag" }
+    }
+  ]
+}

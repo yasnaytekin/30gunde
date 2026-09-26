@@ -1,0 +1,1576 @@
+{
+ "day": 28,
+ "title": "API kullanmak",
+ "region": "dag",
+ "project_contribution": "Görev servisi",
+ "game_role": "Oyun açılınca günün açık görevleri yazılır.",
+ "xp_complete": 150,
+ "objective": "API'lerin ne olduğunu öğrenmek, JSON yanıtlarını okuyup işlemek ve durum kodlarını kontrol etmek",
+ "story": "Dağın yarısındaki kamp evinde bir telsiz var. Piko telsizle hava istasyonunu arıyor: \"Zirvede hava nasıl?\" İstasyon kısa ve düzenli bir cevap veriyor. Programlar da birbirleriyle böyle konuşur. Bu konuşma kurallarına **API** denir.",
+ "sections": [
+  {
+   "title": "API nedir?",
+   "body": "API (Uygulama Programlama Arayüzü), bir programın başka bir programdan bilgi istemesinin kurallarıdır. Restoranı düşün: mutfağa girmezsin, garsona sipariş verirsin, garson yemeği getirir. API o garsondur.\n\nHava durumu, döviz kurları, oyun skorları... Birçok hizmet verisini API ile paylaşır."
+  },
+  {
+   "title": "JSON: API'lerin dili",
+   "body": "API'ler cevaplarını çoğunlukla **JSON** biçiminde verir. JSON, Python sözlüklerine ve listelerine çok benzer ama bir **yazıdır**:\n\n```python\nimport json\n\nresponse = '{\"sehir\": \"İzmir\", \"derece\": 27, \"gunesli\": true}'\ndata = json.loads(response)    # yazı -> sözlük\nprint(data[\"derece\"])          # 27\n\ntext = json.dumps(data, ensure_ascii=False)   # sözlük -> yazı\n```\n\nJSON'da `true`, `false` ve `null` yazılır; Python'da bunlar `True`, `False` ve `None` olur."
+  },
+  {
+   "title": "requests ile istek",
+   "body": "Kendi bilgisayarında internetten veri almak için `requests` paketi kullanılır:\n\n```python\nimport requests\n\nr = requests.get(\"https://api.ornek.com/hava?sehir=izmir\")\nif r.status_code == 200:\n    data = r.json()\n    print(data[\"derece\"])\nelse:\n    print(\"Hata:\", r.status_code)\n```\n\nBu sitede internete istek gönderemiyoruz. Görevlerde API'nin döndürdüğü JSON yazısını hazır vereceğiz; sen onu okuyup işleyeceksin."
+  },
+  {
+   "title": "İç içe veriler",
+   "body": "Gerçek API cevapları çoğu zaman iç içedir: sözlüğün içinde liste, listenin içinde sözlük...\n\n```python\ndata = {\"sehir\": \"İzmir\", \"gunler\": [{\"gun\": \"Pzt\", \"derece\": 27}, {\"gun\": \"Sal\", \"derece\": 25}]}\nprint(data[\"gunler\"][1][\"derece\"])   # 25\n```\n\nAdım adım in: önce `data[\"gunler\"]`, sonra `[1]`, sonra `[\"derece\"]`."
+  }
+ ],
+ "examples": [
+  {
+   "title": "JSON'u aç",
+   "code": "import json\n\nresponse = '{\"sehir\": \"İzmir\", \"derece\": 27, \"gunesli\": true}'\ndata = json.loads(response)\nprint(type(data))\nprint(f\"{data['sehir']}: {data['derece']} derece\")\nprint(\"Güneşli mi?\", data[\"gunesli\"])\n",
+   "note": ""
+  },
+  {
+   "title": "İç içe veri",
+   "code": "import json\n\nresponse = '{\"sehir\": \"Van\", \"gunler\": [{\"gun\": \"Pzt\", \"derece\": 18}, {\"gun\": \"Sal\", \"derece\": 21}]}'\ndata = json.loads(response)\nfor day in data[\"gunler\"]:\n    print(day[\"gun\"], day[\"derece\"])\n",
+   "note": ""
+  },
+  {
+   "title": "Sözlükten JSON",
+   "code": "import json\n\norder = {\"urun\": \"fener\", \"adet\": 2, \"ödendi\": False}\nprint(json.dumps(order))\nprint(json.dumps(order, ensure_ascii=False, indent=2))\n",
+   "note": "ensure_ascii=False Türkçe harflerin olduğu gibi görünmesini sağlar."
+  }
+ ],
+ "tasks": [
+  {
+   "id": "d28-t1",
+   "title": "Hava durumu",
+   "prompt": "`response` JSON yazısını sözlüğe çevir (`data`) ve `İzmir: 27 derece` gibi yazdır.",
+   "starter": "import json\n\nresponse = '{\"sehir\": \"İzmir\", \"derece\": 27}'\n\ndata = {}\n\n# Şehri ve dereceyi yazdır\n",
+   "solution": "import json\n\nresponse = '{\"sehir\": \"İzmir\", \"derece\": 27}'\n\ndata = json.loads(response)\n\nprint(f\"{data['sehir']}: {data['derece']} derece\")\n",
+   "hints": [
+    "data = json.loads(response)",
+    "f-string içinde tek tırnak kullan: {data['sehir']}"
+   ],
+   "check": {
+    "code_contains": [
+     "json.loads"
+    ],
+    "python": "\nout, g = _run(_set(_code, \"response\", '{\"sehir\": \"Kars\", \"derece\": -3}'))\nassert g.get(\"data\") == {\"sehir\": \"Kars\", \"derece\": -3}, \"data, JSON'dan çevrilen sözlük olmalı.\"\nassert \"Kars: -3 derece\" in out, \"Çıktı 'Kars: -3 derece' olmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "import json",
+      "notes": [
+       "`json` modülü programa ekleniyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "response = '{\"sehir\": \"İzmir\", \"derece\": 27}'",
+      "notes": [
+       "`response` adında bir değişken oluşturuluyor ve içine `'{\"sehir\": \"İzmir\", \"derece\": 27}'` (metin (str)) konuyor."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "data = json.loads(response)",
+      "notes": [
+       "`data` adında bir değişken oluşturuluyor ve içine `json.loads(response)` konuyor."
+      ]
+     },
+     {
+      "n": 7,
+      "code": "print(f\"{data['sehir']}: {data['derece']} derece\")",
+      "notes": [
+       "`print(f\"{data['sehir']}: {data['derece']} derece\")`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "response",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `'{\"sehir\": \"İzmir\", \"derece\": 27}'`."
+     },
+     {
+      "term": "data",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `json.loads(response)`."
+     },
+     {
+      "term": "import",
+      "kind": "anahtar kelime",
+      "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+     },
+     {
+      "term": "json",
+      "kind": "modül",
+      "desc": "Veriyi JSON biçiminde yazma ve okuma."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": ".loads()",
+      "kind": "metot",
+      "desc": "JSON metnini Python verisine (sözlük, liste) çevirir."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     },
+     {
+      "term": "f\"...{}\"",
+      "kind": "metin",
+      "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+     },
+     {
+      "term": "[ ]",
+      "kind": "seçme",
+      "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d28-t2",
+   "title": "Ülke listesi",
+   "prompt": "API bir ülke listesi döndürüyor. Ülke **isimlerini** sırayla `names` listesine koy.",
+   "starter": "import json\n\nresponse = '[{\"name\": \"Türkiye\", \"capital\": \"Ankara\"}, {\"name\": \"Japonya\", \"capital\": \"Tokyo\"}]'\n\nnames = []\n\nprint(names)\n",
+   "solution": "import json\n\nresponse = '[{\"name\": \"Türkiye\", \"capital\": \"Ankara\"}, {\"name\": \"Japonya\", \"capital\": \"Tokyo\"}]'\n\ndata = json.loads(response)\nnames = [c[\"name\"] for c in data]\n\nprint(names)\n",
+   "hints": [
+    "Önce json.loads ile listeye çevir.",
+    "Her ülkeden c[\"name\"] al."
+   ],
+   "check": {
+    "python": "\n_, g = _run(_set(_code, \"response\", '[{\"name\": \"Mısır\"}, {\"name\": \"Peru\"}, {\"name\": \"Kenya\"}]'))\nassert g.get(\"names\") == [\"Mısır\", \"Peru\", \"Kenya\"], \"names, ülke isimlerinin listesi olmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "import json",
+      "notes": [
+       "`json` modülü programa ekleniyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "response = '[{\"name\": \"Türkiye\", \"capital\": \"Ankara\"}, {\"name\": \"Japonya\", \"capital\": \"Tokyo\"}]'",
+      "notes": [
+       "`response` adında bir değişken oluşturuluyor ve içine `'[{\"name\": \"Türkiye\", \"capital\": \"Ankara\"}, {\"name\": \"Jap...` (metin (str)) konuyor."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "data = json.loads(response)",
+      "notes": [
+       "`data` adında bir değişken oluşturuluyor ve içine `json.loads(response)` konuyor."
+      ]
+     },
+     {
+      "n": 6,
+      "code": "names = [c[\"name\"] for c in data]",
+      "notes": [
+       "`names` adında bir değişken oluşturuluyor ve içine `[c[\"name\"] for c in data]` (liste üreteciyle kurulan liste) konuyor.",
+       "Tek satırda döngüyle yeni bir liste/dizi üretiliyor."
+      ]
+     },
+     {
+      "n": 8,
+      "code": "print(names)",
+      "notes": [
+       "`print(names)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "response",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `'[{\"name\": \"Türkiye\", \"capital\": \"Ankara\"}, {\"name\": \"Jap...`."
+     },
+     {
+      "term": "data",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `json.loads(response)`."
+     },
+     {
+      "term": "names",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `[c[\"name\"] for c in data]`."
+     },
+     {
+      "term": "import",
+      "kind": "anahtar kelime",
+      "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+     },
+     {
+      "term": "json",
+      "kind": "modül",
+      "desc": "Veriyi JSON biçiminde yazma ve okuma."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": ".loads()",
+      "kind": "metot",
+      "desc": "JSON metnini Python verisine (sözlük, liste) çevirir."
+     },
+     {
+      "term": "[... for ... in ...]",
+      "kind": "liste üreteci",
+      "desc": "Liste üreteci: [ifade for x in liste if koşul] ile tek satırda yeni liste."
+     },
+     {
+      "term": "[ ]",
+      "kind": "seçme",
+      "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d28-t3",
+   "title": "Durum kontrolü",
+   "prompt": "`status` 200 ise `body` içindeki öğe sayısını `3 sonuç bulundu` gibi yazdır. Değilse `Hata: 404` gibi yazdır.",
+   "starter": "import json\n\nstatus = 200\nbody = '{\"results\": [\"a\", \"b\", \"c\"]}'\n\n# Durumu kontrol et\n",
+   "solution": "import json\n\nstatus = 200\nbody = '{\"results\": [\"a\", \"b\", \"c\"]}'\n\nif status == 200:\n    data = json.loads(body)\n    print(f\"{len(data['results'])} sonuç bulundu\")\nelse:\n    print(f\"Hata: {status}\")\n",
+   "hints": [
+    "if status == 200: ile başla.",
+    "Sonuçların sayısı: len(data['results'])"
+   ],
+   "check": {
+    "python": "\nout, _ = _run(_set(_set(_code, \"status\", 200), \"body\", '{\"results\": [1, 2, 3, 4, 5]}'))\nassert \"5 sonuç bulundu\" in out, \"5 sonuç varken '5 sonuç bulundu' yazmalı.\"\nout, _ = _run(_set(_set(_code, \"status\", 500), \"body\", \"bozuk\"))\nassert \"Hata: 500\" in out and \"sonuç\" not in out, \"Durum 200 değilse sadece 'Hata: 500' yazmalı; bozuk cevabı açmaya çalışma.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "import json",
+      "notes": [
+       "`json` modülü programa ekleniyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "status = 200",
+      "notes": [
+       "`status` adında bir değişken oluşturuluyor ve içine `200` (tam sayı) konuyor."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "body = '{\"results\": [\"a\", \"b\", \"c\"]}'",
+      "notes": [
+       "`body` adında bir değişken oluşturuluyor ve içine `'{\"results\": [\"a\", \"b\", \"c\"]}'` (metin (str)) konuyor."
+      ]
+     },
+     {
+      "n": 6,
+      "code": "if status == 200:",
+      "notes": [
+       "Koşul: `status == 200` doğruysa altındaki girintili satırlar çalışır."
+      ]
+     },
+     {
+      "n": 7,
+      "code": "    data = json.loads(body)",
+      "notes": [
+       "`data` adında bir değişken oluşturuluyor ve içine `json.loads(body)` konuyor."
+      ]
+     },
+     {
+      "n": 8,
+      "code": "    print(f\"{len(data['results'])} sonuç bulundu\")",
+      "notes": [
+       "`print(f\"{len(data['results'])} sonuç bulundu\")`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     },
+     {
+      "n": 9,
+      "code": "else:",
+      "notes": [
+       "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+      ]
+     },
+     {
+      "n": 10,
+      "code": "    print(f\"Hata: {status}\")",
+      "notes": [
+       "`print(f\"Hata: {status}\")`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "status",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `200`."
+     },
+     {
+      "term": "body",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `'{\"results\": [\"a\", \"b\", \"c\"]}'`."
+     },
+     {
+      "term": "data",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `json.loads(body)`."
+     },
+     {
+      "term": "import",
+      "kind": "anahtar kelime",
+      "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+     },
+     {
+      "term": "json",
+      "kind": "modül",
+      "desc": "Veriyi JSON biçiminde yazma ve okuma."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "if",
+      "kind": "anahtar kelime",
+      "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+     },
+     {
+      "term": "==",
+      "kind": "operatör",
+      "desc": "Eşit mi? (True/False)"
+     },
+     {
+      "term": ".loads()",
+      "kind": "metot",
+      "desc": "JSON metnini Python verisine (sözlük, liste) çevirir."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     },
+     {
+      "term": "f\"...{}\"",
+      "kind": "metin",
+      "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+     },
+     {
+      "term": "len()",
+      "kind": "fonksiyon",
+      "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+     },
+     {
+      "term": "[ ]",
+      "kind": "seçme",
+      "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+     },
+     {
+      "term": "else",
+      "kind": "anahtar kelime",
+      "desc": "Yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+     }
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "id": "d28-c",
+  "title": "Sipariş gönder",
+  "prompt": "API'ye göndermek için `order` sözlüğünü JSON yazısına çevir ve `payload` değişkenine koy. Türkçe harfler kaçış kodu olmadan (`ş`, `ü` gibi) görünsün.",
+  "starter": "import json\n\norder = {\"ürün\": \"fener\", \"adet\": 2, \"şehir\": \"Muş\"}\n\npayload = \"\"\n\nprint(payload)\n",
+  "solution": "import json\n\norder = {\"ürün\": \"fener\", \"adet\": 2, \"şehir\": \"Muş\"}\n\npayload = json.dumps(order, ensure_ascii=False)\n\nprint(payload)\n",
+  "hints": [
+   "json.dumps(order) sözlüğü yazıya çevirir.",
+   "Türkçe harfler için ensure_ascii=False ekle."
+  ],
+  "check": {
+   "python": "\ntest = {\"ürün\": \"çay\", \"adet\": 3}\n_, g = _run(_set(_code, \"order\", test))\np = g.get(\"payload\")\nassert isinstance(p, str), \"payload bir yazı olmalı: json.dumps(...)\"\nimport json as _j\nassert _j.loads(p) == test, \"payload geri çevrilince order ile aynı olmalı.\"\nassert \"çay\" in p and \"\\\\u\" not in p, \"Türkçe harfler olduğu gibi görünmeli: ensure_ascii=False\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "import json",
+     "notes": [
+      "`json` modülü programa ekleniyor."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "order = {\"ürün\": \"fener\", \"adet\": 2, \"şehir\": \"Muş\"}",
+     "notes": [
+      "`order` adında bir değişken oluşturuluyor ve içine `{\"ürün\": \"fener\", \"adet\": 2, \"şehir\": \"Muş\"}` (sözlük (anahtar: değer)) konuyor."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "payload = json.dumps(order, ensure_ascii=False)",
+     "notes": [
+      "`payload` adında bir değişken oluşturuluyor ve içine `json.dumps(order, ensure_ascii=False)` konuyor."
+     ]
+    },
+    {
+     "n": 7,
+     "code": "print(payload)",
+     "notes": [
+      "`print(payload)`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "order",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"ürün\": \"fener\", \"adet\": 2, \"şehir\": \"Muş\"}`."
+    },
+    {
+     "term": "payload",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `json.dumps(order, ensure_ascii=False)`."
+    },
+    {
+     "term": "import",
+     "kind": "anahtar kelime",
+     "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+    },
+    {
+     "term": "json",
+     "kind": "modül",
+     "desc": "Veriyi JSON biçiminde yazma ve okuma."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": ".dumps()",
+     "kind": "metot",
+     "desc": "Veriyi JSON metnine çevirir."
+    },
+    {
+     "term": "False",
+     "kind": "değer",
+     "desc": "Yanlış (mantıksal değer)."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    }
+   ]
+  }
+ },
+ "project_task": {
+  "id": "d28-p",
+  "title": "Görev servisi",
+  "prompt": "Piko'nun Macerası bir görev servisinden günün görevlerini alıyor. `response`'u aç ve:\n\n- Tamamlanmamış (`\"done\": false`) görevlerin başlıklarını `open_quests` listesine koy.\n- Bu görevlerin ödüllerinin toplamını `total_reward` olarak hesapla.\n- `2 açık görev, toplam 150 altın` gibi yazdır.",
+  "starter": "import json\n\nresponse = '{\"quests\": [{\"title\": \"Fenere git\", \"reward\": 50, \"done\": false}, {\"title\": \"İksir topla\", \"reward\": 30, \"done\": true}, {\"title\": \"Ejderhayı uyandırma\", \"reward\": 100, \"done\": false}]}'\n\nopen_quests = []\ntotal_reward = 0\n\n# Özeti yazdır\n",
+  "solution": "import json\n\nresponse = '{\"quests\": [{\"title\": \"Fenere git\", \"reward\": 50, \"done\": false}, {\"title\": \"İksir topla\", \"reward\": 30, \"done\": true}, {\"title\": \"Ejderhayı uyandırma\", \"reward\": 100, \"done\": false}]}'\n\ndata = json.loads(response)\nopen_list = [q for q in data[\"quests\"] if not q[\"done\"]]\nopen_quests = [q[\"title\"] for q in open_list]\ntotal_reward = sum([q[\"reward\"] for q in open_list])\n\nprint(f\"{len(open_quests)} açık görev, toplam {total_reward} altın\")\n",
+  "hints": [
+   "Görevler data[\"quests\"] içinde.",
+   "Açık görev: not q[\"done\"]",
+   "Önce açık görevleri seç, sonra başlık ve ödülleri ayrı ayrı topla."
+  ],
+  "check": {
+   "python": "\ntest = '{\"quests\": [{\"title\": \"A\", \"reward\": 5, \"done\": true}, {\"title\": \"B\", \"reward\": 7, \"done\": false}, {\"title\": \"C\", \"reward\": 11, \"done\": false}, {\"title\": \"D\", \"reward\": 1, \"done\": false}]}'\nout, g = _run(_set(_code, \"response\", test))\nassert g.get(\"open_quests\") == [\"B\", \"C\", \"D\"], \"open_quests, bitmemiş görevlerin başlıkları olmalı.\"\nassert g.get(\"total_reward\") == 19, \"total_reward, sadece açık görevlerin ödüllerinin toplamı olmalı.\"\nassert \"3 açık görev, toplam 19 altın\" in out, \"Özeti '3 açık görev, toplam 19 altın' biçiminde yazdır.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "import json",
+     "notes": [
+      "`json` modülü programa ekleniyor."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "response = '{\"quests\": [{\"title\": \"Fenere git\", \"reward\": 50, \"done\": false}, {\"title\": \"İksir topla\", \"reward\": 30, \"done\": true}, {\"title\": \"Ejderhayı uyandırma\", \"reward\": 100, \"done\": false}]}'",
+     "notes": [
+      "`response` adında bir değişken oluşturuluyor ve içine `'{\"quests\": [{\"title\": \"Fenere git\", \"reward\": 50, \"done\"...` (metin (str)) konuyor."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "data = json.loads(response)",
+     "notes": [
+      "`data` adında bir değişken oluşturuluyor ve içine `json.loads(response)` konuyor."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "open_list = [q for q in data[\"quests\"] if not q[\"done\"]]",
+     "notes": [
+      "`open_list` adında bir değişken oluşturuluyor ve içine `[q for q in data[\"quests\"] if not q[\"done\"]]` (liste üreteciyle kurulan liste) konuyor.",
+      "Tek satırda döngüyle yeni bir liste/dizi üretiliyor."
+     ]
+    },
+    {
+     "n": 7,
+     "code": "open_quests = [q[\"title\"] for q in open_list]",
+     "notes": [
+      "`open_quests` adında bir değişken oluşturuluyor ve içine `[q[\"title\"] for q in open_list]` (liste üreteciyle kurulan liste) konuyor.",
+      "Tek satırda döngüyle yeni bir liste/dizi üretiliyor."
+     ]
+    },
+    {
+     "n": 8,
+     "code": "total_reward = sum([q[\"reward\"] for q in open_list])",
+     "notes": [
+      "`total_reward` adında bir değişken oluşturuluyor ve içine `sum([q[\"reward\"] for q in open_list])` konuyor.",
+      "Tek satırda döngüyle yeni bir liste/dizi üretiliyor."
+     ]
+    },
+    {
+     "n": 10,
+     "code": "print(f\"{len(open_quests)} açık görev, toplam {total_reward} altın\")",
+     "notes": [
+      "`print(f\"{len(open_quests)} açık görev, toplam {total_rewa...`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "response",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `'{\"quests\": [{\"title\": \"Fenere git\", \"reward\": 50, \"done\"...`."
+    },
+    {
+     "term": "data",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `json.loads(response)`."
+    },
+    {
+     "term": "open_list",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `[q for q in data[\"quests\"] if not q[\"done\"]]`."
+    },
+    {
+     "term": "open_quests",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `[q[\"title\"] for q in open_list]`."
+    },
+    {
+     "term": "total_reward",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `sum([q[\"reward\"] for q in open_list])`."
+    },
+    {
+     "term": "import",
+     "kind": "anahtar kelime",
+     "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+    },
+    {
+     "term": "json",
+     "kind": "modül",
+     "desc": "Veriyi JSON biçiminde yazma ve okuma."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": ".loads()",
+     "kind": "metot",
+     "desc": "JSON metnini Python verisine (sözlük, liste) çevirir."
+    },
+    {
+     "term": "[... for ... in ...]",
+     "kind": "liste üreteci",
+     "desc": "Liste üreteci: [ifade for x in liste if koşul] ile tek satırda yeni liste."
+    },
+    {
+     "term": "[ ]",
+     "kind": "seçme",
+     "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+    },
+    {
+     "term": "not",
+     "kind": "operatör",
+     "desc": "Koşulu tersine çevirir (True ↔ False)."
+    },
+    {
+     "term": "sum()",
+     "kind": "fonksiyon",
+     "desc": "Listedeki sayıları toplar."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    },
+    {
+     "term": "f\"...{}\"",
+     "kind": "metin",
+     "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+    },
+    {
+     "term": "len()",
+     "kind": "fonksiyon",
+     "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+    }
+   ]
+  }
+ },
+ "available": true,
+ "tracks": {
+  "veri": {
+   "project_task": {
+    "id": "d28-pv",
+    "title": "Kur API'si",
+    "prompt": "Bir kur servisinden gelen yanıt `status` (durum kodu) ve `response` (JSON yazısı) değişkenlerinde.\n\n- `status` 200 değilse `Kur alınamadı` yazdır.\n- 200 ise JSON'u aç, `rates` içindeki `USD` kurunu al ve `total_try`'ı dolara çevir: `usd = round(total_try / kur, 2)`. Sonra `Toplam: 97.5 USD` gibi yazdır.",
+    "starter": "import json\n\nstatus = 200\nresponse = '{\"base\": \"TRY\", \"rates\": {\"USD\": 32.0, \"EUR\": 35.0}}'\ntotal_try = 3120\n",
+    "solution": "import json\n\nstatus = 200\nresponse = '{\"base\": \"TRY\", \"rates\": {\"USD\": 32.0, \"EUR\": 35.0}}'\ntotal_try = 3120\nif status != 200:\n    print(\"Kur alınamadı\")\nelse:\n    data = json.loads(response)\n    rate = data[\"rates\"][\"USD\"]\n    usd = round(total_try / rate, 2)\n    print(f\"Toplam: {usd} USD\")\n",
+    "hints": [
+     "json.loads(response) yazıyı sözlüğe çevirir.",
+     "Kur: data[\"rates\"][\"USD\"]"
+    ],
+    "check": {
+     "python": "\nout, g = _run(_set(_set(_code, \"response\", '{\"rates\": {\"USD\": 40.0}}'), \"total_try\", 1000))\nassert g.get(\"usd\") == 25.0 and \"Toplam: 25.0 USD\" in out, \"Kur 40 ve toplam 1000 iken 'Toplam: 25.0 USD' yazmalı.\"\nout, _ = _run(_set(_code, \"status\", 503))\nassert \"Kur alınamadı\" in out and \"USD\" not in out, \"status 200 değilse sadece 'Kur alınamadı' yazmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "import json",
+       "notes": [
+        "`json` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "status = 200",
+       "notes": [
+        "`status` adında bir değişken oluşturuluyor ve içine `200` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "response = '{\"base\": \"TRY\", \"rates\": {\"USD\": 32.0, \"EUR\": 35.0}}'",
+       "notes": [
+        "`response` adında bir değişken oluşturuluyor ve içine `'{\"base\": \"TRY\", \"rates\": {\"USD\": 32.0, \"EUR\": 35.0}}'` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "total_try = 3120",
+       "notes": [
+        "`total_try` adında bir değişken oluşturuluyor ve içine `3120` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "if status != 200:",
+       "notes": [
+        "Koşul: `status != 200` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "    print(\"Kur alınamadı\")",
+       "notes": [
+        "`print(\"Kur alınamadı\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "else:",
+       "notes": [
+        "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "    data = json.loads(response)",
+       "notes": [
+        "`data` adında bir değişken oluşturuluyor ve içine `json.loads(response)` konuyor."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "    rate = data[\"rates\"][\"USD\"]",
+       "notes": [
+        "`rate` adında bir değişken oluşturuluyor ve içine `data[\"rates\"][\"USD\"]` konuyor."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "    usd = round(total_try / rate, 2)",
+       "notes": [
+        "`usd` adında bir değişken oluşturuluyor ve içine `round(total_try / rate, 2)` konuyor."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "    print(f\"Toplam: {usd} USD\")",
+       "notes": [
+        "`print(f\"Toplam: {usd} USD\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "status",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `200`."
+      },
+      {
+       "term": "response",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `'{\"base\": \"TRY\", \"rates\": {\"USD\": 32.0, \"EUR\": 35.0}}'`."
+      },
+      {
+       "term": "total_try",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `3120`."
+      },
+      {
+       "term": "data",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `json.loads(response)`."
+      },
+      {
+       "term": "rate",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `data[\"rates\"][\"USD\"]`."
+      },
+      {
+       "term": "usd",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `round(total_try / rate, 2)`."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "json",
+       "kind": "modül",
+       "desc": "Veriyi JSON biçiminde yazma ve okuma."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "!=",
+       "kind": "operatör",
+       "desc": "Eşit değil mi?"
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "else",
+       "kind": "anahtar kelime",
+       "desc": "Yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+      },
+      {
+       "term": ".loads()",
+       "kind": "metot",
+       "desc": "JSON metnini Python verisine (sözlük, liste) çevirir."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": "round()",
+       "kind": "fonksiyon",
+       "desc": "Sayıyı yuvarlar. round(3.14159, 2) → 3.14"
+      },
+      {
+       "term": "/",
+       "kind": "operatör",
+       "desc": "Bölme; sonuç her zaman ondalıklı sayıdır."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Dolar karşılığı",
+   "game_role": "Kur API'sinden gelen yanıtla toplam harcamayı dolara çevirir."
+  },
+  "otomasyon": {
+   "project_task": {
+    "id": "d28-po",
+    "title": "Hava durumu API'si",
+    "prompt": "Asistan sabah hava durumuna baksın. Bir hava servisinden gelen yanıt `status` ve `response` (JSON) değişkenlerinde.\n\n- `status` 200 değilse `Hava durumu alınamadı` yazdır.\n- 200 ise JSON'u aç ve `Bugün 18 derece` gibi sıcaklığı yazdır. Yağmur olasılığı (`rain`) 50 veya fazlaysa `Şemsiyeni al!`, değilse `Şemsiyeye gerek yok.` yazdır.",
+    "starter": "import json\n\nstatus = 200\nresponse = '{\"city\": \"İzmir\", \"temp\": 18, \"rain\": 70}'\n",
+    "solution": "import json\n\nstatus = 200\nresponse = '{\"city\": \"İzmir\", \"temp\": 18, \"rain\": 70}'\nif status != 200:\n    print(\"Hava durumu alınamadı\")\nelse:\n    data = json.loads(response)\n    print(f\"Bugün {data['temp']} derece\")\n    if data[\"rain\"] >= 50:\n        print(\"Şemsiyeni al!\")\n    else:\n        print(\"Şemsiyeye gerek yok.\")\n",
+    "hints": [
+     "json.loads(response)",
+     "data[\"rain\"] >= 50"
+    ],
+    "check": {
+     "python": "\nout, _ = _run(_set(_code, \"response\", '{\"temp\": 25, \"rain\": 10}'))\nassert \"Bugün 25 derece\" in out and \"Şemsiyeye gerek yok.\" in out, \"Yağmur 10 iken sıcaklığı ve 'Şemsiyeye gerek yok.' yazmalı.\"\nout, _ = _run(_set(_code, \"response\", '{\"temp\": 9, \"rain\": 50}'))\nassert \"Bugün 9 derece\" in out and \"Şemsiyeni al!\" in out, \"Yağmur 50 iken 'Şemsiyeni al!' yazmalı.\"\nout, _ = _run(_set(_code, \"status\", 500))\nassert \"Hava durumu alınamadı\" in out and \"derece\" not in out, \"status 200 değilse sadece 'Hava durumu alınamadı' yazmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "import json",
+       "notes": [
+        "`json` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "status = 200",
+       "notes": [
+        "`status` adında bir değişken oluşturuluyor ve içine `200` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "response = '{\"city\": \"İzmir\", \"temp\": 18, \"rain\": 70}'",
+       "notes": [
+        "`response` adında bir değişken oluşturuluyor ve içine `'{\"city\": \"İzmir\", \"temp\": 18, \"rain\": 70}'` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "if status != 200:",
+       "notes": [
+        "Koşul: `status != 200` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    print(\"Hava durumu alınamadı\")",
+       "notes": [
+        "`print(\"Hava durumu alınamadı\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "else:",
+       "notes": [
+        "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "    data = json.loads(response)",
+       "notes": [
+        "`data` adında bir değişken oluşturuluyor ve içine `json.loads(response)` konuyor."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "    print(f\"Bugün {data['temp']} derece\")",
+       "notes": [
+        "`print(f\"Bugün {data['temp']} derece\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "    if data[\"rain\"] >= 50:",
+       "notes": [
+        "Koşul: `data[\"rain\"] >= 50` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "        print(\"Şemsiyeni al!\")",
+       "notes": [
+        "`print(\"Şemsiyeni al!\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "    else:",
+       "notes": [
+        "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "        print(\"Şemsiyeye gerek yok.\")",
+       "notes": [
+        "`print(\"Şemsiyeye gerek yok.\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "status",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `200`."
+      },
+      {
+       "term": "response",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `'{\"city\": \"İzmir\", \"temp\": 18, \"rain\": 70}'`."
+      },
+      {
+       "term": "data",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `json.loads(response)`."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "json",
+       "kind": "modül",
+       "desc": "Veriyi JSON biçiminde yazma ve okuma."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "!=",
+       "kind": "operatör",
+       "desc": "Eşit değil mi?"
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "else",
+       "kind": "anahtar kelime",
+       "desc": "Yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+      },
+      {
+       "term": ".loads()",
+       "kind": "metot",
+       "desc": "JSON metnini Python verisine (sözlük, liste) çevirir."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": ">=",
+       "kind": "operatör",
+       "desc": "Büyük ya da eşit mi?"
+      }
+     ]
+    }
+   },
+   "project_contribution": "Hava durumu uyarısı",
+   "game_role": "Hava durumu API'sinden gelen yanıta göre sabah uyarısı yapar."
+  },
+  "web": {
+   "project_task": {
+    "id": "d28-pw",
+    "title": "Yorum API'si",
+    "prompt": "Yazının yorumları bir yorum servisinden geliyor. Yanıt `status` (durum kodu) ve `response` (JSON yazısı) değişkenlerinde.\n\n- `status` 200 değilse sadece `Yorumlar yüklenemedi` yazdır.\n- 200 ise JSON'u aç (`json.loads`) ve `comments` içinden sadece `approved` değeri `true` olan yorumları `approved` listesine al. Sonra onaylı yorum sayısını ve her yorumu yazdır:\n\n```\n2 yorum\ncan: Harika yazı!\nzeynep: Devamını bekliyorum\n```",
+    "starter": "import json\n\nstatus = 200\nresponse = '{\"post\": \"merhaba-dunya\", \"comments\": [{\"user\": \"can\", \"text\": \"Harika yazı!\", \"approved\": true}, {\"user\": \"spam_bot\", \"text\": \"Ucuz ürünler!\", \"approved\": false}, {\"user\": \"zeynep\", \"text\": \"Devamını bekliyorum\", \"approved\": true}]}'\n",
+    "solution": "import json\n\nstatus = 200\nresponse = '{\"post\": \"merhaba-dunya\", \"comments\": [{\"user\": \"can\", \"text\": \"Harika yazı!\", \"approved\": true}, {\"user\": \"spam_bot\", \"text\": \"Ucuz ürünler!\", \"approved\": false}, {\"user\": \"zeynep\", \"text\": \"Devamını bekliyorum\", \"approved\": true}]}'\nif status != 200:\n    print(\"Yorumlar yüklenemedi\")\nelse:\n    data = json.loads(response)\n    approved = [c for c in data[\"comments\"] if c[\"approved\"]]\n    print(len(approved), \"yorum\")\n    for c in approved:\n        print(f\"{c['user']}: {c['text']}\")\n",
+    "hints": [
+     "json.loads(response) yazıyı sözlüğe çevirir; JSON'daki true Python'da True olur.",
+     "approved = [c for c in data[\"comments\"] if c[\"approved\"]]"
+    ],
+    "check": {
+     "python": "\ntest = '{\"comments\": [{\"user\": \"a\", \"text\": \"x\", \"approved\": false}, {\"user\": \"b\", \"text\": \"y\", \"approved\": true}]}'\nout, g = _run(_set(_code, \"response\", test))\nassert g.get(\"approved\") == [{\"user\": \"b\", \"text\": \"y\", \"approved\": True}], \"approved, sadece onaylı yorumların listesi olmalı.\"\nassert \"1 yorum\" in out and \"b: y\" in out, \"Onaylı yorum sayısını ve her yorumu 'b: y' gibi yazdır.\"\nassert \"a: x\" not in out, \"Onaylanmamış yorumları yazdırma.\"\nout, _ = _run(_set(_code, \"status\", 503))\nassert out.strip() == \"Yorumlar yüklenemedi\", \"status 200 değilse sadece 'Yorumlar yüklenemedi' yazmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "import json",
+       "notes": [
+        "`json` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "status = 200",
+       "notes": [
+        "`status` adında bir değişken oluşturuluyor ve içine `200` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "response = '{\"post\": \"merhaba-dunya\", \"comments\": [{\"user\": \"can\", \"text\": \"Harika yazı!\", \"approved\": true}, {\"user\": \"spam_bot\", \"text\": \"Ucuz ürünler!\", \"approved\": false}, {\"user\": \"zeynep\", \"text\": \"Devamını bekliyorum\", \"approved\": true}]}'",
+       "notes": [
+        "`response` adında bir değişken oluşturuluyor ve içine `'{\"post\": \"merhaba-dunya\", \"comments\": [{\"user\": \"can\", \"...` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "if status != 200:",
+       "notes": [
+        "Koşul: `status != 200` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    print(\"Yorumlar yüklenemedi\")",
+       "notes": [
+        "`print(\"Yorumlar yüklenemedi\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "else:",
+       "notes": [
+        "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "    data = json.loads(response)",
+       "notes": [
+        "`data` adında bir değişken oluşturuluyor ve içine `json.loads(response)` konuyor."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "    approved = [c for c in data[\"comments\"] if c[\"approved\"]]",
+       "notes": [
+        "`approved` adında bir değişken oluşturuluyor ve içine `[c for c in data[\"comments\"] if c[\"approved\"]]` (liste üreteciyle kurulan liste) konuyor.",
+        "Tek satırda döngüyle yeni bir liste/dizi üretiliyor."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "    print(len(approved), \"yorum\")",
+       "notes": [
+        "`print(len(approved), \"yorum\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "    for c in approved:",
+       "notes": [
+        "Döngü: `approved` içindeki her eleman sırayla `c` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "        print(f\"{c['user']}: {c['text']}\")",
+       "notes": [
+        "`print(f\"{c['user']}: {c['text']}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "status",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `200`."
+      },
+      {
+       "term": "response",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `'{\"post\": \"merhaba-dunya\", \"comments\": [{\"user\": \"can\", \"...`."
+      },
+      {
+       "term": "data",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `json.loads(response)`."
+      },
+      {
+       "term": "approved",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[c for c in data[\"comments\"] if c[\"approved\"]]`."
+      },
+      {
+       "term": "c",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `approved` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "json",
+       "kind": "modül",
+       "desc": "Veriyi JSON biçiminde yazma ve okuma."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "!=",
+       "kind": "operatör",
+       "desc": "Eşit değil mi?"
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "else",
+       "kind": "anahtar kelime",
+       "desc": "Yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+      },
+      {
+       "term": ".loads()",
+       "kind": "metot",
+       "desc": "JSON metnini Python verisine (sözlük, liste) çevirir."
+      },
+      {
+       "term": "[... for ... in ...]",
+       "kind": "liste üreteci",
+       "desc": "Liste üreteci: [ifade for x in liste if koşul] ile tek satırda yeni liste."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Yorumlar",
+   "game_role": "Yorum servisinden gelen yanıttan onaylı yorumları gösterir."
+  },
+  "bot": {
+   "project_task": {
+    "id": "d28-pb",
+    "title": "Fıkra API'si",
+    "prompt": "Kullanıcı \"bana fıkra anlat\" deyince bot bir fıkra servisine soruyor. Yanıt `status` (durum kodu) ve `response` (JSON yazısı) değişkenlerinde.\n\n- `status` 200 ise JSON'u aç; fıkra `joke` içinde: soru `setup`, cevap `punchline`. İkisini ayrı satırlarda yazdır:\n\n```\nBot: Bilgisayar neden üşüdü?\nBot: Çünkü pencereleri açık kalmış!\n```\n\n- `status` 429 ise (çok fazla istek): `Bot: Çok fazla fıkra istedin, biraz bekle.`\n- Başka bir kod ise: `Bot: Şu an aklıma fıkra gelmiyor.`",
+    "starter": "import json\n\nstatus = 200\nresponse = '{\"id\": 7, \"joke\": {\"setup\": \"Bilgisayar neden üşüdü?\", \"punchline\": \"Çünkü pencereleri açık kalmış!\"}}'\n",
+    "solution": "import json\n\nstatus = 200\nresponse = '{\"id\": 7, \"joke\": {\"setup\": \"Bilgisayar neden üşüdü?\", \"punchline\": \"Çünkü pencereleri açık kalmış!\"}}'\nif status == 200:\n    data = json.loads(response)\n    print(f\"Bot: {data['joke']['setup']}\")\n    print(f\"Bot: {data['joke']['punchline']}\")\nelif status == 429:\n    print(\"Bot: Çok fazla fıkra istedin, biraz bekle.\")\nelse:\n    print(\"Bot: Şu an aklıma fıkra gelmiyor.\")\n",
+    "hints": [
+     "json.loads(response) yazıyı sözlüğe çevirir.",
+     "İç içe veri: data[\"joke\"][\"setup\"]"
+    ],
+    "check": {
+     "python": "\nout, _ = _run(_set(_code, \"response\", '{\"id\": 1, \"joke\": {\"setup\": \"Neden?\", \"punchline\": \"Çünkü!\"}}'))\nassert \"Bot: Neden?\" in out and \"Bot: Çünkü!\" in out, \"Fıkrayı JSON'daki joke -> setup ve punchline'dan al.\"\nout, _ = _run(_set(_code, \"status\", 429))\nassert \"Bot: Çok fazla fıkra istedin, biraz bekle.\" in out and \"üşüdü\" not in out, \"status 429 iken sadece bekleme mesajını yazmalı.\"\nout, _ = _run(_set(_code, \"status\", 500))\nassert \"Bot: Şu an aklıma fıkra gelmiyor.\" in out and \"üşüdü\" not in out, \"Başka bir kodda sadece 'Bot: Şu an aklıma fıkra gelmiyor.' yazmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "import json",
+       "notes": [
+        "`json` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "status = 200",
+       "notes": [
+        "`status` adında bir değişken oluşturuluyor ve içine `200` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "response = '{\"id\": 7, \"joke\": {\"setup\": \"Bilgisayar neden üşüdü?\", \"punchline\": \"Çünkü pencereleri açık kalmış!\"}}'",
+       "notes": [
+        "`response` adında bir değişken oluşturuluyor ve içine `'{\"id\": 7, \"joke\": {\"setup\": \"Bilgisayar neden üşüdü?\", \"...` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "if status == 200:",
+       "notes": [
+        "Koşul: `status == 200` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    data = json.loads(response)",
+       "notes": [
+        "`data` adında bir değişken oluşturuluyor ve içine `json.loads(response)` konuyor."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "    print(f\"Bot: {data['joke']['setup']}\")",
+       "notes": [
+        "`print(f\"Bot: {data['joke']['setup']}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "    print(f\"Bot: {data['joke']['punchline']}\")",
+       "notes": [
+        "`print(f\"Bot: {data['joke']['punchline']}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "elif status == 429:",
+       "notes": [
+        "`elif`: yukarıdaki koşul yanlışsa `status == 429` koşuluna bakılır."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "    print(\"Bot: Çok fazla fıkra istedin, biraz bekle.\")",
+       "notes": [
+        "`print(\"Bot: Çok fazla fıkra istedin, biraz bekle.\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "else:",
+       "notes": [
+        "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "    print(\"Bot: Şu an aklıma fıkra gelmiyor.\")",
+       "notes": [
+        "`print(\"Bot: Şu an aklıma fıkra gelmiyor.\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "status",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `200`."
+      },
+      {
+       "term": "response",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `'{\"id\": 7, \"joke\": {\"setup\": \"Bilgisayar neden üşüdü?\", \"...`."
+      },
+      {
+       "term": "data",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `json.loads(response)`."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "json",
+       "kind": "modül",
+       "desc": "Veriyi JSON biçiminde yazma ve okuma."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "==",
+       "kind": "operatör",
+       "desc": "Eşit mi? (True/False)"
+      },
+      {
+       "term": ".loads()",
+       "kind": "metot",
+       "desc": "JSON metnini Python verisine (sözlük, liste) çevirir."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": "elif",
+       "kind": "anahtar kelime",
+       "desc": "Önceki koşullar yanlışsa bu koşula bakılır (\"değilse eğer\")."
+      },
+      {
+       "term": "else",
+       "kind": "anahtar kelime",
+       "desc": "Yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Fıkra anlatıcı",
+   "game_role": "Bir fıkra API'sinden gelen yanıtı okuyup kullanıcıya fıkra anlatır."
+  },
+  "okul": {
+   "project_task": {
+    "id": "d28-pn",
+    "title": "Okul API'si",
+    "prompt": "Okulun not servisinden gelen yanıt `status` (durum kodu) ve `response` (JSON yazısı) değişkenlerinde. Notlar iç içe duruyor: `exams` listesindeki her sınav bir sözlük.\n\n- `status` 200 değilse `Notlar alınamadı (404)` gibi durum koduyla yazdır.\n- 200 ise JSON'u aç, notları bir listeye topla ve `average`'ı hesapla (1 basamağa yuvarla). Sonra şöyle yazdır:\n\n```\nEce: 3 sınav, ortalama 81.7\n```",
+    "starter": "import json\n\nstatus = 200\nresponse = '{\"student\": \"Ece\", \"exams\": [{\"lesson\": \"Matematik\", \"grade\": 85}, {\"lesson\": \"Fizik\", \"grade\": 70}, {\"lesson\": \"Tarih\", \"grade\": 90}]}'\n",
+    "solution": "import json\n\nstatus = 200\nresponse = '{\"student\": \"Ece\", \"exams\": [{\"lesson\": \"Matematik\", \"grade\": 85}, {\"lesson\": \"Fizik\", \"grade\": 70}, {\"lesson\": \"Tarih\", \"grade\": 90}]}'\nif status != 200:\n    print(f\"Notlar alınamadı ({status})\")\nelse:\n    data = json.loads(response)\n    grades = [exam[\"grade\"] for exam in data[\"exams\"]]\n    average = round(sum(grades) / len(grades), 1)\n    print(f\"{data['student']}: {len(grades)} sınav, ortalama {average}\")\n",
+    "hints": [
+     "json.loads(response) yazıyı sözlüğe çevirir.",
+     "Notlar: [exam[\"grade\"] for exam in data[\"exams\"]]"
+    ],
+    "check": {
+     "python": "\nresp = '{\"student\": \"Deniz\", \"exams\": [{\"lesson\": \"Kimya\", \"grade\": 60}, {\"lesson\": \"Müzik\", \"grade\": 91}]}'\nout, g = _run(_set(_code, \"response\", resp))\nassert g.get(\"average\") == 75.5, \"average, exams içindeki notların ortalaması olmalı (1 basamak).\"\nassert \"Deniz: 2 sınav, ortalama 75.5\" in out, \"'Deniz: 2 sınav, ortalama 75.5' gibi yazdır; öğrenci adını da yanıttan al.\"\nout, _ = _run(_set(_code, \"status\", 404))\nassert \"Notlar alınamadı (404)\" in out and \"ortalama\" not in out, \"status 200 değilse sadece 'Notlar alınamadı (404)' gibi yazmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "import json",
+       "notes": [
+        "`json` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "status = 200",
+       "notes": [
+        "`status` adında bir değişken oluşturuluyor ve içine `200` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "response = '{\"student\": \"Ece\", \"exams\": [{\"lesson\": \"Matematik\", \"grade\": 85}, {\"lesson\": \"Fizik\", \"grade\": 70}, {\"lesson\": \"Tarih\", \"grade\": 90}]}'",
+       "notes": [
+        "`response` adında bir değişken oluşturuluyor ve içine `'{\"student\": \"Ece\", \"exams\": [{\"lesson\": \"Matematik\", \"gr...` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "if status != 200:",
+       "notes": [
+        "Koşul: `status != 200` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    print(f\"Notlar alınamadı ({status})\")",
+       "notes": [
+        "`print(f\"Notlar alınamadı ({status})\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "else:",
+       "notes": [
+        "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "    data = json.loads(response)",
+       "notes": [
+        "`data` adında bir değişken oluşturuluyor ve içine `json.loads(response)` konuyor."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "    grades = [exam[\"grade\"] for exam in data[\"exams\"]]",
+       "notes": [
+        "`grades` adında bir değişken oluşturuluyor ve içine `[exam[\"grade\"] for exam in data[\"exams\"]]` (liste üreteciyle kurulan liste) konuyor.",
+        "Tek satırda döngüyle yeni bir liste/dizi üretiliyor."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "    average = round(sum(grades) / len(grades), 1)",
+       "notes": [
+        "`average` adında bir değişken oluşturuluyor ve içine `round(sum(grades) / len(grades), 1)` konuyor."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "    print(f\"{data['student']}: {len(grades)} sınav, ortalama {average}\")",
+       "notes": [
+        "`print(f\"{data['student']}: {len(grades)} sınav, ortalama ...`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "status",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `200`."
+      },
+      {
+       "term": "response",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `'{\"student\": \"Ece\", \"exams\": [{\"lesson\": \"Matematik\", \"gr...`."
+      },
+      {
+       "term": "data",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `json.loads(response)`."
+      },
+      {
+       "term": "grades",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[exam[\"grade\"] for exam in data[\"exams\"]]`."
+      },
+      {
+       "term": "average",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `round(sum(grades) / len(grades), 1)`."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "json",
+       "kind": "modül",
+       "desc": "Veriyi JSON biçiminde yazma ve okuma."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "!=",
+       "kind": "operatör",
+       "desc": "Eşit değil mi?"
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "else",
+       "kind": "anahtar kelime",
+       "desc": "Yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+      },
+      {
+       "term": ".loads()",
+       "kind": "metot",
+       "desc": "JSON metnini Python verisine (sözlük, liste) çevirir."
+      },
+      {
+       "term": "[... for ... in ...]",
+       "kind": "liste üreteci",
+       "desc": "Liste üreteci: [ifade for x in liste if koşul] ile tek satırda yeni liste."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": "round()",
+       "kind": "fonksiyon",
+       "desc": "Sayıyı yuvarlar. round(3.14159, 2) → 3.14"
+      },
+      {
+       "term": "/",
+       "kind": "operatör",
+       "desc": "Bölme; sonuç her zaman ondalıklı sayıdır."
+      },
+      {
+       "term": "sum()",
+       "kind": "fonksiyon",
+       "desc": "Listedeki sayıları toplar."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Okul API'si",
+   "game_role": "Okulun not servisinden gelen JSON yanıtını okuyup ortalamanı hesaplar."
+  }
+ }
+}

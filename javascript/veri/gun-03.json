@@ -1,0 +1,207 @@
+{
+ "day": 3,
+ "title": "Operatörler ve Math",
+ "region": "kalkis",
+ "xp_complete": 150,
+ "objective": "Aritmetik, karşılaştırma ve mantıksal operatörleri kullanmak; Math ile hesap yapmak",
+ "story": "Roket yola çıkmak üzere ama önce hesaplar yapılmalı: Ay'a kaç saatte varılır, yakıt yeter mi, hava uygun mu? Bugün JavaScript'i bir hesap makinesi ve karar vericiye dönüştüreceğiz.",
+ "sections": [
+  {
+   "title": "Aritmetik operatörler",
+   "body": "| İşlem | Operatör | Örnek | Sonuç |\n| --- | --- | --- | --- |\n| Toplama | `+` | `7 + 2` | `9` |\n| Çıkarma | `-` | `7 - 2` | `5` |\n| Çarpma | `*` | `7 * 2` | `14` |\n| Bölme | `/` | `7 / 2` | `3.5` |\n| Kalan (mod) | `%` | `7 % 2` | `1` |\n| Üs | `**` | `2 ** 3` | `8` |\n\nKısayollar: `score += 10` demek `score = score + 10` demektir. `stars++` bir artırır."
+  },
+  {
+   "title": "Karşılaştırma: === ve arkadaşları",
+   "body": "Karşılaştırmaların sonucu her zaman `true` ya da `false` olur:\n\n```js\nconsole.log(10 > 3);      // true\nconsole.log(5 === 5);     // true  (eşit mi?)\nconsole.log(5 !== 5);     // false (farklı mı?)\nconsole.log(\"5\" === 5);   // false: biri metin, biri sayı\n```\n\nEşitlik için hep **üç eşittir** `===` kullan. İki eşittir `==` türleri gizlice dönüştürür ve şaşırtıcı sonuçlar verir."
+  },
+  {
+   "title": "Mantıksal operatörler",
+   "body": "- `&&` (ve): ikisi de doğruysa `true`\n- `||` (veya): en az biri doğruysa `true`\n- `!` (değil): tersine çevirir\n\n```js\nconst fuel = 80;\nconst weather = \"açık\";\nconsole.log(fuel >= 50 && weather === \"açık\");  // true\n```"
+  },
+  {
+   "title": "Math ile hesap",
+   "body": "- `Math.round(4.6)` → `5` (en yakın tam sayıya yuvarlar)\n- `Math.floor(4.6)` → `4` (aşağı yuvarlar)\n- `Math.max(3, 9, 5)` → `9`, `Math.min(...)` en küçüğü verir\n- `Math.random()` → 0 ile 1 arasında rastgele bir sayı\n\nZar atmak: `Math.floor(Math.random() * 6) + 1` bize 1 ile 6 arasında rastgele bir tam sayı verir."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Kutulara yerleştirme",
+   "code": "const items = 20;\nconst perBox = 6;\nconsole.log(\"Dolu kutu:\", Math.floor(items / perBox));\nconsole.log(\"Artan:\", items % perBox);\n",
+   "note": "% kalanı verir: 20'yi 6'ya bölünce 2 artar."
+  },
+  {
+   "title": "Zar at",
+   "code": "const dice = Math.floor(Math.random() * 6) + 1;\nconsole.log(\"Zar:\", dice);\n",
+   "note": "Birkaç kez çalıştır: her seferinde farklı sayı gelebilir."
+  }
+ ],
+ "tasks": [
+  {
+   "id": "js-d3-t1",
+   "title": "Ay yolculuğu",
+   "prompt": "Ay 384400 km uzakta, roketin hızı saatte 40000 km.\n\n- `hours` değişkenine yolculuğun kaç saat süreceğini hesapla: mesafe / hız, sonucu `Math.round` ile yuvarla.\n- `Ay'a 10 saatte varırız.` yazdır (sayı `hours`'tan gelsin).",
+   "starter": "const distance = 384400;\nconst speed = 40000;\n\n// hours'u hesapla\n\nconsole.log(\"Ay'a\", hours, \"saatte varırız.\");\n",
+   "solution": "const distance = 384400;\nconst speed = 40000;\n\n// hours'u hesapla\nconst hours = Math.round(distance / speed);\n\nconsole.log(\"Ay'a\", hours, \"saatte varırız.\");\n",
+   "hints": [
+    "Süre = mesafe / hız",
+    "const hours = Math.round(distance / speed);"
+   ],
+   "check": {
+    "code_contains": [
+     "Math.round",
+     "/"
+    ],
+    "js": "assert(hours === 10, \"hours 10 olmalı (384400 / 40000 = 9.61, yuvarlayınca 10).\");\nassert(_lines.includes(\"Ay'a 10 saatte varırız.\"), \"Çıktıda 'Ay'a 10 saatte varırız.' görünmeli.\");"
+   },
+   "xp": 50
+  },
+  {
+   "id": "js-d3-t2",
+   "title": "Kargo kutuları",
+   "prompt": "47 malzeme var, her kutuya 6 tane sığıyor.\n\n- `fullBoxes`: kaç kutu tamamen dolar? (`Math.floor` ile)\n- `leftover`: kaç malzeme artar? (`%` ile)",
+   "starter": "const items = 47;\nconst perBox = 6;\n\n// fullBoxes ve leftover'ı hesapla\n\nconsole.log(fullBoxes, \"kutu dolu,\", leftover, \"malzeme arttı\");\n",
+   "solution": "const items = 47;\nconst perBox = 6;\n\n// fullBoxes ve leftover'ı hesapla\nconst fullBoxes = Math.floor(items / perBox);\nconst leftover = items % perBox;\n\nconsole.log(fullBoxes, \"kutu dolu,\", leftover, \"malzeme arttı\");\n",
+   "hints": [
+    "Math.floor(items / perBox) bölümün tam kısmını verir.",
+    "items % perBox kalanı verir."
+   ],
+   "check": {
+    "code_contains": [
+     "%",
+     "Math.floor"
+    ],
+    "js": "assert(fullBoxes === 7, \"fullBoxes 7 olmalı.\");\nassert(leftover === 5, \"leftover 5 olmalı.\");"
+   },
+   "xp": 50
+  },
+  {
+   "id": "js-d3-t3",
+   "title": "Kalkış izni",
+   "prompt": "Kalkış için iki şart var: yakıt **en az 50** olmalı **ve** hava `\"açık\"` olmalı.\n\n`canLaunch` değişkenine bu iki şartı `&&` ile birleştirerek yaz ve yazdır.",
+   "starter": "const fuel = 80;\nconst weather = \"açık\";\n\n// canLaunch: iki şart da doğru mu?\n\nconsole.log(\"Kalkış izni:\", canLaunch);\n",
+   "solution": "const fuel = 80;\nconst weather = \"açık\";\n\n// canLaunch: iki şart da doğru mu?\nconst canLaunch = fuel >= 50 && weather === \"açık\";\n\nconsole.log(\"Kalkış izni:\", canLaunch);\n",
+   "hints": [
+    "\"en az 50\" demek >= 50 demek.",
+    "const canLaunch = fuel >= 50 && weather === \"açık\";"
+   ],
+   "check": {
+    "code_contains": [
+     "&&",
+     ">=",
+     "==="
+    ],
+    "js": "assert(canLaunch === true, \"canLaunch true olmalı (80 >= 50 ve hava açık).\");\nassert(_lines.includes(\"Kalkış izni: true\"), \"Çıktıda 'Kalkış izni: true' görünmeli.\");"
+   },
+   "xp": 50
+  }
+ ],
+ "challenge": {
+  "id": "js-d3-c",
+  "title": "Çift zar",
+  "prompt": "İki zar at ve topla:\n\n- `dice1` ve `dice2`: her biri 1 ile 6 arasında rastgele tam sayı\n- `total`: ikisinin toplamı",
+  "starter": "// İki zar at\n\nconsole.log(dice1, \"+\", dice2, \"=\", total);\n",
+  "solution": "// İki zar at\nconst dice1 = Math.floor(Math.random() * 6) + 1;\nconst dice2 = Math.floor(Math.random() * 6) + 1;\nconst total = dice1 + dice2;\n\nconsole.log(dice1, \"+\", dice2, \"=\", total);\n",
+  "hints": [
+   "Math.random() * 6 sonucu 0 ile 6 arasında (6 hariç) bir sayıdır.",
+   "Math.floor(Math.random() * 6) + 1"
+  ],
+  "check": {
+   "code_contains": [
+    "Math.random"
+   ],
+   "js": "const ok = (d) => Number.isInteger(d) && d >= 1 && d <= 6;\nassert(ok(dice1) && ok(dice2), \"dice1 ve dice2 1 ile 6 arasında tam sayı olmalı.\");\nassert(total === dice1 + dice2, \"total iki zarın toplamı olmalı.\");"
+  },
+  "xp": 75
+ },
+ "project_contribution": "Skor hesabı",
+ "project_task": {
+  "id": "js-d3-p",
+  "title": "Skor hesabı",
+  "prompt": "Her yıldız 10 puan. 5 ya da daha fazla yıldız toplayan bonus kazanır.\n\n- `score`: yıldız sayısı çarpı `starPoints`\n- `hasBonus`: yıldız sayısı 5 ya da daha fazla mı? (`true`/`false`)\n\nBeklenen çıktı: `Skor: 70 | Bonus: true`",
+  "starter": "let stars = 7;\nconst starPoints = 10;\n\n// score ve hasBonus'u hesapla\n\nconsole.log(\"Skor:\", score, \"| Bonus:\", hasBonus);\n",
+  "solution": "let stars = 7;\nconst starPoints = 10;\n\n// score ve hasBonus'u hesapla\nconst score = stars * starPoints;\nconst hasBonus = stars >= 5;\n\nconsole.log(\"Skor:\", score, \"| Bonus:\", hasBonus);\n",
+  "hints": [
+   "const score = stars * starPoints;",
+   "Karşılaştırmanın sonucu zaten true/false: stars >= 5"
+  ],
+  "check": {
+   "code_contains": [
+    "*",
+    ">="
+   ],
+   "js": "assert(score === 70, \"score 70 olmalı.\");\nassert(hasBonus === true, \"hasBonus true olmalı.\");\nassert(_lines.includes(\"Skor: 70 | Bonus: true\"), \"Çıktıda 'Skor: 70 | Bonus: true' görünmeli.\");"
+  },
+  "xp": 100
+ },
+ "tracks": {
+  "js-web": {
+   "project_contribution": "Ziyaretçi istatistiği",
+   "project_task": {
+    "id": "js-d3-pw",
+    "title": "Ziyaretçi istatistiği",
+    "prompt": "Siten bir haftada 1250 ziyaretçi aldı.\n\n- `dailyAverage`: günlük ortalama ziyaretçi (`Math.round` ile yuvarla)\n- `isPopular`: ortalama 100'den büyük mü?\n\nBeklenen çıktı: `Günlük ortalama: 179 | Popüler: true`",
+    "starter": "const weeklyVisits = 1250;\nconst days = 7;\n\n// dailyAverage ve isPopular'ı hesapla\n\nconsole.log(\"Günlük ortalama:\", dailyAverage, \"| Popüler:\", isPopular);\n",
+    "solution": "const weeklyVisits = 1250;\nconst days = 7;\n\n// dailyAverage ve isPopular'ı hesapla\nconst dailyAverage = Math.round(weeklyVisits / days);\nconst isPopular = dailyAverage > 100;\n\nconsole.log(\"Günlük ortalama:\", dailyAverage, \"| Popüler:\", isPopular);\n",
+    "hints": [
+     "Ortalama = toplam / gün sayısı",
+     "const dailyAverage = Math.round(weeklyVisits / days);"
+    ],
+    "check": {
+     "code_contains": [
+      "Math.round",
+      "/",
+      ">"
+     ],
+     "js": "assert(dailyAverage === 179, \"dailyAverage 179 olmalı (1250 / 7 ≈ 178.57).\");\nassert(isPopular === true, \"isPopular true olmalı.\");\nassert(_lines.includes(\"Günlük ortalama: 179 | Popüler: true\"), \"Çıktıda 'Günlük ortalama: 179 | Popüler: true' görünmeli.\");"
+    },
+    "xp": 100
+   }
+  },
+  "js-app": {
+   "project_contribution": "Çalışma süresi hesabı",
+   "project_task": {
+    "id": "js-d3-pa",
+    "title": "Çalışma süresi",
+    "prompt": "Bugün 135 dakika çalıştın. Bunu saat ve dakikaya çevir:\n\n- `hours`: tam saat (`Math.floor` ile)\n- `minutes`: kalan dakika (`%` ile)\n\nBeklenen çıktı: `2 saat 15 dakika çalıştın`",
+    "starter": "const studied = 135;\n\n// hours ve minutes'u hesapla\n\nconsole.log(hours, \"saat\", minutes, \"dakika çalıştın\");\n",
+    "solution": "const studied = 135;\n\n// hours ve minutes'u hesapla\nconst hours = Math.floor(studied / 60);\nconst minutes = studied % 60;\n\nconsole.log(hours, \"saat\", minutes, \"dakika çalıştın\");\n",
+    "hints": [
+     "1 saat = 60 dakika.",
+     "Math.floor(studied / 60) ve studied % 60"
+    ],
+    "check": {
+     "code_contains": [
+      "Math.floor",
+      "%"
+     ],
+     "js": "assert(hours === 2 && minutes === 15, \"hours 2, minutes 15 olmalı.\");\nassert(_lines.includes(\"2 saat 15 dakika çalıştın\"), \"Çıktıda '2 saat 15 dakika çalıştın' görünmeli.\");"
+    },
+    "xp": 100
+   }
+  },
+  "js-quiz": {
+   "project_contribution": "Başarı yüzdesi",
+   "project_task": {
+    "id": "js-d3-pq",
+    "title": "Başarı yüzdesi",
+    "prompt": "Yarışmacı 5 sorudan 4'ünü bildi.\n\n- `percent`: başarı yüzdesi (doğru / toplam * 100)\n- `passed`: yüzde 60 ya da daha fazla mı?\n\nBeklenen çıktı: `Başarı: 80 | Geçti: true`",
+    "starter": "const correct = 4;\nconst total = 5;\n\n// percent ve passed'i hesapla\n\nconsole.log(\"Başarı:\", percent, \"| Geçti:\", passed);\n",
+    "solution": "const correct = 4;\nconst total = 5;\n\n// percent ve passed'i hesapla\nconst percent = correct / total * 100;\nconst passed = percent >= 60;\n\nconsole.log(\"Başarı:\", percent, \"| Geçti:\", passed);\n",
+    "hints": [
+     "Yüzde = doğru / toplam * 100",
+     "const passed = percent >= 60;"
+    ],
+    "check": {
+     "code_contains": [
+      "/",
+      "*",
+      ">="
+     ],
+     "js": "assert(percent === 80, \"percent 80 olmalı.\");\nassert(passed === true, \"passed true olmalı.\");\nassert(_lines.includes(\"Başarı: 80 | Geçti: true\"), \"Çıktıda 'Başarı: 80 | Geçti: true' görünmeli.\");"
+    },
+    "xp": 100
+   }
+  }
+ },
+ "available": true
+}

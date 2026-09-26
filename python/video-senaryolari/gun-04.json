@@ -1,0 +1,210 @@
+{
+  "kurs": "python",
+  "gun": 4,
+  "baslik": "Stringler",
+  "maskot": "piko",
+  "ozet": "Piko, Python Köyü'nün tabelaları üzerinden stringleri birleştirmeyi, indeks ve dilimlemeyi, string metotlarını ve f-string ile biçimlendirmeyi anlatıyor.",
+  "hedef_sure_sn": 122,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 12,
+      "anlatim": "Selam, ben Piko! Python Köyü'nde her yerde tabelalar, konuşmalar, mektuplar var. Oyunlarda da karakterler konuşur, isimler ekranda parlar. Bugün yazılarla, yani stringlerle oynuyoruz. Bir kelimeyi tersten yazdırmak ister misin?",
+      "ekran": {
+        "baslik": "Gün 4: Stringler",
+        "gorsel": "gorseller/python/harita/koy.webp"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "String, tırnak içindeki karakterler dizisi. Artı ile birleştirirsin, yıldız ile tekrarlarsın, len ile kaç karakter olduğunu ölçersin. Boşluk ve kesme işareti de sayılır!",
+      "ekran": {
+        "baslik": "Birleştir ve tekrarla",
+        "kod": "first = \"Pi\"\nsecond = \"ko\"\nprint(first + second)\nprint(\"ha\" * 3)\nprint(len(\"Piko'nun Macerası\"))\n",
+        "dil": "python",
+        "cikti": "Piko\nhahaha\n17"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "Her harfin bir sıra numarası var ve sayma sıfırdan başlar. Eksi bir sondaki harfi verir. Sıfırdan üçe dilim alırsan üç dahil olmaz. Eksi birlik adımla da kelime tersine döner!",
+      "ekran": {
+        "baslik": "İndeks ve dilimleme",
+        "kod": "word = \"Python\"\nprint(word[0], word[-1])\nprint(word[0:3])\nprint(word[::-1])\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          3,
+          4
+        ],
+        "cikti": "P n\nPyt\nnohtyP"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true,
+      "yonetmen_notu": "P-y-t-h-o-n harflerinin altında 0'dan 5'e indeks numaraları belirir."
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "Stringlerin kendi aletleri var, bunlara metot deriz. strip kenardaki boşlukları siler, upper büyütür, title kelimelerin baş harfini büyütür, count sayar. Dikkat: upper İngilizce kuralını kullanır, İstanbul noktasız I ile çıkar.",
+      "ekran": {
+        "baslik": "String metotları",
+        "kod": "name = \"  piko  \"\nprint(name.strip().upper())\nprint(\"python köyü\".title())\nprint(\"ananas\".count(\"a\"))\nprint(\"istanbul\".upper())\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          5
+        ],
+        "cikti": "PIKO\nPython Köyü\n3\nISTANBUL"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 11,
+      "anlatim": "En sevdiğim alet: f-string! Tırnağın başına f koyarsın, süslü parantez içindeki değişkenler değerleriyle yer değiştirir. Parantezin içine metot bile yazabilirsin.",
+      "ekran": {
+        "baslik": "f-string",
+        "kod": "name = \"Piko\"\ngold = 42\nprint(f\"{name} cebinde {gold} altın taşıyor.\")\nprint(f\"{name.upper()} geliyor!\")\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          3,
+          4
+        ],
+        "cikti": "Piko cebinde 42 altın taşıyor.\nPIKO geliyor!"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 6,
+      "tur": "hata",
+      "sure_sn": 11,
+      "anlatim": "Yazıyla sayıyı artıyla birleştirmeye çalışırsan Python yine TypeError verir: yazıya sadece yazı eklenebilir. Kurtarıcın hazır: f-string ya da str fonksiyonu.",
+      "ekran": {
+        "baslik": "Yazı + sayı = TypeError",
+        "kod": "name = \"Piko\"\nlevel = 3\nprint(name + \" seviye \" + level)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          3
+        ],
+        "cikti": "TypeError: can only concatenate str (not \"int\") to str"
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "soru",
+      "sure_sn": 10,
+      "anlatim": "Bir ipucu: in, bir yazının içinde başka bir yazı var mı diye sorar. Şimdi söyle: bu kod ne yazdırır?",
+      "ekran": {
+        "baslik": "Sence ne yazar?",
+        "kod": "word = \"Python\"\nprint(word[1:4])\nprint(\"th\" in word)\n",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "cikti",
+      "sure_sn": 10,
+      "anlatim": "Birden dörde kadar dilim: y, t, h. Dört dahil değil! Ve evet, t h kelimenin içinde geçiyor, bu yüzden in True diyor.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "word = \"Python\"\nprint(word[1:4])\nprint(\"th\" in word)\n",
+        "dil": "python",
+        "cikti": "yth\nTrue"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "gorev",
+      "sure_sn": 13,
+      "anlatim": "Görevlerde bir tabelayı bağıran harflerle yazacak, bir ismin ilk ve son harfini yakalayacak, f-string ile seviye mesajı hazırlayacaksın. Challenge'da kabak gibi tersten de aynı okunan kelimeleri avlayacaksın!",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Tabela",
+          "Görev 2: İlk ve son harf",
+          "Görev 3: Seviye mesajı",
+          "Sahne görevi: Piko kalede",
+          "Challenge: Palindrom avcısı"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 10,
+      "tur": "ozet",
+      "sure_sn": 7,
+      "anlatim": "Bugün yazıları birleştirdik, harf harf dilimledik, metotlarla değiştirdik ve f-string ile süsledik.",
+      "ekran": {
+        "baslik": "Bugün öğrendiklerin",
+        "maddeler": [
+          "+ birleştirir, * tekrarlar, len() ölçer",
+          "İndeks 0'dan başlar; [0:3] dilim, [::-1] ters",
+          "upper, title, strip, count ve f-string"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "kapanis",
+      "sure_sn": 8,
+      "anlatim": "Köyün yazı ustası sensin! Yarın Veri Ormanı'na giriyoruz. Kahramanın çantasındaki bütün eşyaları tek bir listede toplayacağız.",
+      "ekran": {
+        "baslik": "Yarın: Listeler",
+        "gorsel": "gorseller/python/harita/orman.webp"
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      },
+      "yonetmen_notu": "Harita köyden ormana doğru kayar."
+    }
+  ]
+}

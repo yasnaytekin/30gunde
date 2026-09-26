@@ -1,0 +1,1348 @@
+{
+ "day": 3,
+ "title": "Operatörler",
+ "region": "koy",
+ "project_contribution": "Skor ve puan",
+ "game_role": "Topladığın altınlar senin skor hesabınla puana çevrilir.",
+ "xp_complete": 150,
+ "objective": "Aritmetik, atama, karşılaştırma ve mantık operatörlerini kullanmak",
+ "story": "Python Köyü'ne hoş geldin! Oyunlarda her şey sayılarla döner: skor, can, altın, hız... Bugün köyün pazarında hesapları sen yapacaksın.",
+ "sections": [
+  {
+   "title": "İki çeşit sayı",
+   "body": "`int` tam sayıdır: `7`, `-3`, `1000`. `float` ondalıklı sayıdır: `3.14`, `0.5`. Python'da ondalık için **nokta** kullanılır, virgül değil!\n\nİki tam sayıyı `/` ile bölersen sonuç her zaman float olur: `8 / 2` sonucu `4.0`"
+  },
+  {
+   "title": "Yeni operatörler",
+   "body": "- `//` tam bölme: `7 // 2` sonucu `3`\n- `%` kalan: `7 % 2` sonucu `1`\n- `**` üs: `3 ** 2` sonucu `9`\n\n`%` çok işe yarar: bir sayının çift olup olmadığını anlamak için `sayi % 2` sonucunun 0 olup olmadığına bakarız."
+  },
+  {
+   "title": "İşlem önceliği",
+   "body": "Python matematikteki sırayı izler: önce parantez, sonra üs, sonra çarpma ve bölme, en son toplama ve çıkarma.\n\n```python\nprint(2 + 3 * 4)    # 14\nprint((2 + 3) * 4)  # 20\n```"
+  },
+  {
+   "title": "Kısayollar",
+   "body": "`score = score + 10` yerine `score += 10` yazabilirsin. Aynısı `-=`, `*=` ve `/=` için de geçerli."
+  },
+  {
+   "title": "Yardımcı fonksiyonlar",
+   "body": "- `round(3.14159, 2)` sonucu `3.14`\n- `abs(-5)` sonucu `5`\n- `max(4, 9, 2)` sonucu `9`\n- `min(4, 9, 2)` sonucu `2`"
+  },
+  {
+   "title": "Karşılaştırma operatörleri",
+   "body": "İki değeri karşılaştırınca Python `True` (doğru) ya da `False` (yanlış) cevabı verir. Bu cevaplara **boolean** denir.\n\n- `==` eşit mi? `!=` eşit değil mi?\n- `>` büyük mü? `<` küçük mü?\n- `>=` büyük ya da eşit mi? `<=` küçük ya da eşit mi?\n\n```python\nprint(10 > 3)    # True\nprint(5 == 7)    # False\n```\n\nTek `=` kutuya değer koymaktır, çift `==` soru sormaktır. Bu ikisini karıştırmak çok yaygın bir hatadır."
+  },
+  {
+   "title": "Mantık operatörleri",
+   "body": "Birden fazla soruyu birleştirmek için:\n\n- `and`: ikisi de doğruysa `True`\n- `or`: en az biri doğruysa `True`\n- `not`: cevabı tersine çevirir\n\n```python\ngold = 30\nprint(gold > 10 and gold < 50)   # True\nprint(not gold > 10)             # False\n```\n\nBu operatörleri 9. günde koşullarla birlikte çok kullanacağız."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Bölmenin üç hali",
+   "code": "print(7 / 2)\nprint(7 // 2)\nprint(7 % 2)\nprint(2 ** 10)\n",
+   "note": ""
+  },
+  {
+   "title": "Skor artıyor",
+   "code": "score = 0\nscore += 10\nscore += 10\nscore *= 2\nprint(\"Skor:\", score)\n",
+   "note": ""
+  },
+  {
+   "title": "Yuvarlama",
+   "code": "pi = 3.14159\nprint(round(pi, 2))\nprint(max(12, 45, 7), min(12, 45, 7))\n",
+   "note": ""
+  },
+  {
+   "title": "Doğru mu yanlış mı?",
+   "code": "hp = 40\ngold = 120\nprint(hp > 50)\nprint(gold >= 100)\nprint(hp > 20 and gold > 100)\nprint(hp > 50 or gold > 100)\nprint(not hp > 50)\n",
+   "note": "hp ve gold değerlerini değiştirip cevapların nasıl değiştiğine bak."
+  }
+ ],
+ "tasks": [
+  {
+   "id": "d3-t1",
+   "title": "Pizza paylaşımı",
+   "prompt": "17 dilim pizza 5 arkadaşa eşit paylaştırılacak. `each` her kişinin alacağı dilim sayısı, `left` artan dilim sayısı olsun. Sayıları kendin yazma, `slices` ve `people` değişkenleriyle hesapla.",
+   "starter": "slices = 17\npeople = 5\n\neach = 0   # her kişiye kaç dilim?\nleft = 0   # kaç dilim artar?\n\nprint(\"Kişi başı:\", each)\nprint(\"Artan:\", left)\n",
+   "solution": "slices = 17\npeople = 5\n\neach = slices // people\nleft = slices % people\n\nprint(\"Kişi başı:\", each)\nprint(\"Artan:\", left)\n",
+   "hints": [
+    "Tam bölme için //, kalan için % kullan.",
+    "each = slices // people"
+   ],
+   "check": {
+    "python": "\nassert each == 3, \"each 3 olmalı. Tam bölme (//) kullan.\"\nassert left == 2, \"left 2 olmalı. Kalan için % kullan.\"\n_, g = _run(_set(_set(_code, \"slices\", 23), \"people\", 4))\nassert g[\"each\"] == 5 and g[\"left\"] == 3, \"Sonucu elle yazma; slices ve people ile hesapla.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "slices = 17",
+      "notes": [
+       "`slices` adında bir değişken oluşturuluyor ve içine `17` (tam sayı) konuyor."
+      ]
+     },
+     {
+      "n": 2,
+      "code": "people = 5",
+      "notes": [
+       "`people` adında bir değişken oluşturuluyor ve içine `5` (tam sayı) konuyor."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "each = slices // people",
+      "notes": [
+       "`each` adında bir değişken oluşturuluyor ve içine `slices // people` konuyor."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "left = slices % people",
+      "notes": [
+       "`left` adında bir değişken oluşturuluyor ve içine `slices % people` konuyor."
+      ]
+     },
+     {
+      "n": 7,
+      "code": "print(\"Kişi başı:\", each)",
+      "notes": [
+       "`print(\"Kişi başı:\", each)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     },
+     {
+      "n": 8,
+      "code": "print(\"Artan:\", left)",
+      "notes": [
+       "`print(\"Artan:\", left)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "slices",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `17`."
+     },
+     {
+      "term": "people",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `5`."
+     },
+     {
+      "term": "each",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `slices // people`."
+     },
+     {
+      "term": "left",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `slices % people`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "//",
+      "kind": "operatör",
+      "desc": "Tam bölme: bölümün tam kısmı (7 // 2 → 3)."
+     },
+     {
+      "term": "%",
+      "kind": "operatör",
+      "desc": "Mod: bölümden kalan (7 % 2 → 1)."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d3-t2",
+   "title": "Can iksiri",
+   "prompt": "`hp` 40 ile başlıyor. Önce iksir içip canı 25 artır (`+=`), sonra tuzağa basıp 15 azalt (`-=`).",
+   "starter": "hp = 40\n# iksir iç: +25\n\n# tuzağa bastın: -15\n\nprint(\"Can:\", hp)\n",
+   "solution": "hp = 40\nhp += 25\nhp -= 15\nprint(\"Can:\", hp)\n",
+   "hints": [
+    "hp += 25 canı 25 artırır.",
+    "Azaltmak için hp -= 15"
+   ],
+   "check": {
+    "code_contains": [
+     "+=",
+     "-="
+    ],
+    "python": "assert hp == 50, \"Sonunda hp 50 olmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "hp = 40",
+      "notes": [
+       "`hp` adında bir değişken oluşturuluyor ve içine `40` (tam sayı) konuyor."
+      ]
+     },
+     {
+      "n": 2,
+      "code": "hp += 25",
+      "notes": [
+       "`hp += 25`: `hp` değişkeninin değeri güncelleniyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "hp -= 15",
+      "notes": [
+       "`hp -= 15`: `hp` değişkeninin değeri güncelleniyor."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "print(\"Can:\", hp)",
+      "notes": [
+       "`print(\"Can:\", hp)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "hp",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `40`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "+=",
+      "kind": "operatör",
+      "desc": "Değişkenin kendi değerine ekler: x += 1 → x = x + 1."
+     },
+     {
+      "term": "-=",
+      "kind": "operatör",
+      "desc": "Değişkenin değerinden çıkarır: x -= 1 → x = x - 1."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d3-t3",
+   "title": "Ortalama",
+   "prompt": "Üç skorun ortalamasını hesapla ve `round()` ile virgülden sonra 1 basamağa yuvarlayarak `average` değişkenine koy.",
+   "starter": "score1 = 80\nscore2 = 95\nscore3 = 72\n\naverage = 0\nprint(average)\n",
+   "solution": "score1 = 80\nscore2 = 95\nscore3 = 72\n\naverage = round((score1 + score2 + score3) / 3, 1)\nprint(average)\n",
+   "hints": [
+    "Ortalama = toplam / adet",
+    "Toplamı paranteze al: (score1 + score2 + score3) / 3",
+    "round(sayı, 1) virgülden sonra 1 basamak bırakır."
+   ],
+   "check": {
+    "code_contains": [
+     "round("
+    ],
+    "python": "\nassert average == 82.3, \"average 82.3 olmalı.\"\n_, g = _run(_set(_code, \"score1\", 100))\nassert g[\"average\"] == 89.0, \"Ortalamayı değişkenlerle hesapla.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "score1 = 80",
+      "notes": [
+       "`score1` adında bir değişken oluşturuluyor ve içine `80` (tam sayı) konuyor."
+      ]
+     },
+     {
+      "n": 2,
+      "code": "score2 = 95",
+      "notes": [
+       "`score2` adında bir değişken oluşturuluyor ve içine `95` (tam sayı) konuyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "score3 = 72",
+      "notes": [
+       "`score3` adında bir değişken oluşturuluyor ve içine `72` (tam sayı) konuyor."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "average = round((score1 + score2 + score3) / 3, 1)",
+      "notes": [
+       "`average` adında bir değişken oluşturuluyor ve içine `round((score1 + score2 + score3) / 3, 1)` konuyor."
+      ]
+     },
+     {
+      "n": 6,
+      "code": "print(average)",
+      "notes": [
+       "`print(average)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "score1",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `80`."
+     },
+     {
+      "term": "score2",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `95`."
+     },
+     {
+      "term": "score3",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `72`."
+     },
+     {
+      "term": "average",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `round((score1 + score2 + score3) / 3, 1)`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "round()",
+      "kind": "fonksiyon",
+      "desc": "Sayıyı yuvarlar. round(3.14159, 2) → 3.14"
+     },
+     {
+      "term": "/",
+      "kind": "operatör",
+      "desc": "Bölme; sonuç her zaman ondalıklı sayıdır."
+     },
+     {
+      "term": "+",
+      "kind": "operatör",
+      "desc": "Toplama; metinlerde ve listelerde uç uca ekleme."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "id": "d3-c",
+  "title": "Saniye çevirici",
+  "prompt": "`seconds` değişkenindeki süreyi saate, dakikaya ve saniyeye çevir. 3725 saniye = 1 saat 2 dakika 5 saniye. İpucu: `//` ve `%` senin en iyi arkadaşların.",
+  "starter": "seconds = 3725\n\nhours = 0\nminutes = 0\nsecs = 0\n\nprint(hours, \"saat\", minutes, \"dakika\", secs, \"saniye\")\n",
+  "solution": "seconds = 3725\n\nhours = seconds // 3600\nminutes = seconds % 3600 // 60\nsecs = seconds % 60\n\nprint(hours, \"saat\", minutes, \"dakika\", secs, \"saniye\")\n",
+  "hints": [
+   "Bir saatte 3600 saniye var.",
+   "Saatten artan saniyeler: seconds % 3600",
+   "Onu 60'a tam bölersen dakikayı bulursun."
+  ],
+  "check": {
+   "python": "\nassert (hours, minutes, secs) == (1, 2, 5), \"3725 saniye = 1 saat 2 dakika 5 saniye olmalı.\"\n_, g = _run(_set(_code, \"seconds\", 7384))\nassert (g[\"hours\"], g[\"minutes\"], g[\"secs\"]) == (2, 3, 4), \"Başka süreler için de doğru çalışmalı. Sayıları elle yazma.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "seconds = 3725",
+     "notes": [
+      "`seconds` adında bir değişken oluşturuluyor ve içine `3725` (tam sayı) konuyor."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "hours = seconds // 3600",
+     "notes": [
+      "`hours` adında bir değişken oluşturuluyor ve içine `seconds // 3600` konuyor."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "minutes = seconds % 3600 // 60",
+     "notes": [
+      "`minutes` adında bir değişken oluşturuluyor ve içine `seconds % 3600 // 60` konuyor."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "secs = seconds % 60",
+     "notes": [
+      "`secs` adında bir değişken oluşturuluyor ve içine `seconds % 60` konuyor."
+     ]
+    },
+    {
+     "n": 7,
+     "code": "print(hours, \"saat\", minutes, \"dakika\", secs, \"saniye\")",
+     "notes": [
+      "`print(hours, \"saat\", minutes, \"dakika\", secs, \"saniye\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "seconds",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `3725`."
+    },
+    {
+     "term": "hours",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `seconds // 3600`."
+    },
+    {
+     "term": "minutes",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `seconds % 3600 // 60`."
+    },
+    {
+     "term": "secs",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `seconds % 60`."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "//",
+     "kind": "operatör",
+     "desc": "Tam bölme: bölümün tam kısmı (7 // 2 → 3)."
+    },
+    {
+     "term": "%",
+     "kind": "operatör",
+     "desc": "Mod: bölümden kalan (7 % 2 → 1)."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    }
+   ]
+  }
+ },
+ "project_task": {
+  "id": "d3-p",
+  "title": "Skor sistemi",
+  "prompt": "Oyunumuzun skor sistemini kuralım. Kahraman 3 altın topladı ve her altın 10 puan. Önce bu puanları `score`'a ekle, sonra boss yenildiği için skoru 2 katına çıkar.",
+  "starter": "score = 0\ncoin_value = 10\ncoins = 3\n\n# 1) Toplanan altınların puanını score'a ekle\n\n# 2) Boss yenildi! Skoru 2 katına çıkar\n\nprint(\"Skor:\", score)\n",
+  "solution": "score = 0\ncoin_value = 10\ncoins = 3\n\nscore += coins * coin_value\nscore *= 2\n\nprint(\"Skor:\", score)\n",
+  "hints": [
+   "Altın puanı: coins * coin_value",
+   "2 katına çıkarmak için: score *= 2"
+  ],
+  "check": {
+   "python": "\nassert score == 60, \"Skor 60 olmalı: (3 × 10) × 2\"\n_, g = _run(_set(_code, \"coins\", 5))\nassert g[\"score\"] == 100, \"coins değişkenini kullanarak hesapla.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "score = 0",
+     "notes": [
+      "`score` adında bir değişken oluşturuluyor ve içine `0` (tam sayı) konuyor."
+     ]
+    },
+    {
+     "n": 2,
+     "code": "coin_value = 10",
+     "notes": [
+      "`coin_value` adında bir değişken oluşturuluyor ve içine `10` (tam sayı) konuyor."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "coins = 3",
+     "notes": [
+      "`coins` adında bir değişken oluşturuluyor ve içine `3` (tam sayı) konuyor."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "score += coins * coin_value",
+     "notes": [
+      "`score += coins * coin_value`: `score` değişkeninin değeri güncelleniyor."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "score *= 2",
+     "notes": [
+      "`score *= 2`: `score` değişkeninin değeri güncelleniyor."
+     ]
+    },
+    {
+     "n": 8,
+     "code": "print(\"Skor:\", score)",
+     "notes": [
+      "`print(\"Skor:\", score)`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "score",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `0`."
+    },
+    {
+     "term": "coin_value",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `10`."
+    },
+    {
+     "term": "coins",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `3`."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "+=",
+     "kind": "operatör",
+     "desc": "Değişkenin kendi değerine ekler: x += 1 → x = x + 1."
+    },
+    {
+     "term": "*",
+     "kind": "operatör",
+     "desc": "Çarpma; metni ya da listeyi tekrarlama (\"*\" * 3 → \"***\")."
+    },
+    {
+     "term": "*=",
+     "kind": "operatör",
+     "desc": "Değişkeni çarpar: x *= 2 → x = x * 2."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    }
+   ]
+  }
+ },
+ "available": true,
+ "visual_task": {
+  "id": "d3-v",
+  "title": "Eşit sıralar",
+  "prompt": "`pikolar` kadar Piko, `sira` kadar satıra **eşit** dağıtılacak. Her satırdaki Piko sayısını tam bölmeyle (`//`) hesapla ve `her_sira` değişkenine koy. Sonra 3 satır yazdır: `\"*\" * her_sira`.\n\n12 Piko 3 satıra 4'er düşer. `pikolar = 15` olunca her satırda 5 Piko olmalı.",
+  "starter": "pikolar = 12\nsira = 3\nher_sira = 0\n\nprint(\"*\" * her_sira)\n",
+  "solution": "pikolar = 12\nsira = 3\nher_sira = pikolar // sira\n\nprint(\"*\" * her_sira)\nprint(\"*\" * her_sira)\nprint(\"*\" * her_sira)\n",
+  "hints": [
+   "her_sira = pikolar // sira",
+   "Sonra üç kez print(\"*\" * her_sira)"
+  ],
+  "check": {
+   "code_contains": [
+    "//"
+   ],
+   "python": "\ndef _satirlar(text):\n    return [l.rstrip() for l in text.strip(\"\\n\").split(\"\\n\")] if text.strip() else []\n\ndef _kontrol(n):\n    s = _satirlar(out)\n    assert len(s) == 3, \"3 satır yazdırmalısın.\"\n    assert all(r == \"*\" * n for r in s), \"Her satırda {} Piko olmalı.\".format(n)\nout = _output\nassert her_sira == 4, \"12 Piko 3 satıra bölününce her_sira 4 olmalı.\"\n_kontrol(4)\nout, _ = _run(_set(_code, \"pikolar\", 15))\n_kontrol(5)\n"
+  },
+  "xp": 40,
+  "scene": {
+   "target": [
+    "****",
+    "****",
+    "****"
+   ]
+  },
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "pikolar = 12",
+     "notes": [
+      "`pikolar` adında bir değişken oluşturuluyor ve içine `12` (tam sayı) konuyor."
+     ]
+    },
+    {
+     "n": 2,
+     "code": "sira = 3",
+     "notes": [
+      "`sira` adında bir değişken oluşturuluyor ve içine `3` (tam sayı) konuyor."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "her_sira = pikolar // sira",
+     "notes": [
+      "`her_sira` adında bir değişken oluşturuluyor ve içine `pikolar // sira` konuyor."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "print(\"*\" * her_sira)",
+     "notes": [
+      "`print(\"*\" * her_sira)`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "print(\"*\" * her_sira)",
+     "notes": [
+      "`print(\"*\" * her_sira)`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 7,
+     "code": "print(\"*\" * her_sira)",
+     "notes": [
+      "`print(\"*\" * her_sira)`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "pikolar",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `12`."
+    },
+    {
+     "term": "sira",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `3`."
+    },
+    {
+     "term": "her_sira",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `pikolar // sira`."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "//",
+     "kind": "operatör",
+     "desc": "Tam bölme: bölümün tam kısmı (7 // 2 → 3)."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    },
+    {
+     "term": "*",
+     "kind": "operatör",
+     "desc": "Çarpma; metni ya da listeyi tekrarlama (\"*\" * 3 → \"***\")."
+    }
+   ]
+  }
+ },
+ "tracks": {
+  "veri": {
+   "project_task": {
+    "id": "d3-pv",
+    "title": "Kalan bütçe",
+    "prompt": "Bu ay kira, market ve ulaşım için para harcadın.\n\n- `spent`: üç harcamanın toplamı\n- `left`: bütçeden kalan (`budget - spent`)\n- `percent`: bütçenin yüzde kaçı harcandı (`spent / budget * 100`)\n\nSonra şöyle yazdır:\n\n```\nHarcanan: 3900\nKalan: 1100\nYüzde: 78.0\n```",
+    "starter": "budget = 5000\nrent = 2000\nfood = 1500\ntransport = 400\n",
+    "solution": "budget = 5000\nrent = 2000\nfood = 1500\ntransport = 400\nspent = rent + food + transport\nleft = budget - spent\npercent = spent / budget * 100\nprint(\"Harcanan:\", spent)\nprint(\"Kalan:\", left)\nprint(\"Yüzde:\", percent)\n",
+    "hints": [
+     "spent = rent + food + transport",
+     "percent için / ve * operatörlerini kullan: spent / budget * 100"
+    ],
+    "check": {
+     "python": "\nassert spent == 3900 and left == 1100, \"spent 3900, left 1100 olmalı.\"\nout, g = _run(_set(_set(_code, \"rent\", 1000), \"budget\", 4000))\nassert g[\"spent\"] == 2900 and g[\"left\"] == 1100, \"spent ve left değişkenlerle hesaplanmalı (sayıları elle yazma).\"\nassert abs(g[\"percent\"] - 72.5) < 0.01, \"percent = spent / budget * 100 olmalı.\"\nassert \"Harcanan: 2900\" in out and \"Kalan: 1100\" in out, \"Harcanan ve Kalan satırlarını yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "budget = 5000",
+       "notes": [
+        "`budget` adında bir değişken oluşturuluyor ve içine `5000` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "rent = 2000",
+       "notes": [
+        "`rent` adında bir değişken oluşturuluyor ve içine `2000` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "food = 1500",
+       "notes": [
+        "`food` adında bir değişken oluşturuluyor ve içine `1500` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "transport = 400",
+       "notes": [
+        "`transport` adında bir değişken oluşturuluyor ve içine `400` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "spent = rent + food + transport",
+       "notes": [
+        "`spent` adında bir değişken oluşturuluyor ve içine `rent + food + transport` konuyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "left = budget - spent",
+       "notes": [
+        "`left` adında bir değişken oluşturuluyor ve içine `budget - spent` konuyor."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "percent = spent / budget * 100",
+       "notes": [
+        "`percent` adında bir değişken oluşturuluyor ve içine `spent / budget * 100` konuyor."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "print(\"Harcanan:\", spent)",
+       "notes": [
+        "`print(\"Harcanan:\", spent)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "print(\"Kalan:\", left)",
+       "notes": [
+        "`print(\"Kalan:\", left)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "print(\"Yüzde:\", percent)",
+       "notes": [
+        "`print(\"Yüzde:\", percent)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "budget",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `5000`."
+      },
+      {
+       "term": "rent",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `2000`."
+      },
+      {
+       "term": "food",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `1500`."
+      },
+      {
+       "term": "transport",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `400`."
+      },
+      {
+       "term": "spent",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `rent + food + transport`."
+      },
+      {
+       "term": "left",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `budget - spent`."
+      },
+      {
+       "term": "percent",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `spent / budget * 100`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "+",
+       "kind": "operatör",
+       "desc": "Toplama; metinlerde ve listelerde uç uca ekleme."
+      },
+      {
+       "term": "-",
+       "kind": "operatör",
+       "desc": "Çıkarma."
+      },
+      {
+       "term": "*",
+       "kind": "operatör",
+       "desc": "Çarpma; metni ya da listeyi tekrarlama (\"*\" * 3 → \"***\")."
+      },
+      {
+       "term": "/",
+       "kind": "operatör",
+       "desc": "Bölme; sonuç her zaman ondalıklı sayıdır."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Kalan bütçe",
+   "game_role": "Harcamaları toplayıp bütçeden ne kaldığını hesaplar."
+  },
+  "otomasyon": {
+   "project_task": {
+    "id": "d3-po",
+    "title": "Toplam süre",
+    "prompt": "Her görev ortalama `minutes_per_task` dakika sürüyor.\n\n- `total_minutes`: görev sayısı × görev başına dakika\n- `hours`: tam saat (`//` ile)\n- `minutes`: artan dakika (`%` ile)\n\nSonra `Toplam süre: 2 saat 15 dakika` gibi yazdır.",
+    "starter": "task_count = 3\nminutes_per_task = 45\n",
+    "solution": "task_count = 3\nminutes_per_task = 45\ntotal_minutes = task_count * minutes_per_task\nhours = total_minutes // 60\nminutes = total_minutes % 60\nprint(\"Toplam süre:\", hours, \"saat\", minutes, \"dakika\")\n",
+    "hints": [
+     "135 // 60 = 2, 135 % 60 = 15",
+     "total_minutes = task_count * minutes_per_task"
+    ],
+    "check": {
+     "python": "\nassert total_minutes == 135 and hours == 2 and minutes == 15, \"3 görev × 45 dakika = 2 saat 15 dakika olmalı.\"\nout, g = _run(_set(_set(_code, \"task_count\", 7), \"minutes_per_task\", 20))\nassert g[\"hours\"] == 2 and g[\"minutes\"] == 20, \"hours ve minutes, // ve % ile hesaplanmalı.\"\nassert \"Toplam süre: 2 saat 20 dakika\" in out, \"'Toplam süre: 2 saat 20 dakika' gibi yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "task_count = 3",
+       "notes": [
+        "`task_count` adında bir değişken oluşturuluyor ve içine `3` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "minutes_per_task = 45",
+       "notes": [
+        "`minutes_per_task` adında bir değişken oluşturuluyor ve içine `45` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "total_minutes = task_count * minutes_per_task",
+       "notes": [
+        "`total_minutes` adında bir değişken oluşturuluyor ve içine `task_count * minutes_per_task` konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "hours = total_minutes // 60",
+       "notes": [
+        "`hours` adında bir değişken oluşturuluyor ve içine `total_minutes // 60` konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "minutes = total_minutes % 60",
+       "notes": [
+        "`minutes` adında bir değişken oluşturuluyor ve içine `total_minutes % 60` konuyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "print(\"Toplam süre:\", hours, \"saat\", minutes, \"dakika\")",
+       "notes": [
+        "`print(\"Toplam süre:\", hours, \"saat\", minutes, \"dakika\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "task_count",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `3`."
+      },
+      {
+       "term": "minutes_per_task",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `45`."
+      },
+      {
+       "term": "total_minutes",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `task_count * minutes_per_task`."
+      },
+      {
+       "term": "hours",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `total_minutes // 60`."
+      },
+      {
+       "term": "minutes",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `total_minutes % 60`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "*",
+       "kind": "operatör",
+       "desc": "Çarpma; metni ya da listeyi tekrarlama (\"*\" * 3 → \"***\")."
+      },
+      {
+       "term": "//",
+       "kind": "operatör",
+       "desc": "Tam bölme: bölümün tam kısmı (7 // 2 → 3)."
+      },
+      {
+       "term": "%",
+       "kind": "operatör",
+       "desc": "Mod: bölümden kalan (7 % 2 → 1)."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Süre hesabı",
+   "game_role": "Görevlerin toplam ne kadar süreceğini saat ve dakika olarak hesaplar."
+  },
+  "web": {
+   "project_task": {
+    "id": "d3-pw",
+    "title": "Blog sayfaları",
+    "prompt": "Blog sayfasının her sayfasına `per_page` kadar yazı sığıyor. Toplam `post_count` yazın var.\n\n- `full_pages`: tamamen dolu sayfa sayısı (`//` ile)\n- `last_page`: artan, son sayfaya kalan yazı sayısı (`%` ile)\n- `needs_extra`: artan yazı var mı? (`last_page > 0`, True ya da False)\n\nSonra şöyle yazdır:\n\n```\nDolu sayfa: 4\nSon sayfada: 3 yazı\nEkstra sayfa gerekli mi: True\n```",
+    "starter": "post_count = 23\nper_page = 5\n",
+    "solution": "post_count = 23\nper_page = 5\nfull_pages = post_count // per_page\nlast_page = post_count % per_page\nneeds_extra = last_page > 0\nprint(\"Dolu sayfa:\", full_pages)\nprint(\"Son sayfada:\", last_page, \"yazı\")\nprint(\"Ekstra sayfa gerekli mi:\", needs_extra)\n",
+    "hints": [
+     "23 // 5 = 4, 23 % 5 = 3",
+     "needs_extra = last_page > 0 bir karşılaştırma; sonucu True ya da False olur."
+    ],
+    "check": {
+     "python": "\nassert full_pages == 4 and last_page == 3, \"23 yazı, sayfada 5 yazı: 4 dolu sayfa, son sayfada 3 yazı olmalı.\"\nassert needs_extra is True, \"needs_extra = last_page > 0 olmalı.\"\nout, g = _run(_set(_set(_code, \"post_count\", 30), \"per_page\", 6))\nassert g[\"full_pages\"] == 5 and g[\"last_page\"] == 0, \"full_pages ve last_page, // ve % ile hesaplanmalı (sayıları elle yazma).\"\nassert g[\"needs_extra\"] is False, \"Artan yazı yoksa needs_extra False olmalı.\"\nfor line in [\"Dolu sayfa: 5\", \"Son sayfada: 0 yazı\", \"Ekstra sayfa gerekli mi: False\"]:\n    assert line in out, \"30 yazı ve sayfada 6 yazı iken '\" + line + \"' yazmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "post_count = 23",
+       "notes": [
+        "`post_count` adında bir değişken oluşturuluyor ve içine `23` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "per_page = 5",
+       "notes": [
+        "`per_page` adında bir değişken oluşturuluyor ve içine `5` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "full_pages = post_count // per_page",
+       "notes": [
+        "`full_pages` adında bir değişken oluşturuluyor ve içine `post_count // per_page` konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "last_page = post_count % per_page",
+       "notes": [
+        "`last_page` adında bir değişken oluşturuluyor ve içine `post_count % per_page` konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "needs_extra = last_page > 0",
+       "notes": [
+        "`needs_extra` adında bir değişken oluşturuluyor ve içine `last_page > 0` konuyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "print(\"Dolu sayfa:\", full_pages)",
+       "notes": [
+        "`print(\"Dolu sayfa:\", full_pages)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "print(\"Son sayfada:\", last_page, \"yazı\")",
+       "notes": [
+        "`print(\"Son sayfada:\", last_page, \"yazı\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "print(\"Ekstra sayfa gerekli mi:\", needs_extra)",
+       "notes": [
+        "`print(\"Ekstra sayfa gerekli mi:\", needs_extra)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "post_count",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `23`."
+      },
+      {
+       "term": "per_page",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `5`."
+      },
+      {
+       "term": "full_pages",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `post_count // per_page`."
+      },
+      {
+       "term": "last_page",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `post_count % per_page`."
+      },
+      {
+       "term": "needs_extra",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `last_page > 0`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "//",
+       "kind": "operatör",
+       "desc": "Tam bölme: bölümün tam kısmı (7 // 2 → 3)."
+      },
+      {
+       "term": "%",
+       "kind": "operatör",
+       "desc": "Mod: bölümden kalan (7 % 2 → 1)."
+      },
+      {
+       "term": ">",
+       "kind": "operatör",
+       "desc": "Büyük mü?"
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Sayfalama",
+   "game_role": "Blog sayfasının kaç sayfaya bölüneceğini hesaplar."
+  },
+  "bot": {
+   "project_task": {
+    "id": "d3-pb",
+    "title": "Mesaj uzunluğu",
+    "prompt": "Botlar çok uzun mesajları sevmez; bizim botumuzun sınırı `limit` karakter. Kullanıcının mesajı `message` değişkeninde.\n\n- `length`: mesajın karakter sayısı (`len()`)\n- `left`: sınıra kaç karakter kaldı (`limit - length`)\n- `too_long`: mesaj sınırdan uzun mu? (`length > limit`, sonuç `True` ya da `False`)\n\nSonra şöyle yazdır:\n\n```\nUzunluk: 33\nKalan: 127\nÇok uzun: False\n```",
+    "starter": "limit = 160\nmessage = \"Merhaba, yarın hava nasıl olacak?\"\n",
+    "solution": "limit = 160\nmessage = \"Merhaba, yarın hava nasıl olacak?\"\nlength = len(message)\nleft = limit - length\ntoo_long = length > limit\nprint(\"Uzunluk:\", length)\nprint(\"Kalan:\", left)\nprint(\"Çok uzun:\", too_long)\n",
+    "hints": [
+     "length = len(message) mesajdaki karakterleri sayar (boşluklar da sayılır).",
+     "Karşılaştırmanın sonucu True ya da False'tur: too_long = length > limit"
+    ],
+    "check": {
+     "python": "\nassert length == 33 and left == 127 and too_long is False, \"length 33, left 127, too_long False olmalı.\"\nout, g = _run(_set(_set(_code, \"message\", \"selam\"), \"limit\", 3))\nassert g[\"length\"] == 5 and g[\"left\"] == -2, \"length len(message) ile, left limit - length ile hesaplanmalı (sayıları elle yazma).\"\nassert g[\"too_long\"] is True, \"too_long, length > limit karşılaştırmasının sonucu olmalı.\"\nassert \"Uzunluk: 5\" in out and \"Kalan: -2\" in out and \"Çok uzun: True\" in out, \"Üç satırı da değişkenlerle yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "limit = 160",
+       "notes": [
+        "`limit` adında bir değişken oluşturuluyor ve içine `160` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "message = \"Merhaba, yarın hava nasıl olacak?\"",
+       "notes": [
+        "`message` adında bir değişken oluşturuluyor ve içine `\"Merhaba, yarın hava nasıl olacak?\"` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "length = len(message)",
+       "notes": [
+        "`length` adında bir değişken oluşturuluyor ve içine `len(message)` konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "left = limit - length",
+       "notes": [
+        "`left` adında bir değişken oluşturuluyor ve içine `limit - length` konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "too_long = length > limit",
+       "notes": [
+        "`too_long` adında bir değişken oluşturuluyor ve içine `length > limit` konuyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "print(\"Uzunluk:\", length)",
+       "notes": [
+        "`print(\"Uzunluk:\", length)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "print(\"Kalan:\", left)",
+       "notes": [
+        "`print(\"Kalan:\", left)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "print(\"Çok uzun:\", too_long)",
+       "notes": [
+        "`print(\"Çok uzun:\", too_long)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "limit",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `160`."
+      },
+      {
+       "term": "message",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"Merhaba, yarın hava nasıl olacak?\"`."
+      },
+      {
+       "term": "length",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `len(message)`."
+      },
+      {
+       "term": "left",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `limit - length`."
+      },
+      {
+       "term": "too_long",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `length > limit`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      },
+      {
+       "term": "-",
+       "kind": "operatör",
+       "desc": "Çıkarma."
+      },
+      {
+       "term": ">",
+       "kind": "operatör",
+       "desc": "Büyük mü?"
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Karakter sayacı",
+   "game_role": "Mesajın uzunluğunu ölçer ve sınırı aşıp aşmadığına bakar."
+  },
+  "okul": {
+   "project_task": {
+    "id": "d3-pn",
+    "title": "Sınav ortalaması",
+    "prompt": "Matematikten üç yazılı sınava girdin: `exam1`, `exam2` ve `exam3`.\n\n- `total`: üç notun toplamı\n- `average`: ortalama (`total / 3`), `round()` ile **1 basamağa** yuvarla\n- `passed`: ortalama 50 veya üstü mü? (`average >= 50`, sonucu `True` ya da `False`)\n\nSonra şöyle yazdır:\n\n```\nToplam: 245\nOrtalama: 81.7\nGeçti mi: True\n```",
+    "starter": "exam1 = 70\nexam2 = 85\nexam3 = 90\n",
+    "solution": "exam1 = 70\nexam2 = 85\nexam3 = 90\ntotal = exam1 + exam2 + exam3\naverage = round(total / 3, 1)\npassed = average >= 50\nprint(\"Toplam:\", total)\nprint(\"Ortalama:\", average)\nprint(\"Geçti mi:\", passed)\n",
+    "hints": [
+     "total = exam1 + exam2 + exam3",
+     "average = round(total / 3, 1) ve passed = average >= 50"
+    ],
+    "check": {
+     "python": "\nassert total == 245 and average == 81.7, \"total 245, average 81.7 olmalı.\"\nassert passed is True, \"passed, average >= 50 karşılaştırmasının sonucu olmalı.\"\nout, g = _run(_set(_set(_set(_code, \"exam1\", 10), \"exam2\", 20), \"exam3\", 31))\nassert g[\"total\"] == 61, \"total değişkenlerle hesaplanmalı (sayıları elle yazma).\"\nassert g[\"average\"] == 20.3, \"average = round(total / 3, 1) olmalı.\"\nassert g[\"passed\"] is False, \"Ortalama 50'nin altındaysa passed False olmalı.\"\nassert \"Toplam: 61\" in out and \"Ortalama: 20.3\" in out and \"Geçti mi: False\" in out, \"Üç satırı da değişkenlerle yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "exam1 = 70",
+       "notes": [
+        "`exam1` adında bir değişken oluşturuluyor ve içine `70` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "exam2 = 85",
+       "notes": [
+        "`exam2` adında bir değişken oluşturuluyor ve içine `85` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "exam3 = 90",
+       "notes": [
+        "`exam3` adında bir değişken oluşturuluyor ve içine `90` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "total = exam1 + exam2 + exam3",
+       "notes": [
+        "`total` adında bir değişken oluşturuluyor ve içine `exam1 + exam2 + exam3` konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "average = round(total / 3, 1)",
+       "notes": [
+        "`average` adında bir değişken oluşturuluyor ve içine `round(total / 3, 1)` konuyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "passed = average >= 50",
+       "notes": [
+        "`passed` adında bir değişken oluşturuluyor ve içine `average >= 50` konuyor."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "print(\"Toplam:\", total)",
+       "notes": [
+        "`print(\"Toplam:\", total)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "print(\"Ortalama:\", average)",
+       "notes": [
+        "`print(\"Ortalama:\", average)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "print(\"Geçti mi:\", passed)",
+       "notes": [
+        "`print(\"Geçti mi:\", passed)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "exam1",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `70`."
+      },
+      {
+       "term": "exam2",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `85`."
+      },
+      {
+       "term": "exam3",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `90`."
+      },
+      {
+       "term": "total",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `exam1 + exam2 + exam3`."
+      },
+      {
+       "term": "average",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `round(total / 3, 1)`."
+      },
+      {
+       "term": "passed",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `average >= 50`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "+",
+       "kind": "operatör",
+       "desc": "Toplama; metinlerde ve listelerde uç uca ekleme."
+      },
+      {
+       "term": "round()",
+       "kind": "fonksiyon",
+       "desc": "Sayıyı yuvarlar. round(3.14159, 2) → 3.14"
+      },
+      {
+       "term": "/",
+       "kind": "operatör",
+       "desc": "Bölme; sonuç her zaman ondalıklı sayıdır."
+      },
+      {
+       "term": ">=",
+       "kind": "operatör",
+       "desc": "Büyük ya da eşit mi?"
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Sınav ortalaması",
+   "game_role": "Üç sınav notunu toplayıp ortalamayı ve geçip geçmediğini hesaplar."
+  }
+ }
+}

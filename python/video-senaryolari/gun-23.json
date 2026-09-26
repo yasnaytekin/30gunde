@@ -1,0 +1,250 @@
+{
+  "kurs": "python",
+  "gun": 23,
+  "baslik": "Sanal ortam",
+  "maskot": "piko",
+  "ozet": "Piko, Bilgi Limanı'ndaki iki geminin ayrı ambarları üzerinden sanal ortamın neden gerektiğini, venv komutlarını ve paket listesini paylaşmayı anlatıyor.",
+  "hedef_sure_sn": 163,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 14,
+      "anlatim": "Selam, ben Piko! Bilgi Limanı'nda iki gemi yan yana duruyor: biri balık taşıyor, diğeri çiçek. Yükler karışsa ne olurdu, düşünsene! Her geminin kendi ambarı var. Python projelerinin de kendi ambarı olmalı. Adı: sanal ortam.",
+      "ekran": {
+        "baslik": "Gün 23: Sanal ortam",
+        "maddeler": [
+          "Bilgi Limanı",
+          "venv ile proje düzeni"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "yonetmen_notu": "Arka plan: Bilgi Limanı bölge görseli (gorseller/python/harita/liman.webp). Dosya repoda henüz yok; eklenince ekran.gorsel alanına yazılmalı. Yan yana iki gemi; birinin ambarında balık, diğerinde çiçek."
+    },
+    {
+      "no": 2,
+      "tur": "anlatim",
+      "sure_sn": 16,
+      "anlatim": "Sorunu görelim. Oyun projen pygame 2.5 istiyor, eski bir projen de 2.1. Bilgisayarda tek bir paket kutusu varsa ikisi aynı anda kurulamaz, birini güncellersen öbürü bozulur. Sanal ortam her projeye ayrı bir kutu verir.",
+      "ekran": {
+        "baslik": "Sorun: sürüm çakışması",
+        "maddeler": [
+          "oyun → pygame 2.5",
+          "eski-oyun → pygame 2.1",
+          "Tek kutu: biri bozulur",
+          "Sanal ortam: her projeye ayrı kutu"
+        ]
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 3,
+      "tur": "anlatim",
+      "sure_sn": 17,
+      "anlatim": "Bu komutlar terminale, proje klasöründeyken yazılır. İlki nokta venv adında bir ortam kurar. Sonra onu etkinleştirirsin: Windows'ta Scripts klasöründeki activate, macOS ve Linux'ta source komutu. Kapatmak için deactivate yeter.",
+      "ekran": {
+        "baslik": "Oluştur ve etkinleştir (terminalde)",
+        "maddeler": [
+          "python -m venv .venv",
+          "Windows: .venv\\Scripts\\activate",
+          "macOS/Linux: source .venv/bin/activate",
+          "Kapat: deactivate"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 4,
+      "tur": "anlatim",
+      "sure_sn": 10,
+      "anlatim": "Terminalin başında parantez içinde .venv yazısını görürsen ortam açık demektir. Artık pip install ile kurduğun her paket sadece bu projeye gider.",
+      "ekran": {
+        "baslik": "Ortam açık mı?",
+        "maddeler": [
+          "(.venv) ~/oyun $",
+          "pip install pygame → sadece bu projeye"
+        ]
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 5,
+      "tur": "hata",
+      "sure_sn": 13,
+      "anlatim": "Sık hata: paketi bir ortama kurup programı başka bir ortamda çalıştırmak, ya da ortamı etkinleştirmeyi unutmak. Python paketi bulamaz ve ModuleNotFoundError verir. Önce ortamı aç, sonra çalıştır.",
+      "ekran": {
+        "baslik": "Sık hata: yanlış ortam",
+        "kod": "import pygame\n",
+        "vurgu_satirlari": [
+          1
+        ],
+        "cikti": "ModuleNotFoundError: No module named 'pygame'",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "uzgun",
+        "konum": "sag"
+      },
+      "calistir": false,
+      "yonetmen_notu": "Paketin kurulu olmadığı bir ortamda çalıştırıldığında görülen hata; doğrulayıcıda çalıştırılmaz."
+    },
+    {
+      "no": 6,
+      "tur": "anlatim",
+      "sure_sn": 14,
+      "anlatim": "Ortam klasörü büyüktür ve paylaşılmaz. Onun yerine paket listesini paylaşırız: pip freeze listeyi requirements dosyasına yazar. Arkadaşın kendi ortamını kurup aynı paketleri yükler. .venv klasörü de gitignore'a eklenir.",
+      "ekran": {
+        "baslik": "Ortamı paylaşmak",
+        "maddeler": [
+          "pip freeze > requirements.txt",
+          "pip install -r requirements.txt",
+          ".venv klasörü .gitignore dosyasına"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 7,
+      "tur": "soru",
+      "sure_sn": 10,
+      "anlatim": "Kodda da benzer bir tuzak var. Listeyi site değişkenine atadım ve site'a flask ekledim. Sence game listesi ne olur?",
+      "ekran": {
+        "baslik": "Sence ne yazdırır?",
+        "kod": "game = [\"pygame\"]\nsite = game\nsite.append(\"flask\")\nprint(\"Oyun:\", game)\n",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 8,
+      "tur": "cikti",
+      "sure_sn": 10,
+      "anlatim": "Game de değişti! Çünkü iki isim aynı kutuyu gösteriyor. Tıpkı iki projenin tek bir paket kutusunu paylaşması gibi.",
+      "ekran": {
+        "baslik": "Cevap: paylaşılan kutu",
+        "kod": "game = [\"pygame\"]\nsite = game\nsite.append(\"flask\")\nprint(\"Oyun:\", game)\n",
+        "dil": "python",
+        "cikti": "Oyun: ['pygame', 'flask']"
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "Çözüm ayrı bir kopya almak. copy ile site kendi kutusuna sahip oluyor, game olduğu gibi kalıyor. Sanal ortam da projelere tam olarak bunu yapar.",
+      "ekran": {
+        "baslik": "Ayrı kopya: copy()",
+        "kod": "game = [\"pygame\"]\nsite = game.copy()\nsite.append(\"flask\")\nprint(\"Oyun:\", game)\nprint(\"Site:\", site)\n",
+        "vurgu_satirlari": [
+          2
+        ],
+        "dil": "python",
+        "cikti": "Oyun: ['pygame']\nSite: ['pygame', 'flask']"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 10,
+      "tur": "kod",
+      "sure_sn": 11,
+      "anlatim": "Ortamları sözlükle taklit edelim. İki projede aynı paketin farklı sürümleri, birbirine hiç karışmadan yaşıyor.",
+      "ekran": {
+        "baslik": "Ortamları taklit edelim",
+        "kod": "envs = {\n    \"oyun\": {\"pygame\": \"2.5.2\"},\n    \"eski-oyun\": {\"pygame\": \"2.1.0\"},\n}\nfor name, packages in envs.items():\n    print(name, \"->\", packages)\n",
+        "vurgu_satirlari": [
+          2,
+          3
+        ],
+        "dil": "python",
+        "cikti": "oyun -> {'pygame': '2.5.2'}\neski-oyun -> {'pygame': '2.1.0'}"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 11,
+      "tur": "gorev",
+      "sure_sn": 13,
+      "anlatim": "Görevlerde ortam komutlarını üretecek, bir listenin ayrı kopyasını alacak ve iki proje arasındaki sürüm çakışmalarını bulacaksın. Projede de paylaşılacak dosyaları seçiyorsun.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Komutları hazırla",
+          "Görev 2: Ayrı kopya",
+          "Görev 3: Çakışmayı bul",
+          "Challenge: Ortama kur",
+          "Proje: Proje düzeni"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 12,
+      "tur": "ozet",
+      "sure_sn": 11,
+      "anlatim": "Özetle: her projeye bir sanal ortam kur, etkinleştir, paketleri içine yükle ve sadece listeyi paylaş.",
+      "ekran": {
+        "baslik": "Bugün öğrendiklerin",
+        "maddeler": [
+          "Sanal ortam = projeye özel paket kutusu",
+          "python -m venv .venv, activate, deactivate",
+          "Paylaşılan: requirements.txt, .venv değil"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 13,
+      "tur": "kapanis",
+      "sure_sn": 12,
+      "anlatim": "Ambarlar tertemiz, aferin! Yarın limanın kayıt ofisine uğruyoruz. Ortalama, ortanca ve NumPy dizileriyle sayıları konuşturacağız. Görüşürüz!",
+      "ekran": {
+        "baslik": "Yarın: İstatistik ve NumPy",
+        "maddeler": [
+          "statistics modülü",
+          "NumPy dizileri"
+        ]
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

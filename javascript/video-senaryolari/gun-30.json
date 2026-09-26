@@ -1,0 +1,264 @@
+{
+  "kurs": "javascript",
+  "gun": 30,
+  "baslik": "Final",
+  "maskot": "kodi",
+  "ozet": "Kodi, 30 günlük yolculuğun son durağı JavaScript Yıldızı'nda sekiz bölgede öğrenilenleri özetliyor, hepsini birleştiren örnekler gösteriyor, projeyi yayınlamayı, son kontrol listesini ve sonraki adımları anlatıp kursu kutlamayla kapatıyor.",
+  "hedef_sure_sn": 179,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 11,
+      "anlatim": "Selam, ben Kodi! Karşımızda parıldayan ışık JavaScript Yıldızı! 30 günlük yolculuğumuzun son durağındayız. Bugün parçaları birleştiriyor ve projeni dünyaya göstermeye hazırlanıyoruz!",
+      "ekran": {
+        "baslik": "Gün 30: Final",
+        "gorsel": "gorseller/javascript/bolgeler/yildiz.webp"
+      },
+      "maskot": {
+        "poz": "el-sallama",
+        "konum": "sag"
+      },
+      "yonetmen_notu": "Yıldız görseline doğru hızlı bir roket yolculuğu; son karede yıldız ekranı doldurur."
+    },
+    {
+      "no": 2,
+      "tur": "anlatim",
+      "sure_sn": 15,
+      "anlatim": "Hadi yolculuğa bir göz atalım! Kalkış Üssü'nde değişkenleri, Döngü Ayı'nda koşulları ve döngüleri öğrendik. Fonksiyon Nebulası'nda nesneler ve map, DOM Gezegeni'nde sayfayı değiştirmek geldi.",
+      "ekran": {
+        "baslik": "Neler öğrendin? (1)",
+        "maddeler": [
+          "Kalkış Üssü: değişkenler, operatörler, metinler",
+          "Döngü Ayı: koşullar, diziler, döngüler, fonksiyonlar",
+          "Fonksiyon Nebulası: kapsam, nesneler, map/filter/reduce, JSON",
+          "DOM Gezegeni: sayfayı değiştirmek, olaylar, formlar"
+        ],
+        "gorsel": "gorseller/javascript/bolgeler/kalkis.webp"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sol"
+      },
+      "yonetmen_notu": "Her madde gelirken ilgili bölge görseli küçük bir kart olarak belirir."
+    },
+    {
+      "no": 3,
+      "tur": "anlatim",
+      "sure_sn": 16,
+      "anlatim": "Olay Kuşağı'nda klavye, zamanlayıcılar ve kalıcı veri; Piksel Gezegeni'nde canvas ve oyun döngüsü. Async İstasyonu'nda hatalar, Promise, fetch ve sınıflar. Burada da temiz kod ve erişilebilirlik!",
+      "ekran": {
+        "baslik": "Neler öğrendin? (2)",
+        "maddeler": [
+          "Olay Kuşağı: klavye, zamanlayıcılar, CSS, localStorage",
+          "Piksel Gezegeni: canvas, animasyon, oyun döngüsü",
+          "Async İstasyonu: hatalar, Promise, fetch, sınıflar",
+          "JavaScript Yıldızı: temiz kod, erişilebilirlik, final"
+        ],
+        "gorsel": "gorseller/javascript/bolgeler/istasyon.webp"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 18,
+      "anlatim": "İşte birçok bölge tek bir kodda: JSON'dan gelen veri, bir sınıf, getter, parçalama, sıralama ve await. Pilotlar yıldız sayısına göre sıralanıp rütbeleriyle yazılıyor. Bunu artık sen de yazabilirsin!",
+      "ekran": {
+        "baslik": "Hepsi bir arada",
+        "kod": "class Pilot {\n  constructor({ name, stars }) { this.name = name; this.stars = stars; }\n  get rank() { return this.stars >= 20 ? \"Kaptan\" : \"Çırak\"; }\n}\nconst wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));\nconst data = JSON.parse('[{\"name\":\"Ada\",\"stars\":12},{\"name\":\"Can\",\"stars\":30}]');\nawait wait(100); // sunucudan geliyormuş gibi\nconst pilots = data.map((p) => new Pilot(p)).sort((a, b) => b.stars - a.stars);\npilots.forEach(({ name, stars, rank }) => console.log(`${name}: ${stars} yıldız, ${rank}`));\n",
+        "vurgu_satirlari": [
+          1,
+          7,
+          8
+        ],
+        "cikti": "Can: 30 yıldız, Kaptan\nAda: 12 yıldız, Çırak",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 13,
+      "anlatim": "Sayfa tarafında da hepsi bir arada: veriler state'te, update değiştirip localStorage'a kaydediyor, render çiziyor. Sayfayı yenilesen de yıldızların kaldığı yerden devam eder.",
+      "ekran": {
+        "baslik": "Örnek: kalıcı yıldız sayacı",
+        "kod": "const state = { stars: Number(localStorage.getItem(\"stars\")) || 0 };\nfunction update(action) {\n  if (action === \"plus\") state.stars += 1;\n  localStorage.setItem(\"stars\", String(state.stars));\n}\nfunction render() { countEl.textContent = `${state.stars} yıldız`; }\nplusBtn.addEventListener(\"click\", () => { update(\"plus\"); render(); });\nrender();\n",
+        "vurgu_satirlari": [
+          1,
+          4,
+          7
+        ],
+        "cikti": "Her tıklamada \"1 yıldız\", \"2 yıldız\"...; sayfa yenilense de sayı kalır.",
+        "html": "<p id=\"count\" aria-live=\"polite\"></p>\n<button id=\"plus\">Yıldız topla</button>",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sol"
+      },
+      "calistir": false
+    },
+    {
+      "no": 6,
+      "tur": "anlatim",
+      "sure_sn": 18,
+      "anlatim": "Gerçek bir sitede genelde üç dosya olur: iskelet için index.html, görünüş için style.css, davranış için script.js. Bunları GitHub Pages ya da Netlify gibi bir statik site servisine yükleyince herkesin açabileceği bir adresin olur.",
+      "ekran": {
+        "baslik": "Projeni yayınla",
+        "maddeler": [
+          "index.html · style.css · script.js",
+          "GitHub Pages ya da Netlify",
+          "Hesabı bir yetişkinle aç; kişisel bilgi paylaşma"
+        ],
+        "kod": "<link rel=\"stylesheet\" href=\"style.css\">\n<script src=\"script.js\" defer></script>\n",
+        "dil": "html",
+        "vurgu_satirlari": [
+          2
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 7,
+      "tur": "hata",
+      "sure_sn": 14,
+      "anlatim": "Yayınlarken sık hata: betiği sayfanın başında defer olmadan yüklemek. Kod, düğmeler oluşmadan çalışır, querySelector null döndürür ve TypeError alırsın. defer eklemek sorunu çözer.",
+      "ekran": {
+        "baslik": "Sık hata: defer'i unutmak",
+        "kod": "// <head> içinde: <script src=\"script.js\"></script>  (defer yok)\nconst plusBtn = document.querySelector(\"#plus\"); // null!\nplusBtn.addEventListener(\"click\", () => {});\n",
+        "vurgu_satirlari": [
+          2,
+          3
+        ],
+        "cikti": "TypeError: Cannot read properties of null (reading 'addEventListener')",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 8,
+      "tur": "soru",
+      "sure_sn": 10,
+      "anlatim": "Son soru, kaptan! 11. günden bir hatıra: önce süz, sonra topla. Sence bu kod ne yazar?",
+      "ekran": {
+        "baslik": "Sence ne yazar?",
+        "kod": "const stars = [3, 8, 5];\nconst total = stars.filter((s) => s > 4).reduce((a, b) => a + b, 0);\nconsole.log(`Toplam: ${total}`);\n",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 9,
+      "tur": "cikti",
+      "sure_sn": 9,
+      "anlatim": "Cevap: Toplam 13! filter dörtten büyük olan sekiz ve beşi bıraktı, reduce da onları topladı. Hâlâ hatırlıyorsun!",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "const stars = [3, 8, 5];\nconst total = stars.filter((s) => s > 4).reduce((a, b) => a + b, 0);\nconsole.log(`Toplam: ${total}`);\n",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "Toplam: 13",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 10,
+      "tur": "anlatim",
+      "sure_sn": 13,
+      "anlatim": "Paylaşmadan önce kendine sor: konsolda kırmızı hata var mı? Telefonda çalışıyor mu? Her şey klavyeyle yapılabiliyor mu? Veri gelmezse kullanıcı ne görüyor?",
+      "ekran": {
+        "baslik": "Son kontrol listesi",
+        "maddeler": [
+          "Konsolda kırmızı hata yok",
+          "Telefonda da kullanılabiliyor",
+          "Klavye + aria-label tamam",
+          "Anlaşılır adlar, tekrar yok",
+          "fetch hatasında anlamlı mesaj"
+        ]
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "gorev",
+      "sure_sn": 13,
+      "anlatim": "Son görevlerin! Adını hatırlayan bir mezuniyet kartı, yazdıkça süzülen canlı bir şehir araması ve en iyi üç pilotu saklayan bir skor tablosu sınıfı. Hepsi öğrendiklerini birleştiriyor.",
+      "ekran": {
+        "baslik": "Final görevleri",
+        "maddeler": [
+          "Görev 1: Mezuniyet kartı",
+          "Görev 2: Canlı arama",
+          "Görev 3: Skor tablosu sınıfı"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 12,
+      "tur": "anlatim",
+      "sure_sn": 13,
+      "anlatim": "Sıradaki durak neresi? Daha çok proje yap! Sonra TypeScript, React gibi arayüz araçları, sunucuda JavaScript için Node.js ya da Phaser gibi oyun kütüphaneleri seni bekliyor.",
+      "ekran": {
+        "baslik": "Sıradaki durak",
+        "maddeler": [
+          "Daha çok proje",
+          "TypeScript",
+          "React, Vue, Svelte",
+          "Node.js",
+          "Phaser ile oyunlar"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 13,
+      "tur": "kapanis",
+      "sure_sn": 16,
+      "anlatim": "Tebrikler, kaptan! 30 günde sıfırdan çalışan projeler yazan bir JavaScript geliştiricisi oldun. Seninle yolculuk etmek harikaydı. Unutma, bu bir son değil, yeni bir kalkış! Görüşmek üzere!",
+      "ekran": {
+        "baslik": "30 Günde JavaScript tamamlandı!",
+        "gorsel": "maskotlar/kodi-javascript/kahraman.png"
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      },
+      "yonetmen_notu": "Konfeti ve havai fişek efekti; Kodi'nin kahraman görseli yıldızın önünde belirir, sonunda roket kalkışıyla kararır."
+    }
+  ]
+}

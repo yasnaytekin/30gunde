@@ -1,0 +1,201 @@
+{
+ "day": 1,
+ "title": "JavaScript ile tanışma",
+ "region": "kalkis",
+ "xp_complete": 150,
+ "objective": "console.log ile ekrana yazdırmak, yorum yazmak ve hata mesajı okumak",
+ "story": "Kalkış Üssü'ne hoş geldin, kaptan! Roketin pistte ama kontrol paneli senin komutlarını bekliyor. Roketin konuştuğu dil **JavaScript**: bugün ona ilk mesajını göndereceksin.",
+ "sections": [
+  {
+   "title": "JavaScript nedir?",
+   "body": "JavaScript, web sayfalarını canlandıran programlama dilidir. Bir düğmeye bastığında açılan menü, oyundaki skor, haritadaki konum: çoğunun arkasında JavaScript vardır.\n\nJavaScript tarayıcının içinde çalışır. Bu yüzden bilgisayarına hiçbir şey kurman gerekmez: bu sayfadaki editöre yazdığın kod doğrudan tarayıcında çalışır."
+  },
+  {
+   "title": "console.log ile konuşmak",
+   "body": "`console.log(...)` parantezin içine yazdığın şeyi **Çıktı** alanına yazar. Metinler tırnak içinde yazılır, sayılar tırnaksız:\n\n```js\nconsole.log(\"Merhaba, dünya!\");\nconsole.log(42);\nconsole.log(3 + 4);\n```\n\nVirgülle birden fazla değer verirsen aralarına boşluk koyarak yazar: `console.log(\"Yakıt:\", 100)` çıktısı `Yakıt: 100` olur.\n\nSatır sonundaki `;` (noktalı virgül) komutun bittiğini gösterir. Çoğu zaman yazmasan da çalışır ama yazmak iyi bir alışkanlıktır."
+  },
+  {
+   "title": "Yorumlar",
+   "body": "`//` ile başlayan satırlar **yorumdur**: JavaScript onları okumaz, kod sana ve arkadaşlarına not bırakmak içindir.\n\n```js\n// Bu satır çalışmaz, sadece bir not\nconsole.log(\"Bu satır çalışır\");\n/* Birden fazla satırlık\n   yorum böyle yazılır */\n```"
+  },
+  {
+   "title": "Hata mesajı bir ipucudur",
+   "body": "Kodda bir yanlışlık olursa kırmızı bir hata mesajı görürsün. Korkma: hata mesajı sana **nerede** ve **ne** olduğunu söyler.\n\n```js\nconsle.log(\"Merhaba\");\n```\n\nBu kod `consle is not defined` hatası verir: `console` yanlış yazılmış. Mesajdaki satır numarasına bak, o satırı dikkatle oku, düzelt ve tekrar çalıştır. Programcılar günün büyük kısmını bunu yaparak geçirir."
+  }
+ ],
+ "examples": [
+  {
+   "title": "İlk sinyal",
+   "code": "console.log(\"Merhaba, dünya!\");\nconsole.log(\"Roket hazır.\");\n",
+   "note": "Çalıştır'a bas ve Çıktı alanına bak."
+  },
+  {
+   "title": "Sayılar ve metinler",
+   "code": "console.log(3 + 4);\nconsole.log(\"3 + 4\");\nconsole.log(\"Yakıt:\", 100, \"litre\");\n",
+   "note": "Tırnak içindeki 3 + 4 hesaplanmaz, olduğu gibi yazılır."
+  }
+ ],
+ "tasks": [
+  {
+   "id": "js-d1-t1",
+   "title": "İlk sinyal",
+   "prompt": "Kontrol merkezine tam olarak şu mesajı gönder: `Merhaba, uzay!`",
+   "starter": "// Mesajını aşağıya yaz\n",
+   "solution": "// Mesajını aşağıya yaz\nconsole.log(\"Merhaba, uzay!\");\n",
+   "hints": [
+    "console.log(...) kullan.",
+    "Metin tırnak içinde olmalı: \"Merhaba, uzay!\"",
+    "console.log(\"Merhaba, uzay!\");"
+   ],
+   "check": {
+    "code_contains": [
+     "console.log"
+    ],
+    "js": "assert(_lines.includes(\"Merhaba, uzay!\"), \"Çıktıda tam olarak 'Merhaba, uzay!' görünmeli (virgül ve ünlem dahil).\");"
+   },
+   "xp": 50
+  },
+  {
+   "id": "js-d1-t2",
+   "title": "Kalkış kontrol listesi",
+   "prompt": "Kalkıştan önce kontrol listesini sırayla yazdır. Her satır ayrı bir `console.log` olsun:\n\n```\nYakıt: tamam\nMotor: tamam\nKalkışa hazır!\n```",
+   "starter": "console.log(\"Yakıt: tamam\");\n\n// Diğer iki satırı ekle\n",
+   "solution": "console.log(\"Yakıt: tamam\");\nconsole.log(\"Motor: tamam\");\nconsole.log(\"Kalkışa hazır!\");\n",
+   "hints": [
+    "Her satır için ayrı bir console.log yaz.",
+    "Sıra önemli: önce Motor, sonra Kalkışa hazır!"
+   ],
+   "check": {
+    "code_contains": [
+     "console.log"
+    ],
+    "js": "assert(_lines.length === 3, \"Tam olarak 3 satır yazdırmalısın.\");\nassert(_lines[0] === \"Yakıt: tamam\" && _lines[1] === \"Motor: tamam\" && _lines[2] === \"Kalkışa hazır!\", \"Satırlar sırasıyla 'Yakıt: tamam', 'Motor: tamam', 'Kalkışa hazır!' olmalı.\");"
+   },
+   "xp": 50
+  },
+  {
+   "id": "js-d1-t3",
+   "title": "Uçuş hesabı",
+   "prompt": "Bir yılda kaç saat var? Sonucu kendin hesaplama: `console.log` içinde **`365 * 24`** işlemini JavaScript'e yaptır.",
+   "starter": "// 365 * 24 işleminin sonucunu yazdır\n",
+   "solution": "// 365 * 24 işleminin sonucunu yazdır\nconsole.log(365 * 24);\n",
+   "hints": [
+    "Çarpma işareti * (yıldız) karakteridir.",
+    "İşlemi tırnak içine yazarsan hesaplanmaz!",
+    "console.log(365 * 24);"
+   ],
+   "check": {
+    "code_contains": [
+     "365",
+     "24",
+     "*"
+    ],
+    "js": "assert(_lines.includes(\"8760\"), \"Çıktıda işlemin sonucu (8760) görünmeli. İşlemi tırnak içine yazmadığından emin ol.\");\nassert(!_code.includes(\"8760\"), \"Sonucu elle yazma; 365 * 24 işlemini JavaScript hesaplasın.\");"
+   },
+   "xp": 50
+  }
+ ],
+ "challenge": {
+  "id": "js-d1-c",
+  "title": "Tek satırda geri sayım",
+  "prompt": "Tek bir `console.log` kullanarak şu 4 satırı yazdır:\n\n```\n3\n2\n1\nAteşle!\n```\n\nİpucu: metnin içindeki `\\n` yeni satıra geçer.",
+  "starter": "// Sadece bir console.log kullan\n",
+  "solution": "// Sadece bir console.log kullan\nconsole.log(\"3\\n2\\n1\\nAteşle!\");\n",
+  "hints": [
+   "\"a\\nb\" yazdırılınca a ve b ayrı satırlara düşer.",
+   "console.log(\"3\\n2\\n1\\nAteşle!\");"
+  ],
+  "check": {
+   "code_contains": [
+    "\\n"
+   ],
+   "js": "assert((_code.match(/console\\.log\\s*\\(/g) || []).length === 1, \"Yalnızca bir console.log kullanmalısın.\");\nassert(_lines.join(\"|\") === \"3|2|1|Ateşle!\", \"Çıktı sırasıyla 3, 2, 1, Ateşle! satırları olmalı.\");"
+  },
+  "xp": 75
+ },
+ "project_contribution": "Oyunun açılış ekranı",
+ "project_task": {
+  "id": "js-d1-p",
+  "title": "Açılış ekranı",
+  "prompt": "**Yıldız Avcısı** oyunumuzun açılış ekranını yazdıralım. Şu üç satırı yazdır; ikinci satırda `Pilot:` yazısından sonra kendi adın ya da takma adın olsun:\n\n```\n*** YILDIZ AVCISI ***\nPilot: Deniz\nGörev: 10 yıldız topla!\n```",
+  "starter": "// Oyunun açılış ekranı\n",
+  "solution": "// Oyunun açılış ekranı\nconsole.log(\"*** YILDIZ AVCISI ***\");\nconsole.log(\"Pilot: Deniz\");\nconsole.log(\"Görev: 10 yıldız topla!\");\n",
+  "hints": [
+   "Üç ayrı console.log yazabilirsin.",
+   "İkinci satır \"Pilot: \" ile başlamalı, ardından adın gelmeli."
+  ],
+  "check": {
+   "code_contains": [
+    "console.log"
+   ],
+   "js": "assert(_lines[0] === \"*** YILDIZ AVCISI ***\", \"İlk satır tam olarak '*** YILDIZ AVCISI ***' olmalı.\");\nassert(/^Pilot: \\S/.test(_lines[1] || \"\"), \"İkinci satır 'Pilot: ' ile başlamalı ve ardından bir ad gelmeli.\");\nassert(_lines[2] === \"Görev: 10 yıldız topla!\", \"Üçüncü satır 'Görev: 10 yıldız topla!' olmalı.\");"
+  },
+  "xp": 100
+ },
+ "tracks": {
+  "js-web": {
+   "project_contribution": "Sitenin karşılama yazısı",
+   "project_task": {
+    "id": "js-d1-pw",
+    "title": "Karşılama yazısı",
+    "prompt": "**Kişisel Web Sitem** projemize başlıyoruz. Sitenin karşılama yazısını yazdır. İlk satırda kendi adın olsun:\n\n```\nMerhaba! Ben Deniz.\nBu benim ilk web sitem.\n```",
+    "starter": "// Sitenin karşılama yazısı\n",
+    "solution": "// Sitenin karşılama yazısı\nconsole.log(\"Merhaba! Ben Deniz.\");\nconsole.log(\"Bu benim ilk web sitem.\");\n",
+    "hints": [
+     "İki ayrı console.log yaz.",
+     "İlk satır \"Merhaba! Ben \" ile başlayıp nokta ile bitmeli."
+    ],
+    "check": {
+     "code_contains": [
+      "console.log"
+     ],
+     "js": "assert(/^Merhaba! Ben .+\\.$/.test(_lines[0] || \"\"), \"İlk satır 'Merhaba! Ben ' ile başlamalı, adınla devam edip nokta ile bitmeli.\");\nassert(_lines[1] === \"Bu benim ilk web sitem.\", \"İkinci satır 'Bu benim ilk web sitem.' olmalı.\");"
+    },
+    "xp": 100
+   }
+  },
+  "js-app": {
+   "project_contribution": "Asistanın açılış mesajı",
+   "project_task": {
+    "id": "js-d1-pa",
+    "title": "Açılış mesajı",
+    "prompt": "**Çalışma Asistanım** uygulamasının açılış mesajını yazdır:\n\n```\n=== Çalışma Asistanım ===\nHedef: Her gün bir adım\n```",
+    "starter": "// Asistanın açılış mesajı\n",
+    "solution": "// Asistanın açılış mesajı\nconsole.log(\"=== Çalışma Asistanım ===\");\nconsole.log(\"Hedef: Her gün bir adım\");\n",
+    "hints": [
+     "İki ayrı console.log yaz.",
+     "Eşittir işaretlerinin sayısına dikkat: üç tane."
+    ],
+    "check": {
+     "code_contains": [
+      "console.log"
+     ],
+     "js": "assert(_lines[0] === \"=== Çalışma Asistanım ===\", \"İlk satır '=== Çalışma Asistanım ===' olmalı.\");\nassert(_lines[1] === \"Hedef: Her gün bir adım\", \"İkinci satır 'Hedef: Her gün bir adım' olmalı.\");"
+    },
+    "xp": 100
+   }
+  },
+  "js-quiz": {
+   "project_contribution": "Yarışmanın ilk sorusu",
+   "project_task": {
+    "id": "js-d1-pq",
+    "title": "İlk soru",
+    "prompt": "**Bilgi Yarışması** projemize başlıyoruz. Karşılama mesajını ve ilk soruyu yazdır:\n\n```\nBilgi Yarışmasına hoş geldin!\nSoru 1: Ay, hangi gezegenin uydusudur?\n```",
+    "starter": "// Yarışmanın ilk ekranı\n",
+    "solution": "// Yarışmanın ilk ekranı\nconsole.log(\"Bilgi Yarışmasına hoş geldin!\");\nconsole.log(\"Soru 1: Ay, hangi gezegenin uydusudur?\");\n",
+    "hints": [
+     "İki ayrı console.log yaz.",
+     "Soru işaretini unutma."
+    ],
+    "check": {
+     "code_contains": [
+      "console.log"
+     ],
+     "js": "assert(_lines[0] === \"Bilgi Yarışmasına hoş geldin!\", \"İlk satır 'Bilgi Yarışmasına hoş geldin!' olmalı.\");\nassert(_lines[1] === \"Soru 1: Ay, hangi gezegenin uydusudur?\", \"İkinci satır 'Soru 1: Ay, hangi gezegenin uydusudur?' olmalı.\");"
+    },
+    "xp": 100
+   }
+  }
+ },
+ "available": true
+}

@@ -1,0 +1,217 @@
+{
+ "day": 28,
+ "title": "Temiz kod",
+ "region": "yildiz",
+ "xp_complete": 150,
+ "objective": "Anlamlı isimler, küçük fonksiyonlar, sabitler, erken dönüş ve parçalama ile kodu düzenlemek",
+ "story": "JavaScript Yıldızı'nın ışığı göründü, kaptan! Usta kaptanlar kodlarını yalnızca çalışır değil, **okunur** yazar. Bugün dağınık kodu toplayıp **temiz kod** yazmayı öğreniyoruz.",
+ "sections": [
+  {
+   "title": "İsimler bir şey anlatmalı",
+   "body": "```js\n// Anlaşılmıyor\nconst d = 7;\nfunction c(a) { return a * 24; }\n\n// Kendini anlatıyor\nconst daysLeft = 7;\nfunction daysToHours(days) { return days * 24; }\n```\n\n- Değişken adı **ne** tuttuğunu söylesin: `score`, `playerName`.\n- Doğru/yanlış tutan değişkenler soru gibi okunsun: `isReady`, `hasKey`, `canLaunch`.\n- Fonksiyon adı bir **fiil** olsun: `loadTasks`, `drawShip`, `calculateScore`.\n- Anlaşılmayan kısaltmalardan kaçın: `btn` herkesçe bilinir ama `plNm` bilinmez."
+  },
+  {
+   "title": "Küçük fonksiyonlar, tekrarsız kod",
+   "body": "Her fonksiyonun **tek bir işi** olsun. Bir fonksiyonu anlatırken \"ve\" diyorsan belki iki fonksiyondur.\n\nAynı kodu iki kez kopyaladıysan dur ve onu bir fonksiyona çevir. Buna **DRY** denir (Don't Repeat Yourself: kendini tekrarlama):\n\n```js\n// Tekrar\nconsole.log(\"*** \" + \"ay\".toUpperCase() + \" ***\");\nconsole.log(\"*** \" + \"mars\".toUpperCase() + \" ***\");\n\n// Tek fonksiyon\nfunction banner(text) {\n  return `*** ${text.toUpperCase()} ***`;\n}\n[\"ay\", \"mars\"].forEach((p) => console.log(banner(p)));\n```\n\nArtık bir değişiklik gerektiğinde tek bir yeri düzeltirsin."
+  },
+  {
+   "title": "Sihirli sayılar ve erken dönüş",
+   "body": "Kodun ortasındaki açıklamasız sayılara **sihirli sayı** denir: `if (d > 1000)` yazınca neden 1000 olduğunu kimse bilmez. Onlara isim ver. Hiç değişmeyen ayarları BÜYÜK_HARFLE yazmak yaygın bir alışkanlıktır:\n\n```js\nconst MIN_FUEL = 50;\nconst STAR_POINTS = 10;\n```\n\nİç içe `if`'ler yerine **erken dönüş** (early return) kullan: önce sorunlu durumları eleyip fonksiyondan çık, asıl işi en sona bırak:\n\n```js\nfunction canLaunch(ship) {\n  if (!ship) return \"Gemi yok\";\n  if (ship.fuel < MIN_FUEL) return \"Yakıt az\";\n  return \"Kalkış!\";\n}\n```"
+  },
+  {
+   "title": "Parçalama, varsayılan değer ve yorumlar",
+   "body": "**Parçalama** (destructuring) bir nesneden ya da diziden değerleri tek satırda çıkarır:\n\n```js\nconst ship = { name: \"Kartal\", speed: 12 };\nconst { name, speed } = ship;\nconst [first, second] = [\"Ay\", \"Mars\", \"Venüs\"];\n```\n\nParametrede de kullanılır ve **varsayılan değer** alabilir:\n\n```js\nfunction createShip({ name = \"Kaşif\", speed = 10 } = {}) {\n  return { name, speed };\n}\ncreateShip();              // { name: \"Kaşif\", speed: 10 }\ncreateShip({ speed: 20 }); // { name: \"Kaşif\", speed: 20 }\n```\n\n`{ name, speed }` kısa yazımı `{ name: name, speed: speed }` demektir.\n\nİyi bir yorum kodun **ne** yaptığını değil **neden** öyle yaptığını anlatır. `// x'i 1 artır` gereksizdir; `// 0'dan başlıyoruz çünkü ilk tur ısınma turu` işe yarar."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Önce ve sonra",
+   "code": "// Önce: ne yaptığı belli değil\nfunction x(a, b) { return a * 10 + (b ? 50 : 0); }\nconsole.log(x(3, true));\n\n// Sonra: aynı iş, okunur hali\nconst STAR_POINTS = 10;\nconst BONUS_POINTS = 50;\n\nfunction calculateScore(stars, hasBonus) {\n  const bonus = hasBonus ? BONUS_POINTS : 0;\n  return stars * STAR_POINTS + bonus;\n}\nconsole.log(calculateScore(3, true));\n",
+   "note": "İki satır da 80 yazar: davranış aynı, okunuş çok farklı."
+  },
+  {
+   "title": "Parçalama ve varsayılan değer",
+   "code": "const pilot = { name: \"Deniz\", level: 4, ship: \"Kartal\" };\nconst { name, ship } = pilot;\nconsole.log(`${name}, ${ship} gemisinde.`);\n\nconst [gold, silver] = [\"Ada\", \"Can\", \"Ece\"];\nconsole.log(\"Birinci:\", gold, \"| İkinci:\", silver);\n\nfunction greet({ name, level = 1 }) {\n  return `Merhaba ${name}, seviye ${level}`;\n}\nconsole.log(greet(pilot));\nconsole.log(greet({ name: \"Mert\" }));\n",
+   "note": "Mert'in seviyesi verilmediği için varsayılan değer (1) kullanıldı."
+  }
+ ],
+ "tasks": [
+  {
+   "id": "js-d28-t1",
+   "title": "Sihirli sayılara isim ver",
+   "prompt": "Aşağıdaki `f` çalışıyor ama ne yaptığı anlaşılmıyor: bir yolculuk için gereken yakıtı hesaplıyor. Aynı işi yapan temiz bir sürüm yaz:\n\n- Sabitler: `FUEL_PER_KM = 3`, `LONG_TRIP_KM = 1000`, `LONG_TRIP_EXTRA = 200`\n- `fuelNeeded(distanceKm)`: km başına yakıt ile çarpsın; yolculuk `LONG_TRIP_KM`'den uzunsa `LONG_TRIP_EXTRA` eklesin. İçinde 3, 1000 ya da 200 sayısı **geçmesin**; sabitleri kullan.\n- Sonunda `fuelNeeded(500)` ve `fuelNeeded(2000)` sonuçlarını yazdır (1500 ve 6200).",
+   "starter": "function f(d) {\n  let r = d * 3;\n  if (d > 1000) {\n    r = r + 200;\n  }\n  return r;\n}\n\nconsole.log(f(500));\nconsole.log(f(2000));\n",
+   "solution": "const FUEL_PER_KM = 3;\nconst LONG_TRIP_KM = 1000;\nconst LONG_TRIP_EXTRA = 200;\n\nfunction fuelNeeded(distanceKm) {\n  const extra = distanceKm > LONG_TRIP_KM ? LONG_TRIP_EXTRA : 0;\n  return distanceKm * FUEL_PER_KM + extra;\n}\n\nconsole.log(fuelNeeded(500));\nconsole.log(fuelNeeded(2000));\n",
+   "hints": [
+    "const FUEL_PER_KM = 3; gibi üç sabit yaz.",
+    "const extra = distanceKm > LONG_TRIP_KM ? LONG_TRIP_EXTRA : 0;"
+   ],
+   "check": {
+    "code_contains": [
+     "const FUEL_PER_KM",
+     "function fuelNeeded"
+    ],
+    "js": "assert(FUEL_PER_KM === 3 && LONG_TRIP_KM === 1000 && LONG_TRIP_EXTRA === 200, \"Üç sabit doğru değerlerle tanımlanmalı.\");\nassert(fuelNeeded(500) === 1500 && fuelNeeded(1000) === 3000 && fuelNeeded(2000) === 6200 && fuelNeeded(1001) === 3203, \"fuelNeeded eski f ile aynı sonuçları vermeli.\");\nassert(!/\\b(3|1000|200)\\b/.test(fuelNeeded.toString()), \"fuelNeeded içinde 3, 1000 ya da 200 yazma; sabitleri kullan.\");\nassert(_lines.join(\",\") === \"1500,6200\", \"Çıktı 1500 ve 6200 olmalı.\");"
+   },
+   "xp": 50
+  },
+  {
+   "id": "js-d28-t2",
+   "title": "Tekrarı kaldır",
+   "prompt": "Bu kod aynı satırı üç kez kopyalıyor. Temizle:\n\n- `banner(name)`: `*** MARS ***` biçiminde bir metin **döndürsün** (Türkçe büyük harf: `toLocaleUpperCase(\"tr\")`).\n- Gezegenleri bir diziye koy: `const planets = [\"Merkür\", \"Venüs\", \"Dünya\"];`\n- `forEach` ile her birini `banner` sonucuyla yazdır.\n\nKodda `toLocaleUpperCase` ve `console.log` yalnızca **birer kez** geçsin.",
+   "starter": "const a = \"Merkür\";\nconsole.log(\"*** \" + a.toLocaleUpperCase(\"tr\") + \" ***\");\nconst b = \"Venüs\";\nconsole.log(\"*** \" + b.toLocaleUpperCase(\"tr\") + \" ***\");\nconst c = \"Dünya\";\nconsole.log(\"*** \" + c.toLocaleUpperCase(\"tr\") + \" ***\");\n",
+   "solution": "const planets = [\"Merkür\", \"Venüs\", \"Dünya\"];\n\nfunction banner(name) {\n  return `*** ${name.toLocaleUpperCase(\"tr\")} ***`;\n}\n\nplanets.forEach((planet) => console.log(banner(planet)));\n",
+   "hints": [
+    "function banner(name) { return `*** ${name.toLocaleUpperCase(\"tr\")} ***`; }",
+    "planets.forEach((planet) => console.log(banner(planet)));"
+   ],
+   "check": {
+    "code_contains": [
+     "function banner",
+     "forEach"
+    ],
+    "js": "assert(banner(\"mars\") === \"*** MARS ***\" && banner(\"jüpiter\") === \"*** JÜPİTER ***\", \"banner('jüpiter') '*** JÜPİTER ***' döndürmeli.\");\nassert(_lines.join(\"|\") === \"*** MERKÜR ***|*** VENÜS ***|*** DÜNYA ***\", \"Çıktı sırasıyla MERKÜR, VENÜS, DÜNYA afişleri olmalı.\");\nassert((_code.match(/toLocaleUpperCase/g) || []).length === 1, \"toLocaleUpperCase kodda yalnızca bir kez geçmeli (banner içinde).\");\nassert((_code.match(/console\\.log/g) || []).length === 1, \"console.log kodda yalnızca bir kez geçmeli (döngü içinde).\");"
+   },
+   "xp": 50
+  },
+  {
+   "id": "js-d28-t3",
+   "title": "Erken dönüş",
+   "prompt": "`canLaunch` iç içe `if`'lerle dolu. Aynı sonuçları veren düz bir sürüm yaz:\n\n- 50 için bir sabit tanımla: `MIN_FUEL`.\n- Önce sorunlu durumları `return` ile ele: gemi yoksa `Gemi yok`, yakıt `MIN_FUEL`'den azsa `Yakıt az`, mürettebat yoksa (`crew` 0) `Mürettebat yok`; en sonda `Kalkış!`.\n- `fuel` ve `crew`'u parçalama ile al: `const { fuel, crew } = ship;`\n- Fonksiyonda hiç `else` kalmasın.",
+   "starter": "function canLaunch(ship) {\n  if (ship) {\n    if (ship.fuel >= 50) {\n      if (ship.crew > 0) {\n        return \"Kalkış!\";\n      } else {\n        return \"Mürettebat yok\";\n      }\n    } else {\n      return \"Yakıt az\";\n    }\n  } else {\n    return \"Gemi yok\";\n  }\n}\n\nconsole.log(canLaunch({ fuel: 80, crew: 3 }));\n",
+   "solution": "const MIN_FUEL = 50;\n\nfunction canLaunch(ship) {\n  if (!ship) return \"Gemi yok\";\n  const { fuel, crew } = ship;\n  if (fuel < MIN_FUEL) return \"Yakıt az\";\n  if (crew <= 0) return \"Mürettebat yok\";\n  return \"Kalkış!\";\n}\n\nconsole.log(canLaunch({ fuel: 80, crew: 3 }));\n",
+   "hints": [
+    "if (!ship) return \"Gemi yok\";",
+    "const { fuel, crew } = ship;",
+    "if (fuel < MIN_FUEL) return \"Yakıt az\";"
+   ],
+   "check": {
+    "code_contains": [
+     "MIN_FUEL",
+     "return"
+    ],
+    "js": "assert(MIN_FUEL === 50, \"MIN_FUEL 50 olmalı.\");\nassert(canLaunch(null) === \"Gemi yok\" && canLaunch(undefined) === \"Gemi yok\", \"Gemi yoksa 'Gemi yok' döndürmeli.\");\nassert(canLaunch({ fuel: 10, crew: 3 }) === \"Yakıt az\" && canLaunch({ fuel: 49, crew: 0 }) === \"Yakıt az\", \"Yakıt 50'den azsa 'Yakıt az' döndürmeli.\");\nassert(canLaunch({ fuel: 80, crew: 0 }) === \"Mürettebat yok\", \"Mürettebat yoksa 'Mürettebat yok' döndürmeli.\");\nassert(canLaunch({ fuel: 50, crew: 2 }) === \"Kalkış!\", \"Her şey tamamsa 'Kalkış!' döndürmeli.\");\nconst src = canLaunch.toString();\nassert(!/\\belse\\b/.test(src), \"canLaunch içinde else kalmamalı; erken dönüş kullan.\");\nassert(/\\{\\s*[\\w\\s,]+\\}\\s*=/.test(src), \"fuel ve crew'u parçalama ile al: const { fuel, crew } = ship;\");\nassert(!/\\b50\\b/.test(src), \"canLaunch içinde 50 yazma; MIN_FUEL kullan.\");"
+   },
+   "xp": 50
+  }
+ ],
+ "challenge": {
+  "id": "js-d28-c",
+  "title": "Varsayılan ayarlar",
+  "prompt": "Bu `createShip` iki sorun taşıyor: `createShip()` hata veriyor ve `speed: 0` verince hız 10 oluyor (çünkü `0 || 10` sonucu 10!). Düzelt:\n\n- Parametrede parçalama ve varsayılan değerler kullan: `name` için `\"Kaşif\"`, `speed` için `10`, `color` için `\"#f7df1e\"`; parametre hiç verilmezse `{}` kullanılsın.\n- Kısa yazımla döndür: `return { name, speed, color };`\n- Ayrıca `describeShip(ship)` yaz: parçalama ile `name` ve `speed`'i alıp `Kartal: hız 12` döndürsün.",
+  "starter": "function createShip(options) {\n  const name = options.name || \"Kaşif\";\n  const speed = options.speed || 10;\n  const color = options.color || \"#f7df1e\";\n  return { name: name, speed: speed, color: color };\n}\n\n// describeShip\n\nconsole.log(createShip({ name: \"Kartal\" }));\n",
+  "solution": "function createShip({ name = \"Kaşif\", speed = 10, color = \"#f7df1e\" } = {}) {\n  return { name, speed, color };\n}\n\n// describeShip\nfunction describeShip({ name, speed }) {\n  return `${name}: hız ${speed}`;\n}\n\nconsole.log(createShip({ name: \"Kartal\" }));\n",
+  "hints": [
+   "function createShip({ name = \"Kaşif\", speed = 10, color = \"#f7df1e\" } = {})",
+   "Sondaki = {} parametre hiç verilmezse boş nesne kullanır.",
+   "function describeShip({ name, speed }) { ... }"
+  ],
+  "check": {
+   "code_contains": [
+    "= {}",
+    "describeShip"
+   ],
+   "js": "let d = null;\ntry { d = createShip(); } catch (err) { d = null; }\nassert(d && d.name === \"Kaşif\" && d.speed === 10 && d.color === \"#f7df1e\", \"createShip() parametresiz de çalışmalı ve varsayılan değerlerle bir gemi döndürmeli.\");\nassert(createShip({ speed: 0 }).speed === 0, \"speed: 0 verilince hız 0 kalmalı (varsayılan değer yalnızca eksikse kullanılır).\");\nconst k = createShip({ name: \"Kartal\", color: \"#ff0000\" });\nassert(k.name === \"Kartal\" && k.speed === 10 && k.color === \"#ff0000\", \"Verilen değerler kullanılmalı, eksikler varsayılan olmalı.\");\nassert(describeShip({ name: \"Nova\", speed: 7 }) === \"Nova: hız 7\", \"describeShip({ name: 'Nova', speed: 7 }) 'Nova: hız 7' döndürmeli.\");\nassert(!/\\|\\|/.test(createShip.toString()), \"createShip içinde || kullanma; varsayılan değerler yeterli.\");"
+  },
+  "xp": 75
+ },
+ "project_contribution": "Kodu düzenlemek",
+ "project_task": {
+  "id": "js-d28-p",
+  "title": "Oyun kodunu düzenle",
+  "prompt": "Oyunun eski puan kodu çalışıyor ama okunmuyor: `s` skor, `l` can; `\"y\"` yıldız, `\"d\"` düşman demek. Temiz bir sürüm yaz:\n\n- Sabitler: `STAR_POINTS = 10`, `BONUS_EVERY = 50` (her 50 puanda bir can), `START_LIVES = 3`\n- `collectStar(game)`: skoru `STAR_POINTS` artırsın; skor `BONUS_EVERY`'nin katı olunca bir can eklesin.\n- `hitEnemy(game)`: bir can azaltsın ama can 0'ın altına inmesin.\n- `isGameOver(game)`: can 0 ise `true` döndürsün.\n- Fonksiyonlar dışarıdaki değişkenleri değil, aldıkları `game` nesnesini (`{ score, lives }`) değiştirsin.\n\nEn sonda `const game = { score: 0, lives: START_LIVES };` oluştur; bir yıldız topla, bir düşmana çarp ve `Skor: 10 | Can: 2` yazdır.",
+  "starter": "let s = 0;\nlet l = 3;\nfunction u(t) {\n  if (t == \"y\") {\n    s = s + 10;\n    if (s % 50 == 0) {\n      l = l + 1;\n    }\n  }\n  if (t == \"d\") {\n    l = l - 1;\n    if (l < 0) l = 0;\n  }\n}\n\nu(\"y\");\nu(\"d\");\nconsole.log(\"Skor: \" + s + \" | Can: \" + l);\n",
+  "solution": "const STAR_POINTS = 10;\nconst BONUS_EVERY = 50;\nconst START_LIVES = 3;\n\nfunction collectStar(game) {\n  game.score += STAR_POINTS;\n  // her BONUS_EVERY puanda bir ödül canı\n  if (game.score % BONUS_EVERY === 0) game.lives += 1;\n}\n\nfunction hitEnemy(game) {\n  game.lives = Math.max(0, game.lives - 1);\n}\n\nfunction isGameOver(game) {\n  return game.lives === 0;\n}\n\nconst game = { score: 0, lives: START_LIVES };\ncollectStar(game);\nhitEnemy(game);\nconsole.log(`Skor: ${game.score} | Can: ${game.lives}`);\n",
+  "hints": [
+   "function collectStar(game) { game.score += STAR_POINTS; ... }",
+   "Can 0'ın altına inmesin: Math.max(0, game.lives - 1)",
+   "function isGameOver(game) { return game.lives === 0; }"
+  ],
+  "check": {
+   "code_contains": [
+    "STAR_POINTS",
+    "function collectStar",
+    "function hitEnemy"
+   ],
+   "js": "assert(STAR_POINTS === 10 && BONUS_EVERY === 50 && START_LIVES === 3, \"Üç sabit doğru değerlerle tanımlanmalı.\");\nconst g = { score: 40, lives: 1 };\ncollectStar(g);\nassert(g.score === 50 && g.lives === 2, \"40 puandan yıldız toplayınca skor 50 olmalı ve bir can kazanılmalı.\");\ncollectStar(g);\nassert(g.score === 60 && g.lives === 2, \"60 puanda can kazanılmamalı.\");\nconst h = { score: 0, lives: 1 };\nhitEnemy(h);\nassert(h.lives === 0, \"hitEnemy bir can azaltmalı.\");\nhitEnemy(h);\nassert(h.lives === 0, \"Can 0'ın altına inmemeli.\");\nassert(isGameOver(h) === true && isGameOver({ score: 0, lives: 2 }) === false, \"isGameOver can 0 ise true, değilse false döndürmeli.\");\nassert(!/\\b(10|50)\\b/.test(collectStar.toString()), \"collectStar içinde 10 ya da 50 yazma; sabitleri kullan.\");\nassert(game.score === 10 && game.lives === 2 && _lines.includes(\"Skor: 10 | Can: 2\"), \"Sonunda 'Skor: 10 | Can: 2' yazdırmalısın.\");"
+  },
+  "xp": 100
+ },
+ "tracks": {
+  "js-web": {
+   "project_contribution": "Menü kodunu düzenlemek",
+   "project_task": {
+    "id": "js-d28-pw",
+    "title": "Menü kodunu düzenle",
+    "prompt": "Menüyü üreten kod aynı beş satırı üç kez tekrar ediyor. Temizle:\n\n- Bağlantıları bir diziye koy: `MENU_LINKS` (her biri `{ text, href }`).\n- `createLink({ text, href })`: `link` sınıfı olan bir `<a>` oluşturup **döndürsün** (parametrede parçalama).\n- `renderMenu(links)`: `#menu`'yü temizleyip her bağlantıyı eklesin.\n- En sonda `renderMenu(MENU_LINKS)` çağır. Kodda `createElement` yalnızca bir kez geçsin.",
+    "starter": "const m = document.querySelector(\"#menu\");\nconst a1 = document.createElement(\"a\");\na1.textContent = \"Ana sayfa\";\na1.href = \"#home\";\na1.className = \"link\";\nm.append(a1);\nconst a2 = document.createElement(\"a\");\na2.textContent = \"Blog\";\na2.href = \"#blog\";\na2.className = \"link\";\nm.append(a2);\nconst a3 = document.createElement(\"a\");\na3.textContent = \"Projeler\";\na3.href = \"#projects\";\na3.className = \"link\";\nm.append(a3);\n",
+    "solution": "const MENU_LINKS = [\n  { text: \"Ana sayfa\", href: \"#home\" },\n  { text: \"Blog\", href: \"#blog\" },\n  { text: \"Projeler\", href: \"#projects\" },\n];\n\nfunction createLink({ text, href }) {\n  const link = document.createElement(\"a\");\n  link.textContent = text;\n  link.href = href;\n  link.className = \"link\";\n  return link;\n}\n\nfunction renderMenu(links) {\n  const menu = document.querySelector(\"#menu\");\n  menu.innerHTML = \"\";\n  links.forEach((link) => menu.append(createLink(link)));\n}\n\nrenderMenu(MENU_LINKS);\n",
+    "hints": [
+     "const MENU_LINKS = [{ text: \"Ana sayfa\", href: \"#home\" }, ...];",
+     "function createLink({ text, href }) { ... return link; }",
+     "links.forEach((link) => menu.append(createLink(link)));"
+    ],
+    "check": {
+     "code_contains": [
+      "MENU_LINKS",
+      "function createLink",
+      "function renderMenu"
+     ],
+     "js": "const texts = () => $$(\"#menu a.link\").map((a) => a.textContent.trim()).join(\",\");\nassert(texts() === \"Ana sayfa,Blog,Projeler\", \"#menu içinde Ana sayfa, Blog, Projeler bağlantıları (link sınıfıyla) olmalı.\");\nassert(Array.isArray(MENU_LINKS) && MENU_LINKS.length === 3, \"MENU_LINKS 3 bağlantılı bir dizi olmalı.\");\nconst a = createLink({ text: \"X\", href: \"#x\" });\nassert(a && a.tagName === \"A\" && a.textContent === \"X\" && a.getAttribute(\"href\") === \"#x\" && a.classList.contains(\"link\"), \"createLink bir <a> döndürmeli (metin, href ve link sınıfıyla).\");\nrenderMenu([{ text: \"İletişim\", href: \"#contact\" }]);\nassert(texts() === \"İletişim\", \"renderMenu menüyü önce temizlemeli, sonra verilen bağlantıları eklemeli.\");\nassert((_code.match(/createElement/g) || []).length === 1, \"createElement kodda yalnızca bir kez geçmeli (createLink içinde).\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<header><h1 id=\"site-title\">Kod Günlüğüm</h1><nav id=\"menu\"></nav></header>\n",
+    "css": "header{display:flex;align-items:center;gap:12px;flex-wrap:wrap}header h1{margin:0;font-size:22px}nav a{margin-right:10px}.card{border:1px solid #ccd;border-radius:8px;padding:8px 12px;margin:8px 0}.card h3{margin:0 0 4px}.tech{color:#556;font-size:14px}body.dark{background:#0b1026;color:#eef}body.dark a{color:#9cf}form{display:grid;gap:6px;max-width:320px}"
+   }
+  },
+  "js-app": {
+   "project_contribution": "İstatistik kodunu düzenlemek",
+   "project_task": {
+    "id": "js-d28-pa",
+    "title": "İstatistik kodunu düzenle",
+    "prompt": "`st` fonksiyonu tamamlanan görev istatistiğini yazıyor ama okunmuyor ve boş listede `%NaN` gösteriyor. Üç küçük fonksiyona böl:\n\n- `countDone(tasks)`: bitmiş (`done` true) görev sayısı (`filter` ile).\n- `percentDone(tasks)`: yüzde (tam sayıya yuvarla). Liste boşsa erken dönüşle `0` döndürsün.\n- `statsText(tasks)`: `Tamamlanan: 1/2 (%50)` metnini döndürsün (diğer iki fonksiyonu kullanarak).",
+    "starter": "function st(a) {\n  let c = 0;\n  for (let i = 0; i < a.length; i++) {\n    if (a[i].done == true) {\n      c++;\n    }\n  }\n  return \"Tamamlanan: \" + c + \"/\" + a.length + \" (%\" + Math.round(c / a.length * 100) + \")\";\n}\n\nconst list = [{ title: \"Matematik\", done: true }, { title: \"Fizik\", done: false }];\nconsole.log(st(list));\n",
+    "solution": "function countDone(tasks) {\n  return tasks.filter((task) => task.done).length;\n}\n\nfunction percentDone(tasks) {\n  if (tasks.length === 0) return 0;\n  return Math.round((countDone(tasks) / tasks.length) * 100);\n}\n\nfunction statsText(tasks) {\n  return `Tamamlanan: ${countDone(tasks)}/${tasks.length} (%${percentDone(tasks)})`;\n}\n\nconst list = [{ title: \"Matematik\", done: true }, { title: \"Fizik\", done: false }];\nconsole.log(statsText(list));\n",
+    "hints": [
+     "tasks.filter((task) => task.done).length",
+     "if (tasks.length === 0) return 0;",
+     "Şablon metin: `Tamamlanan: ${...}/${tasks.length} (%${...})`"
+    ],
+    "check": {
+     "code_contains": [
+      "filter",
+      "function statsText"
+     ],
+     "js": "const three = [{ title: \"A\", done: true }, { title: \"B\", done: false }, { title: \"C\", done: false }];\nassert(countDone(three) === 1 && countDone([]) === 0, \"countDone bitmiş görevleri saymalı.\");\nassert(percentDone(three) === 33, \"3 görevden 1'i bitince percentDone 33 olmalı.\");\nassert(percentDone([]) === 0, \"Boş listede percentDone 0 döndürmeli.\");\nassert(statsText(three) === \"Tamamlanan: 1/3 (%33)\", \"statsText 'Tamamlanan: 1/3 (%33)' döndürmeli.\");\nassert(statsText([]) === \"Tamamlanan: 0/0 (%0)\", \"Boş listede statsText 'Tamamlanan: 0/0 (%0)' döndürmeli.\");\nassert(_lines.includes(\"Tamamlanan: 1/2 (%50)\"), \"Çıktıda 'Tamamlanan: 1/2 (%50)' görünmeli.\");"
+    },
+    "xp": 100
+   }
+  },
+  "js-quiz": {
+   "project_contribution": "Sonuç kodunu düzenlemek",
+   "project_task": {
+    "id": "js-d28-pq",
+    "title": "Sonuç kodunu düzenle",
+    "prompt": "Yarışmanın sonuç mesajını üreten `g` iç içe `else`'lerle dolu. Temiz bir sürüm yaz:\n\n- Sabitler: `GREAT_PERCENT = 90`, `PASS_PERCENT = 60`\n- `percent(correct, total)`: yüzdeyi tam sayı olarak döndürsün; `total` 0 ise `0`.\n- `resultMessage({ correct, total })`: parçalamayla alsın, erken dönüşlerle `Harika! (%100)`, `Geçtin (%60)` ya da `Tekrar dene (%25)` döndürsün. İçinde `else` olmasın.",
+    "starter": "function g(c, t) {\n  let p = Math.round(c / t * 100);\n  if (p >= 90) {\n    return \"Harika! (%\" + p + \")\";\n  } else {\n    if (p >= 60) {\n      return \"Geçtin (%\" + p + \")\";\n    } else {\n      return \"Tekrar dene (%\" + p + \")\";\n    }\n  }\n}\n\nconsole.log(g(4, 5));\n",
+    "solution": "const GREAT_PERCENT = 90;\nconst PASS_PERCENT = 60;\n\nfunction percent(correct, total) {\n  if (total === 0) return 0;\n  return Math.round((correct / total) * 100);\n}\n\nfunction resultMessage({ correct, total }) {\n  const p = percent(correct, total);\n  if (p >= GREAT_PERCENT) return `Harika! (%${p})`;\n  if (p >= PASS_PERCENT) return `Geçtin (%${p})`;\n  return `Tekrar dene (%${p})`;\n}\n\nconsole.log(resultMessage({ correct: 4, total: 5 }));\n",
+    "hints": [
+     "if (total === 0) return 0;",
+     "function resultMessage({ correct, total }) { ... }",
+     "if (p >= GREAT_PERCENT) return `Harika! (%${p})`;"
+    ],
+    "check": {
+     "code_contains": [
+      "GREAT_PERCENT",
+      "PASS_PERCENT",
+      "function resultMessage"
+     ],
+     "js": "assert(GREAT_PERCENT === 90 && PASS_PERCENT === 60, \"GREAT_PERCENT 90, PASS_PERCENT 60 olmalı.\");\nassert(percent(3, 5) === 60 && percent(1, 3) === 33 && percent(0, 0) === 0, \"percent yuvarlanmış yüzdeyi vermeli; total 0 ise 0.\");\nassert(resultMessage({ correct: 5, total: 5 }) === \"Harika! (%100)\", \"5/5 için 'Harika! (%100)' olmalı.\");\nassert(resultMessage({ correct: 9, total: 10 }) === \"Harika! (%90)\", \"9/10 için 'Harika! (%90)' olmalı.\");\nassert(resultMessage({ correct: 3, total: 5 }) === \"Geçtin (%60)\", \"3/5 için 'Geçtin (%60)' olmalı.\");\nassert(resultMessage({ correct: 1, total: 4 }) === \"Tekrar dene (%25)\", \"1/4 için 'Tekrar dene (%25)' olmalı.\");\nassert(resultMessage({ correct: 0, total: 0 }) === \"Tekrar dene (%0)\", \"Soru yoksa 'Tekrar dene (%0)' olmalı.\");\nassert(!/\\belse\\b/.test(resultMessage.toString()), \"resultMessage içinde else olmamalı; erken dönüş kullan.\");\nassert(_lines.includes(\"Geçtin (%80)\"), \"Çıktıda 'Geçtin (%80)' görünmeli.\");"
+    },
+    "xp": 100
+   }
+  }
+ },
+ "available": true
+}

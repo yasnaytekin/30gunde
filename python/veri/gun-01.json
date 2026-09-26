@@ -1,0 +1,624 @@
+{
+ "day": 1,
+ "title": "Python ile tanışma",
+ "region": "kamp",
+ "project_contribution": "Karşılama ekranı",
+ "game_role": "Oyun açılınca karşılama ekranın yazılır.",
+ "xp_complete": 150,
+ "objective": "print() ile ekrana yazı yazmak ve Python'ı hesap makinesi gibi kullanmak",
+ "story": "Selam! Ben Piko. Bilgisayarlar çok hızlıdır ama ne yapacaklarını kendileri bilmez. Onlara ne yapacaklarını sen söyleyeceksin. Bugün bilgisayara ilk kez konuşmayı öğreteceğiz!",
+ "sections": [
+  {
+   "title": "Kod nedir?",
+   "body": "Kod, bilgisayara verdiğin talimatların listesidir. Python bu talimatları **yukarıdan aşağıya, satır satır** okur ve sırayla yapar.\n\nPython dünyada en çok kullanılan programlama dillerinden biri. Oyunlar, web siteleri, yapay zekâ programları... Hepsinde Python var."
+  },
+  {
+   "title": "print() ile konuş",
+   "body": "`print()` parantezin içine yazdığın şeyi ekrana yazar. Yazıları **tırnak içine** alırız, sayıları almayız.\n\n```python\nprint(\"Merhaba!\")\nprint(42)\n```\n\nVirgül koyarak birden çok şeyi yan yana yazdırabilirsin. Python aralarına boşluk koyar."
+  },
+  {
+   "title": "Python bir hesap makinesi",
+   "body": "- `+` toplama, `-` çıkarma\n- `*` çarpma, `/` bölme\n- `**` üs alma: `2 ** 3` sonucu `8`\n\nİşlemi tırnak içine yazarsan Python hesaplamaz, olduğu gibi yazar: `print(\"2 + 2\")` ekrana `2 + 2` yazar."
+  },
+  {
+   "title": "Yorumlar ve hatalar",
+   "body": "`#` ile başlayan satırlar **yorumdur**. Python onları okumaz; kendine not bırakmak için kullanırsın.\n\nBir harfi yanlış yazarsan Python hata verir. Korkma! Hata, sorunun hangi satırda olduğunu söyler ve ben de sana ne anlama geldiğini Türkçe anlatırım."
+  },
+  {
+   "title": "Sahnede çizim: her yıldız bir Piko",
+   "body": "Bazı görevlerde yazdırdığın şey **sahnede resme dönüşür**. Kurallar çok basit:\n\n- `*` yazdırırsan sahnede bir **Piko** belirir\n- `#` bir **duvar**, `o` bir **altın**, `H` bir **kalp** olur\n- boşluk boş bir karedir\n\nYani `print(\"***\")` yan yana üç Piko dizer. Alt alta üç kez yazdırırsan 3 satırlık bir Piko ordusu kurarsın!"
+  }
+ ],
+ "examples": [
+  {
+   "title": "İlk program",
+   "code": "print(\"Merhaba Dünya!\")\n",
+   "note": "Çalıştır'a bas ve çıktıya bak."
+  },
+  {
+   "title": "Hesap yapalım",
+   "code": "print(3 + 4)\nprint(10 * 5)\nprint(2 ** 10)\nprint(\"3 + 4\")\n",
+   "note": "Son satır neden hesaplanmadı? Çünkü tırnak içinde!"
+  },
+  {
+   "title": "Virgülle yazdır",
+   "code": "# Bu bir yorum, Python bunu okumaz\nprint(\"Piko\", \"diyor ki:\", \"Selam!\")\nprint(\"Yaşım:\", 12)\n",
+   "note": ""
+  },
+  {
+   "title": "Piko sırası",
+   "code": "print(\"*****\")\nprint(\"#####\")\n",
+   "note": "Çalıştır'a bas: beş Piko ve altlarında beş duvar.",
+   "scene": {
+    "target": []
+   }
+  }
+ ],
+ "tasks": [
+  {
+   "id": "d1-t1",
+   "title": "İlk sözün",
+   "prompt": "Ekrana tam olarak `Merhaba Python!` yazdır.",
+   "starter": "# print() kullanarak yaz\n",
+   "solution": "print(\"Merhaba Python!\")\n",
+   "hints": [
+    "print() fonksiyonunu kullan.",
+    "Yazılar tırnak içinde olmalı: print(\"...\")",
+    "Büyük/küçük harfler ve ünlem de aynı olmalı: Merhaba Python!"
+   ],
+   "check": {
+    "output_contains": [
+     "Merhaba Python!"
+    ]
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "print(\"Merhaba Python!\")",
+      "notes": [
+       "`print(\"Merhaba Python!\")`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d1-t2",
+   "title": "Kendini tanıt",
+   "prompt": "Ekrana `Benim adım` ile başlayan ve adınla biten bir cümle yazdır. Örneğin: `Benim adım Ayşe`",
+   "starter": "",
+   "solution": "print(\"Benim adım Deniz\")\n",
+   "hints": [
+    "Tek bir print() yeterli.",
+    "Tırnağın içine \"Benim adım\" ve adını yaz."
+   ],
+   "check": {
+    "python": "\nlines = [l for l in _output.splitlines() if \"Benim adım\" in l]\nassert lines, \"Çıktıda 'Benim adım' yazısı görünmeli.\"\nassert lines[0].replace(\"Benim adım\", \"\").strip(), \"Adını da yazmayı unutma!\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "print(\"Benim adım Deniz\")",
+      "notes": [
+       "`print(\"Benim adım Deniz\")`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d1-t3",
+   "title": "Bir yılda kaç saat?",
+   "prompt": "Bir yılda 365 gün, bir günde 24 saat var. Sonucu kendin hesaplama; `365 * 24` işlemini Python'a yaptır ve yazdır.",
+   "starter": "",
+   "solution": "print(365 * 24)\n",
+   "hints": [
+    "Çarpma işareti *",
+    "İşlemi tırnak içine yazma, yoksa Python hesaplamaz."
+   ],
+   "check": {
+    "code_contains": [
+     "365",
+     "24",
+     "*"
+    ],
+    "output_contains": [
+     "8760"
+    ]
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "print(365 * 24)",
+      "notes": [
+       "`print(365 * 24)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     },
+     {
+      "term": "*",
+      "kind": "operatör",
+      "desc": "Çarpma; metni ya da listeyi tekrarlama (\"*\" * 3 → \"***\")."
+     }
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "id": "d1-c",
+  "title": "Yıldızlı afiş",
+  "prompt": "En az 3 satırdan oluşan bir afiş yazdır. En az 3 satırda `*` olsun. Küçük bir sır: `print(\"*\" * 20)` yan yana 20 yıldız yazar!",
+  "starter": "",
+  "solution": "print(\"*\" * 20)\nprint(\"*  PİKO GELİYOR  *\")\nprint(\"*\" * 20)\n",
+  "hints": [
+   "Üç ayrı print() kullanabilirsin.",
+   "Yıldızlı çizgi için \"*\" * 20"
+  ],
+  "check": {
+   "python": "\nlines = [l for l in _output.splitlines() if l.strip()]\nassert len(lines) >= 3, \"En az 3 satır yazdırmalısın.\"\nassert sum(1 for l in lines if \"*\" in l) >= 3, \"En az 3 satırda * olmalı.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "print(\"*\" * 20)",
+     "notes": [
+      "`print(\"*\" * 20)`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 2,
+     "code": "print(\"*  PİKO GELİYOR  *\")",
+     "notes": [
+      "`print(\"* PİKO GELİYOR *\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "print(\"*\" * 20)",
+     "notes": [
+      "`print(\"*\" * 20)`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    },
+    {
+     "term": "*",
+     "kind": "operatör",
+     "desc": "Çarpma; metni ya da listeyi tekrarlama (\"*\" * 3 → \"***\")."
+    }
+   ]
+  }
+ },
+ "project_task": {
+  "id": "d1-p",
+  "title": "Karşılama ekranı",
+  "prompt": "Oyunumuzun adı **Piko'nun Macerası**. Oyun açıldığında görünecek karşılama ekranını yaz: oyunun adını ve `Oyuna hoş geldin!` mesajını yazdır. İstersen yıldızlarla süsle.",
+  "starter": "# Piko'nun Macerası: karşılama ekranı\nprint(\"*\" * 30)\n",
+  "solution": "print(\"*\" * 30)\nprint(\"Piko'nun Macerası\")\nprint(\"Oyuna hoş geldin!\")\nprint(\"*\" * 30)\n",
+  "hints": [
+   "İki yeni print() satırı ekle.",
+   "Yazıları tam olarak görevde yazdığı gibi yaz."
+  ],
+  "check": {
+   "output_contains": [
+    "Piko'nun Macerası",
+    "Oyuna hoş geldin!"
+   ]
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "print(\"*\" * 30)",
+     "notes": [
+      "`print(\"*\" * 30)`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 2,
+     "code": "print(\"Piko'nun Macerası\")",
+     "notes": [
+      "`print(\"Piko'nun Macerası\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "print(\"Oyuna hoş geldin!\")",
+     "notes": [
+      "`print(\"Oyuna hoş geldin!\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "print(\"*\" * 30)",
+     "notes": [
+      "`print(\"*\" * 30)`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    },
+    {
+     "term": "*",
+     "kind": "operatör",
+     "desc": "Çarpma; metni ya da listeyi tekrarlama (\"*\" * 3 → \"***\")."
+    }
+   ]
+  }
+ },
+ "available": true,
+ "visual_task": {
+  "id": "d1-v",
+  "title": "Piko ordusu",
+  "prompt": "Her `*` sahnede bir Piko. `print()` ile **3 satır**, her satırda **3 Piko** olan bir ordu diz. Sahnede soluk görünen şekli doldur!",
+  "starter": "print(\"***\")\n",
+  "solution": "print(\"***\")\nprint(\"***\")\nprint(\"***\")\n",
+  "hints": [
+   "Bir satır için print(\"***\") yeterli.",
+   "Alt alta üç satır için üç tane print() yaz."
+  ],
+  "check": {
+   "python": "\ndef _satirlar(text):\n    return [l.rstrip() for l in text.strip(\"\\n\").split(\"\\n\")] if text.strip() else []\n\ns = _satirlar(_output)\nassert len(s) == 3, \"Tam 3 satır yazdırmalısın. Şu an {} satır var.\".format(len(s))\nassert all(r == \"***\" for r in s), \"Her satırda yan yana 3 yıldız olmalı: ***\"\n"
+  },
+  "xp": 40,
+  "scene": {
+   "target": [
+    "***",
+    "***",
+    "***"
+   ]
+  },
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "print(\"***\")",
+     "notes": [
+      "`print(\"***\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 2,
+     "code": "print(\"***\")",
+     "notes": [
+      "`print(\"***\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "print(\"***\")",
+     "notes": [
+      "`print(\"***\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    }
+   ]
+  }
+ },
+ "tracks": {
+  "veri": {
+   "project_task": {
+    "id": "d1-pv",
+    "title": "Rapor başlığı",
+    "prompt": "Bu yolda kendi **Harcama Defteri** programını yazacaksın: harcamalarını kaydedecek, bütçeni izleyecek ve rapor çıkaracak.\n\nİlk parça raporun başlığı. Önce 30 tane `=` işaretinden oluşan bir çizgi, sonra `Harcama Defteri` ve `Aylık rapor hazırlanıyor...` yazdır.",
+    "starter": "# Harcama Defteri: rapor başlığı\n",
+    "solution": "print(\"=\" * 30)\nprint(\"Harcama Defteri\")\nprint(\"Aylık rapor hazırlanıyor...\")\n",
+    "hints": [
+     "Üç tane print() yeterli.",
+     "Çizgi için print(\"=\" * 30) yazabilirsin."
+    ],
+    "check": {
+     "python": "\nassert \"=\" * 30 in _output, \"30 tane = işaretinden oluşan çizgiyi yazdır.\"\nassert \"Harcama Defteri\" in _output, \"Harcama Defteri yazısı çıktıda olmalı.\"\nassert \"Aylık rapor hazırlanıyor...\" in _output, \"Aylık rapor hazırlanıyor... yazısı çıktıda olmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "print(\"=\" * 30)",
+       "notes": [
+        "`print(\"=\" * 30)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "print(\"Harcama Defteri\")",
+       "notes": [
+        "`print(\"Harcama Defteri\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "print(\"Aylık rapor hazırlanıyor...\")",
+       "notes": [
+        "`print(\"Aylık rapor hazırlanıyor...\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "*",
+       "kind": "operatör",
+       "desc": "Çarpma; metni ya da listeyi tekrarlama (\"*\" * 3 → \"***\")."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Rapor başlığı",
+   "game_role": "Program açılınca raporun başlığını yazar."
+  },
+  "otomasyon": {
+   "project_task": {
+    "id": "d1-po",
+    "title": "Asistanın açılışı",
+    "prompt": "Bu yolda kendi **Görev Asistanı** programını yazacaksın: görevlerini düzenleyecek, hatırlatacak ve tekrar eden işleri senin yerine yapacak.\n\nİlk parça açılış mesajı. `Görev Asistanı` ve `Bugünün planı hazırlanıyor...` yazdır, altına 30 tane `-` işaretinden bir çizgi çek.",
+    "starter": "# Görev Asistanı: açılış\n",
+    "solution": "print(\"Görev Asistanı\")\nprint(\"Bugünün planı hazırlanıyor...\")\nprint(\"-\" * 30)\n",
+    "hints": [
+     "Üç tane print() yeterli.",
+     "Çizgi için print(\"-\" * 30)"
+    ],
+    "check": {
+     "python": "\nassert \"Görev Asistanı\" in _output, \"Görev Asistanı yazısı çıktıda olmalı.\"\nassert \"Bugünün planı hazırlanıyor...\" in _output, \"Bugünün planı hazırlanıyor... yazısı çıktıda olmalı.\"\nassert \"-\" * 30 in _output, \"30 tane - işaretinden oluşan çizgiyi yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "print(\"Görev Asistanı\")",
+       "notes": [
+        "`print(\"Görev Asistanı\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "print(\"Bugünün planı hazırlanıyor...\")",
+       "notes": [
+        "`print(\"Bugünün planı hazırlanıyor...\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "print(\"-\" * 30)",
+       "notes": [
+        "`print(\"-\" * 30)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "*",
+       "kind": "operatör",
+       "desc": "Çarpma; metni ya da listeyi tekrarlama (\"*\" * 3 → \"***\")."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Açılış mesajı",
+   "game_role": "Asistan açılınca selam verir."
+  },
+  "web": {
+   "project_task": {
+    "id": "d1-pw",
+    "title": "Site üreticisinin açılışı",
+    "prompt": "Bu yolda kendi **Kişisel Web Sitem** programını yazacaksın: yazılarını HTML sayfalarına çevirecek, menüsünü kuracak ve siteni yayına hazırlayacak küçük bir site üreticisi.\n\nİlk parça açılış mesajı. `Kişisel Web Sitem` ve `Sayfalar hazırlanıyor...` yazdır, altına 30 tane `~` işaretinden bir çizgi çek.",
+    "starter": "# Kişisel Web Sitem: açılış\n",
+    "solution": "print(\"Kişisel Web Sitem\")\nprint(\"Sayfalar hazırlanıyor...\")\nprint(\"~\" * 30)\n",
+    "hints": [
+     "Üç tane print() yeterli.",
+     "Çizgi için print(\"~\" * 30) yazabilirsin."
+    ],
+    "check": {
+     "python": "\nassert \"Kişisel Web Sitem\" in _output, \"Kişisel Web Sitem yazısı çıktıda olmalı.\"\nassert \"Sayfalar hazırlanıyor...\" in _output, \"Sayfalar hazırlanıyor... yazısı çıktıda olmalı.\"\nassert \"~\" * 30 in _output, \"30 tane ~ işaretinden oluşan çizgiyi yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "print(\"Kişisel Web Sitem\")",
+       "notes": [
+        "`print(\"Kişisel Web Sitem\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "print(\"Sayfalar hazırlanıyor...\")",
+       "notes": [
+        "`print(\"Sayfalar hazırlanıyor...\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "print(\"~\" * 30)",
+       "notes": [
+        "`print(\"~\" * 30)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "*",
+       "kind": "operatör",
+       "desc": "Çarpma; metni ya da listeyi tekrarlama (\"*\" * 3 → \"***\")."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Açılış mesajı",
+   "game_role": "Site üreticisi çalışınca açılış mesajını yazar."
+  },
+  "bot": {
+   "project_task": {
+    "id": "d1-pb",
+    "title": "Botun ilk sözleri",
+    "prompt": "Bu yolda kendi **Sohbet Botu**'nu yazacaksın: mesajları anlayan, kurallara göre cevap veren ve konuşmaları hatırlayan küçük bir yapay zekâ asistanı.\n\nİlk parça botun açılış ekranı. Önce 30 tane `-` işaretinden oluşan bir çizgi, sonra `Sohbet Botu çalışıyor...` ve `Bot: Merhaba! Sana nasıl yardım edebilirim?` yazdır.",
+    "starter": "# Sohbet Botu: karşılama ekranı\n",
+    "solution": "print(\"-\" * 30)\nprint(\"Sohbet Botu çalışıyor...\")\nprint(\"Bot: Merhaba! Sana nasıl yardım edebilirim?\")\n",
+    "hints": [
+     "Üç tane print() yeterli.",
+     "Çizgi için print(\"-\" * 30) yazabilirsin."
+    ],
+    "check": {
+     "python": "\nassert \"-\" * 30 in _output, \"30 tane - işaretinden oluşan çizgiyi yazdır.\"\nassert \"Sohbet Botu çalışıyor...\" in _output, \"Sohbet Botu çalışıyor... yazısı çıktıda olmalı.\"\nassert \"Bot: Merhaba! Sana nasıl yardım edebilirim?\" in _output, \"Botun ilk mesajı çıktıda olmalı: Bot: Merhaba! Sana nasıl yardım edebilirim?\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "print(\"-\" * 30)",
+       "notes": [
+        "`print(\"-\" * 30)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "print(\"Sohbet Botu çalışıyor...\")",
+       "notes": [
+        "`print(\"Sohbet Botu çalışıyor...\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "print(\"Bot: Merhaba! Sana nasıl yardım edebilirim?\")",
+       "notes": [
+        "`print(\"Bot: Merhaba! Sana nasıl yardım edebilirim?\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "*",
+       "kind": "operatör",
+       "desc": "Çarpma; metni ya da listeyi tekrarlama (\"*\" * 3 → \"***\")."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Karşılama ekranı",
+   "game_role": "Bot açılınca ilk mesajını yazar."
+  },
+  "okul": {
+   "project_task": {
+    "id": "d1-pn",
+    "title": "Defterin kapağı",
+    "prompt": "Bu yolda kendi **Okul Not Defteri** programını yazacaksın: derslerini ve notlarını tutacak, ortalamanı hesaplayacak, sınavlarını hatırlatacak ve karneni çıkaracak.\n\nİlk parça defterin kapağı. Önce 30 tane `*` işaretinden oluşan bir çizgi, sonra `Okul Not Defteri` ve `Bu dönemin notları yükleniyor...` yazdır.",
+    "starter": "# Okul Not Defteri: kapak\n",
+    "solution": "print(\"*\" * 30)\nprint(\"Okul Not Defteri\")\nprint(\"Bu dönemin notları yükleniyor...\")\n",
+    "hints": [
+     "Üç tane print() yeterli.",
+     "Çizgi için print(\"*\" * 30) yazabilirsin."
+    ],
+    "check": {
+     "python": "\nassert \"*\" * 30 in _output, \"30 tane * işaretinden oluşan çizgiyi yazdır.\"\nassert \"Okul Not Defteri\" in _output, \"Okul Not Defteri yazısı çıktıda olmalı.\"\nassert \"Bu dönemin notları yükleniyor...\" in _output, \"Bu dönemin notları yükleniyor... yazısı çıktıda olmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "print(\"*\" * 30)",
+       "notes": [
+        "`print(\"*\" * 30)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "print(\"Okul Not Defteri\")",
+       "notes": [
+        "`print(\"Okul Not Defteri\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "print(\"Bu dönemin notları yükleniyor...\")",
+       "notes": [
+        "`print(\"Bu dönemin notları yükleniyor...\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "*",
+       "kind": "operatör",
+       "desc": "Çarpma; metni ya da listeyi tekrarlama (\"*\" * 3 → \"***\")."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Defterin kapağı",
+   "game_role": "Program açılınca defterin başlığını yazar."
+  }
+ }
+}

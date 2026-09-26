@@ -1,0 +1,238 @@
+{
+  "kurs": "python",
+  "gun": 27,
+  "baslik": "Python ve MongoDB",
+  "maskot": "piko",
+  "ozet": "Piko, Python Dağı'nın kütüphanesinden yola çıkarak belge tabanlı veritabanı fikrini, MongoDB'nin insert, find ve update işlemlerini ve bunları Python sözlükleriyle canlandırmayı anlatıyor.",
+  "hedef_sure_sn": 160,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 15,
+      "anlatim": "Selam, ben Piko! Python Dağı'nın yamacındaki kütüphanede her oyuncunun bir dosyası var. Kütüphaneci bir isim duyunca doğru dosyayı saniyede buluyor, yeni dosya açıyor, seviyeleri güncelliyor. Bilgisayar dünyasında bu kütüphanecinin adı veritabanı!",
+      "ekran": {
+        "baslik": "Gün 27: Python ve MongoDB",
+        "maddeler": [
+          "Python Dağı",
+          "Belge, koleksiyon, sorgu"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "yonetmen_notu": "Arka plan: Python Dağı bölge görseli (gorseller/python/harita/dag.webp). Dosya repoda henüz yok; eklenince ekran.gorsel alanına yazılmalı. Raflarla dolu bir dağ kütüphanesi; kütüphaneci hızla dosya çeker."
+    },
+    {
+      "no": 2,
+      "tur": "anlatim",
+      "sure_sn": 16,
+      "anlatim": "Program kapanınca değişkenler kaybolur. Binlerce oyuncunun verisini hızla aramak ve güvende tutmak için veritabanı kullanılır. MongoDB bir belge veritabanı: her kayıt bir sözlüğe benzeyen belge, belgeler de koleksiyonlarda toplanır.",
+      "ekran": {
+        "baslik": "Veritabanı nedir?",
+        "maddeler": [
+          "Belge (document): {\"name\": \"Piko\", \"level\": 3}",
+          "Koleksiyon (collection): belgelerin toplandığı yer",
+          "MongoDB = belge veritabanı"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 3,
+      "tur": "anlatim",
+      "sure_sn": 17,
+      "anlatim": "Kendi bilgisayarında pymongo paketiyle gerçek MongoDB'ye bağlanırsın. insert_one ekler, find arar, update_one günceller, delete_one siler. Bu sitede veritabanına bağlanamıyoruz, o yüzden koleksiyonu bir sözlük listesiyle canlandıracağız.",
+      "ekran": {
+        "baslik": "pymongo ile gerçek MongoDB",
+        "kod": "from pymongo import MongoClient\nclient = MongoClient(\"mongodb://localhost:27017\")\ndb = client[\"oyun\"]\n\ndb.players.insert_one({\"name\": \"Piko\", \"level\": 3})\nfor p in db.players.find({\"level\": 3}):\n    print(p[\"name\"])\ndb.players.update_one({\"name\": \"Piko\"}, {\"$set\": {\"level\": 4}})\n",
+        "vurgu_satirlari": [
+          5,
+          6,
+          8
+        ],
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": false,
+      "yonetmen_notu": "Veritabanı sunucusu gerektirdiği için çalıştırılmaz; sadece gerçek kullanımı gösterir."
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "İşte koleksiyonumuz: sözlüklerden oluşan bir liste. Yeni belge eklemek append kadar kolay, yani insert'in ta kendisi. Döngüyle de tüm belgeleri geziyorum.",
+      "ekran": {
+        "baslik": "Koleksiyon ve belgeler",
+        "kod": "players = [\n    {\"name\": \"Piko\", \"level\": 3},\n    {\"name\": \"Ece\", \"level\": 5},\n]\nplayers.append({\"name\": \"Can\", \"level\": 1})\nfor p in players:\n    print(p[\"name\"], \"seviye\", p[\"level\"])\n",
+        "vurgu_satirlari": [
+          5
+        ],
+        "dil": "python",
+        "cikti": "Piko seviye 3\nEce seviye 5\nCan seviye 1"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "anlatim",
+      "sure_sn": 15,
+      "anlatim": "find içindeki sorgu da bir sözlüktür. Seviye üç derse, seviyesi üç olan tüm belgeleri getirir. Belgenin, sorgudaki tüm alanlarla eşleşmesi gerekir. Hepsi doğru mu sorusunu all fonksiyonu tek satırda cevaplar.",
+      "ekran": {
+        "baslik": "Sorgu (query) nedir?",
+        "maddeler": [
+          "find({\"level\": 3})",
+          "Sorgudaki tüm alanlar eşleşmeli",
+          "all(): hepsi doğru mu?",
+          "any(): en az biri doğru mu?"
+        ]
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 6,
+      "tur": "soru",
+      "sure_sn": 10,
+      "anlatim": "Bir belgeyi dört farklı sorguyla deniyorum. Sonuncusu boş bir sorgu. Sence hangileri True, hangileri False çıkar?",
+      "ekran": {
+        "baslik": "Sence ne yazdırır?",
+        "kod": "doc = {\"name\": \"Piko\", \"level\": 3, \"club\": \"mavi\"}\nfor query in [{\"level\": 3}, {\"level\": 3, \"club\": \"mavi\"}, {\"level\": 4}, {}]:\n    ok = all(doc.get(k) == v for k, v in query.items())\n    print(query, \"->\", ok)\n",
+        "vurgu_satirlari": [
+          3
+        ],
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 7,
+      "tur": "cikti",
+      "sure_sn": 12,
+      "anlatim": "Seviye dört eşleşmedi, o yüzden False. Boş sorgunun kontrol edecek hiç alanı yok, all da boşsa True verir. Yani boş sorgu her belgeye uyar ve hepsini getirir.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "doc = {\"name\": \"Piko\", \"level\": 3, \"club\": \"mavi\"}\nfor query in [{\"level\": 3}, {\"level\": 3, \"club\": \"mavi\"}, {\"level\": 4}, {}]:\n    ok = all(doc.get(k) == v for k, v in query.items())\n    print(query, \"->\", ok)\n",
+        "dil": "python",
+        "cikti": "{'level': 3} -> True\n{'level': 3, 'club': 'mavi'} -> True\n{'level': 4} -> False\n{} -> True"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "kod",
+      "sure_sn": 13,
+      "anlatim": "Güncelleme için Piko'yu bulup update ile yeni değerleri yazıyorum. break de ilk eşleşmeden sonra aramayı bitiriyor, tıpkı update_one gibi.",
+      "ekran": {
+        "baslik": "Güncelleme",
+        "kod": "players = [{\"name\": \"Piko\", \"level\": 3}, {\"name\": \"Ece\", \"level\": 5}]\nfor p in players:\n    if p[\"name\"] == \"Piko\":\n        p.update({\"level\": 4})\n        break\nprint(players)\n",
+        "vurgu_satirlari": [
+          4,
+          5
+        ],
+        "dil": "python",
+        "cikti": "[{'name': 'Piko', 'level': 4}, {'name': 'Ece', 'level': 5}]"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "hata",
+      "sure_sn": 12,
+      "anlatim": "Sık hata: bazı belgelerde olmayan bir alanı köşeli parantezle okumak. Belgelerin alanları farklı olabilir, Python KeyError verir. Güvenli okumak için get kullan.",
+      "ekran": {
+        "baslik": "Sık hata: eksik alan",
+        "kod": "players = [{\"name\": \"Piko\", \"level\": 3}, {\"name\": \"Can\"}]\nfor p in players:\n    print(p[\"name\"], p[\"level\"])\n",
+        "vurgu_satirlari": [
+          3
+        ],
+        "cikti": "Piko 3\nKeyError: 'level'",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "uzgun",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 10,
+      "tur": "gorev",
+      "sure_sn": 13,
+      "anlatim": "Görevlerde kendi insert_one, find ve update_one fonksiyonlarını yazacaksın. Yani MongoDB'nin içini sen kuruyorsun! Projede de oyuncu ekleyip seviye atlatıyorsun.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: insert_one",
+          "Görev 2: find",
+          "Görev 3: update_one",
+          "Challenge: $gt işareti",
+          "Proje: Oyuncu veritabanı"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "ozet",
+      "sure_sn": 11,
+      "anlatim": "Özetle: MongoDB'de belgeler sözlük gibidir ve koleksiyonlarda toplanır. Sorguyla bulunur, update ile güncellenir, delete ile silinir.",
+      "ekran": {
+        "baslik": "Bugün öğrendiklerin",
+        "maddeler": [
+          "Belge ve koleksiyon",
+          "insert, find, update, delete",
+          "Sorgu eşleşmesi: all()"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 12,
+      "tur": "kapanis",
+      "sure_sn": 12,
+      "anlatim": "Kütüphanenin yeni ustası sensin! Yarın kamp evindeki telsize geçiyoruz. Programların birbiriyle konuştuğu API'leri ve JSON yanıtlarını okumayı öğreneceğiz. Görüşürüz!",
+      "ekran": {
+        "baslik": "Yarın: API kullanmak",
+        "maddeler": [
+          "API nedir?",
+          "JSON ve durum kodları"
+        ]
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

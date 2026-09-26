@@ -1,0 +1,1193 @@
+{
+ "day": 7,
+ "title": "Set'ler",
+ "region": "orman",
+ "project_contribution": "Keşfedilen yerler",
+ "game_role": "Yeni bir bölgeye girince keşfettiğin yerler listelenir.",
+ "xp_complete": 150,
+ "objective": "Tekrarsız koleksiyonlar olan set'leri kullanmak ve küme işlemleri yapmak",
+ "story": "Piko ormanda dolaşırken aynı yerlerden defalarca geçti. Haritasına her geçişi yazarsa sayfa dolacak! Aslında ona sadece **hangi yerleri gördüğü** lazım, kaç kez gördüğü değil. Bugün tekrarları kendiliğinden atan **set**'lerle tanışıyoruz.",
+ "sections": [
+  {
+   "title": "Set nedir?",
+   "body": "Set, **süslü parantezle** yazılan ve içinde **aynı eleman iki kez bulunamayan** bir koleksiyondur. Elemanların bir sırası yoktur.\n\n```python\nplaces = {\"kamp\", \"köy\", \"kamp\"}\nprint(places)       # {'kamp', 'köy'}  (sıra değişebilir)\nprint(len(places))  # 2\n```\n\nBoş set oluşturmak için `set()` yazılır. `{}` yazarsan boş bir sözlük (dictionary) olur."
+  },
+  {
+   "title": "Listeden tekrarları atmak",
+   "body": "Bir listeyi `set()` içine koyarsan tekrarlar kaybolur:\n\n```python\nvisits = [\"orman\", \"köy\", \"orman\", \"kamp\"]\nunique = set(visits)\nprint(len(unique))  # 3\n```\n\nSonucu sıralı görmek istersen `sorted(unique)` kullan; sana alfabetik bir liste verir."
+  },
+  {
+   "title": "Ekle ve çıkar",
+   "body": "- `places.add(\"liman\")` bir eleman ekler (zaten varsa bir şey olmaz)\n- `places.remove(\"kamp\")` siler, eleman yoksa hata verir\n- `places.discard(\"kamp\")` siler, eleman yoksa sessizce geçer\n- `\"köy\" in places` var mı diye sorar ve çok hızlıdır"
+  },
+  {
+   "title": "Küme işlemleri",
+   "body": "Matematikteki kümeler gibi iki set'i karşılaştırabilirsin:\n\n- `a | b` birleşim: ikisindeki her şey\n- `a & b` kesişim: ikisinde de olanlar\n- `a - b` fark: a'da olup b'de olmayanlar\n- `a <= b` a'nın her elemanı b'de var mı?\n\nAynı işlemlerin kelime halleri de var: `a.union(b)`, `a.intersection(b)`, `a.difference(b)`."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Tekrarlar gitti",
+   "code": "visits = [\"orman\", \"köy\", \"orman\", \"kamp\", \"köy\"]\nunique = set(visits)\nprint(len(visits), \"ziyaret\")\nprint(len(unique), \"farklı yer\")\nprint(sorted(unique))\n",
+   "note": ""
+  },
+  {
+   "title": "Ekle ve çıkar",
+   "code": "bag = {\"kılıç\", \"iksir\"}\nbag.add(\"harita\")\nbag.add(\"iksir\")\nbag.discard(\"kılıç\")\nprint(sorted(bag))\nprint(\"iksir\" in bag)\n",
+   "note": "İksiri iki kez eklemeye çalıştık ama set'te bir tane var."
+  },
+  {
+   "title": "Arkadaşların oyunları",
+   "code": "ali = {\"satranç\", \"saklambaç\", \"futbol\"}\nece = {\"futbol\", \"satranç\", \"yüzme\"}\nprint(\"İkisi de:\", sorted(ali & ece))\nprint(\"Hepsi:\", sorted(ali | ece))\nprint(\"Sadece Ali:\", sorted(ali - ece))\n",
+   "note": ""
+  }
+ ],
+ "tasks": [
+  {
+   "id": "d7-t1",
+   "title": "Tekrarları sil",
+   "prompt": "`visits` listesinden tekrarsız bir set yap ve adını `unique` koy. Sonra kaç farklı yer olduğunu yazdır: `3 farklı yer`",
+   "starter": "visits = [\"orman\", \"köy\", \"orman\", \"kamp\", \"köy\"]\n\n# unique adında bir set oluştur\n\n# Kaç farklı yer olduğunu yazdır\n",
+   "solution": "visits = [\"orman\", \"köy\", \"orman\", \"kamp\", \"köy\"]\n\nunique = set(visits)\n\nprint(f\"{len(unique)} farklı yer\")\n",
+   "hints": [
+    "set(visits) tekrarları atar.",
+    "print(f\"{len(unique)} farklı yer\")"
+   ],
+   "check": {
+    "python": "\ntest = [\"liman\", \"dağ\", \"liman\", \"ada\", \"dağ\", \"kale\"]\nout, g = _run(_set(_code, \"visits\", test))\nassert isinstance(g.get(\"unique\"), set), \"unique bir set olmalı: set(visits)\"\nassert g[\"unique\"] == set(test), \"unique, visits'teki farklı yerleri içermeli.\"\nassert \"4 farklı yer\" in out, \"Farklı yer sayısını len(unique) ile yazdır.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "visits = [\"orman\", \"köy\", \"orman\", \"kamp\", \"köy\"]",
+      "notes": [
+       "`visits` adında bir değişken oluşturuluyor ve içine `[\"orman\", \"köy\", \"orman\", \"kamp\", \"köy\"]` (liste) konuyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "unique = set(visits)",
+      "notes": [
+       "`unique` adında bir değişken oluşturuluyor ve içine `set(visits)` konuyor."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "print(f\"{len(unique)} farklı yer\")",
+      "notes": [
+       "`print(f\"{len(unique)} farklı yer\")`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "visits",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `[\"orman\", \"köy\", \"orman\", \"kamp\", \"köy\"]`."
+     },
+     {
+      "term": "unique",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `set(visits)`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "set()",
+      "kind": "fonksiyon",
+      "desc": "Bir değerden set (tekrarsız küme) oluşturur."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     },
+     {
+      "term": "f\"...{}\"",
+      "kind": "metin",
+      "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+     },
+     {
+      "term": "len()",
+      "kind": "fonksiyon",
+      "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d7-t2",
+   "title": "Yeni yer keşfet",
+   "prompt": "`explored` set'ine `\"orman\"` ekle ve `\"kamp\"` yerini çıkar. Sonra sıralı halini yazdır.",
+   "starter": "explored = {\"kamp\", \"köy\"}\n\n# \"orman\" ekle, \"kamp\" çıkar\n\nprint(sorted(explored))\n",
+   "solution": "explored = {\"kamp\", \"köy\"}\n\nexplored.add(\"orman\")\nexplored.discard(\"kamp\")\n\nprint(sorted(explored))\n",
+   "hints": [
+    "Eklemek için add(), çıkarmak için discard() ya da remove()"
+   ],
+   "check": {
+    "python": "\n_, g = _run(_set(_code, \"explored\", {\"kamp\", \"liman\"}))\nassert g.get(\"explored\") == {\"liman\", \"orman\"}, \"explored'a 'orman' eklenmeli, 'kamp' çıkarılmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "explored = {\"kamp\", \"köy\"}",
+      "notes": [
+       "`explored` adında bir değişken oluşturuluyor ve içine `{\"kamp\", \"köy\"}` (set (tekrarsız küme)) konuyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "explored.add(\"orman\")",
+      "notes": [
+       "`explored.add(\"orman\")`: `explored` üzerinde `add` metodunu çalıştırır. Sete yeni bir eleman ekler."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "explored.discard(\"kamp\")",
+      "notes": [
+       "`explored.discard(\"kamp\")`: `explored` üzerinde `discard` metodunu çalıştırır. Setten elemanı çıkarır; yoksa hata vermez."
+      ]
+     },
+     {
+      "n": 6,
+      "code": "print(sorted(explored))",
+      "notes": [
+       "`print(sorted(explored))`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "explored",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"kamp\", \"köy\"}`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": ".add()",
+      "kind": "metot",
+      "desc": "Sete yeni bir eleman ekler."
+     },
+     {
+      "term": ".discard()",
+      "kind": "metot",
+      "desc": "Setten elemanı çıkarır; yoksa hata vermez."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     },
+     {
+      "term": "sorted()",
+      "kind": "fonksiyon",
+      "desc": "Sıralanmış yeni bir liste verir; asıl liste değişmez."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d7-t3",
+   "title": "Ortak oyunlar",
+   "prompt": "`both` iki arkadaşın **ortak** oyunları, `all_games` ise ikisinin **tüm** oyunları olsun.",
+   "starter": "ali = {\"satranç\", \"saklambaç\", \"futbol\"}\nece = {\"futbol\", \"satranç\", \"yüzme\"}\n\nboth = set()        # ortak oyunlar\nall_games = set()   # tüm oyunlar\n\nprint(sorted(both))\nprint(sorted(all_games))\n",
+   "solution": "ali = {\"satranç\", \"saklambaç\", \"futbol\"}\nece = {\"futbol\", \"satranç\", \"yüzme\"}\n\nboth = ali & ece\nall_games = ali | ece\n\nprint(sorted(both))\nprint(sorted(all_games))\n",
+   "hints": [
+    "Kesişim için &, birleşim için | kullan."
+   ],
+   "check": {
+    "python": "\na = {\"top\", \"ip\", \"lego\"}\nb = {\"lego\", \"boya\"}\n_, g = _run(_set(_set(_code, \"ali\", a), \"ece\", b))\nassert g.get(\"both\") == {\"lego\"}, \"both kesişim olmalı: ali & ece\"\nassert g.get(\"all_games\") == {\"top\", \"ip\", \"lego\", \"boya\"}, \"all_games birleşim olmalı: ali | ece\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "ali = {\"satranç\", \"saklambaç\", \"futbol\"}",
+      "notes": [
+       "`ali` adında bir değişken oluşturuluyor ve içine `{\"satranç\", \"saklambaç\", \"futbol\"}` (set (tekrarsız küme)) konuyor."
+      ]
+     },
+     {
+      "n": 2,
+      "code": "ece = {\"futbol\", \"satranç\", \"yüzme\"}",
+      "notes": [
+       "`ece` adında bir değişken oluşturuluyor ve içine `{\"futbol\", \"satranç\", \"yüzme\"}` (set (tekrarsız küme)) konuyor."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "both = ali & ece",
+      "notes": [
+       "`both` adında bir değişken oluşturuluyor ve içine `ali & ece` konuyor."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "all_games = ali | ece",
+      "notes": [
+       "`all_games` adında bir değişken oluşturuluyor ve içine `ali | ece` konuyor."
+      ]
+     },
+     {
+      "n": 7,
+      "code": "print(sorted(both))",
+      "notes": [
+       "`print(sorted(both))`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     },
+     {
+      "n": 8,
+      "code": "print(sorted(all_games))",
+      "notes": [
+       "`print(sorted(all_games))`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "ali",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"satranç\", \"saklambaç\", \"futbol\"}`."
+     },
+     {
+      "term": "ece",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"futbol\", \"satranç\", \"yüzme\"}`."
+     },
+     {
+      "term": "both",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `ali & ece`."
+     },
+     {
+      "term": "all_games",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `ali | ece`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "&",
+      "kind": "operatör",
+      "desc": "Setlerde kesişim: iki kümede de olanlar."
+     },
+     {
+      "term": "|",
+      "kind": "operatör",
+      "desc": "Setlerde birleşim: iki kümedeki her şey."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     },
+     {
+      "term": "sorted()",
+      "kind": "fonksiyon",
+      "desc": "Sıralanmış yeni bir liste verir; asıl liste değişmez."
+     }
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "id": "d7-c",
+  "title": "Eksik rozetler",
+  "prompt": "`missing` henüz kazanılmamış rozetler olsun. Sonra `Eksik: [...]` şeklinde sıralı yazdır. Hepsi kazanıldıysa `Hepsi tamam!` yazdır.",
+  "starter": "all_badges = {\"İlk Adım\", \"İlk Kod\", \"5 Gün\", \"Python Dostu\"}\nearned = {\"İlk Adım\", \"İlk Kod\"}\n\n# missing = ?\n\n# missing boşsa \"Hepsi tamam!\", değilse \"Eksik: [...]\"\n",
+  "solution": "all_badges = {\"İlk Adım\", \"İlk Kod\", \"5 Gün\", \"Python Dostu\"}\nearned = {\"İlk Adım\", \"İlk Kod\"}\n\nmissing = all_badges - earned\n\nif len(missing) == 0:\n    print(\"Hepsi tamam!\")\nelse:\n    print(f\"Eksik: {sorted(missing)}\")\n",
+  "hints": [
+   "Fark için - kullan: all_badges - earned",
+   "Boş mu diye len(missing) == 0 ile bakabilirsin."
+  ],
+  "check": {
+   "python": "\nout, g = _run(_set(_set(_code, \"all_badges\", {\"A\", \"B\", \"C\"}), \"earned\", {\"B\"}))\nassert g.get(\"missing\") == {\"A\", \"C\"}, \"missing = all_badges - earned olmalı.\"\nassert \"Eksik: ['A', 'C']\" in out, \"Eksik rozetleri sorted() ile sıralı yazdır.\"\nout, g = _run(_set(_set(_code, \"all_badges\", {\"A\", \"B\"}), \"earned\", {\"A\", \"B\"}))\nassert \"Hepsi tamam!\" in out, \"Eksik rozet kalmayınca 'Hepsi tamam!' yazmalı.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "all_badges = {\"İlk Adım\", \"İlk Kod\", \"5 Gün\", \"Python Dostu\"}",
+     "notes": [
+      "`all_badges` adında bir değişken oluşturuluyor ve içine `{\"İlk Adım\", \"İlk Kod\", \"5 Gün\", \"Python Dostu\"}` (set (tekrarsız küme)) konuyor."
+     ]
+    },
+    {
+     "n": 2,
+     "code": "earned = {\"İlk Adım\", \"İlk Kod\"}",
+     "notes": [
+      "`earned` adında bir değişken oluşturuluyor ve içine `{\"İlk Adım\", \"İlk Kod\"}` (set (tekrarsız küme)) konuyor."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "missing = all_badges - earned",
+     "notes": [
+      "`missing` adında bir değişken oluşturuluyor ve içine `all_badges - earned` konuyor."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "if len(missing) == 0:",
+     "notes": [
+      "Koşul: `len(missing) == 0` doğruysa altındaki girintili satırlar çalışır."
+     ]
+    },
+    {
+     "n": 7,
+     "code": "    print(\"Hepsi tamam!\")",
+     "notes": [
+      "`print(\"Hepsi tamam!\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 8,
+     "code": "else:",
+     "notes": [
+      "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+     ]
+    },
+    {
+     "n": 9,
+     "code": "    print(f\"Eksik: {sorted(missing)}\")",
+     "notes": [
+      "`print(f\"Eksik: {sorted(missing)}\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "all_badges",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"İlk Adım\", \"İlk Kod\", \"5 Gün\", \"Python Dostu\"}`."
+    },
+    {
+     "term": "earned",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"İlk Adım\", \"İlk Kod\"}`."
+    },
+    {
+     "term": "missing",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `all_badges - earned`."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "-",
+     "kind": "operatör",
+     "desc": "Çıkarma."
+    },
+    {
+     "term": "if",
+     "kind": "anahtar kelime",
+     "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+    },
+    {
+     "term": "==",
+     "kind": "operatör",
+     "desc": "Eşit mi? (True/False)"
+    },
+    {
+     "term": "len()",
+     "kind": "fonksiyon",
+     "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    },
+    {
+     "term": "else",
+     "kind": "anahtar kelime",
+     "desc": "Yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+    },
+    {
+     "term": "f\"...{}\"",
+     "kind": "metin",
+     "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+    },
+    {
+     "term": "sorted()",
+     "kind": "fonksiyon",
+     "desc": "Sıralanmış yeni bir liste verir; asıl liste değişmez."
+    }
+   ]
+  }
+ },
+ "project_task": {
+  "id": "d7-p",
+  "title": "Keşfedilen yerler",
+  "prompt": "Piko'nun gezdiği yerler `route` listesinde, daha önce bildiği yerler `known` set'inde.\n\n- `visited`: gezdiği farklı yerler (set)\n- `new_places`: gezdiği ama daha önce bilmediği yerler\n\nSonra şöyle yazdır:\n\n```\n4 farklı yer gezildi\nYeni keşifler: ['liman', 'mağara']\n```",
+  "starter": "route = [\"kamp\", \"köy\", \"mağara\", \"köy\", \"liman\", \"kamp\"]\nknown = {\"kamp\", \"köy\"}\n\n# visited ve new_places\n\n# İki satırı yazdır\n",
+  "solution": "route = [\"kamp\", \"köy\", \"mağara\", \"köy\", \"liman\", \"kamp\"]\nknown = {\"kamp\", \"köy\"}\n\nvisited = set(route)\nnew_places = visited - known\n\nprint(f\"{len(visited)} farklı yer gezildi\")\nprint(f\"Yeni keşifler: {sorted(new_places)}\")\n",
+  "hints": [
+   "visited = set(route)",
+   "Yeni yerler için fark: visited - known"
+  ],
+  "check": {
+   "python": "\nout, g = _run(_set(_set(_code, \"route\", [\"ada\", \"dağ\", \"ada\", \"orman\"]), \"known\", {\"orman\"}))\nassert g.get(\"visited\") == {\"ada\", \"dağ\", \"orman\"}, \"visited = set(route) olmalı.\"\nassert g.get(\"new_places\") == {\"ada\", \"dağ\"}, \"new_places = visited - known olmalı.\"\nassert \"3 farklı yer gezildi\" in out, \"Farklı yer sayısını yazdır.\"\nassert \"Yeni keşifler: ['ada', 'dağ']\" in out, \"Yeni keşifleri sorted() ile yazdır.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "route = [\"kamp\", \"köy\", \"mağara\", \"köy\", \"liman\", \"kamp\"]",
+     "notes": [
+      "`route` adında bir değişken oluşturuluyor ve içine `[\"kamp\", \"köy\", \"mağara\", \"köy\", \"liman\", \"kamp\"]` (liste) konuyor."
+     ]
+    },
+    {
+     "n": 2,
+     "code": "known = {\"kamp\", \"köy\"}",
+     "notes": [
+      "`known` adında bir değişken oluşturuluyor ve içine `{\"kamp\", \"köy\"}` (set (tekrarsız küme)) konuyor."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "visited = set(route)",
+     "notes": [
+      "`visited` adında bir değişken oluşturuluyor ve içine `set(route)` konuyor."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "new_places = visited - known",
+     "notes": [
+      "`new_places` adında bir değişken oluşturuluyor ve içine `visited - known` konuyor."
+     ]
+    },
+    {
+     "n": 7,
+     "code": "print(f\"{len(visited)} farklı yer gezildi\")",
+     "notes": [
+      "`print(f\"{len(visited)} farklı yer gezildi\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 8,
+     "code": "print(f\"Yeni keşifler: {sorted(new_places)}\")",
+     "notes": [
+      "`print(f\"Yeni keşifler: {sorted(new_places)}\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "route",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `[\"kamp\", \"köy\", \"mağara\", \"köy\", \"liman\", \"kamp\"]`."
+    },
+    {
+     "term": "known",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"kamp\", \"köy\"}`."
+    },
+    {
+     "term": "visited",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `set(route)`."
+    },
+    {
+     "term": "new_places",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `visited - known`."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "set()",
+     "kind": "fonksiyon",
+     "desc": "Bir değerden set (tekrarsız küme) oluşturur."
+    },
+    {
+     "term": "-",
+     "kind": "operatör",
+     "desc": "Çıkarma."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    },
+    {
+     "term": "f\"...{}\"",
+     "kind": "metin",
+     "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+    },
+    {
+     "term": "len()",
+     "kind": "fonksiyon",
+     "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+    },
+    {
+     "term": "sorted()",
+     "kind": "fonksiyon",
+     "desc": "Sıralanmış yeni bir liste verir; asıl liste değişmez."
+    }
+   ]
+  }
+ },
+ "available": true,
+ "tracks": {
+  "veri": {
+   "project_task": {
+    "id": "d7-pv",
+    "title": "Farklı kategoriler",
+    "prompt": "Bu ayki harcamaların kategorileri `month` listesinde, geçen ay kullandıkların `known` set'inde.\n\n- `categories`: bu ayki farklı kategoriler (set)\n- `new_categories`: bu ay ilk kez harcama yaptığın kategoriler\n\nSonra şöyle yazdır:\n\n```\n4 farklı kategori\nYeni: ['kitap', 'sinema']\n```\n\nYeni kategorileri `sorted()` ile alfabetik yazdır.",
+    "starter": "month = [\"market\", \"kira\", \"market\", \"sinema\", \"kitap\", \"kira\"]\nknown = {\"market\", \"kira\", \"ulaşım\"}\n",
+    "solution": "month = [\"market\", \"kira\", \"market\", \"sinema\", \"kitap\", \"kira\"]\nknown = {\"market\", \"kira\", \"ulaşım\"}\ncategories = set(month)\nnew_categories = categories - known\nprint(len(categories), \"farklı kategori\")\nprint(\"Yeni:\", sorted(new_categories))\n",
+    "hints": [
+     "set(month) tekrarları atar.",
+     "Fark için: categories - known"
+    ],
+    "check": {
+     "python": "\nout, g = _run(_set(_set(_code, \"month\", [\"a\", \"b\", \"a\", \"c\"]), \"known\", {\"b\"}))\nassert g.get(\"categories\") == {\"a\", \"b\", \"c\"}, \"categories = set(month) olmalı.\"\nassert g.get(\"new_categories\") == {\"a\", \"c\"}, \"new_categories = categories - known olmalı.\"\nassert \"3 farklı kategori\" in out, \"Kaç farklı kategori olduğunu yazdır.\"\nassert \"Yeni: ['a', 'c']\" in out, \"Yeni kategorileri sorted() ile yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "month = [\"market\", \"kira\", \"market\", \"sinema\", \"kitap\", \"kira\"]",
+       "notes": [
+        "`month` adında bir değişken oluşturuluyor ve içine `[\"market\", \"kira\", \"market\", \"sinema\", \"kitap\", \"kira\"]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "known = {\"market\", \"kira\", \"ulaşım\"}",
+       "notes": [
+        "`known` adında bir değişken oluşturuluyor ve içine `{\"market\", \"kira\", \"ulaşım\"}` (set (tekrarsız küme)) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "categories = set(month)",
+       "notes": [
+        "`categories` adında bir değişken oluşturuluyor ve içine `set(month)` konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "new_categories = categories - known",
+       "notes": [
+        "`new_categories` adında bir değişken oluşturuluyor ve içine `categories - known` konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "print(len(categories), \"farklı kategori\")",
+       "notes": [
+        "`print(len(categories), \"farklı kategori\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "print(\"Yeni:\", sorted(new_categories))",
+       "notes": [
+        "`print(\"Yeni:\", sorted(new_categories))`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "month",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[\"market\", \"kira\", \"market\", \"sinema\", \"kitap\", \"kira\"]`."
+      },
+      {
+       "term": "known",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"market\", \"kira\", \"ulaşım\"}`."
+      },
+      {
+       "term": "categories",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `set(month)`."
+      },
+      {
+       "term": "new_categories",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `categories - known`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "set()",
+       "kind": "fonksiyon",
+       "desc": "Bir değerden set (tekrarsız küme) oluşturur."
+      },
+      {
+       "term": "-",
+       "kind": "operatör",
+       "desc": "Çıkarma."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      },
+      {
+       "term": "sorted()",
+       "kind": "fonksiyon",
+       "desc": "Sıralanmış yeni bir liste verir; asıl liste değişmez."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Kategoriler",
+   "game_role": "Bu ay hangi kategorilerde harcama yapıldığını bulur."
+  },
+  "otomasyon": {
+   "project_task": {
+    "id": "d7-po",
+    "title": "Kalan görevler",
+    "prompt": "Bütün görevler `all_tasks`, bugün bitirdiklerin `done` set'inde.\n\n- `remaining`: henüz bitmemiş görevler (set farkı)\n- `extra`: `done` içinde olup listede olmayan (planda olmayan ama yaptığın) işler\n\nSonra şöyle yazdır (alfabetik, `sorted()` ile):\n\n```\n2 görev kaldı: ['Rapor yaz', 'Spor']\nPlan dışı: ['Bulaşık']\n```",
+    "starter": "all_tasks = {\"Kahve\", \"Rapor yaz\", \"Spor\", \"E-postaları oku\"}\ndone = {\"Kahve\", \"E-postaları oku\", \"Bulaşık\"}\n",
+    "solution": "all_tasks = {\"Kahve\", \"Rapor yaz\", \"Spor\", \"E-postaları oku\"}\ndone = {\"Kahve\", \"E-postaları oku\", \"Bulaşık\"}\nremaining = all_tasks - done\nextra = done - all_tasks\nprint(f\"{len(remaining)} görev kaldı: {sorted(remaining)}\")\nprint(f\"Plan dışı: {sorted(extra)}\")\n",
+    "hints": [
+     "Fark: all_tasks - done",
+     "Plan dışı işler için tersi: done - all_tasks"
+    ],
+    "check": {
+     "python": "\nout, g = _run(_set(_set(_code, \"all_tasks\", {\"a\", \"b\", \"c\"}), \"done\", {\"b\", \"z\"}))\nassert g.get(\"remaining\") == {\"a\", \"c\"}, \"remaining = all_tasks - done olmalı.\"\nassert g.get(\"extra\") == {\"z\"}, \"extra = done - all_tasks olmalı.\"\nassert \"2 görev kaldı: ['a', 'c']\" in out, \"Kalan görevleri sorted() ile yazdır.\"\nassert \"Plan dışı: ['z']\" in out, \"Plan dışı işleri yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "all_tasks = {\"Kahve\", \"Rapor yaz\", \"Spor\", \"E-postaları oku\"}",
+       "notes": [
+        "`all_tasks` adında bir değişken oluşturuluyor ve içine `{\"Kahve\", \"Rapor yaz\", \"Spor\", \"E-postaları oku\"}` (set (tekrarsız küme)) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "done = {\"Kahve\", \"E-postaları oku\", \"Bulaşık\"}",
+       "notes": [
+        "`done` adında bir değişken oluşturuluyor ve içine `{\"Kahve\", \"E-postaları oku\", \"Bulaşık\"}` (set (tekrarsız küme)) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "remaining = all_tasks - done",
+       "notes": [
+        "`remaining` adında bir değişken oluşturuluyor ve içine `all_tasks - done` konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "extra = done - all_tasks",
+       "notes": [
+        "`extra` adında bir değişken oluşturuluyor ve içine `done - all_tasks` konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "print(f\"{len(remaining)} görev kaldı: {sorted(remaining)}\")",
+       "notes": [
+        "`print(f\"{len(remaining)} görev kaldı: {sorted(remaining)}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "print(f\"Plan dışı: {sorted(extra)}\")",
+       "notes": [
+        "`print(f\"Plan dışı: {sorted(extra)}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "all_tasks",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"Kahve\", \"Rapor yaz\", \"Spor\", \"E-postaları oku\"}`."
+      },
+      {
+       "term": "done",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"Kahve\", \"E-postaları oku\", \"Bulaşık\"}`."
+      },
+      {
+       "term": "remaining",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `all_tasks - done`."
+      },
+      {
+       "term": "extra",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `done - all_tasks`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "-",
+       "kind": "operatör",
+       "desc": "Çıkarma."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      },
+      {
+       "term": "sorted()",
+       "kind": "fonksiyon",
+       "desc": "Sıralanmış yeni bir liste verir; asıl liste değişmez."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Kalan görevler",
+   "game_role": "Bitenleri çıkarıp kalan görevleri bulur."
+  },
+  "web": {
+   "project_task": {
+    "id": "d7-pw",
+    "title": "Etiket bulutu",
+    "prompt": "Yazılarına etiketler koyuyorsun: hepsi `post_tags` listesinde (tekrarlı). Menüde görünen etiketler `menu_tags` set'inde.\n\n- `tags`: farklı etiketler (set)\n- `missing`: yazılarda olan ama menüde olmayan etiketler\n- `empty`: menüde olan ama hiçbir yazıda kullanılmayan etiketler\n\nSonra şöyle yazdır (set'leri `sorted()` ile alfabetik):\n\n```\n4 farklı etiket\nMenüye ekle: ['notlar', 'oyun']\nBoş etiket: ['müzik']\n```",
+    "starter": "post_tags = [\"python\", \"oyun\", \"python\", \"web\", \"notlar\", \"web\"]\nmenu_tags = {\"python\", \"web\", \"müzik\"}\n",
+    "solution": "post_tags = [\"python\", \"oyun\", \"python\", \"web\", \"notlar\", \"web\"]\nmenu_tags = {\"python\", \"web\", \"müzik\"}\ntags = set(post_tags)\nmissing = tags - menu_tags\nempty = menu_tags - tags\nprint(len(tags), \"farklı etiket\")\nprint(\"Menüye ekle:\", sorted(missing))\nprint(\"Boş etiket:\", sorted(empty))\n",
+    "hints": [
+     "set(post_tags) tekrarları atar.",
+     "Fark için: tags - menu_tags ve menu_tags - tags"
+    ],
+    "check": {
+     "python": "\nout, g = _run(_set(_set(_code, \"post_tags\", [\"a\", \"b\", \"a\", \"c\"]), \"menu_tags\", {\"b\", \"d\"}))\nassert g.get(\"tags\") == {\"a\", \"b\", \"c\"}, \"tags = set(post_tags) olmalı.\"\nassert g.get(\"missing\") == {\"a\", \"c\"}, \"missing = tags - menu_tags olmalı.\"\nassert g.get(\"empty\") == {\"d\"}, \"empty = menu_tags - tags olmalı.\"\nassert \"3 farklı etiket\" in out, \"Kaç farklı etiket olduğunu yazdır.\"\nassert \"Menüye ekle: ['a', 'c']\" in out and \"Boş etiket: ['d']\" in out, \"missing ve empty'yi sorted() ile yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "post_tags = [\"python\", \"oyun\", \"python\", \"web\", \"notlar\", \"web\"]",
+       "notes": [
+        "`post_tags` adında bir değişken oluşturuluyor ve içine `[\"python\", \"oyun\", \"python\", \"web\", \"notlar\", \"web\"]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "menu_tags = {\"python\", \"web\", \"müzik\"}",
+       "notes": [
+        "`menu_tags` adında bir değişken oluşturuluyor ve içine `{\"python\", \"web\", \"müzik\"}` (set (tekrarsız küme)) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "tags = set(post_tags)",
+       "notes": [
+        "`tags` adında bir değişken oluşturuluyor ve içine `set(post_tags)` konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "missing = tags - menu_tags",
+       "notes": [
+        "`missing` adında bir değişken oluşturuluyor ve içine `tags - menu_tags` konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "empty = menu_tags - tags",
+       "notes": [
+        "`empty` adında bir değişken oluşturuluyor ve içine `menu_tags - tags` konuyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "print(len(tags), \"farklı etiket\")",
+       "notes": [
+        "`print(len(tags), \"farklı etiket\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "print(\"Menüye ekle:\", sorted(missing))",
+       "notes": [
+        "`print(\"Menüye ekle:\", sorted(missing))`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "print(\"Boş etiket:\", sorted(empty))",
+       "notes": [
+        "`print(\"Boş etiket:\", sorted(empty))`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "post_tags",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[\"python\", \"oyun\", \"python\", \"web\", \"notlar\", \"web\"]`."
+      },
+      {
+       "term": "menu_tags",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"python\", \"web\", \"müzik\"}`."
+      },
+      {
+       "term": "tags",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `set(post_tags)`."
+      },
+      {
+       "term": "missing",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `tags - menu_tags`."
+      },
+      {
+       "term": "empty",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `menu_tags - tags`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "set()",
+       "kind": "fonksiyon",
+       "desc": "Bir değerden set (tekrarsız küme) oluşturur."
+      },
+      {
+       "term": "-",
+       "kind": "operatör",
+       "desc": "Çıkarma."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      },
+      {
+       "term": "sorted()",
+       "kind": "fonksiyon",
+       "desc": "Sıralanmış yeni bir liste verir; asıl liste değişmez."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Etiketler",
+   "game_role": "Yazılardaki farklı etiketleri bulur, menüyle karşılaştırır."
+  },
+  "bot": {
+   "project_task": {
+    "id": "d7-pb",
+    "title": "Bilinmeyen kelimeler",
+    "prompt": "Bot bazı kelimeleri tanıyor (`known` set'i). Kullanıcının mesajındaki kelimelerden hangilerini tanıyor, hangilerini tanımıyor?\n\n- `words`: mesajdaki farklı kelimeler (`set(message.split())`)\n- `matched`: botun tanıdığı kelimeler (kesişim)\n- `unknown`: botun tanımadığı kelimeler (fark)\n\nSonra şöyle yazdır (set'leri `sorted()` ile sıralayarak):\n\n```\n5 farklı kelime\nTanıdık: ['hava', 'merhaba']\nBilinmeyen: ['mı', 'sıcak', 'yarın']\n```",
+    "starter": "known = {\"merhaba\", \"selam\", \"hava\", \"saat\", \"görüşürüz\"}\nmessage = \"merhaba yarın hava sıcak mı sıcak\"\n",
+    "solution": "known = {\"merhaba\", \"selam\", \"hava\", \"saat\", \"görüşürüz\"}\nmessage = \"merhaba yarın hava sıcak mı sıcak\"\nwords = set(message.split())\nmatched = words & known\nunknown = words - known\nprint(len(words), \"farklı kelime\")\nprint(\"Tanıdık:\", sorted(matched))\nprint(\"Bilinmeyen:\", sorted(unknown))\n",
+    "hints": [
+     "set() tekrar eden kelimeleri atar.",
+     "Kesişim: words & known, fark: words - known"
+    ],
+    "check": {
+     "python": "\nout, g = _run(_set(_set(_code, \"message\", \"a b a c\"), \"known\", {\"b\", \"x\"}))\nassert g.get(\"words\") == {\"a\", \"b\", \"c\"}, \"words = set(message.split()) olmalı.\"\nassert g.get(\"matched\") == {\"b\"}, \"matched = words & known olmalı.\"\nassert g.get(\"unknown\") == {\"a\", \"c\"}, \"unknown = words - known olmalı.\"\nassert \"3 farklı kelime\" in out, \"Kaç farklı kelime olduğunu yazdır.\"\nassert \"Tanıdık: ['b']\" in out and \"Bilinmeyen: ['a', 'c']\" in out, \"Tanıdık ve bilinmeyen kelimeleri sorted() ile yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "known = {\"merhaba\", \"selam\", \"hava\", \"saat\", \"görüşürüz\"}",
+       "notes": [
+        "`known` adında bir değişken oluşturuluyor ve içine `{\"merhaba\", \"selam\", \"hava\", \"saat\", \"görüşürüz\"}` (set (tekrarsız küme)) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "message = \"merhaba yarın hava sıcak mı sıcak\"",
+       "notes": [
+        "`message` adında bir değişken oluşturuluyor ve içine `\"merhaba yarın hava sıcak mı sıcak\"` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "words = set(message.split())",
+       "notes": [
+        "`words` adında bir değişken oluşturuluyor ve içine `set(message.split())` konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "matched = words & known",
+       "notes": [
+        "`matched` adında bir değişken oluşturuluyor ve içine `words & known` konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "unknown = words - known",
+       "notes": [
+        "`unknown` adında bir değişken oluşturuluyor ve içine `words - known` konuyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "print(len(words), \"farklı kelime\")",
+       "notes": [
+        "`print(len(words), \"farklı kelime\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "print(\"Tanıdık:\", sorted(matched))",
+       "notes": [
+        "`print(\"Tanıdık:\", sorted(matched))`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "print(\"Bilinmeyen:\", sorted(unknown))",
+       "notes": [
+        "`print(\"Bilinmeyen:\", sorted(unknown))`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "known",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"merhaba\", \"selam\", \"hava\", \"saat\", \"görüşürüz\"}`."
+      },
+      {
+       "term": "message",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"merhaba yarın hava sıcak mı sıcak\"`."
+      },
+      {
+       "term": "words",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `set(message.split())`."
+      },
+      {
+       "term": "matched",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `words & known`."
+      },
+      {
+       "term": "unknown",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `words - known`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "set()",
+       "kind": "fonksiyon",
+       "desc": "Bir değerden set (tekrarsız küme) oluşturur."
+      },
+      {
+       "term": ".split()",
+       "kind": "metot",
+       "desc": "Metni parçalara böler ve liste yapar (varsayılan: boşluklardan)."
+      },
+      {
+       "term": "&",
+       "kind": "operatör",
+       "desc": "Setlerde kesişim: iki kümede de olanlar."
+      },
+      {
+       "term": "-",
+       "kind": "operatör",
+       "desc": "Çıkarma."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      },
+      {
+       "term": "sorted()",
+       "kind": "fonksiyon",
+       "desc": "Sıralanmış yeni bir liste verir; asıl liste değişmez."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Kelime bilgisi",
+   "game_role": "Mesajdaki hangi kelimeleri tanıdığını, hangilerini tanımadığını bulur."
+  },
+  "okul": {
+   "project_task": {
+    "id": "d7-pn",
+    "title": "Sınavı olan dersler",
+    "prompt": "Bu dönemki derslerin `lessons` set'inde. Bu haftaki sınavlar `exams` listesinde (bir dersten iki sınav olabilir).\n\n- `exam_lessons`: bu hafta sınavı olan farklı dersler (set)\n- `free`: bu hafta sınavı **olmayan** dersler\n\nSonra şöyle yazdır:\n\n```\n3 derste sınav var\nSınavsız: ['Müzik', 'Tarih']\n```\n\nSınavsız dersleri `sorted()` ile alfabetik yazdır.",
+    "starter": "lessons = {\"Matematik\", \"Fizik\", \"Kimya\", \"Tarih\", \"Müzik\"}\nexams = [\"Matematik\", \"Fizik\", \"Matematik\", \"Kimya\"]\n",
+    "solution": "lessons = {\"Matematik\", \"Fizik\", \"Kimya\", \"Tarih\", \"Müzik\"}\nexams = [\"Matematik\", \"Fizik\", \"Matematik\", \"Kimya\"]\nexam_lessons = set(exams)\nfree = lessons - exam_lessons\nprint(len(exam_lessons), \"derste sınav var\")\nprint(\"Sınavsız:\", sorted(free))\n",
+    "hints": [
+     "set(exams) tekrarları atar.",
+     "Fark için: lessons - exam_lessons"
+    ],
+    "check": {
+     "python": "\nout, g = _run(_set(_set(_code, \"lessons\", {\"a\", \"b\", \"c\", \"d\"}), \"exams\", [\"a\", \"b\", \"a\"]))\nassert g.get(\"exam_lessons\") == {\"a\", \"b\"}, \"exam_lessons = set(exams) olmalı.\"\nassert g.get(\"free\") == {\"c\", \"d\"}, \"free = lessons - exam_lessons olmalı.\"\nassert \"2 derste sınav var\" in out, \"Kaç derste sınav olduğunu yazdır.\"\nassert \"Sınavsız: ['c', 'd']\" in out, \"Sınavsız dersleri sorted() ile yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "lessons = {\"Matematik\", \"Fizik\", \"Kimya\", \"Tarih\", \"Müzik\"}",
+       "notes": [
+        "`lessons` adında bir değişken oluşturuluyor ve içine `{\"Matematik\", \"Fizik\", \"Kimya\", \"Tarih\", \"Müzik\"}` (set (tekrarsız küme)) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "exams = [\"Matematik\", \"Fizik\", \"Matematik\", \"Kimya\"]",
+       "notes": [
+        "`exams` adında bir değişken oluşturuluyor ve içine `[\"Matematik\", \"Fizik\", \"Matematik\", \"Kimya\"]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "exam_lessons = set(exams)",
+       "notes": [
+        "`exam_lessons` adında bir değişken oluşturuluyor ve içine `set(exams)` konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "free = lessons - exam_lessons",
+       "notes": [
+        "`free` adında bir değişken oluşturuluyor ve içine `lessons - exam_lessons` konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "print(len(exam_lessons), \"derste sınav var\")",
+       "notes": [
+        "`print(len(exam_lessons), \"derste sınav var\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "print(\"Sınavsız:\", sorted(free))",
+       "notes": [
+        "`print(\"Sınavsız:\", sorted(free))`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "lessons",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"Matematik\", \"Fizik\", \"Kimya\", \"Tarih\", \"Müzik\"}`."
+      },
+      {
+       "term": "exams",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[\"Matematik\", \"Fizik\", \"Matematik\", \"Kimya\"]`."
+      },
+      {
+       "term": "exam_lessons",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `set(exams)`."
+      },
+      {
+       "term": "free",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `lessons - exam_lessons`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "set()",
+       "kind": "fonksiyon",
+       "desc": "Bir değerden set (tekrarsız küme) oluşturur."
+      },
+      {
+       "term": "-",
+       "kind": "operatör",
+       "desc": "Çıkarma."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      },
+      {
+       "term": "sorted()",
+       "kind": "fonksiyon",
+       "desc": "Sıralanmış yeni bir liste verir; asıl liste değişmez."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Sınav haftası",
+   "game_role": "Bu hafta hangi derslerden sınav olduğunu ve hangilerinin boş olduğunu bulur."
+  }
+ }
+}

@@ -1,0 +1,233 @@
+{
+ "day": 24,
+ "title": "Hatalar ve hata ayıklama",
+ "region": "istasyon",
+ "xp_complete": 150,
+ "objective": "hata türlerini tanımak, try/catch/finally ile hataları yakalamak, throw ile kendi hatanı fırlatmak ve hata ayıklamak",
+ "story": "Async İstasyonu'na kenetlendin! İstasyonun bilgisayarı arada bir kırmızı alarmlar veriyor. Panik yok: bugün **hata mesajlarını okumayı**, hataları yakalamayı ve kendi hatalarını fırlatmayı öğreneceksin.",
+ "sections": [
+  {
+   "title": "Hata mesajını oku",
+   "body": "Her hata mesajının üç parçası vardır: **tür**, **açıklama** ve **satır numarası**. En sık göreceğin türler:\n\n| Tür | Ne demek? | Örnek |\n|---|---|---|\n| `ReferenceError` | Böyle bir isim yok (yazım hatası ya da tanımlanmamış) | `consle.log(1)` |\n| `TypeError` | Değer, yapmak istediğin işe uygun değil | `undefined.length`, `5()` |\n| `SyntaxError` | Kod JavaScript kurallarına uymuyor ya da metin geçerli JSON değil | `if (x > 1 {`, `JSON.parse(\"{\")` |\n| `RangeError` | Sayı izin verilen aralıkta değil | `new Array(-1)` |\n\nAçıklama çoğu zaman İngilizcedir; kelimelere bakınca anlaşılır: *is not defined* = tanımlı değil, *cannot read properties of undefined* = tanımsız bir şeyin özelliği okunamıyor, *is not a function* = bu bir fonksiyon değil."
+  },
+  {
+   "title": "try, catch, finally",
+   "body": "Hata çıkabilecek kodu `try` bloğuna koyarsan program çökmez; JavaScript hemen `catch` bloğuna atlar:\n\n```js\ntry {\n  const data = JSON.parse(\"{bozuk\");   // burada hata çıkar\n  console.log(\"Bu satır çalışmaz\");\n} catch (error) {\n  console.log(\"Yakalandı:\", error.name); // SyntaxError\n  console.log(error.message);\n} finally {\n  console.log(\"Bu her durumda çalışır\");\n}\nconsole.log(\"Program devam ediyor!\");\n```\n\n- `error` nesnesinin `name` (tür) ve `message` (açıklama) özellikleri vardır.\n- `finally` hata olsa da olmasa da çalışır: temizlik işleri (yükleniyor yazısını kaldırmak, düğmeyi tekrar açmak) için idealdir.\n\n`catch`'i yalnızca **beklediğin** hatalar için kullan: JSON okuma, kullanıcı girişi, ağ. Her şeyi `try` içine sarmak gerçek hataları saklar."
+  },
+  {
+   "title": "throw: kendi hatanı fırlat",
+   "body": "Bir fonksiyon hatalı veri alırsa sessizce yanlış sonuç vermek yerine açık bir mesajla durmalı:\n\n```js\nfunction setFuel(amount) {\n  if (typeof amount !== \"number\") {\n    throw new Error(\"Yakıt bir sayı olmalı\");\n  }\n  if (amount < 0 || amount > 100) {\n    throw new Error(\"Yakıt 0 ile 100 arasında olmalı\");\n  }\n  return amount;\n}\n\ntry {\n  setFuel(150);\n} catch (error) {\n  console.log(\"Hata:\", error.message); // Hata: Yakıt 0 ile 100 arasında olmalı\n}\n```\n\n`throw` fonksiyonu anında durdurur ve hatayı çağıran koda gönderir. Oradaki `try/catch` onu yakalar; yakalayan yoksa program kırmızı hata mesajıyla durur."
+  },
+  {
+   "title": "Hata ayıklama stratejisi",
+   "body": "Programcılar hatayı tahminle değil, adım adım bulur:\n\n1. **Mesajı oku**: tür, açıklama, satır numarası.\n2. **Değerlere bak**: şüphelendiğin yerde `console.log(\"total:\", total)` yaz. Diziler için `console.table(list)` işini kolaylaştırır.\n3. **Sorunu küçült**: kodun bir kısmını yorum satırı yap; hata hâlâ var mı?\n4. **Tek şey değiştir, tekrar çalıştır**: aynı anda birçok şeyi değiştirirsen neyin işe yaradığını bilemezsin.\n\n`console.error(...)` mesajı hata olarak, `console.warn(...)` uyarı olarak işaretler; Çıktı alanında öne çıkarlar.\n\nSık görülen tuzaklar: `\"5\" + 3` sonucu `\"53\"` olur (metin birleştirme). `NaN` görürsen bir yerde sayı yerine metin ya da `undefined` vardır. Dizinin son elemanı `list[list.length - 1]`'dir; `list[list.length]` her zaman `undefined`'dır."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Bozuk kayıtlar",
+   "code": "const saves = ['{\"skor\": 12}', \"{bozuk kayıt\", '{\"skor\": 30}'];\n\nfor (const text of saves) {\n  try {\n    const data = JSON.parse(text);\n    console.log(\"Skor:\", data.skor);\n  } catch (error) {\n    console.log(\"Okunamadı:\", error.name);\n  } finally {\n    console.log(\"---\");\n  }\n}\n",
+   "note": "Bozuk kayıt programı durdurmadı; döngü sıradaki kayıtla devam etti."
+  },
+  {
+   "title": "Hata türleri ve console.table",
+   "code": "const tests = [\n  () => undefinedVariable + 1,\n  () => null.length,\n  () => JSON.parse(\"{\"),\n  () => { throw new Error(\"Kendi hatam\"); },\n];\n\nfor (const test of tests) {\n  try {\n    test();\n  } catch (error) {\n    console.error(error.name + \": \" + error.message);\n  }\n}\n\nconsole.table([{ ad: \"Ada\", skor: 12 }, { ad: \"Can\", skor: 30 }]);\n",
+   "note": "Her testin hangi türde hata verdiğine bak."
+  }
+ ],
+ "tasks": [
+  {
+   "id": "js-d24-t1",
+   "title": "Güvenli okuma",
+   "prompt": "`safeParse(text)` fonksiyonunu düzelt: `JSON.parse`'ı `try/catch` içine al.\n\n- Metin geçerli JSON ise okunan değeri döndürsün.\n- Değilse program çökmesin, `null` döndürsün.",
+   "starter": "function safeParse(text) {\n  // JSON.parse'ı try/catch içine al; hata olursa null döndür\n  return JSON.parse(text);\n}\n\nconsole.log(safeParse('{\"skor\": 42}'));\n",
+   "solution": "function safeParse(text) {\n  // JSON.parse'ı try/catch içine al; hata olursa null döndür\n  try {\n    return JSON.parse(text);\n  } catch (error) {\n    return null;\n  }\n}\n\nconsole.log(safeParse('{\"skor\": 42}'));\nconsole.log(safeParse(\"{bozuk\"));\n",
+   "hints": [
+    "try { return JSON.parse(text); } catch (error) { ... }",
+    "catch içinde: return null;"
+   ],
+   "check": {
+    "code_contains": [
+     "try",
+     "catch"
+    ],
+    "js": "assert(same(safeParse('{\"a\": 1}'), { a: 1 }), \"Geçerli JSON okunup döndürülmeli.\");\nassert(same(safeParse(\"[1, 2]\"), [1, 2]), \"Diziler de okunmalı.\");\nlet broken;\ntry {\n  broken = safeParse(\"{bozuk\");\n} catch (e) {\n  assert(false, \"safeParse bozuk metinde hata fırlatmamalı; try/catch ile yakalayıp null döndürmeli.\");\n}\nassert(broken === null, \"Bozuk metin için null dönmeli.\");\nlet empty;\ntry {\n  empty = safeParse(\"\");\n} catch (e) {\n  assert(false, \"Boş metinde de hata fırlatmamalı.\");\n}\nassert(empty === null, \"Boş metin için de null dönmeli.\");"
+   },
+   "xp": 50
+  },
+  {
+   "id": "js-d24-t2",
+   "title": "Yakıt doğrulama",
+   "prompt": "`setFuel(amount)` fonksiyonunu tamamla:\n\n- `amount` bir sayı değilse: `throw new Error(\"Yakıt bir sayı olmalı\")`\n- 0'dan küçük ya da 100'den büyükse: `throw new Error(\"Yakıt 0 ile 100 arasında olmalı\")`\n- Sorun yoksa `amount`'u döndürsün.\n\nAlttaki `try/catch` hazır; çalıştırınca `Hata: Yakıt 0 ile 100 arasında olmalı` yazmalı.",
+   "starter": "function setFuel(amount) {\n  // kontrolleri yaz; hatalıysa throw new Error(...)\n  return amount;\n}\n\ntry {\n  setFuel(150);\n  console.log(\"Yakıt ayarlandı\");\n} catch (error) {\n  console.log(\"Hata:\", error.message);\n}\n",
+   "solution": "function setFuel(amount) {\n  // kontrolleri yaz; hatalıysa throw new Error(...)\n  if (typeof amount !== \"number\") {\n    throw new Error(\"Yakıt bir sayı olmalı\");\n  }\n  if (amount < 0 || amount > 100) {\n    throw new Error(\"Yakıt 0 ile 100 arasında olmalı\");\n  }\n  return amount;\n}\n\ntry {\n  setFuel(150);\n  console.log(\"Yakıt ayarlandı\");\n} catch (error) {\n  console.log(\"Hata:\", error.message);\n}\n",
+   "hints": [
+    "Sayı mı? typeof amount !== \"number\"",
+    "Aralık: if (amount < 0 || amount > 100) { throw new Error(\"...\"); }"
+   ],
+   "check": {
+    "code_contains": [
+     "throw new Error",
+     "typeof"
+    ],
+    "js": "const messageOf = (fn) => {\n  try {\n    fn();\n    return null;\n  } catch (e) {\n    return e instanceof Error ? e.message : \"Error nesnesi değil\";\n  }\n};\nassert(setFuel(50) === 50 && setFuel(0) === 0 && setFuel(100) === 100, \"Geçerli değerler (0, 50, 100) olduğu gibi döndürülmeli.\");\nassert(messageOf(() => setFuel(150)) === \"Yakıt 0 ile 100 arasında olmalı\", \"setFuel(150) 'Yakıt 0 ile 100 arasında olmalı' hatası fırlatmalı.\");\nassert(messageOf(() => setFuel(-1)) === \"Yakıt 0 ile 100 arasında olmalı\", \"Negatif değerler de aynı hatayı fırlatmalı.\");\nassert(messageOf(() => setFuel(\"50\")) === \"Yakıt bir sayı olmalı\", \"setFuel(\\\"50\\\") (metin) 'Yakıt bir sayı olmalı' hatası fırlatmalı.\");\nassert(_lines.includes(\"Hata: Yakıt 0 ile 100 arasında olmalı\"), \"Çıktıda 'Hata: Yakıt 0 ile 100 arasında olmalı' görünmeli.\");"
+   },
+   "xp": 50
+  },
+  {
+   "id": "js-d24-t3",
+   "title": "finally ile kapanış",
+   "prompt": "`launch(ok)` kalkış adımlarını `steps` dizisine yazıp döndürüyor. Onu `try/catch/finally` ile tamamla:\n\n- `try` içinde: `ok` false ise `throw new Error(\"Motor arızası\")`; değilse `steps`'e `\"Kalkış başarılı\"` ekle.\n- `catch` içinde: `steps`'e `\"Sorun: \"` ile hatanın mesajını birleştirip ekle (`Sorun: Motor arızası`).\n- `finally` içinde: `steps`'e `\"Panel kapatıldı\"` ekle.",
+   "starter": "function launch(ok) {\n  const steps = [];\n  // try / catch / finally\n  return steps;\n}\n\nconsole.log(launch(true));\nconsole.log(launch(false));\n",
+   "solution": "function launch(ok) {\n  const steps = [];\n  // try / catch / finally\n  try {\n    if (!ok) throw new Error(\"Motor arızası\");\n    steps.push(\"Kalkış başarılı\");\n  } catch (error) {\n    steps.push(\"Sorun: \" + error.message);\n  } finally {\n    steps.push(\"Panel kapatıldı\");\n  }\n  return steps;\n}\n\nconsole.log(launch(true));\nconsole.log(launch(false));\n",
+   "hints": [
+    "try { if (!ok) throw new Error(\"Motor arızası\"); steps.push(\"Kalkış başarılı\"); }",
+    "catch (error) { steps.push(\"Sorun: \" + error.message); }",
+    "finally { steps.push(\"Panel kapatıldı\"); }"
+   ],
+   "check": {
+    "code_contains": [
+     "try",
+     "catch",
+     "finally",
+     "throw"
+    ],
+    "js": "assert(same(launch(true), [\"Kalkış başarılı\", \"Panel kapatıldı\"]), \"launch(true) ['Kalkış başarılı', 'Panel kapatıldı'] döndürmeli.\");\nassert(same(launch(false), [\"Sorun: Motor arızası\", \"Panel kapatıldı\"]), \"launch(false) ['Sorun: Motor arızası', 'Panel kapatıldı'] döndürmeli.\");"
+   },
+   "xp": 50
+  }
+ ],
+ "challenge": {
+  "id": "js-d24-c",
+  "title": "Hata avı",
+  "prompt": "`average(list)` bir dizinin ortalamasını hesaplamalı ama sonuç `NaN` çıkıyor! Kodda **üç** sorun var. `console.log` ile değerlere bakarak bul ve düzelt:\n\n- `average([12, 30, 18])` → `20`\n- Boş dizi için `0` döndürmeli (sıfıra bölme olmasın).\n\nİpucu: döngünün içindeki yorum satırını aç ve çıktıyı incele.",
+  "starter": "const scores = [12, 30, 18];\nconsole.table(scores);\n\nfunction average(list) {\n  let total = \"0\";\n  for (let i = 0; i <= list.length; i++) {\n    total = total + list[i];\n    // console.log(\"i:\", i, \"eleman:\", list[i], \"total:\", total);\n  }\n  return total / list.length;\n}\n\nconsole.log(\"Ortalama:\", average(scores));\n",
+  "solution": "const scores = [12, 30, 18];\nconsole.table(scores);\n\nfunction average(list) {\n  if (list.length === 0) return 0;\n  let total = 0;\n  for (let i = 0; i < list.length; i++) {\n    total = total + list[i];\n    // console.log(\"i:\", i, \"eleman:\", list[i], \"total:\", total);\n  }\n  return total / list.length;\n}\n\nconsole.log(\"Ortalama:\", average(scores));\n",
+  "hints": [
+   "total bir metinle başlıyor: \"0\" + 12 = \"012\". Sayıyla başlat: let total = 0;",
+   "Son tur list[list.length] okuyor, o da undefined. < kullan.",
+   "Boş dizi: if (list.length === 0) return 0;"
+  ],
+  "check": {
+   "code_contains": [
+    "return"
+   ],
+   "js": "assert(average([12, 30, 18]) === 20, \"average([12, 30, 18]) 20 olmalı.\");\nassert(average([10, 20, 30, 40]) === 25, \"average([10, 20, 30, 40]) 25 olmalı.\");\nassert(average([7]) === 7, \"Tek elemanlı dizide ortalama o eleman olmalı.\");\nassert(average([]) === 0, \"Boş dizi için 0 dönmeli.\");\nassert(_lines.includes(\"Ortalama: 20\"), \"Çıktıda 'Ortalama: 20' görünmeli.\");"
+  },
+  "xp": 75
+ },
+ "project_contribution": "Hataya dayanıklı oyun",
+ "project_task": {
+  "id": "js-d24-p",
+  "title": "Bozuk kayıt dosyası",
+  "prompt": "Kayıt dosyası bozulursa oyun çökmesin! `loadSave()` fonksiyonunu yaz:\n\n- `localStorage`'dan `yildizSave` anahtarını oku ve `JSON.parse` ile çöz.\n- Kayıt yoksa (`null`) ya da `JSON.parse` hata verirse `{ best: 0, level: 1 }` döndür. Bozuk kayıtta ayrıca `console.warn(\"Kayıt bozuk, sıfırdan başlıyoruz.\")` yaz.\n- Kayıt sağlamsa okunan nesneyi döndür.\n\nÖnizlemedeki kayıt bilerek bozuk bırakıldı. Açılıştaki kod sonucu `#info`'ya `En iyi: 0 · Seviye: 1` biçiminde yazıyor.",
+  "starter": "const DEFAULT_SAVE = { best: 0, level: 1 };\n\nfunction loadSave() {\n  const text = localStorage.getItem(\"yildizSave\");\n  // JSON.parse'ı try/catch ile güvenli yap\n  return { ...DEFAULT_SAVE };\n}\n\nconst save = loadSave();\ndocument.querySelector(\"#info\").textContent = `En iyi: ${save.best} · Seviye: ${save.level}`;\n",
+  "solution": "const DEFAULT_SAVE = { best: 0, level: 1 };\n\nfunction loadSave() {\n  const text = localStorage.getItem(\"yildizSave\");\n  // JSON.parse'ı try/catch ile güvenli yap\n  if (text === null) return { ...DEFAULT_SAVE };\n  try {\n    return JSON.parse(text);\n  } catch (error) {\n    console.warn(\"Kayıt bozuk, sıfırdan başlıyoruz.\");\n    return { ...DEFAULT_SAVE };\n  }\n}\n\nconst save = loadSave();\ndocument.querySelector(\"#info\").textContent = `En iyi: ${save.best} · Seviye: ${save.level}`;\n",
+  "hints": [
+   "Kayıt yoksa getItem null döndürür: if (text === null) return { ...DEFAULT_SAVE };",
+   "try { return JSON.parse(text); } catch (error) { ... }",
+   "catch içinde console.warn(...) ve varsayılanı döndür."
+  ],
+  "check": {
+   "code_contains": [
+    "try",
+    "catch",
+    "JSON.parse",
+    "console.warn"
+   ],
+   "js": "const SEED = '{\"best\": 42, \"level\": ';\ntry {\n  const info = $(\"#info\").textContent;\n  assert(new RegExp(\"En iyi:\\\\s*\" + save.best + \"\\\\b\").test(info) && new RegExp(\"Seviye:\\\\s*\" + save.level + \"\\\\b\").test(info), \"#info açılışta kaydı 'En iyi: 0 · Seviye: 1' biçiminde göstermeli.\");\n  localStorage.setItem(\"yildizSave\", JSON.stringify({ best: 42, level: 3 }));\n  assert(same(loadSave(), { best: 42, level: 3 }), \"Kayıt sağlamsa okunan nesne ({ best: 42, level: 3 }) döndürülmeli.\");\n  localStorage.setItem(\"yildizSave\", \"bozuk{\");\n  const before = out().length;\n  let broken;\n  try {\n    broken = loadSave();\n  } catch (e) {\n    assert(false, \"Bozuk kayıtta loadSave() hata fırlatmamalı; try/catch ile yakala.\");\n  }\n  assert(same(broken, { best: 0, level: 1 }), \"Bozuk kayıtta { best: 0, level: 1 } döndürülmeli.\");\n  assert(/Kayıt bozuk/.test(out().slice(before)), \"Bozuk kayıtta console.warn ile 'Kayıt bozuk, sıfırdan başlıyoruz.' yazılmalı.\");\n  localStorage.removeItem(\"yildizSave\");\n  const none = loadSave();\n  assert(same(none, { best: 0, level: 1 }), \"Kayıt hiç yoksa (null) da { best: 0, level: 1 } döndürülmeli.\");\n} finally {\n  localStorage.setItem(\"yildizSave\", SEED);\n}"
+  },
+  "xp": 100,
+  "mode": "page",
+  "html": "<canvas id=\"game\" width=\"300\" height=\"200\"></canvas>\n<p id=\"info\">Skor: 0</p>\n",
+  "css": "canvas{background:#0b1026;display:block;max-width:100%;border-radius:8px}#info{font-weight:600;margin:8px 0 0}",
+  "storage": {
+   "yildizSave": "{\"best\": 42, \"level\": "
+  }
+ },
+ "tracks": {
+  "js-web": {
+   "project_contribution": "Form hatalarını göstermek",
+   "project_task": {
+    "id": "js-d24-pw",
+    "title": "İletişim formu hataları",
+    "prompt": "İletişim formundaki hataları kullanıcıya düzgünce gösterelim. `validateContact(data)` fonksiyonunu yaz; `data` = `{ name, email, message }`:\n\n- `name` boşsa: `throw new Error(\"Adını yazmalısın.\")`\n- `email` içinde `@` yoksa: `throw new Error(\"E-posta adresi geçersiz.\")`\n- `message` 10 karakterden kısaysa: `throw new Error(\"Mesaj en az 10 karakter olmalı.\")`\n\nForm gönderilince (veriyi toplayan kısım hazır) `try/catch` kullan: hata varsa mesajını `#error`'a yaz ve `#status`'u boşalt; yoksa `#error`'u boşalt ve `#status`'a `Mesajın gönderildi, teşekkürler!` yaz.",
+    "starter": "function validateContact(data) {\n  // üç kontrol; hatalıysa throw new Error(...)\n}\n\nconst form = document.querySelector(\"#contact\");\nform.addEventListener(\"submit\", (e) => {\n  e.preventDefault();\n  const data = {\n    name: document.querySelector(\"#name\").value.trim(),\n    email: document.querySelector(\"#email\").value.trim(),\n    message: document.querySelector(\"#message\").value.trim(),\n  };\n  const error = document.querySelector(\"#error\");\n  const status = document.querySelector(\"#status\");\n  // try / catch ile doğrula ve sonucu göster\n});\n",
+    "solution": "function validateContact(data) {\n  // üç kontrol; hatalıysa throw new Error(...)\n  if (data.name === \"\") throw new Error(\"Adını yazmalısın.\");\n  if (!data.email.includes(\"@\")) throw new Error(\"E-posta adresi geçersiz.\");\n  if (data.message.length < 10) throw new Error(\"Mesaj en az 10 karakter olmalı.\");\n}\n\nconst form = document.querySelector(\"#contact\");\nform.addEventListener(\"submit\", (e) => {\n  e.preventDefault();\n  const data = {\n    name: document.querySelector(\"#name\").value.trim(),\n    email: document.querySelector(\"#email\").value.trim(),\n    message: document.querySelector(\"#message\").value.trim(),\n  };\n  const error = document.querySelector(\"#error\");\n  const status = document.querySelector(\"#status\");\n  // try / catch ile doğrula ve sonucu göster\n  try {\n    validateContact(data);\n    error.textContent = \"\";\n    status.textContent = \"Mesajın gönderildi, teşekkürler!\";\n  } catch (err) {\n    error.textContent = err.message;\n    status.textContent = \"\";\n  }\n});\n",
+    "hints": [
+     "if (data.name === \"\") throw new Error(\"Adını yazmalısın.\");",
+     "@ var mı? data.email.includes(\"@\")",
+     "Submit içinde: try { validateContact(data); ... } catch (err) { error.textContent = err.message; }"
+    ],
+    "check": {
+     "code_contains": [
+      "throw new Error",
+      "try",
+      "catch"
+     ],
+     "js": "const messageOf = (data) => {\n  try {\n    validateContact(data);\n    return null;\n  } catch (e) {\n    return e.message;\n  }\n};\nassert(messageOf({ name: \"Ada\", email: \"ada@site.com\", message: \"Merhaba, siten çok güzel!\" }) === null, \"Geçerli veride hata fırlatılmamalı.\");\nassert(messageOf({ name: \"\", email: \"a@b\", message: \"0123456789\" }) === \"Adını yazmalısın.\", \"Ad boşsa 'Adını yazmalısın.' hatası fırlatılmalı.\");\nassert(messageOf({ name: \"Ada\", email: \"ada.site.com\", message: \"0123456789\" }) === \"E-posta adresi geçersiz.\", \"E-postada @ yoksa 'E-posta adresi geçersiz.' hatası fırlatılmalı.\");\nassert(messageOf({ name: \"Ada\", email: \"ada@site.com\", message: \"kısa\" }) === \"Mesaj en az 10 karakter olmalı.\", \"Mesaj 10 karakterden kısaysa 'Mesaj en az 10 karakter olmalı.' hatası fırlatılmalı.\");\ntype(\"#name\", \"Ada\");\ntype(\"#email\", \"ada-site.com\");\ntype(\"#message\", \"Merhaba dünya!\");\nsubmit(\"#contact\");\nassert($(\"#error\").textContent.trim() === \"E-posta adresi geçersiz.\", \"Hatalı formda hata mesajı #error'da görünmeli.\");\nassert(!/gönderildi/.test($(\"#status\").textContent), \"Hata varsa 'gönderildi' mesajı görünmemeli.\");\ntype(\"#email\", \"ada@site.com\");\nsubmit(\"#contact\");\nassert($(\"#error\").textContent.trim() === \"\", \"Form düzelince #error boşalmalı.\");\nassert($(\"#status\").textContent.trim() === \"Mesajın gönderildi, teşekkürler!\", \"#status 'Mesajın gönderildi, teşekkürler!' yazmalı.\");\ntype(\"#message\", \"kısa\");\nsubmit(\"#contact\");\nassert($(\"#error\").textContent.trim() === \"Mesaj en az 10 karakter olmalı.\" && $(\"#status\").textContent.trim() === \"\", \"Yeni bir hatada #error mesajı göstermeli, #status boşalmalı.\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<header><h1 id=\"site-title\">Ada'nın Sitesi</h1><nav><a href=\"#\">Ana sayfa</a> · <a href=\"#\">Galeri</a> · <a href=\"#\">İletişim</a></nav></header>\n<form id=\"contact\"><input id=\"name\" placeholder=\"Adın\"> <input id=\"email\" placeholder=\"E-posta\"><br><textarea id=\"message\" placeholder=\"Mesajın\"></textarea><br><button>Gönder</button></form>\n<p id=\"error\"></p>\n<p id=\"status\"></p>\n",
+    "css": "header{border-bottom:3px solid #7e57c2;margin-bottom:10px;padding-bottom:4px}#site-title{margin:0;color:#4a2f8a;font-size:22px}nav a{color:#7e57c2}#contact input,#contact textarea{font:inherit;margin:3px 0;padding:4px}#error{color:#c62828;font-weight:600}#status{color:#2e7d32}"
+   }
+  },
+  "js-app": {
+   "project_contribution": "Hatalı veriyi temizlemek",
+   "project_task": {
+    "id": "js-d24-pa",
+    "title": "Bozuk görev kayıtları",
+    "prompt": "Eski bir sürümden gelen görev kayıtlarının bazıları bozuk. `cleanTasks(rows)` fonksiyonunu yaz; `rows` JSON metinlerinden oluşan bir dizi:\n\n- Her metni `JSON.parse` ile oku; okunamayanı atla (`try/catch`).\n- Okunan görevin `title`'ı boş olmayan bir metin ve `minutes`'ı 0'dan büyük bir **sayı** değilse onu da atla.\n- Geçerli görevlerin dizisini döndür. Atlananların sayısını `#warning`'e `3 kayıt atlandı` biçiminde yaz; hiç atlanmadıysa `#warning` boş olsun.\n\nListeyi ekrana yazan `render` hazır.",
+    "starter": "const rows = [\n  '{\"title\": \"Fizik tekrarı\", \"minutes\": 30}',\n  '{bozuk',\n  '{\"title\": \"\", \"minutes\": 20}',\n  '{\"title\": \"Tarih\", \"minutes\": -5}',\n  '{\"title\": \"Kimya\", \"minutes\": 45}',\n];\n\nfunction cleanTasks(rows) {\n  const tasks = [];\n  // her satırı oku ve kontrol et\n  return tasks;\n}\n\nfunction render(tasks) {\n  const list = document.querySelector(\"#list\");\n  list.innerHTML = \"\";\n  for (const t of tasks) {\n    const li = document.createElement(\"li\");\n    li.textContent = `${t.title} (${t.minutes} dk)`;\n    list.append(li);\n  }\n}\n\nrender(cleanTasks(rows));\n",
+    "solution": "const rows = [\n  '{\"title\": \"Fizik tekrarı\", \"minutes\": 30}',\n  '{bozuk',\n  '{\"title\": \"\", \"minutes\": 20}',\n  '{\"title\": \"Tarih\", \"minutes\": -5}',\n  '{\"title\": \"Kimya\", \"minutes\": 45}',\n];\n\nfunction cleanTasks(rows) {\n  const tasks = [];\n  // her satırı oku ve kontrol et\n  let skipped = 0;\n  for (const row of rows) {\n    try {\n      const task = JSON.parse(row);\n      const titleOk = typeof task.title === \"string\" && task.title.trim() !== \"\";\n      const minutesOk = typeof task.minutes === \"number\" && task.minutes > 0;\n      if (titleOk && minutesOk) {\n        tasks.push(task);\n      } else {\n        skipped++;\n      }\n    } catch (error) {\n      skipped++;\n    }\n  }\n  document.querySelector(\"#warning\").textContent = skipped > 0 ? `${skipped} kayıt atlandı` : \"\";\n  return tasks;\n}\n\nfunction render(tasks) {\n  const list = document.querySelector(\"#list\");\n  list.innerHTML = \"\";\n  for (const t of tasks) {\n    const li = document.createElement(\"li\");\n    li.textContent = `${t.title} (${t.minutes} dk)`;\n    list.append(li);\n  }\n}\n\nrender(cleanTasks(rows));\n",
+    "hints": [
+     "for (const row of rows) { try { const task = JSON.parse(row); ... } catch (error) { skipped++; } }",
+     "Sayı mı? typeof task.minutes === \"number\" && task.minutes > 0",
+     "#warning: skipped > 0 ? `${skipped} kayıt atlandı` : \"\""
+    ],
+    "check": {
+     "code_contains": [
+      "try",
+      "catch",
+      "JSON.parse"
+     ],
+     "js": "assert($$(\"#list li\").length === 2, \"Açılışta yalnızca 2 geçerli görev listelenmeli.\");\nassert(/3 kayıt atlandı/.test($(\"#warning\").textContent), \"#warning '3 kayıt atlandı' yazmalı.\");\nlet r;\ntry {\n  r = cleanTasks(['{\"title\": \"A\", \"minutes\": 5}', \"[1\", '{\"title\": \"B\", \"minutes\": \"10\"}', '{\"minutes\": 15}']);\n} catch (e) {\n  assert(false, \"cleanTasks bozuk metinlerde hata fırlatmamalı: \" + e.message);\n}\nassert(same(r, [{ title: \"A\", minutes: 5 }]), \"Yalnızca geçerli görevler döndürülmeli (minutes metin olamaz, title olmalı).\");\nassert($(\"#warning\").textContent.trim() === \"3 kayıt atlandı\", \"Atlanan sayısı hesaplanmalı: '3 kayıt atlandı'.\");\nconst ok = cleanTasks(['{\"title\": \"C\", \"minutes\": 1}']);\nassert(ok.length === 1 && $(\"#warning\").textContent.trim() === \"\", \"Hiç kayıt atlanmadıysa #warning boş olmalı.\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<h2 class=\"app-title\">Çalışma Asistanım</h2>\n<ul id=\"list\"></ul>\n<p id=\"warning\"></p>\n",
+    "css": ".app-title{margin:0 0 8px;color:#2e7d32}#warning{color:#e65100;font-weight:600}"
+   }
+  },
+  "js-quiz": {
+   "project_contribution": "Hatalı soru paketi",
+   "project_task": {
+    "id": "js-d24-pq",
+    "title": "Hatalı soru paketi",
+    "prompt": "Arkadaşların kendi soru paketlerini JSON metni olarak gönderiyor, ama her paket düzgün değil. `loadPack(text)` fonksiyonunu yaz:\n\n- Metin `JSON.parse` ile okunamazsa `#warning`'e `Soru paketi okunamadı.` yaz ve boş dizi döndür.\n- Okunduysa yalnızca geçerli soruları tut: `soru` boş olmayan bir metin, `secenekler` en az 2 elemanlı bir dizi, `dogru` da `secenekler` içinde geçerli bir sıra numarası (0'dan başlar) olmalı.\n- Atlanan soru varsa `#warning`'e `2 soru atlandı` biçiminde yaz; yoksa `#warning` boş olsun.\n- Geçerli soruları döndür.",
+    "starter": "const packText = JSON.stringify([\n  { soru: \"Ay, hangi gezegenin uydusudur?\", secenekler: [\"Mars\", \"Dünya\", \"Jüpiter\"], dogru: 1 },\n  { soru: \"Kızıl gezegen hangisidir?\", secenekler: \"Mars\", dogru: 0 },\n  { soru: \"Halkalarıyla ünlü gezegen hangisidir?\", secenekler: [\"Satürn\", \"Mars\"], dogru: 0 },\n  { soru: \"Güneşe en yakın gezegen hangisidir?\", secenekler: [\"Venüs\", \"Merkür\"], dogru: 5 },\n  { soru: \"En büyük gezegen hangisidir?\", secenekler: [\"Satürn\", \"Jüpiter\", \"Neptün\"], dogru: 1 },\n]);\n\nfunction loadPack(text) {\n  // oku (try/catch), geçerlileri süz, uyarıyı yaz\n  return [];\n}\n\nconst questions = loadPack(packText);\ndocument.querySelector(\"#pack-info\").textContent = `${questions.length} soru hazır`;\n",
+    "solution": "const packText = JSON.stringify([\n  { soru: \"Ay, hangi gezegenin uydusudur?\", secenekler: [\"Mars\", \"Dünya\", \"Jüpiter\"], dogru: 1 },\n  { soru: \"Kızıl gezegen hangisidir?\", secenekler: \"Mars\", dogru: 0 },\n  { soru: \"Halkalarıyla ünlü gezegen hangisidir?\", secenekler: [\"Satürn\", \"Mars\"], dogru: 0 },\n  { soru: \"Güneşe en yakın gezegen hangisidir?\", secenekler: [\"Venüs\", \"Merkür\"], dogru: 5 },\n  { soru: \"En büyük gezegen hangisidir?\", secenekler: [\"Satürn\", \"Jüpiter\", \"Neptün\"], dogru: 1 },\n]);\n\nfunction isValid(q) {\n  return typeof q.soru === \"string\" && q.soru.trim() !== \"\" &&\n    Array.isArray(q.secenekler) && q.secenekler.length >= 2 &&\n    Number.isInteger(q.dogru) && q.dogru >= 0 && q.dogru < q.secenekler.length;\n}\n\nfunction loadPack(text) {\n  // oku (try/catch), geçerlileri süz, uyarıyı yaz\n  const warning = document.querySelector(\"#warning\");\n  let data;\n  try {\n    data = JSON.parse(text);\n  } catch (error) {\n    warning.textContent = \"Soru paketi okunamadı.\";\n    return [];\n  }\n  const valid = data.filter(isValid);\n  const skipped = data.length - valid.length;\n  warning.textContent = skipped > 0 ? `${skipped} soru atlandı` : \"\";\n  return valid;\n}\n\nconst questions = loadPack(packText);\ndocument.querySelector(\"#pack-info\").textContent = `${questions.length} soru hazır`;\n",
+    "hints": [
+     "try { data = JSON.parse(text); } catch (error) { ...; return []; }",
+     "Geçerlilik için ayrı bir isValid(q) fonksiyonu yaz ve data.filter(isValid) kullan.",
+     "dogru için: Number.isInteger(q.dogru) && q.dogru >= 0 && q.dogru < q.secenekler.length"
+    ],
+    "check": {
+     "code_contains": [
+      "try",
+      "catch",
+      "JSON.parse",
+      "filter"
+     ],
+     "js": "assert($(\"#pack-info\").textContent.trim() === \"3 soru hazır\", \"Paketteki 3 geçerli soru tutulmalı: #pack-info '3 soru hazır' yazmalı.\");\nassert($(\"#warning\").textContent.trim() === \"2 soru atlandı\", \"#warning '2 soru atlandı' yazmalı.\");\nlet r;\ntry {\n  r = loadPack(\"{bozuk\");\n} catch (e) {\n  assert(false, \"loadPack bozuk metinde hata fırlatmamalı; try/catch ile yakala.\");\n}\nassert(same(r, []), \"Okunamayan pakette boş dizi dönmeli.\");\nassert($(\"#warning\").textContent.trim() === \"Soru paketi okunamadı.\", \"#warning 'Soru paketi okunamadı.' yazmalı.\");\nconst one = loadPack(JSON.stringify([{ soru: \"A?\", secenekler: [\"x\", \"y\"], dogru: 1 }]));\nassert(one.length === 1 && $(\"#warning\").textContent.trim() === \"\", \"Hiç soru atlanmadıysa #warning boş olmalı.\");\nconst mixed = loadPack(JSON.stringify([\n  { soru: \"\", secenekler: [\"x\", \"y\"], dogru: 0 },\n  { soru: \"B?\", secenekler: [\"x\"], dogru: 0 },\n  { soru: \"C?\", secenekler: [\"x\", \"y\", \"z\"], dogru: 2 },\n  { soru: \"D?\", secenekler: [\"x\", \"y\"], dogru: -1 },\n]));\nassert(mixed.length === 1 && mixed[0].soru === \"C?\", \"Boş soru, tek seçenek ve geçersiz dogru değerleri atlanmalı.\");\nassert($(\"#warning\").textContent.trim() === \"3 soru atlandı\", \"#warning '3 soru atlandı' yazmalı.\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<h2 class=\"quiz-title\">Bilgi Yarışması</h2>\n<p id=\"pack-info\"></p>\n<p id=\"warning\"></p>\n",
+    "css": ".quiz-title{margin:0 0 8px;color:#5e35b1}#warning{color:#c62828;font-weight:600}"
+   }
+  }
+ },
+ "available": true
+}

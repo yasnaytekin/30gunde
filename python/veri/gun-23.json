@@ -1,0 +1,1273 @@
+{
+ "day": 23,
+ "title": "Sanal ortam",
+ "region": "liman",
+ "project_contribution": "Proje düzeni",
+ "game_role": "Oyunun jeneriğinde paylaşılan dosyalar listelenir.",
+ "xp_complete": 150,
+ "objective": "Sanal ortamın ne olduğunu ve neden kullanıldığını anlamak, venv komutlarını tanımak",
+ "story": "Limanda iki gemi yan yana duruyor. Biri balık taşıyor, diğeri çiçek. Yükler karışsa ne olurdu, düşünsene! Her geminin kendi ambarı var. Bilgisayarındaki Python projeleri de böyledir: her projenin kendi paket ambarı olmalı. Bu ambara **sanal ortam** denir.",
+ "sections": [
+  {
+   "title": "Sorun: sürüm çakışması",
+   "body": "Diyelim ki oyun projen `pygame 2.5` istiyor, eski bir proje de `pygame 2.1`. Bilgisayarda tek bir Python ve tek bir paket kutusu varsa ikisi aynı anda kurulamaz. Birini güncellersen öbürü bozulur.\n\n**Sanal ortam** (virtual environment), her projeye kendi ayrı paket kutusunu verir. Böylece projeler birbirini etkilemez."
+  },
+  {
+   "title": "Oluşturmak ve açmak",
+   "body": "Bu komutlar terminale yazılır, proje klasöründeyken:\n\n```\npython -m venv .venv\n```\n\nSonra ortamı **etkinleştirirsin**:\n\n```\n# Windows\n.venv\\Scripts\\activate\n\n# macOS ve Linux\nsource .venv/bin/activate\n```\n\nTerminalin başında `(.venv)` görürsen ortam açıktır. Artık `pip install` ile kurduğun her paket sadece bu projeye gider. Kapatmak için `deactivate` yaz."
+  },
+  {
+   "title": "Ortamı paylaşmak",
+   "body": "Sanal ortam klasörü büyük olur ve başkasıyla paylaşılmaz. Onun yerine paket listesini paylaşırız:\n\n```\npip freeze > requirements.txt\n```\n\nArkadaşın kendi sanal ortamını kurar ve `pip install -r requirements.txt` ile aynı paketleri yükler. `.venv` klasörü de `.gitignore` dosyasına yazılarak paylaşımdan çıkarılır."
+  },
+  {
+   "title": "Kodda benzer bir tuzak",
+   "body": "Ortamları ayırmanın önemini Python'da da görebiliriz. Bir listeyi başka bir değişkene atarsan **aynı liste** paylaşılır:\n\n```python\ngame = [\"pygame\"]\nsite = game          # aynı kutu!\nsite.append(\"flask\")\nprint(game)          # ['pygame', 'flask']\n```\n\nAyrı bir kopya için `site = game.copy()` yazılır. Sanal ortam da projelere ayrı kopyalar vermek gibidir."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Paylaşılan kutu tuzağı",
+   "code": "game = [\"pygame\"]\nsite = game\nsite.append(\"flask\")\nprint(\"Oyun:\", game)\n\ngame = [\"pygame\"]\nsite = game.copy()\nsite.append(\"flask\")\nprint(\"Oyun:\", game)\nprint(\"Site:\", site)\n",
+   "note": ""
+  },
+  {
+   "title": "Ortamları taklit edelim",
+   "code": "envs = {\n    \"oyun\": {\"pygame\": \"2.5.2\"},\n    \"eski-oyun\": {\"pygame\": \"2.1.0\"},\n}\nfor name, packages in envs.items():\n    print(name, \"->\", packages)\n",
+   "note": "İki projede aynı paketin farklı sürümleri sorunsuzca yaşıyor."
+  },
+  {
+   "title": "Komutları üret",
+   "code": "env = \".venv\"\nprint(\"Oluştur:\", f\"python -m venv {env}\")\nprint(\"Windows:\", f\"{env}\\\\Scripts\\\\activate\")\nprint(\"macOS/Linux:\", f\"source {env}/bin/activate\")\n",
+   "note": ""
+  }
+ ],
+ "tasks": [
+  {
+   "id": "d23-t1",
+   "title": "Komutları hazırla",
+   "prompt": "`env_name` adıyla sanal ortam oluşturma ve macOS/Linux'ta etkinleştirme komutlarını üret:\n\n- `create_cmd`: `python -m venv .venv`\n- `activate_cmd`: `source .venv/bin/activate`",
+   "starter": "env_name = \".venv\"\n\ncreate_cmd = \"\"\nactivate_cmd = \"\"\n\nprint(create_cmd)\nprint(activate_cmd)\n",
+   "solution": "env_name = \".venv\"\n\ncreate_cmd = f\"python -m venv {env_name}\"\nactivate_cmd = f\"source {env_name}/bin/activate\"\n\nprint(create_cmd)\nprint(activate_cmd)\n",
+   "hints": [
+    "f-string kullan: f\"python -m venv {env_name}\""
+   ],
+   "check": {
+    "python": "\n_, g = _run(_set(_code, \"env_name\", \"oyun-env\"))\nassert g.get(\"create_cmd\") == \"python -m venv oyun-env\", \"create_cmd 'python -m venv oyun-env' olmalı.\"\nassert g.get(\"activate_cmd\") == \"source oyun-env/bin/activate\", \"activate_cmd 'source oyun-env/bin/activate' olmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "env_name = \".venv\"",
+      "notes": [
+       "`env_name` adında bir değişken oluşturuluyor ve içine `\".venv\"` (metin (str)) konuyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "create_cmd = f\"python -m venv {env_name}\"",
+      "notes": [
+       "`create_cmd` adında bir değişken oluşturuluyor ve içine `f\"python -m venv {env_name}\"` (f-string ile kurulan metin) konuyor."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "activate_cmd = f\"source {env_name}/bin/activate\"",
+      "notes": [
+       "`activate_cmd` adında bir değişken oluşturuluyor ve içine `f\"source {env_name}/bin/activate\"` (f-string ile kurulan metin) konuyor."
+      ]
+     },
+     {
+      "n": 6,
+      "code": "print(create_cmd)",
+      "notes": [
+       "`print(create_cmd)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     },
+     {
+      "n": 7,
+      "code": "print(activate_cmd)",
+      "notes": [
+       "`print(activate_cmd)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "env_name",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `\".venv\"`."
+     },
+     {
+      "term": "create_cmd",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `f\"python -m venv {env_name}\"`."
+     },
+     {
+      "term": "activate_cmd",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `f\"source {env_name}/bin/activate\"`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "f\"...{}\"",
+      "kind": "metin",
+      "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d23-t2",
+   "title": "Ayrı kopya",
+   "prompt": "`site` listesi `game` listesinin **ayrı bir kopyası** olsun. `site`'a `\"flask\"` ekleyince `game` değişmemeli.",
+   "starter": "game = [\"pygame\", \"rich\"]\n\nsite = game\nsite.append(\"flask\")\n\nprint(\"Oyun:\", game)\nprint(\"Site:\", site)\n",
+   "solution": "game = [\"pygame\", \"rich\"]\n\nsite = game.copy()\nsite.append(\"flask\")\n\nprint(\"Oyun:\", game)\nprint(\"Site:\", site)\n",
+   "hints": [
+    "site = game.copy()"
+   ],
+   "check": {
+    "python": "\n_, g = _run(_set(_code, \"game\", [\"numpy\"]))\nassert g.get(\"game\") == [\"numpy\"], \"game listesi değişmemeli; site ayrı bir kopya olmalı.\"\nassert g.get(\"site\") == [\"numpy\", \"flask\"], \"site, game'in kopyası artı 'flask' olmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "game = [\"pygame\", \"rich\"]",
+      "notes": [
+       "`game` adında bir değişken oluşturuluyor ve içine `[\"pygame\", \"rich\"]` (liste) konuyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "site = game.copy()",
+      "notes": [
+       "`site` adında bir değişken oluşturuluyor ve içine `game.copy()` konuyor."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "site.append(\"flask\")",
+      "notes": [
+       "`site.append(\"flask\")`: `site` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+      ]
+     },
+     {
+      "n": 6,
+      "code": "print(\"Oyun:\", game)",
+      "notes": [
+       "`print(\"Oyun:\", game)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     },
+     {
+      "n": 7,
+      "code": "print(\"Site:\", site)",
+      "notes": [
+       "`print(\"Site:\", site)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "game",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `[\"pygame\", \"rich\"]`."
+     },
+     {
+      "term": "site",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `game.copy()`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": ".copy()",
+      "kind": "metot",
+      "desc": "Listenin/sözlüğün bir kopyasını yapar."
+     },
+     {
+      "term": ".append()",
+      "kind": "metot",
+      "desc": "Listenin sonuna yeni bir eleman ekler."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d23-t3",
+   "title": "Çakışmayı bul",
+   "prompt": "İki proje aynı paketlerin farklı sürümlerini istiyor olabilir. **Her ikisinde de olup** sürümü farklı olan paketlerin adlarını alfabetik sırayla `conflicts` listesine koy.",
+   "starter": "project_a = {\"pygame\": \"2.5.2\", \"numpy\": \"1.26.4\", \"rich\": \"13.7.0\"}\nproject_b = {\"pygame\": \"2.1.0\", \"numpy\": \"1.26.4\", \"flask\": \"3.0.0\"}\n\nconflicts = []\n\nprint(conflicts)\n",
+   "solution": "project_a = {\"pygame\": \"2.5.2\", \"numpy\": \"1.26.4\", \"rich\": \"13.7.0\"}\nproject_b = {\"pygame\": \"2.1.0\", \"numpy\": \"1.26.4\", \"flask\": \"3.0.0\"}\n\nconflicts = sorted([name for name in project_a if name in project_b and project_a[name] != project_b[name]])\n\nprint(conflicts)\n",
+   "hints": [
+    "project_a'daki her paket için project_b'de var mı bak.",
+    "Varsa ve sürümler farklıysa listeye ekle, sonunda sorted()"
+   ],
+   "check": {
+    "python": "\na = {\"x\": \"1\", \"y\": \"2\", \"z\": \"3\", \"q\": \"1\"}\nb = {\"z\": \"4\", \"x\": \"9\", \"y\": \"2\", \"w\": \"1\"}\n_, g = _run(_set(_set(_code, \"project_a\", a), \"project_b\", b))\nassert g.get(\"conflicts\") == [\"x\", \"z\"], \"conflicts, iki projede de olup sürümü farklı olan paketler olmalı (alfabetik).\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "project_a = {\"pygame\": \"2.5.2\", \"numpy\": \"1.26.4\", \"rich\": \"13.7.0\"}",
+      "notes": [
+       "`project_a` adında bir değişken oluşturuluyor ve içine `{\"pygame\": \"2.5.2\", \"numpy\": \"1.26.4\", \"rich\": \"13.7.0\"}` (sözlük (anahtar: değer)) konuyor."
+      ]
+     },
+     {
+      "n": 2,
+      "code": "project_b = {\"pygame\": \"2.1.0\", \"numpy\": \"1.26.4\", \"flask\": \"3.0.0\"}",
+      "notes": [
+       "`project_b` adında bir değişken oluşturuluyor ve içine `{\"pygame\": \"2.1.0\", \"numpy\": \"1.26.4\", \"flask\": \"3.0.0\"}` (sözlük (anahtar: değer)) konuyor."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "conflicts = sorted([name for name in project_a if name in project_b and project_a[name] != project_b[name]])",
+      "notes": [
+       "`conflicts` adında bir değişken oluşturuluyor ve içine `sorted([name for name in project_a if name in project_b a...` konuyor.",
+       "Tek satırda döngüyle yeni bir liste/dizi üretiliyor."
+      ]
+     },
+     {
+      "n": 6,
+      "code": "print(conflicts)",
+      "notes": [
+       "`print(conflicts)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "project_a",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"pygame\": \"2.5.2\", \"numpy\": \"1.26.4\", \"rich\": \"13.7.0\"}`."
+     },
+     {
+      "term": "project_b",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"pygame\": \"2.1.0\", \"numpy\": \"1.26.4\", \"flask\": \"3.0.0\"}`."
+     },
+     {
+      "term": "conflicts",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `sorted([name for name in project_a if name in project_b a...`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "sorted()",
+      "kind": "fonksiyon",
+      "desc": "Sıralanmış yeni bir liste verir; asıl liste değişmez."
+     },
+     {
+      "term": "[... for ... in ...]",
+      "kind": "liste üreteci",
+      "desc": "Liste üreteci: [ifade for x in liste if koşul] ile tek satırda yeni liste."
+     },
+     {
+      "term": "and",
+      "kind": "operatör",
+      "desc": "\"ve\": iki koşul da doğruysa True."
+     },
+     {
+      "term": "in",
+      "kind": "operatör",
+      "desc": "İçinde var mı? (listede, metinde, sözlükte)"
+     },
+     {
+      "term": "!=",
+      "kind": "operatör",
+      "desc": "Eşit değil mi?"
+     },
+     {
+      "term": "[ ]",
+      "kind": "seçme",
+      "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "id": "d23-c",
+  "title": "Ortama kur",
+  "prompt": "`install(envs, env, package, version)` fonksiyonu paketi **sadece** verilen ortama kursun. Ortam yoksa önce boş bir ortam oluştursun.",
+  "starter": "def install(envs, env, package, version):\n    pass\n\nenvs = {\"oyun\": {}}\ninstall(envs, \"oyun\", \"pygame\", \"2.5.2\")\ninstall(envs, \"site\", \"flask\", \"3.0.0\")\nprint(envs)\n",
+  "solution": "def install(envs, env, package, version):\n    if env not in envs:\n        envs[env] = {}\n    envs[env][package] = version\n\nenvs = {\"oyun\": {}}\ninstall(envs, \"oyun\", \"pygame\", \"2.5.2\")\ninstall(envs, \"site\", \"flask\", \"3.0.0\")\nprint(envs)\n",
+  "hints": [
+   "Ortam yoksa: if env not in envs: envs[env] = {}",
+   "Sonra envs[env][package] = version"
+  ],
+  "check": {
+   "python": "\ne = {\"a\": {\"x\": \"1\"}}\ninstall(e, \"a\", \"y\", \"2\")\ninstall(e, \"b\", \"x\", \"5\")\nassert e == {\"a\": {\"x\": \"1\", \"y\": \"2\"}, \"b\": {\"x\": \"5\"}}, \"Paketler sadece kendi ortamlarına kurulmalı, yeni ortam gerekirse oluşturulmalı.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "def install(envs, env, package, version):",
+     "notes": [
+      "`install` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `envs`, `env`, `package`, `version`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+     ]
+    },
+    {
+     "n": 2,
+     "code": "    if env not in envs:",
+     "notes": [
+      "Koşul: `env not in envs` doğruysa altındaki girintili satırlar çalışır."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "        envs[env] = {}",
+     "notes": [
+      "`envs[...]` konumundaki değer `{}` ile değiştiriliyor."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "    envs[env][package] = version",
+     "notes": [
+      "`envs[...][...]` konumundaki değer `version` ile değiştiriliyor."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "envs = {\"oyun\": {}}",
+     "notes": [
+      "`envs` değişkenine yeni değer veriliyor: `{\"oyun\": {}}`."
+     ]
+    },
+    {
+     "n": 7,
+     "code": "install(envs, \"oyun\", \"pygame\", \"2.5.2\")",
+     "notes": [
+      "`install(envs, \"oyun\", \"pygame\", \"2.5.2\")`: tanımladığın `install` fonksiyonunu çalıştırır.",
+      "`install(...)`: senin tanımladığın fonksiyonu çağırır."
+     ]
+    },
+    {
+     "n": 8,
+     "code": "install(envs, \"site\", \"flask\", \"3.0.0\")",
+     "notes": [
+      "`install(envs, \"site\", \"flask\", \"3.0.0\")`: tanımladığın `install` fonksiyonunu çalıştırır.",
+      "`install(...)`: senin tanımladığın fonksiyonu çağırır."
+     ]
+    },
+    {
+     "n": 9,
+     "code": "print(envs)",
+     "notes": [
+      "`print(envs)`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "envs",
+     "kind": "parametre",
+     "desc": "`install` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+    },
+    {
+     "term": "env",
+     "kind": "parametre",
+     "desc": "`install` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+    },
+    {
+     "term": "package",
+     "kind": "parametre",
+     "desc": "`install` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+    },
+    {
+     "term": "version",
+     "kind": "parametre",
+     "desc": "`install` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+    },
+    {
+     "term": "def",
+     "kind": "anahtar kelime",
+     "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+    },
+    {
+     "term": "install()",
+     "kind": "senin fonksiyonun",
+     "desc": "Kodda tanımlanan fonksiyon; parametreleri: `envs`, `env`, `package`, `version`."
+    },
+    {
+     "term": "if",
+     "kind": "anahtar kelime",
+     "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+    },
+    {
+     "term": "not in",
+     "kind": "operatör",
+     "desc": "İçinde yok mu?"
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    }
+   ]
+  }
+ },
+ "project_task": {
+  "id": "d23-p",
+  "title": "Proje düzeni",
+  "prompt": "Oyunumuzu paylaşmadan önce hangi dosyaların paylaşılacağını seçelim. `files` listesinden **`.venv/` ile başlayanları ve `.pyc` ile bitenleri** çıkar, kalanları alfabetik sırayla `shared` listesine koy ve her birini ayrı satırda yazdır.",
+  "starter": "files = [\"main.py\", \".venv/bin/python\", \"requirements.txt\", \"piko/oyun.py\", \"piko/oyun.pyc\", \".venv/lib/site.py\"]\n\nshared = []\n\n# Her birini yazdır\n",
+  "solution": "files = [\"main.py\", \".venv/bin/python\", \"requirements.txt\", \"piko/oyun.py\", \"piko/oyun.pyc\", \".venv/lib/site.py\"]\n\nshared = sorted([f for f in files if not f.startswith(\".venv/\") and not f.endswith(\".pyc\")])\n\nfor f in shared:\n    print(f)\n",
+  "hints": [
+   "f.startswith(\".venv/\") ve f.endswith(\".pyc\") işine yarar.",
+   "List comprehension içinde not ... and not ... kullan."
+  ],
+  "check": {
+   "python": "\ntest = [\"z.py\", \".venv/x\", \"a.pyc\", \"b/c.py\", \"README.md\", \".venv/y/z.py\"]\nout, g = _run(_set(_code, \"files\", test))\nassert g.get(\"shared\") == [\"README.md\", \"b/c.py\", \"z.py\"], \"shared, .venv/ ile başlamayan ve .pyc ile bitmeyen dosyalar olmalı (alfabetik).\"\nassert [l.strip() for l in out.strip().splitlines()] == [\"README.md\", \"b/c.py\", \"z.py\"], \"Her dosyayı ayrı satırda yazdır.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "files = [\"main.py\", \".venv/bin/python\", \"requirements.txt\", \"piko/oyun.py\", \"piko/oyun.pyc\", \".venv/lib/site.py\"]",
+     "notes": [
+      "`files` adında bir değişken oluşturuluyor ve içine `[\"main.py\", \".venv/bin/python\", \"requirements.txt\", \"piko...` (liste) konuyor."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "shared = sorted([f for f in files if not f.startswith(\".venv/\") and not f.endswith(\".pyc\")])",
+     "notes": [
+      "`shared` adında bir değişken oluşturuluyor ve içine `sorted([f for f in files if not f.startswith(\".venv/\") an...` konuyor.",
+      "Tek satırda döngüyle yeni bir liste/dizi üretiliyor."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "for f in shared:",
+     "notes": [
+      "Döngü: `shared` içindeki her eleman sırayla `f` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "    print(f)",
+     "notes": [
+      "`print(f)`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "files",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `[\"main.py\", \".venv/bin/python\", \"requirements.txt\", \"piko...`."
+    },
+    {
+     "term": "shared",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `sorted([f for f in files if not f.startswith(\".venv/\") an...`."
+    },
+    {
+     "term": "f",
+     "kind": "döngü değişkeni",
+     "desc": "Döngünün her turunda `shared` içindeki sıradaki elemanı tutar."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "sorted()",
+     "kind": "fonksiyon",
+     "desc": "Sıralanmış yeni bir liste verir; asıl liste değişmez."
+    },
+    {
+     "term": "[... for ... in ...]",
+     "kind": "liste üreteci",
+     "desc": "Liste üreteci: [ifade for x in liste if koşul] ile tek satırda yeni liste."
+    },
+    {
+     "term": "and",
+     "kind": "operatör",
+     "desc": "\"ve\": iki koşul da doğruysa True."
+    },
+    {
+     "term": "not",
+     "kind": "operatör",
+     "desc": "Koşulu tersine çevirir (True ↔ False)."
+    },
+    {
+     "term": ".startswith()",
+     "kind": "metot",
+     "desc": "Metin verilen yazıyla mı başlıyor? (True/False)"
+    },
+    {
+     "term": ".endswith()",
+     "kind": "metot",
+     "desc": "Metin verilen yazıyla mı bitiyor? (True/False)"
+    },
+    {
+     "term": "for",
+     "kind": "anahtar kelime",
+     "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    }
+   ]
+  }
+ },
+ "available": true,
+ "tracks": {
+  "veri": {
+   "project_task": {
+    "id": "d23-pv",
+    "title": "Paylaşılacak dosyalar",
+    "prompt": "Projeni paylaşmadan önce hangi dosyaların gideceğini seçelim. `files` listesinden şunları çıkar:\n\n- `.venv/` ile başlayanlar (sanal ortam her bilgisayarda yeniden kurulur)\n- `.json` ile bitenler (kişisel harcama verilerin!)\n\nKalanları alfabetik sırayla `shared` listesine koy ve her birini ayrı satırda yazdır.",
+    "starter": "files = [\"defter.py\", \".venv/bin/python\", \"harcamalar.json\", \"README.md\", \"requirements.txt\", \".venv/lib/x.py\"]\n",
+    "solution": "files = [\"defter.py\", \".venv/bin/python\", \"harcamalar.json\", \"README.md\", \"requirements.txt\", \".venv/lib/x.py\"]\nshared = sorted([f for f in files if not f.startswith(\".venv/\") and not f.endswith(\".json\")])\nfor f in shared:\n    print(f)\n",
+    "hints": [
+     "f.startswith(\".venv/\") ve f.endswith(\".json\")",
+     "Kalanları sorted() ile sırala."
+    ],
+    "check": {
+     "python": "\ntest = [\"z.py\", \".venv/x\", \"veri.json\", \"b/c.py\", \"README.md\", \".venv/y/z.py\"]\nout, g = _run(_set(_code, \"files\", test))\nassert g.get(\"shared\") == [\"README.md\", \"b/c.py\", \"z.py\"], \"shared, .venv/ ile başlamayan ve .json ile bitmeyen dosyalar olmalı (alfabetik).\"\nassert out.split() == [\"README.md\", \"b/c.py\", \"z.py\"], \"Her dosyayı ayrı satırda yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "files = [\"defter.py\", \".venv/bin/python\", \"harcamalar.json\", \"README.md\", \"requirements.txt\", \".venv/lib/x.py\"]",
+       "notes": [
+        "`files` adında bir değişken oluşturuluyor ve içine `[\"defter.py\", \".venv/bin/python\", \"harcamalar.json\", \"REA...` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "shared = sorted([f for f in files if not f.startswith(\".venv/\") and not f.endswith(\".json\")])",
+       "notes": [
+        "`shared` adında bir değişken oluşturuluyor ve içine `sorted([f for f in files if not f.startswith(\".venv/\") an...` konuyor.",
+        "Tek satırda döngüyle yeni bir liste/dizi üretiliyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "for f in shared:",
+       "notes": [
+        "Döngü: `shared` içindeki her eleman sırayla `f` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "    print(f)",
+       "notes": [
+        "`print(f)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "files",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[\"defter.py\", \".venv/bin/python\", \"harcamalar.json\", \"REA...`."
+      },
+      {
+       "term": "shared",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `sorted([f for f in files if not f.startswith(\".venv/\") an...`."
+      },
+      {
+       "term": "f",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `shared` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "sorted()",
+       "kind": "fonksiyon",
+       "desc": "Sıralanmış yeni bir liste verir; asıl liste değişmez."
+      },
+      {
+       "term": "[... for ... in ...]",
+       "kind": "liste üreteci",
+       "desc": "Liste üreteci: [ifade for x in liste if koşul] ile tek satırda yeni liste."
+      },
+      {
+       "term": "and",
+       "kind": "operatör",
+       "desc": "\"ve\": iki koşul da doğruysa True."
+      },
+      {
+       "term": "not",
+       "kind": "operatör",
+       "desc": "Koşulu tersine çevirir (True ↔ False)."
+      },
+      {
+       "term": ".startswith()",
+       "kind": "metot",
+       "desc": "Metin verilen yazıyla mı başlıyor? (True/False)"
+      },
+      {
+       "term": ".endswith()",
+       "kind": "metot",
+       "desc": "Metin verilen yazıyla mı bitiyor? (True/False)"
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Paylaşılacak dosyalar",
+   "game_role": "Projeyi paylaşırken kişisel verileri ve sanal ortamı dışarıda bırakır."
+  },
+  "otomasyon": {
+   "project_task": {
+    "id": "d23-po",
+    "title": "Kurulum komutları",
+    "prompt": "Asistanı başka bir bilgisayara kurarken sanal ortam gerekiyor. `setup_commands(os_name)` bir komut listesi döndürsün:\n\n1. `python -m venv .venv`\n2. Etkinleştirme: `os_name` `\"windows\"` ise `.venv\\\\Scripts\\\\activate`, değilse `source .venv/bin/activate`\n3. `pip install -r requirements.txt`",
+    "starter": "def setup_commands(os_name):\n    pass\n",
+    "solution": "def setup_commands(os_name):\n    if os_name == \"windows\":\n        activate = \".venv\\\\Scripts\\\\activate\"\n    else:\n        activate = \"source .venv/bin/activate\"\n    return [\"python -m venv .venv\", activate, \"pip install -r requirements.txt\"]\n\n\nfor command in setup_commands(\"linux\"):\n    print(command)\n",
+    "hints": [
+     "Önce if ile etkinleştirme komutunu seç.",
+     "Python yazısında ters bölü iki kez yazılır: \"\\\\\""
+    ],
+    "check": {
+     "python": "\nassert setup_commands(\"linux\") == [\"python -m venv .venv\", \"source .venv/bin/activate\", \"pip install -r requirements.txt\"], \"Linux/macOS için üç komut sırayla olmalı.\"\nw = setup_commands(\"windows\")\nassert w[0] == \"python -m venv .venv\" and w[2] == \"pip install -r requirements.txt\", \"İlk ve son komut her sistemde aynı.\"\nassert w[1] == \".venv\\\\Scripts\\\\activate\", \"Windows'ta etkinleştirme .venv\\\\Scripts\\\\activate olmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "def setup_commands(os_name):",
+       "notes": [
+        "`setup_commands` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `os_name`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "    if os_name == \"windows\":",
+       "notes": [
+        "Koşul: `os_name == \"windows\"` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "        activate = \".venv\\\\Scripts\\\\activate\"",
+       "notes": [
+        "`activate` adında bir değişken oluşturuluyor ve içine `\".venv\\\\Scripts\\\\activate\"` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "    else:",
+       "notes": [
+        "`else`: yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "        activate = \"source .venv/bin/activate\"",
+       "notes": [
+        "`activate` değişkenine yeni değer veriliyor: `\"source .venv/bin/activate\"`."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    return [\"python -m venv .venv\", activate, \"pip install -r requirements.txt\"]",
+       "notes": [
+        "Fonksiyon `[\"python -m venv .venv\", activate, \"pip install -r requir...` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "for command in setup_commands(\"linux\"):",
+       "notes": [
+        "Döngü: `setup_commands(\"linux\")` içindeki her eleman sırayla `command` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır.",
+        "`setup_commands(...)`: senin tanımladığın fonksiyonu çağırır."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "    print(command)",
+       "notes": [
+        "`print(command)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "activate",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\".venv\\\\Scripts\\\\activate\"`."
+      },
+      {
+       "term": "command",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `setup_commands(\"linux\")` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "os_name",
+       "kind": "parametre",
+       "desc": "`setup_commands` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "setup_commands()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `os_name`."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "==",
+       "kind": "operatör",
+       "desc": "Eşit mi? (True/False)"
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "else",
+       "kind": "anahtar kelime",
+       "desc": "Yukarıdaki koşulların hiçbiri doğru değilse burası çalışır."
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Kurulum komutları",
+   "game_role": "Asistanı yeni bir bilgisayara kurmak için gereken komutları yazar."
+  },
+  "web": {
+   "project_task": {
+    "id": "d23-pw",
+    "title": "Yüklenecek dosyalar",
+    "prompt": "Siteyi sunucuya yüklerken sadece ziyaretçinin göreceği dosyalar gitsin. `files` listesinden `deploy` listesini oluştur:\n\n- `.venv/` ile başlayanları çıkar (sanal ortam yüklenmez; içinde `.html` dosyaları bile olabilir!).\n- Sadece `.html` veya `.css` ile bitenleri al.\n\n`deploy`'u alfabetik sırala, her dosyayı ayrı satırda yazdır ve en sonda `3 dosya yüklenecek` gibi yazdır.",
+    "starter": "files = [\"index.html\", \"build.py\", \".venv/lib/python3.12/site.py\", \"style.css\", \".venv/share/doc/index.html\", \"blog/merhaba.html\", \"requirements.txt\", \"yazilar.json\"]\n",
+    "solution": "files = [\"index.html\", \"build.py\", \".venv/lib/python3.12/site.py\", \"style.css\", \".venv/share/doc/index.html\", \"blog/merhaba.html\", \"requirements.txt\", \"yazilar.json\"]\ndeploy = sorted([f for f in files if not f.startswith(\".venv/\") and (f.endswith(\".html\") or f.endswith(\".css\"))])\nfor f in deploy:\n    print(f)\nprint(len(deploy), \"dosya yüklenecek\")\n",
+    "hints": [
+     "f.startswith(\".venv/\"), f.endswith(\".html\") ve f.endswith(\".css\")",
+     "Koşulları and / or ile birleştir; or kısmını parantez içine al."
+    ],
+    "check": {
+     "python": "\ntest = [\"z.css\", \".venv/a.html\", \"app.py\", \"b/c.html\", \".venv/x/y.css\", \"notes.txt\", \"a.html\"]\nout, g = _run(_set(_code, \"files\", test))\nassert g.get(\"deploy\") == [\"a.html\", \"b/c.html\", \"z.css\"], \"deploy, .venv/ ile başlamayan .html ve .css dosyaları olmalı (alfabetik).\"\nlines = [l.strip() for l in out.strip().splitlines()]\nassert lines == [\"a.html\", \"b/c.html\", \"z.css\", \"3 dosya yüklenecek\"], \"Her dosyayı ayrı satırda, en sonda '3 dosya yüklenecek' gibi yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "files = [\"index.html\", \"build.py\", \".venv/lib/python3.12/site.py\", \"style.css\", \".venv/share/doc/index.html\", \"blog/merhaba.html\", \"requirements.txt\", \"yazilar.json\"]",
+       "notes": [
+        "`files` adında bir değişken oluşturuluyor ve içine `[\"index.html\", \"build.py\", \".venv/lib/python3.12/site.py\"...` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "deploy = sorted([f for f in files if not f.startswith(\".venv/\") and (f.endswith(\".html\") or f.endswith(\".css\"))])",
+       "notes": [
+        "`deploy` adında bir değişken oluşturuluyor ve içine `sorted([f for f in files if not f.startswith(\".venv/\") an...` konuyor.",
+        "Tek satırda döngüyle yeni bir liste/dizi üretiliyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "for f in deploy:",
+       "notes": [
+        "Döngü: `deploy` içindeki her eleman sırayla `f` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "    print(f)",
+       "notes": [
+        "`print(f)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "print(len(deploy), \"dosya yüklenecek\")",
+       "notes": [
+        "`print(len(deploy), \"dosya yüklenecek\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "files",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[\"index.html\", \"build.py\", \".venv/lib/python3.12/site.py\"...`."
+      },
+      {
+       "term": "deploy",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `sorted([f for f in files if not f.startswith(\".venv/\") an...`."
+      },
+      {
+       "term": "f",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `deploy` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "sorted()",
+       "kind": "fonksiyon",
+       "desc": "Sıralanmış yeni bir liste verir; asıl liste değişmez."
+      },
+      {
+       "term": "[... for ... in ...]",
+       "kind": "liste üreteci",
+       "desc": "Liste üreteci: [ifade for x in liste if koşul] ile tek satırda yeni liste."
+      },
+      {
+       "term": "and",
+       "kind": "operatör",
+       "desc": "\"ve\": iki koşul da doğruysa True."
+      },
+      {
+       "term": "not",
+       "kind": "operatör",
+       "desc": "Koşulu tersine çevirir (True ↔ False)."
+      },
+      {
+       "term": "or",
+       "kind": "operatör",
+       "desc": "\"veya\": koşullardan biri doğruysa True."
+      },
+      {
+       "term": ".startswith()",
+       "kind": "metot",
+       "desc": "Metin verilen yazıyla mı başlıyor? (True/False)"
+      },
+      {
+       "term": ".endswith()",
+       "kind": "metot",
+       "desc": "Metin verilen yazıyla mı bitiyor? (True/False)"
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Yüklenecek dosyalar",
+   "game_role": "Siteyi sunucuya yüklerken sanal ortamı ve kaynak dosyaları dışarıda bırakır."
+  },
+  "bot": {
+   "project_task": {
+    "id": "d23-pb",
+    "title": "Neyi paylaşmalı?",
+    "prompt": "Botunu arkadaşlarınla paylaşacaksın ama her dosya gitmemeli:\n\n- `.venv/` ile başlayanlar: sanal ortam, her bilgisayarda `python -m venv .venv` ile yeniden kurulur.\n- `__pycache__/` ile başlayanlar: Python'ın kendi ürettiği geçici dosyalar.\n- `.json` ile bitenler: sohbet kayıtların, kişisel!\n- `.env` ile bitenler: API anahtarı gibi gizli bilgiler.\n\n`should_share(path)` bu dosyalar için `False`, diğerleri için `True` döndürsün. Sonra `shared` listesine paylaşılacak dosyaları (sırası bozulmadan) koy ve her birini ayrı satırda yazdır.",
+    "starter": "files = [\"bot.py\", \".venv/bin/python\", \"sohbet.json\", \"__pycache__/bot.pyc\", \".env\", \"requirements.txt\", \"README.md\"]\n\n\ndef should_share(path):\n    pass\n",
+    "solution": "files = [\"bot.py\", \".venv/bin/python\", \"sohbet.json\", \"__pycache__/bot.pyc\", \".env\", \"requirements.txt\", \"README.md\"]\n\n\ndef should_share(path):\n    if path.startswith(\".venv/\") or path.startswith(\"__pycache__/\"):\n        return False\n    if path.endswith(\".json\") or path.endswith(\".env\"):\n        return False\n    return True\n\n\nshared = [f for f in files if should_share(f)]\nfor f in shared:\n    print(f)\n",
+    "hints": [
+     "path.startswith(\".venv/\") ve path.endswith(\".json\") True ya da False verir.",
+     "shared = [f for f in files if should_share(f)]"
+    ],
+    "check": {
+     "python": "\nassert should_share(\"bot.py\") is True and should_share(\"README.md\") is True, \"Normal dosyalar için True döndürmeli.\"\nassert should_share(\".venv/lib/x.py\") is False, \".venv/ ile başlayanlar paylaşılmamalı.\"\nassert should_share(\"__pycache__/a.pyc\") is False, \"__pycache__/ ile başlayanlar paylaşılmamalı.\"\nassert should_share(\"veri/sohbet.json\") is False and should_share(\".env\") is False, \".json ve .env ile bitenler paylaşılmamalı.\"\nout, g = _run(_set(_code, \"files\", [\"z.py\", \".env\", \"a/b.json\", \".venv/x\", \"docs/r.md\"]))\nassert g.get(\"shared\") == [\"z.py\", \"docs/r.md\"], \"shared, should_share'in True dediği dosyalar olmalı (aynı sırayla).\"\nassert out.split() == [\"z.py\", \"docs/r.md\"], \"Her paylaşılacak dosyayı ayrı satırda yazdır.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "files = [\"bot.py\", \".venv/bin/python\", \"sohbet.json\", \"__pycache__/bot.pyc\", \".env\", \"requirements.txt\", \"README.md\"]",
+       "notes": [
+        "`files` adında bir değişken oluşturuluyor ve içine `[\"bot.py\", \".venv/bin/python\", \"sohbet.json\", \"__pycache_...` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "def should_share(path):",
+       "notes": [
+        "`should_share` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `path`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "    if path.startswith(\".venv/\") or path.startswith(\"__pycache__/\"):",
+       "notes": [
+        "Koşul: `path.startswith(\".venv/\") or path.startswith(\"__pycache__/\")` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "        return False",
+       "notes": [
+        "Fonksiyon `False` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "    if path.endswith(\".json\") or path.endswith(\".env\"):",
+       "notes": [
+        "Koşul: `path.endswith(\".json\") or path.endswith(\".env\")` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "        return False",
+       "notes": [
+        "Fonksiyon `False` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "    return True",
+       "notes": [
+        "Fonksiyon `True` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "shared = [f for f in files if should_share(f)]",
+       "notes": [
+        "`shared` adında bir değişken oluşturuluyor ve içine `[f for f in files if should_share(f)]` (liste üreteciyle kurulan liste) konuyor.",
+        "Tek satırda döngüyle yeni bir liste/dizi üretiliyor.",
+        "`should_share(...)`: senin tanımladığın fonksiyonu çağırır."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "for f in shared:",
+       "notes": [
+        "Döngü: `shared` içindeki her eleman sırayla `f` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 14,
+       "code": "    print(f)",
+       "notes": [
+        "`print(f)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "files",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[\"bot.py\", \".venv/bin/python\", \"sohbet.json\", \"__pycache_...`."
+      },
+      {
+       "term": "shared",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[f for f in files if should_share(f)]`."
+      },
+      {
+       "term": "f",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `shared` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "path",
+       "kind": "parametre",
+       "desc": "`should_share` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "should_share()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `path`."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "or",
+       "kind": "operatör",
+       "desc": "\"veya\": koşullardan biri doğruysa True."
+      },
+      {
+       "term": ".startswith()",
+       "kind": "metot",
+       "desc": "Metin verilen yazıyla mı başlıyor? (True/False)"
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": "False",
+       "kind": "değer",
+       "desc": "Yanlış (mantıksal değer)."
+      },
+      {
+       "term": ".endswith()",
+       "kind": "metot",
+       "desc": "Metin verilen yazıyla mı bitiyor? (True/False)"
+      },
+      {
+       "term": "True",
+       "kind": "değer",
+       "desc": "Doğru (mantıksal değer)."
+      },
+      {
+       "term": "[... for ... in ...]",
+       "kind": "liste üreteci",
+       "desc": "Liste üreteci: [ifade for x in liste if koşul] ile tek satırda yeni liste."
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Paylaşım süzgeci",
+   "game_role": "Projeyi paylaşırken sanal ortamı, gizli anahtarları ve sohbet kayıtlarını dışarıda bırakır."
+  },
+  "okul": {
+   "project_task": {
+    "id": "d23-pn",
+    "title": ".gitignore hazırlama",
+    "prompt": "Projeni paylaşırken `.venv` sanal ortam klasörü gitmemeli (herkes kendi ortamını kurar) ve notların da gizli kalmalı. Bunları `.gitignore` dosyasına yazarız.\n\n`make_gitignore(private_files)` bir yazı döndürsün:\n\n- İlk iki satır her zaman `.venv/` ve `__pycache__/`\n- Sonra `private_files` listesindeki dosyalar, her biri ayrı satırda\n- Aynı satır iki kez yazılmasın.\n\n`make_gitignore([\"notlar.json\"])` şunu döndürmeli:\n\n```\n.venv/\n__pycache__/\nnotlar.json\n```",
+    "starter": "def make_gitignore(private_files):\n    pass\n",
+    "solution": "def make_gitignore(private_files):\n    lines = [\".venv/\", \"__pycache__/\"]\n    for name in private_files:\n        if name not in lines:\n            lines.append(name)\n    return \"\\n\".join(lines)\n\n\nprint(make_gitignore([\"notlar.json\"]))\n",
+    "hints": [
+     "Önce lines = [\".venv/\", \"__pycache__/\"] listesiyle başla; if name not in lines: ile tekrarı önle.",
+     "\"\\n\".join(lines) satırları alt alta birleştirir."
+    ],
+    "check": {
+     "python": "\nassert make_gitignore([]) == \".venv/\\n__pycache__/\", \"Boş listeyle sadece .venv/ ve __pycache__/ satırları olmalı.\"\nassert make_gitignore([\"notlar.json\", \"sifre.txt\", \"notlar.json\"]) == \".venv/\\n__pycache__/\\nnotlar.json\\nsifre.txt\", \"Dosyalar sırayla eklenmeli, aynı dosya iki kez yazılmamalı.\"\nassert make_gitignore([\".venv/\", \"x.json\"]) == \".venv/\\n__pycache__/\\nx.json\", \".venv/ zaten var, tekrar eklenmemeli.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "def make_gitignore(private_files):",
+       "notes": [
+        "`make_gitignore` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `private_files`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "    lines = [\".venv/\", \"__pycache__/\"]",
+       "notes": [
+        "`lines` adında bir değişken oluşturuluyor ve içine `[\".venv/\", \"__pycache__/\"]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "    for name in private_files:",
+       "notes": [
+        "Döngü: `private_files` içindeki her eleman sırayla `name` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "        if name not in lines:",
+       "notes": [
+        "Koşul: `name not in lines` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "            lines.append(name)",
+       "notes": [
+        "`lines.append(name)`: `lines` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    return \"\\n\".join(lines)",
+       "notes": [
+        "Fonksiyon `\"\\n\".join(lines)` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "print(make_gitignore([\"notlar.json\"]))",
+       "notes": [
+        "`print(make_gitignore([\"notlar.json\"]))`: parantez içindeki değeri ekrana yazdırır.",
+        "`make_gitignore(...)`: senin tanımladığın fonksiyonu çağırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "lines",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[\".venv/\", \"__pycache__/\"]`."
+      },
+      {
+       "term": "name",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `private_files` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "private_files",
+       "kind": "parametre",
+       "desc": "`make_gitignore` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "make_gitignore()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `private_files`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "not in",
+       "kind": "operatör",
+       "desc": "İçinde yok mu?"
+      },
+      {
+       "term": ".append()",
+       "kind": "metot",
+       "desc": "Listenin sonuna yeni bir eleman ekler."
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": ".join()",
+       "kind": "metot",
+       "desc": "Listedeki metinleri aradaki yazıyla birleştirir: \", \".join(liste)"
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      }
+     ]
+    }
+   },
+   "project_contribution": ".gitignore dosyası",
+   "game_role": "Projeyi paylaşırken sanal ortamı ve kişisel not dosyalarını dışarıda bırakır."
+  }
+ }
+}

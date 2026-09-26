@@ -1,0 +1,1339 @@
+{
+ "day": 24,
+ "title": "İstatistik ve NumPy",
+ "region": "liman",
+ "project_contribution": "Oyun istatistikleri",
+ "game_role": "Önceki oyunlarının istatistikleri oyun sonunda yazılır.",
+ "xp_complete": 150,
+ "objective": "statistics modülü ve NumPy ile ortalama, ortanca, tepe değer ve dizi işlemleri yapmak",
+ "story": "Limanın kayıt ofisinde yüzlerce geminin varış süreleri yazılı. Liman başkanı soruyor: \"Gemiler ortalama kaç saatte geliyor? En çok hangi süre görülüyor?\" Sayı yığınlarından anlam çıkarmaya **istatistik** denir. Bugün Python'la sayıları konuşturacağız.",
+ "sections": [
+  {
+   "title": "Temel ölçüler",
+   "body": "- **Ortalama** (mean): hepsini topla, kaç tane olduğuna böl\n- **Ortanca** (median): sıraladığında tam ortadaki değer\n- **Tepe değer** (mode): en sık görülen değer\n- **Standart sapma** (stdev): sayılar ortalamadan ne kadar uzağa dağılıyor?\n\nOrtanca, çok büyük ya da çok küçük tek bir sayıdan ortalama kadar etkilenmez."
+  },
+  {
+   "title": "statistics modülü",
+   "body": "Python'ın içinde gelen `statistics` modülü bu ölçüleri hazır hesaplar:\n\n```python\nimport statistics\n\ntimes = [3, 5, 5, 6, 12]\nprint(statistics.mean(times))     # 6.2\nprint(statistics.median(times))   # 5\nprint(statistics.mode(times))     # 5\nprint(round(statistics.stdev(times), 2))\n```"
+  },
+  {
+   "title": "NumPy dizileri",
+   "body": "**NumPy**, bilim insanlarının en çok kullandığı pakettir. Onun `array` yapısı listeye benzer ama matematik işlemlerini **tüm elemanlara birden** uygular:\n\n```python\nimport numpy as np\n\na = np.array([10, 20, 30])\nprint(a * 2)        # [20 40 60]\nprint(a + a)        # [20 40 60]\nprint(a.mean(), a.max(), a.sum())\n```\n\nNormal bir listeyle `[10, 20] * 2` yazsan liste iki kez yan yana eklenirdi!\n\nİlk çalıştırmada NumPy paketi yükleneceği için birkaç saniye bekleyebilirsin."
+  },
+  {
+   "title": "Koşulla seçmek",
+   "body": "NumPy dizilerinde köşeli parantezin içine koşul yazarak eleman seçebilirsin:\n\n```python\nscores = np.array([45, 90, 12, 77])\nprint(scores[scores >= 50])   # [90 77]\nprint((scores >= 50).sum())   # 2 kişi geçti\n```"
+  }
+ ],
+ "examples": [
+  {
+   "title": "Varış süreleri",
+   "code": "import statistics\n\ntimes = [3, 5, 5, 6, 12]\nprint(\"Ortalama:\", statistics.mean(times))\nprint(\"Ortanca:\", statistics.median(times))\nprint(\"En sık:\", statistics.mode(times))\nprint(\"Sapma:\", round(statistics.stdev(times), 2))\n",
+   "note": ""
+  },
+  {
+   "title": "Liste mi dizi mi?",
+   "code": "import numpy as np\n\nnums = [10, 20, 30]\nprint(\"Liste * 2:\", nums * 2)\nprint(\"Dizi * 2:\", np.array(nums) * 2)\n",
+   "note": "Aynı işlem, çok farklı sonuç!"
+  },
+  {
+   "title": "Filtre",
+   "code": "import numpy as np\n\nscores = np.array([45, 90, 12, 77, 60])\nprint(\"Geçenler:\", scores[scores >= 50])\nprint(\"Kaç kişi:\", (scores >= 50).sum())\nprint(\"Ortalama:\", scores.mean())\n",
+   "note": ""
+  }
+ ],
+ "tasks": [
+  {
+   "id": "d24-t1",
+   "title": "Ortalama ve ortanca",
+   "prompt": "`statistics` modülüyle `scores` listesinin ortalamasını `avg`, ortancasını `mid` değişkenine koy.",
+   "starter": "import statistics\n\nscores = [70, 85, 85, 90, 40]\n\navg = 0\nmid = 0\n\nprint(avg, mid)\n",
+   "solution": "import statistics\n\nscores = [70, 85, 85, 90, 40]\n\navg = statistics.mean(scores)\nmid = statistics.median(scores)\n\nprint(avg, mid)\n",
+   "hints": [
+    "statistics.mean(scores)",
+    "statistics.median(scores)"
+   ],
+   "check": {
+    "python": "\n_, g = _run(_set(_code, \"scores\", [1, 2, 3, 100]))\nassert g.get(\"avg\") == 26.5, \"scores [1, 2, 3, 100] iken avg 26.5 olmalı.\"\nassert g.get(\"mid\") == 2.5, \"scores [1, 2, 3, 100] iken mid 2.5 olmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "import statistics",
+      "notes": [
+       "`statistics` modülü programa ekleniyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "scores = [70, 85, 85, 90, 40]",
+      "notes": [
+       "`scores` adında bir değişken oluşturuluyor ve içine `[70, 85, 85, 90, 40]` (liste) konuyor."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "avg = statistics.mean(scores)",
+      "notes": [
+       "`avg` adında bir değişken oluşturuluyor ve içine `statistics.mean(scores)` konuyor."
+      ]
+     },
+     {
+      "n": 6,
+      "code": "mid = statistics.median(scores)",
+      "notes": [
+       "`mid` adında bir değişken oluşturuluyor ve içine `statistics.median(scores)` konuyor."
+      ]
+     },
+     {
+      "n": 8,
+      "code": "print(avg, mid)",
+      "notes": [
+       "`print(avg, mid)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "scores",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `[70, 85, 85, 90, 40]`."
+     },
+     {
+      "term": "avg",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `statistics.mean(scores)`."
+     },
+     {
+      "term": "mid",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `statistics.median(scores)`."
+     },
+     {
+      "term": "import",
+      "kind": "anahtar kelime",
+      "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+     },
+     {
+      "term": "statistics",
+      "kind": "modül",
+      "desc": "İstatistik fonksiyonları (ortalama, ortanca...)."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": ".mean()",
+      "kind": "metot",
+      "desc": "Ortalamayı hesaplar."
+     },
+     {
+      "term": ".median()",
+      "kind": "metot",
+      "desc": "Ortanca değeri (sıralanınca ortadaki) bulur."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d24-t2",
+   "title": "En sık zar",
+   "prompt": "`rolls` listesinde en çok gelen zarı `most` değişkenine koy.",
+   "starter": "import statistics\n\nrolls = [3, 6, 2, 6, 1, 6, 3]\n\nmost = 0\n\nprint(\"En sık gelen:\", most)\n",
+   "solution": "import statistics\n\nrolls = [3, 6, 2, 6, 1, 6, 3]\n\nmost = statistics.mode(rolls)\n\nprint(\"En sık gelen:\", most)\n",
+   "hints": [
+    "Tepe değer için statistics.mode(rolls)"
+   ],
+   "check": {
+    "python": "\n_, g = _run(_set(_code, \"rolls\", [1, 4, 4, 2, 4, 1]))\nassert g.get(\"most\") == 4, \"En sık gelen değeri bulmalısın: statistics.mode(rolls)\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "import statistics",
+      "notes": [
+       "`statistics` modülü programa ekleniyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "rolls = [3, 6, 2, 6, 1, 6, 3]",
+      "notes": [
+       "`rolls` adında bir değişken oluşturuluyor ve içine `[3, 6, 2, 6, 1, 6, 3]` (liste) konuyor."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "most = statistics.mode(rolls)",
+      "notes": [
+       "`most` adında bir değişken oluşturuluyor ve içine `statistics.mode(rolls)` konuyor."
+      ]
+     },
+     {
+      "n": 7,
+      "code": "print(\"En sık gelen:\", most)",
+      "notes": [
+       "`print(\"En sık gelen:\", most)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "rolls",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `[3, 6, 2, 6, 1, 6, 3]`."
+     },
+     {
+      "term": "most",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `statistics.mode(rolls)`."
+     },
+     {
+      "term": "import",
+      "kind": "anahtar kelime",
+      "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+     },
+     {
+      "term": "statistics",
+      "kind": "modül",
+      "desc": "İstatistik fonksiyonları (ortalama, ortanca...)."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": ".mode()",
+      "kind": "metot",
+      "desc": "En sık geçen değeri bulur."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d24-t3",
+   "title": "NumPy ile iki katı",
+   "prompt": "`scores` listesini bir NumPy dizisine çevir ve tüm skorları iki katına çıkaran `doubled` dizisini oluştur. Döngü kullanma!",
+   "starter": "import numpy as np\n\nscores = [10, 25, 40]\n\ndoubled = scores\n\nprint(doubled)\n",
+   "solution": "import numpy as np\n\nscores = [10, 25, 40]\n\ndoubled = np.array(scores) * 2\n\nprint(doubled)\n",
+   "hints": [
+    "np.array(scores) ile diziye çevir.",
+    "Diziyi doğrudan 2 ile çarp."
+   ],
+   "check": {
+    "python": "\nassert \"for \" not in _code, \"Bu görevde döngü kullanmadan, diziyi doğrudan çarp.\"\n_, g = _run(_set(_code, \"scores\", [1, 7, 50]))\nd = g.get(\"doubled\")\nassert type(d).__module__ == \"numpy\", \"doubled bir NumPy dizisi olmalı: np.array(scores) * 2\"\nassert [int(x) for x in d] == [2, 14, 100], \"doubled, skorların iki katı olmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "import numpy as np",
+      "notes": [
+       "`numpy` modülü programa ekleniyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "scores = [10, 25, 40]",
+      "notes": [
+       "`scores` adında bir değişken oluşturuluyor ve içine `[10, 25, 40]` (liste) konuyor."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "doubled = np.array(scores) * 2",
+      "notes": [
+       "`doubled` adında bir değişken oluşturuluyor ve içine `np.array(scores) * 2` konuyor."
+      ]
+     },
+     {
+      "n": 7,
+      "code": "print(doubled)",
+      "notes": [
+       "`print(doubled)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "scores",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `[10, 25, 40]`."
+     },
+     {
+      "term": "doubled",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `np.array(scores) * 2`."
+     },
+     {
+      "term": "import",
+      "kind": "anahtar kelime",
+      "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+     },
+     {
+      "term": "numpy",
+      "kind": "modül",
+      "desc": "Sayı dizileriyle hızlı hesap kütüphanesi."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "*",
+      "kind": "operatör",
+      "desc": "Çarpma; metni ya da listeyi tekrarlama (\"*\" * 3 → \"***\")."
+     },
+     {
+      "term": ".array()",
+      "kind": "metot",
+      "desc": "NumPy dizisi oluşturur (hızlı sayı listesi)."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "id": "d24-c",
+  "title": "Kaç kişi geçti?",
+  "prompt": "NumPy ile `scores` içinde 50 ve üstü olanları `passed` dizisine, bunların sayısını `count` değişkenine koy.",
+  "starter": "import numpy as np\n\nscores = np.array([45, 90, 12, 77, 50])\n\npassed = scores\ncount = 0\n\nprint(passed, count)\n",
+  "solution": "import numpy as np\n\nscores = np.array([45, 90, 12, 77, 50])\n\npassed = scores[scores >= 50]\ncount = len(passed)\n\nprint(passed, count)\n",
+  "hints": [
+   "Koşulla seçim: scores[scores >= 50]",
+   "Sayısı için len(passed)"
+  ],
+  "check": {
+   "python": "\nsrc = _code.replace(\"np.array([45, 90, 12, 77, 50])\", \"np.array([100, 49, 50, 1, 70, 3])\")\nassert src != _code, \"scores = np.array([45, 90, 12, 77, 50]) satırını değiştirme.\"\n_, g = _run(src)\nassert [int(x) for x in g.get(\"passed\")] == [100, 50, 70], \"passed, 50 ve üstü skorlar olmalı.\"\nassert int(g.get(\"count\")) == 3, \"count, geçenlerin sayısı olmalı.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "import numpy as np",
+     "notes": [
+      "`numpy` modülü programa ekleniyor."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "scores = np.array([45, 90, 12, 77, 50])",
+     "notes": [
+      "`scores` adında bir değişken oluşturuluyor ve içine `np.array([45, 90, 12, 77, 50])` konuyor."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "passed = scores[scores >= 50]",
+     "notes": [
+      "`passed` adında bir değişken oluşturuluyor ve içine `scores[scores >= 50]` konuyor."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "count = len(passed)",
+     "notes": [
+      "`count` adında bir değişken oluşturuluyor ve içine `len(passed)` konuyor."
+     ]
+    },
+    {
+     "n": 8,
+     "code": "print(passed, count)",
+     "notes": [
+      "`print(passed, count)`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "scores",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `np.array([45, 90, 12, 77, 50])`."
+    },
+    {
+     "term": "passed",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `scores[scores >= 50]`."
+    },
+    {
+     "term": "count",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `len(passed)`."
+    },
+    {
+     "term": "import",
+     "kind": "anahtar kelime",
+     "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+    },
+    {
+     "term": "numpy",
+     "kind": "modül",
+     "desc": "Sayı dizileriyle hızlı hesap kütüphanesi."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": ".array()",
+     "kind": "metot",
+     "desc": "NumPy dizisi oluşturur (hızlı sayı listesi)."
+    },
+    {
+     "term": "[ ]",
+     "kind": "seçme",
+     "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+    },
+    {
+     "term": ">=",
+     "kind": "operatör",
+     "desc": "Büyük ya da eşit mi?"
+    },
+    {
+     "term": "len()",
+     "kind": "fonksiyon",
+     "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    }
+   ]
+  }
+ },
+ "project_task": {
+  "id": "d24-p",
+  "title": "Oyun istatistikleri",
+  "prompt": "Oyuncuların günlük oyun süreleri (dakika) `play_times` listesinde. Şunları yazdır:\n\n```\nOrtalama: 31.4\nEn uzun: 55\nEn kısa: 12\nToplam: 157\n```\n\nOrtalamayı 1 basamağa yuvarla.",
+  "starter": "import statistics\n\nplay_times = [25, 40, 12, 55, 25]\n\n# Dört satırı yazdır\n",
+  "solution": "import statistics\n\nplay_times = [25, 40, 12, 55, 25]\n\nprint(\"Ortalama:\", round(statistics.mean(play_times), 1))\nprint(\"En uzun:\", max(play_times))\nprint(\"En kısa:\", min(play_times))\nprint(\"Toplam:\", sum(play_times))\n",
+  "hints": [
+   "round(statistics.mean(play_times), 1)",
+   "max, min ve sum hazır fonksiyonlarını kullan."
+  ],
+  "check": {
+   "python": "\nout, _ = _run(_set(_code, \"play_times\", [10, 20, 34]))\nfor line in [\"Ortalama: 21.3\", \"En uzun: 34\", \"En kısa: 10\", \"Toplam: 64\"]:\n    assert line in out, \"play_times [10, 20, 34] iken '\" + line + \"' yazmalı.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "import statistics",
+     "notes": [
+      "`statistics` modülü programa ekleniyor."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "play_times = [25, 40, 12, 55, 25]",
+     "notes": [
+      "`play_times` adında bir değişken oluşturuluyor ve içine `[25, 40, 12, 55, 25]` (liste) konuyor."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "print(\"Ortalama:\", round(statistics.mean(play_times), 1))",
+     "notes": [
+      "`print(\"Ortalama:\", round(statistics.mean(play_times), 1))`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "print(\"En uzun:\", max(play_times))",
+     "notes": [
+      "`print(\"En uzun:\", max(play_times))`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 7,
+     "code": "print(\"En kısa:\", min(play_times))",
+     "notes": [
+      "`print(\"En kısa:\", min(play_times))`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 8,
+     "code": "print(\"Toplam:\", sum(play_times))",
+     "notes": [
+      "`print(\"Toplam:\", sum(play_times))`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "play_times",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `[25, 40, 12, 55, 25]`."
+    },
+    {
+     "term": "import",
+     "kind": "anahtar kelime",
+     "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+    },
+    {
+     "term": "statistics",
+     "kind": "modül",
+     "desc": "İstatistik fonksiyonları (ortalama, ortanca...)."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    },
+    {
+     "term": "round()",
+     "kind": "fonksiyon",
+     "desc": "Sayıyı yuvarlar. round(3.14159, 2) → 3.14"
+    },
+    {
+     "term": ".mean()",
+     "kind": "metot",
+     "desc": "Ortalamayı hesaplar."
+    },
+    {
+     "term": "max()",
+     "kind": "fonksiyon",
+     "desc": "En büyük değeri verir."
+    },
+    {
+     "term": "min()",
+     "kind": "fonksiyon",
+     "desc": "En küçük değeri verir."
+    },
+    {
+     "term": "sum()",
+     "kind": "fonksiyon",
+     "desc": "Listedeki sayıları toplar."
+    }
+   ]
+  }
+ },
+ "available": true,
+ "tracks": {
+  "veri": {
+   "project_task": {
+    "id": "d24-pv",
+    "title": "Harcama istatistikleri",
+    "prompt": "`amounts` listesindeki harcamaların istatistiklerini `statistics` modülüyle çıkaralım. Şunları yazdır:\n\n```\nOrtalama: 184.2\nOrtanca: 120\nEn büyük: 450\n```\n\nOrtalamayı 1 basamağa yuvarla (`round`).",
+    "starter": "import statistics\n\namounts = [120, 45, 450, 90, 216]\n",
+    "solution": "import statistics\n\namounts = [120, 45, 450, 90, 216]\nprint(\"Ortalama:\", round(statistics.mean(amounts), 1))\nprint(\"Ortanca:\", statistics.median(amounts))\nprint(\"En büyük:\", max(amounts))\n",
+    "hints": [
+     "statistics.mean() ortalama, statistics.median() ortanca verir.",
+     "round(x, 1) bir basamağa yuvarlar."
+    ],
+    "check": {
+     "python": "\nout, _ = _run(_set(_code, \"amounts\", [10, 20, 34]))\nfor line in [\"Ortalama: 21.3\", \"Ortanca: 20\", \"En büyük: 34\"]:\n    assert line in out, \"amounts [10, 20, 34] iken '\" + line + \"' yazmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "import statistics",
+       "notes": [
+        "`statistics` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "amounts = [120, 45, 450, 90, 216]",
+       "notes": [
+        "`amounts` adında bir değişken oluşturuluyor ve içine `[120, 45, 450, 90, 216]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "print(\"Ortalama:\", round(statistics.mean(amounts), 1))",
+       "notes": [
+        "`print(\"Ortalama:\", round(statistics.mean(amounts), 1))`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "print(\"Ortanca:\", statistics.median(amounts))",
+       "notes": [
+        "`print(\"Ortanca:\", statistics.median(amounts))`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "print(\"En büyük:\", max(amounts))",
+       "notes": [
+        "`print(\"En büyük:\", max(amounts))`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "amounts",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[120, 45, 450, 90, 216]`."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "statistics",
+       "kind": "modül",
+       "desc": "İstatistik fonksiyonları (ortalama, ortanca...)."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "round()",
+       "kind": "fonksiyon",
+       "desc": "Sayıyı yuvarlar. round(3.14159, 2) → 3.14"
+      },
+      {
+       "term": ".mean()",
+       "kind": "metot",
+       "desc": "Ortalamayı hesaplar."
+      },
+      {
+       "term": ".median()",
+       "kind": "metot",
+       "desc": "Ortanca değeri (sıralanınca ortadaki) bulur."
+      },
+      {
+       "term": "max()",
+       "kind": "fonksiyon",
+       "desc": "En büyük değeri verir."
+      }
+     ]
+    }
+   },
+   "project_contribution": "İstatistikler",
+   "game_role": "Harcamaların ortalamasını, ortancasını ve en büyüğünü hesaplar."
+  },
+  "otomasyon": {
+   "project_task": {
+    "id": "d24-po",
+    "title": "Görev süreleri",
+    "prompt": "Geçen haftaki görevlerin süreleri (dakika) `durations` listesinde. `statistics` modülüyle şunları yazdır:\n\n```\nOrtalama: 38.6 dk\nOrtanca: 30 dk\nUzun görev sayısı: 2\n```\n\nOrtalamayı 1 basamağa yuvarla. Uzun görev: ortalamadan uzun sürenler.",
+    "starter": "import statistics\n\ndurations = [25, 30, 90, 18, 30]\n",
+    "solution": "import statistics\n\ndurations = [25, 30, 90, 18, 30]\nmean = statistics.mean(durations)\nprint(f\"Ortalama: {round(mean, 1)} dk\")\nprint(f\"Ortanca: {statistics.median(durations)} dk\")\nlong_tasks = [d for d in durations if d > mean]\nprint(f\"Uzun görev sayısı: {len(long_tasks)}\")\n",
+    "hints": [
+     "statistics.mean() ve statistics.median()",
+     "Uzun görevler: [d for d in durations if d > mean]"
+    ],
+    "check": {
+     "python": "\nout, _ = _run(_set(_code, \"durations\", [10, 20, 60]))\nfor line in [\"Ortalama: 30 dk\", \"Ortanca: 20 dk\", \"Uzun görev sayısı: 1\"]:\n    assert line in out, \"durations [10, 20, 60] iken '\" + line + \"' yazmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "import statistics",
+       "notes": [
+        "`statistics` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "durations = [25, 30, 90, 18, 30]",
+       "notes": [
+        "`durations` adında bir değişken oluşturuluyor ve içine `[25, 30, 90, 18, 30]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "mean = statistics.mean(durations)",
+       "notes": [
+        "`mean` adında bir değişken oluşturuluyor ve içine `statistics.mean(durations)` konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "print(f\"Ortalama: {round(mean, 1)} dk\")",
+       "notes": [
+        "`print(f\"Ortalama: {round(mean, 1)} dk\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "print(f\"Ortanca: {statistics.median(durations)} dk\")",
+       "notes": [
+        "`print(f\"Ortanca: {statistics.median(durations)} dk\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "long_tasks = [d for d in durations if d > mean]",
+       "notes": [
+        "`long_tasks` adında bir değişken oluşturuluyor ve içine `[d for d in durations if d > mean]` (liste üreteciyle kurulan liste) konuyor.",
+        "Tek satırda döngüyle yeni bir liste/dizi üretiliyor."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "print(f\"Uzun görev sayısı: {len(long_tasks)}\")",
+       "notes": [
+        "`print(f\"Uzun görev sayısı: {len(long_tasks)}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "durations",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[25, 30, 90, 18, 30]`."
+      },
+      {
+       "term": "mean",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `statistics.mean(durations)`."
+      },
+      {
+       "term": "long_tasks",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[d for d in durations if d > mean]`."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "statistics",
+       "kind": "modül",
+       "desc": "İstatistik fonksiyonları (ortalama, ortanca...)."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": ".mean()",
+       "kind": "metot",
+       "desc": "Ortalamayı hesaplar."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "round()",
+       "kind": "fonksiyon",
+       "desc": "Sayıyı yuvarlar. round(3.14159, 2) → 3.14"
+      },
+      {
+       "term": ".median()",
+       "kind": "metot",
+       "desc": "Ortanca değeri (sıralanınca ortadaki) bulur."
+      },
+      {
+       "term": "[... for ... in ...]",
+       "kind": "liste üreteci",
+       "desc": "Liste üreteci: [ifade for x in liste if koşul] ile tek satırda yeni liste."
+      },
+      {
+       "term": ">",
+       "kind": "operatör",
+       "desc": "Büyük mü?"
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Süre istatistikleri",
+   "game_role": "Görevlerin ne kadar sürdüğünü analiz eder."
+  },
+  "web": {
+   "project_task": {
+    "id": "d24-pw",
+    "title": "Ziyaretçi istatistikleri",
+    "prompt": "Son bir haftada sitene her gün kaç kişinin geldiği `visits` listesinde.\n\n- `mean`: ortalama ziyaret (`statistics.mean`, 1 basamağa yuvarla: `round`)\n- `median`: ortanca (`statistics.median`)\n- `busy_days`: ortalamanın **üstünde** ziyaret alan gün sayısı. Listeyi NumPy dizisine çevir (`np.array`), `>` ile koşul yaz ve `.sum()` ile say.\n\nSonra şöyle yazdır:\n\n```\nOrtalama: 185.1\nOrtanca: 131\nYoğun gün: 2\n```",
+    "starter": "import statistics\nimport numpy as np\n\nvisits = [120, 95, 310, 150, 88, 402, 131]\n",
+    "solution": "import statistics\nimport numpy as np\n\nvisits = [120, 95, 310, 150, 88, 402, 131]\nmean = round(statistics.mean(visits), 1)\nmedian = statistics.median(visits)\narr = np.array(visits)\nbusy_days = int((arr > mean).sum())\nprint(\"Ortalama:\", mean)\nprint(\"Ortanca:\", median)\nprint(\"Yoğun gün:\", busy_days)\n",
+    "hints": [
+     "statistics.mean() ortalama, statistics.median() ortanca verir.",
+     "arr > mean her gün için True/False verir; (arr > mean).sum() True'ları sayar."
+    ],
+    "check": {
+     "code_contains": [
+      "np.array"
+     ],
+     "python": "\nout, g = _run(_set(_code, \"visits\", [10, 20, 32, 100]))\nassert g.get(\"mean\") == 40.5, \"mean, ortalama olmalı: round(statistics.mean(visits), 1)\"\nassert g.get(\"median\") == 26.0, \"median, statistics.median(visits) olmalı.\"\nassert g.get(\"busy_days\") == 1, \"busy_days, ortalamanın üstündeki gün sayısı olmalı.\"\nfor line in [\"Ortalama: 40.5\", \"Ortanca: 26.0\", \"Yoğun gün: 1\"]:\n    assert line in out, \"visits [10, 20, 32, 100] iken '\" + line + \"' yazmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "import statistics",
+       "notes": [
+        "`statistics` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "import numpy as np",
+       "notes": [
+        "`numpy` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "visits = [120, 95, 310, 150, 88, 402, 131]",
+       "notes": [
+        "`visits` adında bir değişken oluşturuluyor ve içine `[120, 95, 310, 150, 88, 402, 131]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "mean = round(statistics.mean(visits), 1)",
+       "notes": [
+        "`mean` adında bir değişken oluşturuluyor ve içine `round(statistics.mean(visits), 1)` konuyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "median = statistics.median(visits)",
+       "notes": [
+        "`median` adında bir değişken oluşturuluyor ve içine `statistics.median(visits)` konuyor."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "arr = np.array(visits)",
+       "notes": [
+        "`arr` adında bir değişken oluşturuluyor ve içine `np.array(visits)` konuyor."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "busy_days = int((arr > mean).sum())",
+       "notes": [
+        "`busy_days` adında bir değişken oluşturuluyor ve içine `int((arr > mean).sum())` konuyor."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "print(\"Ortalama:\", mean)",
+       "notes": [
+        "`print(\"Ortalama:\", mean)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "print(\"Ortanca:\", median)",
+       "notes": [
+        "`print(\"Ortanca:\", median)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "print(\"Yoğun gün:\", busy_days)",
+       "notes": [
+        "`print(\"Yoğun gün:\", busy_days)`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "visits",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[120, 95, 310, 150, 88, 402, 131]`."
+      },
+      {
+       "term": "mean",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `round(statistics.mean(visits), 1)`."
+      },
+      {
+       "term": "median",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `statistics.median(visits)`."
+      },
+      {
+       "term": "arr",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `np.array(visits)`."
+      },
+      {
+       "term": "busy_days",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `int((arr > mean).sum())`."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "statistics",
+       "kind": "modül",
+       "desc": "İstatistik fonksiyonları (ortalama, ortanca...)."
+      },
+      {
+       "term": "numpy",
+       "kind": "modül",
+       "desc": "Sayı dizileriyle hızlı hesap kütüphanesi."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "round()",
+       "kind": "fonksiyon",
+       "desc": "Sayıyı yuvarlar. round(3.14159, 2) → 3.14"
+      },
+      {
+       "term": ".mean()",
+       "kind": "metot",
+       "desc": "Ortalamayı hesaplar."
+      },
+      {
+       "term": ".median()",
+       "kind": "metot",
+       "desc": "Ortanca değeri (sıralanınca ortadaki) bulur."
+      },
+      {
+       "term": ".array()",
+       "kind": "metot",
+       "desc": "NumPy dizisi oluşturur (hızlı sayı listesi)."
+      },
+      {
+       "term": "int()",
+       "kind": "fonksiyon",
+       "desc": "Bir değeri tam sayıya çevirir, örneğin \"42\" yazısını 42 sayısına."
+      },
+      {
+       "term": ".sum()",
+       "kind": "metot",
+       "desc": "`arr > mean` nesnesinin `sum` metodunu çağırır."
+      },
+      {
+       "term": ">",
+       "kind": "operatör",
+       "desc": "Büyük mü?"
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Ziyaretçi istatistikleri",
+   "game_role": "Günlük ziyaretçi sayılarının ortalamasını, ortancasını ve yoğun günleri bulur."
+  },
+  "bot": {
+   "project_task": {
+    "id": "d24-pb",
+    "title": "Mesaj uzunlukları",
+    "prompt": "Kullanıcılar bota kısa mı, uzun mu yazıyor? `messages` listesindeki mesajlar için:\n\n- `lengths`: her mesajın **kelime** sayısı (list comprehension ve `split()`)\n- `statistics` ile ortalamayı (1 basamağa yuvarla) ve ortancayı yazdır.\n- `arr = np.array(lengths)` ile bir NumPy dizisi yap ve 2 kelime ya da daha kısa mesajların sayısını bul (`arr[arr <= 2]`).\n\n```\nOrtalama: 2.6\nOrtanca: 2\nKısa mesaj: 3\n```",
+    "starter": "import statistics\nimport numpy as np\n\nmessages = [\"merhaba\", \"yarın hava nasıl olacak\", \"teşekkürler\", \"saat kaç\", \"bana bir fıkra anlatır mısın\"]\n",
+    "solution": "import statistics\nimport numpy as np\n\nmessages = [\"merhaba\", \"yarın hava nasıl olacak\", \"teşekkürler\", \"saat kaç\", \"bana bir fıkra anlatır mısın\"]\nlengths = [len(m.split()) for m in messages]\nprint(\"Ortalama:\", round(statistics.mean(lengths), 1))\nprint(\"Ortanca:\", statistics.median(lengths))\narr = np.array(lengths)\nshort = arr[arr <= 2]\nprint(\"Kısa mesaj:\", len(short))\n",
+    "hints": [
+     "lengths = [len(m.split()) for m in messages]",
+     "arr[arr <= 2] sadece 2 ve altındaki değerleri seçer; len() ile say."
+    ],
+    "check": {
+     "code_contains": [
+      "np.array"
+     ],
+     "python": "\nout, g = _run(_set(_code, \"messages\", [\"a b c\", \"a\", \"a b c d e f\", \"a b\"]))\nassert g.get(\"lengths\") == [3, 1, 6, 2], \"lengths, her mesajın kelime sayısı olmalı: len(m.split())\"\nfor line in [\"Ortalama: 3\", \"Ortanca: 2.5\", \"Kısa mesaj: 2\"]:\n    assert line in out, \"messages değişince '\" + line + \"' yazmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "import statistics",
+       "notes": [
+        "`statistics` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "import numpy as np",
+       "notes": [
+        "`numpy` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "messages = [\"merhaba\", \"yarın hava nasıl olacak\", \"teşekkürler\", \"saat kaç\", \"bana bir fıkra anlatır mısın\"]",
+       "notes": [
+        "`messages` adında bir değişken oluşturuluyor ve içine `[\"merhaba\", \"yarın hava nasıl olacak\", \"teşekkürler\", \"sa...` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "lengths = [len(m.split()) for m in messages]",
+       "notes": [
+        "`lengths` adında bir değişken oluşturuluyor ve içine `[len(m.split()) for m in messages]` (liste üreteciyle kurulan liste) konuyor.",
+        "Tek satırda döngüyle yeni bir liste/dizi üretiliyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "print(\"Ortalama:\", round(statistics.mean(lengths), 1))",
+       "notes": [
+        "`print(\"Ortalama:\", round(statistics.mean(lengths), 1))`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "print(\"Ortanca:\", statistics.median(lengths))",
+       "notes": [
+        "`print(\"Ortanca:\", statistics.median(lengths))`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "arr = np.array(lengths)",
+       "notes": [
+        "`arr` adında bir değişken oluşturuluyor ve içine `np.array(lengths)` konuyor."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "short = arr[arr <= 2]",
+       "notes": [
+        "`short` adında bir değişken oluşturuluyor ve içine `arr[arr <= 2]` konuyor."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "print(\"Kısa mesaj:\", len(short))",
+       "notes": [
+        "`print(\"Kısa mesaj:\", len(short))`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "messages",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[\"merhaba\", \"yarın hava nasıl olacak\", \"teşekkürler\", \"sa...`."
+      },
+      {
+       "term": "lengths",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[len(m.split()) for m in messages]`."
+      },
+      {
+       "term": "arr",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `np.array(lengths)`."
+      },
+      {
+       "term": "short",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `arr[arr <= 2]`."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "statistics",
+       "kind": "modül",
+       "desc": "İstatistik fonksiyonları (ortalama, ortanca...)."
+      },
+      {
+       "term": "numpy",
+       "kind": "modül",
+       "desc": "Sayı dizileriyle hızlı hesap kütüphanesi."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "[... for ... in ...]",
+       "kind": "liste üreteci",
+       "desc": "Liste üreteci: [ifade for x in liste if koşul] ile tek satırda yeni liste."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      },
+      {
+       "term": ".split()",
+       "kind": "metot",
+       "desc": "Metni parçalara böler ve liste yapar (varsayılan: boşluklardan)."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "round()",
+       "kind": "fonksiyon",
+       "desc": "Sayıyı yuvarlar. round(3.14159, 2) → 3.14"
+      },
+      {
+       "term": ".mean()",
+       "kind": "metot",
+       "desc": "Ortalamayı hesaplar."
+      },
+      {
+       "term": ".median()",
+       "kind": "metot",
+       "desc": "Ortanca değeri (sıralanınca ortadaki) bulur."
+      },
+      {
+       "term": ".array()",
+       "kind": "metot",
+       "desc": "NumPy dizisi oluşturur (hızlı sayı listesi)."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": "<=",
+       "kind": "operatör",
+       "desc": "Küçük ya da eşit mi?"
+      }
+     ]
+    }
+   },
+   "project_contribution": "Mesaj istatistikleri",
+   "game_role": "Kullanıcıların mesajlarının ne kadar uzun olduğunu ölçer."
+  },
+  "okul": {
+   "project_task": {
+    "id": "d24-pn",
+    "title": "Sınıfta neredesin?",
+    "prompt": "Öğretmen sınıfın sınav notlarını paylaştı: `class_scores`. Senin notun `my_score`.\n\n- `statistics` modülüyle sınıf ortalamasını (1 basamağa yuvarla) ve ortancayı yazdır.\n- Notları `np.array` ile NumPy dizisine çevir ve **koşulla seçerek** senden yüksek alan kaç kişi olduğunu bul.\n\n```\nSınıf ortalaması: 68.3\nOrtanca: 66.0\nSenden yüksek: 2 kişi\n```",
+    "starter": "import statistics\nimport numpy as np\n\nclass_scores = [45, 90, 72, 60, 88, 55]\nmy_score = 72\n",
+    "solution": "import statistics\nimport numpy as np\n\nclass_scores = [45, 90, 72, 60, 88, 55]\nmy_score = 72\nprint(\"Sınıf ortalaması:\", round(statistics.mean(class_scores), 1))\nprint(\"Ortanca:\", statistics.median(class_scores))\nscores = np.array(class_scores)\nhigher = scores[scores > my_score]\nprint(f\"Senden yüksek: {len(higher)} kişi\")\n",
+    "hints": [
+     "statistics.mean() ortalama, statistics.median() ortanca verir.",
+     "scores[scores > my_score] senden yüksek notları seçer; len() ile say."
+    ],
+    "check": {
+     "code_contains": [
+      "np.array(",
+      "statistics."
+     ],
+     "python": "\nout, _ = _run(_set(_set(_code, \"class_scores\", [10, 20, 30, 41, 50]), \"my_score\", 15))\nassert \"Sınıf ortalaması: 30.2\" in out, \"class_scores [10, 20, 30, 41, 50] iken 'Sınıf ortalaması: 30.2' yazmalı.\"\nassert re.search(r\"Ortanca: 30(\\.0)?\\n\", out), \"class_scores [10, 20, 30, 41, 50] iken 'Ortanca: 30' yazmalı.\"\nassert \"Senden yüksek: 4 kişi\" in out, \"my_score 15 iken 'Senden yüksek: 4 kişi' yazmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "import statistics",
+       "notes": [
+        "`statistics` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "import numpy as np",
+       "notes": [
+        "`numpy` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "class_scores = [45, 90, 72, 60, 88, 55]",
+       "notes": [
+        "`class_scores` adında bir değişken oluşturuluyor ve içine `[45, 90, 72, 60, 88, 55]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "my_score = 72",
+       "notes": [
+        "`my_score` adında bir değişken oluşturuluyor ve içine `72` (tam sayı) konuyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "print(\"Sınıf ortalaması:\", round(statistics.mean(class_scores), 1))",
+       "notes": [
+        "`print(\"Sınıf ortalaması:\", round(statistics.mean(class_sc...`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "print(\"Ortanca:\", statistics.median(class_scores))",
+       "notes": [
+        "`print(\"Ortanca:\", statistics.median(class_scores))`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "scores = np.array(class_scores)",
+       "notes": [
+        "`scores` adında bir değişken oluşturuluyor ve içine `np.array(class_scores)` konuyor."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "higher = scores[scores > my_score]",
+       "notes": [
+        "`higher` adında bir değişken oluşturuluyor ve içine `scores[scores > my_score]` konuyor."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "print(f\"Senden yüksek: {len(higher)} kişi\")",
+       "notes": [
+        "`print(f\"Senden yüksek: {len(higher)} kişi\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "class_scores",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[45, 90, 72, 60, 88, 55]`."
+      },
+      {
+       "term": "my_score",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `72`."
+      },
+      {
+       "term": "scores",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `np.array(class_scores)`."
+      },
+      {
+       "term": "higher",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `scores[scores > my_score]`."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "statistics",
+       "kind": "modül",
+       "desc": "İstatistik fonksiyonları (ortalama, ortanca...)."
+      },
+      {
+       "term": "numpy",
+       "kind": "modül",
+       "desc": "Sayı dizileriyle hızlı hesap kütüphanesi."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "round()",
+       "kind": "fonksiyon",
+       "desc": "Sayıyı yuvarlar. round(3.14159, 2) → 3.14"
+      },
+      {
+       "term": ".mean()",
+       "kind": "metot",
+       "desc": "Ortalamayı hesaplar."
+      },
+      {
+       "term": ".median()",
+       "kind": "metot",
+       "desc": "Ortanca değeri (sıralanınca ortadaki) bulur."
+      },
+      {
+       "term": ".array()",
+       "kind": "metot",
+       "desc": "NumPy dizisi oluşturur (hızlı sayı listesi)."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": ">",
+       "kind": "operatör",
+       "desc": "Büyük mü?"
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Sınıf istatistikleri",
+   "game_role": "Sınıfın sınav sonuçlarını özetler ve seni sınıfla karşılaştırır."
+  }
+ }
+}

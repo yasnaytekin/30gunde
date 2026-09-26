@@ -1,0 +1,1146 @@
+{
+ "day": 5,
+ "title": "Listeler",
+ "region": "orman",
+ "project_contribution": "Envanter",
+ "game_role": "Oyuna senin çantanla başlarsın.",
+ "xp_complete": 150,
+ "objective": "Liste oluşturmak, eleman eklemek, çıkarmak ve listeyi incelemek",
+ "story": "Veri Ormanı'na hoş geldin! Maceraya çıkan her kahramanın bir çantası vardır: kılıç, iksir, harita... Onlarca eşyayı tek tek değişkende tutmak zor olurdu. Bugün hepsini tek bir **listede** toplayacağız.",
+ "sections": [
+  {
+   "title": "Liste nedir?",
+   "body": "Liste, köşeli parantez içinde virgülle ayrılmış değerlerdir:\n\n```python\ninventory = [\"kılıç\", \"iksir\", \"harita\"]\nscores = [40, 85, 60]\n```\n\nStringlerde olduğu gibi indeks **0'dan başlar**: `inventory[0]` sonucu `\"kılıç\"`, `inventory[-1]` sonucu `\"harita\"`. `len(inventory)` listedeki eleman sayısını verir."
+  },
+  {
+   "title": "Listeyi değiştirmek",
+   "body": "- `append(x)` sona ekler\n- `insert(0, x)` istediğin sıraya ekler\n- `remove(x)` bulduğu ilk x'i çıkarır\n- `pop()` son elemanı çıkarır ve sana verir\n- `inventory[1] = \"kalkan\"` bir elemanı değiştirir"
+  },
+  {
+   "title": "Listeyi incelemek",
+   "body": "- `\"iksir\" in inventory` eleman var mı? (`True` ya da `False`)\n- `inventory.count(\"iksir\")` kaç tane var?\n- `sum(scores)`, `max(scores)`, `min(scores)`: toplam, en büyük, en küçük\n- `sorted(scores)` sıralanmış yeni bir liste verir, `scores.sort()` listenin kendisini sıralar"
+  },
+  {
+   "title": "Dilimleme",
+   "body": "Stringlerdeki gibi listeleri de dilimleyebilirsin: `scores[0:2]` ilk iki eleman, `scores[::-1]` ters çevrilmiş liste."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Çanta",
+   "code": "inventory = [\"kılıç\", \"iksir\"]\ninventory.append(\"harita\")\nprint(inventory)\nprint(\"İlk eşya:\", inventory[0])\nprint(\"Eşya sayısı:\", len(inventory))\n",
+   "note": ""
+  },
+  {
+   "title": "Çıkar ve kontrol et",
+   "code": "inventory = [\"kılıç\", \"iksir\", \"taş\"]\ninventory.remove(\"taş\")\nprint(inventory)\nprint(\"iksir\" in inventory)\nlast = inventory.pop()\nprint(\"Çıkan:\", last, \"Kalan:\", inventory)\n",
+   "note": ""
+  },
+  {
+   "title": "Skorlar",
+   "code": "scores = [40, 85, 60, 95]\nprint(sum(scores), max(scores), min(scores))\nprint(sorted(scores))\n",
+   "note": ""
+  }
+ ],
+ "tasks": [
+  {
+   "id": "d5-t1",
+   "title": "Çantaya ekle",
+   "prompt": "Çantanın sonuna `\"iksir\"` ekle.",
+   "starter": "inventory = [\"kılıç\", \"kalkan\"]\n\n# \"iksir\" ekle\n\nprint(inventory)\n",
+   "solution": "inventory = [\"kılıç\", \"kalkan\"]\n\ninventory.append(\"iksir\")\n\nprint(inventory)\n",
+   "hints": [
+    "Sona eklemek için append() kullanılır.",
+    "inventory.append(\"iksir\")"
+   ],
+   "check": {
+    "code_contains": [
+     "append("
+    ],
+    "python": "assert inventory == [\"kılıç\", \"kalkan\", \"iksir\"], \"Çanta ['kılıç', 'kalkan', 'iksir'] olmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "inventory = [\"kılıç\", \"kalkan\"]",
+      "notes": [
+       "`inventory` adında bir değişken oluşturuluyor ve içine `[\"kılıç\", \"kalkan\"]` (liste) konuyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "inventory.append(\"iksir\")",
+      "notes": [
+       "`inventory.append(\"iksir\")`: `inventory` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "print(inventory)",
+      "notes": [
+       "`print(inventory)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "inventory",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `[\"kılıç\", \"kalkan\"]`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": ".append()",
+      "kind": "metot",
+      "desc": "Listenin sonuna yeni bir eleman ekler."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d5-t2",
+   "title": "Taşı at",
+   "prompt": "Çantada gereksiz taşlar var. `remove()` ile ilk `\"taş\"`ı çıkar.",
+   "starter": "inventory = [\"elma\", \"taş\", \"anahtar\", \"taş\"]\n\n# İlk \"taş\"ı çıkar\n\nprint(inventory)\n",
+   "solution": "inventory = [\"elma\", \"taş\", \"anahtar\", \"taş\"]\n\ninventory.remove(\"taş\")\n\nprint(inventory)\n",
+   "hints": [
+    "remove() sadece bulduğu ilk elemanı çıkarır.",
+    "inventory.remove(\"taş\")"
+   ],
+   "check": {
+    "code_contains": [
+     "remove("
+    ],
+    "python": "assert inventory == [\"elma\", \"anahtar\", \"taş\"], \"Sadece ilk taş çıkmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "inventory = [\"elma\", \"taş\", \"anahtar\", \"taş\"]",
+      "notes": [
+       "`inventory` adında bir değişken oluşturuluyor ve içine `[\"elma\", \"taş\", \"anahtar\", \"taş\"]` (liste) konuyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "inventory.remove(\"taş\")",
+      "notes": [
+       "`inventory.remove(\"taş\")`: `inventory` üzerinde `remove` metodunu çalıştırır. Listeden (ya da setten) verilen elemanı çıkarır."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "print(inventory)",
+      "notes": [
+       "`print(inventory)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "inventory",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `[\"elma\", \"taş\", \"anahtar\", \"taş\"]`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": ".remove()",
+      "kind": "metot",
+      "desc": "Listeden (ya da setten) verilen elemanı çıkarır."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d5-t3",
+   "title": "Skor tablosu",
+   "prompt": "`best` en yüksek skor, `total` skorların toplamı, `count` kaç skor olduğu olsun. Hepsini fonksiyonlarla hesapla.",
+   "starter": "scores = [40, 85, 60, 95]\n\nbest = 0\ntotal = 0\ncount = 0\n\nprint(best, total, count)\n",
+   "solution": "scores = [40, 85, 60, 95]\n\nbest = max(scores)\ntotal = sum(scores)\ncount = len(scores)\n\nprint(best, total, count)\n",
+   "hints": [
+    "max(), sum() ve len() fonksiyonlarını kullan.",
+    "best = max(scores)"
+   ],
+   "check": {
+    "python": "\nassert best == 95 and total == 280 and count == 4, \"best 95, total 280, count 4 olmalı.\"\n_, g = _run(_set(_code, \"scores\", [1, 2, 3]))\nassert (g[\"best\"], g[\"total\"], g[\"count\"]) == (3, 6, 3), \"Sayıları elle yazma, fonksiyonlarla hesapla.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "scores = [40, 85, 60, 95]",
+      "notes": [
+       "`scores` adında bir değişken oluşturuluyor ve içine `[40, 85, 60, 95]` (liste) konuyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "best = max(scores)",
+      "notes": [
+       "`best` adında bir değişken oluşturuluyor ve içine `max(scores)` konuyor."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "total = sum(scores)",
+      "notes": [
+       "`total` adında bir değişken oluşturuluyor ve içine `sum(scores)` konuyor."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "count = len(scores)",
+      "notes": [
+       "`count` adında bir değişken oluşturuluyor ve içine `len(scores)` konuyor."
+      ]
+     },
+     {
+      "n": 7,
+      "code": "print(best, total, count)",
+      "notes": [
+       "`print(best, total, count)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "scores",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `[40, 85, 60, 95]`."
+     },
+     {
+      "term": "best",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `max(scores)`."
+     },
+     {
+      "term": "total",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `sum(scores)`."
+     },
+     {
+      "term": "count",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `len(scores)`."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "max()",
+      "kind": "fonksiyon",
+      "desc": "En büyük değeri verir."
+     },
+     {
+      "term": "sum()",
+      "kind": "fonksiyon",
+      "desc": "Listedeki sayıları toplar."
+     },
+     {
+      "term": "len()",
+      "kind": "fonksiyon",
+      "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "id": "d5-c",
+  "title": "Alfabetik sıralama",
+  "prompt": "`sorted_names` isimlerin alfabetik sıralı hali olsun. `top3` ise sıralı listenin ilk üç ismi. İpucu: `sorted()` ve dilimleme.",
+  "starter": "names = [\"Zeynep\", \"Ali\", \"Deniz\", \"Can\", \"Elif\"]\n\nsorted_names = []\ntop3 = []\n\nprint(sorted_names)\nprint(top3)\n",
+  "solution": "names = [\"Zeynep\", \"Ali\", \"Deniz\", \"Can\", \"Elif\"]\n\nsorted_names = sorted(names)\ntop3 = sorted_names[0:3]\n\nprint(sorted_names)\nprint(top3)\n",
+  "hints": [
+   "sorted(names) sıralı yeni bir liste verir.",
+   "İlk üç eleman: liste[0:3]"
+  ],
+  "check": {
+   "python": "\nassert sorted_names == [\"Ali\", \"Can\", \"Deniz\", \"Elif\", \"Zeynep\"], \"sorted_names alfabetik sırada olmalı.\"\nassert top3 == [\"Ali\", \"Can\", \"Deniz\"], \"top3 sıralı listenin ilk üç ismi olmalı.\"\n_, g = _run(_set(_code, \"names\", [\"Mert\", \"Ada\", \"Bora\", \"Cem\"]))\nassert g[\"top3\"] == [\"Ada\", \"Bora\", \"Cem\"], \"İsimleri elle yazma, names listesini kullan.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "names = [\"Zeynep\", \"Ali\", \"Deniz\", \"Can\", \"Elif\"]",
+     "notes": [
+      "`names` adında bir değişken oluşturuluyor ve içine `[\"Zeynep\", \"Ali\", \"Deniz\", \"Can\", \"Elif\"]` (liste) konuyor."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "sorted_names = sorted(names)",
+     "notes": [
+      "`sorted_names` adında bir değişken oluşturuluyor ve içine `sorted(names)` konuyor."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "top3 = sorted_names[0:3]",
+     "notes": [
+      "`top3` adında bir değişken oluşturuluyor ve içine `sorted_names[0:3]` konuyor."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "print(sorted_names)",
+     "notes": [
+      "`print(sorted_names)`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 7,
+     "code": "print(top3)",
+     "notes": [
+      "`print(top3)`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "names",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `[\"Zeynep\", \"Ali\", \"Deniz\", \"Can\", \"Elif\"]`."
+    },
+    {
+     "term": "sorted_names",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `sorted(names)`."
+    },
+    {
+     "term": "top3",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `sorted_names[0:3]`."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "sorted()",
+     "kind": "fonksiyon",
+     "desc": "Sıralanmış yeni bir liste verir; asıl liste değişmez."
+    },
+    {
+     "term": "[a:b]",
+     "kind": "seçme",
+     "desc": "Dilimleme: a'dan başlayıp b'ye kadar (b hariç) olan parçayı alır."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    }
+   ]
+  }
+ },
+ "project_task": {
+  "id": "d5-p",
+  "title": "Envanter",
+  "prompt": "Kahramanımızın çantasını hazırlayalım.\n\n- Boş `inventory` listesine `\"fener\"`, `\"harita\"` ve `\"anahtar\"` ekle\n- f-string ve `len()` ile `Çantanda 3 eşya var` yazdır",
+  "starter": "inventory = []\n\n# fener, harita ve anahtar ekle\n\n# \"Çantanda 3 eşya var\" yazdır (sayıyı len() ile bul)\n",
+  "solution": "inventory = []\n\ninventory.append(\"fener\")\ninventory.append(\"harita\")\ninventory.append(\"anahtar\")\n\nprint(f\"Çantanda {len(inventory)} eşya var\")\n",
+  "hints": [
+   "Üç kez append() kullan.",
+   "print(f\"Çantanda {len(inventory)} eşya var\")"
+  ],
+  "check": {
+   "code_contains": [
+    "len("
+   ],
+   "python": "\nassert inventory == [\"fener\", \"harita\", \"anahtar\"], \"Çanta sırasıyla fener, harita, anahtar içermeli.\"\nassert \"Çantanda 3 eşya var\" in _output, \"Çıktıda 'Çantanda 3 eşya var' görünmeli.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "inventory = []",
+     "notes": [
+      "`inventory` adında bir değişken oluşturuluyor ve içine `[]` (liste) konuyor."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "inventory.append(\"fener\")",
+     "notes": [
+      "`inventory.append(\"fener\")`: `inventory` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "inventory.append(\"harita\")",
+     "notes": [
+      "`inventory.append(\"harita\")`: `inventory` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "inventory.append(\"anahtar\")",
+     "notes": [
+      "`inventory.append(\"anahtar\")`: `inventory` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+     ]
+    },
+    {
+     "n": 7,
+     "code": "print(f\"Çantanda {len(inventory)} eşya var\")",
+     "notes": [
+      "`print(f\"Çantanda {len(inventory)} eşya var\")`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "inventory",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `[]`."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": ".append()",
+     "kind": "metot",
+     "desc": "Listenin sonuna yeni bir eleman ekler."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    },
+    {
+     "term": "f\"...{}\"",
+     "kind": "metin",
+     "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+    },
+    {
+     "term": "len()",
+     "kind": "fonksiyon",
+     "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+    }
+   ]
+  }
+ },
+ "available": true,
+ "visual_task": {
+  "id": "d5-v",
+  "title": "Odaya Piko koy",
+  "prompt": "`sahne` listesi bir odanın 3 satırını tutuyor ama ortadaki satırda Piko yok. Listenin **1 numaralı** elemanını `\"# * #\"` ile değiştir. Sonra listenin elemanlarını sırayla (0, 1, 2) yazdır.",
+  "starter": "sahne = [\"#####\", \"#   #\", \"#####\"]\n\nprint(sahne[0])\n",
+  "solution": "sahne = [\"#####\", \"#   #\", \"#####\"]\nsahne[1] = \"# * #\"\n\nprint(sahne[0])\nprint(sahne[1])\nprint(sahne[2])\n",
+  "hints": [
+   "Bir elemanı değiştirmek: sahne[1] = \"# * #\"",
+   "İndeksler 0'dan başlar: sahne[0], sahne[1], sahne[2]"
+  ],
+  "check": {
+   "code_contains": [
+    "sahne[1] ="
+   ],
+   "python": "\ndef _satirlar(text):\n    return [l.rstrip() for l in text.strip(\"\\n\").split(\"\\n\")] if text.strip() else []\n\nassert sahne[1] == \"# * #\", 'sahne[1] \"# * #\" olmalı.'\nassert _satirlar(_output) == [\"#####\", \"# * #\", \"#####\"], \"Listenin üç elemanını sırayla yazdırmalısın.\"\n"
+  },
+  "xp": 40,
+  "scene": {
+   "target": [
+    "#####",
+    "# * #",
+    "#####"
+   ]
+  },
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "sahne = [\"#####\", \"#   #\", \"#####\"]",
+     "notes": [
+      "`sahne` adında bir değişken oluşturuluyor ve içine `[\"#####\", \"# #\", \"#####\"]` (liste) konuyor."
+     ]
+    },
+    {
+     "n": 2,
+     "code": "sahne[1] = \"# * #\"",
+     "notes": [
+      "`sahne[...]` konumundaki değer `\"# * #\"` ile değiştiriliyor."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "print(sahne[0])",
+     "notes": [
+      "`print(sahne[0])`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "print(sahne[1])",
+     "notes": [
+      "`print(sahne[1])`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "print(sahne[2])",
+     "notes": [
+      "`print(sahne[2])`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "sahne",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `[\"#####\", \"# #\", \"#####\"]`."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    },
+    {
+     "term": "[ ]",
+     "kind": "seçme",
+     "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+    }
+   ]
+  }
+ },
+ "tracks": {
+  "veri": {
+   "project_task": {
+    "id": "d5-pv",
+    "title": "Harcama listesi",
+    "prompt": "Harcamaları bir listede tutalım.\n\n- Boş `expenses` listesine sırasıyla `120`, `45` ve `300` ekle (`append`).\n- Sonra şu iki satırı yazdır (`len()`, `sum()` ve `max()` kullan):\n\n```\n3 harcama, toplam 465 TL\nEn büyük harcama: 300 TL\n```",
+    "starter": "expenses = []\n",
+    "solution": "expenses = []\nexpenses.append(120)\nexpenses.append(45)\nexpenses.append(300)\nprint(f\"{len(expenses)} harcama, toplam {sum(expenses)} TL\")\nprint(f\"En büyük harcama: {max(expenses)} TL\")\n",
+    "hints": [
+     "expenses.append(120) listenin sonuna ekler.",
+     "f\"{len(expenses)} harcama, toplam {sum(expenses)} TL\""
+    ],
+    "check": {
+     "code_contains": [
+      "append(",
+      "len(",
+      "sum("
+     ],
+     "python": "\nassert expenses == [120, 45, 300], \"expenses sırasıyla 120, 45, 300 olmalı.\"\nassert \"3 harcama, toplam 465 TL\" in _output, \"Çıktıda '3 harcama, toplam 465 TL' görünmeli.\"\nassert \"En büyük harcama: 300 TL\" in _output, \"Çıktıda 'En büyük harcama: 300 TL' görünmeli.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "expenses = []",
+       "notes": [
+        "`expenses` adında bir değişken oluşturuluyor ve içine `[]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "expenses.append(120)",
+       "notes": [
+        "`expenses.append(120)`: `expenses` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "expenses.append(45)",
+       "notes": [
+        "`expenses.append(45)`: `expenses` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "expenses.append(300)",
+       "notes": [
+        "`expenses.append(300)`: `expenses` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "print(f\"{len(expenses)} harcama, toplam {sum(expenses)} TL\")",
+       "notes": [
+        "`print(f\"{len(expenses)} harcama, toplam {sum(expenses)} TL\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "print(f\"En büyük harcama: {max(expenses)} TL\")",
+       "notes": [
+        "`print(f\"En büyük harcama: {max(expenses)} TL\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "expenses",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[]`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": ".append()",
+       "kind": "metot",
+       "desc": "Listenin sonuna yeni bir eleman ekler."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      },
+      {
+       "term": "sum()",
+       "kind": "fonksiyon",
+       "desc": "Listedeki sayıları toplar."
+      },
+      {
+       "term": "max()",
+       "kind": "fonksiyon",
+       "desc": "En büyük değeri verir."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Harcama listesi",
+   "game_role": "Harcama tutarlarını bir listede toplar."
+  },
+  "otomasyon": {
+   "project_task": {
+    "id": "d5-po",
+    "title": "Görev listesi",
+    "prompt": "Görevleri bir listede toplayalım.\n\n- Boş `tasks` listesine sırasıyla `\"E-postaları oku\"`, `\"Rapor yaz\"` ve `\"Spor\"` ekle.\n- En başa `\"Kahve\"` ekle (`insert`).\n- Sonra `4 görev: Kahve, E-postaları oku, Rapor yaz, Spor` yazdır (`len()` ve `\", \".join()`).",
+    "starter": "tasks = []\n",
+    "solution": "tasks = []\ntasks.append(\"E-postaları oku\")\ntasks.append(\"Rapor yaz\")\ntasks.append(\"Spor\")\ntasks.insert(0, \"Kahve\")\nprint(f\"{len(tasks)} görev: {', '.join(tasks)}\")\n",
+    "hints": [
+     "tasks.insert(0, \"Kahve\") en başa ekler.",
+     "\", \".join(tasks) listeyi virgüllerle birleştirir."
+    ],
+    "check": {
+     "code_contains": [
+      "append(",
+      "insert(",
+      "len("
+     ],
+     "python": "\nassert tasks == [\"Kahve\", \"E-postaları oku\", \"Rapor yaz\", \"Spor\"], \"tasks sırasıyla Kahve, E-postaları oku, Rapor yaz, Spor olmalı.\"\nassert \"4 görev: Kahve, E-postaları oku, Rapor yaz, Spor\" in _output, \"Çıktıda '4 görev: Kahve, E-postaları oku, Rapor yaz, Spor' görünmeli.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "tasks = []",
+       "notes": [
+        "`tasks` adında bir değişken oluşturuluyor ve içine `[]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "tasks.append(\"E-postaları oku\")",
+       "notes": [
+        "`tasks.append(\"E-postaları oku\")`: `tasks` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "tasks.append(\"Rapor yaz\")",
+       "notes": [
+        "`tasks.append(\"Rapor yaz\")`: `tasks` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "tasks.append(\"Spor\")",
+       "notes": [
+        "`tasks.append(\"Spor\")`: `tasks` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "tasks.insert(0, \"Kahve\")",
+       "notes": [
+        "`tasks.insert(0, \"Kahve\")`: `tasks` üzerinde `insert` metodunu çalıştırır. Listede istenen sıraya eleman ekler."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "print(f\"{len(tasks)} görev: {', '.join(tasks)}\")",
+       "notes": [
+        "`print(f\"{len(tasks)} görev: {', '.join(tasks)}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "tasks",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[]`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": ".append()",
+       "kind": "metot",
+       "desc": "Listenin sonuna yeni bir eleman ekler."
+      },
+      {
+       "term": ".insert()",
+       "kind": "metot",
+       "desc": "Listede istenen sıraya eleman ekler."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      },
+      {
+       "term": ".join()",
+       "kind": "metot",
+       "desc": "Listedeki metinleri aradaki yazıyla birleştirir: \", \".join(liste)"
+      }
+     ]
+    }
+   },
+   "project_contribution": "Görev listesi",
+   "game_role": "Günün görevlerini bir listede tutar."
+  },
+  "web": {
+   "project_task": {
+    "id": "d5-pw",
+    "title": "Sayfa listesi",
+    "prompt": "Sitenin sayfalarını bir listede tutalım.\n\n- `pages` listesine sırasıyla `\"Hakkımda\"` ve `\"Projeler\"` ekle (`append`).\n- Sonra şu iki satırı yazdır (`len()`, `\", \".join(pages)` ve son eleman için `pages[-1]`):\n\n```\n4 sayfa: Ana Sayfa, Blog, Hakkımda, Projeler\nMenünün sonu: Projeler\n```",
+    "starter": "pages = [\"Ana Sayfa\", \"Blog\"]\n",
+    "solution": "pages = [\"Ana Sayfa\", \"Blog\"]\npages.append(\"Hakkımda\")\npages.append(\"Projeler\")\nprint(f\"{len(pages)} sayfa: {', '.join(pages)}\")\nprint(f\"Menünün sonu: {pages[-1]}\")\n",
+    "hints": [
+     "pages.append(\"Hakkımda\") listenin sonuna ekler.",
+     "\", \".join(pages) elemanları virgülle birleştirir."
+    ],
+    "check": {
+     "code_contains": [
+      "append(",
+      "len(",
+      "join("
+     ],
+     "python": "\nassert pages == [\"Ana Sayfa\", \"Blog\", \"Hakkımda\", \"Projeler\"], \"pages sırasıyla Ana Sayfa, Blog, Hakkımda, Projeler olmalı.\"\nassert \"4 sayfa: Ana Sayfa, Blog, Hakkımda, Projeler\" in _output, \"Çıktıda '4 sayfa: Ana Sayfa, Blog, Hakkımda, Projeler' görünmeli.\"\nassert \"Menünün sonu: Projeler\" in _output, \"Çıktıda 'Menünün sonu: Projeler' görünmeli.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "pages = [\"Ana Sayfa\", \"Blog\"]",
+       "notes": [
+        "`pages` adında bir değişken oluşturuluyor ve içine `[\"Ana Sayfa\", \"Blog\"]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "pages.append(\"Hakkımda\")",
+       "notes": [
+        "`pages.append(\"Hakkımda\")`: `pages` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "pages.append(\"Projeler\")",
+       "notes": [
+        "`pages.append(\"Projeler\")`: `pages` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "print(f\"{len(pages)} sayfa: {', '.join(pages)}\")",
+       "notes": [
+        "`print(f\"{len(pages)} sayfa: {', '.join(pages)}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "print(f\"Menünün sonu: {pages[-1]}\")",
+       "notes": [
+        "`print(f\"Menünün sonu: {pages[-1]}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "pages",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[\"Ana Sayfa\", \"Blog\"]`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": ".append()",
+       "kind": "metot",
+       "desc": "Listenin sonuna yeni bir eleman ekler."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      },
+      {
+       "term": ".join()",
+       "kind": "metot",
+       "desc": "Listedeki metinleri aradaki yazıyla birleştirir: \", \".join(liste)"
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": "-",
+       "kind": "operatör",
+       "desc": "Sayının önündeki eksi işareti."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Sayfa listesi",
+   "game_role": "Sitenin sayfalarını bir listede toplar."
+  },
+  "bot": {
+   "project_task": {
+    "id": "d5-pb",
+    "title": "Selam kelimeleri",
+    "prompt": "Bot hangi kelimelerin selam olduğunu bir listeden öğrensin.\n\n- `greetings` listesine sırasıyla `\"hey\"` ve `\"günaydın\"` ekle (`append`).\n- Yeni bir metot: `split()` bir yazıyı boşluklardan bölüp kelimelerin listesini verir. `\"selam bot\".split()` sonucu `['selam', 'bot']`. Bununla mesajın kelimelerinden `words` listesini oluştur.\n- `first_word`: mesajın ilk kelimesi\n\nSonra şöyle yazdır:\n\n```\n4 selam kelimesi biliyorum\nİlk kelime: selam\nSelam mı: True\n```\n\nSon satır, ilk kelimenin `greetings` içinde olup olmadığını söyler (`in`).",
+    "starter": "greetings = [\"merhaba\", \"selam\"]\nmessage = \"selam bot nasılsın\"\n",
+    "solution": "greetings = [\"merhaba\", \"selam\"]\nmessage = \"selam bot nasılsın\"\ngreetings.append(\"hey\")\ngreetings.append(\"günaydın\")\nwords = message.split()\nfirst_word = words[0]\nprint(f\"{len(greetings)} selam kelimesi biliyorum\")\nprint(f\"İlk kelime: {first_word}\")\nprint(f\"Selam mı: {first_word in greetings}\")\n",
+    "hints": [
+     "greetings.append(\"hey\") listenin sonuna ekler.",
+     "words = message.split() ve first_word = words[0]"
+    ],
+    "check": {
+     "code_contains": [
+      "append(",
+      "split("
+     ],
+     "python": "\nassert greetings == [\"merhaba\", \"selam\", \"hey\", \"günaydın\"], \"greetings sırasıyla merhaba, selam, hey, günaydın olmalı.\"\nassert \"4 selam kelimesi biliyorum\" in _output, \"Kaç selam kelimesi bildiğini len() ile yazdır.\"\nout, g = _run(_set(_code, \"message\", \"günaydın dünya\"))\nassert g[\"words\"] == [\"günaydın\", \"dünya\"], \"words, message.split() ile oluşturulmalı.\"\nassert \"İlk kelime: günaydın\" in out and \"Selam mı: True\" in out, \"İlk kelimeyi ve selam olup olmadığını yazdır.\"\nout, _ = _run(_set(_code, \"message\", \"hava nasıl\"))\nassert \"İlk kelime: hava\" in out and \"Selam mı: False\" in out, \"İlk kelime selam değilse False yazmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "greetings = [\"merhaba\", \"selam\"]",
+       "notes": [
+        "`greetings` adında bir değişken oluşturuluyor ve içine `[\"merhaba\", \"selam\"]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "message = \"selam bot nasılsın\"",
+       "notes": [
+        "`message` adında bir değişken oluşturuluyor ve içine `\"selam bot nasılsın\"` (metin (str)) konuyor."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "greetings.append(\"hey\")",
+       "notes": [
+        "`greetings.append(\"hey\")`: `greetings` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "greetings.append(\"günaydın\")",
+       "notes": [
+        "`greetings.append(\"günaydın\")`: `greetings` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "words = message.split()",
+       "notes": [
+        "`words` adında bir değişken oluşturuluyor ve içine `message.split()` konuyor."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "first_word = words[0]",
+       "notes": [
+        "`first_word` adında bir değişken oluşturuluyor ve içine `words[0]` konuyor."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "print(f\"{len(greetings)} selam kelimesi biliyorum\")",
+       "notes": [
+        "`print(f\"{len(greetings)} selam kelimesi biliyorum\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "print(f\"İlk kelime: {first_word}\")",
+       "notes": [
+        "`print(f\"İlk kelime: {first_word}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "print(f\"Selam mı: {first_word in greetings}\")",
+       "notes": [
+        "`print(f\"Selam mı: {first_word in greetings}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "greetings",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[\"merhaba\", \"selam\"]`."
+      },
+      {
+       "term": "message",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `\"selam bot nasılsın\"`."
+      },
+      {
+       "term": "words",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `message.split()`."
+      },
+      {
+       "term": "first_word",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `words[0]`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": ".append()",
+       "kind": "metot",
+       "desc": "Listenin sonuna yeni bir eleman ekler."
+      },
+      {
+       "term": ".split()",
+       "kind": "metot",
+       "desc": "Metni parçalara böler ve liste yapar (varsayılan: boşluklardan)."
+      },
+      {
+       "term": "[ ]",
+       "kind": "seçme",
+       "desc": "Köşeli parantezle sıra numarası (0'dan başlar) ya da sözlük anahtarıyla eleman seçme."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      },
+      {
+       "term": "in",
+       "kind": "operatör",
+       "desc": "İçinde var mı? (listede, metinde, sözlükte)"
+      }
+     ]
+    }
+   },
+   "project_contribution": "Selam kelimeleri",
+   "game_role": "Botun tanıdığı selam kelimelerini bir listede tutar."
+  },
+  "okul": {
+   "project_task": {
+    "id": "d5-pn",
+    "title": "Not listesi",
+    "prompt": "Bir dersin notlarını listede tutalım.\n\n- Boş `grades` listesine sırasıyla `70`, `85` ve `60` ekle (`append`).\n- Sonra şu iki satırı yazdır (`len()`, `max()` ve `min()` kullan):\n\n```\n3 not girildi, en yüksek 85\nEn düşük not: 60\n```",
+    "starter": "grades = []\n",
+    "solution": "grades = []\ngrades.append(70)\ngrades.append(85)\ngrades.append(60)\nprint(f\"{len(grades)} not girildi, en yüksek {max(grades)}\")\nprint(f\"En düşük not: {min(grades)}\")\n",
+    "hints": [
+     "grades.append(70) listenin sonuna ekler.",
+     "f\"{len(grades)} not girildi, en yüksek {max(grades)}\""
+    ],
+    "check": {
+     "code_contains": [
+      "append(",
+      "len(",
+      "max(",
+      "min("
+     ],
+     "python": "\nassert grades == [70, 85, 60], \"grades sırasıyla 70, 85, 60 olmalı.\"\nassert \"3 not girildi, en yüksek 85\" in _output, \"Çıktıda '3 not girildi, en yüksek 85' görünmeli.\"\nassert \"En düşük not: 60\" in _output, \"Çıktıda 'En düşük not: 60' görünmeli.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "grades = []",
+       "notes": [
+        "`grades` adında bir değişken oluşturuluyor ve içine `[]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "grades.append(70)",
+       "notes": [
+        "`grades.append(70)`: `grades` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 3,
+       "code": "grades.append(85)",
+       "notes": [
+        "`grades.append(85)`: `grades` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "grades.append(60)",
+       "notes": [
+        "`grades.append(60)`: `grades` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "print(f\"{len(grades)} not girildi, en yüksek {max(grades)}\")",
+       "notes": [
+        "`print(f\"{len(grades)} not girildi, en yüksek {max(grades)}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "print(f\"En düşük not: {min(grades)}\")",
+       "notes": [
+        "`print(f\"En düşük not: {min(grades)}\")`: parantez içindeki değeri ekrana yazdırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "grades",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[]`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": ".append()",
+       "kind": "metot",
+       "desc": "Listenin sonuna yeni bir eleman ekler."
+      },
+      {
+       "term": "print()",
+       "kind": "fonksiyon",
+       "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+      },
+      {
+       "term": "f\"...{}\"",
+       "kind": "metin",
+       "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      },
+      {
+       "term": "max()",
+       "kind": "fonksiyon",
+       "desc": "En büyük değeri verir."
+      },
+      {
+       "term": "min()",
+       "kind": "fonksiyon",
+       "desc": "En küçük değeri verir."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Not listesi",
+   "game_role": "Bir dersin notlarını listede toplar."
+  }
+ }
+}

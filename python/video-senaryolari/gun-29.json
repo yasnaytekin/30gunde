@@ -1,0 +1,240 @@
+{
+  "kurs": "python",
+  "gun": 29,
+  "baslik": "API yapmak",
+  "maskot": "piko",
+  "ozet": "Piko, Python Dağı'nın zirvesine yakın bir istasyonda kendi API'mizi kurmayı; HTTP metotlarını, adresleri, durum kodlarını ve (kod, cevap) döndüren fonksiyonları anlatıyor.",
+  "hedef_sure_sn": 159,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 14,
+      "anlatim": "Selam, ben Piko! Zirveye çok az kaldı! Dün başka istasyonlara soru sorduk. Bugün soruları cevaplayan istasyon biz oluyoruz. Arkadaşlarının oyunları, skorları senin yazacağın API'den okuyacak. Hazır mısın?",
+      "ekran": {
+        "baslik": "Gün 29: API yapmak",
+        "maddeler": [
+          "Python Dağı",
+          "GET, POST, PUT, DELETE"
+        ]
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "yonetmen_notu": "Arka plan: Python Dağı bölge görseli (gorseller/python/harita/dag.webp). Dosya repoda henüz yok; eklenince ekran.gorsel alanına yazılmalı. Zirveye yakın bir istasyon; Piko telsizin başında cevap veriyor."
+    },
+    {
+      "no": 2,
+      "tur": "anlatim",
+      "sure_sn": 16,
+      "anlatim": "API'ye gelen her isteğin bir metodu vardır ve ne istendiğini söyler. GET veriyi getirir, POST yeni veri ekler, PUT günceller, DELETE siler. Bu dört işleme kısaca CRUD denir.",
+      "ekran": {
+        "baslik": "HTTP metotları",
+        "maddeler": [
+          "GET: oku",
+          "POST: ekle",
+          "PUT: güncelle",
+          "DELETE: sil",
+          "CRUD: Create, Read, Update, Delete"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "Adresler düzenlidir: players tüm oyuncular, players bölü iki ise iki numaralı oyuncu. Adresi strip ve split ile parçalara ayırınca hangi kaynağın ve hangi kimliğin istendiğini okuyabiliyorum.",
+      "ekran": {
+        "baslik": "Adresi parçala",
+        "kod": "for path in [\"/players\", \"/players/2\", \"/scores/10\"]:\n    parts = path.strip(\"/\").split(\"/\")\n    print(path, \"->\", parts)\n",
+        "vurgu_satirlari": [
+          2
+        ],
+        "dil": "python",
+        "cikti": "/players -> ['players']\n/players/2 -> ['players', '2']\n/scores/10 -> ['scores', '10']"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "anlatim",
+      "sure_sn": 16,
+      "anlatim": "Gerçek bir API'yi Flask ile yazarsın. route adresi ve metodu seçer, jsonify cevabı JSON'a çevirir, yanına da durum kodu gelir. Burada sunucu çalıştıramadığımız için her fonksiyon durum kodu ve cevap döndürecek.",
+      "ekran": {
+        "baslik": "Flask ile gerçek bir API",
+        "kod": "from flask import Flask, jsonify, request\napp = Flask(__name__)\nplayers = []\n\n@app.route(\"/players\", methods=[\"POST\"])\ndef create_player():\n    data = request.get_json()\n    players.append(data)\n    return jsonify(data), 201\n",
+        "vurgu_satirlari": [
+          5,
+          9
+        ],
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": false,
+      "yonetmen_notu": "Sunucu gerektirdiği için çalıştırılmaz; sadece gerçek kullanımı gösterir."
+    },
+    {
+      "no": 5,
+      "tur": "anlatim",
+      "sure_sn": 14,
+      "anlatim": "İyi bir API her zaman anlaşılır bir durum kodu döndürür. İki yüz bir yeni kayıt oluştu, iki yüz dört silindi ama gösterilecek bir şey yok, dört yüz ise isteğin eksik ya da hatalı demek.",
+      "ekran": {
+        "baslik": "Doğru durum kodu",
+        "maddeler": [
+          "200 Tamam (GET, PUT)",
+          "201 Oluşturuldu (POST)",
+          "204 İçerik yok (DELETE)",
+          "400 Hatalı istek",
+          "404 Bulunamadı"
+        ]
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 15,
+      "anlatim": "İşte mini API'mizin POST kısmı. Önce gövdede isim var mı diye bakıyor, yoksa dört yüzle geri çeviriyor. Varsa yeni bir kimlik verip oyuncuyu ekliyor ve iki yüz bir döndürüyor.",
+      "ekran": {
+        "baslik": "Mini API: POST",
+        "kod": "players = [{\"id\": 1, \"name\": \"Piko\"}]\n\ndef create_player(body):\n    if \"name\" not in body:\n        return 400, {\"hata\": \"isim gerekli\"}\n    player = {\"id\": len(players) + 1, \"name\": body[\"name\"]}\n    players.append(player)\n    return 201, player\n",
+        "vurgu_satirlari": [
+          4,
+          5,
+          8
+        ],
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 7,
+      "tur": "soru",
+      "sure_sn": 9,
+      "anlatim": "Bu API'ye iki istek gönderiyorum: biri isimli, biri bomboş. Sence ikisine ne cevap gelir?",
+      "ekran": {
+        "baslik": "Sence ne yazdırır?",
+        "kod": "players = [{\"id\": 1, \"name\": \"Piko\"}]\n\ndef create_player(body):\n    if \"name\" not in body:\n        return 400, {\"hata\": \"isim gerekli\"}\n    player = {\"id\": len(players) + 1, \"name\": body[\"name\"]}\n    players.append(player)\n    return 201, player\n\nprint(create_player({\"name\": \"Ece\"}))\nprint(create_player({}))\n",
+        "vurgu_satirlari": [
+          10,
+          11
+        ],
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 8,
+      "tur": "cikti",
+      "sure_sn": 11,
+      "anlatim": "Ece iki numaralı kimlikle eklendi ve iki yüz bir geldi. Boş istek ise dört yüz aldı, üstelik ne eksik olduğunu söyleyen bir mesajla.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "players = [{\"id\": 1, \"name\": \"Piko\"}]\n\ndef create_player(body):\n    if \"name\" not in body:\n        return 400, {\"hata\": \"isim gerekli\"}\n    player = {\"id\": len(players) + 1, \"name\": body[\"name\"]}\n    players.append(player)\n    return 201, player\n\nprint(create_player({\"name\": \"Ece\"}))\nprint(create_player({}))\n",
+        "dil": "python",
+        "cikti": "(201, {'id': 2, 'name': 'Ece'})\n(400, {'hata': 'isim gerekli'})"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "hata",
+      "sure_sn": 12,
+      "anlatim": "Sık hata: gövdeyi kontrol etmeden doğrudan name alanını okumak. İstekte isim yoksa KeyError alırsın ve API çöker. Önce in ile kontrol et, eksikse dört yüz dön.",
+      "ekran": {
+        "baslik": "Sık hata: kontrolsüz gövde",
+        "kod": "def create_player(body):\n    return 201, {\"name\": body[\"name\"]}\n\nprint(create_player({}))\n",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "KeyError: 'name'",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "uzgun",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 10,
+      "tur": "gorev",
+      "sure_sn": 14,
+      "anlatim": "Görevlerde tek oyuncuyu getiren bir GET, yeni oyuncu ekleyen bir POST ve oyuncu silen bir DELETE yazacaksın. Projede de Piko'nun Macerası'nın skor API'sini kuruyorsun!",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: GET: tek oyuncu",
+          "Görev 2: POST: yeni oyuncu",
+          "Görev 3: DELETE: oyuncu sil",
+          "Challenge: Yönlendirici",
+          "Proje: Oyun API'si"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "ozet",
+      "sure_sn": 11,
+      "anlatim": "Özetle: metot ne yapılacağını, adres neyin istendiğini söyler; iyi bir API de her isteğe doğru durum koduyla cevap verir.",
+      "ekran": {
+        "baslik": "Bugün öğrendiklerin",
+        "maddeler": [
+          "GET, POST, PUT, DELETE = CRUD",
+          "Adresi split ile parçala",
+          "200, 201, 204, 400, 404"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 12,
+      "tur": "kapanis",
+      "sure_sn": 13,
+      "anlatim": "Artık kendi API'ni yazabiliyorsun, inanılmaz! Yarın zirvedeyiz. Otuz günde öğrendiğin her şeyi birleştirip Piko'nun Macerası'nın final sürümünü yazacağız. Sakın kaçırma!",
+      "ekran": {
+        "baslik": "Yarın: Final ve sonrası",
+        "maddeler": [
+          "Zirve!",
+          "Final macerası"
+        ]
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

@@ -1,0 +1,1430 @@
+{
+ "day": 12,
+ "title": "Modüller",
+ "region": "atolye",
+ "project_contribution": "Rastgele olaylar",
+ "game_role": "Sandıkları açınca senin rastgele olayların ve altınların çıkar.",
+ "xp_complete": 150,
+ "objective": "Hazır modülleri içe aktarmak ve math ile random modüllerini kullanmak",
+ "story": "Atölyenin duvarında dev bir alet dolabı var. Her çekmecede başka ustaların yaptığı aletler duruyor: biri hesap aletleri, biri zar ve kura aletleri... Python'da bu çekmecelere **modül** denir. Bugün çekmeceleri açıyoruz!",
+ "sections": [
+  {
+   "title": "Modül nedir?",
+   "body": "Modül, başka birinin (ya da senin) yazdığı fonksiyonlarla dolu bir Python dosyasıdır. `import` ile projene alırsın:\n\n```python\nimport math\nprint(math.sqrt(49))   # 7.0\n```\n\nPython kurulurken yanında yüzlerce modülle gelir. Buna **standart kütüphane** denir."
+  },
+  {
+   "title": "math: hesap aletleri",
+   "body": "- `math.sqrt(x)` karekök\n- `math.pi` pi sayısı (3.14159...)\n- `math.floor(4.7)` aşağı yuvarlar: 4\n- `math.ceil(4.2)` yukarı yuvarlar: 5\n- `math.pow(2, 3)` üs alır: 8.0"
+  },
+  {
+   "title": "random: şans aletleri",
+   "body": "Oyunların sürprizleri buradan gelir:\n\n- `random.randint(1, 6)` 1 ile 6 arasında (ikisi dahil) rastgele tam sayı\n- `random.choice(liste)` listeden rastgele bir eleman\n- `random.shuffle(liste)` listeyi karıştırır\n- `random.random()` 0 ile 1 arasında rastgele ondalıklı sayı\n\nHer çalıştırmada farklı sonuç çıkar. Aynı sonuçları tekrar görmek istersen başta `random.seed(42)` yazabilirsin."
+  },
+  {
+   "title": "from, as ve kendi modülün",
+   "body": "Sadece bir parçayı almak için `from` kullanılır, uzun isimleri kısaltmak için `as`:\n\n```python\nfrom math import pi, sqrt\nimport random as rnd\nprint(pi, sqrt(16), rnd.randint(1, 3))\n```\n\nKendi bilgisayarında `araclar.py` adında bir dosya yazarsan, aynı klasördeki başka bir dosyada `import araclar` diyerek onun fonksiyonlarını kullanabilirsin. Büyük projeler böyle düzenlenir."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Hesap aletleri",
+   "code": "import math\n\nprint(math.sqrt(81))\nprint(round(math.pi, 4))\nprint(math.floor(4.7), math.ceil(4.2))\n",
+   "note": ""
+  },
+  {
+   "title": "Zar ve kura",
+   "code": "import random\n\nprint(\"Zar:\", random.randint(1, 6))\nfriends = [\"Ali\", \"Ece\", \"Can\", \"Zeynep\"]\nprint(\"Kurada çıkan:\", random.choice(friends))\nrandom.shuffle(friends)\nprint(\"Karışık sıra:\", friends)\n",
+   "note": "Birkaç kez çalıştır, sonuçlar değişiyor mu?"
+  },
+  {
+   "title": "from ve as",
+   "code": "from math import sqrt, pi\nimport random as rnd\n\nprint(sqrt(144))\nprint(pi)\nrnd.seed(7)\nprint(rnd.randint(1, 100))\n",
+   "note": "seed sabit olduğu için sayı her seferinde aynı çıkar."
+  }
+ ],
+ "tasks": [
+  {
+   "id": "d12-t1",
+   "title": "Karekök",
+   "prompt": "`math` modülünü kullanarak `area`'nın karekökünü bul ve `side` değişkenine koy.",
+   "starter": "area = 81\n\n# math modülünü içe aktar ve side'ı hesapla\nside = 0\n\nprint(\"Bir kenar:\", side)\n",
+   "solution": "import math\n\narea = 81\n\nside = math.sqrt(area)\n\nprint(\"Bir kenar:\", side)\n",
+   "hints": [
+    "En üste import math yaz.",
+    "Karekök: math.sqrt(area)"
+   ],
+   "check": {
+    "python": "\nassert \"import math\" in _code or \"from math import\" in _code, \"math modülünü içe aktar: import math\"\n_, g = _run(_set(_code, \"area\", 49))\nassert g.get(\"side\") == 7, \"area 49 iken side 7 olmalı. math.sqrt(area) kullan.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "import math",
+      "notes": [
+       "`math` modülü programa ekleniyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "area = 81",
+      "notes": [
+       "`area` adında bir değişken oluşturuluyor ve içine `81` (tam sayı) konuyor."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "side = math.sqrt(area)",
+      "notes": [
+       "`side` adında bir değişken oluşturuluyor ve içine `math.sqrt(area)` konuyor."
+      ]
+     },
+     {
+      "n": 7,
+      "code": "print(\"Bir kenar:\", side)",
+      "notes": [
+       "`print(\"Bir kenar:\", side)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "area",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `81`."
+     },
+     {
+      "term": "side",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `math.sqrt(area)`."
+     },
+     {
+      "term": "import",
+      "kind": "anahtar kelime",
+      "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+     },
+     {
+      "term": "math",
+      "kind": "modül",
+      "desc": "Matematik fonksiyonları (karekök, pi...)."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": ".sqrt()",
+      "kind": "metot",
+      "desc": "Karekök alır."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d12-t2",
+   "title": "Zar at",
+   "prompt": "`random` modülüyle 1 ile 6 arasında bir zar at, sonucu `dice` değişkenine koy ve `Zar: 4` gibi yazdır.",
+   "starter": "# random modülünü içe aktar\n\ndice = 1\n\nprint(f\"Zar: {dice}\")\n",
+   "solution": "import random\n\ndice = random.randint(1, 6)\n\nprint(f\"Zar: {dice}\")\n",
+   "hints": [
+    "import random",
+    "random.randint(1, 6) hem 1'i hem 6'yı içerir."
+   ],
+   "check": {
+    "code_contains": [
+     "random"
+    ],
+    "python": "\nseen = set()\nfor _ in range(60):\n    _, g = _run(_code)\n    d = g.get(\"dice\")\n    assert isinstance(d, int) and 1 <= d <= 6, \"dice 1 ile 6 arasında bir tam sayı olmalı.\"\n    seen.add(d)\nassert len(seen) >= 3, \"dice her seferinde aynı çıkıyor. random.randint(1, 6) kullan.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "import random",
+      "notes": [
+       "`random` modülü programa ekleniyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "dice = random.randint(1, 6)",
+      "notes": [
+       "`dice` adında bir değişken oluşturuluyor ve içine `random.randint(1, 6)` konuyor."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "print(f\"Zar: {dice}\")",
+      "notes": [
+       "`print(f\"Zar: {dice}\")`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "dice",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `random.randint(1, 6)`."
+     },
+     {
+      "term": "import",
+      "kind": "anahtar kelime",
+      "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+     },
+     {
+      "term": "random",
+      "kind": "modül",
+      "desc": "Rastgele sayı ve seçim fonksiyonları."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": ".randint()",
+      "kind": "metot",
+      "desc": "İki sayı arasında (ikisi de dahil) rastgele tam sayı seçer."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     },
+     {
+      "term": "f\"...{}\"",
+      "kind": "metin",
+      "desc": "Başında f olan metin; {} içindeki değişkenlerin değeri metne yerleşir."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d12-t3",
+   "title": "Rastgele hazine",
+   "prompt": "`treasures` listesinden rastgele bir hazine seç ve `prize` değişkenine koy.",
+   "starter": "import random\n\ntreasures = [\"altın\", \"elmas\", \"harita\", \"iksir\"]\n\nprize = treasures[0]\n\nprint(\"Hazine:\", prize)\n",
+   "solution": "import random\n\ntreasures = [\"altın\", \"elmas\", \"harita\", \"iksir\"]\n\nprize = random.choice(treasures)\n\nprint(\"Hazine:\", prize)\n",
+   "hints": [
+    "Listeden rastgele seçmek için random.choice(...)"
+   ],
+   "check": {
+    "python": "\nseen = set()\nfor _ in range(60):\n    _, g = _run(_code)\n    assert g.get(\"prize\") in g[\"treasures\"], \"prize, treasures listesinden seçilmeli.\"\n    seen.add(g[\"prize\"])\nassert len(seen) >= 2, \"prize hep aynı. random.choice(treasures) kullan.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "import random",
+      "notes": [
+       "`random` modülü programa ekleniyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "treasures = [\"altın\", \"elmas\", \"harita\", \"iksir\"]",
+      "notes": [
+       "`treasures` adında bir değişken oluşturuluyor ve içine `[\"altın\", \"elmas\", \"harita\", \"iksir\"]` (liste) konuyor."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "prize = random.choice(treasures)",
+      "notes": [
+       "`prize` adında bir değişken oluşturuluyor ve içine `random.choice(treasures)` konuyor."
+      ]
+     },
+     {
+      "n": 7,
+      "code": "print(\"Hazine:\", prize)",
+      "notes": [
+       "`print(\"Hazine:\", prize)`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "treasures",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `[\"altın\", \"elmas\", \"harita\", \"iksir\"]`."
+     },
+     {
+      "term": "prize",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `random.choice(treasures)`."
+     },
+     {
+      "term": "import",
+      "kind": "anahtar kelime",
+      "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+     },
+     {
+      "term": "random",
+      "kind": "modül",
+      "desc": "Rastgele sayı ve seçim fonksiyonları."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": ".choice()",
+      "kind": "metot",
+      "desc": "Listeden rastgele bir eleman seçer."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "id": "d12-c",
+  "title": "Daire alanı",
+  "prompt": "`from math import pi` ile pi'yi al. Yarıçapı `radius` olan dairenin alanını hesaplayıp **2 basamağa yuvarla** ve `area` değişkenine koy. Formül: pi x r x r",
+  "starter": "radius = 3\n\n# pi'yi math modülünden al\n\narea = 0\n\nprint(\"Alan:\", area)\n",
+  "solution": "from math import pi\n\nradius = 3\n\narea = round(pi * radius ** 2, 2)\n\nprint(\"Alan:\", area)\n",
+  "hints": [
+   "from math import pi",
+   "round(sayı, 2) iki basamağa yuvarlar."
+  ],
+  "check": {
+   "code_contains": [
+    "from math import"
+   ],
+   "python": "\nimport math\n_, g = _run(_set(_code, \"radius\", 5))\nassert g.get(\"area\") == round(math.pi * 25, 2), \"radius 5 iken area 78.54 olmalı: round(pi * radius ** 2, 2)\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "from math import pi",
+     "notes": [
+      "`math` modülünden `pi` programa alınıyor."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "radius = 3",
+     "notes": [
+      "`radius` adında bir değişken oluşturuluyor ve içine `3` (tam sayı) konuyor."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "area = round(pi * radius ** 2, 2)",
+     "notes": [
+      "`area` adında bir değişken oluşturuluyor ve içine `round(pi * radius ** 2, 2)` konuyor."
+     ]
+    },
+    {
+     "n": 7,
+     "code": "print(\"Alan:\", area)",
+     "notes": [
+      "`print(\"Alan:\", area)`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "radius",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `3`."
+    },
+    {
+     "term": "area",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `round(pi * radius ** 2, 2)`."
+    },
+    {
+     "term": "import",
+     "kind": "anahtar kelime",
+     "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+    },
+    {
+     "term": "math",
+     "kind": "modül",
+     "desc": "Matematik fonksiyonları (karekök, pi...)."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "round()",
+     "kind": "fonksiyon",
+     "desc": "Sayıyı yuvarlar. round(3.14159, 2) → 3.14"
+    },
+    {
+     "term": "*",
+     "kind": "operatör",
+     "desc": "Çarpma; metni ya da listeyi tekrarlama (\"*\" * 3 → \"***\")."
+    },
+    {
+     "term": "**",
+     "kind": "operatör",
+     "desc": "Üs alma (2 ** 3 → 8)."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    }
+   ]
+  }
+ },
+ "project_task": {
+  "id": "d12-p",
+  "title": "Rastgele olaylar",
+  "prompt": "Macerayı sürprizli yapalım! `random_event()` fonksiyonu `events` listesinden rastgele bir olayı **döndürsün**. `find_gold()` fonksiyonu 5 ile 20 arasında rastgele bir sayı döndürsün.",
+  "starter": "import random\n\nevents = [\"Bir iksir buldun!\", \"Tuzağa bastın!\", \"Bir dost geldi!\", \"Yağmur başladı!\"]\n\ndef random_event():\n    pass\n\ndef find_gold():\n    pass\n\nprint(random_event())\nprint(\"Bulunan altın:\", find_gold())\n",
+  "solution": "import random\n\nevents = [\"Bir iksir buldun!\", \"Tuzağa bastın!\", \"Bir dost geldi!\", \"Yağmur başladı!\"]\n\ndef random_event():\n    return random.choice(events)\n\ndef find_gold():\n    return random.randint(5, 20)\n\nprint(random_event())\nprint(\"Bulunan altın:\", find_gold())\n",
+  "hints": [
+   "random_event içinde: return random.choice(events)",
+   "find_gold içinde: return random.randint(5, 20)"
+  ],
+  "check": {
+   "python": "\nseen = set()\ngolds = set()\nfor _ in range(80):\n    e = random_event()\n    assert e in events, \"random_event() events listesinden bir olay döndürmeli.\"\n    seen.add(e)\n    gold = find_gold()\n    assert isinstance(gold, int) and 5 <= gold <= 20, \"find_gold() 5 ile 20 arasında bir tam sayı döndürmeli.\"\n    golds.add(gold)\nassert len(seen) >= 2, \"random_event() hep aynı olayı döndürüyor.\"\nassert len(golds) >= 3, \"find_gold() hep aynı sayıyı döndürüyor.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "import random",
+     "notes": [
+      "`random` modülü programa ekleniyor."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "events = [\"Bir iksir buldun!\", \"Tuzağa bastın!\", \"Bir dost geldi!\", \"Yağmur başladı!\"]",
+     "notes": [
+      "`events` adında bir değişken oluşturuluyor ve içine `[\"Bir iksir buldun!\", \"Tuzağa bastın!\", \"Bir dost geldi!\"...` (liste) konuyor."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "def random_event():",
+     "notes": [
+      "`random_event` adında bir fonksiyon tanımlanıyor. Parametre almıyor. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "    return random.choice(events)",
+     "notes": [
+      "Fonksiyon `random.choice(events)` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 8,
+     "code": "def find_gold():",
+     "notes": [
+      "`find_gold` adında bir fonksiyon tanımlanıyor. Parametre almıyor. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+     ]
+    },
+    {
+     "n": 9,
+     "code": "    return random.randint(5, 20)",
+     "notes": [
+      "Fonksiyon `random.randint(5, 20)` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 11,
+     "code": "print(random_event())",
+     "notes": [
+      "`print(random_event())`: parantez içindeki değeri ekrana yazdırır.",
+      "`random_event(...)`: senin tanımladığın fonksiyonu çağırır."
+     ]
+    },
+    {
+     "n": 12,
+     "code": "print(\"Bulunan altın:\", find_gold())",
+     "notes": [
+      "`print(\"Bulunan altın:\", find_gold())`: parantez içindeki değeri ekrana yazdırır.",
+      "`find_gold(...)`: senin tanımladığın fonksiyonu çağırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "events",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `[\"Bir iksir buldun!\", \"Tuzağa bastın!\", \"Bir dost geldi!\"...`."
+    },
+    {
+     "term": "import",
+     "kind": "anahtar kelime",
+     "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+    },
+    {
+     "term": "random",
+     "kind": "modül",
+     "desc": "Rastgele sayı ve seçim fonksiyonları."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "def",
+     "kind": "anahtar kelime",
+     "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+    },
+    {
+     "term": "random_event()",
+     "kind": "senin fonksiyonun",
+     "desc": "Kodda tanımlanan fonksiyon; parametreleri: -."
+    },
+    {
+     "term": "return",
+     "kind": "anahtar kelime",
+     "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+    },
+    {
+     "term": ".choice()",
+     "kind": "metot",
+     "desc": "Listeden rastgele bir eleman seçer."
+    },
+    {
+     "term": "find_gold()",
+     "kind": "senin fonksiyonun",
+     "desc": "Kodda tanımlanan fonksiyon; parametreleri: -."
+    },
+    {
+     "term": ".randint()",
+     "kind": "metot",
+     "desc": "İki sayı arasında (ikisi de dahil) rastgele tam sayı seçer."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    }
+   ]
+  }
+ },
+ "available": true,
+ "tracks": {
+  "veri": {
+   "project_task": {
+    "id": "d12-pv",
+    "title": "Günlük harçlık",
+    "prompt": "İki yardımcı fonksiyon yazalım:\n\n- `daily_allowance(left, days)`: kalan parayı kalan günlere böl ve **aşağı yuvarla** (`math.floor`). Gün 0 ise `0` döndür.\n- `sample_expenses(n)`: `random.randint` ile 10 ile 500 arasında `n` tane rastgele tutar içeren bir liste döndürsün (programı denemek için).",
+    "starter": "import math\nimport random\n\n\ndef daily_allowance(left, days):\n    pass\n\n\ndef sample_expenses(n):\n    pass\n",
+    "solution": "import math\nimport random\n\n\ndef daily_allowance(left, days):\n    if days == 0:\n        return 0\n    return math.floor(left / days)\n\n\ndef sample_expenses(n):\n    result = []\n    for _ in range(n):\n        result.append(random.randint(10, 500))\n    return result\n",
+    "hints": [
+     "math.floor(1100 / 7) 157 verir.",
+     "random.randint(10, 500) iki sınır dahil rastgele bir tam sayı verir."
+    ],
+    "check": {
+     "python": "\nassert daily_allowance(1100, 7) == 157, \"daily_allowance(1100, 7) 157 olmalı: math.floor(1100 / 7)\"\nassert daily_allowance(90, 0) == 0, \"Gün 0 ise 0 döndürmeli.\"\nseen = set()\nfor _ in range(30):\n    s = sample_expenses(5)\n    assert isinstance(s, list) and len(s) == 5, \"sample_expenses(5) 5 elemanlı bir liste döndürmeli.\"\n    assert all(isinstance(x, int) and 10 <= x <= 500 for x in s), \"Tutarlar 10 ile 500 arasında tam sayı olmalı.\"\n    seen.update(s)\nassert len(seen) > 10, \"Tutarlar rastgele olmalı: random.randint kullan.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "import math",
+       "notes": [
+        "`math` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "import random",
+       "notes": [
+        "`random` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "def daily_allowance(left, days):",
+       "notes": [
+        "`daily_allowance` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `left`, `days`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    if days == 0:",
+       "notes": [
+        "Koşul: `days == 0` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "        return 0",
+       "notes": [
+        "Fonksiyon `0` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "    return math.floor(left / days)",
+       "notes": [
+        "Fonksiyon `math.floor(left / days)` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "def sample_expenses(n):",
+       "notes": [
+        "`sample_expenses` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `n`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "    result = []",
+       "notes": [
+        "`result` adında bir değişken oluşturuluyor ve içine `[]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "    for _ in range(n):",
+       "notes": [
+        "Döngü: `range(n)` içindeki her eleman sırayla `_` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 14,
+       "code": "        result.append(random.randint(10, 500))",
+       "notes": [
+        "`result.append(random.randint(10, 500))`: `result` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 15,
+       "code": "    return result",
+       "notes": [
+        "Fonksiyon `result` değerini geri verir ve burada biter."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "result",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[]`."
+      },
+      {
+       "term": "_",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `range(n)` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "left",
+       "kind": "parametre",
+       "desc": "`daily_allowance` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "days",
+       "kind": "parametre",
+       "desc": "`daily_allowance` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "n",
+       "kind": "parametre",
+       "desc": "`sample_expenses` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "math",
+       "kind": "modül",
+       "desc": "Matematik fonksiyonları (karekök, pi...)."
+      },
+      {
+       "term": "random",
+       "kind": "modül",
+       "desc": "Rastgele sayı ve seçim fonksiyonları."
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "daily_allowance()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `left`, `days`."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "==",
+       "kind": "operatör",
+       "desc": "Eşit mi? (True/False)"
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": ".floor()",
+       "kind": "metot",
+       "desc": "`math` nesnesinin `floor` metodunu çağırır."
+      },
+      {
+       "term": "/",
+       "kind": "operatör",
+       "desc": "Bölme; sonuç her zaman ondalıklı sayıdır."
+      },
+      {
+       "term": "sample_expenses()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `n`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": "range()",
+       "kind": "fonksiyon",
+       "desc": "Sayı dizisi üretir: range(5) → 0, 1, 2, 3, 4. Son sayı dahil değildir."
+      },
+      {
+       "term": ".append()",
+       "kind": "metot",
+       "desc": "Listenin sonuna yeni bir eleman ekler."
+      },
+      {
+       "term": ".randint()",
+       "kind": "metot",
+       "desc": "İki sayı arasında (ikisi de dahil) rastgele tam sayı seçer."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Günlük harçlık ve örnek veri",
+   "game_role": "Ay sonuna kadar günde ne harcayabileceğini hesaplar, deneme verisi üretir."
+  },
+  "otomasyon": {
+   "project_task": {
+    "id": "d12-po",
+    "title": "Rastgele görev seçici",
+    "prompt": "Hangi işe başlayacağına karar veremeyince asistan seçsin:\n\n- `pick_task(tasks)`: listeden **rastgele** bir görev döndürsün (`random.choice`). Liste boşsa `None` döndürsün.\n- `focus_blocks(minutes)`: çalışma süresini 25 dakikalık bloklara bölsün ve **yukarı yuvarlayarak** kaç blok gerektiğini döndürsün (`math.ceil`).",
+    "starter": "import math\nimport random\n\n\ndef pick_task(tasks):\n    pass\n\n\ndef focus_blocks(minutes):\n    pass\n",
+    "solution": "import math\nimport random\n\n\ndef pick_task(tasks):\n    if not tasks:\n        return None\n    return random.choice(tasks)\n\n\ndef focus_blocks(minutes):\n    return math.ceil(minutes / 25)\n",
+    "hints": [
+     "random.choice(liste) rastgele bir eleman verir.",
+     "math.ceil(60 / 25) 3 verir."
+    ],
+    "check": {
+     "python": "\nassert pick_task([]) is None, \"Boş listede None dönmeli.\"\nseen = set(pick_task([\"a\", \"b\", \"c\"]) for _ in range(60))\nassert seen == {\"a\", \"b\", \"c\"}, \"pick_task rastgele seçmeli ve her görev seçilebilmeli.\"\nassert focus_blocks(60) == 3 and focus_blocks(50) == 2 and focus_blocks(10) == 1, \"focus_blocks yukarı yuvarlamalı: math.ceil(minutes / 25)\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "import math",
+       "notes": [
+        "`math` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "import random",
+       "notes": [
+        "`random` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "def pick_task(tasks):",
+       "notes": [
+        "`pick_task` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `tasks`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    if not tasks:",
+       "notes": [
+        "Koşul: `not tasks` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "        return None",
+       "notes": [
+        "Fonksiyon `None` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "    return random.choice(tasks)",
+       "notes": [
+        "Fonksiyon `random.choice(tasks)` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "def focus_blocks(minutes):",
+       "notes": [
+        "`focus_blocks` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `minutes`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "    return math.ceil(minutes / 25)",
+       "notes": [
+        "Fonksiyon `math.ceil(minutes / 25)` değerini geri verir ve burada biter."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "tasks",
+       "kind": "parametre",
+       "desc": "`pick_task` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "minutes",
+       "kind": "parametre",
+       "desc": "`focus_blocks` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "math",
+       "kind": "modül",
+       "desc": "Matematik fonksiyonları (karekök, pi...)."
+      },
+      {
+       "term": "random",
+       "kind": "modül",
+       "desc": "Rastgele sayı ve seçim fonksiyonları."
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "pick_task()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `tasks`."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "not",
+       "kind": "operatör",
+       "desc": "Koşulu tersine çevirir (True ↔ False)."
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": "None",
+       "kind": "değer",
+       "desc": "\"Hiçbir şey / boş\" anlamına gelen özel değer."
+      },
+      {
+       "term": ".choice()",
+       "kind": "metot",
+       "desc": "Listeden rastgele bir eleman seçer."
+      },
+      {
+       "term": "focus_blocks()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `minutes`."
+      },
+      {
+       "term": ".ceil()",
+       "kind": "metot",
+       "desc": "`math` nesnesinin `ceil` metodunu çağırır."
+      },
+      {
+       "term": "/",
+       "kind": "operatör",
+       "desc": "Bölme; sonuç her zaman ondalıklı sayıdır."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Rastgele seçim",
+   "game_role": "Kararsız kaldığında sıradaki görevi ve günün ipucunu seçer."
+  },
+  "web": {
+   "project_task": {
+    "id": "d12-pw",
+    "title": "Okuma süresi",
+    "prompt": "İki yardımcı fonksiyon yazalım:\n\n- `reading_time(text, wpm=200)`: yazıdaki kelime sayısını (`len(text.split())`) dakikada okunan kelime sayısına (`wpm`) böl ve **yukarı yuvarla** (`math.ceil`). En az `1` döndürsün (boş yazı için de).\n- `pick_featured(titles)`: ana sayfada öne çıkarmak için başlıklardan birini `random.choice` ile rastgele seçip döndürsün.",
+    "starter": "import math\nimport random\n\n\ndef reading_time(text, wpm=200):\n    pass\n\n\ndef pick_featured(titles):\n    pass\n",
+    "solution": "import math\nimport random\n\n\ndef reading_time(text, wpm=200):\n    minutes = math.ceil(len(text.split()) / wpm)\n    if minutes < 1:\n        return 1\n    return minutes\n\n\ndef pick_featured(titles):\n    return random.choice(titles)\n",
+    "hints": [
+     "math.ceil(450 / 200) 3 verir.",
+     "Sonuç 1'den küçükse 1 döndür. random.choice(titles) listeden rastgele bir eleman verir."
+    ],
+    "check": {
+     "python": "\nassert reading_time(\"kelime \" * 450) == 3, \"450 kelimelik bir yazı 3 dakika olmalı: math.ceil(450 / 200)\"\nassert reading_time(\"a \" * 200) == 1, \"200 kelime tam 1 dakika olmalı.\"\nassert reading_time(\"a \" * 301, 100) == 4, \"wpm verilince onu kullanmalı: 301 kelime, dakikada 100 -> 4\"\nassert reading_time(\"\") == 1, \"Boş yazı için de en az 1 döndürmeli.\"\ntitles = [\"A\", \"B\", \"C\", \"D\", \"E\"]\nseen = set()\nfor _ in range(60):\n    t = pick_featured(titles)\n    assert t in titles, \"pick_featured listedeki başlıklardan birini döndürmeli.\"\n    seen.add(t)\nassert len(seen) >= 3, \"Seçim rastgele olmalı: random.choice kullan.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "import math",
+       "notes": [
+        "`math` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "import random",
+       "notes": [
+        "`random` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "def reading_time(text, wpm=200):",
+       "notes": [
+        "`reading_time` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `text`, `wpm`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    minutes = math.ceil(len(text.split()) / wpm)",
+       "notes": [
+        "`minutes` adında bir değişken oluşturuluyor ve içine `math.ceil(len(text.split()) / wpm)` konuyor."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "    if minutes < 1:",
+       "notes": [
+        "Koşul: `minutes < 1` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "        return 1",
+       "notes": [
+        "Fonksiyon `1` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "    return minutes",
+       "notes": [
+        "Fonksiyon `minutes` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "def pick_featured(titles):",
+       "notes": [
+        "`pick_featured` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `titles`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "    return random.choice(titles)",
+       "notes": [
+        "Fonksiyon `random.choice(titles)` değerini geri verir ve burada biter."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "minutes",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `math.ceil(len(text.split()) / wpm)`."
+      },
+      {
+       "term": "text",
+       "kind": "parametre",
+       "desc": "`reading_time` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "wpm",
+       "kind": "parametre",
+       "desc": "`reading_time` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "titles",
+       "kind": "parametre",
+       "desc": "`pick_featured` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "math",
+       "kind": "modül",
+       "desc": "Matematik fonksiyonları (karekök, pi...)."
+      },
+      {
+       "term": "random",
+       "kind": "modül",
+       "desc": "Rastgele sayı ve seçim fonksiyonları."
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "reading_time()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `text`, `wpm`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": ".ceil()",
+       "kind": "metot",
+       "desc": "`math` nesnesinin `ceil` metodunu çağırır."
+      },
+      {
+       "term": "/",
+       "kind": "operatör",
+       "desc": "Bölme; sonuç her zaman ondalıklı sayıdır."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      },
+      {
+       "term": ".split()",
+       "kind": "metot",
+       "desc": "Metni parçalara böler ve liste yapar (varsayılan: boşluklardan)."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "<",
+       "kind": "operatör",
+       "desc": "Küçük mü?"
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": "pick_featured()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `titles`."
+      },
+      {
+       "term": ".choice()",
+       "kind": "metot",
+       "desc": "Listeden rastgele bir eleman seçer."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Okuma süresi ve öne çıkan yazı",
+   "game_role": "Yazının kaç dakikada okunacağını hesaplar, ana sayfa için rastgele bir yazı seçer."
+  },
+  "bot": {
+   "project_task": {
+    "id": "d12-pb",
+    "title": "Farklı selamlar",
+    "prompt": "Hep aynı cümleyi söyleyen bot sıkıcıdır! İki yardımcı fonksiyon yazalım:\n\n- `random_greeting()`: `GREETINGS` listesinden **rastgele** bir selam döndürsün (`random.choice`).\n- `typing_seconds(message)`: bot cevap yazarken ekranda \"yazıyor...\" görünsün. Her 20 karakter için 1 saniye say ve **yukarı yuvarla** (`math.ceil`). 45 karakterlik bir cevap 3 saniye sürer.",
+    "starter": "import math\nimport random\n\nGREETINGS = [\"Merhaba!\", \"Selam!\", \"Hoş geldin!\", \"Ne var ne yok?\"]\n\n\ndef random_greeting():\n    pass\n\n\ndef typing_seconds(message):\n    pass\n",
+    "solution": "import math\nimport random\n\nGREETINGS = [\"Merhaba!\", \"Selam!\", \"Hoş geldin!\", \"Ne var ne yok?\"]\n\n\ndef random_greeting():\n    return random.choice(GREETINGS)\n\n\ndef typing_seconds(message):\n    return math.ceil(len(message) / 20)\n",
+    "hints": [
+     "random.choice(liste) listeden rastgele bir eleman verir.",
+     "math.ceil(45 / 20) 3 verir."
+    ],
+    "check": {
+     "python": "\nseen = set(random_greeting() for _ in range(80))\nassert seen <= set(GREETINGS), \"random_greeting, GREETINGS listesinden bir selam döndürmeli.\"\nassert len(seen) == len(GREETINGS), \"random_greeting rastgele seçmeli: random.choice kullan.\"\nassert typing_seconds(\"a\" * 45) == 3, \"45 karakter için 3 saniye olmalı: math.ceil(len(message) / 20)\"\nassert typing_seconds(\"a\" * 20) == 1 and typing_seconds(\"a\" * 21) == 2, \"Yukarı yuvarlamalısın: math.ceil\"\nassert typing_seconds(\"\") == 0, \"Boş mesaj için 0 saniye olmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "import math",
+       "notes": [
+        "`math` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "import random",
+       "notes": [
+        "`random` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "GREETINGS = [\"Merhaba!\", \"Selam!\", \"Hoş geldin!\", \"Ne var ne yok?\"]",
+       "notes": [
+        "`GREETINGS` adında bir değişken oluşturuluyor ve içine `[\"Merhaba!\", \"Selam!\", \"Hoş geldin!\", \"Ne var ne yok?\"]` (liste) konuyor."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "def random_greeting():",
+       "notes": [
+        "`random_greeting` adında bir fonksiyon tanımlanıyor. Parametre almıyor. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "    return random.choice(GREETINGS)",
+       "notes": [
+        "Fonksiyon `random.choice(GREETINGS)` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "def typing_seconds(message):",
+       "notes": [
+        "`typing_seconds` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `message`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "    return math.ceil(len(message) / 20)",
+       "notes": [
+        "Fonksiyon `math.ceil(len(message) / 20)` değerini geri verir ve burada biter."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "GREETINGS",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `[\"Merhaba!\", \"Selam!\", \"Hoş geldin!\", \"Ne var ne yok?\"]`."
+      },
+      {
+       "term": "message",
+       "kind": "parametre",
+       "desc": "`typing_seconds` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "math",
+       "kind": "modül",
+       "desc": "Matematik fonksiyonları (karekök, pi...)."
+      },
+      {
+       "term": "random",
+       "kind": "modül",
+       "desc": "Rastgele sayı ve seçim fonksiyonları."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "random_greeting()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: -."
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": ".choice()",
+       "kind": "metot",
+       "desc": "Listeden rastgele bir eleman seçer."
+      },
+      {
+       "term": "typing_seconds()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `message`."
+      },
+      {
+       "term": ".ceil()",
+       "kind": "metot",
+       "desc": "`math` nesnesinin `ceil` metodunu çağırır."
+      },
+      {
+       "term": "/",
+       "kind": "operatör",
+       "desc": "Bölme; sonuç her zaman ondalıklı sayıdır."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Rastgele cevaplar",
+   "game_role": "Her seferinde farklı bir selam seçer ve yazma süresini hesaplar."
+  },
+  "okul": {
+   "project_task": {
+    "id": "d12-pn",
+    "title": "Hedef not",
+    "prompt": "İki yardımcı fonksiyon yazalım:\n\n- `needed_score(average, count, target)`: `count` sınavın ortalaması `average`. Bir sonraki sınavdan kaç alırsan ortalaman `target` olur? Formül: `target * (count + 1) - average * count`. Sonucu `math.ceil` ile **yukarı** yuvarla. 100'den büyükse `None`, 0'dan küçükse `0` döndür.\n- `pick_subject(subjects)`: listeden `random.choice` ile rastgele bir ders döndürsün (bugün hangisini çalışsan?).",
+    "starter": "import math\nimport random\n\n\ndef needed_score(average, count, target):\n    pass\n\n\ndef pick_subject(subjects):\n    pass\n",
+    "solution": "import math\nimport random\n\n\ndef needed_score(average, count, target):\n    needed = math.ceil(target * (count + 1) - average * count)\n    if needed > 100:\n        return None\n    if needed < 0:\n        return 0\n    return needed\n\n\ndef pick_subject(subjects):\n    return random.choice(subjects)\n",
+    "hints": [
+     "math.ceil(81.1) 82 verir.",
+     "random.choice(subjects) listeden rastgele bir eleman seçer."
+    ],
+    "check": {
+     "python": "\nassert needed_score(62.5, 2, 70) == 85, \"needed_score(62.5, 2, 70) 85 olmalı.\"\nassert needed_score(66.3, 3, 70) == 82, \"Sonucu math.ceil ile yukarı yuvarla: needed_score(66.3, 3, 70) 82 olmalı.\"\nassert needed_score(80, 1, 90) == 100, \"Tam 100 gerekiyorsa 100 döndürmeli.\"\nassert needed_score(40, 1, 90) is None, \"100'den fazla puan gerekiyorsa None döndürmeli.\"\nassert needed_score(95, 3, 50) == 0, \"Sonuç 0'dan küçükse 0 döndürmeli.\"\nsubjects = [\"Matematik\", \"Fizik\", \"Tarih\", \"Kimya\", \"Müzik\"]\nseen = set()\nfor _ in range(60):\n    s = pick_subject(subjects)\n    assert s in subjects, \"pick_subject listedeki derslerden birini döndürmeli.\"\n    seen.add(s)\nassert len(seen) >= 3, \"Ders rastgele seçilmeli: random.choice kullan.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "import math",
+       "notes": [
+        "`math` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "import random",
+       "notes": [
+        "`random` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "def needed_score(average, count, target):",
+       "notes": [
+        "`needed_score` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `average`, `count`, `target`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    needed = math.ceil(target * (count + 1) - average * count)",
+       "notes": [
+        "`needed` adında bir değişken oluşturuluyor ve içine `math.ceil(target * (count + 1) - average * count)` konuyor."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "    if needed > 100:",
+       "notes": [
+        "Koşul: `needed > 100` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "        return None",
+       "notes": [
+        "Fonksiyon `None` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "    if needed < 0:",
+       "notes": [
+        "Koşul: `needed < 0` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "        return 0",
+       "notes": [
+        "Fonksiyon `0` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "    return needed",
+       "notes": [
+        "Fonksiyon `needed` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 14,
+       "code": "def pick_subject(subjects):",
+       "notes": [
+        "`pick_subject` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `subjects`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 15,
+       "code": "    return random.choice(subjects)",
+       "notes": [
+        "Fonksiyon `random.choice(subjects)` değerini geri verir ve burada biter."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "needed",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `math.ceil(target * (count + 1) - average * count)`."
+      },
+      {
+       "term": "average",
+       "kind": "parametre",
+       "desc": "`needed_score` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "count",
+       "kind": "parametre",
+       "desc": "`needed_score` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "target",
+       "kind": "parametre",
+       "desc": "`needed_score` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "subjects",
+       "kind": "parametre",
+       "desc": "`pick_subject` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "math",
+       "kind": "modül",
+       "desc": "Matematik fonksiyonları (karekök, pi...)."
+      },
+      {
+       "term": "random",
+       "kind": "modül",
+       "desc": "Rastgele sayı ve seçim fonksiyonları."
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "needed_score()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `average`, `count`, `target`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": ".ceil()",
+       "kind": "metot",
+       "desc": "`math` nesnesinin `ceil` metodunu çağırır."
+      },
+      {
+       "term": "-",
+       "kind": "operatör",
+       "desc": "Çıkarma."
+      },
+      {
+       "term": "*",
+       "kind": "operatör",
+       "desc": "Çarpma; metni ya da listeyi tekrarlama (\"*\" * 3 → \"***\")."
+      },
+      {
+       "term": "+",
+       "kind": "operatör",
+       "desc": "Toplama; metinlerde ve listelerde uç uca ekleme."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": ">",
+       "kind": "operatör",
+       "desc": "Büyük mü?"
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": "None",
+       "kind": "değer",
+       "desc": "\"Hiçbir şey / boş\" anlamına gelen özel değer."
+      },
+      {
+       "term": "<",
+       "kind": "operatör",
+       "desc": "Küçük mü?"
+      },
+      {
+       "term": "pick_subject()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `subjects`."
+      },
+      {
+       "term": ".choice()",
+       "kind": "metot",
+       "desc": "Listeden rastgele bir eleman seçer."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Hedef not ve çalışma seçici",
+   "game_role": "Hedef ortalamaya ulaşmak için kaç alman gerektiğini hesaplar, bugün çalışacağın dersi seçer."
+  }
+ }
+}

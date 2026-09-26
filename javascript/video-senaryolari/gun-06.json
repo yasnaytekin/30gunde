@@ -1,0 +1,164 @@
+{
+  "kurs": "javascript",
+  "gun": 6,
+  "baslik": "Diziler",
+  "maskot": "kodi",
+  "ozet": "Kargo bölmesindeki eşyaları tek bir dizide tutuyoruz: indeksle elemana ulaşmak, push, pop, unshift, shift ile ekleyip çıkarmak, includes ve indexOf ile aramak, slice, splice ve join.",
+  "hedef_sure_sn": 150,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 10,
+      "anlatim": "Selam, ben Kodi! Döngü Ayı'nda kargo bölmesi doluyor: yakıt hücreleri, kalkanlar, haritalar. Her eşyaya ayrı bir değişken mi açacağız? Hiç sanmıyorum!",
+      "ekran": {
+        "baslik": "Gün 6: Diziler",
+        "gorsel": "gorseller/javascript/bolgeler/ay.webp"
+      },
+      "maskot": { "poz": "el-sallama", "konum": "sag" }
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "Dizi, birçok değeri sırayla tutan bir listedir. Köşeli parantezle yazılır. Sayma yine sıfırdan başlar. length eleman sayısını verir, son eleman da length eksi bir sırasındadır.",
+      "ekran": {
+        "baslik": "Dizi: sıralı bir liste",
+        "kod": "const planets = [\"Merkür\", \"Venüs\", \"Dünya\"];\nconsole.log(planets[0]);\nconsole.log(planets.length);\nconsole.log(planets[planets.length - 1]);\n",
+        "dil": "js",
+        "vurgu_satirlari": [1, 4],
+        "cikti": "Merkür\n3\nDünya"
+      },
+      "maskot": { "poz": "isaret", "konum": "alt-sag" },
+      "calistir": true,
+      "yonetmen_notu": "Üç gezegen kutucuk olarak dizilir, altlarında 0, 1, 2 numaraları belirir."
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 17,
+      "anlatim": "push sona, unshift başa ekler. pop sondakini çıkarıp bize verir, shift de baştakini. Dizi const olsa bile eleman ekleyip çıkarabiliriz; const sadece başka bir diziye bağlanmayı engeller.",
+      "ekran": {
+        "baslik": "Eklemek ve çıkarmak",
+        "kod": "const cargo = [\"yakıt\", \"kalkan\"];\ncargo.push(\"harita\");\ncargo.unshift(\"su\");\nconsole.log(cargo);\nconst last = cargo.pop();\nconsole.log(last, cargo.length);\n",
+        "dil": "js",
+        "vurgu_satirlari": [2, 3, 5],
+        "cikti": "[ 'su', 'yakıt', 'kalkan', 'harita' ]\nharita 3"
+      },
+      "maskot": { "poz": "konusma", "konum": "alt-sag" },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "Aramak için iki metot var. includes, eleman dizide var mı diye bakar. indexOf ise kaçıncı sırada olduğunu söyler; bulamazsa eksi bir verir.",
+      "ekran": {
+        "baslik": "Aramak: includes ve indexOf",
+        "kod": "const team = [\"Deniz\", \"Ece\", \"Kaan\"];\nconsole.log(team.includes(\"Ece\"));\nconsole.log(team.indexOf(\"Kaan\"));\nconsole.log(team.indexOf(\"Zeynep\"));\n",
+        "dil": "js",
+        "vurgu_satirlari": [2, 3, 4],
+        "cikti": "true\n2\n-1"
+      },
+      "maskot": { "poz": "isaret", "konum": "alt-sag" },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 17,
+      "anlatim": "slice diziyi bozmadan bir parça kopyalar. splice ise diziyi değiştirir: önce Ay'ı sildik, sonra aynı yere Venüs'ü ekledik. join de hepsini aralarına ok koyarak tek metin yaptı.",
+      "ekran": {
+        "baslik": "slice, splice ve join",
+        "kod": "const route = [\"Dünya\", \"Ay\", \"Mars\", \"Jüpiter\"];\nconsole.log(route.slice(1, 3));\nroute.splice(1, 1);\nroute.splice(1, 0, \"Venüs\");\nconsole.log(route.join(\" → \"));\n",
+        "dil": "js",
+        "vurgu_satirlari": [2, 3, 4, 5],
+        "cikti": "[ 'Ay', 'Mars' ]\nDünya → Venüs → Mars → Jüpiter"
+      },
+      "maskot": { "poz": "konusma", "konum": "alt-sag" },
+      "calistir": true
+    },
+    {
+      "no": 6,
+      "tur": "hata",
+      "sure_sn": 15,
+      "anlatim": "Klasik hata: üç elemanlı dizide üç numaralı sırayı istemek. O sıra boş, undefined geldi. Üstelik onu büyük harfe çevirmeye çalışınca kod çöktü. Son eleman length eksi birde!",
+      "ekran": {
+        "baslik": "Olmayan sıra: undefined",
+        "kod": "const planets = [\"Merkür\", \"Venüs\", \"Dünya\"];\nconsole.log(planets[3]);\nconsole.log(planets[3].toUpperCase());\n",
+        "dil": "js",
+        "vurgu_satirlari": [2, 3],
+        "cikti": "undefined\nTypeError: Cannot read properties of undefined (reading 'toUpperCase')"
+      },
+      "maskot": { "poz": "sasirma", "konum": "sag" },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "soru",
+      "sure_sn": 10,
+      "anlatim": "Rotaya Jüpiter'i ekledik. Sence Mars kaçıncı sırada, ve son satırda hangi metin çıkar? Durdur ve düşün.",
+      "ekran": {
+        "baslik": "Sence ne yazdırır?",
+        "kod": "const route = [\"Dünya\", \"Ay\", \"Mars\"];\nroute.push(\"Jüpiter\");\nconsole.log(route.indexOf(\"Mars\"));\nconsole.log(route.slice(0, 2).join(\" + \"));\n",
+        "dil": "js"
+      },
+      "maskot": { "poz": "dusunme", "konum": "sag" }
+    },
+    {
+      "no": 8,
+      "tur": "cikti",
+      "sure_sn": 10,
+      "anlatim": "Mars 2 numaralı sırada, çünkü sayma sıfırdan başlıyor. slice ilk iki elemanı aldı, join de onları artıyla birleştirdi.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "const route = [\"Dünya\", \"Ay\", \"Mars\"];\nroute.push(\"Jüpiter\");\nconsole.log(route.indexOf(\"Mars\"));\nconsole.log(route.slice(0, 2).join(\" + \"));\n",
+        "dil": "js",
+        "cikti": "2\nDünya + Ay"
+      },
+      "maskot": { "poz": "mutlu", "konum": "sag" },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "gorev",
+      "sure_sn": 12,
+      "anlatim": "Görevlerin: gezegen listesinin ilk ve son elemanını bul, kargoyu metotlarla yeniden düzenle ve mürettebat listesinde arama yap.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Gezegen listesi",
+          "Görev 2: Kargo yükleme",
+          "Görev 3: Mürettebat araması"
+        ]
+      },
+      "maskot": { "poz": "isaret", "konum": "sol" }
+    },
+    {
+      "no": 10,
+      "tur": "ozet",
+      "sure_sn": 11,
+      "anlatim": "Özet: dizi sıralı bir listedir ve sıfırdan sayılır. push, pop, unshift, shift ile değişir. includes ve indexOf ile ararız.",
+      "ekran": {
+        "baslik": "Özet",
+        "maddeler": [
+          "[ ] ile dizi, [0] ilk eleman, length eleman sayısı",
+          "push / pop / unshift / shift",
+          "includes, indexOf, slice, splice, join"
+        ]
+      },
+      "maskot": { "poz": "on", "konum": "sag" }
+    },
+    {
+      "no": 11,
+      "tur": "kapanis",
+      "sure_sn": 10,
+      "anlatim": "Kargo yerleşti, harikasın! Yarın Döngü Ayı'nın yörüngesine giriyoruz. Aynı işi yüz kez yazmadan tekrarlatmayı öğreneceğiz: döngüler.",
+      "ekran": {
+        "baslik": "Yarın: Döngüler",
+        "gorsel": "maskotlar/kodi-javascript/kahraman.png"
+      },
+      "maskot": { "poz": "tebrik", "konum": "sag" }
+    }
+  ]
+}

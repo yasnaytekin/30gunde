@@ -1,0 +1,232 @@
+{
+  "kurs": "javascript",
+  "gun": 28,
+  "baslik": "Temiz kod",
+  "maskot": "kodi",
+  "ozet": "Kodi, JavaScript Yıldızı'nın ışığında anlamlı isimleri, küçük ve tekrarsız fonksiyonları, sihirli sayılar yerine sabitleri, erken dönüşü, parçalamayı ve varsayılan değerleri anlatıyor.",
+  "hedef_sure_sn": 164,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 12,
+      "anlatim": "Selam, ben Kodi! JavaScript Yıldızı'nın ışığı göründü! Usta kaptanlar kodlarını yalnızca çalışır değil, okunur yazar. Bugün dağınık kodu toplayıp temiz kod yazmayı öğreniyoruz!",
+      "ekran": {
+        "baslik": "Gün 28: Temiz kod",
+        "gorsel": "gorseller/javascript/bolgeler/yildiz.webp"
+      },
+      "maskot": {
+        "poz": "el-sallama",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 17,
+      "anlatim": "İki kod da aynı işi yapıyor. Ama hangisi ne yaptığını anlatıyor? Değişken adı ne tuttuğunu, fonksiyon adı ne yaptığını söylesin. Doğru yanlış tutan adlar soru gibi okunsun: isReady, canLaunch.",
+      "ekran": {
+        "baslik": "İsimler bir şey anlatmalı",
+        "kod": "// Anlaşılmıyor\nconst d = 7;\nfunction c(a) { return a * 24; }\n// Kendini anlatıyor\nconst daysLeft = 7;\nfunction daysToHours(days) { return days * 24; }\nconsole.log(daysToHours(daysLeft));\n",
+        "vurgu_satirlari": [
+          5,
+          6
+        ],
+        "cikti": "168",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 18,
+      "anlatim": "Kodun ortasındaki açıklamasız sayılara sihirli sayı denir. On ne, elli ne? Onlara isim ver. Hiç değişmeyen ayarları büyük harfle yazmak yaygın bir alışkanlıktır. Davranış aynı, okunuş çok farklı.",
+      "ekran": {
+        "baslik": "Sihirli sayılar yerine sabitler",
+        "kod": "// Önce: function x(a, b) { return a * 10 + (b ? 50 : 0); }\nconst STAR_POINTS = 10;\nconst BONUS_POINTS = 50;\nfunction calculateScore(stars, hasBonus) {\n  const bonus = hasBonus ? BONUS_POINTS : 0;\n  return stars * STAR_POINTS + bonus;\n}\nconsole.log(calculateScore(3, true));\n",
+        "vurgu_satirlari": [
+          2,
+          3,
+          6
+        ],
+        "cikti": "80",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 17,
+      "anlatim": "Her fonksiyonun tek bir işi olsun. Aynı kodu iki kez kopyaladıysan dur ve onu bir fonksiyona çevir. Buna DRY denir: kendini tekrarlama. Değişiklik gerekince tek bir yeri düzeltirsin.",
+      "ekran": {
+        "baslik": "Küçük fonksiyonlar, tekrarsız kod",
+        "kod": "function scoreLine(name, score) {\n  return `${name.padEnd(5, \".\")} ${score} puan`;\n}\nconst pilots = [[\"Ada\", 12], [\"Can\", 30]];\npilots.forEach(([name, score]) => console.log(scoreLine(name, score)));\n",
+        "vurgu_satirlari": [
+          1,
+          5
+        ],
+        "cikti": "Ada.. 12 puan\nCan.. 30 puan",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "İç içe if'ler yerine erken dönüş kullan. Önce sorunlu durumları eleyip fonksiyondan çık, asıl işi en sona bırak. Kod yukarıdan aşağı düz okunur, hiç else kalmaz.",
+      "ekran": {
+        "baslik": "Erken dönüş",
+        "kod": "function openHatch(pilot) {\n  if (!pilot) return \"Kimse yok\";\n  if (!pilot.hasKey) return \"Anahtar yok\";\n  return \"Kapak açıldı\";\n}\nconsole.log(openHatch(null));\nconsole.log(openHatch({ hasKey: true }));\n",
+        "vurgu_satirlari": [
+          2,
+          3,
+          4
+        ],
+        "cikti": "Kimse yok\nKapak açıldı",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 18,
+      "anlatim": "Parçalama bir nesneden ya da diziden değerleri tek satırda çıkarır. Parametrede de kullanılır ve varsayılan değer alabilir. Mert'in seviyesi verilmediği için bir kullanıldı.",
+      "ekran": {
+        "baslik": "Parçalama ve varsayılan değer",
+        "kod": "const pilot = { name: \"Deniz\", level: 4, ship: \"Kartal\" };\nconst { name, ship } = pilot;\nconsole.log(`${name}, ${ship} gemisinde.`);\nfunction greet({ name, level = 1 }) {\n  return `Merhaba ${name}, seviye ${level}`;\n}\nconsole.log(greet({ name: \"Mert\" }));\n",
+        "vurgu_satirlari": [
+          2,
+          4
+        ],
+        "cikti": "Deniz, Kartal gemisinde.\nMerhaba Mert, seviye 1",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "hata",
+      "sure_sn": 13,
+      "anlatim": "Sık hata: kodun ne yaptığını tekrar eden yorumlar yazmak. İyi bir yorum ne yapıldığını değil, neden öyle yapıldığını anlatır.",
+      "ekran": {
+        "baslik": "Sık hata: gereksiz yorum",
+        "kod": "let lap = 0; // 0'dan başlıyoruz çünkü ilk tur ısınma turu (yararlı)\nlap = lap + 1; // lap'i 1 artır (gereksiz)\n",
+        "vurgu_satirlari": [
+          2
+        ],
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "uzgun",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 8,
+      "tur": "soru",
+      "sure_sn": 9,
+      "anlatim": "Soru zamanı! Diziden ilk iki değeri parçalama ile alıyoruz. Sence ne yazar?",
+      "ekran": {
+        "baslik": "Sence ne yazar?",
+        "kod": "const [gold, silver] = [\"Ada\", \"Can\", \"Ece\"];\nconsole.log(gold, silver);\n",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 9,
+      "tur": "cikti",
+      "sure_sn": 8,
+      "anlatim": "Cevap: Ada Can! Dizi parçalamada sıra önemlidir. Ece'ye bir ad vermediğimiz için alınmadı.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "const [gold, silver] = [\"Ada\", \"Can\", \"Ece\"];\nconsole.log(gold, silver);\n",
+        "cikti": "Ada Can",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 10,
+      "tur": "gorev",
+      "sure_sn": 13,
+      "anlatim": "Görev zamanı! Dağınık bir yakıt hesabındaki sihirli sayılara isim vereceksin, kopyalanmış satırları tek fonksiyona toplayacaksın ve iç içe if'leri erken dönüşle düzleştireceksin.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Sihirli sayılara isim ver",
+          "Görev 2: Tekrarı kaldır",
+          "Görev 3: Erken dönüş"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "ozet",
+      "sure_sn": 12,
+      "anlatim": "Özetleyelim: anlatan isimler seç, fonksiyonlar küçük ve tekrarsız olsun. Sayılara isim ver, erken dönüş kullan, parçalama ile değerleri kısaca al.",
+      "ekran": {
+        "baslik": "Özet",
+        "maddeler": [
+          "Anlamlı isimler: isReady, loadTasks",
+          "Tek iş, DRY, SABİTLER, erken dönüş",
+          "Parçalama ve varsayılan değer"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 12,
+      "tur": "kapanis",
+      "sure_sn": 11,
+      "anlatim": "Kodun artık parıl parıl! Yarın projeni toparlıyoruz: düğmeler ve klavye aynı işi yapacak, oyun telefonda da oynanacak. Görüşürüz!",
+      "ekran": {
+        "baslik": "Yarın: Projeyi toparlama",
+        "gorsel": "gorseller/javascript/arka-plan/bg-space-wide.webp"
+      },
+      "maskot": {
+        "poz": "el-sallama",
+        "konum": "orta"
+      }
+    }
+  ]
+}

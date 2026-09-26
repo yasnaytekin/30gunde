@@ -1,0 +1,234 @@
+{
+  "kurs": "javascript",
+  "gun": 19,
+  "baslik": "CSS'i kodla kontrol etmek",
+  "maskot": "kodi",
+  "ozet": "Kodi, Olay Kuşağı'nda style, classList, CSS değişkenleri ve data-* özellikleriyle bir sayfanın görünüşünü JavaScript'ten değiştirmeyi; gece modu ve renk seçici örnekleriyle anlatıyor.",
+  "hedef_sure_sn": 159,
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 12,
+      "anlatim": "Selam, ben Kodi! Gemim artık hareket ediyor ve zamanı ölçüyor. Şimdi sıra görünüşte! Tek bir tıklamayla bütün kokpiti gece moduna çevirebilir miyiz? Bugün CSS'i kodla kontrol ediyoruz.",
+      "ekran": {
+        "baslik": "Gün 19: CSS'i kodla kontrol etmek",
+        "gorsel": "gorseller/javascript/bolgeler/kusak.webp"
+      },
+      "maskot": {
+        "poz": "el-sallama",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "Her elemanın bir style nesnesi var. CSS'teki tireli adlar burada birleşik yazılır: background-color, backgroundColor olur. Değerler metindir, o yüzden birimi unutma: 150 değil, 150px.",
+      "ekran": {
+        "baslik": "element.style",
+        "kod": "const box = document.querySelector(\"#box\");\nbox.style.backgroundColor = \"#f7df1e\";\nbox.style.width = \"150px\"; // 150 değil, \"150px\"\n",
+        "vurgu_satirlari": [
+          2,
+          3
+        ],
+        "cikti": "Kargo kutusu sarıya boyanır ve 150 piksel genişler.",
+        "html": "<div id=\"box\">Kargo</div>",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 3,
+      "tur": "anlatim",
+      "sure_sn": 16,
+      "anlatim": "Çok sayıda stili tek tek yazmak yerine görünüşü CSS'te bir sınıfa yaz. JavaScript yalnızca sınıfı ekler ya da çıkarır. toggle varsa çıkarır, yoksa ekler; contains ise sınıf var mı diye sorar.",
+      "ekran": {
+        "baslik": "classList ile durumlar",
+        "kod": "shield.classList.add(\"active\");      // ekle\nshield.classList.remove(\"active\");   // çıkar\nshield.classList.toggle(\"active\");   // varsa çıkar, yoksa ekle\nshield.classList.contains(\"active\"); // true / false\n",
+        "vurgu_satirlari": [
+          3,
+          4
+        ],
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sol"
+      },
+      "calistir": false
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "İşte gece modu. Bütün renkler CSS'te, night sınıfının içinde duruyor. Düğme yalnızca sınıfı değiştiriyor, sonra contains ile durumu okuyup kendi yazısını güncelliyor.",
+      "ekran": {
+        "baslik": "Örnek: gece modu",
+        "kod": "btn.addEventListener(\"click\", () => {\n  document.body.classList.toggle(\"night\");\n  const night = document.body.classList.contains(\"night\");\n  btn.textContent = night ? \"Gündüz modu\" : \"Gece modu\";\n});\n",
+        "vurgu_satirlari": [
+          2,
+          3,
+          4
+        ],
+        "cikti": "Sayfa koyu renklere geçer, düğmede \"Gündüz modu\" yazar.",
+        "html": "<div id=\"card\"><h3>Kaptan Günlüğü</h3><p>Bugün Olay Kuşağı gezildi.</p></div>\n<button id=\"toggle\">Gece modu</button>",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": false,
+      "yonetmen_notu": "Tıklama anında sayfa gündüzden geceye yumuşak bir geçişle döner."
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 17,
+      "anlatim": "CSS'te iki tireyle başlayan adlar değişkendir ve var ile her yerde kullanılır. JavaScript'le değişkeni tek satırda değiştirirsin; onu kullanan her şey birden güncellenir. Okumak için getComputedStyle kullanıyoruz.",
+      "ekran": {
+        "baslik": "CSS değişkenleri",
+        "kod": "/* CSS:  :root { --accent: #f7df1e; } */\nconst root = document.documentElement; // <html>\nroot.style.setProperty(\"--accent\", \"#b388ff\");\nconst now = getComputedStyle(root).getPropertyValue(\"--accent\").trim();\nconsole.log(now);\n",
+        "vurgu_satirlari": [
+          3,
+          4
+        ],
+        "cikti": "#b388ff  (--accent kullanan her kenarlık ve düğme mora döner)",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 15,
+      "anlatim": "data ile başlayan özellikler elemana kendi bilgini eklemenin yoludur. JavaScript'te dataset ile okunur ve yazılır. CSS de bu özelliklere göre seçim yapabilir.",
+      "ekran": {
+        "baslik": "data-* ve dataset",
+        "kod": "// <button data-color=\"#e53935\">Kızıl</button>\nconsole.log(btn.dataset.color);\ndocument.body.dataset.mode = \"gece\";\n// artık <body data-mode=\"gece\">\n",
+        "vurgu_satirlari": [
+          2,
+          3
+        ],
+        "cikti": "#e53935",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sol"
+      },
+      "calistir": false
+    },
+    {
+      "no": 7,
+      "tur": "hata",
+      "sure_sn": 13,
+      "anlatim": "Sık hata: style'a birimsiz sayı vermek. Tarayıcı bunu geçersiz sayar ve sessizce yok sayar. Hata mesajı çıkmaz, kutu sadece yerinden kıpırdamaz!",
+      "ekran": {
+        "baslik": "Sık hata: birimi unutmak",
+        "kod": "box.style.width = 150;     // işe yaramaz\nbox.style.width = \"150px\"; // doğrusu\n",
+        "vurgu_satirlari": [
+          1
+        ],
+        "cikti": "İlk satırdan sonra kutunun genişliği değişmez.",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "uzgun",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 8,
+      "tur": "soru",
+      "sure_sn": 9,
+      "anlatim": "Soru zamanı! Kalkan sınıfı şu an kapalı. toggle'ı iki kez çağırırsak sence konsolda ne yazar?",
+      "ekran": {
+        "baslik": "Sence ne yazar?",
+        "kod": "shield.classList.toggle(\"active\");\nshield.classList.toggle(\"active\");\nconsole.log(shield.classList.contains(\"active\"));\n",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 9,
+      "tur": "cikti",
+      "sure_sn": 9,
+      "anlatim": "Cevap false! İlk toggle sınıfı ekledi, ikinci toggle geri çıkardı. Kalkan başladığı gibi kapalı kaldı.",
+      "ekran": {
+        "baslik": "Cevap",
+        "kod": "shield.classList.toggle(\"active\");\nshield.classList.toggle(\"active\");\nconsole.log(shield.classList.contains(\"active\"));\n",
+        "cikti": "false",
+        "dil": "js"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 10,
+      "tur": "gorev",
+      "sure_sn": 13,
+      "anlatim": "Görevlerin hazır! Önce style ile bir kargo kutusunu boyayacaksın. Sonra açılıp kapanan bir kalkan, en sonda da düğmelerle rengi değişen bir gezegen yapacaksın.",
+      "ekran": {
+        "baslik": "Bugünün görevleri",
+        "maddeler": [
+          "Görev 1: Kutuyu boya",
+          "Görev 2: Kalkan",
+          "Görev 3: Gezegen rengi"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "ozet",
+      "sure_sn": 12,
+      "anlatim": "Özetleyelim: tek bir stil için style, durumlar için classList, bütün temayı değiştirmek için CSS değişkenleri. Kendi bilgini eklemek için de data özellikleri.",
+      "ekran": {
+        "baslik": "Özet",
+        "maddeler": [
+          "style.backgroundColor = \"...\" (birimle!)",
+          "classList: add, remove, toggle, contains",
+          "--değişken + setProperty; data-* + dataset"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 12,
+      "tur": "kapanis",
+      "sure_sn": 11,
+      "anlatim": "Gemin artık hem hızlı hem şık! Ama sayfayı yenileyince skor sıfırlanıyor, değil mi? Yarın gemine bir hafıza takacağız: kalıcı veri. Görüşürüz!",
+      "ekran": {
+        "baslik": "Yarın: Kalıcı veri",
+        "gorsel": "gorseller/javascript/arka-plan/bg-space-wide.webp"
+      },
+      "maskot": {
+        "poz": "el-sallama",
+        "konum": "orta"
+      }
+    }
+  ]
+}

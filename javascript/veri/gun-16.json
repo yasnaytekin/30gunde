@@ -1,0 +1,244 @@
+{
+ "day": 16,
+ "title": "Formlar",
+ "region": "dom",
+ "xp_complete": 150,
+ "objective": "Formdan değer okumak (metin, sayı, onay kutusu, seçim listesi), doğrulamak ve hataları sayfada göstermek",
+ "story": "DOM Gezegeni'nin son durağındasın! Kontrol kulesi, uçuşa çıkacak her pilotun bilgilerini istiyor. Bugün **formlardan** veri almayı ve yanlış girilen bilgileri yakalamayı öğreneceksin.",
+ "sections": [
+  {
+   "title": "submit olayı ve preventDefault",
+   "body": "Formun içindeki düğmeye basınca (ya da kutudayken Enter'a basınca) form **gönderilir** ve `submit` olayı olur. Tarayıcı normalde bu anda sayfayı yeniler; yazdığın her şey kaybolur. `e.preventDefault()` bu varsayılan davranışı durdurur:\n\n```js\nconst form = document.querySelector(\"#pilot-form\");\nform.addEventListener(\"submit\", (e) => {\n  e.preventDefault(); // sayfa yenilenmesin\n  console.log(\"Form gönderildi!\");\n});\n```\n\nOlayı düğmeye (`click`) değil **forma** (`submit`) bağla. Böylece Enter tuşu da çalışır."
+  },
+  {
+   "title": "Kutudaki değeri okumak",
+   "body": "Bir `input`'un içindeki yazı `.value` özelliğindedir ve **her zaman metindir**, içine sayı yazılmış olsa bile:\n\n```js\nconst raw = document.querySelector(\"#fuel\").value; // \"150\"\nconst fuel = Number(raw);                          // 150\nif (Number.isNaN(fuel)) {\n  console.log(\"Bu bir sayı değil!\");\n}\n```\n\n- `.value.trim()` baştaki ve sondaki boşlukları siler: `\"  Ada \"` → `\"Ada\"`\n- `Number(\"abc\")` sonucu `NaN` olur; `Number.isNaN(...)` ile anlarsın.\n- `Number(\"\")` ise `0` verir. Boş kutuyu ayrıca kontrol etmeyi unutma!"
+  },
+  {
+   "title": "Onay kutusu ve seçim listesi",
+   "body": "Onay kutusunda (`type=\"checkbox\"`) önemli olan yazı değil, işaretli olup olmadığıdır: `.checked` bize `true` ya da `false` verir. Seçim listesinde (`select`) `.value`, seçili `option`'ın `value` değeridir:\n\n```js\nconst ready = document.querySelector(\"#ready\").checked;      // true / false\nconst crew = Number(document.querySelector(\"#crew\").value);  // \"3\" → 3\n```"
+  },
+  {
+   "title": "Doğrulama, hata mesajı ve sıfırlama",
+   "body": "Formu kabul etmeden önce değerleri kontrol etmeye **doğrulama** denir. Hata mesajını sayfanın içinde göster ki kullanıcı neyi düzelteceğini görsün:\n\n```js\nif (name === \"\") {\n  info.textContent = \"Önce pilot adını yaz!\";\n  info.classList.add(\"error\");\n  return; // gerisini çalıştırma\n}\ninfo.classList.remove(\"error\");\nform.reset(); // bütün kutuları boşaltır\n```\n\n`return` olay fonksiyonundan hemen çıkar; hata varsa gerisi çalışmaz.\n\nİpucu: Doğrulamayı `validate(...)` gibi ayrı bir fonksiyona koy. Hata varsa mesajı, yoksa boş metni `\"\"` döndürsün. Böylece onu farklı değerlerle tek tek deneyebilirsin."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Pilot kaydı",
+   "code": "const form = document.querySelector(\"#f\");\nconst info = document.querySelector(\"#info\");\n\nform.addEventListener(\"submit\", (e) => {\n  e.preventDefault();\n  const name = document.querySelector(\"#name\").value.trim();\n  if (name === \"\") {\n    info.textContent = \"Adını yazmayı unuttun!\";\n    return;\n  }\n  info.textContent = `Hoş geldin, Kaptan ${name}!`;\n  form.reset();\n});\n",
+   "note": "Kutuyu boş bırakıp da dene.",
+   "mode": "page",
+   "html": "<form id=\"f\"><input id=\"name\" placeholder=\"Adın\"> <button>Kaydet</button></form>\n<p id=\"info\">Adını yaz, sonra Kaydet düğmesine bas.</p>\n",
+   "css": ""
+  },
+  {
+   "title": "Onay kutusu ve seçim listesi",
+   "code": "const form = document.querySelector(\"#f\");\nform.addEventListener(\"submit\", (e) => {\n  e.preventDefault();\n  const shield = document.querySelector(\"#shield\").checked;\n  const speed = Number(document.querySelector(\"#speed\").value);\n  console.log(\"Kalkan:\", shield, \"Hız:\", speed);\n  document.querySelector(\"#info\").textContent = `Kalkan ${shield ? \"açık\" : \"kapalı\"}, hız ${speed * 100} km/sn`;\n});\n",
+   "note": "Onay kutusunu işaretle, hızı değiştir ve Uygula'ya bas.",
+   "mode": "page",
+   "html": "<form id=\"f\"><label><input type=\"checkbox\" id=\"shield\"> Kalkan açık</label> \n<select id=\"speed\"><option value=\"1\">Yavaş</option><option value=\"2\">Normal</option><option value=\"3\">Hızlı</option></select> <button>Uygula</button></form>\n<p id=\"info\"></p>\n",
+   "css": ""
+  }
+ ],
+ "tasks": [
+  {
+   "id": "js-d16-t1",
+   "title": "Görev kaydı",
+   "prompt": "Form gönderilince:\n\n- sayfa yenilenmesin (`preventDefault`),\n- `#mission` kutusundaki görev adı boşlukları temizlenerek `#out`'a `Görev kaydedildi: Mars keşfi` biçiminde yazılsın,\n- form sıfırlansın (`form.reset()`).",
+   "starter": "const form = document.querySelector(\"#mission-form\");\n\n// submit olayını dinle\n\n",
+   "solution": "const form = document.querySelector(\"#mission-form\");\n\n// submit olayını dinle\nform.addEventListener(\"submit\", (e) => {\n  e.preventDefault();\n  const mission = document.querySelector(\"#mission\").value.trim();\n  document.querySelector(\"#out\").textContent = `Görev kaydedildi: ${mission}`;\n  form.reset();\n});\n",
+   "hints": [
+    "form.addEventListener(\"submit\", (e) => { e.preventDefault(); ... })",
+    "document.querySelector(\"#mission\").value.trim()"
+   ],
+   "check": {
+    "code_contains": [
+     "submit",
+     "preventDefault",
+     ".value"
+    ],
+    "js": "type(\"#mission\", \"  Mars keşfi \");\nsubmit(\"#mission-form\");\nassert($(\"#out\").textContent === \"Görev kaydedildi: Mars keşfi\", \"#out 'Görev kaydedildi: Mars keşfi' olmalı (boşlukları trim ile temizle).\");\nassert($(\"#mission\").value === \"\", \"Kayıttan sonra form sıfırlanmalı (form.reset()).\");\ntype(\"#mission\", \"Ay üssü\");\nsubmit(\"#mission-form\");\nassert($(\"#out\").textContent === \"Görev kaydedildi: Ay üssü\", \"Görev adı kutudan okunmalı: 'Ay üssü' yazınca 'Görev kaydedildi: Ay üssü' görünmeli.\");"
+   },
+   "xp": 50,
+   "mode": "page",
+   "html": "<form id=\"mission-form\"><input id=\"mission\" placeholder=\"Görev adı\"> <button>Kaydet</button></form>\n<p id=\"out\">Henüz görev yok.</p>\n",
+   "css": ""
+  },
+  {
+   "id": "js-d16-t2",
+   "title": "Yakıt hesaplayıcı",
+   "prompt": "Form gönderilince toplam yakıtı hesapla: `#fuel` kutusundaki sayı × `#tanks` listesinde seçilen depo sayısı.\n\n- Sonucu `#out`'a `Toplam yakıt: 300 litre` biçiminde yaz.\n- Yakıt bir sayı değilse ya da 0 veya daha küçükse `Lütfen geçerli bir sayı yaz.` yaz.",
+   "starter": "const form = document.querySelector(\"#fuel-form\");\nconst result = document.querySelector(\"#out\");\n\n// submit olayını dinle, sayıları Number ile çevir\n\n",
+   "solution": "const form = document.querySelector(\"#fuel-form\");\nconst result = document.querySelector(\"#out\");\n\n// submit olayını dinle, sayıları Number ile çevir\nform.addEventListener(\"submit\", (e) => {\n  e.preventDefault();\n  const fuel = Number(document.querySelector(\"#fuel\").value);\n  const tanks = Number(document.querySelector(\"#tanks\").value);\n  if (Number.isNaN(fuel) || fuel <= 0) {\n    result.textContent = \"Lütfen geçerli bir sayı yaz.\";\n    return;\n  }\n  result.textContent = `Toplam yakıt: ${fuel * tanks} litre`;\n});\n",
+   "hints": [
+    "const fuel = Number(document.querySelector(\"#fuel\").value);",
+    "Number.isNaN(fuel) || fuel <= 0 ise hata mesajı yaz ve return ile çık."
+   ],
+   "check": {
+    "code_contains": [
+     "Number(",
+     "submit"
+    ],
+    "js": "type(\"#fuel\", \"150\");\ntype(\"#tanks\", \"2\");\nsubmit(\"#fuel-form\");\nassert($(\"#out\").textContent === \"Toplam yakıt: 300 litre\", \"150 yakıt ve 2 depo için #out 'Toplam yakıt: 300 litre' olmalı.\");\ntype(\"#fuel\", \"40\");\ntype(\"#tanks\", \"3\");\nsubmit(\"#fuel-form\");\nassert($(\"#out\").textContent === \"Toplam yakıt: 120 litre\", \"40 yakıt ve 3 depo için 'Toplam yakıt: 120 litre' olmalı. Depo sayısını listeden oku.\");\ntype(\"#fuel\", \"abc\");\nsubmit(\"#fuel-form\");\nassert($(\"#out\").textContent === \"Lütfen geçerli bir sayı yaz.\", \"Sayı olmayan yakıtta 'Lütfen geçerli bir sayı yaz.' yazmalı.\");\ntype(\"#fuel\", \"\");\nsubmit(\"#fuel-form\");\nassert($(\"#out\").textContent === \"Lütfen geçerli bir sayı yaz.\", \"Boş kutuda da hata mesajı görünmeli (Number(\\\"\\\") 0 verir).\");"
+   },
+   "xp": 50,
+   "mode": "page",
+   "html": "<form id=\"fuel-form\"><label>Depo başına yakıt <input id=\"fuel\" placeholder=\"ör. 150\"></label> \n<label>Depo sayısı <select id=\"tanks\"><option value=\"1\">1</option><option value=\"2\">2</option><option value=\"3\">3</option></select></label> <button>Hesapla</button></form>\n<p id=\"out\"></p>\n",
+   "css": ""
+  },
+  {
+   "id": "js-d16-t3",
+   "title": "Kalkış onayı",
+   "prompt": "Form gönderilince:\n\n- `#ready` onay kutusu işaretli **değilse** `#out`'a `Önce güvenlik kontrolünü onayla!` yaz ve `#out`'a `error` sınıfını ekle.\n- İşaretliyse `Kalkış onaylandı: 3 kişilik ekip` yaz (sayı `#crew` listesinden gelsin) ve `error` sınıfını kaldır.",
+   "starter": "const form = document.querySelector(\"#launch-form\");\nconst result = document.querySelector(\"#out\");\n\n// submit olayını dinle; onay kutusu için .checked\n\n",
+   "solution": "const form = document.querySelector(\"#launch-form\");\nconst result = document.querySelector(\"#out\");\n\n// submit olayını dinle; onay kutusu için .checked\nform.addEventListener(\"submit\", (e) => {\n  e.preventDefault();\n  const ready = document.querySelector(\"#ready\").checked;\n  const crew = document.querySelector(\"#crew\").value;\n  if (!ready) {\n    result.textContent = \"Önce güvenlik kontrolünü onayla!\";\n    result.classList.add(\"error\");\n    return;\n  }\n  result.textContent = `Kalkış onaylandı: ${crew} kişilik ekip`;\n  result.classList.remove(\"error\");\n});\n",
+   "hints": [
+    "document.querySelector(\"#ready\").checked true ya da false verir.",
+    "if (!ready) { ... return; }"
+   ],
+   "check": {
+    "code_contains": [
+     ".checked",
+     "classList"
+    ],
+    "js": "submit(\"#launch-form\");\nassert($(\"#out\").textContent === \"Önce güvenlik kontrolünü onayla!\", \"Onay kutusu işaretli değilken 'Önce güvenlik kontrolünü onayla!' yazmalı.\");\nassert($(\"#out\").classList.contains(\"error\"), \"Hata durumunda #out'a error sınıfı eklenmeli.\");\n$(\"#ready\").checked = true;\ntype(\"#crew\", \"4\");\nsubmit(\"#launch-form\");\nassert($(\"#out\").textContent === \"Kalkış onaylandı: 4 kişilik ekip\", \"İşaretliyken ve 4 kişi seçiliyken 'Kalkış onaylandı: 4 kişilik ekip' yazmalı.\");\nassert(!$(\"#out\").classList.contains(\"error\"), \"Onaylanınca error sınıfı kaldırılmalı.\");\ntype(\"#crew\", \"2\");\nsubmit(\"#launch-form\");\nassert($(\"#out\").textContent === \"Kalkış onaylandı: 2 kişilik ekip\", \"Ekip sayısı listeden okunmalı (2 kişi seçince '2 kişilik ekip').\");"
+   },
+   "xp": 50,
+   "mode": "page",
+   "html": "<form id=\"launch-form\"><label><input type=\"checkbox\" id=\"ready\"> Güvenlik kontrolü tamam</label><br>\n<label>Ekip: <select id=\"crew\"><option value=\"2\">2 kişi</option><option value=\"3\">3 kişi</option><option value=\"4\">4 kişi</option></select></label> <button>Kalkış</button></form>\n<p id=\"out\"></p>\n",
+   "css": ".error{color:#c0392b;font-weight:600}"
+  }
+ ],
+ "challenge": {
+  "id": "js-d16-c",
+  "title": "Kayıt formu",
+  "prompt": "Kayıt formunu doğrula. Form gönderilince bütün hataları bul ve her birini `#errors` listesine ayrı bir `<li>` olarak ekle (önce listeyi temizle):\n\n- Kullanıcı adı (boşlukları temizlenmiş) 3 ile 12 harf arasında değilse: `Kullanıcı adı 3-12 harf olmalı.`\n- Yaş 10 ile 99 arasında tam sayı değilse: `Yaş 10 ile 99 arasında bir sayı olmalı.`\n\nHata yoksa `#out`'a `Kayıt tamam, Ada!` yaz ve formu sıfırla. Hata varsa `#out` boş kalsın.",
+  "starter": "const form = document.querySelector(\"#signup\");\nconst errorList = document.querySelector(\"#errors\");\nconst result = document.querySelector(\"#out\");\n\n// submit olayını dinle: hataları bir diziye topla, sonra listede göster\n\n",
+  "solution": "const form = document.querySelector(\"#signup\");\nconst errorList = document.querySelector(\"#errors\");\nconst result = document.querySelector(\"#out\");\n\n// submit olayını dinle: hataları bir diziye topla, sonra listede göster\nform.addEventListener(\"submit\", (e) => {\n  e.preventDefault();\n  const username = document.querySelector(\"#username\").value.trim();\n  const age = Number(document.querySelector(\"#age\").value);\n  const errors = [];\n  if (username.length < 3 || username.length > 12) {\n    errors.push(\"Kullanıcı adı 3-12 harf olmalı.\");\n  }\n  if (!Number.isInteger(age) || age < 10 || age > 99) {\n    errors.push(\"Yaş 10 ile 99 arasında bir sayı olmalı.\");\n  }\n  errorList.innerHTML = \"\";\n  for (const error of errors) {\n    const li = document.createElement(\"li\");\n    li.textContent = error;\n    errorList.append(li);\n  }\n  if (errors.length === 0) {\n    result.textContent = `Kayıt tamam, ${username}!`;\n    form.reset();\n  } else {\n    result.textContent = \"\";\n  }\n});\n",
+  "hints": [
+   "const errors = []; hata buldukça errors.push(\"...\")",
+   "Listeyi temizlemek için: errorList.innerHTML = \"\";",
+   "Tam sayı mı? Number.isInteger(age)"
+  ],
+  "check": {
+   "code_contains": [
+    "preventDefault",
+    "push",
+    "createElement"
+   ],
+   "js": "const texts = () => $$(\"#errors li\").map((li) => li.textContent.trim());\nsubmit(\"#signup\");\nassert(texts().length === 2, \"Boş formda #errors listesinde 2 hata (<li>) olmalı.\");\nassert(texts().includes(\"Kullanıcı adı 3-12 harf olmalı.\") && texts().includes(\"Yaş 10 ile 99 arasında bir sayı olmalı.\"), \"Hata metinleri görevdeki gibi olmalı.\");\nassert($(\"#out\").textContent === \"\", \"Hata varken #out boş olmalı.\");\ntype(\"#username\", \" Ada \");\ntype(\"#age\", \"8\");\nsubmit(\"#signup\");\nassert(texts().length === 1 && texts()[0] === \"Yaş 10 ile 99 arasında bir sayı olmalı.\", \"Ad 'Ada', yaş 8 iken yalnızca yaş hatası görünmeli (liste her seferinde temizlenmeli).\");\ntype(\"#username\", \"Uzaygezgini2026\");\ntype(\"#age\", \"20\");\nsubmit(\"#signup\");\nassert(texts().length === 1 && texts()[0] === \"Kullanıcı adı 3-12 harf olmalı.\", \"12 harften uzun ad için kullanıcı adı hatası görünmeli.\");\ntype(\"#username\", \"Ada\");\ntype(\"#age\", \"13\");\nsubmit(\"#signup\");\nassert(texts().length === 0, \"Hata yokken #errors boş olmalı.\");\nassert($(\"#out\").textContent === \"Kayıt tamam, Ada!\", \"Hata yokken #out 'Kayıt tamam, Ada!' olmalı.\");\nassert($(\"#username\").value === \"\" && $(\"#age\").value === \"\", \"Kayıttan sonra form sıfırlanmalı.\");"
+  },
+  "xp": 75,
+  "mode": "page",
+  "html": "<form id=\"signup\"><input id=\"username\" placeholder=\"Kullanıcı adı\"> <input id=\"age\" placeholder=\"Yaş\"> <button>Kaydol</button></form>\n<ul id=\"errors\"></ul>\n<p id=\"out\"></p>\n",
+  "css": "#errors{color:#c0392b}"
+ },
+ "project_contribution": "Pilot adı formu",
+ "project_task": {
+  "id": "js-d16-p",
+  "title": "Pilot adı formu",
+  "prompt": "Oyun başlamadan önce pilotun adını alalım. `#pilot-form` gönderilince:\n\n- Sayfa yenilenmesin.\n- Ad (boşlukları temizlenmiş) boşsa `#info`'ya `Önce pilot adını yaz!` yaz ve `error` sınıfını ekle.\n- Değilse adı `pilotName` değişkenine koy, `#info`'ya `Hazır ol, Kaptan Ada!` yaz, `error` sınıfını kaldır ve formu sıfırla.",
+  "starter": "const form = document.querySelector(\"#pilot-form\");\nconst info = document.querySelector(\"#info\");\nlet pilotName = \"\";\n\n// submit olayını dinle\n\n",
+  "solution": "const form = document.querySelector(\"#pilot-form\");\nconst info = document.querySelector(\"#info\");\nlet pilotName = \"\";\n\n// submit olayını dinle\nform.addEventListener(\"submit\", (e) => {\n  e.preventDefault();\n  const name = document.querySelector(\"#pilot-name\").value.trim();\n  if (name === \"\") {\n    info.textContent = \"Önce pilot adını yaz!\";\n    info.classList.add(\"error\");\n    return;\n  }\n  pilotName = name;\n  info.textContent = `Hazır ol, Kaptan ${pilotName}!`;\n  info.classList.remove(\"error\");\n  form.reset();\n});\n",
+  "hints": [
+   "const name = document.querySelector(\"#pilot-name\").value.trim();",
+   "Boşsa: info.classList.add(\"error\"); return;",
+   "Başarılıysa: pilotName = name; ... form.reset();"
+  ],
+  "check": {
+   "code_contains": [
+    "preventDefault",
+    "trim",
+    "reset"
+   ],
+   "js": "type(\"#pilot-name\", \"   \");\nsubmit(\"#pilot-form\");\nassert($(\"#info\").textContent.trim() === \"Önce pilot adını yaz!\", \"Boş adla gönderilince #info 'Önce pilot adını yaz!' olmalı.\");\nassert($(\"#info\").classList.contains(\"error\"), \"Hata durumunda #info'ya error sınıfı eklenmeli.\");\ntype(\"#pilot-name\", \"  Ada \");\nsubmit(\"#pilot-form\");\nassert($(\"#info\").textContent.trim() === \"Hazır ol, Kaptan Ada!\", \"'Ada' yazınca #info 'Hazır ol, Kaptan Ada!' olmalı.\");\nassert(!$(\"#info\").classList.contains(\"error\"), \"Geçerli adda error sınıfı kaldırılmalı.\");\nassert(pilotName === \"Ada\", \"pilotName değişkeni 'Ada' olmalı.\");\nassert($(\"#pilot-name\").value === \"\", \"Kayıttan sonra form sıfırlanmalı (form.reset()).\");\ntype(\"#pilot-name\", \"Deniz\");\nsubmit(\"#pilot-form\");\nassert($(\"#info\").textContent.trim() === \"Hazır ol, Kaptan Deniz!\" && pilotName === \"Deniz\", \"Ad kutudan okunmalı: 'Deniz' yazınca 'Hazır ol, Kaptan Deniz!' görünmeli.\");"
+  },
+  "xp": 100,
+  "mode": "page",
+  "html": "<h2 id=\"title\">Yıldız Avcısı</h2>\n<form id=\"pilot-form\"><input id=\"pilot-name\" placeholder=\"Pilot adı\" autocomplete=\"off\"> <button>Başla</button></form>\n<p id=\"info\">Pilot adını yaz ve başla.</p>\n<p id=\"hud\">Skor: <span id=\"score\">0</span> · Süre: <span id=\"time\">10</span> · En yüksek: <span id=\"best\">0</span></p>\n<div id=\"field\"><div id=\"ship\"></div></div>\n<div id=\"colors\"><button data-color=\"#f7df1e\">Sarı</button> <button data-color=\"#4dd0e1\">Turkuaz</button> <button data-color=\"#ff6b6b\">Kırmızı</button></div>\n",
+  "css": ":root{--ship-color:#f7df1e}#title{margin:0 0 6px;color:#0b1026}#info.error{color:#c0392b;font-weight:600}#hud{margin:4px 0}#field{position:relative;width:300px;height:70px;background:#0b1026;border-radius:8px;overflow:hidden}#field.hit{background:#8e1b2b}#ship{position:absolute;left:0;bottom:10px;width:30px;height:30px;border-radius:50% 50% 6px 6px;background:var(--ship-color)}#colors{margin-top:8px}"
+ },
+ "tracks": {
+  "js-web": {
+   "project_contribution": "İletişim formu",
+   "project_task": {
+    "id": "js-d16-pw",
+    "title": "İletişim formu",
+    "prompt": "Sitene bir iletişim formu ekliyoruz. Önce `validateContact(name, email)` fonksiyonunu yaz:\n\n- `name` boşsa `\"Adını yazmalısın.\"` döndürsün,\n- `email` içinde `@` ya da `.` yoksa `\"Geçerli bir e-posta yaz.\"` döndürsün,\n- sorun yoksa `\"\"` (boş metin) döndürsün.\n\nSonra `#contact` gönderilince ad ve e-postayı (boşlukları temizleyerek) oku. Hata varsa mesajı `#form-msg`'ye yaz ve `error` sınıfını ekle. Yoksa `Teşekkürler, Ada! Mesajın alındı.` yaz, `error`'u kaldır ve formu sıfırla.",
+    "starter": "const form = document.querySelector(\"#contact\");\nconst msg = document.querySelector(\"#form-msg\");\n\nfunction validateContact(name, email) {\n  // Hata varsa mesajı, yoksa \"\" döndür\n}\n\n// submit olayını dinle\n\n",
+    "solution": "const form = document.querySelector(\"#contact\");\nconst msg = document.querySelector(\"#form-msg\");\n\nfunction validateContact(name, email) {\n  // Hata varsa mesajı, yoksa \"\" döndür\n  if (name === \"\") return \"Adını yazmalısın.\";\n  if (!email.includes(\"@\") || !email.includes(\".\")) return \"Geçerli bir e-posta yaz.\";\n  return \"\";\n}\n\n// submit olayını dinle\nform.addEventListener(\"submit\", (e) => {\n  e.preventDefault();\n  const name = document.querySelector(\"#c-name\").value.trim();\n  const email = document.querySelector(\"#c-email\").value.trim();\n  const error = validateContact(name, email);\n  if (error !== \"\") {\n    msg.textContent = error;\n    msg.classList.add(\"error\");\n    return;\n  }\n  msg.textContent = `Teşekkürler, ${name}! Mesajın alındı.`;\n  msg.classList.remove(\"error\");\n  form.reset();\n});\n",
+    "hints": [
+     "if (name === \"\") return \"Adını yazmalısın.\";",
+     "email.includes(\"@\") içinde @ var mı diye bakar.",
+     "Olayda: const error = validateContact(name, email);"
+    ],
+    "check": {
+     "code_contains": [
+      "preventDefault",
+      "includes",
+      "reset"
+     ],
+     "js": "assert(validateContact(\"\", \"ada@site.com\") === \"Adını yazmalısın.\", \"validateContact(\\\"\\\", ...) 'Adını yazmalısın.' döndürmeli.\");\nassert(validateContact(\"Ada\", \"ada\") === \"Geçerli bir e-posta yaz.\", \"@ olmayan e-postada 'Geçerli bir e-posta yaz.' döndürmeli.\");\nassert(validateContact(\"Ada\", \"ada@site\") === \"Geçerli bir e-posta yaz.\", \"Nokta olmayan e-postada da hata döndürmeli.\");\nassert(validateContact(\"Ada\", \"ada@site.com\") === \"\", \"Doğru bilgilerde \\\"\\\" (boş metin) döndürmeli.\");\ntype(\"#c-name\", \"  \");\ntype(\"#c-email\", \"ada@site.com\");\nsubmit(\"#contact\");\nassert($(\"#form-msg\").textContent === \"Adını yazmalısın.\" && $(\"#form-msg\").classList.contains(\"error\"), \"Ad boşken #form-msg 'Adını yazmalısın.' olmalı ve error sınıfı eklenmeli.\");\ntype(\"#c-name\", \" Ada \");\ntype(\"#c-email\", \" ada@site.com \");\nsubmit(\"#contact\");\nassert($(\"#form-msg\").textContent === \"Teşekkürler, Ada! Mesajın alındı.\", \"Doğru bilgilerde 'Teşekkürler, Ada! Mesajın alındı.' yazmalı.\");\nassert(!$(\"#form-msg\").classList.contains(\"error\"), \"Başarılı gönderimde error sınıfı kaldırılmalı.\");\nassert($(\"#c-name\").value === \"\" && $(\"#c-email\").value === \"\", \"Başarılı gönderimden sonra form sıfırlanmalı.\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<header id=\"top\"><h2 id=\"site-title\">Deniz Yıldız</h2> <input id=\"search\" placeholder=\"Sitede ara ( / )\" autocomplete=\"off\"> <span id=\"clock\">--:--:--</span></header>\n<nav id=\"accents\"><button data-accent=\"#f7df1e\">Sarı</button> <button data-accent=\"#26c6da\">Turkuaz</button> <button data-accent=\"#b388ff\">Mor</button> <button id=\"theme-btn\">Tema değiştir</button></nav>\n<form id=\"contact\"><input id=\"c-name\" placeholder=\"Adın\" autocomplete=\"off\"> <input id=\"c-email\" placeholder=\"E-posta adresin\" autocomplete=\"off\"> <button>Gönder</button></form>\n<p id=\"form-msg\"></p>\n",
+    "css": ":root{--accent:#f7df1e}body.dark{background:#0b1026;color:#eef1ff}#site-title{display:inline-block;margin:0 8px 6px 0;border-bottom:4px solid var(--accent)}#clock{font-family:monospace;margin-left:8px}nav{margin:6px 0}nav button.active{outline:3px solid var(--accent)}#contact input{margin:4px 4px 4px 0}#form-msg.error{color:#c0392b;font-weight:600}"
+   }
+  },
+  "js-app": {
+   "project_contribution": "Yeni görev formu",
+   "project_task": {
+    "id": "js-d16-pa",
+    "title": "Yeni görev formu",
+    "prompt": "Boş ya da çok uzun görevler listeye girmesin. Önce `validateTask(text)` fonksiyonunu yaz:\n\n- `text` boşsa `\"Görev boş olamaz.\"`\n- 40 karakterden uzunsa `\"Görev en fazla 40 karakter olabilir.\"`\n- sorun yoksa `\"\"`\n\nSonra `#task-form` gönderilince kutudaki metni (boşlukları temizleyerek) doğrula. Hata varsa `#task-msg`'ye yaz ve `error` sınıfını ekle. Yoksa mesajı temizle, `error`'u kaldır, `addTask(text)` ile görevi ekle ve formu sıfırla.",
+    "starter": "const form = document.querySelector(\"#task-form\");\nconst input = document.querySelector(\"#task-input\");\nconst msg = document.querySelector(\"#task-msg\");\nconst list = document.querySelector(\"#task-list\");\n\nfunction addTask(text) {\n  const li = document.createElement(\"li\");\n  li.textContent = text;\n  list.append(li);\n}\n\nfunction validateTask(text) {\n  // Hata varsa mesajı, yoksa \"\" döndür\n}\n\n// submit olayını dinle\n\n",
+    "solution": "const form = document.querySelector(\"#task-form\");\nconst input = document.querySelector(\"#task-input\");\nconst msg = document.querySelector(\"#task-msg\");\nconst list = document.querySelector(\"#task-list\");\n\nfunction addTask(text) {\n  const li = document.createElement(\"li\");\n  li.textContent = text;\n  list.append(li);\n}\n\nfunction validateTask(text) {\n  // Hata varsa mesajı, yoksa \"\" döndür\n  if (text === \"\") return \"Görev boş olamaz.\";\n  if (text.length > 40) return \"Görev en fazla 40 karakter olabilir.\";\n  return \"\";\n}\n\n// submit olayını dinle\nform.addEventListener(\"submit\", (e) => {\n  e.preventDefault();\n  const text = input.value.trim();\n  const error = validateTask(text);\n  if (error !== \"\") {\n    msg.textContent = error;\n    msg.classList.add(\"error\");\n    return;\n  }\n  msg.textContent = \"\";\n  msg.classList.remove(\"error\");\n  addTask(text);\n  form.reset();\n});\n",
+    "hints": [
+     "if (text.length > 40) return \"Görev en fazla 40 karakter olabilir.\";",
+     "Olayda: const error = validateTask(input.value.trim());"
+    ],
+    "check": {
+     "code_contains": [
+      "preventDefault",
+      "length",
+      "reset"
+     ],
+     "js": "assert(validateTask(\"\") === \"Görev boş olamaz.\", \"validateTask(\\\"\\\") 'Görev boş olamaz.' döndürmeli.\");\nassert(validateTask(\"a\".repeat(41)) === \"Görev en fazla 40 karakter olabilir.\", \"41 karakterlik görevde 'Görev en fazla 40 karakter olabilir.' döndürmeli.\");\nassert(validateTask(\"a\".repeat(40)) === \"\" && validateTask(\"Fizik tekrarı\") === \"\", \"Uygun görevde \\\"\\\" döndürmeli (tam 40 karakter de uygundur).\");\ntype(\"#task-input\", \"   \");\nsubmit(\"#task-form\");\nassert($$(\"#task-list li\").length === 0, \"Boş görev listeye eklenmemeli.\");\nassert($(\"#task-msg\").textContent === \"Görev boş olamaz.\" && $(\"#task-msg\").classList.contains(\"error\"), \"Boş görevde #task-msg 'Görev boş olamaz.' olmalı ve error sınıfı eklenmeli.\");\ntype(\"#task-input\", \"  Fizik tekrarı \");\nsubmit(\"#task-form\");\nconst items = $$(\"#task-list li\");\nassert(items.length === 1 && items[0].textContent === \"Fizik tekrarı\", \"Geçerli görev boşlukları temizlenmiş hâliyle listeye eklenmeli.\");\nassert($(\"#task-msg\").textContent === \"\" && !$(\"#task-msg\").classList.contains(\"error\"), \"Görev eklenince hata mesajı ve error sınıfı temizlenmeli.\");\nassert($(\"#task-input\").value === \"\", \"Görev eklenince kutu boşalmalı (form.reset()).\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<h2 id=\"app-title\">Çalışma Asistanım</h2>\n<form id=\"task-form\"><input id=\"task-input\" placeholder=\"Yeni görev\" autocomplete=\"off\"> <button>Ekle</button></form>\n<p id=\"task-msg\"></p>\n<ul id=\"task-list\"></ul>\n<div id=\"progress\"><div id=\"progress-bar\"></div></div> <span id=\"progress-text\">0 / 0</span>\n<p id=\"focus\"><strong id=\"focus-time\">25:00</strong> <button id=\"focus-start\">Başlat</button> <button id=\"focus-pause\">Duraklat</button> <span id=\"focus-msg\"></span></p>\n",
+    "css": "#app-title{margin:0 0 6px}#task-msg.error{color:#c0392b;font-weight:600}#task-list li{cursor:pointer;padding:2px 0}#task-list li.done{text-decoration:line-through;opacity:.55}#progress{display:inline-block;vertical-align:middle;width:200px;height:10px;background:#e3e6f0;border-radius:5px;overflow:hidden}#progress-bar{width:var(--progress,0%);height:100%;background:#43a047}#focus-time{font-family:monospace;font-size:20px}"
+   }
+  },
+  "js-quiz": {
+   "project_contribution": "Yarışmacı formu",
+   "project_task": {
+    "id": "js-d16-pq",
+    "title": "Yarışmacı formu",
+    "prompt": "Yarışmaya katılan herkes adını yazsın. `#player-form` gönderilince:\n\n- Ad (boşlukları temizlenmiş) 2 harften kısaysa `#welcome`'a `İsim en az 2 harf olmalı.` yaz ve `error` sınıfını ekle.\n- Değilse adı `playerName`'e koy, `#welcome`'a `Hoş geldin, Ada! Bol şans.` yaz, `error`'u kaldır ve formu gizle (`form.hidden = true`).",
+    "starter": "const form = document.querySelector(\"#player-form\");\nconst welcome = document.querySelector(\"#welcome\");\nlet playerName = \"\";\n\n// submit olayını dinle\n\n",
+    "solution": "const form = document.querySelector(\"#player-form\");\nconst welcome = document.querySelector(\"#welcome\");\nlet playerName = \"\";\n\n// submit olayını dinle\nform.addEventListener(\"submit\", (e) => {\n  e.preventDefault();\n  const name = document.querySelector(\"#player-name\").value.trim();\n  if (name.length < 2) {\n    welcome.textContent = \"İsim en az 2 harf olmalı.\";\n    welcome.classList.add(\"error\");\n    return;\n  }\n  playerName = name;\n  welcome.textContent = `Hoş geldin, ${playerName}! Bol şans.`;\n  welcome.classList.remove(\"error\");\n  form.hidden = true;\n});\n",
+    "hints": [
+     "if (name.length < 2) { ... return; }",
+     "form.hidden = true; formu gizler."
+    ],
+    "check": {
+     "code_contains": [
+      "preventDefault",
+      "trim",
+      "hidden"
+     ],
+     "js": "type(\"#player-name\", \" A \");\nsubmit(\"#player-form\");\nassert($(\"#welcome\").textContent === \"İsim en az 2 harf olmalı.\" && $(\"#welcome\").classList.contains(\"error\"), \"Tek harfli isimde #welcome 'İsim en az 2 harf olmalı.' olmalı ve error sınıfı eklenmeli.\");\nassert(!$(\"#player-form\").hidden, \"Hatalı isimde form gizlenmemeli.\");\ntype(\"#player-name\", \" Ada \");\nsubmit(\"#player-form\");\nassert($(\"#welcome\").textContent === \"Hoş geldin, Ada! Bol şans.\", \"'Ada' için #welcome 'Hoş geldin, Ada! Bol şans.' olmalı.\");\nassert(!$(\"#welcome\").classList.contains(\"error\") && playerName === \"Ada\", \"error sınıfı kaldırılmalı ve playerName 'Ada' olmalı.\");\nassert($(\"#player-form\").hidden === true, \"Kayıttan sonra form gizlenmeli (form.hidden = true).\");\n$(\"#player-form\").hidden = false;\ntype(\"#player-name\", \"Efe\");\nsubmit(\"#player-form\");\nassert($(\"#welcome\").textContent === \"Hoş geldin, Efe! Bol şans.\", \"İsim kutudan okunmalı: 'Efe' yazınca 'Hoş geldin, Efe! Bol şans.' görünmeli.\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<h2 id=\"quiz-title\">Bilgi Yarışması</h2>\n<form id=\"player-form\"><input id=\"player-name\" placeholder=\"Yarışmacı adı\" autocomplete=\"off\"> <button>Katıl</button></form>\n<p id=\"welcome\"></p>\n<p id=\"question\">Ay, hangi gezegenin uydusudur?</p>\n<div id=\"options\"><button class=\"option\">1) Mars</button> <button class=\"option\">2) Dünya</button> <button class=\"option\">3) Jüpiter</button></div>\n<p id=\"feedback\"></p>\n<p id=\"status\">Puan: <span id=\"score\">0</span> · Süre: <span id=\"time\">10</span> · Rekor: <span id=\"best\">0</span></p>\n",
+    "css": "#quiz-title{margin:0 0 6px}#welcome.error{color:#c0392b;font-weight:600}.option{margin:2px;padding:6px 10px;border:1px solid #9aa3c0;border-radius:6px;background:#f4f6fb;color:#1b1f33}.option.correct{background:#2e7d32;color:#fff}.option.wrong{background:#c62828;color:#fff}"
+   }
+  }
+ },
+ "available": true
+}

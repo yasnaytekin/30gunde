@@ -1,0 +1,248 @@
+{
+ "day": 15,
+ "title": "Eleman oluşturmak",
+ "region": "dom",
+ "xp_complete": 150,
+ "objective": "createElement ile yeni elemanlar oluşturmak, diziden liste çizmek (render), eleman silmek ve dataset kullanmak",
+ "story": "DOM Gezegeni'nde inşaat zamanı! Şimdiye kadar sayfada var olan elemanları değiştirdin; bugün JavaScript ile sıfırdan **yeni elemanlar** üretip sayfaya ekleyeceksin.",
+ "sections": [
+  {
+   "title": "createElement ve append",
+   "body": "Yeni bir eleman üç adımda eklenir: **oluştur, doldur, ekle**.\n\n```js\nconst list = document.querySelector(\"#cargo\");\nconst li = document.createElement(\"li\"); // 1) oluştur\nli.textContent = \"Oksijen tüpü\";          // 2) doldur\nli.classList.add(\"item\");\nlist.append(li);                           // 3) sayfaya ekle (sona)\n```\n\n`createElement` elemanı yalnızca bellekte oluşturur; bir yere eklemeden sayfada görünmez. `append` sona, `prepend` başa ekler. Bir elemanın içine başka elemanlar da koyabilirsin: `li.append(button)`."
+  },
+  {
+   "title": "remove() ve temizlemek",
+   "body": "`el.remove()` elemanı sayfadan siler. Bir kutunun içini tamamen boşaltmak için içeriğini boş metin yapmak yeter:\n\n```js\ndocument.querySelector(\"#old\").remove(); // tek elemanı sil\nlist.textContent = \"\";                    // listenin içini boşalt\n```"
+  },
+  {
+   "title": "Diziden liste: render()",
+   "body": "Asıl güç şurada: veriyi bir dizide tutup ekranı diziden **çizmek**. Bunu yapan fonksiyona genelde `render` (çiz) denir. Her çağrıldığında listeyi temizler ve diziden baştan kurar:\n\n```js\nconst items = [\"Oksijen\", \"Su\", \"Yakıt\"];\n\nfunction render() {\n  list.textContent = \"\"; // önce temizle\n  for (const item of items) {\n    const li = document.createElement(\"li\");\n    li.textContent = item;\n    list.append(li);\n  }\n}\n\nrender();\nitems.push(\"Kalkan\"); // veri değişti...\nrender();             // ...ekranı yeniden çiz\n```\n\nKural basit: **önce veriyi değiştir, sonra `render()` çağır.** Temizlemeyi unutursan her çağrıda liste bir kez daha eklenir."
+  },
+  {
+   "title": "dataset: data-* nitelikleri",
+   "body": "Bir elemanda kendi bilgini `data-` ile başlayan niteliklerde saklayabilirsin. JavaScript'te bunlara `dataset` ile ulaşılır:\n\n```js\nli.dataset.id = 7;          // HTML'de: <li data-id=\"7\">\nconsole.log(li.dataset.id); // \"7\" (her zaman metin!)\n```\n\nTireli adlar camelCase olur: `data-max-speed` → `dataset.maxSpeed`.\n\nOlay yetkilendirmeyle birlikte çok kullanışlıdır: tıklanan düğmenin hangi kayda ait olduğunu `e.target.dataset.index` söyler. Değer metin olduğu için sayı gerekiyorsa `Number(...)` ile çevir."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Diziden liste",
+   "code": "const planets = [\"Merkür\", \"Venüs\", \"Dünya\", \"Mars\"];\nconst list = document.querySelector(\"#list\");\n\nfor (const name of planets) {\n  const li = document.createElement(\"li\");\n  li.textContent = name;\n  list.append(li);\n}\n\nconst sun = document.createElement(\"li\");\nsun.textContent = \"Güneş (merkez)\";\nsun.classList.add(\"sun\");\nlist.prepend(sun);\nconsole.log(\"Eleman sayısı:\", list.children.length);\n",
+   "note": "planets dizisine Jüpiter'i ekleyip tekrar çalıştır.",
+   "mode": "page",
+   "html": "<ul id=\"list\"></ul>\n",
+   "css": ".sun{color:#c28a00;font-weight:bold}"
+  },
+  {
+   "title": "render() ve silme",
+   "code": "const stars = [\"Vega\", \"Sirius\"];\nconst list = document.querySelector(\"#list\");\n\nfunction render() {\n  list.textContent = \"\";\n  stars.forEach((star, i) => {\n    const li = document.createElement(\"li\");\n    li.textContent = star + \" \";\n    const del = document.createElement(\"button\");\n    del.textContent = \"Sil\";\n    del.dataset.index = i;\n    li.append(del);\n    list.append(li);\n  });\n}\n\nlist.addEventListener(\"click\", (e) => {\n  if (e.target.tagName !== \"BUTTON\") return;\n  stars.splice(Number(e.target.dataset.index), 1);\n  render();\n});\n\ndocument.querySelector(\"#add\").addEventListener(\"click\", () => {\n  stars.push(\"Yıldız \" + Math.floor(Math.random() * 100));\n  render();\n});\n\nrender();\n",
+   "note": "Yıldız ekle, sonra Sil düğmelerine tıkla. Her değişiklikte dizi değişiyor ve render() listeyi baştan çiziyor.",
+   "mode": "page",
+   "html": "<ul id=\"list\"></ul>\n<button id=\"add\">Rastgele yıldız ekle</button>\n",
+   "css": ""
+  }
+ ],
+ "tasks": [
+  {
+   "id": "js-d15-t1",
+   "title": "İlk elemanlar",
+   "prompt": "`#cargo` listesine kodla iki eleman ekle:\n\n1. `Oksijen tüpü` yazan bir `<li>` oluştur ve `append` ile ekle.\n2. `Su deposu` yazan bir `<li>` oluştur ve `prepend` ile **başa** ekle.",
+   "starter": "const cargo = document.querySelector(\"#cargo\");\n\n// 1) Oksijen tüpü: oluştur, doldur, append\n\n// 2) Su deposu: oluştur, doldur, prepend\n\n",
+   "solution": "const cargo = document.querySelector(\"#cargo\");\n\n// 1) Oksijen tüpü: oluştur, doldur, append\nconst oxygen = document.createElement(\"li\");\noxygen.textContent = \"Oksijen tüpü\";\ncargo.append(oxygen);\n\n// 2) Su deposu: oluştur, doldur, prepend\nconst water = document.createElement(\"li\");\nwater.textContent = \"Su deposu\";\ncargo.prepend(water);\n",
+   "hints": [
+    "const li = document.createElement(\"li\");",
+    "li.textContent = \"Oksijen tüpü\"; cargo.append(li);",
+    "İkincisi için cargo.prepend(...)"
+   ],
+   "check": {
+    "code_contains": [
+     "createElement",
+     "append",
+     "prepend"
+    ],
+    "js": "const items = $$(\"#cargo li\");\nassert(items.length === 2, \"#cargo içinde 2 <li> olmalı.\");\nassert(items[0].textContent.trim() === \"Su deposu\" && items[1].textContent.trim() === \"Oksijen tüpü\", \"Sıra: önce 'Su deposu' (prepend), sonra 'Oksijen tüpü' olmalı.\");\nassert(/createElement/.test(_code), \"Elemanları createElement ile oluştur.\");"
+   },
+   "xp": 50,
+   "mode": "page",
+   "html": "<h1>Yük Listesi</h1>\n<ul id=\"cargo\"></ul>\n<p id=\"count\"></p>\n<p><input id=\"item-name\" placeholder=\"Yeni yük\"> <button id=\"add\">Ekle</button></p>\n",
+   "css": "#cargo li{margin:4px 0;cursor:pointer}.del{margin-left:8px;font-size:13px}#count{font-weight:bold}"
+  },
+  {
+   "id": "js-d15-t2",
+   "title": "Diziden liste",
+   "prompt": "`render()` fonksiyonunu tamamla:\n\n- `#cargo`'yu temizlesin,\n- `items` dizisindeki her yük için bir `<li>` oluşturup eklesin,\n- `#count`'a `3 yük` biçiminde yük sayısını yazsın.\n\nKontrol, diziye yeni yük ekleyip `render()`'ı tekrar çağıracak.",
+   "starter": "const items = [\"Oksijen\", \"Su\", \"Yakıt\"];\nconst cargo = document.querySelector(\"#cargo\");\n\nfunction render() {\n  // temizle, her yük için <li>, sonra #count\n}\n\nrender();\n",
+   "solution": "const items = [\"Oksijen\", \"Su\", \"Yakıt\"];\nconst cargo = document.querySelector(\"#cargo\");\n\nfunction render() {\n  // temizle, her yük için <li>, sonra #count\n  cargo.textContent = \"\";\n  for (const item of items) {\n    const li = document.createElement(\"li\");\n    li.textContent = item;\n    cargo.append(li);\n  }\n  document.querySelector(\"#count\").textContent = `${items.length} yük`;\n}\n\nrender();\n",
+   "hints": [
+    "Önce temizle: cargo.textContent = \"\";",
+    "for (const item of items) { ... createElement(\"li\") ... }",
+    "`${items.length} yük`"
+   ],
+   "check": {
+    "code_contains": [
+     "createElement",
+     "append"
+    ],
+    "js": "const texts = () => $$(\"#cargo li\").map((li) => li.textContent.trim()).join(\",\");\nassert(texts() === \"Oksijen,Su,Yakıt\", \"#cargo'da sırasıyla Oksijen, Su, Yakıt olmalı.\");\nassert($(\"#count\").textContent.trim() === \"3 yük\", \"#count '3 yük' olmalı.\");\nitems.push(\"Kalkan\");\nrender();\nassert(texts() === \"Oksijen,Su,Yakıt,Kalkan\", \"Diziye yük eklenip render() çağrılınca liste güncellenmeli; önce listeyi temizlemeyi unutma.\");\nassert($(\"#count\").textContent.trim() === \"4 yük\", \"#count items.length'ten hesaplanmalı ('4 yük').\");"
+   },
+   "xp": 50,
+   "mode": "page",
+   "html": "<h1>Yük Listesi</h1>\n<ul id=\"cargo\"></ul>\n<p id=\"count\"></p>\n<p><input id=\"item-name\" placeholder=\"Yeni yük\"> <button id=\"add\">Ekle</button></p>\n",
+   "css": "#cargo li{margin:4px 0;cursor:pointer}.del{margin-left:8px;font-size:13px}#count{font-weight:bold}"
+  },
+  {
+   "id": "js-d15-t3",
+   "title": "Kimlik etiketleri",
+   "prompt": "Her yükün bir kimliği (`id`) var. `render()` her `<li>`'ye yükün adını yazsın ve kimliğini `li.dataset.id` ile saklasın.\n\nSonra `#cargo`'ya **tek** bir `click` dinleyicisi ekle: tıklanan `<li>`'nin kimliğini `#count`'a `Seçilen kimlik: 12` biçiminde yazsın.",
+   "starter": "const parts = [\n  { id: 7, name: \"Oksijen\" },\n  { id: 12, name: \"Su\" },\n  { id: 31, name: \"Yakıt\" },\n];\nconst cargo = document.querySelector(\"#cargo\");\n\nfunction render() {\n  cargo.textContent = \"\";\n  for (const part of parts) {\n    // <li> oluştur: adını yaz, dataset.id'ye kimliğini koy\n  }\n}\n\nrender();\n\n// #cargo'ya tıklama dinleyicisi\n\n",
+   "solution": "const parts = [\n  { id: 7, name: \"Oksijen\" },\n  { id: 12, name: \"Su\" },\n  { id: 31, name: \"Yakıt\" },\n];\nconst cargo = document.querySelector(\"#cargo\");\n\nfunction render() {\n  cargo.textContent = \"\";\n  for (const part of parts) {\n    // <li> oluştur: adını yaz, dataset.id'ye kimliğini koy\n    const li = document.createElement(\"li\");\n    li.textContent = part.name;\n    li.dataset.id = part.id;\n    cargo.append(li);\n  }\n}\n\nrender();\n\n// #cargo'ya tıklama dinleyicisi\ncargo.addEventListener(\"click\", (e) => {\n  if (e.target.tagName !== \"LI\") return;\n  document.querySelector(\"#count\").textContent = `Seçilen kimlik: ${e.target.dataset.id}`;\n});\n",
+   "hints": [
+    "li.dataset.id = part.id;",
+    "cargo.addEventListener(\"click\", (e) => { ... })",
+    "Tıklanan li: e.target, kimliği: e.target.dataset.id"
+   ],
+   "check": {
+    "code_contains": [
+     "createElement",
+     "dataset",
+     "addEventListener"
+    ],
+    "js": "const items = $$(\"#cargo li\");\nassert(items.length === 3 && items.map((li) => li.textContent.trim()).join(\",\") === \"Oksijen,Su,Yakıt\", \"#cargo'da Oksijen, Su, Yakıt olmalı.\");\nassert(items[0].getAttribute(\"data-id\") === \"7\" && items[1].dataset.id === \"12\" && items[2].dataset.id === \"31\", \"Her <li>'nin dataset.id'si yükün kimliği olmalı (7, 12, 31).\");\nclick(items[1]);\nassert($(\"#count\").textContent.trim() === \"Seçilen kimlik: 12\", \"Su'ya tıklayınca #count 'Seçilen kimlik: 12' olmalı.\");\nparts.push({ id: 99, name: \"Kalkan\" });\nrender();\nclick($$(\"#cargo li\")[3]);\nassert($(\"#count\").textContent.trim() === \"Seçilen kimlik: 99\", \"Yeni eklenen yükler de çalışmalı: kimliği dataset'ten oku.\");"
+   },
+   "xp": 50,
+   "mode": "page",
+   "html": "<h1>Yük Listesi</h1>\n<ul id=\"cargo\"></ul>\n<p id=\"count\"></p>\n<p><input id=\"item-name\" placeholder=\"Yeni yük\"> <button id=\"add\">Ekle</button></p>\n",
+   "css": "#cargo li{margin:4px 0;cursor:pointer}.del{margin-left:8px;font-size:13px}#count{font-weight:bold}"
+  }
+ ],
+ "challenge": {
+  "id": "js-d15-c",
+  "title": "Ekle ve sil",
+  "prompt": "Yük listesini tam çalışır hâle getir:\n\n- `render()` her `<li>`'nin içine `Sil` yazan, `del` sınıflı bir düğme koysun; düğmenin `dataset.index`'i yükün dizideki sırası olsun.\n- `#add` tıklanınca `#item-name` kutusundaki metin (boşlukları `trim()` ile temizlenmiş) `items`'a eklensin, kutu temizlensin ve liste yeniden çizilsin. Boş metin eklenmesin.\n- `#cargo`'ya tek bir dinleyici ekle: bir `Sil` düğmesine tıklanınca o yük `splice` ile diziden silinsin ve liste yeniden çizilsin.",
+  "starter": "const items = [\"Oksijen\", \"Su\", \"Yakıt\"];\nconst cargo = document.querySelector(\"#cargo\");\nconst input = document.querySelector(\"#item-name\");\n\nfunction render() {\n  cargo.textContent = \"\";\n  items.forEach((item, i) => {\n    const li = document.createElement(\"li\");\n    li.textContent = item;\n    // Sil düğmesi: class \"del\", dataset.index = i\n    cargo.append(li);\n  });\n  document.querySelector(\"#count\").textContent = `${items.length} yük`;\n}\n\nrender();\n\n// Ekle düğmesi\n\n// Sil düğmeleri (olay yetkilendirme)\n\n",
+  "solution": "const items = [\"Oksijen\", \"Su\", \"Yakıt\"];\nconst cargo = document.querySelector(\"#cargo\");\nconst input = document.querySelector(\"#item-name\");\n\nfunction render() {\n  cargo.textContent = \"\";\n  items.forEach((item, i) => {\n    const li = document.createElement(\"li\");\n    li.textContent = item;\n    // Sil düğmesi: class \"del\", dataset.index = i\n    const del = document.createElement(\"button\");\n    del.textContent = \"Sil\";\n    del.classList.add(\"del\");\n    del.dataset.index = i;\n    li.append(del);\n    cargo.append(li);\n  });\n  document.querySelector(\"#count\").textContent = `${items.length} yük`;\n}\n\nrender();\n\n// Ekle düğmesi\ndocument.querySelector(\"#add\").addEventListener(\"click\", () => {\n  const name = input.value.trim();\n  if (name === \"\") return;\n  items.push(name);\n  input.value = \"\";\n  render();\n});\n\n// Sil düğmeleri (olay yetkilendirme)\ncargo.addEventListener(\"click\", (e) => {\n  if (!e.target.classList.contains(\"del\")) return;\n  items.splice(Number(e.target.dataset.index), 1);\n  render();\n});\n",
+  "hints": [
+   "const del = document.createElement(\"button\"); del.classList.add(\"del\"); del.dataset.index = i; li.append(del);",
+   "Ekle: const name = input.value.trim(); if (name === \"\") return;",
+   "Sil: items.splice(Number(e.target.dataset.index), 1); render();"
+  ],
+  "check": {
+   "code_contains": [
+    "createElement",
+    "dataset",
+    "splice"
+   ],
+   "js": "assert($$(\"#cargo li\").length === 3 && $$(\"#cargo .del\").length === 3, \"Her yükün yanında del sınıflı bir Sil düğmesi olmalı.\");\ntype(\"#item-name\", \" Kalkan \");\nclick(\"#add\");\nassert(items.length === 4 && items[3] === \"Kalkan\", \"Ekle'ye tıklayınca kutudaki metin (boşlukları temizlenmiş) items dizisine eklenmeli.\");\nassert($$(\"#cargo li\").length === 4 && $$(\"#cargo li\")[3].textContent.includes(\"Kalkan\"), \"Ekledikten sonra liste yeniden çizilmeli.\");\nassert($(\"#item-name\").value === \"\", \"Ekledikten sonra kutu temizlenmeli.\");\ntype(\"#item-name\", \"   \");\nclick(\"#add\");\nassert(items.length === 4, \"Boş metin eklenmemeli.\");\nclick($$(\"#cargo .del\")[0]);\nassert(items.length === 3 && items[0] === \"Su\", \"İlk Sil düğmesine tıklayınca Oksijen diziden silinmeli.\");\nassert($$(\"#cargo li\").length === 3 && $(\"#count\").textContent.trim() === \"3 yük\", \"Silince liste ve #count güncellenmeli.\");"
+  },
+  "xp": 75,
+  "mode": "page",
+  "html": "<h1>Yük Listesi</h1>\n<ul id=\"cargo\"></ul>\n<p id=\"count\"></p>\n<p><input id=\"item-name\" placeholder=\"Yeni yük\"> <button id=\"add\">Ekle</button></p>\n",
+  "css": "#cargo li{margin:4px 0;cursor:pointer}.del{margin-left:8px;font-size:13px}#count{font-weight:bold}"
+ },
+ "project_contribution": "Envanter listesi ekranda",
+ "project_task": {
+  "id": "js-d15-p",
+  "title": "Envanter ekranda",
+  "prompt": "Oyun panelinde envanter görünsün. `renderInventory()` fonksiyonunu tamamla:\n\n- `#inventory` listesini temizlesin,\n- `inventory` dizisindeki her eşya için `item` sınıflı bir `<li>` oluşturup eklesin.\n\nÖnizlemede Başla'ya tıklayınca envanteri görürsün. Kontrol, envantere yeni eşya ekleyip `renderInventory()`'yi tekrar çağıracak.",
+  "starter": "const inventory = [\"kalkan\", \"lazer\", \"harita\"];\n\n// (14. gün) Başla düğmesi oyun panelini açar\ndocument.querySelector(\"#start-btn\").addEventListener(\"click\", () => {\n  document.querySelector(\"#start-screen\").classList.add(\"hidden\");\n  document.querySelector(\"#game-panel\").classList.remove(\"hidden\");\n});\n\nfunction renderInventory() {\n  const list = document.querySelector(\"#inventory\");\n  // temizle, her eşya için <li class=\"item\">\n}\n\nrenderInventory();\n",
+  "solution": "const inventory = [\"kalkan\", \"lazer\", \"harita\"];\n\n// (14. gün) Başla düğmesi oyun panelini açar\ndocument.querySelector(\"#start-btn\").addEventListener(\"click\", () => {\n  document.querySelector(\"#start-screen\").classList.add(\"hidden\");\n  document.querySelector(\"#game-panel\").classList.remove(\"hidden\");\n});\n\nfunction renderInventory() {\n  const list = document.querySelector(\"#inventory\");\n  // temizle, her eşya için <li class=\"item\">\n  list.textContent = \"\";\n  for (const thing of inventory) {\n    const li = document.createElement(\"li\");\n    li.textContent = thing;\n    li.classList.add(\"item\");\n    list.append(li);\n  }\n}\n\nrenderInventory();\n",
+  "hints": [
+   "Önce temizle: list.textContent = \"\";",
+   "const li = document.createElement(\"li\"); li.classList.add(\"item\");",
+   "list.append(li);"
+  ],
+  "check": {
+   "code_contains": [
+    "createElement",
+    "append"
+   ],
+   "js": "const lis = () => $$(\"#inventory li\");\nassert(lis().length === 3, \"#inventory içinde 3 <li> olmalı (her eşya için bir tane).\");\nassert(lis().map((li) => li.textContent.trim()).join(\",\") === \"kalkan,lazer,harita\", \"Eşyalar sırasıyla kalkan, lazer, harita olmalı.\");\nassert(lis().every((li) => li.classList.contains(\"item\")), \"Her <li>'ye item sınıfı eklenmeli.\");\ninventory.push(\"roket\");\nrenderInventory();\nassert(lis().length === 4 && lis()[3].textContent.trim() === \"roket\", \"Eşya ekleyip renderInventory() çağırınca liste güncellenmeli; önce listeyi temizle.\");"
+  },
+  "xp": 100,
+  "mode": "page",
+  "html": "<div id=\"start-screen\" class=\"screen\">\n  <h1 id=\"game-title\">Oyun</h1>\n  <p>Pilot: <span id=\"pilot\">?</span></p>\n  <p>Seviye: <span id=\"level\">?</span></p>\n  <button id=\"start-btn\">Başla</button>\n</div>\n<div id=\"game-panel\" class=\"screen hidden\">\n  <p id=\"hud\">Skor: 0</p>\n  <h2>Envanter</h2>\n  <ul id=\"inventory\"></ul>\n</div>\n",
+  "css": "html,body{background:#0b1026;color:#e8ecff}.screen{padding:12px;border:1px solid #2c3566;border-radius:10px}.hidden{display:none}#game-title{color:#f7df1e;margin-top:0}#start-btn{padding:6px 14px;border-radius:6px;border:1px solid #7a86b8}.ready{background:#f7df1e;color:#0b1026;font-weight:bold}.item{margin:4px 0}"
+ },
+ "tracks": {
+  "js-web": {
+   "project_contribution": "Proje kartları",
+   "project_task": {
+    "id": "js-d15-pw",
+    "title": "Proje kartları",
+    "prompt": "Projelerini `projects` dizisinden kart olarak çiz. `renderProjects()` fonksiyonu:\n\n- `#projects`'i temizlesin,\n- Her proje için `card` sınıflı bir `<article>` oluştursun; içine proje adını yazan bir `<h3>` ve etiketi yazan, `tag` sınıflı bir `<p>` koysun,\n- Kartı `#projects`'e eklesin.",
+    "starter": "const projects = [\n  { title: \"Hesap Makinesi\", tag: \"js\" },\n  { title: \"Kedi Galerisi\", tag: \"html\" },\n  { title: \"Yıldız Oyunu\", tag: \"js\" },\n];\n\nfunction renderProjects() {\n  const box = document.querySelector(\"#projects\");\n  // temizle, her proje için article.card > h3 + p.tag\n}\n\nrenderProjects();\n",
+    "solution": "const projects = [\n  { title: \"Hesap Makinesi\", tag: \"js\" },\n  { title: \"Kedi Galerisi\", tag: \"html\" },\n  { title: \"Yıldız Oyunu\", tag: \"js\" },\n];\n\nfunction renderProjects() {\n  const box = document.querySelector(\"#projects\");\n  // temizle, her proje için article.card > h3 + p.tag\n  box.textContent = \"\";\n  for (const p of projects) {\n    const card = document.createElement(\"article\");\n    card.classList.add(\"card\");\n    const title = document.createElement(\"h3\");\n    title.textContent = p.title;\n    const tag = document.createElement(\"p\");\n    tag.classList.add(\"tag\");\n    tag.textContent = p.tag;\n    card.append(title, tag);\n    box.append(card);\n  }\n}\n\nrenderProjects();\n",
+    "hints": [
+     "const card = document.createElement(\"article\"); card.classList.add(\"card\");",
+     "h3 ve p'yi de oluştur, sonra card.append(title, tag);",
+     "Başta box.textContent = \"\"; ile temizle."
+    ],
+    "check": {
+     "code_contains": [
+      "createElement",
+      "append"
+     ],
+     "js": "const cards = () => $$(\"#projects .card\");\nassert(cards().length === 3, \"#projects içinde 3 kart (.card) olmalı.\");\nassert(cards().every((c) => c.tagName === \"ARTICLE\"), \"Kartlar <article> olmalı.\");\nassert(cards().map((c) => c.querySelector(\"h3\") && c.querySelector(\"h3\").textContent.trim()).join(\",\") === \"Hesap Makinesi,Kedi Galerisi,Yıldız Oyunu\", \"Her kartta proje adını yazan bir <h3> olmalı.\");\nassert(cards().every((c, i) => c.querySelector(\".tag\") && c.querySelector(\".tag\").textContent.trim() === projects[i].tag), \"Her kartta etiketi yazan p.tag olmalı.\");\nprojects.push({ title: \"Blog\", tag: \"css\" });\nrenderProjects();\nassert(cards().length === 4 && cards()[3].querySelector(\"h3\").textContent.trim() === \"Blog\", \"Yeni proje ekleyip renderProjects() çağırınca 4 kart olmalı; önce temizlemeyi unutma.\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<header id=\"site-header\">\n  <h1 id=\"site-name\">Adın</h1>\n  <p id=\"tagline\">Kısa bir cümle</p>\n  <button id=\"theme-btn\">Koyu tema</button>\n</header>\n<main>\n  <h2>Projelerim</h2>\n  <div id=\"projects\"></div>\n</main>\n",
+    "css": "html:has(body.dark){background:#0b1026}body.dark{background:#0b1026;color:#e8ecff}#site-header{padding:10px 0;border-bottom:3px solid #c9cfe8}#site-header.filled{border-bottom-color:#f7df1e}#site-name{margin:0}.card{border:1px solid #c9cfe8;border-radius:8px;padding:6px 10px;margin:6px 0}.card h3{margin:0}.tag{margin:2px 0 0;font-size:13px;color:#7a86b8}"
+   }
+  },
+  "js-app": {
+   "project_contribution": "Yeni görev ekle",
+   "project_task": {
+    "id": "js-d15-pa",
+    "title": "Yeni görev ekle",
+    "prompt": "Ekle düğmesi (`#add-btn`) çalışsın. Tıklanınca:\n\n- `#new-task` kutusundaki metni `trim()` ile al; boşsa hiçbir şey yapma.\n- `task` sınıflı bir `<li>` oluştur; içine metni yazan `name` sınıflı bir `<span>` ve `Tamamla` yazan `done-btn` sınıflı bir `<button>` koy.\n- `<li>`'yi `#task-list`'e ekle, kutuyu temizle, `updateSummary()` çağır.\n\nTamamla düğmeleri olay yetkilendirmeyle çalıştığı için yeni görevlerde de işe yarar.",
+    "starter": "const list = document.querySelector(\"#task-list\");\nconst input = document.querySelector(\"#new-task\");\n\nfunction updateSummary() {\n  const all = document.querySelectorAll(\".task\").length;\n  const done = document.querySelectorAll(\".task.done\").length;\n  document.querySelector(\"#summary\").textContent = `${done}/${all} görev tamamlandı`;\n}\nupdateSummary();\n\n// Tamamla düğmeleri (olay yetkilendirme: yeni görevlerde de çalışır)\nlist.addEventListener(\"click\", (e) => {\n  if (!e.target.classList.contains(\"done-btn\")) return;\n  const li = e.target.parentElement;\n  li.classList.toggle(\"done\");\n  e.target.textContent = li.classList.contains(\"done\") ? \"Geri al\" : \"Tamamla\";\n  updateSummary();\n});\n\n// Ekle düğmesi: yeni görev oluştur\n\n",
+    "solution": "const list = document.querySelector(\"#task-list\");\nconst input = document.querySelector(\"#new-task\");\n\nfunction updateSummary() {\n  const all = document.querySelectorAll(\".task\").length;\n  const done = document.querySelectorAll(\".task.done\").length;\n  document.querySelector(\"#summary\").textContent = `${done}/${all} görev tamamlandı`;\n}\nupdateSummary();\n\n// Tamamla düğmeleri (olay yetkilendirme: yeni görevlerde de çalışır)\nlist.addEventListener(\"click\", (e) => {\n  if (!e.target.classList.contains(\"done-btn\")) return;\n  const li = e.target.parentElement;\n  li.classList.toggle(\"done\");\n  e.target.textContent = li.classList.contains(\"done\") ? \"Geri al\" : \"Tamamla\";\n  updateSummary();\n});\n\n// Ekle düğmesi: yeni görev oluştur\ndocument.querySelector(\"#add-btn\").addEventListener(\"click\", () => {\n  const text = input.value.trim();\n  if (text === \"\") return;\n  const li = document.createElement(\"li\");\n  li.classList.add(\"task\");\n  const name = document.createElement(\"span\");\n  name.classList.add(\"name\");\n  name.textContent = text;\n  const btn = document.createElement(\"button\");\n  btn.classList.add(\"done-btn\");\n  btn.textContent = \"Tamamla\";\n  li.append(name, \" \", btn);\n  list.append(li);\n  input.value = \"\";\n  updateSummary();\n});\n",
+    "hints": [
+     "const text = input.value.trim(); if (text === \"\") return;",
+     "span ve button'u oluşturup li.append(name, btn); ile ekle.",
+     "Sonra list.append(li); input.value = \"\"; updateSummary();"
+    ],
+    "check": {
+     "code_contains": [
+      "createElement",
+      "append",
+      "trim"
+     ],
+     "js": "assert($$(\".task\").length === 4 && $(\"#summary\").textContent.trim() === \"1/4 görev tamamlandı\", \"Başlangıçta 4 görev ve '1/4 görev tamamlandı' olmalı.\");\ntype(\"#new-task\", \"  Kimya özeti \");\nclick(\"#add-btn\");\nconst rows = $$(\"#task-list .task\");\nassert(rows.length === 5, \"Ekle'ye tıklayınca #task-list'e task sınıflı yeni bir <li> eklenmeli.\");\nconst last = rows[4];\nassert(last.querySelector(\".name\") && last.querySelector(\".name\").textContent.trim() === \"Kimya özeti\", \"Yeni görevin adı span.name içinde 'Kimya özeti' olmalı (trim ile).\");\nassert(last.querySelector(\".done-btn\") && last.querySelector(\".done-btn\").textContent.trim() === \"Tamamla\", \"Yeni görevde 'Tamamla' yazan button.done-btn olmalı.\");\nassert($(\"#new-task\").value === \"\", \"Ekledikten sonra kutu temizlenmeli.\");\nassert($(\"#summary\").textContent.trim() === \"1/5 görev tamamlandı\", \"Özet güncellenmeli: '1/5 görev tamamlandı'.\");\ntype(\"#new-task\", \"   \");\nclick(\"#add-btn\");\nassert($$(\"#task-list .task\").length === 5, \"Boş görev eklenmemeli.\");\nclick(last.querySelector(\".done-btn\"));\nassert(last.classList.contains(\"done\") && $(\"#summary\").textContent.trim() === \"2/5 görev tamamlandı\", \"Yeni görevin Tamamla düğmesi de çalışmalı.\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<h1>Çalışma Asistanım</h1>\n<p id=\"summary\">...</p>\n<ul id=\"task-list\">\n  <li class=\"task done\"><span class=\"name\">Matematik ödevi</span> <button class=\"done-btn\">Geri al</button></li>\n  <li class=\"task\"><span class=\"name\">Fizik tekrarı</span> <button class=\"done-btn\">Tamamla</button></li>\n  <li class=\"task\"><span class=\"name\">İngilizce kelimeler</span> <button class=\"done-btn\">Tamamla</button></li>\n  <li class=\"task\"><span class=\"name\">Kitap okuma</span> <button class=\"done-btn\">Tamamla</button></li>\n</ul>\n<p><input id=\"new-task\" placeholder=\"Yeni görev\"> <button id=\"add-btn\">Ekle</button></p>\n",
+    "css": "#summary{font-weight:bold}.task{margin:4px 0}.done .name{text-decoration:line-through;color:#7a86b8}.done-btn{font-size:13px;margin-left:6px}"
+   }
+  },
+  "js-quiz": {
+   "project_contribution": "Seçenekleri oluştur",
+   "project_task": {
+    "id": "js-d15-pq",
+    "title": "Seçenekleri oluştur",
+    "prompt": "Seçenek düğmeleri artık HTML'de yok; soruya göre kodla oluşturulacak (soruların 2, 3 ya da 4 seçeneği olabilir). `renderOptions(q)` fonksiyonu:\n\n- `#question`'a `q.text`'i yazsın, `#options`'ı temizlesin,\n- Her seçenek için `option` sınıflı bir `<button>` oluştursun; metni seçenek, `dataset.index`'i sırası olsun,\n- Düğmeye tıklanınca sırası `q.answer`'a eşitse `#feedback`'e `Doğru!`, değilse `Yanlış` yazsın.",
+    "starter": "const question = { text: \"Kızıl gezegen hangisi?\", options: [\"Mars\", \"Venüs\", \"Merkür\"], answer: 0 };\nconst feedback = document.querySelector(\"#feedback\");\n\nfunction renderOptions(q) {\n  const box = document.querySelector(\"#options\");\n  // soruyu yaz, kutuyu temizle, her seçenek için düğme oluştur\n}\n\nrenderOptions(question);\n",
+    "solution": "const question = { text: \"Kızıl gezegen hangisi?\", options: [\"Mars\", \"Venüs\", \"Merkür\"], answer: 0 };\nconst feedback = document.querySelector(\"#feedback\");\n\nfunction renderOptions(q) {\n  const box = document.querySelector(\"#options\");\n  // soruyu yaz, kutuyu temizle, her seçenek için düğme oluştur\n  document.querySelector(\"#question\").textContent = q.text;\n  box.textContent = \"\";\n  q.options.forEach((option, i) => {\n    const btn = document.createElement(\"button\");\n    btn.classList.add(\"option\");\n    btn.textContent = option;\n    btn.dataset.index = i;\n    btn.addEventListener(\"click\", () => {\n      feedback.textContent = i === q.answer ? \"Doğru!\" : \"Yanlış\";\n    });\n    box.append(btn);\n  });\n}\n\nrenderOptions(question);\n",
+    "hints": [
+     "q.options.forEach((option, i) => { const btn = document.createElement(\"button\"); ... })",
+     "btn.dataset.index = i; btn.classList.add(\"option\");",
+     "btn.addEventListener(\"click\", () => { ... i === q.answer ... });"
+    ],
+    "check": {
+     "code_contains": [
+      "createElement",
+      "dataset",
+      "addEventListener"
+     ],
+     "js": "const btns = () => $$(\"#options .option\");\nassert($(\"#question\").textContent.trim() === \"Kızıl gezegen hangisi?\", \"#question 'Kızıl gezegen hangisi?' olmalı.\");\nassert(btns().length === 3 && btns().map((b) => b.textContent.trim()).join(\",\") === \"Mars,Venüs,Merkür\", \"#options içinde Mars, Venüs, Merkür yazan 3 .option düğmesi olmalı.\");\nassert(btns().every((b, i) => b.tagName === \"BUTTON\" && b.dataset.index === String(i)), \"Her düğme <button> olmalı ve dataset.index'i sırası olmalı (0, 1, 2).\");\nclick(btns()[2]);\nassert($(\"#feedback\").textContent.trim() === \"Yanlış\", \"Yanlış seçeneğe tıklayınca #feedback 'Yanlış' olmalı.\");\nclick(btns()[0]);\nassert($(\"#feedback\").textContent.trim() === \"Doğru!\", \"Doğru seçeneğe tıklayınca #feedback 'Doğru!' olmalı.\");\nrenderOptions({ text: \"Halkalı gezegen?\", options: [\"Mars\", \"Venüs\", \"Merkür\", \"Satürn\"], answer: 3 });\nassert(btns().length === 4, \"renderOptions önce kutuyu temizlemeli; 4 seçenekli soruda 4 düğme olmalı.\");\nassert($(\"#question\").textContent.trim() === \"Halkalı gezegen?\", \"#question yeni sorunun metnini göstermeli.\");\nclick(btns()[3]);\nassert($(\"#feedback\").textContent.trim() === \"Doğru!\", \"Doğru cevap q.answer'dan okunmalı.\");"
+    },
+    "xp": 100,
+    "mode": "page",
+    "html": "<h1>Bilgi Yarışması</h1>\n<p id=\"question\">Soru yükleniyor...</p>\n<div id=\"options\"></div>\n<p id=\"feedback\"></p>\n<p id=\"score\">Puan: 0</p>\n",
+    "css": "#question{font-size:18px;font-weight:bold}.option{display:block;margin:6px 0;padding:6px 12px;min-width:180px;text-align:left}#feedback{font-weight:bold}"
+   }
+  }
+ },
+ "available": true
+}

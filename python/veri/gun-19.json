@@ -1,0 +1,1806 @@
+{
+ "day": 19,
+ "title": "Dosya işlemleri",
+ "region": "ada",
+ "project_contribution": "Oyunu kaydetme",
+ "game_role": "Oyunu Kaydet ve Yükle düğmeleri senin fonksiyonlarını kullanır.",
+ "xp_complete": 150,
+ "objective": "Dosyaya yazmak, dosyadan okumak ve JSON ile veriyi kaydetmek",
+ "story": "Adanın deniz fenerinde bir kaptan günlüğü bulduk. Kaptan her akşam olanları deftere yazmış, böylece yüzlerce yıl sonra biz okuyabiliyoruz. Programların da bir defteri olabilir: **dosyalar**. Program kapansa bile dosyadaki bilgi kalır. Bugün oyunumuzu kaydetmeyi öğreneceğiz.",
+ "sections": [
+  {
+   "title": "Dosya açmak",
+   "body": "`open(dosya_adı, mod)` bir dosyayı açar. Mod, ne yapmak istediğini söyler:\n\n- `\"r\"` okumak için (varsayılan)\n- `\"w\"` yazmak için: dosya yoksa oluşturur, **varsa içini siler**\n- `\"a\"` sonuna eklemek için\n\nDosyayı işimiz bitince kapatmak gerekir. `with` bunu bizim için otomatik yapar:\n\n```python\nwith open(\"gunluk.txt\", \"w\") as f:\n    f.write(\"Bugün Python öğrendim\\n\")\n```\n\n`\\n` yeni satır demektir. `write` kendisi alt satıra geçmez."
+  },
+  {
+   "title": "Okumak",
+   "body": "```python\nwith open(\"gunluk.txt\") as f:\n    text = f.read()          # tüm dosya tek bir yazı\n\nwith open(\"gunluk.txt\") as f:\n    for line in f:           # satır satır\n        print(line.strip())\n```\n\n`strip()` satır sonundaki `\\n` karakterini temizler."
+  },
+  {
+   "title": "JSON ile kaydetmek",
+   "body": "Listeleri ve sözlükleri dosyaya kaydetmenin en kolay yolu **JSON** biçimidir:\n\n```python\nimport json\n\nhero = {\"name\": \"Piko\", \"hp\": 80}\nwith open(\"kayit.json\", \"w\") as f:\n    json.dump(hero, f)\n\nwith open(\"kayit.json\") as f:\n    loaded = json.load(f)\n```\n\nDosya var mı diye bakmak için: `import os` ve `os.path.exists(\"kayit.json\")`"
+  },
+  {
+   "title": "Bu sitede dosyalar",
+   "body": "Burada yazdığın dosyalar tarayıcının hafızasında, **sadece o çalıştırma boyunca** yaşar. Bir sonraki çalıştırmada her şey temiz başlar. Bu yüzden görevlerde önce yazıp sonra aynı kodda okuyacağız.\n\nKendi bilgisayarında Python kurduğunda dosyalar gerçekten diske yazılır ve kalıcı olur."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Yaz ve oku",
+   "code": "with open(\"gunluk.txt\", \"w\") as f:\n    f.write(\"1. gün: Kampa vardık\\n\")\n    f.write(\"2. gün: Köyü gezdik\\n\")\n\nwith open(\"gunluk.txt\") as f:\n    print(f.read())\n",
+   "note": ""
+  },
+  {
+   "title": "Sonuna ekle",
+   "code": "with open(\"liste.txt\", \"w\") as f:\n    f.write(\"kılıç\\n\")\n\nwith open(\"liste.txt\", \"a\") as f:\n    f.write(\"iksir\\n\")\n\nwith open(\"liste.txt\") as f:\n    for i, line in enumerate(f, 1):\n        print(i, line.strip())\n",
+   "note": ""
+  },
+  {
+   "title": "JSON kaydı",
+   "code": "import json, os\n\nhero = {\"name\": \"Piko\", \"hp\": 80, \"bag\": [\"harita\"]}\nwith open(\"kayit.json\", \"w\") as f:\n    json.dump(hero, f)\n\nprint(\"Dosya var mı?\", os.path.exists(\"kayit.json\"))\nwith open(\"kayit.json\") as f:\n    print(json.load(f))\n",
+   "note": ""
+  }
+ ],
+ "tasks": [
+  {
+   "id": "d19-t1",
+   "title": "Günlük yaz",
+   "prompt": "`entry` yazısını `gunluk.txt` dosyasına yaz, sonra dosyayı okuyup içeriğini yazdır.",
+   "starter": "entry = \"Bugün Python öğrendim\"\n\n# gunluk.txt dosyasına yaz\n\n# Dosyayı oku ve yazdır\n",
+   "solution": "entry = \"Bugün Python öğrendim\"\n\nwith open(\"gunluk.txt\", \"w\") as f:\n    f.write(entry)\n\nwith open(\"gunluk.txt\") as f:\n    print(f.read())\n",
+   "hints": [
+    "Yazmak için: with open(\"gunluk.txt\", \"w\") as f:",
+    "Okumak için: with open(\"gunluk.txt\") as f: print(f.read())"
+   ],
+   "check": {
+    "code_contains": [
+     "open(",
+     "gunluk.txt"
+    ],
+    "python": "\nout, _ = _run(_set(_code, \"entry\", \"Deniz feneri parlıyor\"))\nassert \"Deniz feneri parlıyor\" in out, \"Yazdığın yazıyı dosyadan okuyup yazdırmalısın.\"\nout, _ = _run(_set(_code, \"entry\", \"Ada\") + '\\nprint(open(\"gunluk.txt\").read() == \"Ada\")\\n')\nassert out.strip().endswith(\"True\"), \"gunluk.txt dosyasının içinde sadece entry olmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "entry = \"Bugün Python öğrendim\"",
+      "notes": [
+       "`entry` adında bir değişken oluşturuluyor ve içine `\"Bugün Python öğrendim\"` (metin (str)) konuyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "with open(\"gunluk.txt\", \"w\") as f:",
+      "notes": [
+       "`with open(\"gunluk.txt\", \"w\") as f`: dosya açılır, blok bitince otomatik kapanır."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "    f.write(entry)",
+      "notes": [
+       "`f.write(entry)`: `f` üzerinde `write` metodunu çalıştırır. Dosyaya metin yazar."
+      ]
+     },
+     {
+      "n": 6,
+      "code": "with open(\"gunluk.txt\") as f:",
+      "notes": [
+       "`with open(\"gunluk.txt\") as f`: dosya açılır, blok bitince otomatik kapanır."
+      ]
+     },
+     {
+      "n": 7,
+      "code": "    print(f.read())",
+      "notes": [
+       "`print(f.read())`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "entry",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `\"Bugün Python öğrendim\"`."
+     },
+     {
+      "term": "f",
+      "kind": "değişken",
+      "desc": "Açılan dosyayı temsil eder."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "with",
+      "kind": "anahtar kelime",
+      "desc": "Dosya gibi kaynakları açar ve blok bitince otomatik kapatır."
+     },
+     {
+      "term": "open()",
+      "kind": "fonksiyon",
+      "desc": "Bir dosyayı okumak ya da yazmak için açar. \"r\" okuma, \"w\" yazma, \"a\" sona ekleme."
+     },
+     {
+      "term": ".write()",
+      "kind": "metot",
+      "desc": "Dosyaya metin yazar."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     },
+     {
+      "term": ".read()",
+      "kind": "metot",
+      "desc": "Dosyanın tamamını metin olarak okur."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d19-t2",
+   "title": "Satırları say",
+   "prompt": "`lines` listesindeki her eşyayı ayrı satır olarak `canta.txt` dosyasına yaz. Sonra dosyayı okuyup kaç satır olduğunu `count` değişkenine koy.",
+   "starter": "lines = [\"kılıç\", \"kalkan\", \"iksir\"]\n\n# Her eşyayı ayrı satıra yaz\n\ncount = 0\n\nprint(count, \"satır\")\n",
+   "solution": "lines = [\"kılıç\", \"kalkan\", \"iksir\"]\n\nwith open(\"canta.txt\", \"w\") as f:\n    for item in lines:\n        f.write(item + \"\\n\")\n\ncount = 0\nwith open(\"canta.txt\") as f:\n    for line in f:\n        count += 1\n\nprint(count, \"satır\")\n",
+   "hints": [
+    "Her eşyanın sonuna \"\\n\" ekle.",
+    "Okurken for line in f: ile say."
+   ],
+   "check": {
+    "code_contains": [
+     "open("
+    ],
+    "python": "\n_, g = _run(_set(_code, \"lines\", [\"a\", \"b\", \"c\", \"d\", \"e\"]))\nassert g.get(\"count\") == 5, \"5 eşya varken count 5 olmalı. Her eşyayı ayrı satıra yaz, sonra dosyadan say.\"\ntest = _set(_code, \"lines\", [\"x\", \"y\"]) + '\\nprint(\"OKU:\", open(\"canta.txt\").read().split())\\n'\nout, _ = _run(test)\nassert \"OKU: ['x', 'y']\" in out, \"canta.txt dosyasında eşyalar satır satır yazılı olmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "lines = [\"kılıç\", \"kalkan\", \"iksir\"]",
+      "notes": [
+       "`lines` adında bir değişken oluşturuluyor ve içine `[\"kılıç\", \"kalkan\", \"iksir\"]` (liste) konuyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "with open(\"canta.txt\", \"w\") as f:",
+      "notes": [
+       "`with open(\"canta.txt\", \"w\") as f`: dosya açılır, blok bitince otomatik kapanır."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "    for item in lines:",
+      "notes": [
+       "Döngü: `lines` içindeki her eleman sırayla `item` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+      ]
+     },
+     {
+      "n": 5,
+      "code": "        f.write(item + \"\\n\")",
+      "notes": [
+       "`f.write(item + \"\\n\")`: `f` üzerinde `write` metodunu çalıştırır. Dosyaya metin yazar."
+      ]
+     },
+     {
+      "n": 7,
+      "code": "count = 0",
+      "notes": [
+       "`count` adında bir değişken oluşturuluyor ve içine `0` (tam sayı) konuyor."
+      ]
+     },
+     {
+      "n": 8,
+      "code": "with open(\"canta.txt\") as f:",
+      "notes": [
+       "`with open(\"canta.txt\") as f`: dosya açılır, blok bitince otomatik kapanır."
+      ]
+     },
+     {
+      "n": 9,
+      "code": "    for line in f:",
+      "notes": [
+       "Döngü: `f` içindeki her eleman sırayla `line` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+      ]
+     },
+     {
+      "n": 10,
+      "code": "        count += 1",
+      "notes": [
+       "`count += 1`: `count` değişkeninin değeri güncelleniyor."
+      ]
+     },
+     {
+      "n": 12,
+      "code": "print(count, \"satır\")",
+      "notes": [
+       "`print(count, \"satır\")`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "lines",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `[\"kılıç\", \"kalkan\", \"iksir\"]`."
+     },
+     {
+      "term": "f",
+      "kind": "değişken",
+      "desc": "Açılan dosyayı temsil eder."
+     },
+     {
+      "term": "count",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `0`."
+     },
+     {
+      "term": "item",
+      "kind": "döngü değişkeni",
+      "desc": "Döngünün her turunda `lines` içindeki sıradaki elemanı tutar."
+     },
+     {
+      "term": "line",
+      "kind": "döngü değişkeni",
+      "desc": "Döngünün her turunda `f` içindeki sıradaki elemanı tutar."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "with",
+      "kind": "anahtar kelime",
+      "desc": "Dosya gibi kaynakları açar ve blok bitince otomatik kapatır."
+     },
+     {
+      "term": "open()",
+      "kind": "fonksiyon",
+      "desc": "Bir dosyayı okumak ya da yazmak için açar. \"r\" okuma, \"w\" yazma, \"a\" sona ekleme."
+     },
+     {
+      "term": "for",
+      "kind": "anahtar kelime",
+      "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+     },
+     {
+      "term": ".write()",
+      "kind": "metot",
+      "desc": "Dosyaya metin yazar."
+     },
+     {
+      "term": "+",
+      "kind": "operatör",
+      "desc": "Toplama; metinlerde ve listelerde uç uca ekleme."
+     },
+     {
+      "term": "+=",
+      "kind": "operatör",
+      "desc": "Değişkenin kendi değerine ekler: x += 1 → x = x + 1."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     }
+    ]
+   }
+  },
+  {
+   "id": "d19-t3",
+   "title": "Sonuna ekle",
+   "prompt": "`skorlar.txt` dosyasına önce `100` yaz. Sonra dosyayı **ekleme modunda** açıp `new_score`'u ekle. En sonda dosyayı okuyup yazdır.",
+   "starter": "new_score = 250\n\nwith open(\"skorlar.txt\", \"w\") as f:\n    f.write(\"100\\n\")\n\n# new_score'u dosyanın sonuna ekle\n\nwith open(\"skorlar.txt\") as f:\n    print(f.read())\n",
+   "solution": "new_score = 250\n\nwith open(\"skorlar.txt\", \"w\") as f:\n    f.write(\"100\\n\")\n\nwith open(\"skorlar.txt\", \"a\") as f:\n    f.write(str(new_score) + \"\\n\")\n\nwith open(\"skorlar.txt\") as f:\n    print(f.read())\n",
+   "hints": [
+    "Ekleme modu: open(\"skorlar.txt\", \"a\")",
+    "Sayıyı yazmadan önce str() ile yazıya çevir."
+   ],
+   "check": {
+    "python": "\nassert '\"a\"' in _code or \"'a'\" in _code, \"Dosyayı ekleme modunda aç: open('skorlar.txt', 'a')\"\nout, _ = _run(_set(_code, \"new_score\", 777))\nassert out.split() == [\"100\", \"777\"], \"Dosyada önce 100, sonra yeni skor olmalı.\"\n"
+   },
+   "xp": 50,
+   "explain": {
+    "lines": [
+     {
+      "n": 1,
+      "code": "new_score = 250",
+      "notes": [
+       "`new_score` adında bir değişken oluşturuluyor ve içine `250` (tam sayı) konuyor."
+      ]
+     },
+     {
+      "n": 3,
+      "code": "with open(\"skorlar.txt\", \"w\") as f:",
+      "notes": [
+       "`with open(\"skorlar.txt\", \"w\") as f`: dosya açılır, blok bitince otomatik kapanır."
+      ]
+     },
+     {
+      "n": 4,
+      "code": "    f.write(\"100\\n\")",
+      "notes": [
+       "`f.write(\"100\\n\")`: `f` üzerinde `write` metodunu çalıştırır. Dosyaya metin yazar."
+      ]
+     },
+     {
+      "n": 6,
+      "code": "with open(\"skorlar.txt\", \"a\") as f:",
+      "notes": [
+       "`with open(\"skorlar.txt\", \"a\") as f`: dosya açılır, blok bitince otomatik kapanır."
+      ]
+     },
+     {
+      "n": 7,
+      "code": "    f.write(str(new_score) + \"\\n\")",
+      "notes": [
+       "`f.write(str(new_score) + \"\\n\")`: `f` üzerinde `write` metodunu çalıştırır. Dosyaya metin yazar."
+      ]
+     },
+     {
+      "n": 9,
+      "code": "with open(\"skorlar.txt\") as f:",
+      "notes": [
+       "`with open(\"skorlar.txt\") as f`: dosya açılır, blok bitince otomatik kapanır."
+      ]
+     },
+     {
+      "n": 10,
+      "code": "    print(f.read())",
+      "notes": [
+       "`print(f.read())`: parantez içindeki değeri ekrana yazdırır."
+      ]
+     }
+    ],
+    "terms": [
+     {
+      "term": "new_score",
+      "kind": "değişken",
+      "desc": "Kodda tanımlanan değişken. İlk değeri: `250`."
+     },
+     {
+      "term": "f",
+      "kind": "değişken",
+      "desc": "Açılan dosyayı temsil eder."
+     },
+     {
+      "term": "=",
+      "kind": "operatör",
+      "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+     },
+     {
+      "term": "with",
+      "kind": "anahtar kelime",
+      "desc": "Dosya gibi kaynakları açar ve blok bitince otomatik kapatır."
+     },
+     {
+      "term": "open()",
+      "kind": "fonksiyon",
+      "desc": "Bir dosyayı okumak ya da yazmak için açar. \"r\" okuma, \"w\" yazma, \"a\" sona ekleme."
+     },
+     {
+      "term": ".write()",
+      "kind": "metot",
+      "desc": "Dosyaya metin yazar."
+     },
+     {
+      "term": "+",
+      "kind": "operatör",
+      "desc": "Toplama; metinlerde ve listelerde uç uca ekleme."
+     },
+     {
+      "term": "str()",
+      "kind": "fonksiyon",
+      "desc": "Bir değeri metne (yazıya) çevirir."
+     },
+     {
+      "term": "print()",
+      "kind": "fonksiyon",
+      "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+     },
+     {
+      "term": ".read()",
+      "kind": "metot",
+      "desc": "Dosyanın tamamını metin olarak okur."
+     }
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "id": "d19-c",
+  "title": "JSON kaydet ve yükle",
+  "prompt": "`hero` sözlüğünü `hero.json` dosyasına **json.dump** ile kaydet. Sonra **json.load** ile okuyup `loaded` değişkenine koy.",
+  "starter": "import json\n\nhero = {\"name\": \"Piko\", \"hp\": 80, \"bag\": [\"harita\", \"anahtar\"]}\n\nloaded = None\n\nprint(loaded)\n",
+  "solution": "import json\n\nhero = {\"name\": \"Piko\", \"hp\": 80, \"bag\": [\"harita\", \"anahtar\"]}\n\nwith open(\"hero.json\", \"w\") as f:\n    json.dump(hero, f)\n\nwith open(\"hero.json\") as f:\n    loaded = json.load(f)\n\nprint(loaded)\n",
+  "hints": [
+   "Kaydet: with open(\"hero.json\", \"w\") as f: json.dump(hero, f)",
+   "Yükle: with open(\"hero.json\") as f: loaded = json.load(f)"
+  ],
+  "check": {
+   "code_contains": [
+    "json.dump",
+    "json.load"
+   ],
+   "python": "\ntest = {\"name\": \"Ece\", \"hp\": 12, \"bag\": []}\n_, g = _run(_set(_code, \"hero\", test))\nassert g.get(\"loaded\") == test, \"loaded, dosyadan okunan sözlük olmalı ve hero ile aynı olmalı.\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "import json",
+     "notes": [
+      "`json` modülü programa ekleniyor."
+     ]
+    },
+    {
+     "n": 3,
+     "code": "hero = {\"name\": \"Piko\", \"hp\": 80, \"bag\": [\"harita\", \"anahtar\"]}",
+     "notes": [
+      "`hero` adında bir değişken oluşturuluyor ve içine `{\"name\": \"Piko\", \"hp\": 80, \"bag\": [\"harita\", \"anahtar\"]}` (sözlük (anahtar: değer)) konuyor."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "with open(\"hero.json\", \"w\") as f:",
+     "notes": [
+      "`with open(\"hero.json\", \"w\") as f`: dosya açılır, blok bitince otomatik kapanır."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "    json.dump(hero, f)",
+     "notes": [
+      "`json.dump(hero, f)`: `json` üzerinde `dump` metodunu çalıştırır. Veriyi JSON olarak dosyaya yazar."
+     ]
+    },
+    {
+     "n": 8,
+     "code": "with open(\"hero.json\") as f:",
+     "notes": [
+      "`with open(\"hero.json\") as f`: dosya açılır, blok bitince otomatik kapanır."
+     ]
+    },
+    {
+     "n": 9,
+     "code": "    loaded = json.load(f)",
+     "notes": [
+      "`loaded` adında bir değişken oluşturuluyor ve içine `json.load(f)` konuyor."
+     ]
+    },
+    {
+     "n": 11,
+     "code": "print(loaded)",
+     "notes": [
+      "`print(loaded)`: parantez içindeki değeri ekrana yazdırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "hero",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `{\"name\": \"Piko\", \"hp\": 80, \"bag\": [\"harita\", \"anahtar\"]}`."
+    },
+    {
+     "term": "f",
+     "kind": "değişken",
+     "desc": "Açılan dosyayı temsil eder."
+    },
+    {
+     "term": "loaded",
+     "kind": "değişken",
+     "desc": "Kodda tanımlanan değişken. İlk değeri: `json.load(f)`."
+    },
+    {
+     "term": "import",
+     "kind": "anahtar kelime",
+     "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+    },
+    {
+     "term": "json",
+     "kind": "modül",
+     "desc": "Veriyi JSON biçiminde yazma ve okuma."
+    },
+    {
+     "term": "=",
+     "kind": "operatör",
+     "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+    },
+    {
+     "term": "with",
+     "kind": "anahtar kelime",
+     "desc": "Dosya gibi kaynakları açar ve blok bitince otomatik kapatır."
+    },
+    {
+     "term": "open()",
+     "kind": "fonksiyon",
+     "desc": "Bir dosyayı okumak ya da yazmak için açar. \"r\" okuma, \"w\" yazma, \"a\" sona ekleme."
+    },
+    {
+     "term": ".dump()",
+     "kind": "metot",
+     "desc": "Veriyi JSON olarak dosyaya yazar."
+    },
+    {
+     "term": ".load()",
+     "kind": "metot",
+     "desc": "Dosyadaki JSON'u okuyup Python verisine çevirir."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    }
+   ]
+  }
+ },
+ "project_task": {
+  "id": "d19-p",
+  "title": "Oyunu kaydetme",
+  "prompt": "Piko'nun Macerası artık kaydedilebilsin!\n\n- `save_game(state)` sözlüğü `kayit.json` dosyasına JSON olarak yazsın.\n- `load_game()` dosya varsa içindeki sözlüğü döndürsün, **yoksa `None`** döndürsün.",
+  "starter": "import json\nimport os\n\ndef save_game(state):\n    pass\n\ndef load_game():\n    pass\n\nprint(load_game())\nsave_game({\"hp\": 50, \"place\": \"fener\"})\nprint(load_game())\n",
+  "solution": "import json\nimport os\n\ndef save_game(state):\n    with open(\"kayit.json\", \"w\") as f:\n        json.dump(state, f)\n\ndef load_game():\n    if not os.path.exists(\"kayit.json\"):\n        return None\n    with open(\"kayit.json\") as f:\n        return json.load(f)\n\nprint(load_game())\nsave_game({\"hp\": 50, \"place\": \"fener\"})\nprint(load_game())\n",
+  "hints": [
+   "save_game içinde json.dump kullan.",
+   "load_game içinde önce os.path.exists(\"kayit.json\") ile bak."
+  ],
+  "check": {
+   "python": "\ntest = '''\nimport os as _os\nif _os.path.exists(\"kayit.json\"):\n    _os.remove(\"kayit.json\")\nBEFORE = load_game()\nsave_game({\"hp\": 7, \"bag\": [\"ip\"]})\nAFTER = load_game()\nsave_game({\"hp\": 99})\nAGAIN = load_game()\n'''\n_, g = _run(_code + \"\\n\" + test)\nassert g[\"BEFORE\"] is None, \"Kayıt dosyası yokken load_game() None döndürmeli: os.path.exists ile kontrol et.\"\nassert g[\"AFTER\"] == {\"hp\": 7, \"bag\": [\"ip\"]}, \"save_game ile kaydedilen sözlük load_game ile aynen geri gelmeli.\"\nassert g[\"AGAIN\"] == {\"hp\": 99}, \"Yeni kayıt eskisinin yerine geçmeli ('w' modu).\"\n"
+  },
+  "xp": 100,
+  "explain": {
+   "lines": [
+    {
+     "n": 1,
+     "code": "import json",
+     "notes": [
+      "`json` modülü programa ekleniyor."
+     ]
+    },
+    {
+     "n": 2,
+     "code": "import os",
+     "notes": [
+      "`os` modülü programa ekleniyor."
+     ]
+    },
+    {
+     "n": 4,
+     "code": "def save_game(state):",
+     "notes": [
+      "`save_game` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `state`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+     ]
+    },
+    {
+     "n": 5,
+     "code": "    with open(\"kayit.json\", \"w\") as f:",
+     "notes": [
+      "`with open(\"kayit.json\", \"w\") as f`: dosya açılır, blok bitince otomatik kapanır."
+     ]
+    },
+    {
+     "n": 6,
+     "code": "        json.dump(state, f)",
+     "notes": [
+      "`json.dump(state, f)`: `json` üzerinde `dump` metodunu çalıştırır. Veriyi JSON olarak dosyaya yazar."
+     ]
+    },
+    {
+     "n": 8,
+     "code": "def load_game():",
+     "notes": [
+      "`load_game` adında bir fonksiyon tanımlanıyor. Parametre almıyor. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+     ]
+    },
+    {
+     "n": 9,
+     "code": "    if not os.path.exists(\"kayit.json\"):",
+     "notes": [
+      "Koşul: `not os.path.exists(\"kayit.json\")` doğruysa altındaki girintili satırlar çalışır."
+     ]
+    },
+    {
+     "n": 10,
+     "code": "        return None",
+     "notes": [
+      "Fonksiyon `None` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 11,
+     "code": "    with open(\"kayit.json\") as f:",
+     "notes": [
+      "`with open(\"kayit.json\") as f`: dosya açılır, blok bitince otomatik kapanır."
+     ]
+    },
+    {
+     "n": 12,
+     "code": "        return json.load(f)",
+     "notes": [
+      "Fonksiyon `json.load(f)` değerini geri verir ve burada biter."
+     ]
+    },
+    {
+     "n": 14,
+     "code": "print(load_game())",
+     "notes": [
+      "`print(load_game())`: parantez içindeki değeri ekrana yazdırır.",
+      "`load_game(...)`: senin tanımladığın fonksiyonu çağırır."
+     ]
+    },
+    {
+     "n": 15,
+     "code": "save_game({\"hp\": 50, \"place\": \"fener\"})",
+     "notes": [
+      "`save_game({\"hp\": 50, \"place\": \"fener\"})`: tanımladığın `save_game` fonksiyonunu çalıştırır.",
+      "`save_game(...)`: senin tanımladığın fonksiyonu çağırır."
+     ]
+    },
+    {
+     "n": 16,
+     "code": "print(load_game())",
+     "notes": [
+      "`print(load_game())`: parantez içindeki değeri ekrana yazdırır.",
+      "`load_game(...)`: senin tanımladığın fonksiyonu çağırır."
+     ]
+    }
+   ],
+   "terms": [
+    {
+     "term": "f",
+     "kind": "değişken",
+     "desc": "Açılan dosyayı temsil eder."
+    },
+    {
+     "term": "state",
+     "kind": "parametre",
+     "desc": "`save_game` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+    },
+    {
+     "term": "import",
+     "kind": "anahtar kelime",
+     "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+    },
+    {
+     "term": "json",
+     "kind": "modül",
+     "desc": "Veriyi JSON biçiminde yazma ve okuma."
+    },
+    {
+     "term": "os",
+     "kind": "modül",
+     "desc": "İşletim sistemi araçları (dosya var mı?, klasörler...)."
+    },
+    {
+     "term": "def",
+     "kind": "anahtar kelime",
+     "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+    },
+    {
+     "term": "save_game()",
+     "kind": "senin fonksiyonun",
+     "desc": "Kodda tanımlanan fonksiyon; parametreleri: `state`."
+    },
+    {
+     "term": "with",
+     "kind": "anahtar kelime",
+     "desc": "Dosya gibi kaynakları açar ve blok bitince otomatik kapatır."
+    },
+    {
+     "term": "open()",
+     "kind": "fonksiyon",
+     "desc": "Bir dosyayı okumak ya da yazmak için açar. \"r\" okuma, \"w\" yazma, \"a\" sona ekleme."
+    },
+    {
+     "term": ".dump()",
+     "kind": "metot",
+     "desc": "Veriyi JSON olarak dosyaya yazar."
+    },
+    {
+     "term": "load_game()",
+     "kind": "senin fonksiyonun",
+     "desc": "Kodda tanımlanan fonksiyon; parametreleri: -."
+    },
+    {
+     "term": "if",
+     "kind": "anahtar kelime",
+     "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+    },
+    {
+     "term": "not",
+     "kind": "operatör",
+     "desc": "Koşulu tersine çevirir (True ↔ False)."
+    },
+    {
+     "term": ".exists()",
+     "kind": "metot",
+     "desc": "Verilen dosya ya da klasör var mı? (True/False)"
+    },
+    {
+     "term": "return",
+     "kind": "anahtar kelime",
+     "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+    },
+    {
+     "term": "None",
+     "kind": "değer",
+     "desc": "\"Hiçbir şey / boş\" anlamına gelen özel değer."
+    },
+    {
+     "term": ".load()",
+     "kind": "metot",
+     "desc": "Dosyadaki JSON'u okuyup Python verisine çevirir."
+    },
+    {
+     "term": "print()",
+     "kind": "fonksiyon",
+     "desc": "Parantez içindekini ekrana yazdırır. Virgülle ayrılan değerler arasına boşluk koyar."
+    }
+   ]
+  }
+ },
+ "available": true,
+ "tracks": {
+  "veri": {
+   "project_task": {
+    "id": "d19-pv",
+    "title": "Harcamaları kaydetme",
+    "prompt": "Program kapanınca harcamalar kaybolmasın!\n\n- `save_expenses(records)`: listeyi `harcamalar.json` dosyasına JSON olarak yazsın.\n- `load_expenses()`: dosya varsa içindeki listeyi döndürsün, **yoksa boş liste** `[]` döndürsün.",
+    "starter": "import json\nimport os\n\n\ndef save_expenses(records):\n    pass\n\n\ndef load_expenses():\n    pass\n",
+    "solution": "import json\nimport os\n\n\ndef save_expenses(records):\n    with open(\"harcamalar.json\", \"w\") as f:\n        json.dump(records, f)\n\n\ndef load_expenses():\n    if not os.path.exists(\"harcamalar.json\"):\n        return []\n    with open(\"harcamalar.json\") as f:\n        return json.load(f)\n",
+    "hints": [
+     "json.dump(veri, dosya) yazar, json.load(dosya) okur.",
+     "os.path.exists(\"harcamalar.json\") dosya var mı diye bakar."
+    ],
+    "check": {
+     "python": "\ntest = '''\nimport os as _os\nif _os.path.exists(\"harcamalar.json\"):\n    _os.remove(\"harcamalar.json\")\nBEFORE = load_expenses()\nsave_expenses([[\"market\", 120]])\nAFTER = load_expenses()\nsave_expenses([[\"kira\", 2000], [\"kahve\", 35]])\nAGAIN = load_expenses()\n'''\n_, g = _run(_code + \"\\n\" + test)\nassert g[\"BEFORE\"] == [], \"Dosya yokken load_expenses() boş liste döndürmeli.\"\nassert g[\"AFTER\"] == [[\"market\", 120]], \"Kaydettiğin liste geri yüklenmeli.\"\nassert g[\"AGAIN\"] == [[\"kira\", 2000], [\"kahve\", 35]], \"Yeniden kaydedince dosya güncellenmeli.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "import json",
+       "notes": [
+        "`json` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "import os",
+       "notes": [
+        "`os` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "def save_expenses(records):",
+       "notes": [
+        "`save_expenses` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `records`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    with open(\"harcamalar.json\", \"w\") as f:",
+       "notes": [
+        "`with open(\"harcamalar.json\", \"w\") as f`: dosya açılır, blok bitince otomatik kapanır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "        json.dump(records, f)",
+       "notes": [
+        "`json.dump(records, f)`: `json` üzerinde `dump` metodunu çalıştırır. Veriyi JSON olarak dosyaya yazar."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "def load_expenses():",
+       "notes": [
+        "`load_expenses` adında bir fonksiyon tanımlanıyor. Parametre almıyor. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "    if not os.path.exists(\"harcamalar.json\"):",
+       "notes": [
+        "Koşul: `not os.path.exists(\"harcamalar.json\")` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "        return []",
+       "notes": [
+        "Fonksiyon `[]` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "    with open(\"harcamalar.json\") as f:",
+       "notes": [
+        "`with open(\"harcamalar.json\") as f`: dosya açılır, blok bitince otomatik kapanır."
+       ]
+      },
+      {
+       "n": 14,
+       "code": "        return json.load(f)",
+       "notes": [
+        "Fonksiyon `json.load(f)` değerini geri verir ve burada biter."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "f",
+       "kind": "değişken",
+       "desc": "Açılan dosyayı temsil eder."
+      },
+      {
+       "term": "records",
+       "kind": "parametre",
+       "desc": "`save_expenses` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "json",
+       "kind": "modül",
+       "desc": "Veriyi JSON biçiminde yazma ve okuma."
+      },
+      {
+       "term": "os",
+       "kind": "modül",
+       "desc": "İşletim sistemi araçları (dosya var mı?, klasörler...)."
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "save_expenses()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `records`."
+      },
+      {
+       "term": "with",
+       "kind": "anahtar kelime",
+       "desc": "Dosya gibi kaynakları açar ve blok bitince otomatik kapatır."
+      },
+      {
+       "term": "open()",
+       "kind": "fonksiyon",
+       "desc": "Bir dosyayı okumak ya da yazmak için açar. \"r\" okuma, \"w\" yazma, \"a\" sona ekleme."
+      },
+      {
+       "term": ".dump()",
+       "kind": "metot",
+       "desc": "Veriyi JSON olarak dosyaya yazar."
+      },
+      {
+       "term": "load_expenses()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: -."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "not",
+       "kind": "operatör",
+       "desc": "Koşulu tersine çevirir (True ↔ False)."
+      },
+      {
+       "term": ".exists()",
+       "kind": "metot",
+       "desc": "Verilen dosya ya da klasör var mı? (True/False)"
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": ".load()",
+       "kind": "metot",
+       "desc": "Dosyadaki JSON'u okuyup Python verisine çevirir."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Kaydet / yükle",
+   "game_role": "Harcamaları dosyaya kaydeder, program yeniden açılınca geri yükler."
+  },
+  "otomasyon": {
+   "project_task": {
+    "id": "d19-po",
+    "title": "Görevleri dosyaya kaydetme",
+    "prompt": "Asistan kapanınca görevler kaybolmasın!\n\n- `save_tasks(tasks)`: her görevi **ayrı bir satıra** yazarak `gorevler.txt` dosyasına kaydetsin.\n- `load_tasks()`: dosya varsa satırları liste olarak döndürsün (satır sonlarını at), **yoksa boş liste** döndürsün.",
+    "starter": "import os\n\n\ndef save_tasks(tasks):\n    pass\n\n\ndef load_tasks():\n    pass\n",
+    "solution": "import os\n\n\ndef save_tasks(tasks):\n    with open(\"gorevler.txt\", \"w\") as f:\n        for task in tasks:\n            f.write(task + \"\\n\")\n\n\ndef load_tasks():\n    if not os.path.exists(\"gorevler.txt\"):\n        return []\n    with open(\"gorevler.txt\") as f:\n        return [line.strip() for line in f if line.strip()]\n",
+    "hints": [
+     "f.write(task + \"\\n\") her görevi ayrı satıra yazar.",
+     "Okurken line.strip() satır sonunu atar."
+    ],
+    "check": {
+     "python": "\ntest = '''\nimport os as _os\nif _os.path.exists(\"gorevler.txt\"):\n    _os.remove(\"gorevler.txt\")\nBEFORE = load_tasks()\nsave_tasks([\"Kahve\", \"Spor\"])\nAFTER = load_tasks()\nsave_tasks([\"Uyku\"])\nAGAIN = load_tasks()\n'''\n_, g = _run(_code + \"\\n\" + test)\nassert g[\"BEFORE\"] == [], \"Dosya yokken load_tasks() boş liste döndürmeli.\"\nassert g[\"AFTER\"] == [\"Kahve\", \"Spor\"], \"Kaydettiğin görevler geri yüklenmeli.\"\nassert g[\"AGAIN\"] == [\"Uyku\"], \"Yeniden kaydedince dosya güncellenmeli.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "import os",
+       "notes": [
+        "`os` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 4,
+       "code": "def save_tasks(tasks):",
+       "notes": [
+        "`save_tasks` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `tasks`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "    with open(\"gorevler.txt\", \"w\") as f:",
+       "notes": [
+        "`with open(\"gorevler.txt\", \"w\") as f`: dosya açılır, blok bitince otomatik kapanır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "        for task in tasks:",
+       "notes": [
+        "Döngü: `tasks` içindeki her eleman sırayla `task` değişkenine konur ve girintili satırlar her seferinde tekrar çalışır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "            f.write(task + \"\\n\")",
+       "notes": [
+        "`f.write(task + \"\\n\")`: `f` üzerinde `write` metodunu çalıştırır. Dosyaya metin yazar."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "def load_tasks():",
+       "notes": [
+        "`load_tasks` adında bir fonksiyon tanımlanıyor. Parametre almıyor. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "    if not os.path.exists(\"gorevler.txt\"):",
+       "notes": [
+        "Koşul: `not os.path.exists(\"gorevler.txt\")` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "        return []",
+       "notes": [
+        "Fonksiyon `[]` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "    with open(\"gorevler.txt\") as f:",
+       "notes": [
+        "`with open(\"gorevler.txt\") as f`: dosya açılır, blok bitince otomatik kapanır."
+       ]
+      },
+      {
+       "n": 14,
+       "code": "        return [line.strip() for line in f if line.strip()]",
+       "notes": [
+        "Fonksiyon `[line.strip() for line in f if line.strip()]` değerini geri verir ve burada biter.",
+        "Tek satırda döngüyle yeni bir liste/dizi üretiliyor."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "f",
+       "kind": "değişken",
+       "desc": "Açılan dosyayı temsil eder."
+      },
+      {
+       "term": "task",
+       "kind": "döngü değişkeni",
+       "desc": "Döngünün her turunda `tasks` içindeki sıradaki elemanı tutar."
+      },
+      {
+       "term": "tasks",
+       "kind": "parametre",
+       "desc": "`save_tasks` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "os",
+       "kind": "modül",
+       "desc": "İşletim sistemi araçları (dosya var mı?, klasörler...)."
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "save_tasks()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `tasks`."
+      },
+      {
+       "term": "with",
+       "kind": "anahtar kelime",
+       "desc": "Dosya gibi kaynakları açar ve blok bitince otomatik kapatır."
+      },
+      {
+       "term": "open()",
+       "kind": "fonksiyon",
+       "desc": "Bir dosyayı okumak ya da yazmak için açar. \"r\" okuma, \"w\" yazma, \"a\" sona ekleme."
+      },
+      {
+       "term": "for",
+       "kind": "anahtar kelime",
+       "desc": "Bir listedeki (ya da range'deki) her eleman için altındaki satırları tekrarlar."
+      },
+      {
+       "term": ".write()",
+       "kind": "metot",
+       "desc": "Dosyaya metin yazar."
+      },
+      {
+       "term": "+",
+       "kind": "operatör",
+       "desc": "Toplama; metinlerde ve listelerde uç uca ekleme."
+      },
+      {
+       "term": "load_tasks()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: -."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "not",
+       "kind": "operatör",
+       "desc": "Koşulu tersine çevirir (True ↔ False)."
+      },
+      {
+       "term": ".exists()",
+       "kind": "metot",
+       "desc": "Verilen dosya ya da klasör var mı? (True/False)"
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": "[... for ... in ...]",
+       "kind": "liste üreteci",
+       "desc": "Liste üreteci: [ifade for x in liste if koşul] ile tek satırda yeni liste."
+      },
+      {
+       "term": ".strip()",
+       "kind": "metot",
+       "desc": "Metnin başındaki ve sonundaki boşlukları siler."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Kaydet / yükle",
+   "game_role": "Görev listesini dosyaya yazar, asistan açılınca geri okur."
+  },
+  "web": {
+   "project_task": {
+    "id": "d19-pw",
+    "title": "Yazıları kaydetme",
+    "prompt": "Yazıların program kapanınca kaybolmasın!\n\n- `save_posts(posts)`: listeyi `yazilar.json` dosyasına JSON olarak yazsın.\n- `load_posts()`: dosya varsa içindeki listeyi döndürsün, **yoksa boş liste** `[]` döndürsün.\n- `add_post(post)`: kayıtlı yazıları yükleyip yeni yazıyı sona eklesin, listeyi tekrar kaydetsin ve toplam yazı sayısını döndürsün.",
+    "starter": "import json\nimport os\n\n\ndef save_posts(posts):\n    pass\n\n\ndef load_posts():\n    pass\n\n\ndef add_post(post):\n    pass\n",
+    "solution": "import json\nimport os\n\n\ndef save_posts(posts):\n    with open(\"yazilar.json\", \"w\") as f:\n        json.dump(posts, f)\n\n\ndef load_posts():\n    if not os.path.exists(\"yazilar.json\"):\n        return []\n    with open(\"yazilar.json\") as f:\n        return json.load(f)\n\n\ndef add_post(post):\n    posts = load_posts()\n    posts.append(post)\n    save_posts(posts)\n    return len(posts)\n",
+    "hints": [
+     "json.dump(veri, dosya) yazar, json.load(dosya) okur.",
+     "add_post içinde: posts = load_posts(), posts.append(post), save_posts(posts), return len(posts)"
+    ],
+    "check": {
+     "python": "\ntest = \"\"\"\nimport os as _os\nif _os.path.exists(\"yazilar.json\"):\n    _os.remove(\"yazilar.json\")\nBEFORE = load_posts()\nN1 = add_post({\"title\": \"A\"})\nN2 = add_post({\"title\": \"B\"})\nAFTER = load_posts()\nsave_posts([{\"title\": \"C\"}])\nAGAIN = load_posts()\n\"\"\"\n_, g = _run(_code + \"\\n\" + test)\nassert g[\"BEFORE\"] == [], \"Dosya yokken load_posts() boş liste döndürmeli.\"\nassert g[\"N1\"] == 1 and g[\"N2\"] == 2, \"add_post toplam yazı sayısını döndürmeli (1, sonra 2).\"\nassert g[\"AFTER\"] == [{\"title\": \"A\"}, {\"title\": \"B\"}], \"add_post ile eklenen yazılar dosyaya kaydedilmeli.\"\nassert g[\"AGAIN\"] == [{\"title\": \"C\"}], \"save_posts dosyayı yeni listeyle güncellemeli.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "import json",
+       "notes": [
+        "`json` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "import os",
+       "notes": [
+        "`os` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "def save_posts(posts):",
+       "notes": [
+        "`save_posts` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `posts`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    with open(\"yazilar.json\", \"w\") as f:",
+       "notes": [
+        "`with open(\"yazilar.json\", \"w\") as f`: dosya açılır, blok bitince otomatik kapanır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "        json.dump(posts, f)",
+       "notes": [
+        "`json.dump(posts, f)`: `json` üzerinde `dump` metodunu çalıştırır. Veriyi JSON olarak dosyaya yazar."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "def load_posts():",
+       "notes": [
+        "`load_posts` adında bir fonksiyon tanımlanıyor. Parametre almıyor. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "    if not os.path.exists(\"yazilar.json\"):",
+       "notes": [
+        "Koşul: `not os.path.exists(\"yazilar.json\")` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "        return []",
+       "notes": [
+        "Fonksiyon `[]` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "    with open(\"yazilar.json\") as f:",
+       "notes": [
+        "`with open(\"yazilar.json\") as f`: dosya açılır, blok bitince otomatik kapanır."
+       ]
+      },
+      {
+       "n": 14,
+       "code": "        return json.load(f)",
+       "notes": [
+        "Fonksiyon `json.load(f)` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 17,
+       "code": "def add_post(post):",
+       "notes": [
+        "`add_post` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `post`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 18,
+       "code": "    posts = load_posts()",
+       "notes": [
+        "`posts` değişkenine yeni değer veriliyor: `load_posts()`.",
+        "`load_posts(...)`: senin tanımladığın fonksiyonu çağırır."
+       ]
+      },
+      {
+       "n": 19,
+       "code": "    posts.append(post)",
+       "notes": [
+        "`posts.append(post)`: `posts` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 20,
+       "code": "    save_posts(posts)",
+       "notes": [
+        "`save_posts(posts)`: tanımladığın `save_posts` fonksiyonunu çalıştırır.",
+        "`save_posts(...)`: senin tanımladığın fonksiyonu çağırır."
+       ]
+      },
+      {
+       "n": 21,
+       "code": "    return len(posts)",
+       "notes": [
+        "Fonksiyon `len(posts)` değerini geri verir ve burada biter."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "f",
+       "kind": "değişken",
+       "desc": "Açılan dosyayı temsil eder."
+      },
+      {
+       "term": "posts",
+       "kind": "parametre",
+       "desc": "`save_posts` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "post",
+       "kind": "parametre",
+       "desc": "`add_post` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "json",
+       "kind": "modül",
+       "desc": "Veriyi JSON biçiminde yazma ve okuma."
+      },
+      {
+       "term": "os",
+       "kind": "modül",
+       "desc": "İşletim sistemi araçları (dosya var mı?, klasörler...)."
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "save_posts()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `posts`."
+      },
+      {
+       "term": "with",
+       "kind": "anahtar kelime",
+       "desc": "Dosya gibi kaynakları açar ve blok bitince otomatik kapatır."
+      },
+      {
+       "term": "open()",
+       "kind": "fonksiyon",
+       "desc": "Bir dosyayı okumak ya da yazmak için açar. \"r\" okuma, \"w\" yazma, \"a\" sona ekleme."
+      },
+      {
+       "term": ".dump()",
+       "kind": "metot",
+       "desc": "Veriyi JSON olarak dosyaya yazar."
+      },
+      {
+       "term": "load_posts()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: -."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "not",
+       "kind": "operatör",
+       "desc": "Koşulu tersine çevirir (True ↔ False)."
+      },
+      {
+       "term": ".exists()",
+       "kind": "metot",
+       "desc": "Verilen dosya ya da klasör var mı? (True/False)"
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": ".load()",
+       "kind": "metot",
+       "desc": "Dosyadaki JSON'u okuyup Python verisine çevirir."
+      },
+      {
+       "term": "add_post()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `post`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": ".append()",
+       "kind": "metot",
+       "desc": "Listenin sonuna yeni bir eleman ekler."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Kaydet / yükle",
+   "game_role": "Yazıları dosyaya kaydeder, program yeniden açılınca geri yükler."
+  },
+  "bot": {
+   "project_task": {
+    "id": "d19-pb",
+    "title": "Sohbet geçmişi",
+    "prompt": "Bot kapanınca konuşmaları unutmasın!\n\n- `load_history()`: `sohbet.json` dosyası varsa içindeki listeyi döndürsün, **yoksa boş liste** `[]` döndürsün.\n- `log_message(sender, text)`: geçmişi yüklesin, sonuna `{\"sender\": sender, \"text\": text}` sözlüğünü eklesin, listeyi `sohbet.json` dosyasına JSON olarak geri yazsın ve geçmişteki mesaj sayısını döndürsün.",
+    "starter": "import json\nimport os\n\n\ndef load_history():\n    pass\n\n\ndef log_message(sender, text):\n    pass\n",
+    "solution": "import json\nimport os\n\n\ndef load_history():\n    if not os.path.exists(\"sohbet.json\"):\n        return []\n    with open(\"sohbet.json\") as f:\n        return json.load(f)\n\n\ndef log_message(sender, text):\n    history = load_history()\n    history.append({\"sender\": sender, \"text\": text})\n    with open(\"sohbet.json\", \"w\") as f:\n        json.dump(history, f)\n    return len(history)\n",
+    "hints": [
+     "os.path.exists(\"sohbet.json\") dosya var mı diye bakar; json.load(dosya) okur.",
+     "log_message içinde: yükle, append ile ekle, json.dump(history, dosya) ile yaz, len(history) döndür."
+    ],
+    "check": {
+     "python": "\nimport json as _json\ntest = '''\nimport os as _os\nif _os.path.exists(\"sohbet.json\"):\n    _os.remove(\"sohbet.json\")\nBEFORE = load_history()\nN1 = log_message(\"sen\", \"merhaba\")\nN2 = log_message(\"bot\", \"Selam!\")\nAFTER = load_history()\nRAW = open(\"sohbet.json\").read() if _os.path.exists(\"sohbet.json\") else \"null\"\n'''\n_, g = _run(_code + \"\\n\" + test)\nassert g[\"BEFORE\"] == [], \"Dosya yokken load_history() boş liste döndürmeli.\"\nassert g[\"N1\"] == 1 and g[\"N2\"] == 2, \"log_message geçmişteki mesaj sayısını döndürmeli.\"\nexpected = [{\"sender\": \"sen\", \"text\": \"merhaba\"}, {\"sender\": \"bot\", \"text\": \"Selam!\"}]\nassert g[\"AFTER\"] == expected, \"Kaydedilen mesajlar {sender, text} sözlükleri olarak geri yüklenmeli.\"\nassert _json.loads(g[\"RAW\"]) == expected, \"Geçmiş sohbet.json dosyasına JSON olarak yazılmalı.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "import json",
+       "notes": [
+        "`json` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "import os",
+       "notes": [
+        "`os` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "def load_history():",
+       "notes": [
+        "`load_history` adında bir fonksiyon tanımlanıyor. Parametre almıyor. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    if not os.path.exists(\"sohbet.json\"):",
+       "notes": [
+        "Koşul: `not os.path.exists(\"sohbet.json\")` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "        return []",
+       "notes": [
+        "Fonksiyon `[]` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 8,
+       "code": "    with open(\"sohbet.json\") as f:",
+       "notes": [
+        "`with open(\"sohbet.json\") as f`: dosya açılır, blok bitince otomatik kapanır."
+       ]
+      },
+      {
+       "n": 9,
+       "code": "        return json.load(f)",
+       "notes": [
+        "Fonksiyon `json.load(f)` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "def log_message(sender, text):",
+       "notes": [
+        "`log_message` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `sender`, `text`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "    history = load_history()",
+       "notes": [
+        "`history` adında bir değişken oluşturuluyor ve içine `load_history()` konuyor.",
+        "`load_history(...)`: senin tanımladığın fonksiyonu çağırır."
+       ]
+      },
+      {
+       "n": 14,
+       "code": "    history.append({\"sender\": sender, \"text\": text})",
+       "notes": [
+        "`history.append({\"sender\": sender, \"text\": text})`: `history` üzerinde `append` metodunu çalıştırır. Listenin sonuna yeni bir eleman ekler."
+       ]
+      },
+      {
+       "n": 15,
+       "code": "    with open(\"sohbet.json\", \"w\") as f:",
+       "notes": [
+        "`with open(\"sohbet.json\", \"w\") as f`: dosya açılır, blok bitince otomatik kapanır."
+       ]
+      },
+      {
+       "n": 16,
+       "code": "        json.dump(history, f)",
+       "notes": [
+        "`json.dump(history, f)`: `json` üzerinde `dump` metodunu çalıştırır. Veriyi JSON olarak dosyaya yazar."
+       ]
+      },
+      {
+       "n": 17,
+       "code": "    return len(history)",
+       "notes": [
+        "Fonksiyon `len(history)` değerini geri verir ve burada biter."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "f",
+       "kind": "değişken",
+       "desc": "Açılan dosyayı temsil eder."
+      },
+      {
+       "term": "history",
+       "kind": "değişken",
+       "desc": "Kodda tanımlanan değişken. İlk değeri: `load_history()`."
+      },
+      {
+       "term": "sender",
+       "kind": "parametre",
+       "desc": "`log_message` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "text",
+       "kind": "parametre",
+       "desc": "`log_message` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "json",
+       "kind": "modül",
+       "desc": "Veriyi JSON biçiminde yazma ve okuma."
+      },
+      {
+       "term": "os",
+       "kind": "modül",
+       "desc": "İşletim sistemi araçları (dosya var mı?, klasörler...)."
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "load_history()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: -."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "not",
+       "kind": "operatör",
+       "desc": "Koşulu tersine çevirir (True ↔ False)."
+      },
+      {
+       "term": ".exists()",
+       "kind": "metot",
+       "desc": "Verilen dosya ya da klasör var mı? (True/False)"
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": "with",
+       "kind": "anahtar kelime",
+       "desc": "Dosya gibi kaynakları açar ve blok bitince otomatik kapatır."
+      },
+      {
+       "term": "open()",
+       "kind": "fonksiyon",
+       "desc": "Bir dosyayı okumak ya da yazmak için açar. \"r\" okuma, \"w\" yazma, \"a\" sona ekleme."
+      },
+      {
+       "term": ".load()",
+       "kind": "metot",
+       "desc": "Dosyadaki JSON'u okuyup Python verisine çevirir."
+      },
+      {
+       "term": "log_message()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `sender`, `text`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      },
+      {
+       "term": ".append()",
+       "kind": "metot",
+       "desc": "Listenin sonuna yeni bir eleman ekler."
+      },
+      {
+       "term": ".dump()",
+       "kind": "metot",
+       "desc": "Veriyi JSON olarak dosyaya yazar."
+      },
+      {
+       "term": "len()",
+       "kind": "fonksiyon",
+       "desc": "Bir metnin, listenin ya da sözlüğün eleman sayısını (uzunluğunu) verir."
+      }
+     ]
+    }
+   },
+   "project_contribution": "Sohbet geçmişi",
+   "game_role": "Konuşmaları dosyaya kaydeder, bot yeniden açılınca hatırlar."
+  },
+  "okul": {
+   "project_task": {
+    "id": "d19-pn",
+    "title": "Notları kaydetme",
+    "prompt": "Program kapanınca notların kaybolmasın!\n\n- `save_grades(grades)`: sözlüğü `notlar.json` dosyasına JSON olarak yazsın.\n- `load_grades()`: dosya varsa içindeki sözlüğü döndürsün, **yoksa boş sözlük** `{}` döndürsün.\n- `add_grade(lesson, grade)`: kayıtlı notları yüklesin, yeni notu ekleyip tekrar kaydetsin.",
+    "starter": "import json\nimport os\n\n\ndef save_grades(grades):\n    pass\n\n\ndef load_grades():\n    pass\n\n\ndef add_grade(lesson, grade):\n    pass\n",
+    "solution": "import json\nimport os\n\n\ndef save_grades(grades):\n    with open(\"notlar.json\", \"w\") as f:\n        json.dump(grades, f)\n\n\ndef load_grades():\n    if not os.path.exists(\"notlar.json\"):\n        return {}\n    with open(\"notlar.json\") as f:\n        return json.load(f)\n\n\ndef add_grade(lesson, grade):\n    grades = load_grades()\n    grades[lesson] = grade\n    save_grades(grades)\n",
+    "hints": [
+     "json.dump(veri, dosya) yazar, json.load(dosya) okur. os.path.exists(\"notlar.json\") dosya var mı diye bakar.",
+     "add_grade içinde: önce load_grades(), sonra grades[lesson] = grade, en son save_grades(grades)."
+    ],
+    "check": {
+     "python": "\ntest = '''\nimport os as _os\nif _os.path.exists(\"notlar.json\"):\n    _os.remove(\"notlar.json\")\nBEFORE = load_grades()\nsave_grades({\"Matematik\": 85})\nAFTER = load_grades()\nadd_grade(\"Fizik\", 70)\nADDED = load_grades()\nsave_grades({\"Tarih\": 90})\nAGAIN = load_grades()\n'''\n_, g = _run(_code + \"\\n\" + test)\nassert g[\"BEFORE\"] == {}, \"Dosya yokken load_grades() boş sözlük döndürmeli.\"\nassert g[\"AFTER\"] == {\"Matematik\": 85}, \"Kaydettiğin notlar geri yüklenmeli.\"\nassert g[\"ADDED\"] == {\"Matematik\": 85, \"Fizik\": 70}, \"add_grade eski notları koruyup yeni notu eklemeli.\"\nassert g[\"AGAIN\"] == {\"Tarih\": 90}, \"Yeniden kaydedince dosya güncellenmeli.\"\n"
+    },
+    "xp": 100,
+    "explain": {
+     "lines": [
+      {
+       "n": 1,
+       "code": "import json",
+       "notes": [
+        "`json` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 2,
+       "code": "import os",
+       "notes": [
+        "`os` modülü programa ekleniyor."
+       ]
+      },
+      {
+       "n": 5,
+       "code": "def save_grades(grades):",
+       "notes": [
+        "`save_grades` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `grades`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 6,
+       "code": "    with open(\"notlar.json\", \"w\") as f:",
+       "notes": [
+        "`with open(\"notlar.json\", \"w\") as f`: dosya açılır, blok bitince otomatik kapanır."
+       ]
+      },
+      {
+       "n": 7,
+       "code": "        json.dump(grades, f)",
+       "notes": [
+        "`json.dump(grades, f)`: `json` üzerinde `dump` metodunu çalıştırır. Veriyi JSON olarak dosyaya yazar."
+       ]
+      },
+      {
+       "n": 10,
+       "code": "def load_grades():",
+       "notes": [
+        "`load_grades` adında bir fonksiyon tanımlanıyor. Parametre almıyor. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 11,
+       "code": "    if not os.path.exists(\"notlar.json\"):",
+       "notes": [
+        "Koşul: `not os.path.exists(\"notlar.json\")` doğruysa altındaki girintili satırlar çalışır."
+       ]
+      },
+      {
+       "n": 12,
+       "code": "        return {}",
+       "notes": [
+        "Fonksiyon `{}` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 13,
+       "code": "    with open(\"notlar.json\") as f:",
+       "notes": [
+        "`with open(\"notlar.json\") as f`: dosya açılır, blok bitince otomatik kapanır."
+       ]
+      },
+      {
+       "n": 14,
+       "code": "        return json.load(f)",
+       "notes": [
+        "Fonksiyon `json.load(f)` değerini geri verir ve burada biter."
+       ]
+      },
+      {
+       "n": 17,
+       "code": "def add_grade(lesson, grade):",
+       "notes": [
+        "`add_grade` adında bir fonksiyon tanımlanıyor. Aldığı değerler (parametreler): `lesson`, `grade`. İçindeki satırlar ancak fonksiyon çağrılınca çalışır."
+       ]
+      },
+      {
+       "n": 18,
+       "code": "    grades = load_grades()",
+       "notes": [
+        "`grades` değişkenine yeni değer veriliyor: `load_grades()`.",
+        "`load_grades(...)`: senin tanımladığın fonksiyonu çağırır."
+       ]
+      },
+      {
+       "n": 19,
+       "code": "    grades[lesson] = grade",
+       "notes": [
+        "`grades[...]` konumundaki değer `grade` ile değiştiriliyor."
+       ]
+      },
+      {
+       "n": 20,
+       "code": "    save_grades(grades)",
+       "notes": [
+        "`save_grades(grades)`: tanımladığın `save_grades` fonksiyonunu çalıştırır.",
+        "`save_grades(...)`: senin tanımladığın fonksiyonu çağırır."
+       ]
+      }
+     ],
+     "terms": [
+      {
+       "term": "f",
+       "kind": "değişken",
+       "desc": "Açılan dosyayı temsil eder."
+      },
+      {
+       "term": "grades",
+       "kind": "parametre",
+       "desc": "`save_grades` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "lesson",
+       "kind": "parametre",
+       "desc": "`add_grade` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "grade",
+       "kind": "parametre",
+       "desc": "`add_grade` fonksiyonu çağrılırken verilen değer bu isimle kullanılır."
+      },
+      {
+       "term": "import",
+       "kind": "anahtar kelime",
+       "desc": "Bir modülü (hazır kod kütüphanesini) programa ekler."
+      },
+      {
+       "term": "json",
+       "kind": "modül",
+       "desc": "Veriyi JSON biçiminde yazma ve okuma."
+      },
+      {
+       "term": "os",
+       "kind": "modül",
+       "desc": "İşletim sistemi araçları (dosya var mı?, klasörler...)."
+      },
+      {
+       "term": "def",
+       "kind": "anahtar kelime",
+       "desc": "Yeni bir fonksiyon tanımlar; çağrılana kadar içi çalışmaz."
+      },
+      {
+       "term": "save_grades()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `grades`."
+      },
+      {
+       "term": "with",
+       "kind": "anahtar kelime",
+       "desc": "Dosya gibi kaynakları açar ve blok bitince otomatik kapatır."
+      },
+      {
+       "term": "open()",
+       "kind": "fonksiyon",
+       "desc": "Bir dosyayı okumak ya da yazmak için açar. \"r\" okuma, \"w\" yazma, \"a\" sona ekleme."
+      },
+      {
+       "term": ".dump()",
+       "kind": "metot",
+       "desc": "Veriyi JSON olarak dosyaya yazar."
+      },
+      {
+       "term": "load_grades()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: -."
+      },
+      {
+       "term": "if",
+       "kind": "anahtar kelime",
+       "desc": "Koşul doğruysa altındaki girintili satırlar çalışır."
+      },
+      {
+       "term": "not",
+       "kind": "operatör",
+       "desc": "Koşulu tersine çevirir (True ↔ False)."
+      },
+      {
+       "term": ".exists()",
+       "kind": "metot",
+       "desc": "Verilen dosya ya da klasör var mı? (True/False)"
+      },
+      {
+       "term": "return",
+       "kind": "anahtar kelime",
+       "desc": "Fonksiyondan bir değer geri gönderir ve fonksiyonu bitirir."
+      },
+      {
+       "term": ".load()",
+       "kind": "metot",
+       "desc": "Dosyadaki JSON'u okuyup Python verisine çevirir."
+      },
+      {
+       "term": "add_grade()",
+       "kind": "senin fonksiyonun",
+       "desc": "Kodda tanımlanan fonksiyon; parametreleri: `lesson`, `grade`."
+      },
+      {
+       "term": "=",
+       "kind": "operatör",
+       "desc": "Atama: sağdaki değeri soldaki isme koyar. (Karşılaştırma için == kullanılır.)"
+      }
+     ]
+    }
+   },
+   "project_contribution": "Kaydet / yükle",
+   "game_role": "Notları dosyaya kaydeder, program yeniden açılınca geri yükler."
+  }
+ }
+}
