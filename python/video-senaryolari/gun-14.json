@@ -5,6 +5,25 @@
   "maskot": "piko",
   "ozet": "Piko, fonksiyonları değer gibi kullanmayı anlatıyor: fonksiyonu fonksiyona vermek, map, filter, sorted ile key, ve fonksiyon döndüren fonksiyonlar (closure).",
   "hedef_sure_sn": 124,
+  "dil": "tr",
+  "giris": {
+    "anlatim": "Gün 14: Üst düzey fonksiyonlar! Bu derste fonksiyonları değer gibi kullanmayı; map, filter ve sorted ile çalışmayı ve fonksiyon üreten fonksiyonları öğreneceksin.",
+    "maddeler": [
+      "Fonksiyonlar da değerdir",
+      "map, filter, sorted ve key",
+      "Fonksiyon üreten fonksiyon"
+    ]
+  },
+  "cikis": {
+    "anlatim": "Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!",
+    "baslik": "İnteraktif dersler için",
+    "adres": "30gunde.com.tr",
+    "maddeler": [
+      "Kodunu tarayıcıda yaz ve çalıştır",
+      "Görevleri tamamla, rozet kazan",
+      "30 günde adım adım Python"
+    ]
+  },
   "sahneler": [
     {
       "no": 1,

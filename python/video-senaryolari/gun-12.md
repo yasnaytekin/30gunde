@@ -20,6 +20,14 @@ Ders metni: [gun-12.md](../gunler/gun-12.md)
 | 10 | ozet | 6 sn | on (sag) |
 | 11 | kapanis | 9 sn | tebrik (orta) |
 
+## Giriş (konu tanıtımı)
+
+**Seslendirme:** Gün 12: Modüller! Bu derste import ile hazır modülleri kullanmayı, math ve random ile hesap yapıp oyuna şans katmayı öğreneceksin.
+
+- import ile modül kullanmak
+- math ve random
+- from, as ve seed
+
 ## Sahne 1: acilis (12 sn)
 
 **Seslendirme:** Selam, ben Piko! Atölyenin duvarında dev bir alet dolabı var. Her çekmecede başka ustaların yaptığı aletler duruyor: hesap aletleri, zar ve kura aletleri. Python'da bu çekmecelere modül denir. Hadi açalım!
@@ -225,3 +233,13 @@ print(math.floor(7.9) + math.ceil(7.1))
 **Görsel:** `gorseller/python/harita/atolye.webp`
 
 **Maskot:** tebrik pozu, orta
+
+## Çıkış (30gunde.com.tr yönlendirmesi)
+
+**Seslendirme:** Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!
+
+**Ekranda:** İnteraktif dersler için **30gunde.com.tr**
+
+- Kodunu tarayıcıda yaz ve çalıştır
+- Görevleri tamamla, rozet kazan
+- 30 günde adım adım Python

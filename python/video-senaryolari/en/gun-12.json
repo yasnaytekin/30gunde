@@ -1,0 +1,230 @@
+{
+  "kurs": "python",
+  "gun": 12,
+  "baslik": "Modules",
+  "maskot": "piko",
+  "ozet": "Piko opens the workshop's tool cabinet: using modules with import, the math and random modules, importing with from and as, and the idea of writing your own module.",
+  "hedef_sure_sn": 123,
+  "dil": "en",
+  "giris": {
+    "anlatim": "Day 12: Modules! In this lesson you'll use ready-made modules with import, do math with math, and add luck to your game with random.",
+    "maddeler": [
+      "Using modules with import",
+      "math and random",
+      "from, as and seed"
+    ]
+  },
+  "cikis": {
+    "anlatim": "The interactive version of this lesson is waiting for you at 30gunde.com.tr. Write your code right in the browser, run it instantly, and finish the tasks!",
+    "baslik": "Interactive lessons at",
+    "adres": "30gunde.com.tr",
+    "maddeler": [
+      "Write and run code in your browser",
+      "Finish tasks, earn badges",
+      "Learn Python step by step in 30 days"
+    ]
+  },
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 12,
+      "anlatim": "Hi, I'm Piko! There's a giant tool cabinet on the workshop wall. Every drawer holds tools made by other makers: math tools, dice and lottery tools. In Python these drawers are called modules. Let's open them!",
+      "ekran": {
+        "baslik": "Day 12: Modules",
+        "gorsel": "gorseller/python/harita/atolye.webp"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "A module is a Python file full of functions. You bring it into your project with import. Then you write the module's name, a dot, and the tool's name: square root, the number pi, rounding down and rounding up. Python comes with these modules.",
+      "ekran": {
+        "baslik": "import math",
+        "kod": "import math\n\nprint(math.sqrt(49))\nprint(round(math.pi, 4))\nprint(math.floor(4.7), math.ceil(4.2))\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          1,
+          3
+        ],
+        "cikti": "7.0\n3.1416\n4 5"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "The surprises in games come from the random module. randint gives a random whole number between two numbers, both included. choice picks one item from a list, and shuffle mixes a list up. The result changes every time you run it!",
+      "ekran": {
+        "baslik": "random: tools of luck",
+        "kod": "import random\n\nprint(\"Dice:\", random.randint(1, 6))\nfriends = [\"Ali\", \"Ece\", \"Can\", \"Zeynep\"]\nprint(\"Picked:\", random.choice(friends))\nrandom.shuffle(friends)\nprint(\"Shuffled:\", friends)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          3,
+          5,
+          6
+        ],
+        "cikti": "Dice: 4\nPicked: Ece\nShuffled: ['Can', 'Ali', 'Zeynep', 'Ece']"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "With from, you take only the tool you want out of the drawer, so you don't have to write math in front of it. With as, you shorten long names. And when the seed is fixed, the random number comes out the same every time.",
+      "ekran": {
+        "baslik": "from, as and seed",
+        "kod": "from math import sqrt, pi\nimport random as rnd\n\nprint(sqrt(144))\nprint(pi)\nrnd.seed(7)\nprint(rnd.randint(1, 100))\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          1,
+          2,
+          6
+        ],
+        "cikti": "12.0\n3.141592653589793\n42"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "anlatim",
+      "sure_sn": 12,
+      "anlatim": "You can write your own module too. If you make a file called tools.py on your computer, another file in the same folder can use its functions by saying import tools. That's how big projects are organized.",
+      "ekran": {
+        "baslik": "Your own module",
+        "maddeler": [
+          "tools.py: your own functions",
+          "In the same folder: import tools",
+          "This is how big projects are split into parts"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 6,
+      "tur": "hata",
+      "sure_sn": 12,
+      "anlatim": "We said import math, but then wrote sqrt on its own. Python gives a NameError: it doesn't know sqrt. Either write math dot sqrt, or bring sqrt in directly with from.",
+      "ekran": {
+        "baslik": "Forgetting the module name",
+        "kod": "import math\nprint(sqrt(16))\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "NameError: name 'sqrt' is not defined"
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "soru",
+      "sure_sn": 8,
+      "anlatim": "One rounds down, the other rounds up. What do you think this adds up to?",
+      "ekran": {
+        "baslik": "What will it print?",
+        "kod": "import math\nprint(math.floor(7.9) + math.ceil(7.1))\n",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "cikti",
+      "sure_sn": 10,
+      "anlatim": "Fifteen! floor brought seven point nine down to seven, and ceil pushed seven point one up to eight. Seven plus eight is fifteen.",
+      "ekran": {
+        "baslik": "The answer",
+        "kod": "import math\nprint(math.floor(7.9) + math.ceil(7.1))\n",
+        "dil": "python",
+        "cikti": "15"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "gorev",
+      "sure_sn": 12,
+      "anlatim": "In the tasks you'll find the side of a square with math, roll a die with random, and pick a random prize from a treasure list. In the challenge you'll work out the area of a circle using pi.",
+      "ekran": {
+        "baslik": "Today's tasks",
+        "maddeler": [
+          "Task 1: Square root",
+          "Task 2: Roll the die",
+          "Task 3: Random treasure",
+          "Challenge: Circle area"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 10,
+      "tur": "ozet",
+      "sure_sn": 6,
+      "anlatim": "Today we brought other makers' tools into our project and added some luck to our game.",
+      "ekran": {
+        "baslik": "What you learned today",
+        "maddeler": [
+          "Bring it in with import module, use it with module.tool",
+          "math: sqrt, pi, floor, ceil; random: randint, choice, shuffle",
+          "Write less with from ... import and as; repeat with seed"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "kapanis",
+      "sure_sn": 9,
+      "anlatim": "The tool cabinet is yours now! Tomorrow we'll fire up the magic mold in the corner of the workshop: list comprehensions, which squeeze four-line loops into a single line.",
+      "ekran": {
+        "baslik": "Tomorrow: List comprehensions",
+        "gorsel": "gorseller/python/harita/atolye.webp"
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}
