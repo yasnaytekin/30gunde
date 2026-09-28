@@ -21,6 +21,14 @@ Ders metni: [gun-18.md](../gunler/gun-18.md)
 | 11 | ozet | 11 sn | on (sag) |
 | 12 | kapanis | 12 sn | tebrik (orta) |
 
+## Giriş (konu tanıtımı)
+
+**Seslendirme:** Gün 18: Düzenli ifadeler! Bu derste re modülüyle metinlerde desen aramayı; findall, search ve sub ile bilgi bulmayı ve değiştirmeyi öğreneceksin.
+
+- Desen nedir?
+- findall, search, sub
+- Gruplarla parçalamak
+
 ## Sahne 1: acilis (13 sn)
 
 **Seslendirme:** Selam, ben Piko! Keşif Adası'nın mağarasındayız. Duvarlar yazılarla dolu, bir yerlerde gizli sayılar ve şifreler saklı. Hepsini tek tek okumak günler sürer! Neyse ki Python'ın bir büyüteci var: düzenli ifadeler.
@@ -251,3 +259,13 @@ False
 - JSON ile kaydet
 
 **Maskot:** tebrik pozu, orta
+
+## Çıkış (30gunde.com.tr yönlendirmesi)
+
+**Seslendirme:** Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!
+
+**Ekranda:** İnteraktif dersler için **30gunde.com.tr**
+
+- Kodunu tarayıcıda yaz ve çalıştır
+- Görevleri tamamla, rozet kazan
+- 30 günde adım adım Python

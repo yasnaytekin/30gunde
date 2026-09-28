@@ -21,6 +21,14 @@ Ders metni: [gun-21.md](../gunler/gun-21.md)
 | 11 | ozet | 11 sn | on (sag) |
 | 12 | kapanis | 12 sn | tebrik (orta) |
 
+## Giriş (konu tanıtımı)
+
+**Seslendirme:** Gün 21: Sınıflar ve nesneler! Bu derste class ile kendi veri tiplerini kurmayı; __init__, self, metotlar ve kalıtımı öğreneceksin.
+
+- class ve nesne
+- __init__ ve self
+- Metotlar ve kalıtım
+
 ## Sahne 1: acilis (14 sn)
 
 **Seslendirme:** Selam, ben Piko! Bilgi Limanı'na vardık! Tersanede gemiler tek bir çizime göre yapılıyor. Çizim bir kez hazırlanıyor, ondan istediğin kadar gemi çıkıyor. Python'da çizime sınıf, üretilen gemilere nesne diyoruz.
@@ -298,3 +306,13 @@ TypeError: Pet.feed() takes 0 positional arguments but 1 was given
 - BeautifulSoup
 
 **Maskot:** tebrik pozu, orta
+
+## Çıkış (30gunde.com.tr yönlendirmesi)
+
+**Seslendirme:** Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!
+
+**Ekranda:** İnteraktif dersler için **30gunde.com.tr**
+
+- Kodunu tarayıcıda yaz ve çalıştır
+- Görevleri tamamla, rozet kazan
+- 30 günde adım adım Python

@@ -1,0 +1,255 @@
+{
+  "kurs": "python",
+  "gun": 17,
+  "baslik": "Error handling",
+  "maskot": "piko",
+  "ozet": "On the rotten bridges of Discovery Island, Piko shows how to catch errors with try, except, else and finally, and how to raise his own errors.",
+  "hedef_sure_sn": 148,
+  "dil": "en",
+  "giris": {
+    "anlatim": "Day 17: Error handling! In this lesson you'll catch errors with try and except, tidy up with else and finally, and raise your own errors.",
+    "maddeler": [
+      "try and except",
+      "else and finally",
+      "Your own errors with raise"
+    ]
+  },
+  "cikis": {
+    "anlatim": "The interactive version of this lesson is waiting for you at 30gunde.com.tr. Write your code right in the browser, run it instantly, and finish the tasks!",
+    "baslik": "Interactive lessons at",
+    "adres": "30gunde.com.tr",
+    "maddeler": [
+      "Write and run code in your browser",
+      "Finish tasks, earn badges",
+      "Learn Python step by step in 30 days"
+    ]
+  },
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 14,
+      "anlatim": "Hi, I'm Piko! The bridges on Discovery Island might be rotten. A smart explorer ties a rope around their waist at every step. So can your program hold on to a rope instead of crashing when it hits an error? Yes! Today we learn error handling.",
+      "ekran": {
+        "baslik": "Day 17: Error handling",
+        "maddeler": [
+          "Discovery Island",
+          "try, except, else, finally, raise"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 2,
+      "tur": "hata",
+      "sure_sn": 11,
+      "anlatim": "First let's see it without a rope. I'm trying to turn twelve, written out in letters, into a number with int. Python gives a ValueError and stops the program right there.",
+      "ekran": {
+        "baslik": "No rope: the program crashes",
+        "kod": "text = \"twelve\"\nage = int(text)\nprint(\"Your age:\", age)\n",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "ValueError: invalid literal for int() with base 10: 'twelve'",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "uzgun",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 15,
+      "anlatim": "Now I tie the rope. I put the code that might fail inside try, and what to do if it fails inside except. When the conversion fails, except runs, and the program keeps going without crashing.",
+      "ekran": {
+        "baslik": "try and except",
+        "kod": "text = \"twelve\"\ntry:\n    age = int(text)\n    print(\"Your age:\", age)\nexcept ValueError:\n    print(\"Please write it in digits.\")\nprint(\"The program keeps going.\")\n",
+        "vurgu_satirlari": [
+          2,
+          5
+        ],
+        "dil": "python",
+        "cikti": "Please write it in digits.\nThe program keeps going."
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 15,
+      "anlatim": "Every error has a name. Here I wrote two separate excepts: ValueError for text that isn't a number, and ZeroDivisionError for dividing by zero. I give each one its own answer.",
+      "ekran": {
+        "baslik": "Which error are you catching?",
+        "kod": "for text in [\"5\", \"0\", \"five\"]:\n    try:\n        print(100 / int(text))\n    except ValueError:\n        print(\"Not a number!\")\n    except ZeroDivisionError:\n        print(\"Can't divide by zero!\")\n",
+        "vurgu_satirlari": [
+          4,
+          6
+        ],
+        "dil": "python",
+        "cikti": "20.0\nCan't divide by zero!\nNot a number!"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "anlatim",
+      "sure_sn": 10,
+      "anlatim": "A warning: writing a bare except to catch every error is easy, but it hides real bugs too. Always write the name of the error you expect.",
+      "ekran": {
+        "baslik": "Tip",
+        "maddeler": [
+          "except: catches everything, hides bugs",
+          "except ValueError: catches only what you expect",
+          "To see the message: except ValueError as err"
+        ]
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "There are two more helpers. else runs when there's no error at all. finally always runs, error or not; it's perfect for wrapping things up.",
+      "ekran": {
+        "baslik": "else and finally",
+        "kod": "try:\n    n = int(\"5\")\nexcept ValueError:\n    print(\"Error!\")\nelse:\n    print(\"Success:\", n)\nfinally:\n    print(\"Check done.\")\n",
+        "vurgu_satirlari": [
+          5,
+          7
+        ],
+        "dil": "python",
+        "cikti": "Success: 5\nCheck done."
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "kod",
+      "sure_sn": 15,
+      "anlatim": "Sometimes we throw an error on purpose. The set_hp function raises a ValueError if it gets negative health. Outside, I catch it and print its message with as err.",
+      "ekran": {
+        "baslik": "raise: throw your own error",
+        "kod": "def set_hp(value):\n    if value < 0:\n        raise ValueError(\"Health can't be negative\")\n    return value\n\ntry:\n    set_hp(-5)\nexcept ValueError as err:\n    print(\"Caught:\", err)\n",
+        "vurgu_satirlari": [
+          3,
+          8
+        ],
+        "dil": "python",
+        "cikti": "Caught: Health can't be negative"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "soru",
+      "sure_sn": 9,
+      "anlatim": "Mini question! There's no error here; the number converts just fine. Which lines do you think show up on the screen?",
+      "ekran": {
+        "baslik": "What will it print?",
+        "kod": "try:\n    n = int(\"7\")\nexcept ValueError:\n    print(\"Error!\")\nelse:\n    print(\"Number:\", n)\nfinally:\n    print(\"Done.\")\n",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 9,
+      "tur": "cikti",
+      "sure_sn": 9,
+      "anlatim": "Since there was no error, except was skipped and else ran. And finally came at the very end, as always.",
+      "ekran": {
+        "baslik": "The answer",
+        "kod": "try:\n    n = int(\"7\")\nexcept ValueError:\n    print(\"Error!\")\nelse:\n    print(\"Number:\", n)\nfinally:\n    print(\"Done.\")\n",
+        "dil": "python",
+        "cikti": "Number: 7\nDone."
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 10,
+      "tur": "gorev",
+      "sure_sn": 13,
+      "anlatim": "Your tasks are ready! You'll write a number converter that doesn't crash, a safe division that uses try, and a program that asks your age. In the project, the player's mistyped commands won't break the game.",
+      "ekran": {
+        "baslik": "Today's tasks",
+        "maddeler": [
+          "Task 1: Safe number",
+          "Task 2: Safe division",
+          "Task 3: Ask the age",
+          "Challenge: Protect with raise",
+          "Project: Sturdy commands"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "ozet",
+      "sure_sn": 11,
+      "anlatim": "In short: try it with try, catch it with except, tidy up with else and finally, and warn yourself with raise when you need to.",
+      "ekran": {
+        "baslik": "What you learned today",
+        "maddeler": [
+          "An error inside try is caught by except",
+          "else runs if there's no error, finally always runs",
+          "raise throws a clear error of your own"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 12,
+      "tur": "kapanis",
+      "sure_sn": 12,
+      "anlatim": "You're awesome! Tomorrow we go into the island's cave. The walls hide secret numbers and passwords. To find them, we'll use Python's magnifying glass: regular expressions. See you!",
+      "ekran": {
+        "baslik": "Tomorrow: Regular expressions",
+        "maddeler": [
+          "The re module",
+          "Searching text for patterns"
+        ]
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

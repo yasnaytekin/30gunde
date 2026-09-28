@@ -21,6 +21,14 @@ Ders metni: [gun-19.md](../gunler/gun-19.md)
 | 11 | ozet | 11 sn | on (sag) |
 | 12 | kapanis | 12 sn | tebrik (orta) |
 
+## Giriş (konu tanıtımı)
+
+**Seslendirme:** Gün 19: Dosya işlemleri! Bu derste dosyaya yazmayı, dosyadan okumayı ve JSON ile oyunu kaydetmeyi öğreneceksin.
+
+- open ve dosya modları
+- Yaz, oku, sonuna ekle
+- JSON ile kaydet
+
 ## Sahne 1: acilis (14 sn)
 
 **Seslendirme:** Selam, ben Piko! Keşif Adası'nın deniz fenerinde eski bir kaptan günlüğü bulduk. Kaptan her akşam olanları yazmış, biz de yıllar sonra okuyabiliyoruz. Programların da böyle bir defteri var: dosyalar. Bugün oyunumuzu kaydetmeyi öğreniyoruz!
@@ -268,3 +276,13 @@ iksir
 - requirements.txt
 
 **Maskot:** tebrik pozu, orta
+
+## Çıkış (30gunde.com.tr yönlendirmesi)
+
+**Seslendirme:** Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!
+
+**Ekranda:** İnteraktif dersler için **30gunde.com.tr**
+
+- Kodunu tarayıcıda yaz ve çalıştır
+- Görevleri tamamla, rozet kazan
+- 30 günde adım adım Python
