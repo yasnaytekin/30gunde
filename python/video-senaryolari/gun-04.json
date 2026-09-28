@@ -5,6 +5,25 @@
   "maskot": "piko",
   "ozet": "Piko, Python Köyü'nün tabelaları üzerinden stringleri birleştirmeyi, indeks ve dilimlemeyi, string metotlarını ve f-string ile biçimlendirmeyi anlatıyor.",
   "hedef_sure_sn": 122,
+  "dil": "tr",
+  "giris": {
+    "anlatim": "Gün 4: Stringler! Bu derste yazıları birleştirmeyi, harf harf dilimlemeyi ve f-string ile süslemeyi öğreneceksin.",
+    "maddeler": [
+      "Birleştirme ve tekrar",
+      "İndeks ve dilimleme",
+      "Metotlar ve f-string"
+    ]
+  },
+  "cikis": {
+    "anlatim": "Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!",
+    "baslik": "İnteraktif dersler için",
+    "adres": "30gunde.com.tr",
+    "maddeler": [
+      "Kodunu tarayıcıda yaz ve çalıştır",
+      "Görevleri tamamla, rozet kazan",
+      "30 günde adım adım Python"
+    ]
+  },
   "sahneler": [
     {
       "no": 1,
@@ -112,7 +131,11 @@
         "vurgu_satirlari": [
           3
         ],
-        "cikti": "TypeError: can only concatenate str (not \"int\") to str"
+        "cikti": "TypeError: can only concatenate str (not \"int\") to str",
+        "duzeltme": {
+          "kod": "name = \"Piko\"\nlevel = 3\nprint(f\"{name} seviye {level}\")\n",
+          "cikti": "Piko seviye 3"
+        }
       },
       "maskot": {
         "poz": "sasirma",

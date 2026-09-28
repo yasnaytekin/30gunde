@@ -20,6 +20,14 @@ Ders metni: [gun-14.md](../gunler/gun-14.md)
 | 10 | ozet | 8 sn | on (sag) |
 | 11 | kapanis | 9 sn | tebrik (orta) |
 
+## Giriş (konu tanıtımı)
+
+**Seslendirme:** Gün 14: Üst düzey fonksiyonlar! Bu derste fonksiyonları değer gibi kullanmayı; map, filter ve sorted ile çalışmayı ve fonksiyon üreten fonksiyonları öğreneceksin.
+
+- Fonksiyonlar da değerdir
+- map, filter, sorted ve key
+- Fonksiyon üreten fonksiyon
+
 ## Sahne 1: acilis (12 sn)
 
 **Seslendirme:** Selam, ben Piko! Atölyenin ustası bana bir sır verdi: aletleri başka aletlere de takabilirsin! Matkabın ucunu değiştirmek gibi, bir fonksiyona başka bir fonksiyonu verebilirsin. Bugün üst düzey fonksiyonları öğreniyoruz.
@@ -237,3 +245,13 @@ Piko
 **Görsel:** `gorseller/python/harita/atolye.webp`
 
 **Maskot:** tebrik pozu, orta
+
+## Çıkış (30gunde.com.tr yönlendirmesi)
+
+**Seslendirme:** Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!
+
+**Ekranda:** İnteraktif dersler için **30gunde.com.tr**
+
+- Kodunu tarayıcıda yaz ve çalıştır
+- Görevleri tamamla, rozet kazan
+- 30 günde adım adım Python

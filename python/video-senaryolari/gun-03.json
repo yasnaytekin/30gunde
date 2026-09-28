@@ -5,6 +5,25 @@
   "maskot": "piko",
   "ozet": "Piko, Python Köyü'nün pazarında bölmenin üç halini, işlem önceliğini, += kısayolunu, karşılaştırma ve mantık operatörlerini anlatıyor.",
   "hedef_sure_sn": 137,
+  "dil": "tr",
+  "giris": {
+    "anlatim": "Gün 3: Operatörler! Bu derste bölmenin üç halini, işlem önceliğini, karşılaştırma ve mantık operatörlerini öğreneceksin.",
+    "maddeler": [
+      "/, // ve % ile bölme",
+      "İşlem önceliği ve +=",
+      "Karşılaştırma: and, or, not"
+    ]
+  },
+  "cikis": {
+    "anlatim": "Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!",
+    "baslik": "İnteraktif dersler için",
+    "adres": "30gunde.com.tr",
+    "maddeler": [
+      "Kodunu tarayıcıda yaz ve çalıştır",
+      "Görevleri tamamla, rozet kazan",
+      "30 günde adım adım Python"
+    ]
+  },
   "sahneler": [
     {
       "no": 1,
@@ -138,7 +157,12 @@
         "vurgu_satirlari": [
           1
         ],
-        "cikti": "3 6"
+        "cikti": "3 6",
+        "cikti_cumle": 2,
+        "duzeltme": {
+          "kod": "print(3.5 + 1)\n",
+          "cikti": "4.5"
+        }
       },
       "maskot": {
         "poz": "uzgun",

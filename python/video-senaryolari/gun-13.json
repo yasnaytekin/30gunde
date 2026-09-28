@@ -5,6 +5,25 @@
   "maskot": "piko",
   "ozet": "Piko, atölyenin sihirli kalıbıyla list comprehension'ı anlatıyor: tek satırda liste üretmek, if ile süzmek, if-else ile dönüştürmek ve lambda ile isimsiz mini fonksiyonlar.",
   "hedef_sure_sn": 116,
+  "dil": "tr",
+  "giris": {
+    "anlatim": "Gün 13: List comprehension! Bu derste tek satırda liste üretmeyi, if ile süzmeyi ve lambda ile mini fonksiyonlar yazmayı öğreneceksin.",
+    "maddeler": [
+      "Tek satırda liste",
+      "if ile süzmek, if-else ile dönüştürmek",
+      "lambda: mini fonksiyon"
+    ]
+  },
+  "cikis": {
+    "anlatim": "Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!",
+    "baslik": "İnteraktif dersler için",
+    "adres": "30gunde.com.tr",
+    "maddeler": [
+      "Kodunu tarayıcıda yaz ve çalıştır",
+      "Görevleri tamamla, rozet kazan",
+      "30 günde adım adım Python"
+    ]
+  },
   "sahneler": [
     {
       "no": 1,

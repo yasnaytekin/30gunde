@@ -20,6 +20,14 @@ Ders metni: [gun-04.md](../gunler/gun-04.md)
 | 10 | ozet | 7 sn | on (sag) |
 | 11 | kapanis | 8 sn | tebrik (orta) |
 
+## Giriş (konu tanıtımı)
+
+**Seslendirme:** Gün 4: Stringler! Bu derste yazıları birleştirmeyi, harf harf dilimlemeyi ve f-string ile süslemeyi öğreneceksin.
+
+- Birleştirme ve tekrar
+- İndeks ve dilimleme
+- Metotlar ve f-string
+
 ## Sahne 1: acilis (12 sn)
 
 **Seslendirme:** Selam, ben Piko! Python Köyü'nde her yerde tabelalar, konuşmalar, mektuplar var. Oyunlarda da karakterler konuşur, isimler ekranda parlar. Bugün yazılarla, yani stringlerle oynuyoruz. Bir kelimeyi tersten yazdırmak ister misin?
@@ -154,6 +162,20 @@ print(name + " seviye " + level)
 TypeError: can only concatenate str (not "int") to str
 ```
 
+**Düzeltilmiş kod:**
+
+```python
+name = "Piko"
+level = 3
+print(f"{name} seviye {level}")
+```
+
+**Düzeltilmiş çıktı:**
+
+```text
+Piko seviye 3
+```
+
 **Maskot:** sasirma pozu, sag
 
 ## Sahne 7: soru (10 sn)
@@ -236,3 +258,13 @@ True
 **Maskot:** tebrik pozu, orta
 
 *Yönetmen notu: Harita köyden ormana doğru kayar.*
+
+## Çıkış (30gunde.com.tr yönlendirmesi)
+
+**Seslendirme:** Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!
+
+**Ekranda:** İnteraktif dersler için **30gunde.com.tr**
+
+- Kodunu tarayıcıda yaz ve çalıştır
+- Görevleri tamamla, rozet kazan
+- 30 günde adım adım Python

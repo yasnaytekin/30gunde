@@ -21,6 +21,14 @@ Ders metni: [gun-08.md](../gunler/gun-08.md)
 | 11 | ozet | 6 sn | on (sag) |
 | 12 | kapanis | 9 sn | tebrik (orta) |
 
+## Giriş (konu tanıtımı)
+
+**Seslendirme:** Gün 8: Dictionary! Bu derste bilgileri anahtar ve değerlerle saklamayı, güncellemeyi ve get ile hata almadan okumayı öğreneceksin.
+
+- Anahtar ve değer
+- Ekle, değiştir, sil
+- get() ve iç içe veriler
+
 ## Sahne 1: acilis (12 sn)
 
 **Seslendirme:** Selam, ben Piko! Veri Ormanı'nda yaşayan her canlının bir kimlik kartı var: adı, canı, gücü. Bunları bir listede tutarsak hangisi hangisiydi karışır. Bugün Python'ın sözlükleriyle tanışıyoruz!
@@ -251,3 +259,13 @@ print(len(hero), hero["hp"])
 **Maskot:** tebrik pozu, orta
 
 *Yönetmen notu: Harita ormandan kaleye doğru kayar.*
+
+## Çıkış (30gunde.com.tr yönlendirmesi)
+
+**Seslendirme:** Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!
+
+**Ekranda:** İnteraktif dersler için **30gunde.com.tr**
+
+- Kodunu tarayıcıda yaz ve çalıştır
+- Görevleri tamamla, rozet kazan
+- 30 günde adım adım Python

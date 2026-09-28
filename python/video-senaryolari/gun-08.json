@@ -5,6 +5,25 @@
   "maskot": "piko",
   "ozet": "Piko, Veri Ormanı'ndaki canlıların kimlik kartlarını sözlüklerle tutuyor: anahtarla değere ulaşmak, eklemek, değiştirmek, silmek, get() ile güvenli bakış ve iç içe veriler.",
   "hedef_sure_sn": 122,
+  "dil": "tr",
+  "giris": {
+    "anlatim": "Gün 8: Dictionary! Bu derste bilgileri anahtar ve değerlerle saklamayı, güncellemeyi ve get ile hata almadan okumayı öğreneceksin.",
+    "maddeler": [
+      "Anahtar ve değer",
+      "Ekle, değiştir, sil",
+      "get() ve iç içe veriler"
+    ]
+  },
+  "cikis": {
+    "anlatim": "Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!",
+    "baslik": "İnteraktif dersler için",
+    "adres": "30gunde.com.tr",
+    "maddeler": [
+      "Kodunu tarayıcıda yaz ve çalıştır",
+      "Görevleri tamamla, rozet kazan",
+      "30 günde adım adım Python"
+    ]
+  },
   "sahneler": [
     {
       "no": 1,

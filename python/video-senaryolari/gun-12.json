@@ -5,6 +5,25 @@
   "maskot": "piko",
   "ozet": "Piko, atölyenin alet dolabını açıyor: import ile modül kullanmak, math ve random modülleri, from ve as ile içe aktarmak ve kendi modülünü yazma fikri.",
   "hedef_sure_sn": 123,
+  "dil": "tr",
+  "giris": {
+    "anlatim": "Gün 12: Modüller! Bu derste import ile hazır modülleri kullanmayı, math ve random ile hesap yapıp oyuna şans katmayı öğreneceksin.",
+    "maddeler": [
+      "import ile modül kullanmak",
+      "math ve random",
+      "from, as ve seed"
+    ]
+  },
+  "cikis": {
+    "anlatim": "Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!",
+    "baslik": "İnteraktif dersler için",
+    "adres": "30gunde.com.tr",
+    "maddeler": [
+      "Kodunu tarayıcıda yaz ve çalıştır",
+      "Görevleri tamamla, rozet kazan",
+      "30 günde adım adım Python"
+    ]
+  },
   "sahneler": [
     {
       "no": 1,

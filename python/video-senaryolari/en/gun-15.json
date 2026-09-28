@@ -1,0 +1,267 @@
+{
+  "kurs": "python",
+  "gun": 15,
+  "baslik": "Error types",
+  "maskot": "piko",
+  "ozet": "In the workshop's detective office, Piko explains how to read error messages: line, type and description; common errors like NameError, ValueError, AttributeError and TypeError; and tracing with print.",
+  "hedef_sure_sn": 142,
+  "dil": "en",
+  "giris": {
+    "anlatim": "Day 15: Error types! In this lesson you'll learn to read error messages, recognize the most common error types, and track bugs down with print.",
+    "maddeler": [
+      "How to read an error message",
+      "NameError, ValueError, AttributeError",
+      "Tracing with print"
+    ]
+  },
+  "cikis": {
+    "anlatim": "The interactive version of this lesson is waiting for you at 30gunde.com.tr. Write your code right in the browser, run it instantly, and finish the tasks!",
+    "baslik": "Interactive lessons at",
+    "adres": "30gunde.com.tr",
+    "maddeler": [
+      "Write and run code in your browser",
+      "Finish tasks, earn badges",
+      "Learn Python step by step in 30 days"
+    ]
+  },
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 12,
+      "anlatim": "Hi, I'm Piko! The workshop's last room is a detective office. The desk is covered with broken code, and all of it gives red error messages. But error messages aren't our enemies, they're clues. Today we become error detectives!",
+      "ekran": {
+        "baslik": "Day 15: Error types",
+        "gorsel": "gorseller/python/harita/atolye.webp"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 2,
+      "tur": "anlatim",
+      "sure_sn": 12,
+      "anlatim": "An error message has three clues: the line number, the error type, and a short description. Go to the line first, then look at the type. The problem is usually on that line or right above it.",
+      "ekran": {
+        "baslik": "How to read an error message",
+        "maddeler": [
+          "Line number: where is the problem?",
+          "Error type: NameError, TypeError...",
+          "Description: the short sentence next to the type"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 3,
+      "tur": "hata",
+      "sure_sn": 12,
+      "anlatim": "NameError means a name that was never defined. Most of the time it's a typo. Python is a good detective partner: it even asks, did you mean score?",
+      "ekran": {
+        "baslik": "NameError",
+        "kod": "score = 10\nprint(scroe)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "NameError: name 'scroe' is not defined. Did you mean: 'score'?"
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "hata",
+      "sure_sn": 10,
+      "anlatim": "With a ValueError the type is right, but the value doesn't fit. int can turn text into a number, but it can't understand twelve written out in letters.",
+      "ekran": {
+        "baslik": "ValueError",
+        "kod": "text = \"twelve\"\nprint(int(text))\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "ValueError: invalid literal for int() with base 10: 'twelve'"
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "hata",
+      "sure_sn": 10,
+      "anlatim": "AttributeError means you called a method that type doesn't have. upper is a tool that belongs to text; a number has no such tool.",
+      "ekran": {
+        "baslik": "AttributeError",
+        "kod": "level = 5\nprint(level.upper())\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "AttributeError: 'int' object has no attribute 'upper'"
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 6,
+      "tur": "anlatim",
+      "sure_sn": 13,
+      "anlatim": "Let's add a few more suspects to the detective's notebook. A forgotten colon gives a SyntaxError, and broken indentation gives an IndentationError. A missing position gives an IndexError, a missing key gives a KeyError, and dividing by zero gives a ZeroDivisionError.",
+      "ekran": {
+        "baslik": "The suspect list",
+        "maddeler": [
+          "SyntaxError: a grammar rule is broken",
+          "IndentationError: bad indentation",
+          "TypeError: the wrong types together",
+          "IndexError: a position that isn't in the list",
+          "KeyError: a key that isn't in the dictionary",
+          "ZeroDivisionError: dividing by zero"
+        ]
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 7,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "Many errors come from mixed-up types. They all look like three, but their types are completely different! Three in quotes is text, and three in square brackets is a list.",
+      "ekran": {
+        "baslik": "Check the type",
+        "kod": "values = [3, \"3\", 3.0, True, [3]]\nfor v in values:\n    print(repr(v), \"->\", type(v).__name__)\n",
+        "dil": "python",
+        "cikti": "3 -> int\n'3' -> str\n3.0 -> float\nTrue -> bool\n[3] -> list"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "Some errors don't even give a message! The total should have been sixty, but it came out thirty. The detective's trick: put prints in between. The running total never builds up, so an equals sign must have been written instead of plus equals.",
+      "ekran": {
+        "baslik": "Trace it with print",
+        "kod": "prices = [10, 20, 30]\ntotal = 0\nfor p in prices:\n    total = p\n    print(\"running total:\", total)\nprint(\"Total:\", total)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          4,
+          5
+        ],
+        "cikti": "running total: 10\nrunning total: 20\nrunning total: 30\nTotal: 30"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "soru",
+      "sure_sn": 8,
+      "anlatim": "Now you're the detective! Which error type does this code give? A KeyError, or a TypeError?",
+      "ekran": {
+        "baslik": "Which error?",
+        "kod": "hero = {\"name\": \"Piko\"}\nprint(hero[\"name\"] + 5)\n",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 10,
+      "tur": "hata",
+      "sure_sn": 9,
+      "anlatim": "TypeError! The key exists, so it's not a KeyError. But the value that comes back is text, and you can't add a number to text.",
+      "ekran": {
+        "baslik": "The answer: TypeError",
+        "kod": "hero = {\"name\": \"Piko\"}\nprint(hero[\"name\"] + 5)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "TypeError: can only concatenate str (not \"int\") to str"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 11,
+      "tur": "gorev",
+      "sure_sn": 12,
+      "anlatim": "Your detective tasks are ready! You'll repair three broken pieces of code by reading their error messages: a TypeError, an IndexError and a KeyError. In the challenge you'll rescue an average function that crashes on an empty list.",
+      "ekran": {
+        "baslik": "Today's tasks",
+        "maddeler": [
+          "Task 1: Fix the TypeError",
+          "Task 2: Fix the IndexError",
+          "Task 3: Fix the KeyError",
+          "Challenge: Dividing by zero"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 12,
+      "tur": "ozet",
+      "sure_sn": 7,
+      "anlatim": "Today we learned to read error messages like clues and to recognize the suspects one by one.",
+      "ekran": {
+        "baslik": "What you learned today",
+        "maddeler": [
+          "First the line, then the error type, then the description",
+          "Common errors: NameError, TypeError, ValueError...",
+          "Check the type with type(), trace with print()"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 13,
+      "tur": "kapanis",
+      "sure_sn": 11,
+      "anlatim": "You've finished the Tool Workshop, congratulations, detective! Tomorrow we set sail for Discovery Island, where we'll do math with dates and times. On the island we'll also learn to catch errors before the program crashes.",
+      "ekran": {
+        "baslik": "Tomorrow: Dates and times",
+        "gorsel": "gorseller/python/harita/atolye.webp"
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

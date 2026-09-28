@@ -1,0 +1,258 @@
+{
+  "kurs": "python",
+  "gun": 11,
+  "baslik": "Functions",
+  "maskot": "piko",
+  "ozet": "In the Tool Workshop, Piko shows how to build your own tools: defining functions with def, parameters, returning results with return, default values, and *args.",
+  "hedef_sure_sn": 135,
+  "dil": "en",
+  "giris": {
+    "anlatim": "Day 11: Functions! In this lesson you'll write your own functions with def, give them parameters, and get results back with return.",
+    "maddeler": [
+      "Writing functions with def",
+      "Parameters and return",
+      "Default values and *args"
+    ]
+  },
+  "cikis": {
+    "anlatim": "The interactive version of this lesson is waiting for you at 30gunde.com.tr. Write your code right in the browser, run it instantly, and finish the tasks!",
+    "baslik": "Interactive lessons at",
+    "adres": "30gunde.com.tr",
+    "maddeler": [
+      "Write and run code in your browser",
+      "Finish tasks, earn badges",
+      "Learn Python step by step in 30 days"
+    ]
+  },
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 13,
+      "anlatim": "Hi, I'm Piko! Welcome to the Tool Workshop. Every tool here has a job: a hammer hammers, a saw cuts. A tool you make once can be used again and again. The same is possible in code! We call these tools functions.",
+      "ekran": {
+        "baslik": "Day 11: Functions",
+        "gorsel": "gorseller/python/harita/atolye.webp"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "With def you make your own function. The lines inside are indented, and they don't run until the function is called. Wherever you write its name and parentheses, it gets to work: here, twice.",
+      "ekran": {
+        "baslik": "Defining a function with def",
+        "kod": "def greet():\n    print(\"Hello!\")\n\ngreet()\ngreet()\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          1,
+          4,
+          5
+        ],
+        "cikti": "Hello!\nHello!"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 10,
+      "anlatim": "The names inside the parentheses are parameters. When you call the function, you put values into these boxes. The same tool gives different results with different materials.",
+      "ekran": {
+        "baslik": "Parameters",
+        "kod": "def greet(name):\n    print(f\"Hello {name}, welcome to the workshop!\")\n\ngreet(\"Piko\")\ngreet(\"Deniz\")\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          1,
+          4,
+          5
+        ],
+        "cikti": "Hello Piko, welcome to the workshop!\nHello Deniz, welcome to the workshop!"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 13,
+      "anlatim": "print only writes the result on the screen. return hands the result back to where the function was called, so you can put it in a variable and use it again. Careful: once return runs, the function stops right there.",
+      "ekran": {
+        "baslik": "return: hand back the result",
+        "kod": "def add(a, b):\n    return a + b\n\ntotal = add(3, 4)\nprint(total * 2)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2,
+          4
+        ],
+        "cikti": "14"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 11,
+      "anlatim": "If you give a parameter a default value, you don't have to write that value when you call it. If no amount is given, twenty is used; if you give one, yours wins.",
+      "ekran": {
+        "baslik": "Default values",
+        "kod": "def heal(hp, amount=20):\n    return hp + amount\n\nprint(heal(50))\nprint(heal(50, 5))\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          1
+        ],
+        "cikti": "70\n55"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 11,
+      "anlatim": "For functions that take as many values as you like, we use a starred parameter. All the numbers that come in are gathered in a tuple, and we add them all up with a loop.",
+      "ekran": {
+        "baslik": "*args: as many values as you like",
+        "kod": "def total(*numbers):\n    result = 0\n    for n in numbers:\n        result += n\n    return result\n\nprint(total(1, 2, 3, 4))\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          1
+        ],
+        "cikti": "10"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "hata",
+      "sure_sn": 13,
+      "anlatim": "The most common mix-up: writing print instead of return. The function prints seven on the screen but gives nothing back, so it returns None. Python can't multiply None by two, so we get a TypeError.",
+      "ekran": {
+        "baslik": "print or return?",
+        "kod": "def add(a, b):\n    print(a + b)\n\ntotal = add(3, 4)\nprint(total * 2)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2,
+          5
+        ],
+        "cikti": "7\nTypeError: unsupported operand type(s) for *: 'NoneType' and 'int'"
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "soru",
+      "sure_sn": 9,
+      "anlatim": "You can pass a function's result back into the same function. What do you think this code prints? Does Hello get printed?",
+      "ekran": {
+        "baslik": "What will it print?",
+        "kod": "def double(x):\n    return x * 2\n    print(\"Hello\")\n\nprint(double(double(3)))\n",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "cikti",
+      "sure_sn": 10,
+      "anlatim": "Twelve! The inner call gave six, and the outer one turned it into twelve. Hello was never printed, because once return runs, the function stops right there.",
+      "ekran": {
+        "baslik": "The answer",
+        "kod": "def double(x):\n    return x * 2\n    print(\"Hello\")\n\nprint(double(double(3)))\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2,
+          3
+        ],
+        "cikti": "12"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 10,
+      "tur": "gorev",
+      "sure_sn": 13,
+      "anlatim": "In the tasks you'll write a greeting function, return the area of a rectangle, and give an attack a default damage. In the stage task you'll build an army factory. And in the challenge you'll find the highest score without using max.",
+      "ekran": {
+        "baslik": "Today's tasks",
+        "maddeler": [
+          "Task 1: Greeting function",
+          "Task 2: Area calculator",
+          "Task 3: Default damage",
+          "Stage task: Army factory",
+          "Challenge: Highest score"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "ozet",
+      "sure_sn": 8,
+      "anlatim": "Today we built our own tools: we gave them materials, got their results back, and added default settings.",
+      "ekran": {
+        "baslik": "What you learned today",
+        "maddeler": [
+          "Define with def, call it by name",
+          "Parameters are the materials, return is the result",
+          "Default value: amount=20; many values: *args"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 12,
+      "tur": "kapanis",
+      "sure_sn": 10,
+      "anlatim": "Your first tools are ready, congratulations! Tomorrow we open the workshop's giant tool cabinet: modules written by other makers. We'll roll dice and create random events.",
+      "ekran": {
+        "baslik": "Tomorrow: Modules",
+        "gorsel": "gorseller/python/harita/atolye.webp"
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

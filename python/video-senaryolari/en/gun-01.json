@@ -1,0 +1,259 @@
+{
+  "kurs": "python",
+  "gun": 1,
+  "baslik": "Meet Python",
+  "maskot": "piko",
+  "dil": "en",
+  "ozet": "At Base Camp, Piko explains how to print text with print(), use Python as a calculator, write comments and read your first error message.",
+  "hedef_sure_sn": 133,
+  "giris": {
+    "anlatim": "Day 1: Meet Python! In this lesson you'll print text on the screen, make Python do math for you, and read your very first error message.",
+    "maddeler": [
+      "Print text with print()",
+      "Do math with Python",
+      "Read your first error"
+    ]
+  },
+  "cikis": {
+    "anlatim": "The interactive version of this lesson is waiting for you at 30gunde.com.tr. Write your code right in the browser, run it instantly, and finish the tasks!",
+    "baslik": "Interactive lessons at",
+    "adres": "30gunde.com.tr",
+    "maddeler": [
+      "Write and run code in your browser",
+      "Finish tasks, earn badges",
+      "Learn Python step by step in 30 days"
+    ]
+  },
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 12,
+      "anlatim": "Hi, I'm Piko! Welcome to Base Camp. Computers are super fast, but they don't know what to do on their own. You're the one who tells them. Ready? Today we talk to a computer for the very first time!",
+      "ekran": {
+        "baslik": "Day 1: Meet Python",
+        "gorsel": "gorseller/python/harita/kamp.webp"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "yonetmen_notu": "Zoom into the camp on the map; Piko peeks out from beside the campfire."
+    },
+    {
+      "no": 2,
+      "tur": "anlatim",
+      "sure_sn": 10,
+      "anlatim": "Code is a list of instructions you give a computer. Python reads them from top to bottom, line by line, and does them in order. Games, websites, artificial intelligence: Python is everywhere.",
+      "ekran": {
+        "baslik": "What is code?",
+        "maddeler": [
+          "Code: instructions for the computer",
+          "Python reads top to bottom, line by line",
+          "Games, websites, AI"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "Our first magic word is print. Whatever you put inside the parentheses shows up on the screen. Text goes inside quotes, numbers don't. Press Run, and two lines appear.",
+      "ekran": {
+        "baslik": "Talk with print()",
+        "kod": "print(\"Hello World!\")\nprint(42)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          1,
+          2
+        ],
+        "cikti": "Hello World!\n42",
+        "cikti_cumle": 3
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "Python is also a giant calculator. Plus adds, a star multiplies, and two stars raise to a power. Two to the power of ten is exactly one thousand twenty-four!",
+      "ekran": {
+        "baslik": "Python is a calculator",
+        "kod": "print(3 + 4)\nprint(10 * 5)\nprint(2 ** 10)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          3
+        ],
+        "cikti": "7\n50\n1024"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "A line that starts with a hash sign is a comment. Python skips it, so you can leave notes for yourself. With commas you can print several things side by side, and Python puts a space between them.",
+      "ekran": {
+        "baslik": "Comments and commas",
+        "kod": "# This is a comment, Python skips it\nprint(\"Piko\", \"says:\", \"Hi!\")\nprint(\"My age:\", 12)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          1,
+          2
+        ],
+        "cikti": "Piko says: Hi!\nMy age: 12"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 10,
+      "anlatim": "In some tasks, what you print turns into a picture on the stage. Every star becomes a Piko, and every hash sign becomes a wall. Here are five Pikos with five walls below them!",
+      "ekran": {
+        "baslik": "Drawing on the stage",
+        "kod": "print(\"*****\")\nprint(\"#####\")\n",
+        "dil": "python",
+        "cikti": "*****\n#####",
+        "izgara": true
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "alt-sag"
+      },
+      "calistir": true,
+      "yonetmen_notu": "Next to the output, a stage grid: stars turn into Piko figures, # signs into wall tiles."
+    },
+    {
+      "no": 7,
+      "tur": "hata",
+      "sure_sn": 14,
+      "anlatim": "Now let's forget one letter. Python answers in red: NameError, I don't know anything called prin. It even asks: did you mean print? Don't worry, the error message shows you where the problem is. Fix the letter and run it again.",
+      "ekran": {
+        "baslik": "Our first error",
+        "kod": "prin(\"Hello!\")\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          1
+        ],
+        "cikti": "NameError: name 'prin' is not defined. Did you mean: 'print'?",
+        "duzeltme": {
+          "kod": "print(\"Hello!\")\n",
+          "cikti": "Hello!"
+        }
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sag"
+      },
+      "calistir": true,
+      "yonetmen_notu": "The error line flashes red; the missing 't' drops into place and it turns green."
+    },
+    {
+      "no": 8,
+      "tur": "soru",
+      "sure_sn": 8,
+      "anlatim": "Your turn. Do you think these two lines print the same thing? Think for a second...",
+      "ekran": {
+        "baslik": "What will it print?",
+        "kod": "print(3 + 4)\nprint(\"3 + 4\")\n",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      },
+      "calistir": true,
+      "yonetmen_notu": "A 3-second countdown on screen."
+    },
+    {
+      "no": 9,
+      "tur": "cikti",
+      "sure_sn": 10,
+      "anlatim": "Nope! The first line does the math and prints seven. In the second line the math is inside quotes, so it's just text. Python doesn't calculate it, it prints it exactly as it is.",
+      "ekran": {
+        "baslik": "The answer",
+        "kod": "print(3 + 4)\nprint(\"3 + 4\")\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "7\n3 + 4"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 10,
+      "tur": "gorev",
+      "sure_sn": 16,
+      "anlatim": "Now the stage is yours! First you'll print your very first words, then introduce yourself. You'll also find out how many hours there are in a year, but don't do the math yourself, let Python do it. And in the stage task, you'll line up your own Piko army.",
+      "ekran": {
+        "baslik": "Today's tasks",
+        "maddeler": [
+          "Task 1: Your first words",
+          "Task 2: Introduce yourself",
+          "Task 3: Hours in a year?",
+          "Stage task: Piko army",
+          "Challenge: Starry banner"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "ozet",
+      "sure_sn": 10,
+      "anlatim": "Today we printed on the screen with print, made Python do math, left a comment, and read our first error message. Not bad, right?",
+      "ekran": {
+        "baslik": "What you learned today",
+        "maddeler": [
+          "print() writes to the screen; text goes in quotes",
+          "Do math with + - * / **",
+          "# starts a comment; errors show the way"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 12,
+      "tur": "kapanis",
+      "sure_sn": 9,
+      "anlatim": "You wrote your first code, congratulations! Tomorrow we'll open labeled boxes in the computer's memory, and keep our hero's name and health in them. See you!",
+      "ekran": {
+        "baslik": "Tomorrow: Variables",
+        "gorsel": "gorseller/python/rozetler/ilk-kod.webp"
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      },
+      "yonetmen_notu": "The First Code badge floats onto the screen, then the camp map slowly fades out."
+    }
+  ]
+}

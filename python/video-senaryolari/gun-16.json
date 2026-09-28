@@ -5,6 +5,25 @@
   "maskot": "piko",
   "ozet": "Piko, Keşif Adası'ndaki güneş saatinin önünde datetime modülünü anlatıyor: tarih oluşturmak, strftime ile biçimlendirmek ve tarihler arasında gün hesabı yapmak.",
   "hedef_sure_sn": 157,
+  "dil": "tr",
+  "giris": {
+    "anlatim": "Gün 16: Tarih ve saat! Bu derste datetime modülüyle tarih oluşturmayı, biçimlendirmeyi ve tarihler arasında gün hesabı yapmayı öğreneceksin.",
+    "maddeler": [
+      "date ve datetime",
+      "strftime ile biçimlendirmek",
+      "timedelta ile gün hesabı"
+    ]
+  },
+  "cikis": {
+    "anlatim": "Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!",
+    "baslik": "İnteraktif dersler için",
+    "adres": "30gunde.com.tr",
+    "maddeler": [
+      "Kodunu tarayıcıda yaz ve çalıştır",
+      "Görevleri tamamla, rozet kazan",
+      "30 günde adım adım Python"
+    ]
+  },
   "sahneler": [
     {
       "no": 1,

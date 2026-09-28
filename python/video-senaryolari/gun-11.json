@@ -5,6 +5,25 @@
   "maskot": "piko",
   "ozet": "Piko, Alet Atölyesi'nde kendi aletlerini yapmayı anlatıyor: def ile fonksiyon tanımlamak, parametreler, return ile sonuç döndürmek, varsayılan değerler ve *args.",
   "hedef_sure_sn": 134,
+  "dil": "tr",
+  "giris": {
+    "anlatim": "Gün 11: Fonksiyonlar! Bu derste def ile kendi fonksiyonlarını yazmayı, parametre almayı ve return ile sonuç döndürmeyi öğreneceksin.",
+    "maddeler": [
+      "def ile fonksiyon yazmak",
+      "Parametre ve return",
+      "Varsayılan değer ve *args"
+    ]
+  },
+  "cikis": {
+    "anlatim": "Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!",
+    "baslik": "İnteraktif dersler için",
+    "adres": "30gunde.com.tr",
+    "maddeler": [
+      "Kodunu tarayıcıda yaz ve çalıştır",
+      "Görevleri tamamla, rozet kazan",
+      "30 günde adım adım Python"
+    ]
+  },
   "sahneler": [
     {
       "no": 1,

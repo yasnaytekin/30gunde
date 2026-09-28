@@ -21,6 +21,14 @@ Ders metni: [gun-03.md](../gunler/gun-03.md)
 | 11 | ozet | 8 sn | on (sag) |
 | 12 | kapanis | 9 sn | tebrik (orta) |
 
+## Giriş (konu tanıtımı)
+
+**Seslendirme:** Gün 3: Operatörler! Bu derste bölmenin üç halini, işlem önceliğini, karşılaştırma ve mantık operatörlerini öğreneceksin.
+
+- /, // ve % ile bölme
+- İşlem önceliği ve +=
+- Karşılaştırma: and, or, not
+
 ## Sahne 1: acilis (12 sn)
 
 **Seslendirme:** Selam, ben Piko! Python Köyü'ne hoş geldin. Oyunlarda her şey sayılarla döner: skor, can, altın. Bugün köyün pazarında hesapları sen yapacaksın. İlk soru: yedi elmayı iki kişiye nasıl bölersin?
@@ -177,6 +185,18 @@ print(3,5 + 1)
 3 6
 ```
 
+**Düzeltilmiş kod:**
+
+```python
+print(3.5 + 1)
+```
+
+**Düzeltilmiş çıktı:**
+
+```text
+4.5
+```
+
 **Maskot:** uzgun pozu, sag
 
 ## Sahne 8: soru (8 sn)
@@ -254,3 +274,13 @@ False
 **Görsel:** `gorseller/python/harita/koy.webp`
 
 **Maskot:** tebrik pozu, orta
+
+## Çıkış (30gunde.com.tr yönlendirmesi)
+
+**Seslendirme:** Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!
+
+**Ekranda:** İnteraktif dersler için **30gunde.com.tr**
+
+- Kodunu tarayıcıda yaz ve çalıştır
+- Görevleri tamamla, rozet kazan
+- 30 günde adım adım Python

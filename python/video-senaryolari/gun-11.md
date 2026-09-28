@@ -21,6 +21,14 @@ Ders metni: [gun-11.md](../gunler/gun-11.md)
 | 11 | ozet | 8 sn | on (sag) |
 | 12 | kapanis | 10 sn | tebrik (orta) |
 
+## Giriş (konu tanıtımı)
+
+**Seslendirme:** Gün 11: Fonksiyonlar! Bu derste def ile kendi fonksiyonlarını yazmayı, parametre almayı ve return ile sonuç döndürmeyi öğreneceksin.
+
+- def ile fonksiyon yazmak
+- Parametre ve return
+- Varsayılan değer ve *args
+
 ## Sahne 1: acilis (12 sn)
 
 **Seslendirme:** Selam, ben Piko! Alet Atölyesi'ne hoş geldin. Burada her aletin bir işi var: çekiç çakar, testere keser. Bir kere yapılan alet defalarca kullanılır. Kodda da aynısı mümkün! Bu aletlere fonksiyon diyoruz.
@@ -264,3 +272,13 @@ print(double(double(3)))
 **Görsel:** `gorseller/python/harita/atolye.webp`
 
 **Maskot:** tebrik pozu, orta
+
+## Çıkış (30gunde.com.tr yönlendirmesi)
+
+**Seslendirme:** Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!
+
+**Ekranda:** İnteraktif dersler için **30gunde.com.tr**
+
+- Kodunu tarayıcıda yaz ve çalıştır
+- Görevleri tamamla, rozet kazan
+- 30 günde adım adım Python

@@ -4,28 +4,50 @@
 zamana göre çizilir, Playwright (Chromium) her kareyi çeker, ffmpeg kareleri videoya dönüştürür.
 Böylece çıktı her seferinde birebir aynı olur.
 
-Gerekenler: Python 3, `pip install playwright numpy scipy` + `playwright install chromium`, ffmpeg.
+Gerekenler: Python 3, `pip install playwright numpy scipy` + `playwright install chromium`, ffmpeg
+(ders videosu `imageio-ffmpeg` paketindeki ffmpeg'i kullanır).
 Yazı tipi olarak Poppins (Google Fonts) ve kod için DejaVu Sans Mono kurulu olmalı.
 
 ## ders-videosu/: gün gün konu anlatım videoları
 
-`python/video-senaryolari/gun-XX.json` ve `javascript/video-senaryolari/gun-XX.json` dosyalarını okur.
+Senaryodan **seslendirilmiş, maskotu konuşan, müzikli** videoyu tek komutla üretir:
 
 ```bash
 cd video-sablonu/ders-videosu
-python3 build.py ../../javascript/video-senaryolari/gun-01.json   # built.html üretir
-python3 preview.py h 3,20,45                                     # birkaç anın ekran görüntüsü
-python3 render.py h                                              # yatay 1920x1080 → ders_h.mp4
-python3 render.py v                                              # dikey 1080x1920 → ders_v.mp4 (Reels/Shorts)
-SUBTITLES=0 python3 render.py h                                  # altyazısız
+bash modelleri-indir.sh                        # bir kez: seslendirme modelleri (~430 MB, GitHub'dan)
+pip install sherpa-onnx soundfile numpy scipy pillow imageio-ffmpeg playwright
+python3 uret.py python 1                       # Türkçe + İngilizce, yatay + dikey → 4 video
+python3 uret.py python 1 --dil tr --yon h      # yalnızca Türkçe yatay
+python3 uret.py python 1 --onizleme 5,30,90    # video yerine o anların ekran görüntüsü (is/… klasörüne)
 ```
 
-- Her sahne senaryodaki `sure_sn` kadar sürer. Kod sahnelerinde kod yazılıyormuş gibi belirir,
-  vurgulanan satırlar parlar, çıktı paneli sonra açılır. Maskot pozu sahneden sahneye değişir.
-- Seslendirme henüz yok: altyazı olarak senaryodaki `anlatim` metni gösterilir. Seslendirme
-  (insan sesi ya da TTS) sahne sürelerine göre kaydedilip ffmpeg ile eklenebilir:
-  `ffmpeg -i ders_h.mp4 -i ses.wav -c:v copy -c:a aac -shortest gun-01.mp4`
-- Tema kursa göre otomatik seçilir: Python açık renk harita teması, JavaScript lacivert uzay teması.
+Çıktı: `cikti/<kurs>/gun-XX/<kurs>-gun-XX-<dil>-<yatay|dikey>.mp4` ve her dil için `.srt` altyazı dosyası.
+Yatay 1920x1080, dikey 1080x1920 (Reels/Shorts), 30 fps, H.264 + AAC, ses -16 LUFS.
+
+Videonun akışı:
+
+1. **Giriş (konu tanıtımı):** logo, "Gün N", günün başlığı ve "Bu derste" maddeleri; Piko konuyu tanıtır (senaryodaki `giris`).
+2. **Sahneler:** senaryodaki sahneler. Kod yazılıyormuş gibi belirir (klavye sesiyle), "Çalıştır" düğmesine basılır,
+   çıktı açılır. `hata` sahnesinde hata paneli kırmızı titrer; `ekran.duzeltme` varsa kod düzeltilip yeşile döner.
+   `ekran.izgara: true` çıktıyı sahne ızgarası olarak çizer (`*` Piko, `#` duvar, `o` altın, `H` kalp).
+   `soru` sahnesinde soru sorulduktan sonra 3-2-1 geri sayım olur.
+3. **Çıkış:** "İnteraktif dersler için 30gunde.com.tr" kartı (senaryodaki `cikis`).
+
+Ses ve konuşturma:
+
+- **Seslendirme** çevrim dışı yapılır ([sherpa-onnx](https://github.com/k2-fsa/sherpa-onnx)): Türkçe Piper `tr_TR-fahrettin-medium`,
+  İngilizce Kokoro `am_michael` (biraz inceltilmiş). Ayarlar ve telaffuz düzeltmeleri `ses.py` içinde (`SESLER`, `TELAFFUZ`;
+  ör. "Python" → "Pay tın"). Bir sahnede özel okuma gerekirse sahneye `"seslendirme": "..."` yazılır, altyazı `anlatim` kalır.
+- **Sahne süreleri sese göre** ayarlanır (senaryodaki `sure_sn` yalnızca sessiz önizlemede kullanılır). Altyazılar cümle cümle
+  gerçek sesle eşzamanlıdır. Çıktının hangi cümlede açılacağı `ekran.cikti_cumle` (0'dan başlayan cümle sırası) ile seçilebilir.
+- **Dudak senkronu:** ses zarfından ağız açıklığı ve kaba ağız şekli çıkarılır. `on` pozunda Piko'nun gerçek ağız kareleri
+  (a, e, i, o, u, kapalı) kullanılır; ağzı açık pozlarda (konusma, mutlu, isaret, sasirma, tebrik, sol, sag) ağız parçası
+  sesle açılıp kapanır; ağzı kapalı pozlarda (dusunme, uzgun) Piko konuşurken öne döner. Parçaları `araclar/agiz-rig.py`
+  üretir (`maskotlar/piko-python/konusma-rig/`). Kodi için dudak senkronu henüz yok (pozlar olduğu gibi gösterilir).
+- **Müzik ve efektler** `muzik.py` ile kodla sentezlenir (telifsiz): sakin bir döngü, konuşurken otomatik kısılır;
+  geçiş, klavye, çıktı, hata, doğru cevap ve geri sayım efektleri.
+
+Sessiz, hızlı önizleme için eski yol da çalışır: `python3 build.py <senaryo.json>`, `python3 preview.py h 3,20`, `python3 render.py h`.
 
 ## tanitim-videosu/: 30 saniyelik tanıtım videosu (30 Günde Python)
 

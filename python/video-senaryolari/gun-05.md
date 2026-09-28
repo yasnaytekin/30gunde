@@ -20,6 +20,14 @@ Ders metni: [gun-05.md](../gunler/gun-05.md)
 | 10 | ozet | 7 sn | on (sag) |
 | 11 | kapanis | 9 sn | tebrik (orta) |
 
+## Giriş (konu tanıtımı)
+
+**Seslendirme:** Gün 5: Listeler! Bu derste kahramanın çantasını bir listeyle düzenlemeyi; eleman eklemeyi, çıkarmayı ve listeyi incelemeyi öğreneceksin.
+
+- Liste oluşturmak ve indeks
+- append, remove, pop
+- sum, max, sorted
+
 ## Sahne 1: acilis (12 sn)
 
 **Seslendirme:** Selam, ben Piko! Veri Ormanı'na hoş geldin. Maceraya çıkan her kahramanın bir çantası vardır: kılıç, iksir, harita. Onlarca eşyayı tek tek değişkende tutmak zor olurdu. Çözüm mü? Liste!
@@ -152,6 +160,19 @@ print(inventory[3])
 IndexError: list index out of range
 ```
 
+**Düzeltilmiş kod:**
+
+```python
+inventory = ["kılıç", "iksir", "harita"]
+print(inventory[-1])
+```
+
+**Düzeltilmiş çıktı:**
+
+```text
+harita
+```
+
 **Maskot:** sasirma pozu, sag
 
 ## Sahne 7: soru (8 sn)
@@ -231,3 +252,13 @@ print(len(nums), nums[-1])
 **Görsel:** `gorseller/python/harita/orman.webp`
 
 **Maskot:** tebrik pozu, orta
+
+## Çıkış (30gunde.com.tr yönlendirmesi)
+
+**Seslendirme:** Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!
+
+**Ekranda:** İnteraktif dersler için **30gunde.com.tr**
+
+- Kodunu tarayıcıda yaz ve çalıştır
+- Görevleri tamamla, rozet kazan
+- 30 günde adım adım Python

@@ -16,15 +16,16 @@ body { font-family: "Body", "Poppins", system-ui, sans-serif; font-weight: 500; 
 .theme-python .bg { background: radial-gradient(1200px 700px at 85% -10%, #FFE9A8 0, transparent 60%), radial-gradient(900px 600px at -10% 100%, #CFE3FF 0, transparent 60%), #F4F8FF; }
 .theme-javascript { --ink: #EEF1FF; --ink2: #A9B2D9; --accent: #F7DF1E; --accent2: #4FE3F0; --panel: #141C45; --line: #2A3670; color: var(--ink); }
 .theme-javascript .bg { background: linear-gradient(rgba(11,16,38,.55), rgba(11,16,38,.55)), var(--space) center / cover, #0B1026; }
-.top { position: absolute; left: 64px; top: 40px; display: flex; align-items: center; gap: 16px; font-family: "Head"; font-size: 30px; }
+.dots { position: absolute; inset: 0; opacity: .5; background-image: radial-gradient(rgba(47,109,181,.16) 3px, transparent 3.5px); background-size: 44px 44px; }
+.theme-javascript .dots { display: none; }
+.top { position: absolute; left: 64px; top: 40px; display: flex; align-items: center; gap: 16px; font-family: "Head"; font-size: 30px; z-index: 5; }
 .top img { width: 56px; height: 56px; border-radius: 14px; }
 .top .day { color: var(--accent); }
-.theme-python .top .day { color: var(--accent); }
+.progress { position: absolute; left: 0; bottom: 0; height: 8px; background: var(--accent2); z-index: 6; }
 .scene { position: absolute; inset: 0; opacity: 0; }
 .h1 { font-family: "Head", "Poppins", sans-serif; font-weight: 700; line-height: 1.12; letter-spacing: -.01em; }
 .title-big { position: absolute; left: 120px; top: 300px; width: 1050px; font-size: 92px; }
 .title-big small { display: block; font-size: 38px; color: var(--accent); margin-bottom: 14px; }
-.theme-python .title-big small { color: var(--accent); }
 .heading { position: absolute; left: 120px; top: 150px; width: 1180px; font-size: 62px; }
 .bullets { position: absolute; left: 120px; top: 300px; width: 1100px; margin: 0; padding: 0; list-style: none; }
 .bullets li { font-size: 44px; line-height: 1.3; margin: 0 0 30px; padding-left: 64px; position: relative; }
@@ -33,58 +34,134 @@ body { font-family: "Body", "Poppins", system-ui, sans-serif; font-weight: 500; 
 .code { position: absolute; left: 120px; top: 270px; width: 1180px; background: #0E1430; border-radius: 26px; box-shadow: 0 30px 80px rgba(8,18,40,.35); overflow: hidden; border: 1px solid rgba(255,255,255,.08); }
 .code .bar { height: 54px; display: flex; align-items: center; gap: 12px; padding: 0 22px; background: rgba(255,255,255,.05); color: #8FA4C4; font-size: 24px; }
 .code .bar i { width: 16px; height: 16px; border-radius: 50%; display: inline-block; }
+.code .bar .run { margin-left: auto; font-family: "Head"; font-size: 22px; color: #0E1430; background: #2E9E62; padding: 6px 18px; border-radius: 10px; }
 .code pre { margin: 0; padding: 26px 30px 30px 0; font: 34px/1.5 "DejaVu Sans Mono", ui-monospace, Menlo, Consolas, monospace; color: #E9ECFF; white-space: pre; }
 .code .ln { display: block; padding-left: 30px; border-left: 6px solid transparent; }
 .code .ln.hl { background: rgba(247,223,30,.12); border-left-color: #F7DF1E; }
+.code .ln.bad { background: rgba(232,87,74,.28); border-left-color: #E8574A; }
+.code .ln.ok { background: rgba(46,158,98,.25); border-left-color: #2E9E62; }
+.code .ins { background: #2E9E62; color: #fff; border-radius: 4px; }
 .code .n { display: inline-block; width: 44px; color: #4A5A86; user-select: none; }
 .caret { display: inline-block; width: 3px; height: 1.1em; background: #F7DF1E; vertical-align: -0.15em; margin-left: 2px; }
 .t-k { color: #C792EA; } .t-s { color: #C3E88D; } .t-c { color: #6C7AA6; font-style: italic; } .t-n { color: #F78C6C; } .t-f { color: #82AAFF; }
-.out { position: absolute; left: 120px; width: 1180px; background: var(--panel); border-radius: 22px; border: 2px solid var(--line); padding: 22px 30px; box-shadow: 0 20px 50px rgba(8,18,40,.18); }
+.out { position: absolute; left: 120px; width: 1180px; background: var(--panel); border-radius: 22px; border: 2px solid var(--line); padding: 22px 30px; box-shadow: 0 20px 50px rgba(8,18,40,.18); opacity: 0; }
 .out b { display: block; font-family: "Head"; font-size: 24px; color: var(--ink2); margin-bottom: 8px; text-transform: uppercase; letter-spacing: .08em; }
 .out pre { margin: 0; font: 34px/1.45 "DejaVu Sans Mono", ui-monospace, monospace; white-space: pre-wrap; color: var(--ink); }
+.out.err { border-color: #E8574A; background: #FFF1EF; } .out.err b, .out.err pre { color: #B3261E; }
+.theme-javascript .out.err { background: #3A1420; } .theme-javascript .out.err pre, .theme-javascript .out.err b { color: #FF9A8F; }
+.out.good { border-color: #2E9E62; } .out.good b { color: #2E9E62; }
+.grid { position: absolute; left: 120px; display: flex; flex-direction: column; gap: 8px; padding: 18px 24px; background: #E8F4E0; border: 2px solid #BFDDAA; border-radius: 22px; opacity: 0; }
+.grid b { font-family: "Head"; font-size: 22px; color: #3E6B2A; text-transform: uppercase; letter-spacing: .08em; }
+.grid .row { display: flex; gap: 8px; }
+.grid .c { width: 72px; height: 72px; display: grid; place-items: center; }
+.grid .c img { height: 72px; }
+.grid .wall { background: linear-gradient(#B5652F, #8E4A1F); border-radius: 8px; box-shadow: inset 0 -6px 0 rgba(0,0,0,.2), inset 0 0 0 3px rgba(255,255,255,.15); }
+.grid .coin { width: 44px; height: 44px; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #FFE680, #E0A800); }
 .picture { position: absolute; right: 90px; top: 150px; width: 820px; height: 720px; display: grid; place-items: center; }
 .picture.with-m { right: 470px; width: 600px; }
+.picture.with-orta { right: 50px; width: 440px; }
+.scene.has-pic .mascot.orta { left: 60%; }
+body.v .scene.has-pic .mascot.orta { left: 50%; }
+body.v .picture.with-orta { left: 90px; width: 900px; }
 .scene.has-pic .title-big, .scene.has-pic .heading, .scene.has-pic .bullets { width: 700px; }
-body.v .scene.has-pic .title-big, body.v .scene.has-pic .heading, body.v .scene.has-pic .bullets { width: 940px; }
-body.v .picture.with-m { left: 60px; width: 700px; }
 .picture img { max-width: 100%; max-height: 100%; filter: drop-shadow(0 30px 60px rgba(0,0,0,.35)); }
 .mascot { position: absolute; bottom: 150px; height: 560px; filter: drop-shadow(0 24px 40px rgba(0,0,0,.3)); }
-.mascot.sag { right: 90px; } .mascot.sol { left: 60px; } .mascot.orta { left: 50%; margin-left: -200px; }
+.mascot .layer { position: absolute; inset: 0; }
+.mascot .layer > img { position: absolute; }
+.mascot .layer > img.base { left: 0; top: 0; width: 100%; height: 100%; }
+.mascot .layer.talk { inset: auto; top: 0; left: 50%; height: 100%; transform: translateX(-50%); }
+.mascot .mouth { transform-origin: 50% 0; }
+.mascot.sag { right: 90px; } .mascot.sol { left: 60px; } .mascot.orta { left: 50%; }
 .mascot.alt-sag { right: 60px; bottom: 150px; height: 380px; } .mascot.alt-sol { left: 60px; bottom: 150px; height: 380px; }
-.scene.m-sol .heading, .scene.m-sol .bullets, .scene.m-sol .code, .scene.m-sol .out, .scene.m-sol .title-big { left: 560px; width: 1240px; }
-.sub { position: absolute; left: 50%; bottom: 44px; transform: translateX(-50%); max-width: 1500px; padding: 16px 30px; border-radius: 18px; background: rgba(8,12,30,.78); color: #fff; font-size: 34px; line-height: 1.35; text-align: center; }
-.tag { position: absolute; left: 120px; top: 150px; font-family: "Head"; font-size: 28px; padding: 8px 22px; border-radius: 999px; background: var(--accent); color: #0B1026; }
+.scene.m-sol .heading, .scene.m-sol .bullets, .scene.m-sol .code, .scene.m-sol .out, .scene.m-sol .title-big, .scene.m-sol .grid { left: 560px; width: 1240px; }
+.scene.m-sol .grid { width: auto; }
+.count { position: absolute; left: 120px; width: 1180px; display: flex; align-items: center; gap: 30px; opacity: 0; }
+.count .num { width: 150px; height: 150px; border-radius: 50%; background: var(--accent2); color: #13233F; font: 700 92px/150px "Head"; text-align: center; box-shadow: 0 16px 40px rgba(0,0,0,.2); }
+.count span { font-family: "Head"; font-size: 48px; }
+.sub { position: absolute; left: 50%; bottom: 44px; transform: translateX(-50%); width: max-content; max-width: 1500px; padding: 16px 30px; border-radius: 18px; background: rgba(8,12,30,.78); color: #fff; font-size: 34px; line-height: 1.35; text-align: center; z-index: 7; display: none; }
+/* giriş */
+.intro .logo { position: absolute; left: 120px; top: 150px; width: 132px; height: 132px; border-radius: 30px; box-shadow: 0 18px 40px rgba(8,18,40,.25); }
+.intro .brand { position: absolute; left: 280px; top: 174px; font-family: "Head"; font-size: 50px; }
+.intro .brand small { display: block; font-size: 26px; color: var(--ink2); font-family: "Body"; }
+.intro .pill { position: absolute; left: 120px; top: 330px; padding: 10px 30px; border-radius: 999px; background: var(--accent2); color: #13233F; font-family: "Head"; font-size: 40px; }
+.theme-javascript .intro .pill { background: var(--accent); color: #0B1026; }
+.intro .title { position: absolute; left: 120px; top: 405px; width: 1150px; font-size: 104px; }
+.intro .learn { position: absolute; left: 120px; top: 580px; width: 1200px; }
+.intro .learn b { display: block; font-family: "Head"; font-size: 30px; color: var(--accent); margin-bottom: 18px; text-transform: uppercase; letter-spacing: .08em; }
+.intro .chips { display: flex; flex-direction: column; align-items: flex-start; gap: 16px; }
+.intro .chip { font-size: 36px; padding: 12px 28px; transform-origin: 0 50%; border-radius: 18px; background: var(--panel); border: 2px solid var(--line); box-shadow: 0 10px 26px rgba(8,18,40,.12); opacity: 0; }
+.intro .glow, .outro .glow { position: absolute; right: 120px; top: 170px; width: 700px; height: 700px; border-radius: 50%; background: radial-gradient(circle, rgba(255,200,61,.55), rgba(255,200,61,0) 65%); }
+.theme-javascript .glow { background: radial-gradient(circle, rgba(79,227,240,.35), rgba(79,227,240,0) 65%); }
+/* çıkış */
+.outro .heading { top: 170px; font-size: 58px; }
+.outro .url { position: absolute; left: 120px; top: 290px; width: 1180px; height: 170px; display: flex; align-items: center; gap: 28px; padding: 0 44px; border-radius: 34px; background: var(--panel); border: 4px solid var(--accent); box-shadow: 0 26px 60px rgba(8,18,40,.22); }
+.outro .url svg { flex: none; }
+.outro .url .txt { font-family: "Head"; font-size: 96px; color: var(--accent); letter-spacing: -.01em; white-space: nowrap; }
+.outro .url .caret { background: var(--accent); width: 6px; }
+.outro .bullets { top: 540px; }
+.outro .bullets li::before { content: "✓"; background: #2E9E62; color: #fff; font: 700 22px/30px "Head"; text-align: center; width: 30px; height: 30px; box-shadow: none; border-radius: 50%; top: 14px; }
+.outro .foot { position: absolute; left: 120px; bottom: 120px; display: flex; align-items: center; gap: 16px; font-family: "Head"; font-size: 30px; color: var(--ink2); }
+.outro .foot img { width: 56px; height: 56px; border-radius: 14px; }
 /* dikey (9:16) */
 body.v { --W: 1080px; --H: 1920px; }
 body.v .top { left: 48px; top: 48px; font-size: 32px; }
 body.v .title-big { left: 70px; top: 360px; width: 940px; font-size: 84px; }
 body.v .heading { left: 70px; top: 190px; width: 940px; font-size: 56px; }
 body.v .bullets { left: 70px; top: 380px; width: 940px; }
-body.v .code, body.v .out { left: 50px; width: 980px; }
+body.v .code, body.v .out, body.v .count { left: 50px; width: 980px; }
+body.v .grid { left: 50px; }
 body.v .code { top: 360px; }
 body.v .picture { left: 90px; right: auto; top: 640px; width: 900px; height: 640px; }
+body.v .picture.with-m { left: 60px; width: 700px; }
+body.v .scene.has-pic .title-big, body.v .scene.has-pic .heading, body.v .scene.has-pic .bullets { width: 940px; }
 body.v .mascot { height: 460px; bottom: 300px; }
+body.v .mascot.alt-sag, body.v .mascot.alt-sol { height: 360px; bottom: 300px; }
 body.v .mascot.sol, body.v .mascot.alt-sol { left: auto; right: 40px; }
 body.v .scene.m-sol .heading, body.v .scene.m-sol .bullets, body.v .scene.m-sol .title-big { left: 70px; width: 940px; }
 body.v .scene.m-sol .code, body.v .scene.m-sol .out { left: 50px; width: 980px; }
+body.v .scene.m-sol .grid { left: 50px; }
 body.v .sub { bottom: 90px; max-width: 980px; font-size: 38px; }
+body.v .intro .logo { left: 70px; top: 200px; }
+body.v .intro .brand { left: 230px; top: 222px; font-size: 46px; }
+body.v .intro .pill { left: 70px; top: 400px; }
+body.v .intro .title { left: 70px; top: 490px; width: 940px; font-size: 96px; }
+body.v .intro .learn { left: 70px; top: 760px; width: 940px; }
+body.v .intro .chips { flex-direction: column; align-items: flex-start; }
+body.v .glow { right: -120px; top: auto; bottom: 200px; }
+body.v .outro .heading { left: 70px; top: 260px; width: 940px; }
+body.v .outro .url { left: 50px; top: 420px; width: 980px; height: 150px; padding: 0 30px; gap: 20px; }
+body.v .outro .url .txt { font-size: 74px; }
+body.v .outro .bullets { left: 70px; top: 650px; width: 940px; }
+body.v .outro .foot { left: 70px; bottom: 820px; }
 </style>
 </head>
 <body>
-<div id="stage"><div class="bg"></div><div class="top"><img id="logo" alt=""><span id="course"></span><span class="day" id="dayname"></span></div></div>
+<div id="stage"><div class="bg"></div><div class="dots"></div><div class="top"><img id="logo" alt=""><span id="course"></span><span class="day" id="dayname"></span></div><div class="sub" id="sub"></div><div class="progress" id="progress"></div></div>
 <script>
 const S = __SENARYO__;
+const Z0 = __ZAMAN__;   // uret.py: sese göre zaman çizelgesi + dudak senkronu. null ise sure_sn'den hesaplanır (sessiz önizleme).
+const RIG = __RIG__;    // Piko dudak senkronu parçaları (maskotlar/piko-python/konusma-rig/rig.json)
 const ROOT = "__ROOT__";   // repo köküne göreli yol
 const V = new URLSearchParams(location.search).get("o") === "v";
 if (V) document.body.classList.add("v");
 const JS = S.kurs === "javascript";
+const DIL = S.dil || "tr";
+document.documentElement.lang = DIL;  // büyük harf dönüşümü (i → İ / I) dile göre
+const TXT = {
+  tr: { course: JS ? "30 Günde JavaScript" : "30 Günde Python", day: "Gün", output: "Çıktı", error: "Hata", see: "Görüşmek üzere", learn: "Bu derste", stage: "Sahne", think: "Düşün!", run: "Çalıştır", file: JS ? "kod.js" : "kod.py" },
+  en: { course: JS ? "JavaScript in 30 Days" : "Python in 30 Days", day: "Day", output: "Output", error: "Error", see: "See you soon", learn: "In this lesson", stage: "Stage", think: "Think!", run: "Run", file: JS ? "code.js" : "code.py" },
+}[DIL];
 const MK = JS ? "kodi-javascript" : "piko-python";
 const stage = document.getElementById("stage");
 stage.classList.add("theme-" + S.kurs);
 stage.style.setProperty("--space", `url(${ROOT}gorseller/javascript/arka-plan/${V ? "bg-space.webp" : "bg-space-wide.webp"})`);
-document.getElementById("logo").src = ROOT + (JS ? "gorseller/javascript/simgeler/favicon-96.png" : "gorseller/python/logo-128.png");
-document.getElementById("course").textContent = JS ? "30 Günde JavaScript" : "30 Günde Python";
-document.getElementById("dayname").textContent = `· Gün ${S.gun}`;
+const LOGO = ROOT + (JS ? "gorseller/javascript/simgeler/favicon-96.png" : "gorseller/python/logo-128.png");
+document.getElementById("logo").src = LOGO;
+document.getElementById("course").textContent = TXT.course;
+document.getElementById("dayname").textContent = `· ${TXT.day} ${S.gun}`;
+const topBar = stage.querySelector(".top");
+const subEl = document.getElementById("sub");
+const progEl = document.getElementById("progress");
 
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 const KW = JS
@@ -110,14 +187,97 @@ function highlight(line) {
   }
   return out + esc(line.slice(last));
 }
+const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const ease = (x) => 1 - Math.pow(1 - clamp(x), 3);
+const easeBack = (x) => { x = clamp(x); const c = 1.7; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
 
-// Sahnelerin zaman çizelgesi
-let t0 = 0;
-const scenes = S.sahneler.map((s) => { const o = { ...s, start: t0, end: t0 + s.sure_sn }; t0 += s.sure_sn; return o; });
-window.DURATION = t0;
+// ---- zaman çizelgesi (ses yoksa sure_sn'den) ----
+function fallbackZaman() {
+  const segs = []; let t = 0;
+  const split = (txt) => (txt || "").split(/(?<=[.!?…])\s+/).filter(Boolean);
+  const add = (tip, tur, dur, text, extra) => {
+    const parts = split(text); const tot = parts.reduce((a, p) => a + p.length, 0) || 1; let acc = 0;
+    const v0 = t + 0.4, v1 = t + dur - 0.6;
+    const subs = parts.map((p) => { const a = v0 + (v1 - v0) * acc / tot; acc += p.length; return { a, b: v0 + (v1 - v0) * acc / tot, text: p }; });
+    const s = { tip, tur, t0: t, t1: t + dur, v0, v1, subs, ...extra };
+    const ek = (extra.i != null && S.sahneler[extra.i].ekran) || {};
+    if (ek.kod) { s.typ0 = t + dur * 0.05; s.typ1 = t + dur * 0.45; if (ek.cikti) s.out_at = t + dur * 0.5; if (ek.duzeltme) s.fix_at = t + dur * 0.78; }
+    if (tur === "soru") s.sayac = t + dur - 3.2;
+    segs.push(s); t += dur;
+  };
+  if (S.giris) add("giris", "giris", 7, S.giris.anlatim, {});
+  S.sahneler.forEach((s, i) => add("sahne", s.tur, s.sure_sn, s.anlatim, { i }));
+  if (S.cikis) add("cikis", "cikis", 9, S.cikis.anlatim, {});
+  return { sure: t, segs, agiz: null };
+}
+const Z = Z0 || fallbackZaman();
+window.DURATION = Z.sure;
 
-const mascotSrc = (poz) => `${ROOT}maskotlar/${MK}/pozlar/${poz}.png`;
-for (const s of scenes) {
+// ---- maskot (Piko: dudak senkronu) ----
+const poseSrc = (poz) => `${ROOT}maskotlar/${MK}/pozlar/${poz}.png`;
+const rigSrc = (f) => `${ROOT}maskotlar/piko-python/konusma-rig/${f}`;
+function mouthAt(t) {
+  if (!Z.agiz) return { o: 0, g: "k" };
+  const k = Math.max(0, Math.min(Z.agiz.length - 1, Math.round(t * Z.env_fps)));
+  return { o: Z.agiz[k] / 100, g: Z.gorus[k] };
+}
+function rigLayer(poz, cls) {
+  const r = RIG && RIG.pozlar[poz];
+  const L = document.createElement("div"); L.className = "layer " + cls;
+  if (!r) { L.innerHTML = `<img class="base" src="${poseSrc(poz)}">`; return { L, r: null }; }
+  const [x, y, w, h] = r.agiz;
+  const box = `left:${x * 100}%;top:${y * 100}%;width:${w * 100}%;height:${h * 100}%`;
+  if (r.tur === "olcek") {
+    L.innerHTML = `<img class="base" src="${rigSrc(poz + "-agizsiz.png")}"><img class="mouth" style="${box}" src="${rigSrc(poz + "-agiz.png")}">`;
+  } else {
+    L.innerHTML = `<img class="base" src="${poseSrc(poz)}">` + r.kareler.map((v) => `<img class="mouth v-${v}" style="${box};display:none" src="${rigSrc(poz + "-" + v + ".png")}">`).join("");
+  }
+  return { L, r };
+}
+function makeMascot(poz, pos, extraCls = "") {
+  const el = document.createElement("div");
+  el.className = `mascot ${pos} ${extraCls}`;
+  const info = RIG && RIG.pozlar[poz];
+  const sizeSrc = info ? info.boyut : null;
+  const main = rigLayer(poz, "main");
+  el.append(main.L);
+  let talk = null;
+  if (RIG && !main.r && !JS) {  // ağzı kapalı pozlar (dusunme, uzgun): konuşurken önden konuşan Piko'ya geçilir
+    talk = rigLayer("on", "talk"); talk.L.style.opacity = 0; el.append(talk.L);
+    talk.L.style.aspectRatio = RIG.pozlar.on.boyut.join(" / ");
+  }
+  const setAspect = (w, h) => { el.style.aspectRatio = `${w} / ${h}`; };
+  if (sizeSrc) setAspect(...sizeSrc);
+  else { const im = main.L.querySelector("img"); im.addEventListener("load", () => setAspect(im.naturalWidth, im.naturalHeight)); }
+  function drive(layer, speakW, m) {
+    if (!layer.r) return;
+    if (layer.r.tur === "olcek") {
+      const k = 0.12 + 0.88 * m.o;
+      const s = 1 + (k - 1) * speakW;
+      layer.L.querySelector(".mouth").style.transform = `scaleY(${s.toFixed(3)})`;
+    } else {
+      const g = m.g === "k" ? "kapali" : m.g;
+      layer.L.querySelectorAll(".mouth").forEach((im) => { im.style.display = speakW > 0.5 && im.classList.contains("v-" + g) ? "block" : "none"; });
+    }
+  }
+  return {
+    el,
+    update(t, seg) {
+      const speakW = seg.v1 > seg.v0 ? clamp(Math.min((t - seg.v0 + 0.08) / 0.12, (seg.v1 + 0.12 - t) / 0.15)) : 0;
+      const m = mouthAt(t);
+      if (talk) {
+        talk.L.style.opacity = speakW; main.L.style.opacity = 1 - speakW;
+        drive(talk, speakW, m);
+      } else drive(main, speakW, m);
+      return m.o * speakW;
+    },
+  };
+}
+
+// ---- sahneleri kur ----
+const TOPPOS = { h: 300, v: 380 };
+function buildScene(seg) {
+  const s = S.sahneler[seg.i];
   const e = s.ekran || {};
   const m = s.maskot || {};
   const pos = m.konum || "yok";
@@ -125,7 +285,8 @@ for (const s of scenes) {
   el.className = "scene" + (pos === "sol" || pos === "alt-sol" ? " m-sol" : "") + (e.gorsel && !e.kod ? " has-pic" : "");
   let html = "";
   const big = s.tur === "acilis" || s.tur === "kapanis";
-  if (big) html += `<div class="title-big h1"><small>${esc(s.tur === "acilis" ? `Gün ${S.gun}` : "Görüşmek üzere")}</small>${esc(String(e.baslik || S.baslik).replace(/^Gün\s*\d+\s*[:·-]\s*/, ""))}</div>`;
+  const title = String(e.baslik || S.baslik).replace(/^(Gün|Day)\s*\d+\s*[:·-]\s*/, "");
+  if (big) html += `<div class="title-big h1"><small>${esc(s.tur === "acilis" ? `${TXT.day} ${S.gun}` : TXT.see)}</small>${esc(title)}</div>`;
   else if (e.baslik) html += `<div class="heading h1">${esc(e.baslik)}</div>`;
   const hasCode = !!e.kod;
   if (e.maddeler && e.maddeler.length) {
@@ -135,89 +296,208 @@ for (const s of scenes) {
   if (hasCode) {
     const lines = e.kod.replace(/\n$/, "").split("\n");
     const hl = new Set(e.vurgu_satirlari || []);
-    html += `<div class="code"><div class="bar"><i style="background:#E8574A"></i><i style="background:#FFC83D"></i><i style="background:#2E9E62"></i><span style="margin-left:12px">${JS ? "kod.js" : "kod.py"}</span></div><pre>${lines.map((l, i) => `<span class="ln" data-hl="${hl.has(i + 1) ? 1 : 0}"><span class="n">${i + 1}</span><span class="src" data-src="${esc(l)}"></span></span>`).join("")}</pre></div>`;
+    html += `<div class="code"><div class="bar"><i style="background:#E8574A"></i><i style="background:#FFC83D"></i><i style="background:#2E9E62"></i><span style="margin-left:12px">${TXT.file}</span>${e.cikti ? `<span class="run">▶ ${TXT.run}</span>` : ""}</div><pre>${lines.map((l, i) => `<span class="ln" data-hl="${hl.has(i + 1) ? 1 : 0}"><span class="n">${i + 1}</span><span class="src" data-src="${esc(l)}"></span></span>`).join("")}</pre></div>`;
   }
-  if (e.cikti) html += `<div class="out"><b>${s.tur === "hata" ? "Hata" : "Çıktı"}</b><pre>${esc(e.cikti)}</pre></div>`;
-  if (e.gorsel && !hasCode) html += `<div class="picture${pos === "sag" || pos === "alt-sag" ? " with-m" : ""}"><img src="${ROOT}${e.gorsel}" alt=""></div>`;
-  if (pos !== "yok" && m.poz) html += `<img class="mascot ${pos}" src="${mascotSrc(m.poz)}" alt="">`;
-  html += `<div class="sub"></div>`;
+  if (e.cikti) html += `<div class="out${s.tur === "hata" ? " err" : ""}"><b>${s.tur === "hata" ? TXT.error : TXT.output}</b><pre>${esc(e.cikti)}</pre></div>`;
+  if (e.izgara && e.cikti) {
+    const cell = (ch) => ch === "*" ? `<div class="c"><img src="${poseSrc("on")}"></div>` : ch === "#" ? `<div class="c wall"></div>` : ch === "o" ? `<div class="c"><div class="coin"></div></div>` : ch === "H" ? `<div class="c" style="font-size:56px;color:#E8574A">♥</div>` : `<div class="c"></div>`;
+    html += `<div class="grid"><b>${TXT.stage}</b>${e.cikti.split("\n").map((r) => `<div class="row">${[...r].map(cell).join("")}</div>`).join("")}</div>`;
+  }
+  if (s.tur === "soru") html += `<div class="count"><div class="num">3</div><span>${TXT.think}</span></div>`;
+  if (e.gorsel && !hasCode) html += `<div class="picture${pos === "sag" || pos === "alt-sag" ? " with-m" : pos === "orta" ? " with-orta" : ""}"><img src="${ROOT}${e.gorsel}" alt=""></div>`;
   el.innerHTML = html;
-  stage.append(el);
-  s.el = el;
-  // altyazı: cümlelere böl, sürelerini uzunluğa göre dağıt
-  // cümle sonu: . ! ? … ardından boşluk (console.log gibi noktalar bölünmez); uzun cümleler virgülden ikiye
-  let parts = (s.anlatim || "").split(/(?<=[.!?…])\s+/).filter(Boolean);
-  parts = parts.flatMap((p) => { if (p.length <= 110) return [p]; const i = p.indexOf(", ", Math.floor(p.length / 2) - 25); return i > 0 ? [p.slice(0, i + 1), p.slice(i + 2)] : [p]; });
-  if (!parts.length) parts = [s.anlatim || ""];
-  const total = parts.reduce((a, p) => a + p.length, 0) || 1;
-  let acc = 0;
-  s.subs = parts.map((p) => { const a = acc / total; acc += p.length; return { text: p.trim(), a, b: acc / total }; });
-  s.codeLines = hasCode ? [...el.querySelectorAll(".src")] : [];
-  s.codeLen = s.codeLines.reduce((a, x) => a + x.dataset.src.length, 0);
+  let masc = null;
+  if (pos !== "yok" && m.poz) { masc = makeMascot(m.poz, pos); el.append(masc.el); }
+  stage.insertBefore(el, subEl);
+  const codeLines = hasCode ? [...el.querySelectorAll(".src")] : [];
+  if (hasCode) {  // uzun satırlar kutuya sığmıyorsa kod yazısını küçült (DejaVu Sans Mono: karakter ≈ 0,602 em)
+    const maxLen = Math.max(...[e.kod, (e.duzeltme || {}).kod || ""].flatMap((k) => k.split("\n").map((l) => l.length)));
+    const code = el.querySelector(".code"), pre = code.querySelector("pre");
+    const avail = code.clientWidth - 30 - 44 - 30 - 6;
+    const fs = Math.min(34, Math.floor(avail / (0.602 * maxLen)));
+    if (fs < 34) pre.style.fontSize = fs + "px";
+  }
+  return { seg, s, e, el, masc, codeLines, codeLen: codeLines.reduce((a, x) => a + x.dataset.src.length, 0), fixed: false };
+}
+function buildIntro(seg) {
+  const g = S.giris;
+  const el = document.createElement("div");
+  el.className = "scene intro";
+  el.innerHTML = `<div class="glow"></div><img class="logo" src="${LOGO}"><div class="brand">${esc(TXT.course)}<small>30gunde.com.tr</small></div>
+    <div class="pill">${TXT.day} ${S.gun}</div><div class="title h1">${esc(S.baslik)}</div>
+    <div class="learn"><b>${TXT.learn}</b><div class="chips">${(g.maddeler || []).map((b) => `<div class="chip">${esc(b)}</div>`).join("")}</div></div>`;
+  const masc = makeMascot(JS ? "el-sallama" : "on", "sag");
+  el.append(masc.el);
+  stage.insertBefore(el, subEl);
+  return { seg, el, masc, intro: true };
+}
+function buildOutro(seg) {
+  const c = S.cikis;
+  const el = document.createElement("div");
+  el.className = "scene outro";
+  const lock = `<svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="color:var(--accent)"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>`;
+  el.innerHTML = `<div class="glow"></div><div class="heading h1">${esc(c.baslik || "")}</div>
+    <div class="url">${lock}<span class="txt"></span></div>
+    <ul class="bullets">${(c.maddeler || []).map((b) => `<li>${esc(b)}</li>`).join("")}</ul>
+    <div class="foot"><img src="${LOGO}"><span>${esc(TXT.course)}</span></div>`;
+  const masc = makeMascot(JS ? "el-sallama" : "tebrik", "sag");
+  el.append(masc.el);
+  stage.insertBefore(el, subEl);
+  return { seg, el, masc, outro: true, url: c.adres || "30gunde.com.tr" };
+}
+const items = Z.segs.map((seg) => seg.tip === "giris" ? buildIntro(seg) : seg.tip === "cikis" ? buildOutro(seg) : buildScene(seg));
+
+// kod satırlarını çizer; fixed ise düzeltilmiş kodu (eklenen harfler yeşil) gösterir
+function drawCode(it, typed, caretOn, fixedCode) {
+  if (fixedCode) {
+    const lines = fixedCode.replace(/\n$/, "").split("\n");
+    it.codeLines.forEach((x, i) => {
+      const old = x.dataset.src, nw = lines[i] || "";
+      let a = 0; while (a < old.length && old[a] === nw[a]) a++;
+      const extra = nw.length - old.length;
+      x.innerHTML = extra > 0 ? highlight(nw.slice(0, a)) + `<span class="ins">${esc(nw.slice(a, a + extra))}</span>` + highlight(nw.slice(a + extra)) : highlight(nw);
+    });
+    return;
+  }
+  let left = typed;
+  it.codeLines.forEach((x) => {
+    const src = x.dataset.src;
+    const n = Math.max(0, Math.min(src.length, left));
+    const showCaret = caretOn && left >= 0 && left <= src.length;
+    left -= src.length;
+    x.innerHTML = highlight(src.slice(0, n)) + (showCaret ? '<span class="caret"></span>' : "");
+    if (showCaret) left = -1e9;
+  });
 }
 
-const clamp = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
-const ease = (x) => 1 - Math.pow(1 - clamp(x), 3);
+function renderItem(it, t) {
+  const seg = it.seg;
+  const d = seg.t1 - seg.t0;
+  const local = t - seg.t0;
+  const visible = t >= seg.t0 - 0.001 && t < seg.t1 + 0.4;
+  if (!visible) { it.el.style.opacity = 0; it.el.style.visibility = "hidden"; return; }
+  it.el.style.visibility = "visible";
+  const fadeIn = clamp(local / 0.4);
+  const fadeOut = clamp((seg.t1 + 0.4 - t) / 0.4);
+  it.el.style.opacity = Math.min(fadeIn, t < seg.t1 ? 1 : fadeOut);
+  const speech = Math.max(0.1, seg.v1 - seg.v0);
+  const sp = clamp((t - seg.v0) / speech);   // konuşmanın ilerleyişi
+
+  let talkAmt = 0;
+  if (it.masc) {
+    talkAmt = it.masc.update(t, seg);
+    const m = it.masc.el;
+    if (m.classList.contains("orta")) m.style.marginLeft = -m.offsetWidth / 2 + "px";
+    const k = ease(local / 0.5);
+    const dir = m.classList.contains("sol") || m.classList.contains("alt-sol") ? -1 : 1;
+    const bob = Math.sin(t * 2.2) * 8 - talkAmt * 6;
+    m.style.transform = `translate(${(1 - k) * 140 * dir}px, ${bob}px) rotate(${Math.sin(t * 1.3) * 1.2}deg)`;
+    m.style.opacity = k;
+  }
+
+  if (it.intro) {
+    const lg = it.el.querySelector(".logo"); lg.style.transform = `scale(${easeBack((local - 0.1) / 0.5)})`;
+    const br = it.el.querySelector(".brand"); br.style.opacity = ease((local - 0.3) / 0.4); br.style.transform = `translateX(${(1 - ease((local - 0.3) / 0.4)) * -30}px)`;
+    const pill = it.el.querySelector(".pill"); pill.style.transform = `scale(${easeBack((local - 0.5) / 0.4)})`;
+    const ti = it.el.querySelector(".title"); ti.style.opacity = ease((local - 0.7) / 0.5); ti.style.transform = `translateY(${(1 - ease((local - 0.7) / 0.5)) * 40}px)`;
+    const lb = it.el.querySelector(".learn b"); lb.style.opacity = ease((t - seg.v0 - speech * 0.25) / 0.4);
+    it.el.querySelectorAll(".chip").forEach((c, i, all) => {
+      const at = seg.v0 + speech * (0.3 + 0.6 * i / all.length);
+      const k = easeBack((t - at) / 0.4); c.style.opacity = clamp((t - at) / 0.25); c.style.transform = `scale(${0.6 + 0.4 * k})`;
+    });
+    it.el.querySelector(".glow").style.transform = `scale(${1 + 0.05 * Math.sin(t * 1.5)})`;
+    return;
+  }
+  if (it.outro) {
+    const h = it.el.querySelector(".heading"); h.style.opacity = ease(local / 0.5); h.style.transform = `translateY(${(1 - ease(local / 0.6)) * 30}px)`;
+    const u = it.el.querySelector(".url"); const ku = easeBack((local - 0.3) / 0.5);
+    u.style.transform = `scale(${(0.7 + 0.3 * ku) * (1 + 0.025 * Math.max(0, Math.sin((t - seg.t0) * 3.2)) * (local > 1.8 ? 1 : 0))})`; u.style.opacity = clamp((local - 0.3) / 0.3);
+    const n = Math.floor(clamp((local - 0.6) / 1.0) * it.url.length);
+    const blink = n < it.url.length || Math.floor(t * 2) % 2 === 0;
+    u.querySelector(".txt").innerHTML = esc(it.url.slice(0, n)) + (blink ? '<span class="caret"></span>' : "");
+    it.el.querySelectorAll(".bullets li").forEach((li, i, all) => {
+      const at = seg.v0 + speech * (0.35 + 0.5 * i / all.length);
+      const k = ease((t - at) / 0.4); li.style.opacity = k; li.style.transform = `translateX(${(1 - k) * 40}px)`;
+    });
+    it.el.querySelector(".glow").style.transform = `scale(${1 + 0.05 * Math.sin(t * 1.5)})`;
+    return;
+  }
+
+  const head = it.el.querySelector(".heading, .title-big");
+  if (head) head.style.transform = `translateY(${(1 - ease(local / 0.6)) * 30}px)`;
+  it.el.querySelectorAll(".bullets li").forEach((li, i, all) => {
+    const at = seg.v0 + speech * (0.02 + 0.75 * i / Math.max(all.length, 1));
+    const k = ease((t - at) / 0.45);
+    li.style.opacity = k; li.style.transform = `translateX(${(1 - k) * 40}px)`;
+  });
+  const code = it.el.querySelector(".code");
+  const out = it.el.querySelector(".out");
+  if (it.codeLines.length) {
+    const kt = clamp((t - seg.typ0) / Math.max(0.01, seg.typ1 - seg.typ0));
+    const typed = Math.floor(kt * it.codeLen);
+    const fixNow = seg.fix_at != null && t >= seg.fix_at;
+    drawCode(it, typed, kt < 1 && t >= seg.typ0 - 0.2, fixNow ? it.e.duzeltme.kod : null);
+    const outOn = seg.out_at != null && t >= seg.out_at;
+    it.codeLines.forEach((x) => {
+      const ln = x.parentElement;
+      const bad = it.s.tur === "hata" && outOn && !fixNow;
+      ln.classList.toggle("bad", bad && ln.dataset.hl === "1");
+      if (bad) ln.style.opacity = 0.75 + 0.25 * Math.cos((t - seg.out_at) * 8);
+      else ln.style.opacity = 1;
+      ln.classList.toggle("ok", fixNow && ln.dataset.hl === "1");
+      ln.classList.toggle("hl", !bad && !fixNow && ln.dataset.hl === "1" && t > (seg.out_at ?? seg.typ1 + 0.4));
+    });
+    const run = code.querySelector(".run");
+    if (run) { const pulse = seg.out_at != null && Math.abs(t - seg.out_at + 0.15) < 0.2; run.style.transform = `scale(${pulse ? 0.9 : 1})`; run.style.filter = pulse ? "brightness(1.3)" : ""; }
+    if (out) {
+      out.style.top = (code.offsetTop + code.offsetHeight + 30) + "px";
+      const k = ease((t - (seg.out_at ?? 1e9)) / 0.3);
+      out.style.opacity = k; out.style.transform = `translateY(${(1 - k) * 20}px)` + (it.s.tur === "hata" && !fixNow && k > 0 ? ` translateX(${Math.sin((t - seg.out_at) * 40) * 6 * clamp(1 - (t - seg.out_at) / 0.5)}px)` : "");
+      if (fixNow && !it.fixed) {
+        it.fixed = true; out.classList.remove("err"); out.classList.add("good");
+        out.querySelector("b").textContent = TXT.output; out.querySelector("pre").textContent = it.e.duzeltme.cikti;
+      } else if (!fixNow && it.fixed) {
+        it.fixed = false; out.classList.add("err"); out.classList.remove("good");
+        out.querySelector("b").textContent = TXT.error; out.querySelector("pre").textContent = it.e.cikti;
+      }
+      const grid = it.el.querySelector(".grid");
+      if (grid) {
+        grid.style.top = (out.offsetTop + out.offsetHeight + 24) + "px";
+        const kg = ease((t - seg.out_at - 0.5) / 0.35); grid.style.opacity = kg;
+        grid.querySelectorAll(".c").forEach((c, i) => { const kc = easeBack((t - seg.out_at - 0.6 - i * 0.07) / 0.3); c.style.transform = `scale(${kc})`; });
+      }
+    }
+    const cnt = it.el.querySelector(".count");
+    if (cnt && seg.sayac != null) {
+      cnt.style.top = (code.offsetTop + code.offsetHeight + 40) + "px";
+      const k = t - seg.sayac;
+      cnt.style.opacity = k >= 0 && k < 3.1 ? ease(k / 0.2) : 0;
+      const num = Math.max(1, 3 - Math.floor(Math.max(0, k)));
+      cnt.querySelector(".num").textContent = num;
+      const f = k - Math.floor(k); cnt.querySelector(".num").style.transform = `scale(${1 + 0.25 * Math.max(0, 1 - f / 0.25)})`;
+    }
+  } else if (out) { out.style.top = (V ? 420 : 300) + "px"; out.style.opacity = ease((t - seg.t0 - 0.5) / 0.3); }
+  const pic = it.el.querySelector(".picture img");
+  if (pic) {
+    const p = clamp(local / d);
+    const pop = it.s.tur === "kapanis" ? easeBack((local - 0.3) / 0.6) : 1;
+    pic.style.transform = `scale(${(1 + 0.06 * p) * (0.4 + 0.6 * pop)}) translateY(${Math.sin(t * 1.2) * 6}px) rotate(${it.s.tur === "kapanis" ? Math.sin(t * 1.6) * 3 : 0}deg)`;
+    pic.style.opacity = it.s.tur === "kapanis" ? clamp((local - 0.3) / 0.3) : 1;
+  }
+}
 
 window.renderAt = function (t) {
-  for (const s of scenes) {
-    const d = s.end - s.start;
-    const local = t - s.start;
-    const visible = t >= s.start - 0.001 && t < s.end + 0.4;
-    if (!visible) { s.el.style.opacity = 0; continue; }
-    const fadeIn = clamp(local / 0.4);
-    const fadeOut = clamp((s.end + 0.4 - t) / 0.4);
-    s.el.style.opacity = Math.min(fadeIn, t < s.end ? 1 : fadeOut);
-    const p = clamp(local / d);
-    // başlık ve maddeler
-    const head = s.el.querySelector(".heading, .title-big");
-    if (head) head.style.transform = `translateY(${(1 - ease(local / 0.6)) * 30}px)`;
-    s.el.querySelectorAll(".bullets li").forEach((li, i, all) => {
-      const at = 0.08 + (i / Math.max(all.length, 1)) * 0.6;
-      const k = ease((p - at) / 0.08);
-      li.style.opacity = k; li.style.transform = `translateX(${(1 - k) * 40}px)`;
-    });
-    // kod: yazılma animasyonu (%5 → %45), sonra vurgu
-    if (s.codeLines.length) {
-      const typed = Math.floor(clamp((p - 0.05) / 0.4) * s.codeLen);
-      let left = typed;
-      s.codeLines.forEach((x, i) => {
-        const src = x.dataset.src;
-        const n = Math.max(0, Math.min(src.length, left));
-        left -= src.length;
-        const caret = n < src.length && n > 0 || (left <= 0 && left > -1 && typed < s.codeLen && n === src.length);
-        x.innerHTML = highlight(src.slice(0, n)) + (caret && typed < s.codeLen ? '<span class="caret"></span>' : "");
-        const ln = x.parentElement;
-        ln.classList.toggle("hl", ln.dataset.hl === "1" && p > 0.5);
-      });
-      const code = s.el.querySelector(".code");
-      const out = s.el.querySelector(".out");
-      if (out) {
-        out.style.top = (code.offsetTop + code.offsetHeight + 30) + "px";
-        const k = ease((p - 0.5) / 0.1);
-        out.style.opacity = k; out.style.transform = `translateY(${(1 - k) * 20}px)`;
-      }
-    } else {
-      const out = s.el.querySelector(".out");
-      if (out) { out.style.top = (V ? 420 : 300) + "px"; out.style.opacity = ease((p - 0.1) / 0.1); }
-    }
-    // görsel: yavaş yakınlaşma
-    const pic = s.el.querySelector(".picture img");
-    if (pic) pic.style.transform = `scale(${1 + 0.06 * p}) translateY(${Math.sin(t * 1.2) * 6}px)`;
-    // maskot: girişte kayar, sonra hafifçe süzülür
-    const m = s.el.querySelector(".mascot");
-    if (m) {
-      const k = ease(local / 0.5);
-      const dir = m.classList.contains("sol") || m.classList.contains("alt-sol") ? -1 : 1;
-      m.style.transform = `translate(${(1 - k) * 120 * dir}px, ${Math.sin(t * 2.2) * 8}px)`;
-      m.style.opacity = k;
-    }
-    // altyazı
-    const sub = s.subs.find((x) => p >= x.a && p < x.b) || s.subs[s.subs.length - 1];
-    const subEl = s.el.querySelector(".sub");
-    subEl.textContent = sub ? sub.text : "";
-    subEl.style.display = window.SUBTITLES === false || !subEl.textContent ? "none" : "block";
-  }
+  let cur = null;
+  for (const it of items) { renderItem(it, t); if (t >= it.seg.t0 && t < it.seg.t1) cur = it; }
+  // üst çubuk giriş/çıkış kartlarında gizli
+  const onCard = cur && (cur.intro || cur.outro);
+  topBar.style.opacity = onCard ? 0 : 1;
+  // altyazı
+  let text = "";
+  if (cur) for (const s of cur.seg.subs) if (t >= s.a && t < s.b) { text = s.text; break; }
+  subEl.textContent = text;
+  subEl.style.display = window.SUBTITLES === false || !text ? "none" : "block";
+  progEl.style.width = `${clamp(t / Z.sure) * 100}%`;
 };
 window.ready = Promise.all([...document.images].map((im) => im.decode().catch(() => {}))).then(() => document.fonts.ready).then(() => { window.renderAt(0); return true; });
 </script>
