@@ -20,6 +20,14 @@ Ders metni: [gun-10.md](../gunler/gun-10.md)
 | 10 | ozet | 8 sn | on (sag) |
 | 11 | kapanis | 9 sn | tebrik (orta) |
 
+## Giriş (konu tanıtımı)
+
+**Seslendirme:** Gün 10: Döngüler! Bu derste while ve for döngüleriyle tekrar eden işleri bilgisayara yaptırmayı, range, break ve continue kullanmayı öğreneceksin.
+
+- while ve for
+- range() ve enumerate
+- break, continue, sonsuz döngü
+
 ## Sahne 1: acilis (12 sn)
 
 **Seslendirme:** Selam, ben Piko! Mantık Kalesi'nin kulesinde yüz basamak var. Her basamak için ayrı print yazsaydık parmaklarımız yorulurdu! Bilgisayarlar tekrar eden işleri hiç sıkılmadan yapar. Bugün döngüleri öğreniyoruz.
@@ -251,3 +259,13 @@ while count > 0:
 **Maskot:** tebrik pozu, orta
 
 *Yönetmen notu: Harita kaleden atölyeye doğru kayar.*
+
+## Çıkış (30gunde.com.tr yönlendirmesi)
+
+**Seslendirme:** Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!
+
+**Ekranda:** İnteraktif dersler için **30gunde.com.tr**
+
+- Kodunu tarayıcıda yaz ve çalıştır
+- Görevleri tamamla, rozet kazan
+- 30 günde adım adım Python
