@@ -98,9 +98,32 @@ def sahne(rows, root):
     return '<div class="sahne"><span>Sahne</span>' + "".join(f'<div class="row">{"".join(cell(c) for c in r)}</div>' for r in rows) + "</div>"
 
 
-def qr_png(url):
-    img = qrcode.make(url, border=1, box_size=8)
-    b = io.BytesIO(); img.save(b, "PNG"); return b.getvalue()
+def jpg(rel, genislik_px, oran=None):
+    """Fotoğraf gibi görselleri baskı çözünürlüğünde JPEG'e çevirir (PDF'e sıkıştırılmış gömülür).
+    oran (genişlik/yükseklik) verilirse ortadan o orana kırpılır."""
+    from PIL import Image, ImageOps
+    src = REPO / rel
+    out = HERE / "is" / "img" / f"{src.stem}-{genislik_px}{f'-{oran:.2f}' if oran else ''}.jpg"
+    if not out.exists():
+        out.parent.mkdir(parents=True, exist_ok=True)
+        im = Image.open(src).convert("RGB")
+        if oran:
+            im = ImageOps.fit(im, (genislik_px, round(genislik_px / oran)), Image.LANCZOS)
+        im.thumbnail((genislik_px, genislik_px * 4))
+        im.save(out, "JPEG", quality=86, optimize=True, progressive=True)
+    return out.as_uri()
+
+
+def qr_ciz(c, url, x, y, boyut):
+    """QR kodu vektör kareler olarak çizer (resim gömmez, PDF küçük kalır)."""
+    q = qrcode.QRCode(border=0, error_correction=qrcode.constants.ERROR_CORRECT_M)
+    q.add_data(url); q.make(fit=True)
+    m = q.get_matrix(); n = len(m); s = boyut / n
+    c.setFillColorRGB(0.07, 0.14, 0.25)
+    for r, row in enumerate(m):
+        for col, on in enumerate(row):
+            if on:
+                c.rect(x + col * s, y + (n - 1 - r) * s, s * 1.02, s * 1.02, stroke=0, fill=1)
 
 
 def fontlari_hazirla():
@@ -254,7 +277,7 @@ def gun_html(v, k, root):
     body = f"""<section class="acilis">
  <div class="ust"><span class="gun">Gün {n}</span><span class="bolge">{html.escape(reg["name"])}</span></div>
  <h1>{html.escape(v["title"])}</h1>
- <img class="harita" src="{root}/{k["bolge"].format(v["region"])}">
+ <img class="harita" src="{jpg(k["bolge"].format(v["region"]), 1400, 120 / 62)}">
  <div class="box hedef"><h4>Bugünün hedefi</h4>{md_inline(v["objective"])}</div>
  <div class="konusma"><img src="{root}/{k["poz"].format(poz)}"><div class="balon">{md_inline(v["story"])}</div></div>
  <div class="proje">Proje katkısı ({html.escape(k["varsayilan_proje"])}): <b>{html.escape(v["project_contribution"])}</b>. {html.escape(v.get("game_role", ""))}</div>
@@ -346,7 +369,7 @@ def on_bolum_html(k, gunler, sayfalar, root):
 def kapak_html(k, gunler, root):
     n0, n1 = int(gunler[0]["day"]), int(gunler[-1]["day"])
     kurs = json.loads((REPO / "python/veri/kurs.json").read_text("utf8"))
-    bolgeler = "".join(f'<img src="{root}/{k["bolge"].format(r["id"])}">' for r in kurs["regions"][:3] if (REPO / k["bolge"].format(r["id"])).exists())
+    bolgeler = "".join(f'<img src="{jpg(k["bolge"].format(r["id"]), 320)}">' for r in kurs["regions"][:3] if (REPO / k["bolge"].format(r["id"])).exists())
     return f"""<section class="kapak"><img class="logo" src="{root}/{k["logo"]}"><div class="marka">30gunde.com.tr</div>
 <h1>30 Günde<br><span>Python</span></h1>
 <div class="alt">Macera haritasıyla, her gün bir adım: kodlamaya {k["maskot"]} ile başla.</div>
@@ -379,7 +402,6 @@ def altbilgi(writer, sayfa_bilgisi, k):
     """Her sayfanın altına sayfa numarası, gün adı ve o günün QR kodunu basar."""
     pdfmetrics.registerFont(TTFont("Head", str(FONTS / "Poppins-SemiBold.ttf")))
     pdfmetrics.registerFont(TTFont("Body", str(FONTS / "Poppins-Regular.ttf")))
-    qr_cache = {}
     for i, (etiket, url) in enumerate(sayfa_bilgisi):
         if etiket is None:
             continue
@@ -392,12 +414,9 @@ def altbilgi(writer, sayfa_bilgisi, k):
         c.setFillColorRGB(0.29, 0.36, 0.48); c.setFont("Body", 6.5)
         metin = f"{k['ad']} · {etiket}"
         if url:
-            if url not in qr_cache:
-                from reportlab.lib.utils import ImageReader
-                qr_cache[url] = ImageReader(io.BytesIO(qr_png(url)))
             q = 13 * mm
             qx = (W_MM - 14) * mm - q if sol else 14 * mm
-            c.drawImage(qr_cache[url], qx, 4.5 * mm, q, q)
+            qr_ciz(c, url, qx, 4.5 * mm, q)
             tx = qx - 2 * mm if sol else qx + q + 2 * mm
             c.setFont("Head", 6.5); c.setFillColorRGB(0.18, 0.43, 0.71)
             (c.drawRightString if sol else c.drawString)(tx, 12.2 * mm, "Etkileşimli ders (isteğe bağlı)")
@@ -445,6 +464,7 @@ def main():
         else:
             sayfa_bilgisi += [("Çözümler" if ad == "cozumler" else "Giriş", "https://30gunde.com.tr")] * n
     altbilgi(writer, sayfa_bilgisi, k)
+    writer.compress_identical_objects(remove_duplicates=True, remove_unreferenced=True)  # parçalar arasında ortak görseller bir kez
     writer.add_metadata({"/Title": f"{k['ad']} · Gün {g0}–{g1} (örnek)", "/Author": "30 Günde", "/Subject": "30gunde.com.tr"})
     out = REPO / "cikti" / "kitap" / f"30-gunde-{a.kurs}-gun-{g0:02d}-{g1:02d}.pdf"
     out.parent.mkdir(parents=True, exist_ok=True)
