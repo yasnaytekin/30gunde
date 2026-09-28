@@ -1,5 +1,6 @@
 # 30 Günde kitabı: gün gün ders verisinden (veri/gun-XX.json) baskıya ve e-kitaba uygun PDF üretir.
 #   python3 kitap/kitap.py python 1-3            # cikti/kitap/30-gunde-python-gun-01-03.pdf
+#   python3 kitap/kitap.py javascript 1-2        # cikti/kitap/30-gunde-javascript-gun-01-02.pdf
 # Kitap siteden bağımsız kullanılabilir: örneklerin çıktıları kodu gerçekten çalıştırarak yazılır, görevlerin
 # "kendini kontrol et" maddeleri ve çözümleri (satır satır açıklamalarıyla) kitabın içindedir. Her sayfanın altında
 # o günün etkileşimli dersine giden bir QR kod bulunur (isteğe bağlı kullanım).
@@ -11,7 +12,7 @@ import markdown
 import qrcode
 from pygments import highlight
 from pygments.formatters import HtmlFormatter
-from pygments.lexers import PythonLexer
+from pygments.lexers import HtmlLexer, JavascriptLexer, PythonLexer
 from pypdf import PdfReader, PdfWriter
 from reportlab.lib.units import mm
 from reportlab.pdfbase import pdfmetrics
@@ -24,11 +25,28 @@ FONTS = HERE / "fontlar"
 W_MM, H_MM = 148, 210  # A5
 
 KURS = {
-    "python": {"ad": "30 Günde Python", "maskot": "Piko", "renk": "#2F6DB5", "renk2": "#FFC83D", "ink": "#13233F",
-               "logo": "gorseller/python/logo-128.png", "bolge": "gorseller/python/harita/{}.webp",
-               "poz": "maskotlar/piko-python/pozlar/{}.png", "url": "https://30gunde.com.tr/#/ders/{}",
-               "varsayilan_proje": "Piko'nun Macerası"},
+    "python": {"kod": "python", "ad": "30 Günde Python", "dil_adi": "Python", "maskot": "Piko",
+               "renk": "#2F6DB5", "renk2": "#FFC83D", "ink": "#13233F",
+               "logo": "gorseller/python/logo-128.png", "bolge": "gorseller/python/harita/{}.webp", "bolge_tur": "harita",
+               "poz": "maskotlar/piko-python/pozlar/{}.png", "kapak_poz": "maskotlar/piko-python/pozlar/tebrik.png",
+               "acilis_poz": ("mutlu", "konusma"), "url": "https://30gunde.com.tr/#/ders/{}",
+               "varsayilan_proje": "Piko'nun Macerası", "alt": "Macera haritasıyla, her gün bir adım: kodlamaya Piko ile başla.",
+               "kurulum": "Bilgisayarına <b>python.org</b> adresinden Python'u kur. Kurulumla gelen <b>IDLE</b> programını aç, "
+                          "<i>File → New File</i> ile yeni bir dosya aç, kodunu yaz ve <b>F5</b> tuşuyla çalıştır."},
+    "javascript": {"kod": "javascript", "ad": "30 Günde JavaScript", "dil_adi": "JavaScript", "maskot": "Kodi",
+                   "renk": "#2B3A8C", "renk2": "#F7DF1E", "ink": "#0B1026",
+                   "logo": "gorseller/javascript/simgeler/icon-512.png", "bolge": "gorseller/javascript/bolgeler/{}.webp", "bolge_tur": "gezegen",
+                   "uzay": "gorseller/javascript/arka-plan/bg-space-wide.webp",
+                   "poz": "maskotlar/kodi-javascript/pozlar/{}.png", "kapak_poz": "maskotlar/kodi-javascript/kahraman.png",
+                   "acilis_poz": ("el-sallama", "konusma"),
+                   # Sitede JavaScript derslerinin adresi doğrulanmalı; varsayım:
+                   "url": "https://30gunde.com.tr/#/js/ders/{}",
+                   "varsayilan_proje": "Yıldız Avcısı", "alt": "Uzay yolculuğuyla, her gün bir adım: kodlamaya Kodi ile başla.",
+                   "kurulum": "Bir tarayıcı aç (Chrome, Edge ya da Firefox) ve <b>F12</b> ile Geliştirici Araçları'nı aç. "
+                              "<b>Console</b> sekmesine kodunu yaz ve Enter'a bas; <code>console.log</code> çıktıları orada görünür. "
+                              "Sayfa (HTML) görevlerinde kodu bir <code>.html</code> dosyasındaki <code>&lt;script&gt;</code> etiketine yazıp dosyayı tarayıcıda aç."},
 }
+K = KURS["python"]  # main() seçilen kursa göre değiştirir
 
 # Yalnızca sitede anlamlı olan ifadelerin kitap karşılıkları
 UYARLA = [
@@ -40,6 +58,9 @@ UYARLA = [
      "Programı çalıştırınca `input()` seni bekler: cevabını yaz ve Enter'a bas."),
     ("Girdi kutusundaki adı değiştirip tekrar çalıştır.", "Farklı bir adla tekrar çalıştır."),
     ("sahnede resme dönüşür", "sahnede resme dönüşür (sitede canlı, kitapta çizimle gösteriyoruz)"),
+    ("Çalıştır'a bas ve Çıktı alanına bak.", "Kodu çalıştır ve konsoldaki çıktıya bak."),
+    ("yazdığın şeyi **Çıktı** alanına yazar", "yazdığın şeyi konsola (**Console**) yazar"),
+    ("bu sayfadaki editöre yazdığın kod doğrudan tarayıcında çalışır", "yazdığın kod doğrudan tarayıcında çalışır"),
 ]
 
 
@@ -62,9 +83,13 @@ def md_inline(s):
 FORMATTER = HtmlFormatter(cssclass="hl", nowrap=True)
 
 
-def kod(code, cikti=None, baslik=None, hata=False, sekil=None):
+def lexer():
+    return PythonLexer() if K["kod"] == "python" else JavascriptLexer()
+
+
+def kod(code, cikti=None, baslik=None, hata=False, sekil=None, lex=None):
     code = (code or "").rstrip("\n")
-    out = f'<div class="code">{f"<div class=cap>{html.escape(baslik)}</div>" if baslik else ""}<pre class="hl">{highlight(code, PythonLexer(), FORMATTER).rstrip()}</pre></div>'
+    out = f'<div class="code">{f"<div class=cap>{html.escape(baslik)}</div>" if baslik else ""}<pre class="hl">{highlight(code, lex or lexer(), FORMATTER).rstrip()}</pre></div>'
     if cikti is not None:
         out += f'<div class="out{" err" if hata else ""}"><span>{"Hata" if hata else "Çıktı"}</span><pre>{html.escape(cikti.rstrip())}</pre></div>'
     if sekil:
@@ -74,13 +99,18 @@ def kod(code, cikti=None, baslik=None, hata=False, sekil=None):
 
 def calistir(code, inputs=None):
     """Kodu çalıştırıp konsolda görüneceği gibi çıktıyı döndürür (input() cevapları ekrana yazılır)."""
+    if K["kod"] == "javascript" and re.search(r"\b(document|window|alert|prompt|localStorage|requestAnimationFrame)\b", code):
+        return None, False  # sayfa (DOM) kodu: çıktı tarayıcıda görünür, burada çalıştırılmaz
     pre = ""
     if inputs:
         pre = ("import builtins as _b\n_i = iter(%r)\n"
                "def _inp(p=''):\n    v = next(_i)\n    print(p + v)\n    return v\n_b.input = _inp\n") % (list(inputs),)
     with tempfile.TemporaryDirectory() as d:
-        f = Path(d) / "k.py"; f.write_text(pre + code, "utf8")
-        r = subprocess.run([sys.executable, str(f)], capture_output=True, text=True, timeout=10, cwd=d)
+        if K["kod"] == "python":
+            f = Path(d) / "k.py"; f.write_text(pre + code, "utf8"); cmd = [sys.executable, str(f)]
+        else:
+            f = Path(d) / "k.mjs"; f.write_text(code, "utf8"); cmd = ["node", str(f)]
+        r = subprocess.run(cmd, capture_output=True, text=True, timeout=10, cwd=d)
     if r.returncode != 0:
         last = r.stderr.strip().splitlines()[-1] if r.stderr.strip() else "Hata"
         return (r.stdout + last).strip("\n"), True
@@ -90,7 +120,7 @@ def calistir(code, inputs=None):
 def sahne(rows, root):
     """Sahne ızgarası: * Piko, # duvar, o altın, H kalp."""
     def cell(ch):
-        if ch == "*": return f'<i class="c"><img src="{root}/{KURS["python"]["poz"].format("on")}"></i>'
+        if ch == "*": return f'<i class="c"><img src="{root}/{K["poz"].format("on")}"></i>'
         if ch == "#": return '<i class="c wall"></i>'
         if ch == "o": return '<i class="c"><b class="coin"></b></i>'
         if ch == "H": return '<i class="c heart">♥</i>'
@@ -112,6 +142,25 @@ def jpg(rel, genislik_px, oran=None):
         im.thumbnail((genislik_px, genislik_px * 4))
         im.save(out, "JPEG", quality=86, optimize=True, progressive=True)
     return out.as_uri()
+
+
+def png(rel, genislik_px):
+    """Şeffaf görselleri (gezegenler, maskotlar) küçültüp PNG olarak saklar."""
+    from PIL import Image
+    src = REPO / rel
+    out = HERE / "is" / "img" / f"{src.stem}-{genislik_px}.png"
+    if not out.exists():
+        out.parent.mkdir(parents=True, exist_ok=True)
+        im = Image.open(src).convert("RGBA")
+        im.thumbnail((genislik_px, genislik_px * 4))
+        im.save(out, "PNG", optimize=True)
+    return out.as_uri()
+
+
+def bolge_gorseli(k, bolge, genislik_px, oran=None):
+    if k["bolge_tur"] == "gezegen":
+        return png(k["bolge"].format(bolge), genislik_px)
+    return jpg(k["bolge"].format(bolge), genislik_px, oran)
 
 
 def qr_ciz(c, url, x, y, boyut):
@@ -149,7 +198,7 @@ def css(root):
 @font-face {{ font-family: Head; src: url({f('Poppins-ExtraBold.ttf')}); font-weight: 800; }}
 @page {{ size: {W_MM}mm {H_MM}mm; margin: 15mm 14mm 22mm 14mm; }}
 @page cover {{ margin: 0; }}
-:root {{ --c: #2F6DB5; --c2: #FFC83D; --ink: #13233F; --ink2: #4A5B7A; --line: #D8E3F3; --soft: #F4F8FF; }}
+:root {{ --c: {K["renk"]}; --c2: {K["renk2"]}; --ink: {K["ink"]}; --ink2: #4A5B7A; --line: #D8E3F3; --soft: #F4F8FF; }}
 * {{ box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact; }}
 html {{ font-family: Body, sans-serif; font-size: 9.6pt; line-height: 1.5; color: var(--ink); }}
 body {{ margin: 0; }}
@@ -180,7 +229,7 @@ pre {{ margin: 0; }}
 .box.sozluk dl {{ margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 3pt 8pt; font-size: 8.6pt; }}
 .box.sozluk dt {{ font-family: Mono; font-weight: 600; color: var(--c); }} .box.sozluk dd {{ margin: 0; }}
 .box.sozluk dd em {{ color: var(--ink2); font-style: normal; font-size: 7.5pt; }}
-.gorev {{ border: 1pt solid var(--line); border-radius: 8pt; padding: 9pt 10pt 4pt; margin: 9pt 0; }}
+.gorev {{ border: 1pt solid var(--line); border-radius: 8pt; padding: 9pt 10pt 4pt; margin: 9pt 0; break-inside: avoid; }}
 .gorev .bas {{ break-inside: avoid; }}
 .ipucu, .kontrol {{ break-inside: avoid; }}
 div.hl {{ background: var(--soft); border: 0.8pt solid var(--line); border-left: 3pt solid var(--c); border-radius: 5pt; padding: 6pt 8pt; margin: 4pt 0 8pt; break-inside: avoid; }}
@@ -207,6 +256,10 @@ div.hl pre {{ font-family: Mono; font-size: 8.2pt; line-height: 1.45; white-spac
 .acilis .gun {{ font-family: Head; font-weight: 800; font-size: 11pt; background: var(--c2); padding: 2pt 10pt; border-radius: 99pt; }}
 .acilis .bolge {{ font-family: Head; font-weight: 600; font-size: 9pt; color: var(--ink2); }}
 .acilis h1 {{ font-size: 25pt; margin: 8pt 0 8pt; font-weight: 800; }}
+.acilis .uzay {{ width: 100%; height: 62mm; border-radius: 9pt; background-size: cover; background-position: center; display: grid; place-items: center; }}
+.acilis .uzay img {{ height: 54mm; filter: drop-shadow(0 3mm 4mm rgba(0,0,0,.5)); }}
+.kapak.uzayli {{ background: linear-gradient(rgba(11,16,38,.35), rgba(11,16,38,.55)), var(--kapak-bg) center / cover, #0B1026; }}
+.kapak.uzayli .bolgeler img {{ border: none; object-fit: contain; width: 18mm; height: 18mm; }}
 .acilis .harita {{ width: 100%; height: 62mm; object-fit: cover; border-radius: 9pt; display: block; }}
 .acilis .konusma {{ display: flex; gap: 8pt; align-items: flex-end; margin-top: 10pt; }}
 .acilis .konusma img {{ width: 30mm; flex: none; }}
@@ -241,7 +294,7 @@ div.hl pre {{ font-family: Mono; font-size: 8.2pt; line-height: 1.45; white-spac
   font-family: Head; font-weight: 700; font-size: 8pt; display: grid; place-items: center; }}
 .sayfa-sonu {{ break-after: page; }}
 /* çözümler */
-.cozum {{ margin: 8pt 0 12pt; }} .cozum h3 {{ break-after: avoid; }} .aciklama tr {{ break-inside: avoid; }}
+.cozum {{ margin: 8pt 0 12pt; break-inside: avoid; }} .cozum h3 {{ break-after: avoid; }} .aciklama tr {{ break-inside: avoid; }}
 .cozum h3 {{ font-size: 10pt; }} .cozum h3 small {{ font-family: Body; font-weight: 700; color: var(--c); margin-right: 4pt; }}
 .aciklama {{ font-size: 8.3pt; margin: 4pt 0 0; border-collapse: collapse; width: 100%; }}
 .aciklama td {{ padding: 2pt 4pt; vertical-align: top; border-top: 0.5pt solid var(--line); }}
@@ -259,11 +312,18 @@ def gorev_html(t, etiket, cls, ref, root):
     sc = (t.get("scene") or {}).get("target")
     if sc:
         out += sahne(sc, root)
+    if (t.get("html") or "").strip():
+        out += kod(t["html"], baslik="Sayfanın HTML'i (hazır)", lex=HtmlLexer())
     if (t.get("starter") or "").strip():
         out += kod(t["starter"], baslik="Başlangıç kodu")
-    oc = (t.get("check") or {}).get("output_contains")
-    if oc:
-        out += '<div class="kontrol"><b>Kendini kontrol et:</b> çıktında şunlar olmalı: ' + ", ".join(f"<code>{html.escape(x)}</code>" for x in oc) + "</div>"
+    ch = t.get("check") or {}
+    kontrol = []
+    if ch.get("output_contains"):
+        kontrol.append("çıktında şunlar olmalı: " + ", ".join(f"<code>{html.escape(x)}</code>" for x in ch["output_contains"]))
+    if ch.get("code_contains"):
+        kontrol.append("kodunda şunlar geçmeli: " + ", ".join(f"<code>{html.escape(x)}</code>" for x in ch["code_contains"]))
+    if kontrol:
+        out += '<div class="kontrol"><b>Kendini kontrol et:</b> ' + "; ".join(kontrol) + "</div>"
     if t.get("hints"):
         out += '<div class="ipucu"><b>İpuçları</b><ol>' + "".join(f"<li>{md_inline(h)}</li>" for h in t["hints"]) + "</ol></div>"
     out += f'<div class="cozum-ref">Çözüm: kitabın sonunda, {ref}</div></div>'
@@ -272,15 +332,19 @@ def gorev_html(t, etiket, cls, ref, root):
 
 def gun_html(v, k, root):
     n = int(v["day"])
-    reg = next(r for r in json.loads((REPO / "python/veri/kurs.json").read_text("utf8"))["regions"] if r["id"] == v["region"])
-    poz = "mutlu" if n % 2 else "konusma"
+    reg = next(r for r in json.loads((REPO / k["kod"] / "veri/kurs.json").read_text("utf8"))["regions"] if r["id"] == v["region"])
+    poz = k["acilis_poz"][0 if n % 2 else 1]
+    if k["bolge_tur"] == "gezegen":
+        gorsel = f'<div class="uzay" style="background-image:url({jpg(k["uzay"], 1400, 120 / 62)})"><img src="{bolge_gorseli(k, v["region"], 700)}"></div>'
+    else:
+        gorsel = f'<img class="harita" src="{bolge_gorseli(k, v["region"], 1400, 120 / 62)}">'
     body = f"""<section class="acilis">
  <div class="ust"><span class="gun">Gün {n}</span><span class="bolge">{html.escape(reg["name"])}</span></div>
  <h1>{html.escape(v["title"])}</h1>
- <img class="harita" src="{jpg(k["bolge"].format(v["region"]), 1400, 120 / 62)}">
+ {gorsel}
  <div class="box hedef"><h4>Bugünün hedefi</h4>{md_inline(v["objective"])}</div>
  <div class="konusma"><img src="{root}/{k["poz"].format(poz)}"><div class="balon">{md_inline(v["story"])}</div></div>
- <div class="proje">Proje katkısı ({html.escape(k["varsayilan_proje"])}): <b>{html.escape(v["project_contribution"])}</b>. {html.escape(v.get("game_role", ""))}</div>
+ <div class="proje">Proje katkısı ({html.escape(k["varsayilan_proje"])}): <b>{html.escape(v.get("project_contribution", ""))}</b>. {html.escape(v.get("game_role", ""))}</div>
 </section>"""
     body += "<h2>Konu anlatımı</h2>"
     for s in v["sections"]:
@@ -289,7 +353,7 @@ def gun_html(v, k, root):
     for e in v["examples"]:
         out, err = calistir(e["code"], e.get("inputs"))
         sc = (e.get("scene") or {}).get("target") if isinstance(e.get("scene"), dict) else None
-        if not sc and e.get("scene"):
+        if not sc and e.get("scene") and out:
             sc = out.split("\n")
         body += f"<h3>{html.escape(e['title'])}</h3>" + kod(e["code"], out, hata=err, sekil=sahne(sc, root) if sc else None)
         if e.get("note"):
@@ -316,7 +380,9 @@ def gun_html(v, k, root):
 
 
 def cozumler_html(gunler):
-    body = '<section class="on"><h1>Çözümler</h1><p>Önce kendin dene! Takıldığında buraya bak. Her çözümün altında kodun satır satır ne yaptığı yazıyor. '
+    aciklamali = any((t or {}).get("explain") for v in gunler for t in v["tasks"])
+    body = '<section class="on"><h1>Çözümler</h1><p>Önce kendin dene! Takıldığında buraya bak. '
+    body += "Her çözümün altında kodun satır satır ne yaptığı yazıyor. " if aciklamali else "Her çözümün altında çıktısı var. "
     body += "Senin çözümün farklı olabilir; çıktı aynıysa o da doğrudur.</p>"
     for v in gunler:
         n = int(v["day"])
@@ -353,11 +419,11 @@ def on_bolum_html(k, gunler, sayfalar, root):
  <li><b>Konu anlatımı:</b> Günün fikirleri, kısa ve örnekli.</li>
  <li><b>Örnekler:</b> Kodu yaz, çalıştır, çıktıyı kitaptakiyle karşılaştır.</li>
  <li><b>Görevler:</b> Önce kendin dene. "Kendini kontrol et" kutusu ne yazman gerektiğini söyler; ipuçları da hazır.</li>
- <li><b>Sahne görevi, Challenge ve Proje:</b> Biraz daha zor ama çok eğlenceli. Proje adımlarıyla 30 günün sonunda kendi oyununu bitireceksin.</li>
- <li><b>Çözümler:</b> Kitabın sonunda, satır satır açıklamalarıyla.</li>
+ <li><b>{"Sahne görevi, " if k["kod"] == "python" else ""}Challenge ve Proje:</b> Biraz daha zor ama çok eğlenceli. Proje adımlarıyla 30 günün sonunda kendi oyununu bitireceksin.</li>
+ <li><b>Çözümler:</b> Kitabın sonunda, {"satır satır açıklamalarıyla" if k["kod"] == "python" else "çıktılarıyla birlikte"}.</li>
 </ol>
 <h2>Kodu nerede yazacağım?</h2>
-<p>Bilgisayarına <b>python.org</b> adresinden Python'u kur. Kurulumla gelen <b>IDLE</b> programını aç, <i>File → New File</i> ile yeni bir dosya aç, kodunu yaz ve <b>F5</b> tuşuyla çalıştır. Kitabı kullanmak için internete ihtiyacın yok.</p>
+<p>{k["kurulum"]} Kitabı kullanmak için internete ihtiyacın yok.</p>
 <h2>Sayfaların altındaki QR kod</h2>
 <p>İstersen her sayfanın altındaki QR kodu telefonunla okut: o günün <b>etkileşimli dersi</b> açılır. Orada kodunu tarayıcıda yazar, tek tıkla kontrol ettirir, rozet toplarsın. Bu tamamen isteğe bağlı; kitap tek başına yeterli.</p>
 </section>""", f"""<section class="on"><h1>İçindekiler</h1><ul class="icindekiler">{toc}</ul>
@@ -368,14 +434,15 @@ def on_bolum_html(k, gunler, sayfalar, root):
 
 def kapak_html(k, gunler, root):
     n0, n1 = int(gunler[0]["day"]), int(gunler[-1]["day"])
-    kurs = json.loads((REPO / "python/veri/kurs.json").read_text("utf8"))
-    bolgeler = "".join(f'<img src="{jpg(k["bolge"].format(r["id"]), 320)}">' for r in kurs["regions"][:3] if (REPO / k["bolge"].format(r["id"])).exists())
-    return f"""<section class="kapak"><img class="logo" src="{root}/{k["logo"]}"><div class="marka">30gunde.com.tr</div>
-<h1>30 Günde<br><span>Python</span></h1>
-<div class="alt">Macera haritasıyla, her gün bir adım: kodlamaya {k["maskot"]} ile başla.</div>
+    kurs = json.loads((REPO / k["kod"] / "veri/kurs.json").read_text("utf8"))
+    bolgeler = "".join(f'<img src="{bolge_gorseli(k, r["id"], 320)}">' for r in kurs["regions"][:3] if (REPO / k["bolge"].format(r["id"])).exists())
+    uzay = f' uzayli" style="--kapak-bg: url({jpg("gorseller/javascript/arka-plan/bg-space.webp", 1000)})' if k["bolge_tur"] == "gezegen" else ""
+    return f"""<section class="kapak{uzay}"><img class="logo" src="{root}/{k["logo"]}"><div class="marka">30gunde.com.tr</div>
+<h1>30 Günde<br><span>{k["dil_adi"]}</span></h1>
+<div class="alt">{k["alt"]}</div>
 <div class="bolgeler">{bolgeler}</div>
 <div class="etiket">Örnek bölüm · Gün {n0}–{n1}</div>
-<img class="piko" src="{root}/{k["poz"].format("tebrik")}">
+<img class="piko" src="{png(k["kapak_poz"], 900)}">
 <div class="serit"><span>12 yaş ve üstü</span><span>Görevler · Çözümler · Proje</span></div></section>"""
 
 
@@ -434,7 +501,8 @@ def main():
     ap.add_argument("kurs", choices=list(KURS))
     ap.add_argument("gunler", help="ör. 1-3")
     a = ap.parse_args()
-    k = KURS[a.kurs]
+    global K
+    k = K = KURS[a.kurs]
     fontlari_hazirla()
     g0, g1 = map(int, a.gunler.split("-"))
     gunler = [json.loads((REPO / a.kurs / "veri" / f"gun-{d:02d}.json").read_text("utf8")) for d in range(g0, g1 + 1)]
