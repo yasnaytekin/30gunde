@@ -20,6 +20,14 @@ Ders metni: [gun-25.md](../gunler/gun-25.md)
 | 10 | ozet | 11 sn | on (sag) |
 | 11 | kapanis | 13 sn | tebrik (orta) |
 
+## Giriş (konu tanıtımı)
+
+**Seslendirme:** Gün 25: Pandas! Bu derste pandas ile tablo kurmayı, filtrelemeyi, sıralamayı ve CSV verisini gruplayarak özetlemeyi öğreneceksin.
+
+- DataFrame: ilk tablo
+- Filtrele ve sırala
+- CSV ve groupby
+
 ## Sahne 1: acilis (14 sn)
 
 **Seslendirme:** Selam, ben Piko! Liman başkanının masasında dev bir defter var: her satırda bir gemi, her sütunda bir bilgi. Satır satır okumak yerine, en çok yükü kim taşıyor diye sorup anında cevap almak istiyor. Bugün pandas ile tanışıyoruz!
@@ -258,3 +266,13 @@ KeyError: 'ad'
 - İstek, yanıt, yönlendirme
 
 **Maskot:** tebrik pozu, orta
+
+## Çıkış (30gunde.com.tr yönlendirmesi)
+
+**Seslendirme:** Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!
+
+**Ekranda:** İnteraktif dersler için **30gunde.com.tr**
+
+- Kodunu tarayıcıda yaz ve çalıştır
+- Görevleri tamamla, rozet kazan
+- 30 günde adım adım Python

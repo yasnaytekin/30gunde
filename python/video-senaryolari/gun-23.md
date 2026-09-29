@@ -22,6 +22,14 @@ Ders metni: [gun-23.md](../gunler/gun-23.md)
 | 12 | ozet | 11 sn | on (sag) |
 | 13 | kapanis | 12 sn | tebrik (orta) |
 
+## Giriş (konu tanıtımı)
+
+**Seslendirme:** Gün 23: Sanal ortam! Bu derste sanal ortamın neden gerektiğini, venv komutlarını ve paket listesini paylaşmayı öğreneceksin.
+
+- Sürüm çakışması sorunu
+- venv komutları
+- requirements.txt ile paylaşmak
+
 ## Sahne 1: acilis (14 sn)
 
 **Seslendirme:** Selam, ben Piko! Bilgi Limanı'nda iki gemi yan yana duruyor: biri balık taşıyor, diğeri çiçek. Yükler karışsa ne olurdu, düşünsene! Her geminin kendi ambarı var. Python projelerinin de kendi ambarı olmalı. Adı: sanal ortam.
@@ -249,3 +257,13 @@ eski-oyun -> {'pygame': '2.1.0'}
 - NumPy dizileri
 
 **Maskot:** tebrik pozu, orta
+
+## Çıkış (30gunde.com.tr yönlendirmesi)
+
+**Seslendirme:** Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!
+
+**Ekranda:** İnteraktif dersler için **30gunde.com.tr**
+
+- Kodunu tarayıcıda yaz ve çalıştır
+- Görevleri tamamla, rozet kazan
+- 30 günde adım adım Python

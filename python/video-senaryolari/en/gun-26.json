@@ -1,0 +1,253 @@
+{
+  "kurs": "python",
+  "gun": 26,
+  "baslik": "The web with Python",
+  "maskot": "piko",
+  "ozet": "From the watchtower on Python Mountain, Piko explains how the web runs on requests and responses, status codes, generating HTML with Python, and routing with a dictionary.",
+  "hedef_sure_sn": 157,
+  "dil": "en",
+  "giris": {
+    "anlatim": "Day 26: The web with Python! In this lesson you'll learn how the web works with requests and responses, status codes, generating HTML with Python, and routing.",
+    "maddeler": [
+      "Request, response, status code",
+      "Generating HTML with Python",
+      "Routing with a dictionary"
+    ]
+  },
+  "cikis": {
+    "anlatim": "The interactive version of this lesson is waiting for you at 30gunde.com.tr. Write your code right in the browser, run it instantly, and finish the tasks!",
+    "baslik": "Interactive lessons at",
+    "adres": "30gunde.com.tr",
+    "maddeler": [
+      "Write and run code in your browser",
+      "Finish tasks, earn badges",
+      "Learn Python step by step in 30 days"
+    ]
+  },
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 15,
+      "anlatim": "Hi, I'm Piko! We've reached the last region, the foot of Python Mountain! At the top stands a giant watchtower, and it receives messages from all over the world. Every message is a request, and every answer from the tower is a response. Websites work exactly like this!",
+      "ekran": {
+        "baslik": "Day 26: The web with Python",
+        "maddeler": [
+          "New region: Python Mountain",
+          "Requests, responses, generating HTML"
+        ]
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 2,
+      "tur": "anlatim",
+      "sure_sn": 16,
+      "anlatim": "When you type an address into your browser, the browser sends a request to the server: give me the profile page. The server prepares the page and sends back a response. The response has HTML and a status code.",
+      "ekran": {
+        "baslik": "Requests and responses",
+        "maddeler": [
+          "Browser → request: GET /profile",
+          "Server → response: HTML + status code",
+          "200 OK, 404 not found, 500 server error"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "I keep the status codes in a dictionary. When I ask with get, if a code isn't in the dictionary, it says Unknown. Four hundred eighteen really exists: it means I'm a teapot!",
+      "ekran": {
+        "baslik": "Status codes",
+        "kod": "codes = {200: \"OK\", 404: \"Not found\", 500: \"Server error\"}\nfor code in [200, 404, 500, 418]:\n    print(code, codes.get(code, \"Unknown\"))\n",
+        "vurgu_satirlari": [
+          3
+        ],
+        "dil": "python",
+        "cikti": "200 OK\n404 Not found\n500 Server error\n418 Unknown"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "anlatim",
+      "sure_sn": 17,
+      "anlatim": "One of the favorite ways to build a website in Python is Flask. The route line says: if someone asks for the main address, run the home function. We can't start a server on our site, so we'll try the same idea with plain Python.",
+      "ekran": {
+        "baslik": "A site with Flask (on your computer)",
+        "kod": "from flask import Flask\napp = Flask(__name__)\n\n@app.route(\"/\")\ndef home():\n    return \"<h1>Welcome to Piko's site!</h1>\"\n\napp.run()\n",
+        "vurgu_satirlari": [
+          4
+        ],
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "A server's real job is to produce HTML text from data. I build the heading with an f-string. Then I turn each item in the list into an li tag and join them together. Here's the page that will go to the browser!",
+      "ekran": {
+        "baslik": "Generating HTML",
+        "kod": "name = \"Piko\"\nitems = [\"sword\", \"potion\", \"map\"]\n\npage = f\"<h1>{name}'s bag</h1>\"\npage += \"<ul>\" + \"\".join(f\"<li>{i}</li>\" for i in items) + \"</ul>\"\nprint(page)\n",
+        "vurgu_satirlari": [
+          4,
+          5
+        ],
+        "dil": "python",
+        "cikti": "<h1>Piko's bag</h1><ul><li>sword</li><li>potion</li><li>map</li></ul>"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 6,
+      "tur": "anlatim",
+      "sure_sn": 12,
+      "anlatim": "Deciding which address goes to which function is called routing. We can set it up with a dictionary: the key is the address, and the value is the function that makes that page.",
+      "ekran": {
+        "baslik": "Routing",
+        "kod": "def home():\n    return \"<h1>Home</h1>\"\n\ndef about():\n    return \"<h1>About</h1>\"\n\nroutes = {\"/\": home, \"/about\": about}\n",
+        "vurgu_satirlari": [
+          7
+        ],
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 7,
+      "tur": "soru",
+      "sure_sn": 10,
+      "anlatim": "I try three addresses: home, about and secret. What happens when an address that isn't in the dictionary comes in? What do you think we'll see on the screen?",
+      "ekran": {
+        "baslik": "What will it print?",
+        "kod": "def home():\n    return \"<h1>Home</h1>\"\n\ndef about():\n    return \"<h1>About</h1>\"\n\nroutes = {\"/\": home, \"/about\": about}\n\nfor path in [\"/\", \"/about\", \"/secret\"]:\n    view = routes.get(path)\n    print(path, \"->\", view() if view else \"404 Not found\")\n",
+        "vurgu_satirlari": [
+          10,
+          11
+        ],
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 8,
+      "tur": "cikti",
+      "sure_sn": 11,
+      "anlatim": "The first two addresses brought back their own pages. Secret isn't in the dictionary, so get gave None, and we showed four hundred four, Not found. Flask does this for you.",
+      "ekran": {
+        "baslik": "The answer: mini routing",
+        "kod": "def home():\n    return \"<h1>Home</h1>\"\n\ndef about():\n    return \"<h1>About</h1>\"\n\nroutes = {\"/\": home, \"/about\": about}\n\nfor path in [\"/\", \"/about\", \"/secret\"]:\n    view = routes.get(path)\n    print(path, \"->\", view() if view else \"404 Not found\")\n",
+        "dil": "python",
+        "cikti": "/ -> <h1>Home</h1>\n/about -> <h1>About</h1>\n/secret -> 404 Not found"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "hata",
+      "sure_sn": 12,
+      "anlatim": "A common mistake: asking for an address that isn't in the dictionary directly with square brackets. Python gives a KeyError and the server crashes. Use get, and return four hundred four for addresses that don't exist.",
+      "ekran": {
+        "baslik": "Common mistake: an address that doesn't exist",
+        "kod": "routes = {\"/\": \"Home\"}\nprint(routes[\"/secret\"])\n",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "KeyError: '/secret'",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "uzgun",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 10,
+      "tur": "gorev",
+      "sure_sn": 13,
+      "anlatim": "In the tasks you'll produce a welcome page and a list page, and write a function that turns status codes into words. In the project you're building Piko's profile page.",
+      "ekran": {
+        "baslik": "Today's tasks",
+        "maddeler": [
+          "Task 1: Welcome page",
+          "Task 2: List page",
+          "Task 3: Status code",
+          "Challenge: Mini server",
+          "Project: The game's web page"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "ozet",
+      "sure_sn": 11,
+      "anlatim": "In short: the web runs on requests and responses, the server turns data into HTML, and routing sends each address to the right function.",
+      "ekran": {
+        "baslik": "What you learned today",
+        "maddeler": [
+          "Requests, responses and status codes",
+          "HTML with f-strings and join",
+          "Routing with a dictionary, otherwise 404"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 12,
+      "tur": "kapanis",
+      "sure_sn": 12,
+      "anlatim": "You answered the tower's first messages, congratulations! Tomorrow we go down to the mountain's archive. We'll explore MongoDB, a document database, and the insert, find and update operations. See you!",
+      "ekran": {
+        "baslik": "Tomorrow: Python and MongoDB",
+        "maddeler": [
+          "A document database",
+          "insert, find, update"
+        ]
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

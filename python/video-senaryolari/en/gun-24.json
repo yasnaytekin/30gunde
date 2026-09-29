@@ -1,0 +1,233 @@
+{
+  "kurs": "python",
+  "gun": 24,
+  "baslik": "Statistics and NumPy",
+  "maskot": "piko",
+  "ozet": "In the records office of Knowledge Harbor, Piko explains mean, median and mode with the statistics module, and whole-array math and filtering with NumPy arrays.",
+  "hedef_sure_sn": 144,
+  "dil": "en",
+  "giris": {
+    "anlatim": "Day 24: Statistics and NumPy! In this lesson you'll calculate the mean, median and mode, and work with whole arrays and filters in NumPy.",
+    "maddeler": [
+      "mean, median, mode",
+      "NumPy arrays",
+      "Filtering with conditions"
+    ]
+  },
+  "cikis": {
+    "anlatim": "The interactive version of this lesson is waiting for you at 30gunde.com.tr. Write your code right in the browser, run it instantly, and finish the tasks!",
+    "baslik": "Interactive lessons at",
+    "adres": "30gunde.com.tr",
+    "maddeler": [
+      "Write and run code in your browser",
+      "Finish tasks, earn badges",
+      "Learn Python step by step in 30 days"
+    ]
+  },
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 15,
+      "anlatim": "Hi, I'm Piko! In the records office of Knowledge Harbor, the arrival times of hundreds of ships are written down. The harbor master asks: on average, how many hours do ships take to arrive, and which time shows up most often? Today we make numbers talk with Python!",
+      "ekran": {
+        "baslik": "Day 24: Statistics and NumPy",
+        "maddeler": [
+          "Knowledge Harbor",
+          "statistics and NumPy"
+        ]
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 2,
+      "tur": "anlatim",
+      "sure_sn": 17,
+      "anlatim": "There are four basic measures. The mean: add them all up and divide by how many there are. The median: the value right in the middle when you sort them. The mode: the most common value. And the standard deviation tells you how far the numbers spread from the mean.",
+      "ekran": {
+        "baslik": "The basic measures",
+        "maddeler": [
+          "Mean",
+          "Median",
+          "Mode",
+          "Standard deviation (stdev)"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "The statistics module comes with Python and calculates these measures for you. Look, one late ship taking twelve hours pulled the mean up to six, but the median stayed at five. The median isn't bothered much by extreme values.",
+      "ekran": {
+        "baslik": "Arrival times: statistics",
+        "kod": "import statistics\n\ntimes = [3, 5, 5, 6, 12]\nprint(\"Mean:\", statistics.mean(times))\nprint(\"Median:\", statistics.median(times))\nprint(\"Most common:\", statistics.mode(times))\nprint(\"Spread:\", round(statistics.stdev(times), 2))\n",
+        "vurgu_satirlari": [
+          4,
+          5,
+          6
+        ],
+        "dil": "python",
+        "cikti": "Mean: 6.2\nMedian: 5\nMost common: 5\nSpread: 3.42"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "anlatim",
+      "sure_sn": 11,
+      "anlatim": "NumPy is scientists' favorite package. Its array looks like a list, but it applies an operation to every item at once.",
+      "ekran": {
+        "baslik": "NumPy arrays",
+        "maddeler": [
+          "import numpy as np",
+          "np.array([10, 20, 30])",
+          "Operations apply to every item at once"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 5,
+      "tur": "soru",
+      "sure_sn": 10,
+      "anlatim": "I multiply the same list by two once as it is, and once as a NumPy array. What do you think we'll see on the two lines?",
+      "ekran": {
+        "baslik": "What will it print?",
+        "kod": "import numpy as np\n\nnums = [10, 20, 30]\nprint(\"List * 2:\", nums * 2)\nprint(\"Array * 2:\", np.array(nums) * 2)\n",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 6,
+      "tur": "cikti",
+      "sure_sn": 12,
+      "anlatim": "Same operation, very different results! The list got stuck onto itself twice. The array doubled every item. Also notice the array is printed without commas.",
+      "ekran": {
+        "baslik": "The answer: list or array?",
+        "kod": "import numpy as np\n\nnums = [10, 20, 30]\nprint(\"List * 2:\", nums * 2)\nprint(\"Array * 2:\", np.array(nums) * 2)\n",
+        "dil": "python",
+        "cikti": "List * 2: [10, 20, 30, 10, 20, 30]\nArray * 2: [20 40 60]"
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "With arrays, you can pick items by writing a condition inside the square brackets. The ones fifty and above get through. Add up the condition's result with sum, and you find how many people passed. And mean gives the average.",
+      "ekran": {
+        "baslik": "Picking with a condition",
+        "kod": "import numpy as np\n\nscores = np.array([45, 90, 12, 77, 60])\nprint(\"Passed:\", scores[scores >= 50])\nprint(\"How many:\", (scores >= 50).sum())\nprint(\"Average:\", scores.mean())\n",
+        "vurgu_satirlari": [
+          4,
+          5
+        ],
+        "dil": "python",
+        "cikti": "Passed: [90 77 60]\nHow many: 3\nAverage: 56.8"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "hata",
+      "sure_sn": 11,
+      "anlatim": "A common mistake: asking for the average of an empty list. If there are no numbers, there's no average either, and Python gives a StatisticsError. Before calculating, check that the list isn't empty.",
+      "ekran": {
+        "baslik": "Common mistake: an empty list",
+        "kod": "import statistics\n\nscores = []\nprint(statistics.mean(scores))\n",
+        "vurgu_satirlari": [
+          4
+        ],
+        "cikti": "statistics.StatisticsError: mean requires at least one data point",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "uzgun",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "gorev",
+      "sure_sn": 13,
+      "anlatim": "In the tasks you'll calculate the mean and the median, find the most common dice roll, and double scores without a loop. In the project you're summarizing how long the players played.",
+      "ekran": {
+        "baslik": "Today's tasks",
+        "maddeler": [
+          "Task 1: Mean and median",
+          "Task 2: The most common roll",
+          "Task 3: Double it with NumPy",
+          "Challenge: How many passed?",
+          "Project: Game statistics"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 10,
+      "tur": "ozet",
+      "sure_sn": 11,
+      "anlatim": "In short: calculate measures with statistics, do math on a whole array at once with NumPy, and filter with conditions.",
+      "ekran": {
+        "baslik": "What you learned today",
+        "maddeler": [
+          "mean, median, mode, stdev",
+          "np.array: operations apply to every item",
+          "Pick with array[condition]"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "kapanis",
+      "sure_sn": 12,
+      "anlatim": "The numbers talked, you're amazing! Tomorrow we'll line these numbers up in tables. We'll learn to filter and summarize rows and columns with pandas. See you!",
+      "ekran": {
+        "baslik": "Tomorrow: Pandas",
+        "maddeler": [
+          "DataFrame",
+          "Filter and summarize"
+        ]
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

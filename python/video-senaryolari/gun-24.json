@@ -5,6 +5,25 @@
   "maskot": "piko",
   "ozet": "Piko, Bilgi Limanı'nın kayıt ofisinde statistics modülüyle ortalama, ortanca ve tepe değeri; NumPy dizileriyle toplu işlem ve koşulla seçimi anlatıyor.",
   "hedef_sure_sn": 143,
+  "dil": "tr",
+  "giris": {
+    "anlatim": "Gün 24: İstatistik ve NumPy! Bu derste ortalama, ortanca ve tepe değeri hesaplamayı, NumPy dizileriyle toplu işlem ve koşulla seçim yapmayı öğreneceksin.",
+    "maddeler": [
+      "mean, median, mode",
+      "NumPy dizileri",
+      "Koşulla seçmek"
+    ]
+  },
+  "cikis": {
+    "anlatim": "Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!",
+    "baslik": "İnteraktif dersler için",
+    "adres": "30gunde.com.tr",
+    "maddeler": [
+      "Kodunu tarayıcıda yaz ve çalıştır",
+      "Görevleri tamamla, rozet kazan",
+      "30 günde adım adım Python"
+    ]
+  },
   "sahneler": [
     {
       "no": 1,

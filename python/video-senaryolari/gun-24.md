@@ -20,6 +20,14 @@ Ders metni: [gun-24.md](../gunler/gun-24.md)
 | 10 | ozet | 11 sn | on (sag) |
 | 11 | kapanis | 12 sn | tebrik (orta) |
 
+## Giriş (konu tanıtımı)
+
+**Seslendirme:** Gün 24: İstatistik ve NumPy! Bu derste ortalama, ortanca ve tepe değeri hesaplamayı, NumPy dizileriyle toplu işlem ve koşulla seçim yapmayı öğreneceksin.
+
+- mean, median, mode
+- NumPy dizileri
+- Koşulla seçmek
+
 ## Sahne 1: acilis (14 sn)
 
 **Seslendirme:** Selam, ben Piko! Bilgi Limanı'nın kayıt ofisinde yüzlerce geminin varış süresi yazılı. Liman başkanı soruyor: Gemiler ortalama kaç saatte geliyor, en sık hangi süre görülüyor? Bugün Python'la sayıları konuşturacağız!
@@ -232,3 +240,13 @@ statistics.StatisticsError: mean requires at least one data point
 - Filtrele ve özetle
 
 **Maskot:** tebrik pozu, orta
+
+## Çıkış (30gunde.com.tr yönlendirmesi)
+
+**Seslendirme:** Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!
+
+**Ekranda:** İnteraktif dersler için **30gunde.com.tr**
+
+- Kodunu tarayıcıda yaz ve çalıştır
+- Görevleri tamamla, rozet kazan
+- 30 günde adım adım Python

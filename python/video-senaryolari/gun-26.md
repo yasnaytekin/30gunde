@@ -21,6 +21,14 @@ Ders metni: [gun-26.md](../gunler/gun-26.md)
 | 11 | ozet | 11 sn | on (sag) |
 | 12 | kapanis | 12 sn | tebrik (orta) |
 
+## Giriş (konu tanıtımı)
+
+**Seslendirme:** Gün 26: Python ile web! Bu derste web'in istek ve yanıtla nasıl çalıştığını, durum kodlarını, Python ile HTML üretmeyi ve yönlendirmeyi öğreneceksin.
+
+- İstek, yanıt, durum kodu
+- Python ile HTML üretmek
+- Sözlükle yönlendirme
+
 ## Sahne 1: acilis (14 sn)
 
 **Seslendirme:** Selam, ben Piko! Son bölgeye, Python Dağı'nın eteğine geldik! Tepede dev bir gözlem kulesi var ve dünyanın her yerinden mesaj alıyor. Her mesaj bir istek, kulenin her cevabı bir yanıt. Web siteleri de tam böyle çalışır!
@@ -262,3 +270,13 @@ KeyError: '/gizli'
 - insert, find, update
 
 **Maskot:** tebrik pozu, orta
+
+## Çıkış (30gunde.com.tr yönlendirmesi)
+
+**Seslendirme:** Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!
+
+**Ekranda:** İnteraktif dersler için **30gunde.com.tr**
+
+- Kodunu tarayıcıda yaz ve çalıştır
+- Görevleri tamamla, rozet kazan
+- 30 günde adım adım Python
