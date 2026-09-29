@@ -21,6 +21,14 @@ Ders metni: [gun-27.md](../gunler/gun-27.md)
 | 11 | ozet | 11 sn | on (sag) |
 | 12 | kapanis | 12 sn | tebrik (orta) |
 
+## Giriş (konu tanıtımı)
+
+**Seslendirme:** Gün 27: Python ve MongoDB! Bu derste belge tabanlı veritabanı fikrini, MongoDB'nin insert, find ve update işlemlerini ve bunları Python ile canlandırmayı öğreneceksin.
+
+- Belge ve koleksiyon
+- insert, find, update
+- Sorgu eşleşmesi
+
 ## Sahne 1: acilis (15 sn)
 
 **Seslendirme:** Selam, ben Piko! Python Dağı'nın yamacındaki kütüphanede her oyuncunun bir dosyası var. Kütüphaneci bir isim duyunca doğru dosyayı saniyede buluyor, yeni dosya açıyor, seviyeleri güncelliyor. Bilgisayar dünyasında bu kütüphanecinin adı veritabanı!
@@ -249,3 +257,13 @@ KeyError: 'level'
 - JSON ve durum kodları
 
 **Maskot:** tebrik pozu, orta
+
+## Çıkış (30gunde.com.tr yönlendirmesi)
+
+**Seslendirme:** Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!
+
+**Ekranda:** İnteraktif dersler için **30gunde.com.tr**
+
+- Kodunu tarayıcıda yaz ve çalıştır
+- Görevleri tamamla, rozet kazan
+- 30 günde adım adım Python

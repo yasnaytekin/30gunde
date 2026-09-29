@@ -5,6 +5,25 @@
   "maskot": "piko",
   "ozet": "Piko, Python Dağı'nın kütüphanesinden yola çıkarak belge tabanlı veritabanı fikrini, MongoDB'nin insert, find ve update işlemlerini ve bunları Python sözlükleriyle canlandırmayı anlatıyor.",
   "hedef_sure_sn": 160,
+  "dil": "tr",
+  "giris": {
+    "anlatim": "Gün 27: Python ve MongoDB! Bu derste belge tabanlı veritabanı fikrini, MongoDB'nin insert, find ve update işlemlerini ve bunları Python ile canlandırmayı öğreneceksin.",
+    "maddeler": [
+      "Belge ve koleksiyon",
+      "insert, find, update",
+      "Sorgu eşleşmesi"
+    ]
+  },
+  "cikis": {
+    "anlatim": "Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!",
+    "baslik": "İnteraktif dersler için",
+    "adres": "30gunde.com.tr",
+    "maddeler": [
+      "Kodunu tarayıcıda yaz ve çalıştır",
+      "Görevleri tamamla, rozet kazan",
+      "30 günde adım adım Python"
+    ]
+  },
   "sahneler": [
     {
       "no": 1,

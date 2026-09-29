@@ -5,6 +5,25 @@
   "maskot": "piko",
   "ozet": "Piko, Python Dağı'nın zirvesine yakın bir istasyonda kendi API'mizi kurmayı; HTTP metotlarını, adresleri, durum kodlarını ve (kod, cevap) döndüren fonksiyonları anlatıyor.",
   "hedef_sure_sn": 159,
+  "dil": "tr",
+  "giris": {
+    "anlatim": "Gün 29: API yapmak! Bu derste kendi API'ni kurmayı; GET, POST, PUT ve DELETE metotlarını ve doğru durum kodlarını öğreneceksin.",
+    "maddeler": [
+      "GET, POST, PUT, DELETE",
+      "Adresi parçalamak",
+      "Doğru durum kodu"
+    ]
+  },
+  "cikis": {
+    "anlatim": "Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!",
+    "baslik": "İnteraktif dersler için",
+    "adres": "30gunde.com.tr",
+    "maddeler": [
+      "Kodunu tarayıcıda yaz ve çalıştır",
+      "Görevleri tamamla, rozet kazan",
+      "30 günde adım adım Python"
+    ]
+  },
   "sahneler": [
     {
       "no": 1,

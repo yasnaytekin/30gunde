@@ -5,6 +5,25 @@
   "maskot": "piko",
   "ozet": "Piko, Python Dağı'nın zirvesinde 30 günlük yolculuğu bölge bölge özetliyor, öğrenilenleri tek bir oyunda birleştiriyor, final görevlerini tanıtıyor ve kursu kutlamayla kapatıyor.",
   "hedef_sure_sn": 172,
+  "dil": "tr",
+  "giris": {
+    "anlatim": "Gün 30: Final ve sonrası! Bu derste otuz günlük yolculuğu özetleyecek, öğrendiklerini tek bir oyunda birleştirecek ve sonraki adımlarını göreceksin.",
+    "maddeler": [
+      "30 günün özeti",
+      "Hepsi bir arada: final macerası",
+      "Bundan sonra ne yapabilirsin?"
+    ]
+  },
+  "cikis": {
+    "anlatim": "Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!",
+    "baslik": "İnteraktif dersler için",
+    "adres": "30gunde.com.tr",
+    "maddeler": [
+      "Kodunu tarayıcıda yaz ve çalıştır",
+      "Görevleri tamamla, rozet kazan",
+      "30 günde adım adım Python"
+    ]
+  },
   "sahneler": [
     {
       "no": 1,

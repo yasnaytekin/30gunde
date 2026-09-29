@@ -1,0 +1,257 @@
+{
+  "kurs": "python",
+  "gun": 29,
+  "baslik": "Building APIs",
+  "maskot": "piko",
+  "ozet": "At a station near the top of Python Mountain, Piko explains building our own API: HTTP methods, addresses, status codes, and functions that return (code, response).",
+  "hedef_sure_sn": 159,
+  "dil": "en",
+  "giris": {
+    "anlatim": "Day 29: Building APIs! In this lesson you'll build your own API and learn the GET, POST, PUT and DELETE methods and the right status codes.",
+    "maddeler": [
+      "GET, POST, PUT, DELETE",
+      "Splitting the address",
+      "The right status code"
+    ]
+  },
+  "cikis": {
+    "anlatim": "The interactive version of this lesson is waiting for you at 30gunde.com.tr. Write your code right in the browser, run it instantly, and finish the tasks!",
+    "baslik": "Interactive lessons at",
+    "adres": "30gunde.com.tr",
+    "maddeler": [
+      "Write and run code in your browser",
+      "Finish tasks, earn badges",
+      "Learn Python step by step in 30 days"
+    ]
+  },
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 14,
+      "anlatim": "Hi, I'm Piko! We're very close to the top! Yesterday we asked other stations questions. Today we become the station that answers them. Your friends' games will read scores from the API you write. Ready?",
+      "ekran": {
+        "baslik": "Day 29: Building APIs",
+        "maddeler": [
+          "Python Mountain",
+          "GET, POST, PUT, DELETE"
+        ]
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 2,
+      "tur": "anlatim",
+      "sure_sn": 16,
+      "anlatim": "Every request that comes to an API has a method, which says what's being asked for. GET fetches data, POST adds new data, PUT updates, and DELETE removes. These four operations are called CRUD for short.",
+      "ekran": {
+        "baslik": "HTTP methods",
+        "maddeler": [
+          "GET: read",
+          "POST: add",
+          "PUT: update",
+          "DELETE: remove",
+          "CRUD: Create, Read, Update, Delete"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "Addresses are neat and tidy: players is all players, and players slash two is player number two. When I split the address into parts with strip and split, I can read which resource and which ID is being asked for.",
+      "ekran": {
+        "baslik": "Split the address",
+        "kod": "for path in [\"/players\", \"/players/2\", \"/scores/10\"]:\n    parts = path.strip(\"/\").split(\"/\")\n    print(path, \"->\", parts)\n",
+        "vurgu_satirlari": [
+          2
+        ],
+        "dil": "python",
+        "cikti": "/players -> ['players']\n/players/2 -> ['players', '2']\n/scores/10 -> ['scores', '10']"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "anlatim",
+      "sure_sn": 16,
+      "anlatim": "You write a real API with Flask. route picks the address and the method, jsonify turns the answer into JSON, and a status code comes along with it. Since we can't run a server here, each function will return a status code and an answer.",
+      "ekran": {
+        "baslik": "A real API with Flask",
+        "kod": "from flask import Flask, jsonify, request\napp = Flask(__name__)\nplayers = []\n\n@app.route(\"/players\", methods=[\"POST\"])\ndef create_player():\n    data = request.get_json()\n    players.append(data)\n    return jsonify(data), 201\n",
+        "vurgu_satirlari": [
+          5,
+          9
+        ],
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 5,
+      "tur": "anlatim",
+      "sure_sn": 14,
+      "anlatim": "A good API always returns a clear status code. Two hundred one means a new record was created, two hundred four means something was deleted but there's nothing to show, and four hundred means your request was incomplete or wrong.",
+      "ekran": {
+        "baslik": "The right status code",
+        "maddeler": [
+          "200 OK (GET, PUT)",
+          "201 Created (POST)",
+          "204 No content (DELETE)",
+          "400 Bad request",
+          "404 Not found"
+        ]
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 15,
+      "anlatim": "Here's the POST part of our mini API. First it checks whether the body has a name; if not, it sends it back with four hundred. If it does, it gives the player a new ID, adds them, and returns two hundred one.",
+      "ekran": {
+        "baslik": "Mini API: POST",
+        "kod": "players = [{\"id\": 1, \"name\": \"Piko\"}]\n\ndef create_player(body):\n    if \"name\" not in body:\n        return 400, {\"error\": \"name required\"}\n    player = {\"id\": len(players) + 1, \"name\": body[\"name\"]}\n    players.append(player)\n    return 201, player\n",
+        "vurgu_satirlari": [
+          4,
+          5,
+          8
+        ],
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 7,
+      "tur": "soru",
+      "sure_sn": 9,
+      "anlatim": "I send this API two requests: one with a name, and one completely empty. What do you think comes back for each?",
+      "ekran": {
+        "baslik": "What will it print?",
+        "kod": "players = [{\"id\": 1, \"name\": \"Piko\"}]\n\ndef create_player(body):\n    if \"name\" not in body:\n        return 400, {\"error\": \"name required\"}\n    player = {\"id\": len(players) + 1, \"name\": body[\"name\"]}\n    players.append(player)\n    return 201, player\n\nprint(create_player({\"name\": \"Ece\"}))\nprint(create_player({}))\n",
+        "vurgu_satirlari": [
+          10,
+          11
+        ],
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 8,
+      "tur": "cikti",
+      "sure_sn": 11,
+      "anlatim": "Ece was added with ID number two, and we got two hundred one. The empty request got four hundred, with a message saying what was missing.",
+      "ekran": {
+        "baslik": "The answer",
+        "kod": "players = [{\"id\": 1, \"name\": \"Piko\"}]\n\ndef create_player(body):\n    if \"name\" not in body:\n        return 400, {\"error\": \"name required\"}\n    player = {\"id\": len(players) + 1, \"name\": body[\"name\"]}\n    players.append(player)\n    return 201, player\n\nprint(create_player({\"name\": \"Ece\"}))\nprint(create_player({}))\n",
+        "dil": "python",
+        "cikti": "(201, {'id': 2, 'name': 'Ece'})\n(400, {'error': 'name required'})"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "hata",
+      "sure_sn": 12,
+      "anlatim": "A common mistake: reading the name field directly without checking the body. If the request has no name, you get a KeyError and the API crashes. Check with in first, and return four hundred if it's missing.",
+      "ekran": {
+        "baslik": "Common mistake: an unchecked body",
+        "kod": "def create_player(body):\n    return 201, {\"name\": body[\"name\"]}\n\nprint(create_player({}))\n",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "KeyError: 'name'",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "uzgun",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 10,
+      "tur": "gorev",
+      "sure_sn": 14,
+      "anlatim": "In the tasks you'll write a GET that fetches one player, a POST that adds a new player, and a DELETE that removes a player. In the project you're building the score API for Piko's Adventure!",
+      "ekran": {
+        "baslik": "Today's tasks",
+        "maddeler": [
+          "Task 1: GET: one player",
+          "Task 2: POST: a new player",
+          "Task 3: DELETE: remove a player",
+          "Challenge: Router",
+          "Project: Game API"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "ozet",
+      "sure_sn": 11,
+      "anlatim": "In short: the method says what to do, the address says what's wanted, and a good API answers every request with the right status code.",
+      "ekran": {
+        "baslik": "What you learned today",
+        "maddeler": [
+          "GET, POST, PUT, DELETE = CRUD",
+          "Split the address with split",
+          "200, 201, 204, 400, 404"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 12,
+      "tur": "kapanis",
+      "sure_sn": 13,
+      "anlatim": "Now you can write your own API, incredible! Tomorrow we reach the top. We'll combine everything you learned in thirty days and write the final version of Piko's Adventure. Don't miss it!",
+      "ekran": {
+        "baslik": "Tomorrow: The finale and beyond",
+        "maddeler": [
+          "The summit!",
+          "The final adventure"
+        ]
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

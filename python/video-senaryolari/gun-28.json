@@ -5,6 +5,25 @@
   "maskot": "piko",
   "ozet": "Piko, Python Dağı'ndaki kamp evinin telsiziyle API kavramını; JSON cevaplarını json.loads ile açmayı, json.dumps ile göndermeyi, durum kodlarını ve iç içe veriyi anlatıyor.",
   "hedef_sure_sn": 146,
+  "dil": "tr",
+  "giris": {
+    "anlatim": "Gün 28: API kullanmak! Bu derste API'nin ne olduğunu, JSON cevaplarını açmayı, durum kodlarını kontrol etmeyi ve iç içe veride gezinmeyi öğreneceksin.",
+    "maddeler": [
+      "API nedir?",
+      "json.loads ve json.dumps",
+      "Durum kodları ve iç içe veri"
+    ]
+  },
+  "cikis": {
+    "anlatim": "Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!",
+    "baslik": "İnteraktif dersler için",
+    "adres": "30gunde.com.tr",
+    "maddeler": [
+      "Kodunu tarayıcıda yaz ve çalıştır",
+      "Görevleri tamamla, rozet kazan",
+      "30 günde adım adım Python"
+    ]
+  },
   "sahneler": [
     {
       "no": 1,

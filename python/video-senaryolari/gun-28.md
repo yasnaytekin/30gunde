@@ -20,6 +20,14 @@ Ders metni: [gun-28.md](../gunler/gun-28.md)
 | 10 | ozet | 11 sn | on (sag) |
 | 11 | kapanis | 13 sn | tebrik (orta) |
 
+## Giriş (konu tanıtımı)
+
+**Seslendirme:** Gün 28: API kullanmak! Bu derste API'nin ne olduğunu, JSON cevaplarını açmayı, durum kodlarını kontrol etmeyi ve iç içe veride gezinmeyi öğreneceksin.
+
+- API nedir?
+- json.loads ve json.dumps
+- Durum kodları ve iç içe veri
+
 ## Sahne 1: acilis (14 sn)
 
 **Seslendirme:** Selam, ben Piko! Python Dağı'nın yarısındaki kamp evinde bir telsiz var. Hava istasyonunu arıyorum: Zirvede hava nasıl? İstasyon kısa ve düzenli bir cevap veriyor. Programlar da birbiriyle böyle konuşur. Bu kurallara API denir!
@@ -241,3 +249,13 @@ TypeError: string indices must be integers, not 'str'
 - GET, POST, PUT, DELETE
 
 **Maskot:** tebrik pozu, orta
+
+## Çıkış (30gunde.com.tr yönlendirmesi)
+
+**Seslendirme:** Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!
+
+**Ekranda:** İnteraktif dersler için **30gunde.com.tr**
+
+- Kodunu tarayıcıda yaz ve çalıştır
+- Görevleri tamamla, rozet kazan
+- 30 günde adım adım Python

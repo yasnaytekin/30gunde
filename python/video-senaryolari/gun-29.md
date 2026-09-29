@@ -21,6 +21,14 @@ Ders metni: [gun-29.md](../gunler/gun-29.md)
 | 11 | ozet | 11 sn | on (sag) |
 | 12 | kapanis | 13 sn | tebrik (orta) |
 
+## Giriş (konu tanıtımı)
+
+**Seslendirme:** Gün 29: API yapmak! Bu derste kendi API'ni kurmayı; GET, POST, PUT ve DELETE metotlarını ve doğru durum kodlarını öğreneceksin.
+
+- GET, POST, PUT, DELETE
+- Adresi parçalamak
+- Doğru durum kodu
+
 ## Sahne 1: acilis (14 sn)
 
 **Seslendirme:** Selam, ben Piko! Zirveye çok az kaldı! Dün başka istasyonlara soru sorduk. Bugün soruları cevaplayan istasyon biz oluyoruz. Arkadaşlarının oyunları, skorları senin yazacağın API'den okuyacak. Hazır mısın?
@@ -257,3 +265,13 @@ KeyError: 'name'
 - Final macerası
 
 **Maskot:** tebrik pozu, orta
+
+## Çıkış (30gunde.com.tr yönlendirmesi)
+
+**Seslendirme:** Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!
+
+**Ekranda:** İnteraktif dersler için **30gunde.com.tr**
+
+- Kodunu tarayıcıda yaz ve çalıştır
+- Görevleri tamamla, rozet kazan
+- 30 günde adım adım Python
