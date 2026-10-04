@@ -1,9 +1,11 @@
 # 30 Günde kitabı: gün gün ders verisinden (veri/gun-XX.json) baskıya ve e-kitaba uygun PDF üretir.
-#   python3 kitap/kitap.py python 1-3            # cikti/kitap/30-gunde-python-gun-01-03.pdf
+#   python3 kitap/kitap.py python 1-30           # tam kitap: cikti/kitap/30-gunde-python.pdf
+#   python3 kitap/kitap.py python 1-3            # örnek bölüm: cikti/kitap/30-gunde-python-gun-01-03.pdf
 #   python3 kitap/kitap.py javascript 1-2        # cikti/kitap/30-gunde-javascript-gun-01-02.pdf
 # Kitap siteden bağımsız kullanılabilir: örneklerin çıktıları kodu gerçekten çalıştırarak yazılır, görevlerin
 # "kendini kontrol et" maddeleri ve çözümleri (satır satır açıklamalarıyla) kitabın içindedir. Her sayfanın altında
-# o günün etkileşimli dersine giden bir QR kod bulunur (isteğe bağlı kullanım).
+# YouTube kanalına (her günün video anlatımı) giden bir QR kod bulunur; günün açılış sayfasında ayrıca o günün
+# etkileşimli dersinin adresi vardır (isteğe bağlı kullanım). Tüm günler seçilirse (1-30) tam kitap basılır.
 # Gerekenler: pip install markdown pygments "qrcode[pil]" pypdf reportlab playwright
 import argparse, html, io, json, re, subprocess, sys, tempfile
 from pathlib import Path
@@ -46,7 +48,11 @@ KURS = {
                               "<b>Console</b> sekmesine kodunu yaz ve Enter'a bas; <code>console.log</code> çıktıları orada görünür. "
                               "Sayfa (HTML) görevlerinde kodu bir <code>.html</code> dosyasındaki <code>&lt;script&gt;</code> etiketine yazıp dosyayı tarayıcıda aç."},
 }
+VIDEO = "https://www.youtube.com/@30gundekod"  # iki kursun da günlük video anlatımları bu kanalda
 K = KURS["python"]  # main() seçilen kursa göre değiştirir
+
+# Kodları çalıştırmak için ayrıca kurulması gereken paketler (import adı → pip adı)
+PAKETLER = {"bs4": "beautifulsoup4", "numpy": "numpy", "pandas": "pandas", "requests": "requests", "flask": "flask", "pymongo": "pymongo"}
 
 # Yalnızca sitede anlamlı olan ifadelerin kitap karşılıkları
 UYARLA = [
@@ -61,6 +67,35 @@ UYARLA = [
     ("Çalıştır'a bas ve Çıktı alanına bak.", "Kodu çalıştır ve konsoldaki çıktıya bak."),
     ("yazdığın şeyi **Çıktı** alanına yazar", "yazdığın şeyi konsola (**Console**) yazar"),
     ("bu sayfadaki editöre yazdığın kod doğrudan tarayıcında çalışır", "yazdığın kod doğrudan tarayıcında çalışır"),
+    ("Editörde `:` yazıp Enter'a basınca", "IDLE gibi editörlerde `:` yazıp Enter'a basınca"),
+    ("Girdi kutusuna farklı yaşlar yazıp dene.", "Programı birkaç kez çalıştırıp farklı yaşlar yazarak dene."),
+    ("Cevabı editörün altındaki **Girdi** kutusuna yaz.", "Program sorunca yaşını yaz ve Enter'a bas."),
+    ("Girdi kutusuna farklı cevaplar yazıp dene.", "Programı birkaç kez çalıştırıp farklı cevaplar yazarak dene."),
+    ("bu sitede 6 saniye sonra durdurulur.", "böyle bir program kendiliğinden durmaz. Başına gelirse **Ctrl+C** tuşlarıyla durdurabilirsin."),
+    ("Oyunu Kaydet ve Yükle düğmeleri senin fonksiyonlarını kullanır.", "Oyunun kaydetme ve yükleme özelliği senin fonksiyonlarını kullanır."),
+    ("Bu sitede dosyalar", "Görevlerde dosyalar"),
+    ("Burada yazdığın dosyalar tarayıcının hafızasında, **sadece o çalıştırma boyunca** yaşar. Bir sonraki çalıştırmada her şey temiz başlar. "
+     "Bu yüzden görevlerde önce yazıp sonra aynı kodda okuyacağız.\n\nKendi bilgisayarında Python kurduğunda dosyalar gerçekten diske yazılır ve kalıcı olur.",
+     "Bilgisayarında Python dosyaları gerçekten diske yazar: program kapansa da dosya, kodunun bulunduğu klasörde kalır. "
+     "Görevlerde yine de önce yazıp sonra **aynı kodda** okuyacağız; böylece her görev tek başına çalışır.\n\n"
+     "(Etkileşimli derslerde dosyalar tarayıcının hafızasında, sadece o çalıştırma boyunca yaşar.)"),
+    ("Bu sitedeki Python, bazı popüler paketlerle birlikte gelir. `import this` yazıp çalıştır, sana bir sürpriz var.",
+     "Küçük bir sürpriz: `import this` yazıp çalıştır. Bu modül Python'la birlikte gelir, kurmana gerek yok."),
+    ("Bu sitede internetten sayfa indiremediğimiz için HTML'i hazır bir yazı olarak vereceğiz.",
+     "Örnekler internete bağlanmadan da çalışsın diye HTML'i hazır bir yazı olarak vereceğiz."),
+    ("İlk çalıştırmada BeautifulSoup paketi yükleneceği için birkaç saniye bekleyebilirsin.",
+     "BeautifulSoup bilgisayarında yoksa önce terminalde `pip install beautifulsoup4` yazarak kur (20. gün)."),
+    ("Bu sitede bir sunucu başlatamıyoruz, ama aynı fikri düz Python ile deneyeceğiz.",
+     "Örneklerde sunucu başlatmadan aynı fikri düz Python ile deneyeceğiz. Flask'ı denemek istersen: `pip install flask`."),
+    ("Bu sitede gerçek bir veritabanına bağlanamıyoruz.", "Örneklerde gerçek bir veritabanı kurmakla uğraşmayacağız."),
+    ("Bu sitede internete istek gönderemiyoruz.", "Örnekler internetsiz de çalışsın diye gerçek istek göndermeyeceğiz."),
+    ("Bu sitede bir sunucu çalıştıramadığımız için aynı mantığı", "Sunucu kurmadan aynı mantığı"),
+    ("Kendi bilgisayarına Python kur (python.org) ve bu sitede yazdığın projeleri orada da çalıştır.",
+     "Bu kitapta yazdığın kodları sakla: her biri yeni bir maceranın başlangıcı olabilir."),
+    ("Bu parçayı da ekleyince **Proje** sayfasına git ve **Oyunumu oyna**'ya bas. 30 gün boyunca", "Bu parçayla 30 gün boyunca"),
+    ("Yön tuşlarıyla oynarsın ve hangi parçanın ne yaptığını oyunun günlüğünde görürsün.",
+     "İstersen 30gunde.com.tr'deki **Proje** sayfasında **Oyunumu oyna**'ya bas: parçaların yön tuşlarıyla oynanan bir oyuna dönüşür."),
+    ("Görevleri bitirince 30. günü tamamla ve sertifikanı al.", "Görevleri bitirince 30 günlük macerayı tamamlamış olursun; kitabın sonundaki sertifika seni bekliyor."),
 ]
 
 
@@ -163,6 +198,43 @@ def bolge_gorseli(k, bolge, genislik_px, oran=None):
     return jpg(k["bolge"].format(bolge), genislik_px, oran)
 
 
+def qr_svg(url, boyut_mm):
+    """Sayfa içinde kullanılacak vektör QR (tek path)."""
+    q = qrcode.QRCode(border=0, error_correction=qrcode.constants.ERROR_CORRECT_M)
+    q.add_data(url); q.make(fit=True)
+    m = q.get_matrix(); n = len(m)
+    d = "".join(f"M{c} {r}h1v1h-1z" for r, row in enumerate(m) for c, on in enumerate(row) if on)
+    return f'<svg class="qr" viewBox="0 0 {n} {n}" style="width:{boyut_mm}mm;height:{boyut_mm}mm" shape-rendering="crispEdges"><path d="{d}" fill="#13233F"/></svg>'
+
+
+BOLGE_SIMGE = {  # görseli henüz olmayan bölgeler için çizgi simgeler (24×24)
+    "compass": '<circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2 5-5 2 2-5z"/>',
+    "anchor": '<circle cx="12" cy="5" r="2"/><path d="M12 7v14M8 11h8M5 14a7 7 0 0 0 14 0"/>',
+    "mountain": '<path d="M2 20l7-12 4 6 3-4 6 10z"/><path d="M7.5 10.5l1.5 1.5 1.5-1.5"/>',
+    "tent": '<path d="M3 20l9-15 9 15zM12 20v-6"/>', "house": '<path d="M4 11l8-7 8 7v9H4z"/>',
+    "trees": '<path d="M8 3l5 8H3zM8 11v9M16 7l5 8h-10zM16 15v5"/>', "castle": '<path d="M4 21V8h3v3h3V8h4v3h3V8h3v13z"/>',
+    "wrench": '<path d="M14 6a4 4 0 0 0 5 5l-9 9-3-3 9-9z"/>',
+}
+BOLGE_RENK = {"ada": ("#1FA2A8", "#0E5E7A"), "liman": ("#3B6FD6", "#1B2F6B"), "dag": ("#7A5BC7", "#3A2470")}
+
+
+def bolge_kutusu(k, reg, sinif="harita"):
+    """Bölge görseli varsa onu, yoksa bölge adı ve simgesiyle çizilmiş bir şerit döndürür."""
+    if (REPO / k["bolge"].format(reg["id"])).exists():
+        return f'<img class="{sinif}" src="{bolge_gorseli(k, reg["id"], 1400, 120 / 62)}">'
+    a, b = BOLGE_RENK.get(reg["id"], (K["renk"], K["ink"]))
+    simge = BOLGE_SIMGE.get(reg.get("icon"), "")
+    gunler = reg.get("days") or []
+    return (f'<div class="{sinif} yedek" style="background: radial-gradient(70mm 50mm at 80% 20%, rgba(255,255,255,.25), rgba(255,255,255,0) 70%), linear-gradient(135deg, {a}, {b})">'
+            f'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round">{simge}</svg>'
+            f'<div><b>{html.escape(reg["name"])}</b><span>Gün {gunler[0]}–{gunler[-1]}</span></div></div>')
+
+
+def gereken_paketler(v):
+    kodlar = [e["code"] for e in v["examples"]] + [t["solution"] for t in v["tasks"] + [v.get("visual_task"), v.get("challenge"), v.get("project_task")] if t]
+    return sorted({pip for kod_ in kodlar for imp, pip in PAKETLER.items() if re.search(rf"^\s*(import|from)\s+{imp}\b", kod_, re.M)})
+
+
 def qr_ciz(c, url, x, y, boyut):
     """QR kodu vektör kareler olarak çizer (resim gömmez, PDF küçük kalır)."""
     q = qrcode.QRCode(border=0, error_correction=qrcode.constants.ERROR_CORRECT_M)
@@ -175,6 +247,9 @@ def qr_ciz(c, url, x, y, boyut):
                 c.rect(x + col * s, y + (n - 1 - r) * s, s * 1.02, s * 1.02, stroke=0, fill=1)
 
 
+STATIK = {"Nunito": (400, 700, 800), "JetBrainsMono": (400, 600, 700)}
+
+
 def fontlari_hazirla():
     """Yazı tipleri (SIL OFL, Google Fonts deposu) yoksa indirilir; repoya girmez."""
     base = "https://raw.githubusercontent.com/google/fonts/main/ofl/"
@@ -185,14 +260,21 @@ def fontlari_hazirla():
         if not (FONTS / ad).exists():
             import urllib.request
             urllib.request.urlretrieve(base + yol, FONTS / ad)
+    # Chromium değişken (variable) yazı tiplerini PDF'e Type3 olarak gömer ve dosya çok büyür: sabit ağırlıklar üret
+    for ad, agirliklar in STATIK.items():
+        for w in agirliklar:
+            hedef = FONTS / f"{ad}-{w}.ttf"
+            if not hedef.exists():
+                from fontTools.ttLib import TTFont as FTFont
+                from fontTools.varLib.instancer import instantiateVariableFont
+                instantiateVariableFont(FTFont(FONTS / f"{ad}.ttf"), {"wght": w}, updateFontNames=False).save(hedef)
 
 
 # ---------- HTML parçaları ----------
 def css(root):
     f = lambda n: (FONTS / n).as_uri()
     return f"""
-@font-face {{ font-family: Body; src: url({f('Nunito.ttf')}); font-weight: 200 1000; }}
-@font-face {{ font-family: Mono; src: url({f('JetBrainsMono.ttf')}); font-weight: 100 800; }}
+{"".join(f"@font-face {{ font-family: {aile}; src: url({f(f'{ad}-{w}.ttf')}); font-weight: {w}; }}" for aile, ad in (("Body", "Nunito"), ("Mono", "JetBrainsMono")) for w in STATIK[ad])}
 @font-face {{ font-family: Head; src: url({f('Poppins-Bold.ttf')}); font-weight: 700; }}
 @font-face {{ font-family: Head; src: url({f('Poppins-SemiBold.ttf')}); font-weight: 600; }}
 @font-face {{ font-family: Head; src: url({f('Poppins-ExtraBold.ttf')}); font-weight: 800; }}
@@ -251,19 +333,46 @@ div.hl pre {{ font-family: Mono; font-size: 8.2pt; line-height: 1.45; white-spac
 .sahne .coin {{ width: 10pt; height: 10pt; border-radius: 50%; background: radial-gradient(circle at 35% 35%, #FFE680, #E0A800); }}
 .sahne .heart {{ color: #E8574A; font-size: 12pt; }}
 /* gün açılışı */
-.acilis {{ break-after: page; position: relative; height: 170mm; }}
+.acilis {{ break-after: page; position: relative; }}
 .acilis .ust {{ display: flex; align-items: center; gap: 8pt; }}
 .acilis .gun {{ font-family: Head; font-weight: 800; font-size: 11pt; background: var(--c2); padding: 2pt 10pt; border-radius: 99pt; }}
 .acilis .bolge {{ font-family: Head; font-weight: 600; font-size: 9pt; color: var(--ink2); }}
-.acilis h1 {{ font-size: 25pt; margin: 8pt 0 8pt; font-weight: 800; }}
-.acilis .uzay {{ width: 100%; height: 62mm; border-radius: 9pt; background-size: cover; background-position: center; display: grid; place-items: center; }}
+.acilis h1 {{ font-size: 24pt; margin: 6pt 0 7pt; font-weight: 800; }}
+.acilis .uzay {{ width: 100%; height: 56mm; border-radius: 9pt; background-size: cover; background-position: center; display: grid; place-items: center; }}
 .acilis .uzay img {{ height: 54mm; filter: drop-shadow(0 3mm 4mm rgba(0,0,0,.5)); }}
 .kapak.uzayli {{ background: linear-gradient(rgba(11,16,38,.35), rgba(11,16,38,.55)), var(--kapak-bg) center / cover, #0B1026; }}
 .kapak.uzayli .bolgeler img {{ border: none; object-fit: contain; width: 18mm; height: 18mm; }}
-.acilis .harita {{ width: 100%; height: 62mm; object-fit: cover; border-radius: 9pt; display: block; }}
-.acilis .konusma {{ display: flex; gap: 8pt; align-items: flex-end; margin-top: 10pt; }}
-.acilis .konusma img {{ width: 30mm; flex: none; }}
-.acilis .balon {{ position: relative; background: var(--soft); border: 1pt solid var(--line); border-radius: 10pt; padding: 8pt 10pt; font-size: 9.2pt; }}
+.acilis .harita {{ width: 100%; height: 50mm; object-fit: cover; border-radius: 9pt; display: block; }}
+.harita.yedek {{ display: flex; align-items: center; gap: 8mm; padding: 0 12mm; color: #fff; }}
+.harita.yedek svg {{ width: 30mm; height: 30mm; flex: none; opacity: .9; }}
+.harita.yedek b {{ display: block; font-family: Head; font-weight: 800; font-size: 22pt; line-height: 1.1; }}
+.harita.yedek span {{ font-family: Head; font-weight: 600; font-size: 10pt; opacity: .85; }}
+.acilis .baglanti {{ display: flex; gap: 6pt; margin-top: 7pt; break-inside: avoid; }}
+.acilis .baglanti > div {{ flex: 1; display: flex; gap: 6pt; align-items: center; border: 1pt solid var(--line); border-radius: 8pt; padding: 5pt 7pt; font-size: 7.6pt; line-height: 1.35; }}
+.acilis .baglanti > div.video {{ background: #FFF1F0; border-color: #F6C9C4; }}
+.acilis .baglanti b {{ display: block; font-family: Head; font-size: 8pt; }}
+.acilis .baglanti .qr {{ flex: none; }}
+.acilis .paket {{ font-size: 8pt; background: #FFF7DD; border-radius: 5pt; padding: 3pt 7pt; margin-top: 5pt; }}
+.icindekiler.tam li {{ padding: 2.6pt 0; font-size: 9pt; }}
+.icindekiler li.bolum {{ break-after: avoid; border: none; padding: 7pt 0 1pt; font-family: Head; font-weight: 700; font-size: 8pt; letter-spacing: .06em; text-transform: uppercase; color: var(--ink2); }}
+.on .kanal {{ display: flex; gap: 8pt; align-items: center; background: #FFF1F0; border: 1pt solid #F6C9C4; border-radius: 8pt; padding: 7pt 9pt; margin: 6pt 0 8pt; }}
+.on .kanal .qr {{ flex: none; }}
+/* sertifika */
+.sertifika {{ page: cover; width: {W_MM}mm; height: {H_MM}mm; position: relative; overflow: hidden; text-align: center;
+  background: radial-gradient(90mm 70mm at 50% 0%, #FFF3C4, rgba(255,243,196,0) 70%), #fff; }}
+.sertifika .cerceve {{ position: absolute; inset: 9mm; border: 1.6mm solid var(--c); border-radius: 6mm; box-shadow: inset 0 0 0 1.4mm #fff, inset 0 0 0 2mm var(--c2); }}
+.sertifika .ic {{ position: absolute; inset: 22mm 18mm; display: flex; flex-direction: column; align-items: center; }}
+.sertifika .ust {{ font-family: Head; font-weight: 700; font-size: 9pt; letter-spacing: .2em; text-transform: uppercase; color: var(--ink2); }}
+.sertifika h1 {{ font-size: 26pt; font-weight: 800; color: var(--c); margin: 4mm 0 2mm; }}
+.sertifika img {{ width: 48mm; margin: 4mm 0; }}
+.sertifika .ad {{ width: 95mm; border-bottom: 0.5mm solid var(--ink); height: 12mm; margin: 4mm 0 1.5mm; }}
+.sertifika small {{ font-size: 7.5pt; color: var(--ink2); }}
+.sertifika p {{ font-size: 10pt; max-width: 100mm; margin: 5mm 0 0; }}
+.sertifika .imza {{ display: flex; gap: 14mm; margin-top: auto; }}
+.sertifika .imza div {{ width: 40mm; border-top: 0.4mm solid var(--ink); padding-top: 1.5mm; font-size: 7.5pt; color: var(--ink2); }}
+.acilis .konusma {{ display: flex; gap: 8pt; align-items: flex-end; margin-top: 7pt; }}
+.acilis .konusma img {{ width: 26mm; flex: none; }}
+.acilis .balon {{ position: relative; background: var(--soft); border: 1pt solid var(--line); border-radius: 10pt; padding: 7pt 9pt; font-size: 8.8pt; }}
 .acilis .balon::after {{ content: ""; position: absolute; left: -6pt; bottom: 12pt; border: 6pt solid transparent; border-right-color: var(--line); border-left: 0; }}
 .acilis .proje {{ font-size: 8.5pt; color: var(--ink2); margin-top: 6pt; }}
 .acilis .proje b {{ color: var(--ink); }}
@@ -337,18 +446,28 @@ def gun_html(v, k, root):
     if k["bolge_tur"] == "gezegen":
         gorsel = f'<div class="uzay" style="background-image:url({jpg(k["uzay"], 1400, 120 / 62)})"><img src="{bolge_gorseli(k, v["region"], 700)}"></div>'
     else:
-        gorsel = f'<img class="harita" src="{bolge_gorseli(k, v["region"], 1400, 120 / 62)}">'
+        gorsel = bolge_kutusu(k, reg)
+    ders = k["url"].format(n)
+    baglanti = f"""<div class="baglanti">
+  <div class="video">{qr_svg(VIDEO, 15)}<span><b>Video anlatım</b>YouTube'da <b style="display:inline">30 Günde Kod</b> kanalında „Gün {n} · {html.escape(v["title"])}” videosu</span></div>
+  <div>{qr_svg(ders, 15)}<span><b>Etkileşimli ders</b>Görevleri tarayıcında dene:<br>{html.escape(ders.replace("https://", ""))}</span></div>
+ </div>"""
+    paket = gereken_paketler(v)
+    paket = (f'<div class="paket"><b>Bu gün için:</b> kodları kendi bilgisayarında çalıştırmadan önce terminalde '
+             f'<code>pip install {" ".join(paket)}</code> yaz (bkz. 20. gün).</div>') if paket else ""
     body = f"""<section class="acilis">
  <div class="ust"><span class="gun">Gün {n}</span><span class="bolge">{html.escape(reg["name"])}</span></div>
  <h1>{html.escape(v["title"])}</h1>
  {gorsel}
  <div class="box hedef"><h4>Bugünün hedefi</h4>{md_inline(v["objective"])}</div>
  <div class="konusma"><img src="{root}/{k["poz"].format(poz)}"><div class="balon">{md_inline(v["story"])}</div></div>
- <div class="proje">Proje katkısı ({html.escape(k["varsayilan_proje"])}): <b>{html.escape(v.get("project_contribution", ""))}</b>. {html.escape(v.get("game_role", ""))}</div>
+ <div class="proje">Proje katkısı ({html.escape(k["varsayilan_proje"])}): <b>{html.escape(v.get("project_contribution", ""))}</b>. {html.escape(uyarla(v.get("game_role", "")))}</div>
+ {paket}
+ {baglanti}
 </section>"""
     body += "<h2>Konu anlatımı</h2>"
     for s in v["sections"]:
-        body += f"<h3>{html.escape(s['title'])}</h3>{md(s['body'])}"
+        body += f"<h3>{html.escape(uyarla(s['title']))}</h3>{md(s['body'])}"
     body += "<h2>Örnekler</h2>"
     for e in v["examples"]:
         out, err = calistir(e["code"], e.get("inputs"))
@@ -407,11 +526,23 @@ def cozumler_html(gunler):
     return body + "</section>"
 
 
-def on_bolum_html(k, gunler, sayfalar, root):
+def on_bolum_html(k, gunler, sayfalar, root, tam=False):
     """(nasıl kullanılır, içindekiler): ayrı parçalar olarak basılır."""
     n0, n1 = int(gunler[0]["day"]), int(gunler[-1]["day"])
-    toc = "".join(f'<li><b>Gün {int(v["day"])}</b>{html.escape(v["title"])}<span class="s">{sayfalar.get(int(v["day"]), "")}</span></li>' for v in gunler)
+    satir = lambda v: f'<li><b>Gün {int(v["day"])}</b>{html.escape(v["title"])}<span class="s">{sayfalar.get(int(v["day"]), "")}</span></li>'
+    if tam:  # bölgelere göre gruplanmış
+        toc = ""
+        for r in json.loads((REPO / k["kod"] / "veri/kurs.json").read_text("utf8"))["regions"]:
+            vs = [v for v in gunler if v["region"] == r["id"]]
+            if vs:
+                toc += f'<li class="bolum">{html.escape(r["name"])}</li>' + "".join(satir(v) for v in vs)
+    else:
+        toc = "".join(satir(v) for v in gunler)
+    toc += '<li class="bolum">Ekler</li>' if tam else ""
     toc += f'<li><b>Ek</b>Çözümler<span class="s">{sayfalar.get("cozum", "")}</span></li>'
+    if tam:
+        toc += f'<li><b>Son</b>Sertifikan<span class="s">{sayfalar.get("sertifika", "")}</span></li>'
+    ornek = "" if tam else f'<p style="font-size:8.5pt;color:#4A5B7A;margin-top:14pt">Bu bir örnek bölümdür: {k["ad"]} kitabının {n0}–{n1}. günleri.</p>'
     return f"""<section class="on">
 <h1>Bu kitap nasıl kullanılır?</h1>
 <p>Selam! Ben <b>{k["maskot"]}</b>. Bu kitapta her gün yeni bir şey öğrenip hemen kendi kodunu yazacaksın. Her gün aynı sırayla ilerler:</p>
@@ -424,16 +555,18 @@ def on_bolum_html(k, gunler, sayfalar, root):
 </ol>
 <h2>Kodu nerede yazacağım?</h2>
 <p>{k["kurulum"]} Kitabı kullanmak için internete ihtiyacın yok.</p>
-<h2>Sayfaların altındaki QR kod</h2>
-<p>İstersen her sayfanın altındaki QR kodu telefonunla okut: o günün <b>etkileşimli dersi</b> açılır. Orada kodunu tarayıcıda yazar, tek tıkla kontrol ettirir, rozet toplarsın. Bu tamamen isteğe bağlı; kitap tek başına yeterli.</p>
-</section>""", f"""<section class="on"><h1>İçindekiler</h1><ul class="icindekiler">{toc}</ul>
-<p style="font-size:8.5pt;color:#4A5B7A;margin-top:14pt">Bu bir örnek bölümdür: {k["ad"]} kitabının {n0}–{n1}. günleri.</p>
-<p style="font-size:7.5pt;color:#4A5B7A;margin-top:30pt">© 2026 30 Günde · 30gunde.com.tr. Tüm hakları saklıdır. Maskotlar, görseller ve ders içerikleri 30 Günde'ye aittir; izin alınmadan çoğaltılamaz.</p>
+<h2>Video anlatımlar</h2>
+<div class="kanal">{qr_svg(VIDEO, 20)}<div>Her günün konusunu kısa bir videoda {k["maskot"]} anlatıyor. Sayfaların altındaki QR kod seni YouTube'daki <b>30 Günde Kod</b> kanalına götürür; o günün <b>„Gün N”</b> videosunu aç. Kanalda hem 30 Günde Python hem 30 Günde JavaScript videoları var.<br><b>youtube.com/@30gundekod</b></div></div>
+<p>Her günün ilk sayfasında ayrıca o günün <b>etkileşimli dersinin</b> adresi var (30gunde.com.tr). Orada kodunu tarayıcıda yazar, tek tıkla kontrol ettirir, rozet toplarsın. Videolar da site de isteğe bağlı; kitap tek başına yeterli.</p>
+</section>""", f"""<section class="on"><h1>İçindekiler</h1><ul class="icindekiler{" tam" if tam else ""}">{toc}</ul>
+{ornek}
+<p style="font-size:7.5pt;color:#4A5B7A;margin-top:{18 if tam else 30}pt">© 2026 30 Günde · 30gunde.com.tr. Tüm hakları saklıdır. Maskotlar, görseller ve ders içerikleri 30 Günde'ye aittir; izin alınmadan çoğaltılamaz.</p>
 </section>"""
 
 
-def kapak_html(k, gunler, root):
+def kapak_html(k, gunler, root, tam=False):
     n0, n1 = int(gunler[0]["day"]), int(gunler[-1]["day"])
+    gorev = sum(len(v["tasks"]) + sum(bool(v.get(x)) for x in ("visual_task", "challenge", "project_task")) for v in gunler)
     kurs = json.loads((REPO / k["kod"] / "veri/kurs.json").read_text("utf8"))
     bolgeler = "".join(f'<img src="{bolge_gorseli(k, r["id"], 320)}">' for r in kurs["regions"][:3] if (REPO / k["bolge"].format(r["id"])).exists())
     uzay = f' uzayli" style="--kapak-bg: url({jpg("gorseller/javascript/arka-plan/bg-space.webp", 1000)})' if k["bolge_tur"] == "gezegen" else ""
@@ -441,23 +574,44 @@ def kapak_html(k, gunler, root):
 <h1>30 Günde<br><span>{k["dil_adi"]}</span></h1>
 <div class="alt">{k["alt"]}</div>
 <div class="bolgeler">{bolgeler}</div>
-<div class="etiket">Örnek bölüm · Gün {n0}–{n1}</div>
+<div class="etiket">{f"30 gün · {gorev} görev · tüm çözümler" if tam else f"Örnek bölüm · Gün {n0}–{n1}"}</div>
 <img class="piko" src="{png(k["kapak_poz"], 900)}">
-<div class="serit"><span>12 yaş ve üstü</span><span>Görevler · Çözümler · Proje</span></div></section>"""
+<div class="serit"><span>12 yaş ve üstü</span><span>{"Video anlatımlı · " if tam else ""}Görevler · Çözümler · Proje</span></div></section>"""
+
+
+def sertifika_html(k, root):
+    return f"""<section class="sertifika"><div class="cerceve"></div><div class="ic">
+<div class="ust">Başarı sertifikası</div>
+<h1>Tebrikler!</h1>
+<img src="{png(k["kapak_poz"], 600)}">
+<div class="ad"></div><small>adın soyadın</small>
+<p><b>{k["ad"]}</b> macerasının 30 gününü tamamlayarak {k["dil_adi"]} ile kendi programlarını yazmayı öğrendi.</p>
+<div class="imza"><div>Tarih</div><div>{k["maskot"]} · yol arkadaşın</div></div>
+</div></section>"""
 
 
 # ---------- PDF ----------
+# Gün açılışı tek sayfaya sığmazsa bölge görselini sığana kadar alçalt (baskı düzeninde ölçülür)
+ACILIS_SIGDIR = """() => {
+  const mm = 96 / 25.4, a = document.querySelector('.acilis'); if (!a) return;
+  const g = a.querySelector('.harita, .uzay'); if (!g) return;
+  for (let h = 50; a.offsetHeight > 172 * mm && h > 28; h -= 2) g.style.height = h + 'mm';
+}"""
+
+
 def pdf_bas(parcalar, out_dir):
     """Her HTML parçasını ayrı PDF'e basar; sayfa sayılarını döndürür."""
     from playwright.sync_api import sync_playwright
     paths = []
     with sync_playwright() as p:
         b = p.chromium.launch(args=["--allow-file-access-from-files"])
-        pg = b.new_page()
+        pg = b.new_page(viewport={"width": round((W_MM - 28) / 25.4 * 96), "height": 800})
+        pg.emulate_media(media="print")
         for ad, html_ in parcalar:
             f = out_dir / f"{ad}.html"; f.write_text(html_, "utf8")
             pg.goto(f.as_uri()); pg.evaluate("document.fonts.ready")
             pg.wait_for_load_state("networkidle")
+            pg.evaluate(ACILIS_SIGDIR)
             pdf = out_dir / f"{ad}.pdf"
             pg.pdf(path=str(pdf), width=f"{W_MM}mm", height=f"{H_MM}mm", print_background=True, prefer_css_page_size=True)
             paths.append((ad, pdf, len(PdfReader(str(pdf)).pages)))
@@ -466,34 +620,36 @@ def pdf_bas(parcalar, out_dir):
 
 
 def altbilgi(writer, sayfa_bilgisi, k):
-    """Her sayfanın altına sayfa numarası, gün adı ve o günün QR kodunu basar."""
+    """Her sayfanın altına sayfa numarası, gün adı ve video kanalının QR kodunu basar."""
     pdfmetrics.registerFont(TTFont("Head", str(FONTS / "Poppins-SemiBold.ttf")))
     pdfmetrics.registerFont(TTFont("Body", str(FONTS / "Poppins-Regular.ttf")))
-    for i, (etiket, url) in enumerate(sayfa_bilgisi):
+    buf = io.BytesIO()
+    c = canvas.Canvas(buf, pagesize=(W_MM * mm, H_MM * mm))  # tek belge: yazı tipi bir kez gömülür
+    for i, (etiket, gun) in enumerate(sayfa_bilgisi):
         if etiket is None:
+            c.showPage()
             continue
-        buf = io.BytesIO()
-        c = canvas.Canvas(buf, pagesize=(W_MM * mm, H_MM * mm))
         no = i + 1
         sol = no % 2 == 0  # çift sayfalar solda: numara dış kenarda
         c.setFillColorRGB(0.07, 0.14, 0.25); c.setFont("Head", 8)
         c.drawString(14 * mm, 9 * mm, str(no)) if sol else c.drawRightString((W_MM - 14) * mm, 9 * mm, str(no))
-        c.setFillColorRGB(0.29, 0.36, 0.48); c.setFont("Body", 6.5)
-        metin = f"{k['ad']} · {etiket}"
-        if url:
-            q = 13 * mm
-            qx = (W_MM - 14) * mm - q if sol else 14 * mm
-            qr_ciz(c, url, qx, 4.5 * mm, q)
-            tx = qx - 2 * mm if sol else qx + q + 2 * mm
-            c.setFont("Head", 6.5); c.setFillColorRGB(0.18, 0.43, 0.71)
-            (c.drawRightString if sol else c.drawString)(tx, 12.2 * mm, "Etkileşimli ders (isteğe bağlı)")
-            c.setFont("Body", 6.5); c.setFillColorRGB(0.29, 0.36, 0.48)
-            (c.drawRightString if sol else c.drawString)(tx, 8.6 * mm, metin)
-            (c.drawRightString if sol else c.drawString)(tx, 5.4 * mm, url.replace("https://", ""))
-        else:
-            c.drawCentredString(W_MM / 2 * mm, 9 * mm, metin)
-        c.save()
-        writer.pages[i].merge_page(PdfReader(buf).pages[0])
+        q = 13 * mm
+        qx = (W_MM - 14) * mm - q if sol else 14 * mm
+        qr_ciz(c, VIDEO, qx, 4.5 * mm, q)
+        tx = qx - 2 * mm if sol else qx + q + 2 * mm
+        yaz = c.drawRightString if sol else c.drawString
+        c.setFont("Head", 6.5); c.setFillColorRGB(0.75, 0.16, 0.12)
+        yaz(tx, 12.2 * mm, f"Video anlatım: YouTube · „Gün {gun}” videosu" if gun else "Video anlatımlar: YouTube")
+        c.setFont("Body", 6.5); c.setFillColorRGB(0.29, 0.36, 0.48)
+        yaz(tx, 8.6 * mm, f"{k['ad']} · {etiket}")
+        yaz(tx, 5.4 * mm, VIDEO.replace("https://www.", ""))
+        c.showPage()
+    c.save()
+    alt = PdfReader(buf)
+    for i, (etiket, _) in enumerate(sayfa_bilgisi):
+        if etiket is not None:
+            writer.pages[i].merge_page(alt.pages[i])
+            writer.pages[i].compress_content_streams()  # birleştirme içeriği sıkıştırmasız bırakır
 
 
 def main():
@@ -505,36 +661,40 @@ def main():
     k = K = KURS[a.kurs]
     fontlari_hazirla()
     g0, g1 = map(int, a.gunler.split("-"))
+    tam = g0 == 1 and not (REPO / a.kurs / "veri" / f"gun-{g1 + 1:02d}.json").exists()
     gunler = [json.loads((REPO / a.kurs / "veri" / f"gun-{d:02d}.json").read_text("utf8")) for d in range(g0, g1 + 1)]
     work = HERE / "is"; work.mkdir(exist_ok=True)
     root = REPO.as_uri()
     gun_parca = [(f"gun-{int(v['day']):02d}", page(gun_html(v, k, root), root)) for v in gunler]
     coz = ("cozumler", page(cozumler_html(gunler), root))
-    kapak = ("kapak", page(kapak_html(k, gunler, root), root))
+    kapak = ("kapak", page(kapak_html(k, gunler, root, tam), root))
+    son = [("sertifika", page(sertifika_html(k, root), root))] if tam else []
     # ön bölümün uzunluğu sayfa numaralarına bağlı değil: önce boş numaralarla bas, sonra gerçekleriyle
-    nasil, toc = on_bolum_html(k, gunler, {}, root)
-    bilgi = pdf_bas([kapak, ("on", page(nasil, root)), ("icindekiler", page(toc, root))] + gun_parca + [coz], work)
+    nasil, toc = on_bolum_html(k, gunler, {}, root, tam)
+    bilgi = pdf_bas([kapak, ("on", page(nasil, root)), ("icindekiler", page(toc, root))] + gun_parca + [coz] + son, work)
     sayfa = 1; baslangic = {}
     for ad, _, n in bilgi:
         baslangic[ad] = sayfa; sayfa += n
     nums = {int(v["day"]): baslangic[f"gun-{int(v['day']):02d}"] for v in gunler}
     nums["cozum"] = baslangic["cozumler"]
-    bilgi[2] = pdf_bas([("icindekiler", page(on_bolum_html(k, gunler, nums, root)[1], root))], work)[0]
+    nums["sertifika"] = baslangic.get("sertifika", "")
+    bilgi[2] = pdf_bas([("icindekiler", page(on_bolum_html(k, gunler, nums, root, tam)[1], root))], work)[0]
     writer = PdfWriter(); sayfa_bilgisi = []
     for ad, pdf, n in bilgi:
         for p_ in PdfReader(str(pdf)).pages:
             writer.add_page(p_)
-        if ad == "kapak":
+        if ad in ("kapak", "sertifika"):
             sayfa_bilgisi += [(None, None)] * n
         elif ad.startswith("gun-"):
             d = int(ad[4:]); v = next(x for x in gunler if int(x["day"]) == d)
-            sayfa_bilgisi += [(f"Gün {d}: {v['title']}", k["url"].format(d))] * n
+            sayfa_bilgisi += [(f"Gün {d}: {v['title']}", d)] * n
         else:
-            sayfa_bilgisi += [("Çözümler" if ad == "cozumler" else "Giriş", "https://30gunde.com.tr")] * n
+            sayfa_bilgisi += [("Çözümler" if ad == "cozumler" else "Giriş", None)] * n
     altbilgi(writer, sayfa_bilgisi, k)
-    writer.compress_identical_objects(remove_duplicates=True, remove_unreferenced=True)  # parçalar arasında ortak görseller bir kez
-    writer.add_metadata({"/Title": f"{k['ad']} · Gün {g0}–{g1} (örnek)", "/Author": "30 Günde", "/Subject": "30gunde.com.tr"})
-    out = REPO / "cikti" / "kitap" / f"30-gunde-{a.kurs}-gun-{g0:02d}-{g1:02d}.pdf"
+    for _ in range(3):  # parçalar arasında ortak görseller bir kez (maskeler birleşince görseller de eşleşir)
+        writer.compress_identical_objects(remove_duplicates=True, remove_unreferenced=True)
+    writer.add_metadata({"/Title": k["ad"] if tam else f"{k['ad']} · Gün {g0}–{g1} (örnek)", "/Author": "30 Günde", "/Subject": "30gunde.com.tr"})
+    out = REPO / "cikti" / "kitap" / (f"30-gunde-{a.kurs}.pdf" if tam else f"30-gunde-{a.kurs}-gun-{g0:02d}-{g1:02d}.pdf")
     out.parent.mkdir(parents=True, exist_ok=True)
     with open(out, "wb") as f:
         writer.write(f)
