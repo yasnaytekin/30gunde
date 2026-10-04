@@ -223,9 +223,15 @@ def lexer():
     return PythonLexer() if K["kod"] == "python" else JavascriptLexer()
 
 
-def kod(code, cikti=None, baslik=None, hata=False, sekil=None, lex=None, not_=None):
-    """Kod + çıktı (+ şekil) + not. Not, son kutuyla bölünmez bir blokta durur; sayfaya tek başına düşmez."""
+def kod(code, cikti=None, baslik=None, hata=False, sekil=None, lex=None, not_=None, parcali=False):
+    """Kod + çıktı (+ şekil) + not. Not, son kutuyla bölünmez bir blokta durur; sayfaya tek başına düşmez.
+    parcali: (bölünebilir gövde, son 8 satır) ikilisi döndürür; ikisi aynı kutu gibi görünür."""
     code = (code or "").rstrip("\n")
+    if parcali:
+        satirlar = highlight(code, lex or lexer(), FORMATTER).rstrip().split("\n")  # Pygments her satırın etiketlerini kapatır
+        cap = f"<div class=cap>{html.escape(baslik)}</div>" if baslik else ""
+        return (f'<div class="kod-grup govde"><div class="code ust">{cap}<pre class="hl">{chr(10).join(satirlar[:-8])}</pre></div></div>',
+                f'<div class="code alt"><pre class="hl">{chr(10).join(satirlar[-8:])}</pre></div>')
     out = f'<div class="code">{f"<div class=cap>{html.escape(baslik)}</div>" if baslik else ""}<pre class="hl">{highlight(code, lex or lexer(), FORMATTER).rstrip()}</pre></div>'
     son = ""
     if cikti is not None:
@@ -495,6 +501,8 @@ pre {{ margin: 0; }}
 .gorev {{ border: 1pt solid var(--line); border-radius: 8pt; padding: 9pt 10pt 4pt; margin: 9pt 0; break-inside: avoid; }}
 .gorev .bas {{ break-inside: avoid; }}
 .ipucu, .kontrol, .kuyruk, .son-blok {{ break-inside: avoid; }}
+.kod-grup.govde {{ break-inside: auto; margin-bottom: 0; }} .code.ust {{ border-bottom: none; border-radius: 5pt 5pt 0 0; padding-bottom: 0; }}
+.code.alt {{ border-top: none; border-radius: 0 0 5pt 5pt; padding-top: 0; margin-bottom: 9pt; }}
 div.hl {{ background: var(--soft); border: 0.8pt solid var(--line); border-left: 3pt solid var(--c); border-radius: 5pt; padding: 6pt 8pt; margin: 4pt 0 8pt; break-inside: avoid; }}
 div.hl pre {{ font-family: Mono; font-size: 8.2pt; line-height: 1.45; white-space: pre-wrap; }} div.hl code {{ background: none; padding: 0; font-size: 1em; }}
 .gorev .etiket {{ display: inline-block; font-family: Head; font-weight: 700; font-size: 7pt; letter-spacing: .06em; text-transform: uppercase;
@@ -609,11 +617,15 @@ def gorev_html(gv, etiket, cls, ref, root):
     if sc:
         out += sahne(sc, root)
     son = ""  # görevin son kod bloğu kuyrukla aynı sayfada kalır: kuyruk sonraki sayfanın başına tek başına düşmez
+    son_kod = (gv.get("starter") or "").strip() and gv["starter"] or (gv.get("html") or "").strip() and gv["html"] or ""
+    uzun = son_kod.count("\n") + 2 * len(gv.get("hints") or []) + 6 > 36  # kod + kuyruk bir sayfaya sığmaz
     if (gv.get("html") or "").strip():
-        son = kod(gv["html"], baslik=t("html_hazir"), lex=HtmlLexer())
+        son = kod(gv["html"], baslik=t("html_hazir"), lex=HtmlLexer(), parcali=uzun and son_kod is gv["html"])
     if (gv.get("starter") or "").strip():
         out += son
-        son = kod(gv["starter"], baslik=t("baslangic"))
+        son = kod(gv["starter"], baslik=t("baslangic"), parcali=uzun)
+    if isinstance(son, tuple):  # uzun kodun gövdesi bölünebilir, son satırları kuyrukla birlikte kalır
+        out += son[0]; son = son[1]
     ch = gv.get("check") or {}
     kontrol = []
     if ch.get("output_contains"):
