@@ -1,0 +1,37 @@
+{
+ "day": 24, "title": "Statistics and NumPy", "region": "liman",
+ "project_contribution": "Game statistics",
+ "game_role": "The statistics of your previous games are shown at the end of the game.",
+ "objective": "Calculate the mean, median, mode and array operations with the statistics module and NumPy",
+ "story": "The harbor's records office lists the arrival times of hundreds of ships. The harbor master asks: \"How many hours do ships take on average? Which time comes up most often?\" Making sense of piles of numbers is called **statistics**. Today we make the numbers talk with Python.",
+ "sections": [
+  {"title": "Basic measures", "body": "- **Mean**: add them all up and divide by how many there are\n- **Median**: the value exactly in the middle when sorted\n- **Mode**: the value that appears most often\n- **Standard deviation** (stdev): how far the numbers spread from the mean\n\nThe median isn't pulled around by one very big or very small number the way the mean is."},
+  {"title": "The statistics module", "body": "Python's built-in `statistics` module calculates these measures for you:\n\n```python\nimport statistics\n\ntimes = [3, 5, 5, 6, 12]\nprint(statistics.mean(times))     # 6.2\nprint(statistics.median(times))   # 5\nprint(statistics.mode(times))     # 5\nprint(round(statistics.stdev(times), 2))\n```"},
+  {"title": "NumPy arrays", "body": "**NumPy** is the package scientists use most. Its `array` is like a list, but it applies math **to all the items at once**:\n\n```python\nimport numpy as np\n\na = np.array([10, 20, 30])\nprint(a * 2)        # [20 40 60]\nprint(a + a)        # [20 40 60]\nprint(a.mean(), a.max(), a.sum())\n```\n\nWith a normal list, `[10, 20] * 2` would put the list twice side by side!\n\nIf NumPy isn't installed yet, run `pip install numpy` in the terminal first (Day 20)."},
+  {"title": "Picking with a condition", "body": "In NumPy arrays you can pick items by writing a condition inside the square brackets:\n\n```python\nscores = np.array([45, 90, 12, 77])\nprint(scores[scores >= 50])   # [90 77]\nprint((scores >= 50).sum())   # 2 people passed\n```"}
+ ],
+ "examples": [
+  {"title": "Arrival times", "code": "import statistics\n\ntimes = [3, 5, 5, 6, 12]\nprint(\"Mean:\", statistics.mean(times))\nprint(\"Median:\", statistics.median(times))\nprint(\"Most common:\", statistics.mode(times))\nprint(\"Deviation:\", round(statistics.stdev(times), 2))\n", "note": ""},
+  {"title": "List or array?", "code": "import numpy as np\n\nnums = [10, 20, 30]\nprint(\"List * 2:\", nums * 2)\nprint(\"Array * 2:\", np.array(nums) * 2)\n", "note": "The same operation, a very different result!"},
+  {"title": "Filter", "code": "import numpy as np\n\nscores = np.array([45, 90, 12, 77, 60])\nprint(\"Passed:\", scores[scores >= 50])\nprint(\"How many:\", (scores >= 50).sum())\nprint(\"Mean:\", scores.mean())\n", "note": ""}
+ ],
+ "tasks": [
+  {"title": "Mean and median", "prompt": "With the `statistics` module, store the mean of the `scores` list in `avg` and its median in `mid`.",
+   "starter": "import statistics\n\nscores = [70, 85, 85, 90, 40]\n\navg = 0\nmid = 0\n\nprint(avg, mid)\n", "solution": "import statistics\n\nscores = [70, 85, 85, 90, 40]\n\navg = statistics.mean(scores)\nmid = statistics.median(scores)\n\nprint(avg, mid)\n",
+   "hints": ["statistics.mean(scores)", "statistics.median(scores)"], "check": {"output_contains": ["74 85"]}},
+  {"title": "The most common roll", "prompt": "Store the dice value that came up most often in `rolls` in the `most` variable.",
+   "starter": "import statistics\n\nrolls = [3, 6, 2, 6, 1, 6, 3]\n\nmost = 0\n\nprint(\"Most common:\", most)\n", "solution": "import statistics\n\nrolls = [3, 6, 2, 6, 1, 6, 3]\n\nmost = statistics.mode(rolls)\n\nprint(\"Most common:\", most)\n",
+   "hints": ["For the mode: statistics.mode(rolls)"], "check": {"output_contains": ["Most common: 6"]}},
+  {"title": "Doubling with NumPy", "prompt": "Turn the `scores` list into a NumPy array and create the `doubled` array with every score doubled. No loops!",
+   "starter": "import numpy as np\n\nscores = [10, 25, 40]\n\ndoubled = scores\n\nprint(doubled)\n", "solution": "import numpy as np\n\nscores = [10, 25, 40]\n\ndoubled = np.array(scores) * 2\n\nprint(doubled)\n",
+   "hints": ["Turn it into an array with np.array(scores).", "Multiply the array by 2 directly."], "check": {"output_contains": ["[20 50 80]"]}}
+ ],
+ "challenge": {"title": "How many passed?", "prompt": "With NumPy, put the scores of 50 and above from `scores` into the `passed` array, and their number into `count`.",
+  "starter": "import numpy as np\n\nscores = np.array([45, 90, 12, 77, 50])\n\npassed = scores\ncount = 0\n\nprint(passed, count)\n",
+  "solution": "import numpy as np\n\nscores = np.array([45, 90, 12, 77, 50])\n\npassed = scores[scores >= 50]\ncount = len(passed)\n\nprint(passed, count)\n",
+  "hints": ["Picking with a condition: scores[scores >= 50]", "Their number: len(passed)"], "check": {"output_contains": ["[90 77 50] 3"]}},
+ "project_task": {"title": "Game statistics", "prompt": "The players' daily playing times (in minutes) are in the `play_times` list. Print:\n\n```\nMean: 31.4\nLongest: 55\nShortest: 12\nTotal: 157\n```\n\nRound the mean to 1 decimal place.",
+  "starter": "import statistics\n\nplay_times = [25, 40, 12, 55, 25]\n\n# print the four lines\n",
+  "solution": "import statistics\n\nplay_times = [25, 40, 12, 55, 25]\n\nprint(\"Mean:\", round(statistics.mean(play_times), 1))\nprint(\"Longest:\", max(play_times))\nprint(\"Shortest:\", min(play_times))\nprint(\"Total:\", sum(play_times))\n",
+  "hints": ["round(statistics.mean(play_times), 1)", "Use the built-in functions max, min and sum."], "check": {"output_contains": ["Mean: 31.4", "Longest: 55", "Shortest: 12", "Total: 157"]}}
+}

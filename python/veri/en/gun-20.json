@@ -1,0 +1,37 @@
+{
+ "day": 20, "title": "The pip package manager", "region": "ada",
+ "project_contribution": "Package list",
+ "game_role": "Your package list appears in the game's credits.",
+ "objective": "Learn what packages and pip are, and read and write requirements.txt files",
+ "story": "Every day ships dock at the harbor of Discovery Island. Boxes from all over the world are unloaded: inside are ready-made tools built by other programmers. In the Python world these boxes are called **packages**, and the ship that brings them is called **pip**.",
+ "sections": [
+  {"title": "What is a package?", "body": "A package is a collection of modules that someone wrote and shared with everyone. There are hundreds of thousands of Python packages, and they all live in a giant store called **PyPI** (the Python Package Index).\n\nFor example, `requests` makes getting data from the internet easy, `pygame` helps you make games, and `pandas` handles tables."},
+  {"title": "pip commands", "body": "`pip` is the program that installs packages. These commands aren't written inside Python code; you type them in your computer's **terminal**:\n\n```\npip install requests        # install\npip install pygame==2.5.2   # install a specific version\npip list                    # show installed packages\npip uninstall requests      # remove\npip freeze                  # list packages with their versions\n```"},
+  {"title": "requirements.txt", "body": "The packages a project needs are written in a `requirements.txt` file. Each line has one package and its version:\n\n```\nrequests==2.31.0\npygame==2.5.2\n```\n\nWhen someone else downloads your project, they install everything at once with `pip install -r requirements.txt`."},
+  {"title": "Version numbers", "body": "Versions like `2.31.0` are read as **major.minor.patch**. Careful when comparing! If you compare them as text, `\"2.4.1\" > \"2.31.0\"` comes out True, because Python compares character by character and `4` is bigger than `3`. The right way is to turn the parts into numbers:\n\n```python\nv = tuple(int(p) for p in \"2.31.0\".split(\".\"))   # (2, 31, 0)\n```\n\nA little surprise: run `import this`. That module comes with Python, so there's nothing to install."}
+ ],
+ "examples": [
+  {"title": "The Zen of Python", "code": "import this\n", "note": "Python's philosophy of writing code."},
+  {"title": "Split the line", "code": "line = \"requests==2.31.0\"\nname, version = line.split(\"==\")\nprint(\"Package:\", name)\nprint(\"Version:\", version)\n", "note": ""},
+  {"title": "The version trap", "code": "a = \"2.4.1\"\nb = \"2.31.0\"\nprint(\"As text:\", a > b)\nva = tuple(int(p) for p in a.split(\".\"))\nvb = tuple(int(p) for p in b.split(\".\"))\nprint(\"As numbers:\", va > vb)\n", "note": "Which one is right? 31 is bigger than 4, so 2.31.0 is newer."}
+ ],
+ "tasks": [
+  {"title": "Split the line", "prompt": "Put the package name in `line` into `name` and the version into `version`.", "starter": "line = \"requests==2.31.0\"\n\nname = \"\"\nversion = \"\"\n\nprint(name, version)\n",
+   "solution": "line = \"requests==2.31.0\"\n\nname, version = line.split(\"==\")\n\nprint(name, version)\n", "hints": ["line.split(\"==\") gives a list with two parts.", "You can spread them into two variables, like tuple unpacking."], "check": {"output_contains": ["requests 2.31.0"]}},
+  {"title": "Requirements reader", "prompt": "`text` holds the contents of a requirements.txt. Split each line and add it to the `packages` dictionary as `{package: version}`. Skip empty lines.",
+   "starter": "text = \"\"\"requests==2.31.0\nflask==3.0.0\n\nnumpy==1.26.4\"\"\"\n\npackages = {}\n\nprint(packages)\n",
+   "solution": "text = \"\"\"requests==2.31.0\nflask==3.0.0\n\nnumpy==1.26.4\"\"\"\n\npackages = {}\nfor line in text.splitlines():\n    line = line.strip()\n    if line == \"\":\n        continue\n    name, version = line.split(\"==\")\n    packages[name] = version\n\nprint(packages)\n",
+   "hints": ["text.splitlines() gives the lines.", "To skip an empty line: if line == \"\": continue"], "check": {"output_contains": ["'numpy': '1.26.4'"]}},
+  {"title": "Which one is newer?", "prompt": "Compare the versions `v1` and `v2` **as numbers**. Store the newer one in `newer` (`v1` if they're equal).",
+   "starter": "v1 = \"2.4.1\"\nv2 = \"2.31.0\"\n\nnewer = v1\n\nprint(\"Newer:\", newer)\n",
+   "solution": "v1 = \"2.4.1\"\nv2 = \"2.31.0\"\n\nt1 = tuple(int(p) for p in v1.split(\".\"))\nt2 = tuple(int(p) for p in v2.split(\".\"))\nnewer = v2 if t2 > t1 else v1\n\nprint(\"Newer:\", newer)\n",
+   "hints": ["Split each version: v1.split(\".\")", "Turn the parts into ints and make a tuple; tuples compare like numbers."], "check": {"output_contains": ["Newer: 2.31.0"]}}
+ ],
+ "challenge": {"title": "Missing packages", "prompt": "`needed` holds the packages the project wants, `installed` the ones already installed. Put the packages that still need installing into `to_install`, in alphabetical order.",
+  "starter": "needed = {\"requests\", \"pygame\", \"rich\"}\ninstalled = {\"pygame\", \"numpy\"}\n\nto_install = []\n\nprint(to_install)\n", "solution": "needed = {\"requests\", \"pygame\", \"rich\"}\ninstalled = {\"pygame\", \"numpy\"}\n\nto_install = sorted(needed - installed)\n\nprint(to_install)\n",
+  "hints": ["Remember the set difference: needed - installed", "sorted() gives the result as a list."], "check": {"output_contains": ["['requests', 'rich']"]}},
+ "project_task": {"title": "Package list", "prompt": "Let's prepare a requirements.txt for people who want to run our game on their computer. From the `packages` dictionary, build the `requirements` text with one `name==version` line per package, in **alphabetical order**, and print it:\n\n```\npygame==2.5.2\nrich==13.7.0\n```",
+  "starter": "packages = {\"rich\": \"13.7.0\", \"pygame\": \"2.5.2\"}\n\nrequirements = \"\"\n\nprint(requirements)\n",
+  "solution": "packages = {\"rich\": \"13.7.0\", \"pygame\": \"2.5.2\"}\n\nlines = [f\"{name}=={version}\" for name, version in sorted(packages.items())]\nrequirements = \"\\n\".join(lines)\n\nprint(requirements)\n",
+  "hints": ["sorted(packages.items()) sorts the packages by name.", "To join the lines: \"\\n\".join(list)"], "check": {"output_contains": ["pygame==2.5.2\nrich==13.7.0"]}}
+}

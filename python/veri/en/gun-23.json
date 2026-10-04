@@ -1,0 +1,40 @@
+{
+ "day": 23, "title": "Virtual environments", "region": "liman",
+ "project_contribution": "Project layout",
+ "game_role": "The shared files are listed in the game's credits.",
+ "objective": "Understand what a virtual environment is and why it's used, and get to know the venv commands",
+ "story": "Two ships are moored side by side at the harbor. One carries fish, the other flowers. Imagine what would happen if their cargo got mixed up! Each ship has its own hold. Python projects on your computer are the same: every project should have its own package hold. This hold is called a **virtual environment**.",
+ "sections": [
+  {"title": "The problem: version clashes", "body": "Say your game project wants `pygame 2.5` and an old project wants `pygame 2.1`. If your computer has one Python and one package box, both can't be installed at the same time. Update one and the other breaks.\n\nA **virtual environment** gives every project its own separate package box. That way projects don't affect each other."},
+  {"title": "Creating and activating", "body": "These commands are typed in the terminal, inside the project folder:\n\n```\npython -m venv .venv\n```\n\nThen you **activate** the environment:\n\n```\n# Windows\n.venv\\Scripts\\activate\n\n# macOS and Linux\nsource .venv/bin/activate\n```\n\nIf you see `(.venv)` at the start of the terminal line, the environment is active. Now every package you install with `pip install` goes only into this project. To close it, type `deactivate`."},
+  {"title": "Sharing the environment", "body": "The virtual environment folder is big and isn't shared with others. Instead we share the package list:\n\n```\npip freeze > requirements.txt\n```\n\nYour friend creates their own virtual environment and installs the same packages with `pip install -r requirements.txt`. The `.venv` folder is also added to the `.gitignore` file so it isn't shared."},
+  {"title": "A similar trap in code", "body": "We can see why keeping environments apart matters in Python too. If you assign a list to another variable, **the same list** is shared:\n\n```python\ngame = [\"pygame\"]\nsite = game          # the same box!\nsite.append(\"flask\")\nprint(game)          # ['pygame', 'flask']\n```\n\nFor a separate copy, write `site = game.copy()`. A virtual environment is like giving each project its own copy."}
+ ],
+ "examples": [
+  {"title": "The shared box trap", "code": "game = [\"pygame\"]\nsite = game\nsite.append(\"flask\")\nprint(\"Game:\", game)\n\ngame = [\"pygame\"]\nsite = game.copy()\nsite.append(\"flask\")\nprint(\"Game:\", game)\nprint(\"Site:\", site)\n", "note": ""},
+  {"title": "Let's imitate environments", "code": "envs = {\n    \"game\": {\"pygame\": \"2.5.2\"},\n    \"old-game\": {\"pygame\": \"2.1.0\"},\n}\nfor name, packages in envs.items():\n    print(name, \"->\", packages)\n", "note": "Different versions of the same package live happily in two projects."},
+  {"title": "Build the commands", "code": "env = \".venv\"\nprint(\"Create:\", f\"python -m venv {env}\")\nprint(\"Windows:\", f\"{env}\\\\Scripts\\\\activate\")\nprint(\"macOS/Linux:\", f\"source {env}/bin/activate\")\n", "note": ""}
+ ],
+ "tasks": [
+  {"title": "Prepare the commands", "prompt": "Build the commands to create a virtual environment called `env_name` and to activate it on macOS/Linux:\n\n- `create_cmd`: `python -m venv .venv`\n- `activate_cmd`: `source .venv/bin/activate`",
+   "starter": "env_name = \".venv\"\n\ncreate_cmd = \"\"\nactivate_cmd = \"\"\n\nprint(create_cmd)\nprint(activate_cmd)\n",
+   "solution": "env_name = \".venv\"\n\ncreate_cmd = f\"python -m venv {env_name}\"\nactivate_cmd = f\"source {env_name}/bin/activate\"\n\nprint(create_cmd)\nprint(activate_cmd)\n",
+   "hints": ["Use an f-string: f\"python -m venv {env_name}\""], "check": {"output_contains": ["python -m venv .venv", "source .venv/bin/activate"]}},
+  {"title": "A separate copy", "prompt": "The `site` list should be a **separate copy** of the `game` list. Adding `\"flask\"` to `site` must not change `game`.",
+   "starter": "game = [\"pygame\", \"rich\"]\n\nsite = game\nsite.append(\"flask\")\n\nprint(\"Game:\", game)\nprint(\"Site:\", site)\n",
+   "solution": "game = [\"pygame\", \"rich\"]\n\nsite = game.copy()\nsite.append(\"flask\")\n\nprint(\"Game:\", game)\nprint(\"Site:\", site)\n",
+   "hints": ["site = game.copy()"], "check": {"output_contains": ["Game: ['pygame', 'rich']"]}},
+  {"title": "Find the clash", "prompt": "Two projects may want different versions of the same packages. Put the names of the packages that are **in both** with different versions into the `conflicts` list, in alphabetical order.",
+   "starter": "project_a = {\"pygame\": \"2.5.2\", \"numpy\": \"1.26.4\", \"rich\": \"13.7.0\"}\nproject_b = {\"pygame\": \"2.1.0\", \"numpy\": \"1.26.4\", \"flask\": \"3.0.0\"}\n\nconflicts = []\n\nprint(conflicts)\n",
+   "solution": "project_a = {\"pygame\": \"2.5.2\", \"numpy\": \"1.26.4\", \"rich\": \"13.7.0\"}\nproject_b = {\"pygame\": \"2.1.0\", \"numpy\": \"1.26.4\", \"flask\": \"3.0.0\"}\n\nconflicts = sorted([name for name in project_a if name in project_b and project_a[name] != project_b[name]])\n\nprint(conflicts)\n",
+   "hints": ["For each package in project_a, check whether it's in project_b.", "If it is and the versions differ, add it to the list; finally sorted()"], "check": {"output_contains": ["['pygame']"]}}
+ ],
+ "challenge": {"title": "Install into an environment", "prompt": "The `install(envs, env, package, version)` function should install the package **only** into the given environment. If the environment doesn't exist, it should create an empty one first.",
+  "starter": "def install(envs, env, package, version):\n    pass\n\nenvs = {\"game\": {}}\ninstall(envs, \"game\", \"pygame\", \"2.5.2\")\ninstall(envs, \"site\", \"flask\", \"3.0.0\")\nprint(envs)\n",
+  "solution": "def install(envs, env, package, version):\n    if env not in envs:\n        envs[env] = {}\n    envs[env][package] = version\n\nenvs = {\"game\": {}}\ninstall(envs, \"game\", \"pygame\", \"2.5.2\")\ninstall(envs, \"site\", \"flask\", \"3.0.0\")\nprint(envs)\n",
+  "hints": ["If the environment is missing: if env not in envs: envs[env] = {}", "Then envs[env][package] = version"], "check": {"output_contains": ["{'game': {'pygame': '2.5.2'}, 'site': {'flask': '3.0.0'}}"]}},
+ "project_task": {"title": "Project layout", "prompt": "Before sharing our game, let's choose which files to share. From the `files` list, remove **the ones starting with `.venv/` and the ones ending with `.pyc`**, put the rest into the `shared` list in alphabetical order, and print each on its own line.",
+  "starter": "files = [\"main.py\", \".venv/bin/python\", \"requirements.txt\", \"piko/game.py\", \"piko/game.pyc\", \".venv/lib/site.py\"]\n\nshared = []\n\n# print each one\n",
+  "solution": "files = [\"main.py\", \".venv/bin/python\", \"requirements.txt\", \"piko/game.py\", \"piko/game.pyc\", \".venv/lib/site.py\"]\n\nshared = sorted([f for f in files if not f.startswith(\".venv/\") and not f.endswith(\".pyc\")])\n\nfor f in shared:\n    print(f)\n",
+  "hints": ["f.startswith(\".venv/\") and f.endswith(\".pyc\") will help.", "Use not ... and not ... inside the list comprehension."], "check": {"output_contains": ["main.py\npiko/game.py\nrequirements.txt"]}}
+}

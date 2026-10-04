@@ -1,0 +1,33 @@
+{
+ "day": 14, "title": "Higher-order functions", "region": "atolye",
+ "project_contribution": "Leaderboard",
+ "game_role": "At the end of the game, the leaderboard is written with your ranking.",
+ "objective": "Use functions as values: map, filter, sorted and functions that return functions",
+ "story": "The workshop master told Piko a secret: \"You can attach tools to other tools!\" Like changing the bit of a drill, you can hand one function to another. Today we learn functions that play with functions: **higher-order functions**.",
+ "sections": [
+  {"title": "Functions are values too", "body": "If you write a function's name without parentheses, you don't call it; you get **the function itself**. You can put it in a variable or give it to another function:\n\n```python\ndef shout(text):\n    return text.upper() + \"!\"\n\ndef use_twice(func, value):\n    return func(func(value))\n\nprint(use_twice(shout, \"hey\"))   # HEY!!\n```"},
+  {"title": "map and filter", "body": "- `map(function, list)` applies the function to every item\n- `filter(function, list)` keeps the items the function says `True` to\n\n```python\nscores = [40, 75, 90]\nbonus = list(map(lambda s: s + 10, scores))       # [50, 85, 100]\npassed = list(filter(lambda s: s >= 60, scores))  # [75, 90]\n```\n\nDon't forget to wrap them in `list(...)` to see the result."},
+  {"title": "sorted and key", "body": "`sorted` sorts a list. With `key` you say **what to sort by**:\n\n```python\nplayers = [(\"Ali\", 120), (\"Piko\", 300), (\"Emma\", 250)]\nby_score = sorted(players, key=lambda p: p[1], reverse=True)\n```\n\n`reverse=True` sorts from biggest to smallest. `min` and `max` take a `key` too: `max(players, key=lambda p: p[1])`"},
+  {"title": "Functions that make functions", "body": "A function can create a new function inside itself and return it. The inner function remembers the outer one's values; this is called a **closure**:\n\n```python\ndef make_multiplier(n):\n    def multiply(x):\n        return x * n\n    return multiply\n\ntriple = make_multiplier(3)\nprint(triple(5))   # 15\n```\n\n**Decorators** (lines starting with `@`), which you'll meet later, work with this idea too."}
+ ],
+ "examples": [
+  {"title": "Give a function to a function", "code": "def shout(text):\n    return text.upper() + \"!\"\n\ndef use_twice(func, value):\n    return func(func(value))\n\nprint(use_twice(shout, \"hey\"))\nprint(use_twice(lambda n: n * 10, 3))\n", "note": ""},
+  {"title": "map and filter", "code": "scores = [40, 75, 90, 55]\nprint(list(map(lambda s: s + 10, scores)))\nprint(list(filter(lambda s: s >= 60, scores)))\n", "note": ""},
+  {"title": "Sorting", "code": "players = [(\"Ali\", 120), (\"Piko\", 300), (\"Emma\", 250)]\nfor name, score in sorted(players, key=lambda p: p[1], reverse=True):\n    print(name, score)\nprint(\"Short names first:\", sorted([\"Zachary\", \"Ben\", \"Emma\"], key=len))\n", "note": ""}
+ ],
+ "tasks": [
+  {"title": "Apply it", "prompt": "The `apply(func, value)` function should run the `func` it receives on `value` and return the result.", "starter": "def apply(func, value):\n    pass\n\nprint(apply(abs, -7))\nprint(apply(len, \"Piko\"))\n",
+   "solution": "def apply(func, value):\n    return func(value)\n\nprint(apply(abs, -7))\nprint(apply(len, \"Piko\"))\n", "hints": ["func is a function; to call it write func(value).", "return func(value)"]},
+  {"title": "Bonus points", "prompt": "Use `map` to add 10 points to every score and put the result in the `bonus` list.", "starter": "scores = [40, 75, 90]\n\nbonus = []\n\nprint(bonus)\n",
+   "solution": "scores = [40, 75, 90]\n\nbonus = list(map(lambda s: s + 10, scores))\n\nprint(bonus)\n", "hints": ["map(lambda s: s + 10, scores)", "Wrap the result in list(...)."], "check": {"code_contains": ["map("], "output_contains": ["[50, 85, 100]"]}},
+  {"title": "Who passed", "prompt": "Use `filter` to put the scores of 60 and above into the `passed` list.", "starter": "scores = [40, 75, 90, 59, 60]\n\npassed = []\n\nprint(passed)\n",
+   "solution": "scores = [40, 75, 90, 59, 60]\n\npassed = list(filter(lambda s: s >= 60, scores))\n\nprint(passed)\n", "hints": ["filter(lambda s: s >= 60, scores)", "Wrap the result in list(...)."], "check": {"code_contains": ["filter("], "output_contains": ["[75, 90, 60]"]}}
+ ],
+ "challenge": {"title": "Multiplier maker", "prompt": "The `make_multiplier(n)` function should return a **new function** that multiplies its input by `n`.",
+  "starter": "def make_multiplier(n):\n    pass\n\ndouble = make_multiplier(2)\nprint(double(21))\n", "solution": "def make_multiplier(n):\n    def multiply(x):\n        return x * n\n    return multiply\n\ndouble = make_multiplier(2)\nprint(double(21))\n",
+  "hints": ["Define def multiply(x): inside.", "At the end return the function itself: return multiply (no parentheses)"], "check": {"output_contains": ["42"]}},
+ "project_task": {"title": "Leaderboard", "prompt": "Let's build the game's leaderboard. Sort the `players` list by score from **highest to lowest** and store it in `ranking`. Then print:\n\n```\n1. Piko: 300\n2. Emma: 250\n3. Ali: 120\n```",
+  "starter": "players = [(\"Ali\", 120), (\"Piko\", 300), (\"Emma\", 250)]\n\nranking = players\n\n# print the sorted table\n",
+  "solution": "players = [(\"Ali\", 120), (\"Piko\", 300), (\"Emma\", 250)]\n\nranking = sorted(players, key=lambda p: p[1], reverse=True)\n\nfor i, (name, score) in enumerate(ranking, 1):\n    print(f\"{i}. {name}: {score}\")\n",
+  "hints": ["sorted(players, key=lambda p: p[1], reverse=True)", "For the position numbers: enumerate(ranking, 1)"], "check": {"code_contains": ["sorted("], "output_contains": ["1. Piko: 300", "2. Emma: 250", "3. Ali: 120"]}}
+}

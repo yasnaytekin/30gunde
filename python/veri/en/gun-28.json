@@ -1,0 +1,125 @@
+{
+ "day": 28,
+ "title": "Using APIs",
+ "region": "dag",
+ "project_contribution": "Quest service",
+ "game_role": "When the game opens, the day's open quests are listed.",
+ "objective": "Learn what APIs are, read and process JSON responses and check status codes",
+ "story": "In the cabin halfway up the mountain there's a radio. Piko calls the weather station: \"What's the weather like at the summit?\" The station gives a short, tidy answer. Programs talk to each other like this too. The rules of this conversation are called an **API**.",
+ "sections": [
+  {
+   "title": "What is an API?",
+   "body": "An API (Application Programming Interface) is a set of rules for how one program asks another for information. Think of a restaurant: you don't walk into the kitchen; you order from the waiter and the waiter brings the food. The API is that waiter.\n\nWeather, exchange rates, game scores... Many services share their data through APIs."
+  },
+  {
+   "title": "JSON: the language of APIs",
+   "body": "APIs usually give their answers in **JSON** format. JSON looks a lot like Python dictionaries and lists, but it's **text**:\n\n```python\nimport json\n\nresponse = '{\"city\": \"Oslo\", \"degrees\": 17, \"sunny\": true}'\ndata = json.loads(response)    # text -> dictionary\nprint(data[\"degrees\"])         # 17\n\ntext = json.dumps(data)        # dictionary -> text\n```\n\nJSON writes `true`, `false` and `null`; in Python these become `True`, `False` and `None`."
+  },
+  {
+   "title": "Requests with requests",
+   "body": "On your own computer you get data from the internet with the `requests` package:\n\n```python\nimport requests\n\nr = requests.get(\"https://api.example.com/weather?city=oslo\")\nif r.status_code == 200:\n    data = r.json()\n    print(data[\"degrees\"])\nelse:\n    print(\"Error:\", r.status_code)\n```\n\nSo that the examples work without the internet, we won't send real requests. In the tasks we'll give you the JSON text the API returns; you'll read and process it."
+  },
+  {
+   "title": "Nested data",
+   "body": "Real API answers are often nested: a list inside a dictionary, dictionaries inside a list...\n\n```python\ndata = {\"city\": \"Oslo\", \"days\": [{\"day\": \"Mon\", \"degrees\": 17}, {\"day\": \"Tue\", \"degrees\": 15}]}\nprint(data[\"days\"][1][\"degrees\"])   # 15\n```\n\nGo down step by step: first `data[\"days\"]`, then `[1]`, then `[\"degrees\"]`."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Open the JSON",
+   "code": "import json\n\nresponse = '{\"city\": \"Oslo\", \"degrees\": 17, \"sunny\": true}'\ndata = json.loads(response)\nprint(type(data))\nprint(f\"{data['city']}: {data['degrees']} degrees\")\nprint(\"Sunny?\", data[\"sunny\"])\n",
+   "note": ""
+  },
+  {
+   "title": "Nested data",
+   "code": "import json\n\nresponse = '{\"city\": \"Lima\", \"days\": [{\"day\": \"Mon\", \"degrees\": 18}, {\"day\": \"Tue\", \"degrees\": 21}]}'\ndata = json.loads(response)\nfor day in data[\"days\"]:\n    print(day[\"day\"], day[\"degrees\"])\n",
+   "note": ""
+  },
+  {
+   "title": "JSON from a dictionary",
+   "code": "import json\n\norder = {\"item\": \"lantern\", \"count\": 2, \"paid\": False, \"city\": \"Zürich\"}\nprint(json.dumps(order))\nprint(json.dumps(order, ensure_ascii=False, indent=2))\n",
+   "note": "ensure_ascii=False shows letters like ü as they are."
+  }
+ ],
+ "tasks": [
+  {
+   "title": "Weather",
+   "prompt": "Turn the `response` JSON text into a dictionary (`data`) and print something like `Oslo: 17 degrees`.",
+   "starter": "import json\n\nresponse = '{\"city\": \"Oslo\", \"degrees\": 17}'\n\ndata = {}\n\n# print the city and the degrees\n",
+   "solution": "import json\n\nresponse = '{\"city\": \"Oslo\", \"degrees\": 17}'\n\ndata = json.loads(response)\n\nprint(f\"{data['city']}: {data['degrees']} degrees\")\n",
+   "hints": [
+    "data = json.loads(response)",
+    "Use single quotes inside the f-string: {data['city']}"
+   ],
+   "check": {
+    "code_contains": [
+     "json.loads"
+    ],
+    "output_contains": [
+     "Oslo: 17 degrees"
+    ]
+   }
+  },
+  {
+   "title": "Country list",
+   "prompt": "The API returns a list of countries. Put the country **names** into the `names` list, in order.",
+   "starter": "import json\n\nresponse = '[{\"name\": \"Japan\", \"capital\": \"Tokyo\"}, {\"name\": \"Kenya\", \"capital\": \"Nairobi\"}]'\n\nnames = []\n\nprint(names)\n",
+   "solution": "import json\n\nresponse = '[{\"name\": \"Japan\", \"capital\": \"Tokyo\"}, {\"name\": \"Kenya\", \"capital\": \"Nairobi\"}]'\n\ndata = json.loads(response)\nnames = [c[\"name\"] for c in data]\n\nprint(names)\n",
+   "hints": [
+    "First turn it into a list with json.loads.",
+    "Take c[\"name\"] from each country."
+   ],
+   "check": {
+    "output_contains": [
+     "['Japan', 'Kenya']"
+    ]
+   }
+  },
+  {
+   "title": "Status check",
+   "prompt": "If `status` is 200, print the number of items in `body` like `3 results found`. Otherwise print something like `Error: 404`.",
+   "starter": "import json\n\nstatus = 200\nbody = '{\"results\": [\"a\", \"b\", \"c\"]}'\n\n# check the status\n",
+   "solution": "import json\n\nstatus = 200\nbody = '{\"results\": [\"a\", \"b\", \"c\"]}'\n\nif status == 200:\n    data = json.loads(body)\n    print(f\"{len(data['results'])} results found\")\nelse:\n    print(f\"Error: {status}\")\n",
+   "hints": [
+    "Start with if status == 200:",
+    "The number of results: len(data['results'])"
+   ],
+   "check": {
+    "output_contains": [
+     "3 results found"
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "title": "Send an order",
+  "prompt": "Turn the `order` dictionary into JSON text to send to the API and store it in `payload`. Letters like `ü` should appear as they are, without escape codes.",
+  "starter": "import json\n\norder = {\"item\": \"lantern\", \"count\": 2, \"city\": \"Zürich\"}\n\npayload = \"\"\n\nprint(payload)\n",
+  "solution": "import json\n\norder = {\"item\": \"lantern\", \"count\": 2, \"city\": \"Zürich\"}\n\npayload = json.dumps(order, ensure_ascii=False)\n\nprint(payload)\n",
+  "hints": [
+   "json.dumps(order) turns the dictionary into text.",
+   "Add ensure_ascii=False for letters like ü."
+  ],
+  "check": {
+   "output_contains": [
+    "\"city\": \"Zürich\""
+   ]
+  }
+ },
+ "project_task": {
+  "title": "Quest service",
+  "prompt": "Piko's Adventure gets the day's quests from a quest service. Open `response` and:\n\n- Put the titles of the unfinished (`\"done\": false`) quests into the `open_quests` list.\n- Calculate the total reward of these quests as `total_reward`.\n- Print something like `2 open quests, 150 gold in total`.",
+  "starter": "import json\n\nresponse = '{\"quests\": [{\"title\": \"Go to the lighthouse\", \"reward\": 50, \"done\": false}, {\"title\": \"Collect potions\", \"reward\": 30, \"done\": true}, {\"title\": \"Do not wake the dragon\", \"reward\": 100, \"done\": false}]}'\n\nopen_quests = []\ntotal_reward = 0\n\n# print the summary\n",
+  "solution": "import json\n\nresponse = '{\"quests\": [{\"title\": \"Go to the lighthouse\", \"reward\": 50, \"done\": false}, {\"title\": \"Collect potions\", \"reward\": 30, \"done\": true}, {\"title\": \"Do not wake the dragon\", \"reward\": 100, \"done\": false}]}'\n\ndata = json.loads(response)\nopen_list = [q for q in data[\"quests\"] if not q[\"done\"]]\nopen_quests = [q[\"title\"] for q in open_list]\ntotal_reward = sum([q[\"reward\"] for q in open_list])\n\nprint(f\"{len(open_quests)} open quests, {total_reward} gold in total\")\n",
+  "hints": [
+   "The quests are in data[\"quests\"].",
+   "An open quest: not q[\"done\"]",
+   "Pick the open quests first, then collect their titles and rewards separately."
+  ],
+  "check": {
+   "output_contains": [
+    "2 open quests, 150 gold in total"
+   ]
+  }
+ }
+}

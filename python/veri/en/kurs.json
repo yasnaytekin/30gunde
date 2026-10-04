@@ -1,0 +1,13 @@
+{
+ "name": "30 Days of Python",
+ "regions": [
+  {"id": "kamp", "name": "Base Camp", "icon": "tent", "days": [1, 2]},
+  {"id": "koy", "name": "Python Village", "icon": "house", "days": [3, 4]},
+  {"id": "orman", "name": "Data Forest", "icon": "trees", "days": [5, 6, 7, 8]},
+  {"id": "kale", "name": "Logic Castle", "icon": "castle", "days": [9, 10]},
+  {"id": "atolye", "name": "Tool Workshop", "icon": "wrench", "days": [11, 12, 13, 14, 15]},
+  {"id": "ada", "name": "Discovery Island", "icon": "compass", "days": [16, 17, 18, 19, 20]},
+  {"id": "liman", "name": "Knowledge Harbor", "icon": "anchor", "days": [21, 22, 23, 24, 25]},
+  {"id": "dag", "name": "Python Mountain", "icon": "mountain", "days": [26, 27, 28, 29, 30]}
+ ]
+}

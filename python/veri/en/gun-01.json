@@ -1,0 +1,39 @@
+{
+ "day": 1,
+ "title": "Meet Python",
+ "region": "kamp",
+ "project_contribution": "Welcome screen",
+ "game_role": "Your welcome screen is shown when the game starts.",
+ "objective": "Print text with print() and use Python as a calculator",
+ "story": "Hi! I'm Piko. Computers are very fast, but they don't know what to do on their own. You are going to tell them. Today we teach the computer to talk for the very first time!",
+ "sections": [
+  {"title": "What is code?", "body": "Code is a list of instructions you give to a computer. Python reads these instructions **from top to bottom, line by line**, and carries them out in order.\n\nPython is one of the most popular programming languages in the world. Games, websites, artificial intelligence... Python is everywhere."},
+  {"title": "Talk with print()", "body": "`print()` writes whatever you put inside the parentheses on the screen. We put text **inside quotes**; numbers don't need quotes.\n\n```python\nprint(\"Hello!\")\nprint(42)\n```\n\nUse commas to print several things side by side. Python puts a space between them."},
+  {"title": "Python is a calculator", "body": "- `+` addition, `-` subtraction\n- `*` multiplication, `/` division\n- `**` power: `2 ** 3` gives `8`\n\nIf you put a calculation inside quotes, Python doesn't calculate it, it prints it as it is: `print(\"2 + 2\")` shows `2 + 2`."},
+  {"title": "Comments and errors", "body": "Lines starting with `#` are **comments**. Python ignores them; you use them to leave notes for yourself.\n\nIf you mistype a letter, Python shows an error. Don't panic! The error message tells you which line the problem is on, and reading it carefully usually tells you what went wrong."},
+  {"title": "Drawing on the stage: every star is a Piko", "body": "In some tasks, what you print **turns into a picture on the stage**. The rules are simple:\n\n- `*` puts a **Piko** on the stage\n- `#` is a **wall**, `o` is a **coin**, `H` is a **heart**\n- a space is an empty square\n\nSo `print(\"***\")` lines up three Pikos. Print it three times, one under another, and you have a 3-row Piko army!"}
+ ],
+ "examples": [
+  {"title": "First program", "code": "print(\"Hello World!\")\n", "note": "Run the code and look at the output."},
+  {"title": "Let's calculate", "code": "print(3 + 4)\nprint(10 * 5)\nprint(2 ** 10)\nprint(\"3 + 4\")\n", "note": "Why wasn't the last line calculated? Because it's inside quotes!"},
+  {"title": "Print with commas", "code": "# This is a comment, Python ignores it\nprint(\"Piko\", \"says:\", \"Hi!\")\nprint(\"My age:\", 12)\n", "note": ""},
+  {"title": "A row of Pikos", "code": "print(\"*****\")\nprint(\"#####\")\n", "note": "Run it: five Pikos with five walls below them.", "scene": {"target": []}}
+ ],
+ "tasks": [
+  {"title": "Your first words", "prompt": "Print exactly `Hello Python!` on the screen.", "starter": "# write it using print()\n", "solution": "print(\"Hello Python!\")\n",
+   "hints": ["Use the print() function.", "Text must be inside quotes: print(\"...\")", "Capital letters and the exclamation mark must match too: Hello Python!"],
+   "check": {"output_contains": ["Hello Python!"]}},
+  {"title": "Introduce yourself", "prompt": "Print a sentence that starts with `My name is` and ends with your name. For example: `My name is Emma`", "solution": "print(\"My name is Alex\")\n",
+   "hints": ["One print() is enough.", "Write \"My name is\" and your name inside the quotes."]},
+  {"title": "How many hours in a year?", "prompt": "A year has 365 days and a day has 24 hours. Don't calculate it yourself; let Python do `365 * 24` and print the result.", "solution": "print(365 * 24)\n",
+   "hints": ["The multiplication sign is *", "Don't put the calculation in quotes, or Python won't calculate it."],
+   "check": {"output_contains": ["8760"], "code_contains": ["365", "24", "*"]}}
+ ],
+ "visual_task": {"title": "Piko army", "prompt": "Every `*` is a Piko on the stage. Use `print()` to line up an army of **3 rows** with **3 Pikos** in each row. Build the shape below!", "starter": "print(\"***\")\n",
+  "solution": "print(\"***\")\nprint(\"***\")\nprint(\"***\")\n", "hints": ["print(\"***\") makes one row.", "Write three print() lines for three rows."], "scene": {"target": ["***", "***", "***"]}},
+ "challenge": {"title": "Starry banner", "prompt": "Print a banner of at least 3 lines. At least 3 lines should contain `*`. A little secret: `print(\"*\" * 20)` prints 20 stars side by side!",
+  "solution": "print(\"*\" * 20)\nprint(\"*  PIKO IS COMING  *\")\nprint(\"*\" * 20)\n", "hints": ["You can use three separate print() lines.", "For a line of stars: \"*\" * 20"]},
+ "project_task": {"title": "Welcome screen", "prompt": "Our game is called **Piko's Adventure**. Write the welcome screen shown when the game starts: print the game's name and the message `Welcome to the game!`. Decorate it with stars if you like.",
+  "starter": "# Piko's Adventure: welcome screen\nprint(\"*\" * 30)\n", "solution": "print(\"*\" * 30)\nprint(\"Piko's Adventure\")\nprint(\"Welcome to the game!\")\nprint(\"*\" * 30)\n",
+  "hints": ["Add two new print() lines.", "Write the text exactly as in the task."], "check": {"output_contains": ["Piko's Adventure", "Welcome to the game!"]}}
+}

@@ -2,6 +2,8 @@
 #   python3 kitap/kitap.py python 1-30           # tam kitap: cikti/kitap/30-gunde-python.pdf
 #   python3 kitap/kitap.py python 1-3            # örnek bölüm: cikti/kitap/30-gunde-python-gun-01-03.pdf
 #   python3 kitap/kitap.py javascript 1-2        # cikti/kitap/30-gunde-javascript-gun-01-02.pdf
+#   python3 kitap/kitap.py python 1-30 --dil en  # İngilizce baskı: cikti/kitap/30-days-of-python.pdf
+#     (İngilizce içerik python/veri/en/ altında; satır açıklamaları aciklama_en.py ile koddan üretilir)
 # Kitap siteden bağımsız kullanılabilir: örneklerin çıktıları kodu gerçekten çalıştırarak yazılır, görevlerin
 # "kendini kontrol et" maddeleri ve çözümleri (satır satır açıklamalarıyla) kitabın içindedir. Her sayfanın altında
 # YouTube kanalına (her günün video anlatımı) giden bir QR kod bulunur; günün açılış sayfasında ayrıca o günün
@@ -50,6 +52,69 @@ KURS = {
 }
 VIDEO = "https://www.youtube.com/@30gundekod"  # iki kursun da günlük video anlatımları bu kanalda
 K = KURS["python"]  # main() seçilen kursa göre değiştirir
+DIL = "tr"          # main() --dil ile değiştirir
+
+# İngilizce baskıda kursun değişen alanları
+KURS_EN = {
+    "python": {"ad": "30 Days of Python", "varsayilan_proje": "Piko's Adventure",
+               "alt": "Day by day across an adventure map: start coding with Piko.",
+               "kurulum": "Install Python from <b>python.org</b>. Open <b>IDLE</b>, which comes with it, create a new file with "
+                          "<i>File → New File</i>, write your code and run it with <b>F5</b>."},
+}
+
+# Arayüz metinleri (tr, en)
+T = {
+    "cikti": ("Çıktı", "Output"), "hata": ("Hata", "Error"), "sahne": ("Sahne", "Stage"),
+    "html_hazir": ("Sayfanın HTML'i (hazır)", "The page's HTML (ready-made)"), "baslangic": ("Başlangıç kodu", "Starter code"),
+    "kontrol": ("Kendini kontrol et:", "Check yourself:"), "cikti_olmali": ("çıktında şunlar olmalı: ", "your output should contain: "),
+    "kod_gecmeli": ("kodunda şunlar geçmeli: ", "your code should contain: "), "ipuclari": ("İpuçları", "Hints"),
+    "cozum_ref": ("Çözüm: kitabın sonunda, {ref}", "Solution: at the back of the book, {ref}"),
+    "gun": ("Gün {n}", "Day {n}"), "gunler": ("Gün {a}–{b}", "Days {a}–{b}"),
+    "hedef": ("Bugünün hedefi", "Today's goal"), "proje_katki": ("Proje katkısı", "Project piece"),
+    "konu": ("Konu anlatımı", "The lesson"), "ornekler": ("Örnekler", "Examples"), "sozluk": ("Bugünün sözlüğü", "Words of the day"),
+    "gorevler": ("Görevler", "Tasks"), "gorev": ("Görev {i}", "Task {i}"), "sahne_g": ("Sahne görevi", "Stage task"),
+    "challenge": ("Challenge", "Challenge"), "proje": ("Proje", "Project"),
+    "video_kutu": ("<b>Video anlatım</b>YouTube'da <b style=\"display:inline\">30 Günde Kod</b> kanalında „Gün {n} · {title}” videosu",
+                   "<b>Video lesson</b>On the <b style=\"display:inline\">30 Günde Kod</b> YouTube channel: the “Day {n} · {title}” video"),
+    "site_kutu": ("<b>Etkileşimli ders</b>Görevleri tarayıcında dene:<br>{url}", ""),
+    "paket": ("<b>Bu gün için:</b> kodları kendi bilgisayarında çalıştırmadan önce terminalde <code>pip install {p}</code> yaz (bkz. 20. gün).",
+              "<b>For this day:</b> before running the code on your computer, type <code>pip install {p}</code> in the terminal (see Day 20)."),
+    "cozumler": ("Çözümler", "Solutions"),
+    "cozum_giris": ("Önce kendin dene! Takıldığında buraya bak. ", "Try it yourself first! Look here when you get stuck. "),
+    "cozum_satir": ("Her çözümün altında kodun satır satır ne yaptığı yazıyor. ", "Under every solution, you'll find what the code does line by line. "),
+    "cozum_cikti": ("Her çözümün altında çıktısı var. ", "Every solution comes with its output. "),
+    "cozum_farkli": ("Senin çözümün farklı olabilir; çıktı aynıysa o da doğrudur.", "Your solution may be different; if the output is the same, it's right too."),
+    "icindekiler": ("İçindekiler", "Contents"), "ekler": ("Ekler", "Appendix"), "ek": ("Ek", "A"), "son": ("Son", "End"),
+    "sertifikan": ("Sertifikan", "Your certificate"), "giris": ("Giriş", "Introduction"),
+    "ornek_bolum": ("Bu bir örnek bölümdür: {ad} kitabının {a}–{b}. günleri.", "This is a sample chapter: days {a}–{b} of {ad}."),
+    "telif": ("© 2026 30 Günde · 30gunde.com.tr. Tüm hakları saklıdır. Maskotlar, görseller ve ders içerikleri 30 Günde'ye aittir; izin alınmadan çoğaltılamaz.",
+              "© 2026 30 Günde · 30gunde.com.tr. All rights reserved. The mascots, images and lesson content belong to 30 Günde and may not be copied without permission."),
+    "kapak_baslik": ("30 Günde<br><span>{dil}</span>", "30 Days of<br><span>{dil}</span>"),
+    "kapak_tam": ("30 gün · {g} görev · tüm çözümler", "30 days · {g} tasks · all solutions"),
+    "kapak_ornek": ("Örnek bölüm · Gün {a}–{b}", "Sample chapter · Days {a}–{b}"),
+    "yas": ("12 yaş ve üstü", "Ages 12+"), "serit": ("Görevler · Çözümler · Proje", "Tasks · Solutions · Project"),
+    "video_rozet": ("Video anlatımlı", "With video lessons"), "video_rozet_alt": ("Her gün için YouTube'da bir video", "A YouTube video for every day"),
+    "srt_ust": ("Başarı sertifikası", "Certificate of achievement"), "srt_baslik": ("Tebrikler!", "Congratulations!"),
+    "srt_ad": ("adın soyadın", "your name"),
+    "srt_metin": ("<b>{ad}</b> macerasının 30 gününü tamamlayarak {dil} ile kendi programlarını yazmayı öğrendi.",
+                  "completed all 30 days of the <b>{ad}</b> adventure and learned to write their own programs in {dil}."),
+    "srt_tarih": ("Tarih", "Date"), "srt_maskot": ("{m} · yol arkadaşın", "{m} · your guide"),
+    "alt_video_gun": ("Video anlatım: YouTube · „Gün {d}” videosu", "Video lesson: YouTube · “Day {d}” video"),
+    "alt_video": ("Video anlatımlar: YouTube", "Video lessons: YouTube"),
+}
+
+
+def t(anahtar, **kw):
+    s = T[anahtar][1 if DIL == "en" else 0]
+    return s.format(**kw) if kw else s
+
+
+def veri_dizini(kurs):
+    return REPO / kurs / "veri" / ("en" if DIL == "en" else "")
+
+
+def kurs_json(k):
+    return json.loads((veri_dizini(k["kod"]) / "kurs.json").read_text("utf8"))
 
 # Kodları çalıştırmak için ayrıca kurulması gereken paketler (import adı → pip adı)
 PAKETLER = {"bs4": "beautifulsoup4", "numpy": "numpy", "pandas": "pandas", "requests": "requests", "flask": "flask", "pymongo": "pymongo"}
@@ -106,7 +171,7 @@ def uyarla(s):
 
 
 def md(s):
-    return markdown.markdown(uyarla(s or ""), extensions=["fenced_code", "tables", "codehilite"],
+    return markdown.markdown(uyarla(s or "") if DIL == "tr" else (s or ""), extensions=["fenced_code", "tables", "codehilite"],
                              extension_configs={"codehilite": {"guess_lang": False, "css_class": "hl"}})
 
 
@@ -126,7 +191,7 @@ def kod(code, cikti=None, baslik=None, hata=False, sekil=None, lex=None):
     code = (code or "").rstrip("\n")
     out = f'<div class="code">{f"<div class=cap>{html.escape(baslik)}</div>" if baslik else ""}<pre class="hl">{highlight(code, lex or lexer(), FORMATTER).rstrip()}</pre></div>'
     if cikti is not None:
-        out += f'<div class="out{" err" if hata else ""}"><span>{"Hata" if hata else "Çıktı"}</span><pre>{html.escape(cikti.rstrip())}</pre></div>'
+        out += f'<div class="out{" err" if hata else ""}"><span>{t("hata") if hata else t("cikti")}</span><pre>{html.escape(cikti.rstrip())}</pre></div>'
     if sekil:
         out += sekil
     return f'<div class="kod-grup">{out}</div>'
@@ -160,7 +225,7 @@ def sahne(rows, root):
         if ch == "o": return '<i class="c"><b class="coin"></b></i>'
         if ch == "H": return '<i class="c heart">♥</i>'
         return '<i class="c"></i>'
-    return '<div class="sahne"><span>Sahne</span>' + "".join(f'<div class="row">{"".join(cell(c) for c in r)}</div>' for r in rows) + "</div>"
+    return f'<div class="sahne"><span>{t("sahne")}</span>' + "".join(f'<div class="row">{"".join(cell(c) for c in r)}</div>' for r in rows) + "</div>"
 
 
 def jpg(rel, genislik_px, oran=None):
@@ -227,7 +292,7 @@ def bolge_kutusu(k, reg, sinif="harita"):
     gunler = reg.get("days") or []
     return (f'<div class="{sinif} yedek" style="background: radial-gradient(70mm 50mm at 80% 20%, rgba(255,255,255,.25), rgba(255,255,255,0) 70%), linear-gradient(135deg, {a}, {b})">'
             f'<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round">{simge}</svg>'
-            f'<div><b>{html.escape(reg["name"])}</b><span>Gün {gunler[0]}–{gunler[-1]}</span></div></div>')
+            f'<div><b>{html.escape(reg["name"])}</b><span>{t("gunler", a=gunler[0], b=gunler[-1])}</span></div></div>')
 
 
 def gereken_paketler(v):
@@ -353,7 +418,7 @@ div.hl pre {{ font-family: Mono; font-size: 8.2pt; line-height: 1.45; white-spac
 .acilis .baglanti b {{ display: block; font-family: Head; font-size: 8pt; }}
 .acilis .baglanti .qr {{ flex: none; }}
 .acilis .paket {{ font-size: 8pt; background: #FFF7DD; border-radius: 5pt; padding: 3pt 7pt; margin-top: 5pt; }}
-.icindekiler.tam li {{ padding: 2.6pt 0; font-size: 9pt; }}
+.icindekiler.tam li {{ padding: 2.2pt 0; font-size: 9pt; }}
 .icindekiler li.bolum {{ break-after: avoid; border: none; padding: 7pt 0 1pt; font-family: Head; font-weight: 700; font-size: 8pt; letter-spacing: .06em; text-transform: uppercase; color: var(--ink2); }}
 .on .kanal {{ display: flex; gap: 8pt; align-items: center; background: #FFF1F0; border: 1pt solid #F6C9C4; border-radius: 8pt; padding: 7pt 9pt; margin: 6pt 0 8pt; }}
 .on .kanal .qr {{ flex: none; }}
@@ -389,7 +454,13 @@ div.hl pre {{ font-family: Mono; font-size: 8.2pt; line-height: 1.45; white-spac
   display: flex; align-items: center; justify-content: space-between; padding: 0 14mm; font-family: Head; font-weight: 700; font-size: 9pt; }}
 .kapak .etiket {{ position: absolute; left: 14mm; bottom: 28mm; font-family: Head; font-weight: 700; font-size: 9pt; background: rgba(255,255,255,.16);
   border: 1pt solid rgba(255,255,255,.4); padding: 3pt 9pt; border-radius: 99pt; }}
-.kapak .bolgeler {{ position: absolute; left: 14mm; top: 112mm; display: flex; gap: 3mm; }}
+.kapak .video {{ position: absolute; left: 13mm; top: 98mm; display: flex; align-items: center; gap: 2.4mm; background: #fff; color: var(--ink);
+  padding: 1.6mm 4mm 1.6mm 1.8mm; border-radius: 99pt; box-shadow: 0 1.2mm 3mm rgba(0,0,0,.25); transform: rotate(-2deg); }}
+.kapak .video i {{ flex: none; width: 7.5mm; height: 7.5mm; border-radius: 50%; background: #E5322D; display: grid; place-items: center; }}
+.kapak .video i svg {{ width: 3.4mm; height: 3.4mm; margin-left: 0.5mm; }}
+.kapak .video b {{ display: block; font-family: Head; font-weight: 800; font-size: 9.5pt; line-height: 1.1; }}
+.kapak .video small {{ display: block; font-size: 6.8pt; color: var(--ink2); line-height: 1.2; }}
+.kapak .bolgeler {{ position: absolute; left: 14mm; top: 115mm; display: flex; gap: 3mm; }}
 .kapak .bolgeler img {{ width: 20mm; height: 26mm; object-fit: cover; border-radius: 3mm; border: 0.8mm solid rgba(255,255,255,.7); }}
 /* ön bölüm */
 .on h1 {{ font-size: 18pt; margin-bottom: 8pt; font-weight: 800; }}
@@ -412,63 +483,79 @@ div.hl pre {{ font-family: Mono; font-size: 8.2pt; line-height: 1.45; white-spac
 """
 
 
-def page(body, root, lang="tr"):
-    return f'<!doctype html><html lang="{lang}"><head><meta charset="utf-8"><style>{css(root)}</style></head><body>{body}</body></html>'
+def page(body, root):
+    return f'<!doctype html><html lang="{DIL}"><head><meta charset="utf-8"><style>{css(root)}</style></head><body>{body}</body></html>'
 
 
-def gorev_html(t, etiket, cls, ref, root):
-    out = f'<div class="gorev {cls}"><div class="bas"><span class="etiket">{etiket}</span><h3>{html.escape(t["title"])}</h3>{md(t["prompt"])}</div>'
-    sc = (t.get("scene") or {}).get("target")
+def gorev_html(gv, etiket, cls, ref, root):
+    out = f'<div class="gorev {cls}"><div class="bas"><span class="etiket">{etiket}</span><h3>{html.escape(gv["title"])}</h3>{md(gv["prompt"])}</div>'
+    sc = (gv.get("scene") or {}).get("target")
     if sc:
         out += sahne(sc, root)
-    if (t.get("html") or "").strip():
-        out += kod(t["html"], baslik="Sayfanın HTML'i (hazır)", lex=HtmlLexer())
-    if (t.get("starter") or "").strip():
-        out += kod(t["starter"], baslik="Başlangıç kodu")
-    ch = t.get("check") or {}
+    if (gv.get("html") or "").strip():
+        out += kod(gv["html"], baslik=t("html_hazir"), lex=HtmlLexer())
+    if (gv.get("starter") or "").strip():
+        out += kod(gv["starter"], baslik=t("baslangic"))
+    ch = gv.get("check") or {}
     kontrol = []
     if ch.get("output_contains"):
-        kontrol.append("çıktında şunlar olmalı: " + ", ".join(f"<code>{html.escape(x)}</code>" for x in ch["output_contains"]))
+        kontrol.append(t("cikti_olmali") + ", ".join(f"<code>{html.escape(x)}</code>" for x in ch["output_contains"]))
     if ch.get("code_contains"):
-        kontrol.append("kodunda şunlar geçmeli: " + ", ".join(f"<code>{html.escape(x)}</code>" for x in ch["code_contains"]))
+        kontrol.append(t("kod_gecmeli") + ", ".join(f"<code>{html.escape(x)}</code>" for x in ch["code_contains"]))
     if kontrol:
-        out += '<div class="kontrol"><b>Kendini kontrol et:</b> ' + "; ".join(kontrol) + "</div>"
-    if t.get("hints"):
-        out += '<div class="ipucu"><b>İpuçları</b><ol>' + "".join(f"<li>{md_inline(h)}</li>" for h in t["hints"]) + "</ol></div>"
-    out += f'<div class="cozum-ref">Çözüm: kitabın sonunda, {ref}</div></div>'
+        out += f'<div class="kontrol"><b>{t("kontrol")}</b> ' + "; ".join(kontrol) + "</div>"
+    if gv.get("hints"):
+        out += f'<div class="ipucu"><b>{t("ipuclari")}</b><ol>' + "".join(f"<li>{md_inline(h)}</li>" for h in gv["hints"]) + "</ol></div>"
+    out += f'<div class="cozum-ref">{t("cozum_ref", ref=ref)}</div></div>'
     return out
+
+
+def sozluk_terimleri(v):
+    """Günün sözlüğü: Türkçe veride hazır; İngilizce baskıda aynı terimler sozluk.json'dan çevrilir."""
+    kaynak = v.get("_tr", v)
+    terms = {}
+    for gv in kaynak["tasks"] + [kaynak.get("challenge") or {}, kaynak.get("visual_task") or {}, kaynak.get("project_task") or {}]:
+        for x in ((gv or {}).get("explain") or {}).get("terms", []):
+            if x.get("kind") != "değişken":  # değişken adları sözlüğü şişirir
+                terms.setdefault(x["term"], x)
+    if DIL == "en":
+        en = json.loads((veri_dizini(K["kod"]) / "sozluk.json").read_text("utf8"))
+        terms = {k_: {"term": k_, "kind": en[k_][0], "desc": en[k_][1]} for k_ in terms if k_ in en}
+    return terms
 
 
 def gun_html(v, k, root):
     n = int(v["day"])
-    reg = next(r for r in json.loads((REPO / k["kod"] / "veri/kurs.json").read_text("utf8"))["regions"] if r["id"] == v["region"])
+    reg = next(r for r in kurs_json(k)["regions"] if r["id"] == v["region"])
     poz = k["acilis_poz"][0 if n % 2 else 1]
     if k["bolge_tur"] == "gezegen":
         gorsel = f'<div class="uzay" style="background-image:url({jpg(k["uzay"], 1400, 120 / 62)})"><img src="{bolge_gorseli(k, v["region"], 700)}"></div>'
     else:
         gorsel = bolge_kutusu(k, reg)
     ders = k["url"].format(n)
+    site = f'<div>{qr_svg(ders, 15)}<span>{t("site_kutu", url=html.escape(ders.replace("https://", "")))}</span></div>' if DIL == "tr" else ""
     baglanti = f"""<div class="baglanti">
-  <div class="video">{qr_svg(VIDEO, 15)}<span><b>Video anlatım</b>YouTube'da <b style="display:inline">30 Günde Kod</b> kanalında „Gün {n} · {html.escape(v["title"])}” videosu</span></div>
-  <div>{qr_svg(ders, 15)}<span><b>Etkileşimli ders</b>Görevleri tarayıcında dene:<br>{html.escape(ders.replace("https://", ""))}</span></div>
+  <div class="video">{qr_svg(VIDEO, 15)}<span>{t("video_kutu", n=n, title=html.escape(v["title"]))}</span></div>
+  {site}
  </div>"""
     paket = gereken_paketler(v)
-    paket = (f'<div class="paket"><b>Bu gün için:</b> kodları kendi bilgisayarında çalıştırmadan önce terminalde '
-             f'<code>pip install {" ".join(paket)}</code> yaz (bkz. 20. gün).</div>') if paket else ""
+    paket = f'<div class="paket">{t("paket", p=" ".join(paket))}</div>' if paket else ""
+    rol = uyarla(v.get("game_role", "")) if DIL == "tr" else v.get("game_role", "")
     body = f"""<section class="acilis">
- <div class="ust"><span class="gun">Gün {n}</span><span class="bolge">{html.escape(reg["name"])}</span></div>
+ <div class="ust"><span class="gun">{t("gun", n=n)}</span><span class="bolge">{html.escape(reg["name"])}</span></div>
  <h1>{html.escape(v["title"])}</h1>
  {gorsel}
- <div class="box hedef"><h4>Bugünün hedefi</h4>{md_inline(v["objective"])}</div>
+ <div class="box hedef"><h4>{t("hedef")}</h4>{md_inline(v["objective"])}</div>
  <div class="konusma"><img src="{root}/{k["poz"].format(poz)}"><div class="balon">{md_inline(v["story"])}</div></div>
- <div class="proje">Proje katkısı ({html.escape(k["varsayilan_proje"])}): <b>{html.escape(v.get("project_contribution", ""))}</b>. {html.escape(uyarla(v.get("game_role", "")))}</div>
+ <div class="proje">{t("proje_katki")} ({html.escape(k["varsayilan_proje"])}): <b>{html.escape(v.get("project_contribution", ""))}</b>. {html.escape(rol)}</div>
  {paket}
  {baglanti}
 </section>"""
-    body += "<h2>Konu anlatımı</h2>"
-    for s in v["sections"]:
-        body += f"<h3>{html.escape(uyarla(s['title']))}</h3>{md(s['body'])}"
-    body += "<h2>Örnekler</h2>"
+    body += f"<h2>{t('konu')}</h2>"
+    for sec in v["sections"]:
+        baslik = uyarla(sec["title"]) if DIL == "tr" else sec["title"]
+        body += f"<h3>{html.escape(baslik)}</h3>{md(sec['body'])}"
+    body += f"<h2>{t('ornekler')}</h2>"
     for e in v["examples"]:
         out, err = calistir(e["code"], e.get("inputs"))
         sc = (e.get("scene") or {}).get("target") if isinstance(e.get("scene"), dict) else None
@@ -477,116 +564,142 @@ def gun_html(v, k, root):
         body += f"<h3>{html.escape(e['title'])}</h3>" + kod(e["code"], out, hata=err, sekil=sahne(sc, root) if sc else None)
         if e.get("note"):
             body += f'<p class="note">{md_inline(e["note"])}</p>'
-    terms = {}
-    for t in v["tasks"] + [v.get("challenge") or {}, v.get("visual_task") or {}, v.get("project_task") or {}]:
-        for x in ((t or {}).get("explain") or {}).get("terms", []):
-            if x.get("kind") != "değişken":  # değişken adları sözlüğü şişirir
-                terms.setdefault(x["term"], x)
+    terms = sozluk_terimleri(v)
     if terms:
-        body += '<div class="box sozluk"><h4>Bugünün sözlüğü</h4><dl>' + "".join(
+        body += f'<div class="box sozluk"><h4>{t("sozluk")}</h4><dl>' + "".join(
             f'<dt>{html.escape(x["term"])}</dt><dd>{md_inline(x["desc"])} <em>{html.escape(x.get("kind", ""))}</em></dd>' for x in terms.values()) + "</dl></div>"
-    body += "<h2>Görevler</h2>"
-    for i, t in enumerate(v["tasks"], 1):
-        body += gorev_html(t, f"Görev {i}", "", f"{n}.{i}", root)
+    body += f"<h2>{t('gorevler')}</h2>"
+    for i, gv in enumerate(v["tasks"], 1):
+        body += gorev_html(gv, t("gorev", i=i), "", f"{n}.{i}", root)
     j = len(v["tasks"])
     if v.get("visual_task"):
-        j += 1; body += gorev_html(v["visual_task"], "Sahne görevi", "sahne-g", f"{n}.{j}", root)
+        j += 1; body += gorev_html(v["visual_task"], t("sahne_g"), "sahne-g", f"{n}.{j}", root)
     if v.get("challenge"):
-        j += 1; body += gorev_html(v["challenge"], "Challenge", "challenge", f"{n}.{j}", root)
+        j += 1; body += gorev_html(v["challenge"], t("challenge"), "challenge", f"{n}.{j}", root)
     if v.get("project_task"):
-        j += 1; body += gorev_html(v["project_task"], f"Proje: {k['varsayilan_proje']}", "proje", f"{n}.{j}", root)
+        j += 1; body += gorev_html(v["project_task"], f"{t('proje')}: {k['varsayilan_proje']}", "proje", f"{n}.{j}", root)
     return body
 
 
 def cozumler_html(gunler):
-    aciklamali = any((t or {}).get("explain") for v in gunler for t in v["tasks"])
-    body = '<section class="on"><h1>Çözümler</h1><p>Önce kendin dene! Takıldığında buraya bak. '
-    body += "Her çözümün altında kodun satır satır ne yaptığı yazıyor. " if aciklamali else "Her çözümün altında çıktısı var. "
-    body += "Senin çözümün farklı olabilir; çıktı aynıysa o da doğrudur.</p>"
+    if DIL == "en":
+        from aciklama_en import explain
+    aciklamali = DIL == "en" or any((gv or {}).get("explain") for v in gunler for gv in v["tasks"])
+    body = f'<section class="on"><h1>{t("cozumler")}</h1><p>{t("cozum_giris")}'
+    body += t("cozum_satir") if aciklamali else t("cozum_cikti")
+    body += t("cozum_farkli") + "</p>"
     for v in gunler:
         n = int(v["day"])
-        body += f'<h2>Gün {n}: {html.escape(v["title"])}</h2>'
-        items = [(f"Görev {i}", t) for i, t in enumerate(v["tasks"], 1)]
-        if v.get("visual_task"): items.append(("Sahne görevi", v["visual_task"]))
-        if v.get("challenge"): items.append(("Challenge", v["challenge"]))
-        if v.get("project_task"): items.append(("Proje", v["project_task"]))
+        body += f'<h2>{t("gun", n=n)}: {html.escape(v["title"])}</h2>'
+        items = [(t("gorev", i=i), gv) for i, gv in enumerate(v["tasks"], 1)]
+        if v.get("visual_task"): items.append((t("sahne_g"), v["visual_task"]))
+        if v.get("challenge"): items.append((t("challenge"), v["challenge"]))
+        if v.get("project_task"): items.append((t("proje"), v["project_task"]))
         gorulen = set()
-        for j, (etiket, t) in enumerate(items, 1):
-            out, err = calistir(t["solution"], t.get("inputs") or ["Ece", "12", "Piko", "5"] if "input(" in t["solution"] else None)
+        varsayilan = ["Emma", "12", "Piko", "5"] if DIL == "en" else ["Ece", "12", "Piko", "5"]
+        for j, (etiket, gv) in enumerate(items, 1):
+            out, err = calistir(gv["solution"], gv.get("inputs") or varsayilan if "input(" in gv["solution"] else None)
+            satirlar = explain(gv["solution"]) if DIL == "en" else (gv.get("explain") or {}).get("lines", [])
             rows = ""
-            for x in (t.get("explain") or {}).get("lines", []):
+            for x in satirlar:
                 notes = [nn for nn in x.get("notes", []) if nn not in gorulen]  # aynı açıklama gün içinde bir kez
                 gorulen.update(notes)
                 if notes:
                     rows += f'<tr><td>{x["n"]}</td><td>{html.escape(x["code"])}</td><td>{" ".join(md_inline(nn) for nn in notes)}</td></tr>'
-            body += f'<div class="cozum"><h3><small>{n}.{j}</small>{etiket}: {html.escape(t["title"])}</h3>' + kod(t["solution"], out, hata=err)
+            body += f'<div class="cozum"><h3><small>{n}.{j}</small>{etiket}: {html.escape(gv["title"])}</h3>' + kod(gv["solution"], out, hata=err)
             if rows:
                 body += f'<table class="aciklama">{rows}</table>'
             body += "</div>"
     return body + "</section>"
 
 
+NASIL = {
+    "tr": """<h1>Bu kitap nasıl kullanılır?</h1>
+<p>Selam! Ben <b>{m}</b>. Bu kitapta her gün yeni bir şey öğrenip hemen kendi kodunu yazacaksın. Her gün aynı sırayla ilerler:</p>
+<ol class="adimlar">
+ <li><b>Konu anlatımı:</b> Günün fikirleri, kısa ve örnekli.</li>
+ <li><b>Örnekler:</b> Kodu yaz, çalıştır, çıktıyı kitaptakiyle karşılaştır.</li>
+ <li><b>Görevler:</b> Önce kendin dene. "Kendini kontrol et" kutusu ne yazman gerektiğini söyler; ipuçları da hazır.</li>
+ <li><b>{sahne}Challenge ve Proje:</b> Biraz daha zor ama çok eğlenceli. Proje adımlarıyla 30 günün sonunda kendi oyununu bitireceksin.</li>
+ <li><b>Çözümler:</b> Kitabın sonunda, {cozum}.</li>
+</ol>
+<h2>Kodu nerede yazacağım?</h2>
+<p>{kurulum} Kitabı kullanmak için internete ihtiyacın yok.</p>
+<h2>Video anlatımlar</h2>
+<div class="kanal">{qr}<div>Her günün konusunu kısa bir videoda {m} anlatıyor. Sayfaların altındaki QR kod seni YouTube'daki <b>30 Günde Kod</b> kanalına götürür; o günün <b>„Gün N”</b> videosunu aç. Kanalda hem 30 Günde Python hem 30 Günde JavaScript videoları var.<br><b>youtube.com/@30gundekod</b></div></div>
+<p>Her günün ilk sayfasında ayrıca o günün <b>etkileşimli dersinin</b> adresi var (30gunde.com.tr). Orada kodunu tarayıcıda yazar, tek tıkla kontrol ettirir, rozet toplarsın. Videolar da site de isteğe bağlı; kitap tek başına yeterli.</p>""",
+    "en": """<h1>How to use this book</h1>
+<p>Hi! I'm <b>{m}</b>. In this book you'll learn something new every day and write your own code right away. Every day follows the same steps:</p>
+<ol class="adimlar">
+ <li><b>The lesson:</b> the ideas of the day, short and with examples.</li>
+ <li><b>Examples:</b> type the code, run it, and compare the output with the book.</li>
+ <li><b>Tasks:</b> try them yourself first. The "Check yourself" box tells you what to look for, and hints are ready too.</li>
+ <li><b>{sahne}Challenge and Project:</b> a bit harder but lots of fun. With the project steps you'll finish your own game at the end of the 30 days.</li>
+ <li><b>Solutions:</b> at the back of the book, {cozum}.</li>
+</ol>
+<h2>Where do I write the code?</h2>
+<p>{kurulum} You don't need the internet to use this book.</p>
+<h2>Video lessons</h2>
+<div class="kanal">{qr}<div>{m} explains the topic of every day in a short video. The QR code at the bottom of each page takes you to the <b>30 Günde Kod</b> channel on YouTube; open that day's <b>“Day N”</b> video.<br><b>youtube.com/@30gundekod</b></div></div>
+<p>The videos are optional; the book works on its own.</p>""",
+}
+
+
 def on_bolum_html(k, gunler, sayfalar, root, tam=False):
     """(nasıl kullanılır, içindekiler): ayrı parçalar olarak basılır."""
     n0, n1 = int(gunler[0]["day"]), int(gunler[-1]["day"])
-    satir = lambda v: f'<li><b>Gün {int(v["day"])}</b>{html.escape(v["title"])}<span class="s">{sayfalar.get(int(v["day"]), "")}</span></li>'
+    satir = lambda v: f'<li><b>{t("gun", n=int(v["day"]))}</b>{html.escape(v["title"])}<span class="s">{sayfalar.get(int(v["day"]), "")}</span></li>'
     if tam:  # bölgelere göre gruplanmış
         toc = ""
-        for r in json.loads((REPO / k["kod"] / "veri/kurs.json").read_text("utf8"))["regions"]:
+        for r in kurs_json(k)["regions"]:
             vs = [v for v in gunler if v["region"] == r["id"]]
             if vs:
                 toc += f'<li class="bolum">{html.escape(r["name"])}</li>' + "".join(satir(v) for v in vs)
     else:
         toc = "".join(satir(v) for v in gunler)
-    toc += '<li class="bolum">Ekler</li>' if tam else ""
-    toc += f'<li><b>Ek</b>Çözümler<span class="s">{sayfalar.get("cozum", "")}</span></li>'
+    toc += f'<li class="bolum">{t("ekler")}</li>' if tam else ""
+    toc += f'<li><b>{t("ek")}</b>{t("cozumler")}<span class="s">{sayfalar.get("cozum", "")}</span></li>'
     if tam:
-        toc += f'<li><b>Son</b>Sertifikan<span class="s">{sayfalar.get("sertifika", "")}</span></li>'
-    ornek = "" if tam else f'<p style="font-size:8.5pt;color:#4A5B7A;margin-top:14pt">Bu bir örnek bölümdür: {k["ad"]} kitabının {n0}–{n1}. günleri.</p>'
+        toc += f'<li><b>{t("son")}</b>{t("sertifikan")}<span class="s">{sayfalar.get("sertifika", "")}</span></li>'
+    ornek = "" if tam else f'<p style="font-size:8.5pt;color:#4A5B7A;margin-top:14pt">{t("ornek_bolum", ad=k["ad"], a=n0, b=n1)}</p>'
+    py = k["kod"] == "python"
+    nasil = NASIL[DIL].format(
+        m=k["maskot"], kurulum=k["kurulum"], qr=qr_svg(VIDEO, 20),
+        sahne=("Sahne görevi, " if DIL == "tr" else "Stage task, ") if py else "",
+        cozum=("satır satır açıklamalarıyla" if DIL == "tr" else "with line-by-line explanations") if py else
+              ("çıktılarıyla birlikte" if DIL == "tr" else "together with their output"))
     return f"""<section class="on">
-<h1>Bu kitap nasıl kullanılır?</h1>
-<p>Selam! Ben <b>{k["maskot"]}</b>. Bu kitapta her gün yeni bir şey öğrenip hemen kendi kodunu yazacaksın. Her gün aynı sırayla ilerler:</p>
-<ol class="adimlar">
- <li><b>Konu anlatımı:</b> Günün fikirleri, kısa ve örnekli.</li>
- <li><b>Örnekler:</b> Kodu yaz, çalıştır, çıktıyı kitaptakiyle karşılaştır.</li>
- <li><b>Görevler:</b> Önce kendin dene. "Kendini kontrol et" kutusu ne yazman gerektiğini söyler; ipuçları da hazır.</li>
- <li><b>{"Sahne görevi, " if k["kod"] == "python" else ""}Challenge ve Proje:</b> Biraz daha zor ama çok eğlenceli. Proje adımlarıyla 30 günün sonunda kendi oyununu bitireceksin.</li>
- <li><b>Çözümler:</b> Kitabın sonunda, {"satır satır açıklamalarıyla" if k["kod"] == "python" else "çıktılarıyla birlikte"}.</li>
-</ol>
-<h2>Kodu nerede yazacağım?</h2>
-<p>{k["kurulum"]} Kitabı kullanmak için internete ihtiyacın yok.</p>
-<h2>Video anlatımlar</h2>
-<div class="kanal">{qr_svg(VIDEO, 20)}<div>Her günün konusunu kısa bir videoda {k["maskot"]} anlatıyor. Sayfaların altındaki QR kod seni YouTube'daki <b>30 Günde Kod</b> kanalına götürür; o günün <b>„Gün N”</b> videosunu aç. Kanalda hem 30 Günde Python hem 30 Günde JavaScript videoları var.<br><b>youtube.com/@30gundekod</b></div></div>
-<p>Her günün ilk sayfasında ayrıca o günün <b>etkileşimli dersinin</b> adresi var (30gunde.com.tr). Orada kodunu tarayıcıda yazar, tek tıkla kontrol ettirir, rozet toplarsın. Videolar da site de isteğe bağlı; kitap tek başına yeterli.</p>
-</section>""", f"""<section class="on"><h1>İçindekiler</h1><ul class="icindekiler{" tam" if tam else ""}">{toc}</ul>
+{nasil}
+</section>""", f"""<section class="on"><h1>{t("icindekiler")}</h1><ul class="icindekiler{" tam" if tam else ""}">{toc}</ul>
 {ornek}
-<p style="font-size:7.5pt;color:#4A5B7A;margin-top:{18 if tam else 30}pt">© 2026 30 Günde · 30gunde.com.tr. Tüm hakları saklıdır. Maskotlar, görseller ve ders içerikleri 30 Günde'ye aittir; izin alınmadan çoğaltılamaz.</p>
+<p style="font-size:7.5pt;color:#4A5B7A;margin-top:{6 if tam else 30}pt">{t("telif")}</p>
 </section>"""
 
 
 def kapak_html(k, gunler, root, tam=False):
     n0, n1 = int(gunler[0]["day"]), int(gunler[-1]["day"])
     gorev = sum(len(v["tasks"]) + sum(bool(v.get(x)) for x in ("visual_task", "challenge", "project_task")) for v in gunler)
-    kurs = json.loads((REPO / k["kod"] / "veri/kurs.json").read_text("utf8"))
-    bolgeler = "".join(f'<img src="{bolge_gorseli(k, r["id"], 320)}">' for r in kurs["regions"][:3] if (REPO / k["bolge"].format(r["id"])).exists())
+    bolgeler = "".join(f'<img src="{bolge_gorseli(k, r["id"], 320)}">' for r in kurs_json(k)["regions"][:3] if (REPO / k["bolge"].format(r["id"])).exists())
     uzay = f' uzayli" style="--kapak-bg: url({jpg("gorseller/javascript/arka-plan/bg-space.webp", 1000)})' if k["bolge_tur"] == "gezegen" else ""
+    oynat = '<svg viewBox="0 0 10 10"><path d="M2 1l7 4-7 4z" fill="#fff"/></svg>'
     return f"""<section class="kapak{uzay}"><img class="logo" src="{root}/{k["logo"]}"><div class="marka">30gunde.com.tr</div>
-<h1>30 Günde<br><span>{k["dil_adi"]}</span></h1>
+<h1>{t("kapak_baslik", dil=k["dil_adi"])}</h1>
 <div class="alt">{k["alt"]}</div>
+<div class="video"><i>{oynat}</i><div><b>{t("video_rozet")}</b><small>{t("video_rozet_alt")}</small></div></div>
 <div class="bolgeler">{bolgeler}</div>
-<div class="etiket">{f"30 gün · {gorev} görev · tüm çözümler" if tam else f"Örnek bölüm · Gün {n0}–{n1}"}</div>
+<div class="etiket">{t("kapak_tam", g=gorev) if tam else t("kapak_ornek", a=n0, b=n1)}</div>
 <img class="piko" src="{png(k["kapak_poz"], 900)}">
-<div class="serit"><span>12 yaş ve üstü</span><span>{"Video anlatımlı · " if tam else ""}Görevler · Çözümler · Proje</span></div></section>"""
+<div class="serit"><span>{t("yas")}</span><span>{t("serit")}</span></div></section>"""
 
 
 def sertifika_html(k, root):
     return f"""<section class="sertifika"><div class="cerceve"></div><div class="ic">
-<div class="ust">Başarı sertifikası</div>
-<h1>Tebrikler!</h1>
+<div class="ust">{t("srt_ust")}</div>
+<h1>{t("srt_baslik")}</h1>
 <img src="{png(k["kapak_poz"], 600)}">
-<div class="ad"></div><small>adın soyadın</small>
-<p><b>{k["ad"]}</b> macerasının 30 gününü tamamlayarak {k["dil_adi"]} ile kendi programlarını yazmayı öğrendi.</p>
-<div class="imza"><div>Tarih</div><div>{k["maskot"]} · yol arkadaşın</div></div>
+<div class="ad"></div><small>{t("srt_ad")}</small>
+<p>{t("srt_metin", ad=k["ad"], dil=k["dil_adi"])}</p>
+<div class="imza"><div>{t("srt_tarih")}</div><div>{t("srt_maskot", m=k["maskot"])}</div></div>
 </div></section>"""
 
 
@@ -639,7 +752,7 @@ def altbilgi(writer, sayfa_bilgisi, k):
         tx = qx - 2 * mm if sol else qx + q + 2 * mm
         yaz = c.drawRightString if sol else c.drawString
         c.setFont("Head", 6.5); c.setFillColorRGB(0.75, 0.16, 0.12)
-        yaz(tx, 12.2 * mm, f"Video anlatım: YouTube · „Gün {gun}” videosu" if gun else "Video anlatımlar: YouTube")
+        yaz(tx, 12.2 * mm, t("alt_video_gun", d=gun) if gun else t("alt_video"))
         c.setFont("Body", 6.5); c.setFillColorRGB(0.29, 0.36, 0.48)
         yaz(tx, 8.6 * mm, f"{k['ad']} · {etiket}")
         yaz(tx, 5.4 * mm, VIDEO.replace("https://www.", ""))
@@ -656,14 +769,22 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("kurs", choices=list(KURS))
     ap.add_argument("gunler", help="ör. 1-3")
+    ap.add_argument("--dil", choices=["tr", "en"], default="tr")
     a = ap.parse_args()
-    global K
-    k = K = KURS[a.kurs]
+    global K, DIL
+    DIL = a.dil
+    k = K = dict(KURS[a.kurs], **(KURS_EN.get(a.kurs, {}) if DIL == "en" else {}))
+    if DIL == "en" and a.kurs not in KURS_EN:
+        sys.exit(f"{a.kurs} için İngilizce içerik yok")
     fontlari_hazirla()
     g0, g1 = map(int, a.gunler.split("-"))
-    tam = g0 == 1 and not (REPO / a.kurs / "veri" / f"gun-{g1 + 1:02d}.json").exists()
-    gunler = [json.loads((REPO / a.kurs / "veri" / f"gun-{d:02d}.json").read_text("utf8")) for d in range(g0, g1 + 1)]
-    work = HERE / "is"; work.mkdir(exist_ok=True)
+    vd = veri_dizini(a.kurs)
+    tam = g0 == 1 and not (vd / f"gun-{g1 + 1:02d}.json").exists()
+    gunler = [json.loads((vd / f"gun-{d:02d}.json").read_text("utf8")) for d in range(g0, g1 + 1)]
+    if DIL == "en":  # sözlük terimleri Türkçe veriden gelir
+        for v in gunler:
+            v["_tr"] = json.loads((REPO / a.kurs / "veri" / f"gun-{int(v['day']):02d}.json").read_text("utf8"))
+    work = HERE / "is" / DIL; work.mkdir(parents=True, exist_ok=True)
     root = REPO.as_uri()
     gun_parca = [(f"gun-{int(v['day']):02d}", page(gun_html(v, k, root), root)) for v in gunler]
     coz = ("cozumler", page(cozumler_html(gunler), root))
@@ -687,14 +808,19 @@ def main():
             sayfa_bilgisi += [(None, None)] * n
         elif ad.startswith("gun-"):
             d = int(ad[4:]); v = next(x for x in gunler if int(x["day"]) == d)
-            sayfa_bilgisi += [(f"Gün {d}: {v['title']}", d)] * n
+            sayfa_bilgisi += [(f"{t('gun', n=d)}: {v['title']}", d)] * n
         else:
-            sayfa_bilgisi += [("Çözümler" if ad == "cozumler" else "Giriş", None)] * n
+            sayfa_bilgisi += [(t("cozumler") if ad == "cozumler" else t("giris"), None)] * n
     altbilgi(writer, sayfa_bilgisi, k)
     for _ in range(3):  # parçalar arasında ortak görseller bir kez (maskeler birleşince görseller de eşleşir)
         writer.compress_identical_objects(remove_duplicates=True, remove_unreferenced=True)
-    writer.add_metadata({"/Title": k["ad"] if tam else f"{k['ad']} · Gün {g0}–{g1} (örnek)", "/Author": "30 Günde", "/Subject": "30gunde.com.tr"})
-    out = REPO / "cikti" / "kitap" / (f"30-gunde-{a.kurs}.pdf" if tam else f"30-gunde-{a.kurs}-gun-{g0:02d}-{g1:02d}.pdf")
+    ornek = "(örnek)" if DIL == "tr" else "(sample)"
+    writer.add_metadata({"/Title": k["ad"] if tam else f"{k['ad']} · {t('gunler', a=g0, b=g1)} {ornek}", "/Author": "30 Günde", "/Subject": "30gunde.com.tr"})
+    if DIL == "en":
+        ad = f"30-days-of-{a.kurs}" + ("" if tam else f"-days-{g0:02d}-{g1:02d}")
+    else:
+        ad = f"30-gunde-{a.kurs}" + ("" if tam else f"-gun-{g0:02d}-{g1:02d}")
+    out = REPO / "cikti" / "kitap" / f"{ad}.pdf"
     out.parent.mkdir(parents=True, exist_ok=True)
     with open(out, "wb") as f:
         writer.write(f)

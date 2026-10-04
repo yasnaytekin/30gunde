@@ -1,0 +1,36 @@
+{
+ "day": 16, "title": "Dates and times", "region": "ada",
+ "project_contribution": "Daily streak",
+ "game_role": "When the game opens, your daily streak is calculated.",
+ "objective": "Create dates with the datetime module, format them and calculate between dates",
+ "story": "We've landed on Discovery Island! In the middle of the island stands a giant sundial with a message: \"Whoever reads time will solve the island's secret.\" Daily rewards, streaks and countdowns in games all run on date math. Today we read time with Python.",
+ "sections": [
+  {"title": "The datetime module", "body": "For dates and times we use the `datetime` module. We'll mostly use three of its parts:\n\n```python\nfrom datetime import date, datetime, timedelta\n\ntoday = date.today()      # today's date\nnow = datetime.now()      # the current date and time\n```\n\n`date.today()` gives a different result every day. That's why the tasks use fixed dates."},
+  {"title": "Creating a date", "body": "```python\nbirthday = date(2014, 5, 19)   # year, month, day\nprint(birthday.year)    # 2014\nprint(birthday.month)   # 5\nprint(birthday.day)     # 19\nprint(birthday.weekday())  # 0 Monday ... 6 Sunday\n```\n\nIf you need the time too, write `datetime(2026, 9, 23, 14, 30)`: 2:30 pm."},
+  {"title": "Formatting", "body": "`strftime` turns a date into text in the format you want:\n\n- `%d` day, `%m` month (number), `%B` month name, `%Y` four-digit year\n- `%H` hour, `%M` minute\n\n```python\nd = date(2026, 9, 23)\nprint(d.strftime(\"%d %B %Y\"))   # 23 September 2026\nprint(d.strftime(\"%Y-%m-%d\"))   # 2026-09-23\n```\n\n`datetime.strptime(\"2026-09-23\", \"%Y-%m-%d\")` does the opposite: it makes a date from text."},
+  {"title": "Calculating with dates", "body": "Subtracting two dates gives the time between them. `.days` gives you the number of days:\n\n```python\nstart = date(2026, 9, 1)\nend = date(2026, 9, 30)\nprint((end - start).days)   # 29\n```\n\nTo add days to a date, use `timedelta`:\n\n```python\nprint(start + timedelta(days=7))   # one week later\n```"}
+ ],
+ "examples": [
+  {"title": "Parts of a date", "code": "from datetime import date\n\nd = date(2026, 9, 23)\nprint(\"Year:\", d.year)\nprint(\"Month:\", d.month)\nprint(\"Day:\", d.day)\nprint(d.strftime(\"%d %B %Y\"))\n", "note": ""},
+  {"title": "How many days left?", "code": "from datetime import date\n\ntoday = date(2026, 9, 23)\nnew_year = date(2027, 1, 1)\nleft = (new_year - today).days\nprint(f\"{left} days until the new year.\")\n", "note": ""},
+  {"title": "A week later", "code": "from datetime import date, timedelta\n\nstart = date(2026, 9, 23)\nfor week in range(1, 4):\n    print(f\"Week {week}:\", (start + timedelta(days=7 * week)).strftime(\"%d %B %Y\"))\n", "note": ""}
+ ],
+ "tasks": [
+  {"title": "Format the date", "prompt": "Create a date from `year`, `month` and `day` and print it as `23 September 2026`.", "starter": "from datetime import date\n\nyear = 2026\nmonth = 9\nday = 23\n\n# create the date and print it as day month-name year\n",
+   "solution": "from datetime import date\n\nyear = 2026\nmonth = 9\nday = 23\n\nd = date(year, month, day)\nprint(d.strftime(\"%d %B %Y\"))\n", "hints": ["d = date(year, month, day)", "Format: d.strftime(\"%d %B %Y\")"], "check": {"output_contains": ["23 September 2026"]}},
+  {"title": "How many days left?", "prompt": "Store the number of days between `today` and the `birthday` in `days_left` and print something like `12 days until your birthday.`",
+   "starter": "from datetime import date\n\ntoday = date(2026, 9, 23)\nbirthday_day = 5\nbirthday = date(2026, 10, birthday_day)\n\ndays_left = 0\n\nprint(f\"{days_left} days until your birthday.\")\n",
+   "solution": "from datetime import date\n\ntoday = date(2026, 9, 23)\nbirthday_day = 5\nbirthday = date(2026, 10, birthday_day)\n\ndays_left = (birthday - today).days\n\nprint(f\"{days_left} days until your birthday.\")\n",
+   "hints": ["Subtract the two dates: birthday - today", "Add .days to get the number of days."], "check": {"output_contains": ["12 days until your birthday."]}},
+  {"title": "A week later", "prompt": "Add `weeks` weeks to the `start` date and print the result in `day month-name year` format.", "starter": "from datetime import date, timedelta\n\nstart = date(2026, 9, 23)\nweeks = 1\n\n# start + weeks weeks\n",
+   "solution": "from datetime import date, timedelta\n\nstart = date(2026, 9, 23)\nweeks = 1\n\nlater = start + timedelta(weeks=weeks)\nprint(later.strftime(\"%d %B %Y\"))\n", "hints": ["timedelta(weeks=weeks) or timedelta(days=7 * weeks)", "For the format: strftime(\"%d %B %Y\")"], "check": {"code_contains": ["timedelta("], "output_contains": ["30 September 2026"]}}
+ ],
+ "challenge": {"title": "Day of the week", "prompt": "`weekday()` gives a number from 0 (Monday) to 6 (Sunday). Use that number with the `names` list to print which day the date is: `23 September 2026 Wednesday`",
+  "starter": "from datetime import date\n\nnames = [\"Monday\", \"Tuesday\", \"Wednesday\", \"Thursday\", \"Friday\", \"Saturday\", \"Sunday\"]\nyear, month, day = 2026, 9, 23\nd = date(year, month, day)\n\n# print the date and the day's name\n",
+  "solution": "from datetime import date\n\nnames = [\"Monday\", \"Tuesday\", \"Wednesday\", \"Thursday\", \"Friday\", \"Saturday\", \"Sunday\"]\nyear, month, day = 2026, 9, 23\nd = date(year, month, day)\n\nprint(d.strftime(\"%d %B %Y\"), names[d.weekday()])\n",
+  "hints": ["The day's name: names[d.weekday()]"], "check": {"output_contains": ["23 September 2026 Wednesday"]}},
+ "project_task": {"title": "Daily streak", "prompt": "In games your streak grows if you play every day. `last_play` is the last day you played, `today` is today.\n\n- If the difference is 0 days: `You already played today.`\n- If it's 1 day: `Your streak continues!`\n- If it's more: `Streak broken, start again!`",
+  "starter": "from datetime import date\n\ntoday = date(2026, 9, 23)\nlast_day = 22\nlast_play = date(2026, 9, last_day)\n\n# calculate the difference and print the message\n",
+  "solution": "from datetime import date\n\ntoday = date(2026, 9, 23)\nlast_day = 22\nlast_play = date(2026, 9, last_day)\n\ngap = (today - last_play).days\nif gap == 0:\n    print(\"You already played today.\")\nelif gap == 1:\n    print(\"Your streak continues!\")\nelse:\n    print(\"Streak broken, start again!\")\n",
+  "hints": ["gap = (today - last_play).days", "if gap == 0 ... elif gap == 1 ... else"], "check": {"output_contains": ["Your streak continues!"]}}
+}

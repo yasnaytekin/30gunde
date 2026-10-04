@@ -1,0 +1,40 @@
+{
+ "day": 25, "title": "Pandas", "region": "liman",
+ "project_contribution": "Score analysis",
+ "game_role": "Your score analysis isn't used inside the game in this version.",
+ "objective": "Create, inspect, filter and summarize table data with pandas",
+ "story": "On the harbor master's desk lies a giant ledger: one ship per row, one piece of information per column. Instead of reading it row by row, she wants to ask \"who carries the most cargo?\" and get an answer instantly. Today we meet a super-powerful tool for tables: **pandas**.",
+ "sections": [
+  {"title": "DataFrame: a table in Python", "body": "The heart of pandas is a table called a **DataFrame**. It's easy to create from a dictionary: the keys become column names and the lists become the columns' values:\n\n```python\nimport pandas as pd\n\ndata = {\"name\": [\"Piko\", \"Emma\", \"Ben\"], \"score\": [300, 250, 120]}\ndf = pd.DataFrame(data)\nprint(df)\n```\n\nIf pandas isn't installed yet, run `pip install pandas` in the terminal first (Day 20)."},
+  {"title": "Getting to know the table", "body": "- `df.head()` the first 5 rows\n- `df.shape` (number of rows, number of columns)\n- `df.columns` the column names\n- `df.describe()` a summary of the numeric columns\n\nYou get a single column with `df[\"score\"]`. It's called a **Series** and has methods like `.mean()`, `.max()` and `.sum()`."},
+  {"title": "Filtering and sorting", "body": "```python\nwinners = df[df[\"score\"] >= 200]           # rows that match the condition\ntop = df.sort_values(\"score\", ascending=False)\nbest = top.iloc[0][\"name\"]                 # the name cell of the first row\nnames = df[\"name\"].tolist()                # turn a column into a list\n```\n\nAdding a new column is easy too: `df[\"bonus\"] = df[\"score\"] * 2`"},
+  {"title": "CSV and grouping", "body": "Real data often comes in a **CSV** file: lines separated by commas. `pd.read_csv(\"file.csv\")` turns it into a table. If we have it as text, `io.StringIO` lets us read it as if it were a file.\n\nTo add up rows with the same value, use `groupby`:\n\n```python\ntotals = df.groupby(\"player\")[\"score\"].sum()\nprint(totals.idxmax())   # the player with the highest total\n```"}
+ ],
+ "examples": [
+  {"title": "First table", "code": "import pandas as pd\n\ndata = {\"name\": [\"Piko\", \"Emma\", \"Ben\"], \"score\": [300, 250, 120]}\ndf = pd.DataFrame(data)\nprint(df)\nprint(\"Shape:\", df.shape)\nprint(\"Mean score:\", df[\"score\"].mean())\n", "note": ""},
+  {"title": "Filter and sort", "code": "import pandas as pd\n\ndf = pd.DataFrame({\"name\": [\"Piko\", \"Emma\", \"Ben\", \"Ada\"], \"score\": [300, 250, 120, 280]})\nprint(df[df[\"score\"] >= 250])\nprint(df.sort_values(\"score\", ascending=False)[\"name\"].tolist())\n", "note": ""},
+  {"title": "CSV and grouping", "code": "import io\nimport pandas as pd\n\ncsv = \"\"\"player,score\nPiko,50\nEmma,70\nPiko,40\nEmma,10\n\"\"\"\ndf = pd.read_csv(io.StringIO(csv))\ntotals = df.groupby(\"player\")[\"score\"].sum()\nprint(totals)\nprint(\"Winner:\", totals.idxmax())\n", "note": ""}
+ ],
+ "tasks": [
+  {"title": "My first table", "prompt": "Create a DataFrame called `df` from the `data` dictionary. Then store the number of rows in `rows`.",
+   "starter": "import pandas as pd\n\ndata = {\"ship\": [\"Seagull\", \"Dolphin\", \"Eagle\"], \"cargo\": [12, 30, 7]}\n\ndf = None\nrows = 0\n\nprint(df)\nprint(\"Rows:\", rows)\n",
+   "solution": "import pandas as pd\n\ndata = {\"ship\": [\"Seagull\", \"Dolphin\", \"Eagle\"], \"cargo\": [12, 30, 7]}\n\ndf = pd.DataFrame(data)\nrows = df.shape[0]\n\nprint(df)\nprint(\"Rows:\", rows)\n",
+   "hints": ["df = pd.DataFrame(data)", "df.shape gives (rows, columns); the number of rows is df.shape[0] or len(df)"], "check": {"output_contains": ["Rows: 3"]}},
+  {"title": "Average cargo", "prompt": "Store the mean of the `cargo` column of the `df` table in `avg`.",
+   "starter": "import pandas as pd\n\ndata = {\"ship\": [\"Seagull\", \"Dolphin\", \"Eagle\"], \"cargo\": [12, 30, 6]}\ndf = pd.DataFrame(data)\n\navg = 0\n\nprint(\"Average cargo:\", avg)\n",
+   "solution": "import pandas as pd\n\ndata = {\"ship\": [\"Seagull\", \"Dolphin\", \"Eagle\"], \"cargo\": [12, 30, 6]}\ndf = pd.DataFrame(data)\n\navg = df[\"cargo\"].mean()\n\nprint(\"Average cargo:\", avg)\n",
+   "hints": ["The column: df[\"cargo\"]", "The mean: .mean()"], "check": {"output_contains": ["Average cargo: 16.0"]}},
+  {"title": "Heavy ships", "prompt": "Store the names of the ships with a cargo of 10 or more in `heavy` as a **list**.",
+   "starter": "import pandas as pd\n\ndata = {\"ship\": [\"Seagull\", \"Dolphin\", \"Eagle\", \"Whale\"], \"cargo\": [12, 30, 7, 10]}\ndf = pd.DataFrame(data)\n\nheavy = []\n\nprint(heavy)\n",
+   "solution": "import pandas as pd\n\ndata = {\"ship\": [\"Seagull\", \"Dolphin\", \"Eagle\", \"Whale\"], \"cargo\": [12, 30, 7, 10]}\ndf = pd.DataFrame(data)\n\nheavy = df[df[\"cargo\"] >= 10][\"ship\"].tolist()\n\nprint(heavy)\n",
+   "hints": ["Filter the rows first: df[df[\"cargo\"] >= 10]", "Then turn the ship column into a list: [\"ship\"].tolist()"], "check": {"output_contains": ["['Seagull', 'Dolphin', 'Whale']"]}}
+ ],
+ "challenge": {"title": "The best player", "prompt": "Sort the table by `score` from highest to lowest and store the name of the player with the highest score in `best`.",
+  "starter": "import pandas as pd\n\ndata = {\"name\": [\"Ali\", \"Piko\", \"Emma\"], \"score\": [120, 300, 250]}\ndf = pd.DataFrame(data)\n\nbest = \"\"\n\nprint(\"Best:\", best)\n",
+  "solution": "import pandas as pd\n\ndata = {\"name\": [\"Ali\", \"Piko\", \"Emma\"], \"score\": [120, 300, 250]}\ndf = pd.DataFrame(data)\n\ntop = df.sort_values(\"score\", ascending=False)\nbest = top.iloc[0][\"name\"]\n\nprint(\"Best:\", best)\n",
+  "hints": ["df.sort_values(\"score\", ascending=False)", "The first row's name: top.iloc[0][\"name\"]"], "check": {"code_contains": ["sort_values"], "output_contains": ["Best: Piko"]}},
+ "project_task": {"title": "Score analysis", "prompt": "The scores of games played in Piko's Adventure arrived as CSV. The same player may have played several times.\n\n- Read the CSV into the `df` table.\n- `totals`: each player's total score (`groupby`)\n- `winner`: the player with the highest total\n- Print something like `Winner: Emma`.",
+  "starter": "import io\nimport pandas as pd\n\ncsv = \"\"\"player,score\nPiko,50\nEmma,70\nPiko,40\nEmma,30\nBen,80\n\"\"\"\n\ndf = None\ntotals = None\nwinner = \"\"\n\nprint(f\"Winner: {winner}\")\n",
+  "solution": "import io\nimport pandas as pd\n\ncsv = \"\"\"player,score\nPiko,50\nEmma,70\nPiko,40\nEmma,30\nBen,80\n\"\"\"\n\ndf = pd.read_csv(io.StringIO(csv))\ntotals = df.groupby(\"player\")[\"score\"].sum()\nwinner = totals.idxmax()\n\nprint(f\"Winner: {winner}\")\n",
+  "hints": ["pd.read_csv(io.StringIO(csv))", "df.groupby(\"player\")[\"score\"].sum()", "The owner of the biggest total: totals.idxmax()"], "check": {"output_contains": ["Winner: Emma"]}}
+}

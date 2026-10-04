@@ -1,0 +1,41 @@
+{
+ "day": 4, "title": "Strings", "region": "koy",
+ "project_contribution": "Character dialogue",
+ "game_role": "When the game starts, Piko introduces himself with the sentence you wrote.",
+ "objective": "Join, slice and format strings with f-strings",
+ "story": "The village is full of signs, conversations and letters. In games, characters talk and names glow on the screen too. Today we play with text, that is, with **strings**!",
+ "sections": [
+  {"title": "What is a string?", "body": "A string is a sequence of characters inside quotes. Single or double quotes both work: `'Piko'` or `\"Piko\"`.\n\n- Join with `+`: `\"Pi\" + \"ko\"` gives `\"Piko\"`\n- Repeat with `*`: `\"ha\" * 3` gives `\"hahaha\"`\n- Measure with `len()`: `len(\"Piko\")` gives `4`"},
+  {"title": "Reaching single letters", "body": "Every letter has a position number (an index), and counting **starts at 0**.\n\n```python\nword = \"Python\"\nprint(word[0])    # P\nprint(word[-1])   # n (first from the end)\nprint(word[0:3])  # Pyt (0, 1 and 2)\nprint(word[::-1]) # nohtyP (reversed)\n```"},
+  {"title": "String methods", "body": "- `upper()` ALL CAPS, `lower()` all lowercase\n- `title()` Capitalizes Each Word\n- `replace(\"a\", \"e\")` swaps letters\n- `strip()` removes spaces at the start and end\n- `count(\"a\")` counts how many there are"},
+  {"title": "f-strings: put variables inside text", "body": "In text that starts with `f`, variables inside curly braces are replaced with their values:\n\n```python\nname = \"Piko\"\nlevel = 3\nprint(f\"{name} reached level {level}!\")\n```\n\nThis is the easiest way to write messages in games."},
+  {"title": "Is it inside?", "body": "With `in` you can check whether a piece of text is inside another: `\"ko\" in \"Piko\"` gives `True`.\n\nYou ask whether two things are the same with `==`: `\"map\" == \"map\"` gives `True`."}
+ ],
+ "examples": [
+  {"title": "Join and repeat", "code": "first = \"Pi\"\nsecond = \"ko\"\nprint(first + second)\nprint(\"ha\" * 3)\nprint(len(\"Piko's Adventure\"))\n", "note": ""},
+  {"title": "Slicing", "code": "word = \"Python\"\nprint(word[0], word[-1])\nprint(word[0:3])\nprint(word[::-1])\n", "note": ""},
+  {"title": "f-string", "code": "name = \"Piko\"\ngold = 42\nprint(f\"{name} carries {gold} gold coins.\")\nprint(f\"{name.upper()} is coming!\")\n", "note": ""}
+ ],
+ "tasks": [
+  {"title": "Signboard", "prompt": "Turn the text in `word` into capital letters, add `!` to the end and store it in `shout`. The result should be `PYTHON!`.",
+   "starter": "word = \"python\"\n\nshout = \"\"  # word in capitals + \"!\"\nprint(shout)\n", "solution": "word = \"python\"\n\nshout = word.upper() + \"!\"\nprint(shout)\n",
+   "hints": ["word.upper() gives the capitalized version.", "+ \"!\" adds an exclamation mark to the end."], "check": {"code_contains": ["upper()"]}},
+  {"title": "First and last letter", "prompt": "Put the first letter of `name` into `first` and the last letter into `last`. Use a negative index for the last letter.",
+   "starter": "name = \"Piko\"\n\nfirst = \"\"\nlast = \"\"\nprint(first, last)\n", "solution": "name = \"Piko\"\n\nfirst = name[0]\nlast = name[-1]\nprint(first, last)\n",
+   "hints": ["First letter: name[0]", "Last letter: name[-1]"], "check": {"code_contains": ["[-1]"]}},
+  {"title": "Level message", "prompt": "Create the `message` variable with an f-string. The result should be exactly `Mia reached level 7!`, but the name and the number must come from the variables.",
+   "starter": "name = \"Mia\"\nlevel = 7\n\nmessage = \"\"\nprint(message)\n", "solution": "name = \"Mia\"\nlevel = 7\n\nmessage = f\"{name} reached level {level}!\"\nprint(message)\n",
+   "hints": ["An f-string starts with f: f\"...\"", "Put the variables in curly braces: {name}"], "check": {"output_contains": ["Mia reached level 7!"]}}
+ ],
+ "visual_task": {"title": "Piko in the castle", "prompt": "Let's put Piko in a room surrounded by walls. `gap` is the number of empty squares on each side of Piko.\n\n- `wall`: repeat `\"#\"` `gap * 2 + 3` times\n- `room`: `\"#\"` + `gap` spaces + `\"*\"` + `gap` spaces + `\"#\"`\n- Then print `wall`, `room`, `wall`.\n\nWith `gap = 3` the room should grow by itself.",
+  "starter": "gap = 2\nwall = \"#\" * 7\nroom = \"\"\n\nprint(wall)\n",
+  "solution": "gap = 2\nwall = \"#\" * (gap * 2 + 3)\nroom = \"#\" + \" \" * gap + \"*\" + \" \" * gap + \"#\"\n\nprint(wall)\nprint(room)\nprint(wall)\n",
+  "hints": ["A space is text too: \" \" * gap", "room = \"#\" + \" \" * gap + \"*\" + \" \" * gap + \"#\""], "scene": {"target": ["#######", "#  *  #", "#######"]}},
+ "challenge": {"title": "Palindrome hunter", "prompt": "Words that read the same backwards are called palindromes: level, kayak, racecar. If `word` is a palindrome, `is_palindrome` should be `True`, otherwise `False`. No typing `True`; find it by comparing!",
+  "starter": "word = \"level\"\n\nis_palindrome = False\nprint(is_palindrome)\n", "solution": "word = \"level\"\n\nis_palindrome = word == word[::-1]\nprint(is_palindrome)\n",
+  "hints": ["The word reversed: word[::-1]", "Are two things the same? Ask with ==."]},
+ "project_task": {"title": "Character dialogue", "prompt": "At the start of the game the hero introduces himself.\n\n- First print a line of 30 `=` signs\n- Then create `intro` with an f-string: `I'm Piko, the adventure begins!` (use `player_name` instead of Piko)\n- Print `intro`",
+  "starter": "player_name = \"Piko\"\n\n# 1) Print a line of 30 \"=\" signs\n\n# 2) Create the intro sentence with an f-string\nintro = \"\"\nprint(intro)\n",
+  "solution": "player_name = \"Piko\"\n\nprint(\"=\" * 30)\n\nintro = f\"I'm {player_name}, the adventure begins!\"\nprint(intro)\n",
+  "hints": ["For the line: print(\"=\" * 30)", "intro = f\"I'm {player_name}, the adventure begins!\""]}
+}
