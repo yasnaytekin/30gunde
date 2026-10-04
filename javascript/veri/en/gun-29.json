@@ -1,0 +1,132 @@
+{
+ "day": 29,
+ "title": "Wrapping up the project",
+ "region": "yildiz",
+ "project_contribution": "Mobile controls",
+ "objective": "Connect buttons and the keyboard to the same function, make accessible controls, and organize code with init/render/update",
+ "story": "Your project is almost ready, captain! But when your friend opens it on a phone, there's no keyboard and the screen is small. Today we're making your project useful **for everyone**: touch controls, small screens and **accessibility**.",
+ "sections": [
+  {
+   "title": "Phones have no keyboard",
+   "body": "If your game is controlled only with the arrow keys, your friend on a phone can't play. The fix: put buttons like ◀ ▶ on the screen, and make **both the keys and the buttons call the same function**:\n\n```js\nfunction move(dx) { /* the ONE place for movement */ }\n\nleftBtn.addEventListener(\"click\", () => move(-10));\ndocument.addEventListener(\"keydown\", (e) => {\n  if (e.key === \"ArrowLeft\") move(-10);\n});\n```\n\n- `click` works with both a mouse and a touch.\n- If you want to detect holding a button down, use the `pointerdown` (pressed) and `pointerup` (released) events; they work with a mouse, a finger and a pen.\n- A finger is bigger than a mouse pointer: buttons you tap should be at least 44–48 pixels."
+  },
+  {
+   "title": "Small screens and matchMedia",
+   "body": "Layout is mostly CSS's job: `@media (max-width: 600px) { ... }` lets you write separate rules for small screens. You can ask about the screen in JavaScript too:\n\n```js\nconst isSmall = window.matchMedia(\"(max-width: 600px)\").matches;\nif (isSmall) {\n  console.log(\"Small screen: show the touch buttons\");\n}\n```\n\n`matches` gives the current state as `true`/`false`. If you give the canvas `max-width: 100%` in CSS, it fits on a small screen."
+  },
+  {
+   "title": "Accessibility: everyone can use it",
+   "body": "Some users can't see the screen and use a **screen reader**; some can't use a mouse and move around with only the keyboard. A few habits make a big difference:\n\n- Use `<button>`, not `<div>`, for things that get clicked: a button can be selected with Tab and works with Enter and Space on its own.\n- Give a button that is only an icon an `aria-label`: `btn.setAttribute(\"aria-label\", \"Go left\")`. The screen reader reads this instead of ◀.\n- On the button of a menu that opens and closes, `aria-expanded` should be `\"true\"` or `\"false\"`.\n- For messages that change by themselves (`Correct!`, `Saved`), add `aria-live=\"polite\"` to the box; the screen reader reads the change.\n- `element.focus()` moves the keyboard focus to an element. When a menu closes, give the focus back to the button that opened it."
+  },
+  {
+   "title": "init, update, render",
+   "body": "As a project grows, its code gets scattered. A layout with three parts makes your job easier:\n\n```js\nconst state = { score: 0 };   // all the data in one place\n\nfunction update(action) {     // changes the data\n  if (action === \"star\") state.score += 10;\n}\n\nfunction render() {           // draws the data on the screen\n  scoreEl.textContent = `Score: ${state.score}`;\n}\n\nfunction init() {             // connects events, does the first drawing\n  starBtn.addEventListener(\"click\", () => {\n    update(\"star\");\n    render();\n  });\n  render();\n}\n\ninit();\n```\n\nThe rule is simple: **only render touches the screen, and only update changes the data.** When there's a bug, you know right away where to look."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Button and key, one function",
+   "code": "let x = 5;\nconst pos = document.querySelector(\"#pos\");\n\nfunction move(dx) {\n  x = Math.min(10, Math.max(0, x + dx));\n  pos.textContent = `Position: ${x}`;\n}\n\ndocument.querySelector(\"#left\").addEventListener(\"click\", () => move(-1));\ndocument.querySelector(\"#right\").addEventListener(\"click\", () => move(1));\ndocument.addEventListener(\"keydown\", (e) => {\n  if (e.key === \"ArrowLeft\") move(-1);\n  if (e.key === \"ArrowRight\") move(1);\n});\n",
+   "note": "Click the buttons, or click the page and use the arrow keys: both call the same move function.",
+   "html": "<p id=\"pos\">Position: 5</p>\n<div class=\"controls\"><button id=\"left\" aria-label=\"Go left\">◀</button> <button id=\"right\" aria-label=\"Go right\">▶</button></div>\n"
+  },
+  {
+   "title": "A drop-down menu",
+   "code": "const btn = document.querySelector(\"#menu-btn\");\nconst nav = document.querySelector(\"#nav\");\n\nbtn.addEventListener(\"click\", () => {\n  const open = nav.hidden; // if it's hidden, it opens now\n  nav.hidden = !open;\n  btn.setAttribute(\"aria-expanded\", String(open));\n  btn.setAttribute(\"aria-label\", open ? \"Close menu\" : \"Open menu\");\n});\n",
+   "note": "A screen reader reads the button as 'Open menu, collapsed'; when it opens, it becomes 'expanded'.",
+   "html": "<button id=\"menu-btn\" aria-expanded=\"false\" aria-label=\"Open menu\">☰</button>\n<nav id=\"nav\" hidden><a href=\"#a\">Home</a> <a href=\"#b\">Blog</a></nav>\n"
+  }
+ ],
+ "tasks": [
+  {
+   "title": "One function, two ways",
+   "prompt": "Write the `move(dx)` function and connect it to both the buttons and the arrow keys:\n\n- `move(dx)`: change `x` by `dx`; `x` must stay between 0 and 100. Write `Position: 60` into `#pos`.\n- When the `#left` and `#right` buttons are clicked, call `move(-10)` / `move(10)`.\n- The `ArrowLeft` and `ArrowRight` keys should call the **same** function.",
+   "html": "<p id=\"pos\">Position: 50</p>\n<div class=\"controls\"><button id=\"left\" aria-label=\"Go left\">◀</button> <button id=\"right\" aria-label=\"Go right\">▶</button></div>\n",
+   "starter": "let x = 50;\nconst pos = document.querySelector(\"#pos\");\n\nfunction move(dx) {\n  // change x (between 0 and 100), update #pos\n}\n\n// the buttons and arrow keys should call the same move function\n\n",
+   "solution": "let x = 50;\nconst pos = document.querySelector(\"#pos\");\n\nfunction move(dx) {\n  x = Math.min(100, Math.max(0, x + dx));\n  pos.textContent = `Position: ${x}`;\n}\n\n// the buttons and arrow keys should call the same move function\ndocument.querySelector(\"#left\").addEventListener(\"click\", () => move(-10));\ndocument.querySelector(\"#right\").addEventListener(\"click\", () => move(10));\ndocument.addEventListener(\"keydown\", (e) => {\n  if (e.key === \"ArrowLeft\") move(-10);\n  if (e.key === \"ArrowRight\") move(10);\n});\n",
+   "hints": [
+    "x = Math.min(100, Math.max(0, x + dx));",
+    "document.querySelector(\"#right\").addEventListener(\"click\", () => move(10));",
+    "Keyboard: if (e.key === \"ArrowLeft\") move(-10);"
+   ],
+   "check": {
+    "code_contains": [
+     "click",
+     "keydown"
+    ]
+   }
+  },
+  {
+   "title": "Labels and focus",
+   "prompt": "The ▶ and ■ buttons are only icons; a screen reader can't tell what they do. Fix it:\n\n- Give `#play` the `aria-label` `Start` and `#stop` the label `Stop` (`setAttribute`).\n- When `#play` is clicked, `#status` should say `Running` and the keyboard focus should move to `#stop` (`focus()`).\n- When `#stop` is clicked, `#status` should say `Stopped` and the focus should go back to `#play`.",
+   "html": "<div class=\"controls\"><button id=\"play\">▶</button><button id=\"stop\">■</button></div>\n<p id=\"status\">Ready</p>\n",
+   "starter": "const play = document.querySelector(\"#play\");\nconst stop = document.querySelector(\"#stop\");\nconst status = document.querySelector(\"#status\");\n\n// give the aria-labels\n\n// connect the clicks\n\n",
+   "solution": "const play = document.querySelector(\"#play\");\nconst stop = document.querySelector(\"#stop\");\nconst status = document.querySelector(\"#status\");\n\n// give the aria-labels\nplay.setAttribute(\"aria-label\", \"Start\");\nstop.setAttribute(\"aria-label\", \"Stop\");\n\n// connect the clicks\nplay.addEventListener(\"click\", () => {\n  status.textContent = \"Running\";\n  stop.focus();\n});\nstop.addEventListener(\"click\", () => {\n  status.textContent = \"Stopped\";\n  play.focus();\n});\n",
+   "hints": [
+    "play.setAttribute(\"aria-label\", \"Start\");",
+    "Moving the focus: stop.focus();"
+   ],
+   "check": {
+    "code_contains": [
+     "aria-label",
+     "focus()"
+    ]
+   }
+  },
+  {
+   "title": "init, update, render",
+   "prompt": "Write the fuel gauge with the three-part layout (`state` is ready):\n\n- `update(action)`: if `\"burn\"` comes in, the fuel goes down by 20 (not below 0); if `\"refill\"` comes in, it becomes 100. It must not touch the screen.\n- `render()`: write `Fuel: 80` into `#fuel`; if the fuel is 20 or less, add the `low` class to `#fuel`, otherwise remove it.\n- `init()`: connect the `#burn` and `#refill` buttons (on click: `update`, then `render`) and call `render` once.",
+   "html": "<p id=\"fuel\">Fuel: ?</p>\n<button id=\"burn\">Fire the engine</button><button id=\"refill\">Refuel</button>\n",
+   "starter": "const state = { fuel: 100 };\nconst fuelEl = document.querySelector(\"#fuel\");\n\nfunction update(action) {\n  // \"burn\" and \"refill\"\n}\n\nfunction render() {\n  // the text and the low class\n}\n\nfunction init() {\n  // connect the buttons, first drawing\n}\n\ninit();\n",
+   "solution": "const state = { fuel: 100 };\nconst fuelEl = document.querySelector(\"#fuel\");\n\nfunction update(action) {\n  if (action === \"burn\") state.fuel = Math.max(0, state.fuel - 20);\n  if (action === \"refill\") state.fuel = 100;\n}\n\nfunction render() {\n  fuelEl.textContent = `Fuel: ${state.fuel}`;\n  fuelEl.classList.toggle(\"low\", state.fuel <= 20);\n}\n\nfunction init() {\n  document.querySelector(\"#burn\").addEventListener(\"click\", () => {\n    update(\"burn\");\n    render();\n  });\n  document.querySelector(\"#refill\").addEventListener(\"click\", () => {\n    update(\"refill\");\n    render();\n  });\n  render();\n}\n\ninit();\n",
+   "hints": [
+    "if (action === \"burn\") state.fuel = Math.max(0, state.fuel - 20);",
+    "classList.toggle(\"low\", state.fuel <= 20) adds or removes the class depending on the condition.",
+    "Don't forget to call render(); at the end of init."
+   ],
+   "check": {
+    "code_contains": [
+     "function update",
+     "function render",
+     "addEventListener"
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "title": "A keyboard menu",
+  "prompt": "Let users move between the menu buttons with the arrow keys:\n\n- Inside `#menu`, `ArrowDown` moves the focus to the next button and `ArrowUp` to the previous one (`focus()`).\n- Wrap around at the ends: going down from the last one goes to the first, and going up from the first goes to the last.\n- When a button is clicked, write `Selected: Settings` into `#info`.\n\nHint: `e.target` gives the button the event came from, and `items.indexOf(e.target)` gives its position.",
+  "html": "<div id=\"menu\"><button>Play</button><button>Settings</button><button>Scores</button><button>Exit</button></div>\n<p id=\"info\"></p>\n",
+  "starter": "const items = [...document.querySelectorAll(\"#menu button\")];\nconst info = document.querySelector(\"#info\");\n\nfunction focusItem(index) {\n  // if index goes out of range, wrap to the start/end, focus that button\n}\n\n// listen for keydown on #menu; connect click to the buttons\n\n",
+  "solution": "const items = [...document.querySelectorAll(\"#menu button\")];\nconst info = document.querySelector(\"#info\");\n\nfunction focusItem(index) {\n  const count = items.length;\n  items[(index + count) % count].focus();\n}\n\n// listen for keydown on #menu; connect click to the buttons\ndocument.querySelector(\"#menu\").addEventListener(\"keydown\", (e) => {\n  const current = items.indexOf(e.target);\n  if (e.key === \"ArrowDown\") focusItem(current + 1);\n  if (e.key === \"ArrowUp\") focusItem(current - 1);\n});\n\nitems.forEach((item) => {\n  item.addEventListener(\"click\", () => {\n    info.textContent = `Selected: ${item.textContent}`;\n  });\n});\n",
+  "hints": [
+   "To wrap around, use the remainder: (index + count) % count",
+   "const current = items.indexOf(e.target);"
+  ],
+  "check": {
+   "code_contains": [
+    "focus()",
+    "keydown"
+   ]
+  }
+ },
+ "project_task": {
+  "title": "Mobile controls",
+  "prompt": "Let's make it playable on a phone too! In the old code, movement works only with the keyboard, and the logic is buried inside the event. Tidy it up:\n\n- `moveShip(dx)`: change `ship.x`; the ship must not leave the canvas (between 0 and `canvas.width - SHIP_SIZE`); then call `draw()`.\n- The keyboard (`ArrowLeft` / `ArrowRight`) and the on-screen `#btn-left` / `#btn-right` buttons should call the **same** `moveShip` (step: `STEP`).\n- Give the icon buttons an `aria-label`: `Left` and `Right`.",
+  "html": "<h1 id=\"title\">Star Hunter</h1>\n<canvas id=\"game\" width=\"300\" height=\"150\"></canvas>\n<div class=\"controls\"><button id=\"btn-left\">◀</button><button id=\"btn-right\">▶</button></div>\n",
+  "starter": "const canvas = document.querySelector(\"#game\");\nconst ctx = canvas.getContext(\"2d\");\nconst SHIP_SIZE = 30;\nconst STEP = 10;\nconst ship = { x: 135, y: 110 };\n\nfunction draw() {\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  ctx.fillStyle = \"#f7df1e\";\n  ctx.fillRect(ship.x, ship.y, SHIP_SIZE, SHIP_SIZE);\n}\n\n// Old code: movement only on the keyboard, and the logic is buried here\ndocument.addEventListener(\"keydown\", (e) => {\n  if (e.key === \"ArrowLeft\") ship.x -= STEP;\n  if (e.key === \"ArrowRight\") ship.x += STEP;\n  draw();\n});\n\n// 1) write moveShip(dx)  2) the keyboard and buttons call it  3) give aria-labels\n\ndraw();\n",
+  "solution": "const canvas = document.querySelector(\"#game\");\nconst ctx = canvas.getContext(\"2d\");\nconst SHIP_SIZE = 30;\nconst STEP = 10;\nconst ship = { x: 135, y: 110 };\n\nfunction draw() {\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  ctx.fillStyle = \"#f7df1e\";\n  ctx.fillRect(ship.x, ship.y, SHIP_SIZE, SHIP_SIZE);\n}\n\nfunction moveShip(dx) {\n  const maxX = canvas.width - SHIP_SIZE;\n  ship.x = Math.min(maxX, Math.max(0, ship.x + dx));\n  draw();\n}\n\ndocument.addEventListener(\"keydown\", (e) => {\n  if (e.key === \"ArrowLeft\") moveShip(-STEP);\n  if (e.key === \"ArrowRight\") moveShip(STEP);\n});\n\nconst leftBtn = document.querySelector(\"#btn-left\");\nconst rightBtn = document.querySelector(\"#btn-right\");\nleftBtn.setAttribute(\"aria-label\", \"Left\");\nrightBtn.setAttribute(\"aria-label\", \"Right\");\nleftBtn.addEventListener(\"click\", () => moveShip(-STEP));\nrightBtn.addEventListener(\"click\", () => moveShip(STEP));\n\ndraw();\n",
+  "hints": [
+   "function moveShip(dx) { ship.x = Math.min(maxX, Math.max(0, ship.x + dx)); draw(); }",
+   "Change the old keydown code so it calls moveShip(-STEP) / moveShip(STEP).",
+   "rightBtn.addEventListener(\"click\", () => moveShip(STEP));"
+  ],
+  "check": {
+   "code_contains": [
+    "function moveShip",
+    "aria-label",
+    "click"
+   ]
+  }
+ }
+}

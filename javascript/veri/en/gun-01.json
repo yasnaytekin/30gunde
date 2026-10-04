@@ -1,0 +1,26 @@
+{"day": 1, "title": "Meet JavaScript", "region": "kalkis", "project_contribution": "The game's title screen",
+ "objective": "Print with console.log, write comments and read error messages",
+ "story": "Welcome to Launch Base, captain! Your rocket is on the launch pad, but the control panel is waiting for your commands. The rocket speaks **JavaScript**: today you'll send it your first message.",
+ "sections": [
+  {"title": "What is JavaScript?", "body": "JavaScript is the programming language that brings web pages to life. The menu that opens when you press a button, the score in a game, your position on a map: JavaScript is behind most of them.\n\nJavaScript runs inside the browser, so you don't need to install anything special: your browser already understands it."},
+  {"title": "Talking with console.log", "body": "`console.log(...)` writes whatever you put inside the parentheses to the **Console**. Text goes inside quotes; numbers don't:\n\n```js\nconsole.log(\"Hello, world!\");\nconsole.log(42);\nconsole.log(3 + 4);\n```\n\nIf you give several values separated by commas, they're printed with spaces in between: `console.log(\"Fuel:\", 100)` prints `Fuel: 100`.\n\nThe `;` (semicolon) at the end of a line shows that the command is finished. It usually works without it, but writing it is a good habit."},
+  {"title": "Comments", "body": "Lines starting with `//` are **comments**: JavaScript doesn't read them; they're notes for you and your friends.\n\n```js\n// This line doesn't run, it's just a note\nconsole.log(\"This line runs\");\n/* A comment that spans\n   several lines looks like this */\n```"},
+  {"title": "An error message is a clue", "body": "If something is wrong in your code, you'll see a red error message. Don't worry: the message tells you **where** and **what** went wrong.\n\n```js\nconsle.log(\"Hello\");\n```\n\nThis code gives the error `consle is not defined`: `console` is misspelled. Look at the line number in the message, read that line carefully, fix it and run it again. Programmers spend a big part of their day doing exactly this."}
+ ],
+ "examples": [
+  {"title": "First signal", "code": "console.log(\"Hello, world!\");\nconsole.log(\"Rocket ready.\");\n", "note": "Run the code and look at the output in the Console."},
+  {"title": "Numbers and text", "code": "console.log(3 + 4);\nconsole.log(\"3 + 4\");\nconsole.log(\"Fuel:\", 100, \"liters\");\n", "note": "3 + 4 inside quotes isn't calculated; it's printed as it is."}
+ ],
+ "tasks": [
+  {"title": "First signal", "prompt": "Send exactly this message to mission control: `Hello, space!`", "starter": "// Write your message below\n", "solution": "// Write your message below\nconsole.log(\"Hello, space!\");\n",
+   "hints": ["Use console.log(...).", "The text must be in quotes: \"Hello, space!\"", "console.log(\"Hello, space!\");"], "check": {"code_contains": ["console.log"], "output_contains": ["Hello, space!"]}},
+  {"title": "Launch checklist", "prompt": "Before launch, print the checklist in order. Each line should be a separate `console.log`:\n\n```\nFuel: ok\nEngine: ok\nReady for launch!\n```", "starter": "console.log(\"Fuel: ok\");\n\n// Add the other two lines\n",
+   "solution": "console.log(\"Fuel: ok\");\nconsole.log(\"Engine: ok\");\nconsole.log(\"Ready for launch!\");\n", "hints": ["Write a separate console.log for each line.", "Order matters: first Engine, then Ready for launch!"], "check": {"code_contains": ["console.log"]}},
+  {"title": "Flight math", "prompt": "How many hours are there in a year? Don't calculate it yourself: let JavaScript do **`365 * 24`** inside `console.log`.", "starter": "// Print the result of 365 * 24\n", "solution": "// Print the result of 365 * 24\nconsole.log(365 * 24);\n",
+   "hints": ["The multiplication sign is the * (star) character.", "If you put the calculation in quotes, it won't be calculated!", "console.log(365 * 24);"], "check": {"code_contains": ["365", "24", "*"], "output_contains": ["8760"]}}
+ ],
+ "challenge": {"title": "Countdown in one line", "prompt": "Print these 4 lines using a single `console.log`:\n\n```\n3\n2\n1\nIgnition!\n```\n\nHint: `\\n` inside text starts a new line.", "starter": "// Use only one console.log\n",
+  "solution": "// Use only one console.log\nconsole.log(\"3\\n2\\n1\\nIgnition!\");\n", "hints": ["When \"a\\nb\" is printed, a and b land on separate lines.", "console.log(\"3\\n2\\n1\\nIgnition!\");"], "check": {"code_contains": ["\\n"]}},
+ "project_task": {"title": "Title screen", "prompt": "Let's print the title screen of our game **Star Hunter**. Print these three lines; on the second line, put your own name or nickname after `Pilot:`:\n\n```\n*** STAR HUNTER ***\nPilot: Alex\nMission: collect 10 stars!\n```", "starter": "// The game's title screen\n",
+  "solution": "// The game's title screen\nconsole.log(\"*** STAR HUNTER ***\");\nconsole.log(\"Pilot: Alex\");\nconsole.log(\"Mission: collect 10 stars!\");\n", "hints": ["You can write three separate console.log lines.", "The second line must start with \"Pilot: \" followed by your name."], "check": {"code_contains": ["console.log"]}}
+}

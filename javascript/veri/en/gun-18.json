@@ -1,0 +1,129 @@
+{
+ "day": 18,
+ "title": "Timers",
+ "region": "kusak",
+ "project_contribution": "Countdown timer",
+ "objective": "Schedule work with setTimeout, setInterval and clearInterval, and avoid overlapping timers",
+ "story": "In the Event Belt, time is an event too: a tick every second! Today you'll build countdowns, clocks and stopwatches with **timers**.",
+ "sections": [
+  {
+   "title": "setTimeout: a little later",
+   "body": "`setTimeout(function, ms)` runs the function **once**, after the number of milliseconds you give (1000 ms = 1 second):\n\n```js\nconsole.log(\"Countdown started\");\nsetTimeout(() => {\n  console.log(\"Liftoff!\");\n}, 1000);\nconsole.log(\"This line is printed first!\");\n```\n\n`setTimeout` doesn't wait: it puts the function aside to \"run later\" and the code carries on immediately. That's why the last line is printed before `Liftoff!`."
+  },
+  {
+   "title": "setInterval and clearInterval",
+   "body": "`setInterval(function, ms)` runs the function **again** every `ms` milliseconds, until you stop it:\n\n```js\nlet count = 0;\nconst timer = setInterval(() => {\n  count++;\n  console.log(\"Tick\", count);\n  if (count === 5) clearInterval(timer);\n}, 200);\n```\n\n`setInterval` returns an **ID number**; to stop the timer you give it to `clearInterval`. You can cancel a `setTimeout` with `clearTimeout` too."
+  },
+  {
+   "title": "Overlapping timers",
+   "body": "If the start button is pressed twice, **two separate** timers run and time flows twice as fast! The fix: if a timer is already running, don't start a new one (or stop the old one first):\n\n```js\nlet timer = null;\nfunction start() {\n  if (timer !== null) return; // already running\n  timer = setInterval(tick, 1000);\n}\nfunction stop() {\n  clearInterval(timer);\n  timer = null;\n}\n```\n\nPutting each step into a separate function like `tick()` is a good idea: you can call it by hand and test a single step. While testing, keep the interval short (e.g. `100` ms); when you're done, write the real value (`1000`)."
+  },
+  {
+   "title": "Date and time: Date",
+   "body": "`new Date()` gives you the current moment. You can take the hours, minutes and seconds from it:\n\n```js\nconst now = new Date();\nconst h = String(now.getHours()).padStart(2, \"0\");\nconst m = String(now.getMinutes()).padStart(2, \"0\");\nconsole.log(`${h}:${m}`); // e.g. 09:05\n```\n\n- `padStart(2, \"0\")` adds 0s to the front until the text is 2 characters long: `\"5\"` → `\"05\"`.\n- You can create a specific moment too: `new Date(2026, 0, 5, 9, 7, 3)` → 5 January 2026, 09:07:03. Months **start at 0** (January = 0)."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Delayed signal",
+   "code": "document.querySelector(\"#send\").addEventListener(\"click\", () => {\n  const info = document.querySelector(\"#info\");\n  info.textContent = \"Signal on its way...\";\n  setTimeout(() => {\n    info.textContent = \"The signal reached the Mars base!\";\n  }, 1000);\n});\n",
+   "note": "Press the button and wait 1 second.",
+   "html": "<button id=\"send\">Send signal</button>\n<p id=\"info\">Ready.</p>\n"
+  },
+  {
+   "title": "Live clock",
+   "code": "const clock = document.querySelector(\"#clock\");\n\nfunction showTime() {\n  clock.textContent = new Date().toLocaleTimeString(\"en-GB\");\n}\n\nshowTime(); // show it right away\nsetInterval(showTime, 1000); // then update it every second\n",
+   "note": "If you delete the showTime() line, the clock stays empty for the first second.",
+   "html": "<p>Base time: <strong id=\"clock\"></strong></p>"
+  }
+ ],
+ "tasks": [
+  {
+   "title": "Delayed launch",
+   "prompt": "When the `#launch` button is clicked:\n\n- `#info` immediately becomes `Getting ready...`,\n- and **200 ms later** (`setTimeout`) it becomes `Liftoff!`.",
+   "html": "<button id=\"launch\">Launch</button>\n<p id=\"info\">Standing by</p>\n",
+   "starter": "const info = document.querySelector(\"#info\");\n\n// listen to the click event and use setTimeout inside it\n\n",
+   "solution": "const info = document.querySelector(\"#info\");\n\n// listen to the click event and use setTimeout inside it\ndocument.querySelector(\"#launch\").addEventListener(\"click\", () => {\n  info.textContent = \"Getting ready...\";\n  setTimeout(() => {\n    info.textContent = \"Liftoff!\";\n  }, 200);\n});\n",
+   "hints": [
+    "setTimeout(() => { ... }, 200);",
+    "Write the first text right away, outside setTimeout."
+   ],
+   "check": {
+    "code_contains": [
+     "setTimeout"
+    ]
+   }
+  },
+  {
+   "title": "Flight time",
+   "prompt": "When the page opens, `count` goes up by 1 every **100 ms** and shows in `#count` (`setInterval`).\n\nWhen the `#stop` button is clicked, the timer stops (`clearInterval`).",
+   "html": "<p>Flight time: <span id=\"count\">0</span></p>\n<button id=\"stop\">Stop</button>\n",
+   "starter": "let count = 0;\nconst countEl = document.querySelector(\"#count\");\n\n// add to count every 100 ms\n\n// the Stop button stops the timer\n\n",
+   "solution": "let count = 0;\nconst countEl = document.querySelector(\"#count\");\n\n// add to count every 100 ms\nconst timer = setInterval(() => {\n  count++;\n  countEl.textContent = count;\n}, 100);\n\n// the Stop button stops the timer\ndocument.querySelector(\"#stop\").addEventListener(\"click\", () => {\n  clearInterval(timer);\n});\n",
+   "hints": [
+    "const timer = setInterval(() => { ... }, 100);",
+    "On click: clearInterval(timer);"
+   ],
+   "check": {
+    "code_contains": [
+     "setInterval",
+     "clearInterval"
+    ]
+   }
+  },
+  {
+   "title": "Blinking light",
+   "prompt": "The signal light `#light` blinks every **100 ms**: toggle the `on` class (`classList.toggle`) and add 1 to `blinks`.\n\nAfter 6 changes (`blinks === 6`) the timer stops. `#blinks` shows the number of changes.",
+   "html": "<div id=\"light\"></div>\n<p>Changes: <span id=\"blinks\">0</span></p>\n",
+   "starter": "const light = document.querySelector(\"#light\");\nlet blinks = 0;\n\n// toggle with setInterval, stop after 6 changes\n\n",
+   "solution": "const light = document.querySelector(\"#light\");\nlet blinks = 0;\n\n// toggle with setInterval, stop after 6 changes\nconst timer = setInterval(() => {\n  light.classList.toggle(\"on\");\n  blinks++;\n  document.querySelector(\"#blinks\").textContent = blinks;\n  if (blinks === 6) clearInterval(timer);\n}, 100);\n",
+   "hints": [
+    "light.classList.toggle(\"on\");",
+    "if (blinks === 6) clearInterval(timer);"
+   ],
+   "check": {
+    "code_contains": [
+     "setInterval",
+     "clearInterval",
+     "toggle"
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "title": "Stopwatch",
+  "prompt": "Build a stopwatch. `tenths` counts tenths of a second; `#watch` shows it like `2.3` (`(tenths / 10).toFixed(1)`).\n\n- `#start`: starts adding to `tenths` every 100 ms. If it's **already running**, it must not start a new timer!\n- `#stop`: stops the timer (`timer` becomes `null` again so it can be restarted).\n- `#reset`: stops it, sets `tenths` to 0 and shows `0.0`.",
+  "html": "<p id=\"watch\">0.0</p>\n<button id=\"start\">Start</button> <button id=\"stop\">Stop</button> <button id=\"reset\">Reset</button>\n",
+  "starter": "let tenths = 0;\nlet timer = null;\nconst watch = document.querySelector(\"#watch\");\n\nfunction show() {\n  watch.textContent = (tenths / 10).toFixed(1);\n}\n\n// listen to the Start, Stop and Reset buttons\n\n",
+  "solution": "let tenths = 0;\nlet timer = null;\nconst watch = document.querySelector(\"#watch\");\n\nfunction show() {\n  watch.textContent = (tenths / 10).toFixed(1);\n}\n\nfunction stop() {\n  clearInterval(timer);\n  timer = null;\n}\n\n// listen to the Start, Stop and Reset buttons\ndocument.querySelector(\"#start\").addEventListener(\"click\", () => {\n  if (timer !== null) return; // already running\n  timer = setInterval(() => {\n    tenths++;\n    show();\n  }, 100);\n});\ndocument.querySelector(\"#stop\").addEventListener(\"click\", stop);\ndocument.querySelector(\"#reset\").addEventListener(\"click\", () => {\n  stop();\n  tenths = 0;\n  show();\n});\n",
+  "hints": [
+   "if (timer !== null) return; stops it starting twice.",
+   "When stopping: clearInterval(timer); timer = null;"
+  ],
+  "check": {
+   "code_contains": [
+    "setInterval",
+    "clearInterval",
+    "null"
+   ]
+  }
+ },
+ "project_task": {
+  "title": "Countdown timer",
+  "prompt": "The game should last 10 seconds. Write two functions:\n\n- `tick()`: takes 1 from `timeLeft` (never below 0) and writes it into `#time`. When it reaches 0, it stops the timer (`clearInterval`) and writes `Time's up!` into `#info`.\n- `startTimer()`: first stops the old timer, sets `timeLeft` to 10 and writes it into `#time`, then starts the timer with `setInterval(tick, TICK_MS)`.\n\n`startTimer()` is already called when the form is submitted. To make it easy to test, `TICK_MS` is 100 ms for now; in the real game you'd use 1000.",
+  "html": "<h2 id=\"title\">Star Hunter</h2>\n<form id=\"pilot-form\"><input id=\"pilot-name\" placeholder=\"Pilot name\" autocomplete=\"off\"> <button>Start</button></form>\n<p id=\"info\">Type the pilot's name and start.</p>\n<p id=\"hud\">Score: <span id=\"score\">0</span> · Time: <span id=\"time\">10</span> · Best: <span id=\"best\">0</span></p>\n<div id=\"field\"><div id=\"ship\"></div></div>\n<div id=\"colors\"><button data-color=\"#f7df1e\">Yellow</button> <button data-color=\"#4dd0e1\">Turquoise</button> <button data-color=\"#ff6b6b\">Red</button></div>\n",
+  "starter": "const TICK_MS = 100; // 1000 (1 second) in the real game\nlet timeLeft = 10;\nlet timer = null;\nconst timeEl = document.querySelector(\"#time\");\nconst info = document.querySelector(\"#info\");\n\nfunction tick() {\n  // take 1 away (not below 0), write it into #time; at 0 stop and write \"Time's up!\"\n}\n\nfunction startTimer() {\n  // stop the old timer, set the time to 10, start it with setInterval\n}\n\ndocument.querySelector(\"#pilot-form\").addEventListener(\"submit\", (e) => {\n  e.preventDefault();\n  startTimer();\n});\n",
+  "solution": "const TICK_MS = 100; // 1000 (1 second) in the real game\nlet timeLeft = 10;\nlet timer = null;\nconst timeEl = document.querySelector(\"#time\");\nconst info = document.querySelector(\"#info\");\n\nfunction tick() {\n  // take 1 away (not below 0), write it into #time; at 0 stop and write \"Time's up!\"\n  if (timeLeft > 0) timeLeft--;\n  timeEl.textContent = timeLeft;\n  if (timeLeft === 0) {\n    clearInterval(timer);\n    timer = null;\n    info.textContent = \"Time's up!\";\n  }\n}\n\nfunction startTimer() {\n  // stop the old timer, set the time to 10, start it with setInterval\n  clearInterval(timer);\n  timeLeft = 10;\n  timeEl.textContent = timeLeft;\n  info.textContent = \"Collect the stars!\";\n  timer = setInterval(tick, TICK_MS);\n}\n\ndocument.querySelector(\"#pilot-form\").addEventListener(\"submit\", (e) => {\n  e.preventDefault();\n  startTimer();\n});\n",
+  "hints": [
+   "if (timeLeft > 0) timeLeft--;",
+   "The first line of startTimer: clearInterval(timer);",
+   "timer = setInterval(tick, TICK_MS);"
+  ],
+  "check": {
+   "code_contains": [
+    "setInterval",
+    "clearInterval"
+   ]
+  }
+ }
+}

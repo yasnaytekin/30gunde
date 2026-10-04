@@ -1,0 +1,134 @@
+{
+ "day": 13,
+ "title": "Introduction to the DOM",
+ "region": "dom",
+ "project_contribution": "Start screen",
+ "objective": "Find elements on the page with querySelector and change their text, classes, styles and attributes",
+ "story": "You've landed on Planet DOM! Everything here is a web page: headings, paragraphs, buttons. Today you'll learn to touch the page with JavaScript, that is, to change the **DOM**.",
+ "sections": [
+  {
+   "title": "What is the DOM?",
+   "body": "When the browser opens an HTML page, it reads it and turns it into a **tree**: every tag (`h1`, `p`, `button`...) becomes an **object**. This tree is called the **DOM** (Document Object Model). JavaScript can reach these objects and change them; the moment you change them, the page changes too.\n\nThe root of the tree is the `document` object. We reach everything on the page from there.\n\n**From today on, the tasks come with a page.** The page's HTML is given with every task; you only write the JavaScript. Create an `.html` file, put the given HTML inside `<body>`, put your code at the very bottom inside a `<script>` tag, and open the file in your browser. The code runs after the page has loaded, so all the elements are ready. `console.log` output appears in the **Console** tab of the Developer Tools. Under every page code in this book there's a screenshot showing what the page looks like when it opens."
+  },
+  {
+   "title": "Finding elements with querySelector",
+   "body": "`document.querySelector(\"selector\")` gives the **first** element that matches a CSS selector:\n\n```js\nconst title = document.querySelector(\"#title\");    // the one with id=\"title\"\nconst note = document.querySelector(\".note\");      // the first one with class=\"note\"\nconst firstItem = document.querySelector(\"ul li\"); // the first li inside ul\n```\n\nTo get **all** the matches, use `querySelectorAll`. It returns a list that you can walk through with `for...of` or `forEach`:\n\n```js\nconst planets = document.querySelectorAll(\".planet\");\nconsole.log(planets.length);\nfor (const p of planets) {\n  console.log(p.textContent);\n}\n```\n\nIf nothing matches the selector, `querySelector` returns `null`. If you see the error `Cannot set properties of null`, check the selector: did you put `#` for an id and `.` for a class?"
+  },
+  {
+   "title": "textContent and innerHTML",
+   "body": "`textContent` reads or changes the **text** inside an element:\n\n```js\nconst status = document.querySelector(\"#status\");\nconsole.log(status.textContent);       // the old text\nstatus.textContent = \"Landing done!\";  // the new text\n```\n\n`innerHTML` interprets the text you give it **as HTML**: `box.innerHTML = \"<b>Bold</b>\"` really produces bold text.\n\n**Safety note:** never put text that a user typed onto the page with `innerHTML`; someone could hide harmful HTML or code inside it. Use `textContent` to show text. That's what we'll always use in this course."
+  },
+  {
+   "title": "classList, style and attributes",
+   "body": "The cleanest way to change how something looks is to add or remove a **class**; CSS says what the class looks like:\n\n```js\nconst panel = document.querySelector(\"#panel\");\npanel.classList.add(\"active\");      // add\npanel.classList.remove(\"hidden\");   // remove\npanel.classList.toggle(\"dark\");     // remove if it's there, add if not\npanel.classList.contains(\"active\"); // true\n```\n\nYou can also set a single style directly. Dashed CSS names become camelCase here (`background-color` → `backgroundColor`):\n\n```js\npanel.style.color = \"#d63384\";\npanel.style.backgroundColor = \"#0b1026\";\n```\n\nFor HTML **attributes** like `href`, `src`, `disabled`, `data-...`:\n\n```js\nconst link = document.querySelector(\"#docs\");\nlink.getAttribute(\"href\");                                  // read\nlink.setAttribute(\"href\", \"https://developer.mozilla.org\"); // change\nconst btn = document.querySelector(\"#launch\");\nbtn.removeAttribute(\"disabled\");                            // remove\n```"
+  }
+ ],
+ "examples": [
+  {
+   "title": "Change the heading",
+   "code": "const title = document.querySelector(\"#title\");\ntitle.textContent = \"Hello, Planet DOM!\";\ntitle.style.color = \"#d63384\";\n\nconst note = document.querySelector(\".note\");\nnote.textContent = \"JavaScript wrote this line.\";\nnote.classList.add(\"big\");\n\nconsole.log(\"Heading:\", title.textContent);\n",
+   "note": "Change the code and reload the page; the browser rebuilds the page from scratch every time.",
+   "html": "<h1 id=\"title\">Hello</h1>\n<p class=\"note\">This text will be changed by JavaScript.</p>\n"
+  },
+  {
+   "title": "Mark them all",
+   "code": "const planets = document.querySelectorAll(\".planet\");\nconsole.log(\"Number of planets:\", planets.length);\n\nfor (const p of planets) {\n  p.classList.add(\"visited\");\n  p.textContent = p.textContent + \" (visited)\";\n}\n\nconst link = document.querySelector(\"#link\");\nlink.setAttribute(\"href\", \"https://developer.mozilla.org\");\nconsole.log(\"Link:\", link.getAttribute(\"href\"));\n",
+   "note": "querySelectorAll gives a list; with for...of we touch every element one by one.",
+   "html": "<ul>\n  <li class=\"planet\">Mercury</li>\n  <li class=\"planet\">Venus</li>\n  <li class=\"planet\">Mars</li>\n</ul>\n<a id=\"link\" href=\"#\">Docs</a>\n"
+  }
+ ],
+ "tasks": [
+  {
+   "title": "First touch",
+   "prompt": "Change the text of the heading (`#title`) to `Planet DOM` and the status paragraph (`#status`) to `Landing done!`. Use `textContent`.",
+   "html": "<h1 id=\"title\">Mission Control</h1>\n<p id=\"status\">Waiting...</p>\n<div id=\"panel\" class=\"box hidden\">Hidden panel: route ready.</div>\n<ul id=\"planets\">\n  <li class=\"planet\">Mercury</li>\n  <li class=\"planet\">Venus</li>\n  <li class=\"planet\">Mars</li>\n  <li class=\"planet\">Jupiter</li>\n</ul>\n<p><a id=\"docs\" href=\"#\">Docs</a> <button id=\"launch\" data-fuel=\"80\" disabled>Launch</button></p>\n",
+   "starter": "const title = document.querySelector(\"#title\");\n\n// change the text of title and #status\n\n",
+   "solution": "const title = document.querySelector(\"#title\");\n\n// change the text of title and #status\ntitle.textContent = \"Planet DOM\";\ndocument.querySelector(\"#status\").textContent = \"Landing done!\";\n",
+   "hints": [
+    "title.textContent = \"Planet DOM\";",
+    "For #status use document.querySelector(\"#status\") too."
+   ],
+   "check": {
+    "code_contains": [
+     "querySelector",
+     "textContent"
+    ]
+   }
+  },
+  {
+   "title": "Class and style",
+   "prompt": "Get the panel ready:\n\n1. Add the `active` class to `#status`.\n2. Remove the `hidden` class from `#panel` (so the panel shows).\n3. Set the text color of `#title` to `#d63384` with `style`.",
+   "html": "<h1 id=\"title\">Mission Control</h1>\n<p id=\"status\">Waiting...</p>\n<div id=\"panel\" class=\"box hidden\">Hidden panel: route ready.</div>\n<ul id=\"planets\">\n  <li class=\"planet\">Mercury</li>\n  <li class=\"planet\">Venus</li>\n  <li class=\"planet\">Mars</li>\n  <li class=\"planet\">Jupiter</li>\n</ul>\n<p><a id=\"docs\" href=\"#\">Docs</a> <button id=\"launch\" data-fuel=\"80\" disabled>Launch</button></p>\n",
+   "starter": "const status = document.querySelector(\"#status\");\nconst panel = document.querySelector(\"#panel\");\nconst title = document.querySelector(\"#title\");\n\n// add a class, remove a class, change the color\n\n",
+   "solution": "const status = document.querySelector(\"#status\");\nconst panel = document.querySelector(\"#panel\");\nconst title = document.querySelector(\"#title\");\n\n// add a class, remove a class, change the color\nstatus.classList.add(\"active\");\npanel.classList.remove(\"hidden\");\ntitle.style.color = \"#d63384\";\n",
+   "hints": [
+    "status.classList.add(\"active\");",
+    "panel.classList.remove(\"hidden\");",
+    "title.style.color = \"#d63384\";"
+   ],
+   "check": {
+    "code_contains": [
+     "classList.add",
+     "classList.remove",
+     "style.color"
+    ]
+   }
+  },
+  {
+   "title": "All the planets",
+   "prompt": "Get all the `.planet` elements with `querySelectorAll` and add the `visited` class to each one with a loop.\n\nThen write the number of planets into `#status`: `4 planets visited`. Don't type the number yourself; use the list's `length`.",
+   "html": "<h1 id=\"title\">Mission Control</h1>\n<p id=\"status\">Waiting...</p>\n<div id=\"panel\" class=\"box hidden\">Hidden panel: route ready.</div>\n<ul id=\"planets\">\n  <li class=\"planet\">Mercury</li>\n  <li class=\"planet\">Venus</li>\n  <li class=\"planet\">Mars</li>\n  <li class=\"planet\">Jupiter</li>\n</ul>\n<p><a id=\"docs\" href=\"#\">Docs</a> <button id=\"launch\" data-fuel=\"80\" disabled>Launch</button></p>\n",
+   "starter": "const planets = document.querySelectorAll(\".planet\");\n\n// add visited to every planet\n\n// write the number of planets into #status\n\n",
+   "solution": "const planets = document.querySelectorAll(\".planet\");\n\n// add visited to every planet\nfor (const p of planets) {\n  p.classList.add(\"visited\");\n}\n\n// write the number of planets into #status\ndocument.querySelector(\"#status\").textContent = `${planets.length} planets visited`;\n",
+   "hints": [
+    "for (const p of planets) { p.classList.add(\"visited\"); }",
+    "planets.length gives the number of planets.",
+    "`${planets.length} planets visited`"
+   ],
+   "check": {
+    "code_contains": [
+     "querySelectorAll",
+     "classList.add",
+     "length"
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "title": "Launch permission",
+  "prompt": "The fuel of the launch button (`#launch`) is in its `data-fuel` attribute. Write the `updateLaunch()` function:\n\n- Read `data-fuel` with `getAttribute` and turn it into a number.\n- If fuel is 50 or more: remove the button's `disabled` attribute and write `Ready for launch (fuel 80)` into `#status`.\n- If it's less: put the `disabled` attribute on the button (`setAttribute(\"disabled\", \"\")`) and write `Not enough fuel (fuel 30)` into `#status`.\n\nAlso set the `href` attribute of the `#docs` link to `https://developer.mozilla.org`.",
+  "html": "<h1 id=\"title\">Mission Control</h1>\n<p id=\"status\">Waiting...</p>\n<div id=\"panel\" class=\"box hidden\">Hidden panel: route ready.</div>\n<ul id=\"planets\">\n  <li class=\"planet\">Mercury</li>\n  <li class=\"planet\">Venus</li>\n  <li class=\"planet\">Mars</li>\n  <li class=\"planet\">Jupiter</li>\n</ul>\n<p><a id=\"docs\" href=\"#\">Docs</a> <button id=\"launch\" data-fuel=\"80\" disabled>Launch</button></p>\n",
+  "starter": "const launch = document.querySelector(\"#launch\");\nconst status = document.querySelector(\"#status\");\n\nfunction updateLaunch() {\n  // read data-fuel, turn it into a number, update the button and #status\n}\n\nupdateLaunch();\n\n// change the href attribute of the #docs link\n\n",
+  "solution": "const launch = document.querySelector(\"#launch\");\nconst status = document.querySelector(\"#status\");\n\nfunction updateLaunch() {\n  // read data-fuel, turn it into a number, update the button and #status\n  const fuel = Number(launch.getAttribute(\"data-fuel\"));\n  if (fuel >= 50) {\n    launch.removeAttribute(\"disabled\");\n    status.textContent = `Ready for launch (fuel ${fuel})`;\n  } else {\n    launch.setAttribute(\"disabled\", \"\");\n    status.textContent = `Not enough fuel (fuel ${fuel})`;\n  }\n}\n\nupdateLaunch();\n\n// change the href attribute of the #docs link\ndocument.querySelector(\"#docs\").setAttribute(\"href\", \"https://developer.mozilla.org\");\n",
+  "hints": [
+   "const fuel = Number(launch.getAttribute(\"data-fuel\"));",
+   "launch.removeAttribute(\"disabled\");",
+   "Write the fuel from the variable: `Ready for launch (fuel ${fuel})`"
+  ],
+  "check": {
+   "code_contains": [
+    "getAttribute",
+    "setAttribute"
+   ]
+  }
+ },
+ "project_task": {
+  "title": "Start screen",
+  "prompt": "Fill in the game's start screen. Write the `showStart(g)` function:\n\n- It writes `g.title` into `#game-title`, `g.pilot` into `#pilot` and `g.level` into `#level` (`textContent`).\n- It adds the `ready` class to the start button (`#start-btn`).\n\nDon't type the texts yourself; always take them from the `g` object.",
+  "html": "<div id=\"start-screen\" class=\"screen\">\n  <h1 id=\"game-title\">Game</h1>\n  <p>Pilot: <span id=\"pilot\">?</span></p>\n  <p>Level: <span id=\"level\">?</span></p>\n  <button id=\"start-btn\">Start</button>\n</div>\n<div id=\"game-panel\" class=\"screen hidden\">\n  <p id=\"hud\">Score: 0</p>\n  <h2>Inventory</h2>\n  <ul id=\"inventory\"></ul>\n</div>\n",
+  "starter": "const game = { title: \"Star Hunter\", pilot: \"Ada\", level: 1 };\n\nfunction showStart(g) {\n  // find the elements and fill them with the info in g\n}\n\nshowStart(game);\n",
+  "solution": "const game = { title: \"Star Hunter\", pilot: \"Ada\", level: 1 };\n\nfunction showStart(g) {\n  // find the elements and fill them with the info in g\n  document.querySelector(\"#game-title\").textContent = g.title;\n  document.querySelector(\"#pilot\").textContent = g.pilot;\n  document.querySelector(\"#level\").textContent = g.level;\n  document.querySelector(\"#start-btn\").classList.add(\"ready\");\n}\n\nshowStart(game);\n",
+  "hints": [
+   "document.querySelector(\"#game-title\").textContent = g.title;",
+   "Do the same for #pilot and #level.",
+   "classList.add(\"ready\")"
+  ],
+  "check": {
+   "code_contains": [
+    "querySelector",
+    "textContent",
+    "classList.add"
+   ]
+  }
+ }
+}

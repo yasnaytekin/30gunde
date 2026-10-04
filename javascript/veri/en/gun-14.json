@@ -1,0 +1,130 @@
+{
+ "day": 14,
+ "title": "Events",
+ "region": "dom",
+ "project_contribution": "Start button",
+ "objective": "Listen to click and typing events with addEventListener, and use e.target and event delegation",
+ "story": "On Planet DOM everything is waiting to react to you. A button being pressed, a letter being typed into a box: these are all **events**. Today you turn your page into a living control panel that listens to events.",
+ "sections": [
+  {
+   "title": "addEventListener: listen for an event",
+   "body": "A click, a key press, typing into a box... Everything that happens on a page is an **event**. `addEventListener` tells an element \"when this event happens, run this function\":\n\n```js\nconst btn = document.querySelector(\"#start\");\nbtn.addEventListener(\"click\", () => {\n  console.log(\"Clicked!\");\n});\n```\n\nThe function doesn't run right away; it runs **every time** the event happens. Open the page and click the button yourself to try it.\n\nCareful: when you pass a named function, don't add parentheses. `btn.addEventListener(\"click\", launch)` is right; if you write `launch()`, the function runs once immediately and doesn't listen for clicks."
+  },
+  {
+   "title": "The event object and e.target",
+   "body": "The browser gives the listener function an **event object**, usually called `e`. Its most used property is `e.target`: the element where the event happened.\n\n```js\nconst buttons = document.querySelectorAll(\".planet-btn\");\nfor (const b of buttons) {\n  b.addEventListener(\"click\", (e) => {\n    console.log(\"Chosen:\", e.target.textContent);\n  });\n}\n```\n\n`e.type` gives the event's name (`\"click\"`). You can attach the same function to many buttons and find out which one was clicked with `e.target`."
+  },
+  {
+   "title": "The input event and state",
+   "body": "Every time a letter is typed into an `<input>` box, an `input` event happens. The text in the box is in the `value` property:\n\n```js\nconst nameBox = document.querySelector(\"#name\");\nnameBox.addEventListener(\"input\", () => {\n  document.querySelector(\"#hello\").textContent = \"Hello, \" + nameBox.value;\n});\n```\n\nOn interactive pages we keep data in a variable; this is called **state**. An event changes the state, then we update the screen from the state:\n\n```js\nlet lives = 3;\nhitBtn.addEventListener(\"click\", () => {\n  lives--;                                   // 1) change the state\n  livesText.textContent = \"Lives: \" + lives; // 2) update the screen\n});\n```"
+  },
+  {
+   "title": "Removing a listener and event delegation",
+   "body": "To remove a listener, call `removeEventListener` with the same event name and **the same function**; that's why we give the function a name:\n\n```js\nfunction onLaunch() {\n  console.log(\"Launch!\");\n  btn.removeEventListener(\"click\", onLaunch); // won't run again\n}\nbtn.addEventListener(\"click\", onLaunch);\n```\n\nThe shortcut: `btn.addEventListener(\"click\", onLaunch, { once: true })`.\n\n**Event delegation**: a click event starts at the clicked element and **bubbles up** to the elements around it. So instead of adding a separate listener to every button, you can add **one** listener to the element that contains them:\n\n```js\nconst menu = document.querySelector(\"#menu\");\nmenu.addEventListener(\"click\", (e) => {\n  if (e.target.tagName !== \"BUTTON\") return; // ignore it if it's not a button\n  console.log(\"Route:\", e.target.textContent);\n});\n```\n\nThe nice part: buttons **added to the menu later** work too. That will be really useful tomorrow when you create elements with code."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Counter button",
+   "code": "let count = 0;\nconst btn = document.querySelector(\"#btn\");\n\nbtn.addEventListener(\"click\", (e) => {\n  count++;\n  document.querySelector(\"#info\").textContent = `${count} clicks`;\n  console.log(\"Clicked:\", e.target.textContent);\n});\n",
+   "note": "Open the page and click the button a few times.",
+   "html": "<button id=\"btn\">Click</button>\n<p id=\"info\">0 clicks</p>\n"
+  },
+  {
+   "title": "Live preview and colors",
+   "code": "const input = document.querySelector(\"#name\");\nconst hello = document.querySelector(\"#hello\");\n\ninput.addEventListener(\"input\", () => {\n  hello.textContent = \"Hello, \" + input.value + \"!\";\n});\n\nconst colors = { red: \"#d1242f\", blue: \"#1f6feb\", green: \"#1a7f37\" };\ndocument.querySelector(\"#colors\").addEventListener(\"click\", (e) => {\n  if (e.target.tagName !== \"BUTTON\") return;\n  hello.style.color = colors[e.target.textContent];\n});\n",
+   "note": "Type into the box, then click the color buttons. One listener handles all the color buttons.",
+   "html": "<input id=\"name\" placeholder=\"Type your name\">\n<p id=\"hello\">Hello!</p>\n<div id=\"colors\"><button>red</button> <button>blue</button> <button>green</button></div>\n"
+  }
+ ],
+ "tasks": [
+  {
+   "title": "Speed control",
+   "prompt": "Manage the `speed` state with buttons:\n\n- When `#boost` (Speed up) is clicked, `speed` goes up by 10.\n- When `#brake` (Slow down) is clicked, it goes down by 10, but **never below 0**.\n- After every click, `#speed` shows the new speed.",
+   "html": "<h1 id=\"title\">Control Panel</h1>\n<p id=\"info\">Ready.</p>\n<p>Speed: <span id=\"speed\">0</span></p>\n<p><button id=\"boost\">Speed up</button> <button id=\"brake\">Slow down</button> <button id=\"launch\">Launch</button></p>\n<p><input id=\"call-sign\" placeholder=\"Your call sign\"></p>\n<p id=\"preview\"></p>\n<ul id=\"menu\">\n  <li><button>Mars</button></li>\n  <li><button>Venus</button></li>\n  <li><button>Jupiter</button></li>\n</ul>\n",
+   "starter": "let speed = 0;\nconst speedText = document.querySelector(\"#speed\");\n\n// listen to the #boost and #brake buttons\n\n",
+   "solution": "let speed = 0;\nconst speedText = document.querySelector(\"#speed\");\n\n// listen to the #boost and #brake buttons\ndocument.querySelector(\"#boost\").addEventListener(\"click\", () => {\n  speed += 10;\n  speedText.textContent = speed;\n});\n\ndocument.querySelector(\"#brake\").addEventListener(\"click\", () => {\n  speed = Math.max(0, speed - 10);\n  speedText.textContent = speed;\n});\n",
+   "hints": [
+    "document.querySelector(\"#boost\").addEventListener(\"click\", () => { ... })",
+    "To stay at 0 or above: if (speed > 0) speed -= 10;",
+    "Then speedText.textContent = speed;"
+   ],
+   "check": {
+    "code_contains": [
+     "addEventListener"
+    ]
+   }
+  },
+  {
+   "title": "Call sign",
+   "prompt": "Every time something is typed into the `#call-sign` box (the `input` event), the `#preview` paragraph should show the call sign **in capitals**:\n\ntyping `eagle` → `Call sign: EAGLE`\n\nHint: remember the `toUpperCase()` method that turns text into capitals.",
+   "html": "<h1 id=\"title\">Control Panel</h1>\n<p id=\"info\">Ready.</p>\n<p>Speed: <span id=\"speed\">0</span></p>\n<p><button id=\"boost\">Speed up</button> <button id=\"brake\">Slow down</button> <button id=\"launch\">Launch</button></p>\n<p><input id=\"call-sign\" placeholder=\"Your call sign\"></p>\n<p id=\"preview\"></p>\n<ul id=\"menu\">\n  <li><button>Mars</button></li>\n  <li><button>Venus</button></li>\n  <li><button>Jupiter</button></li>\n</ul>\n",
+   "starter": "const callSign = document.querySelector(\"#call-sign\");\nconst preview = document.querySelector(\"#preview\");\n\n// listen to the input event\n\n",
+   "solution": "const callSign = document.querySelector(\"#call-sign\");\nconst preview = document.querySelector(\"#preview\");\n\n// listen to the input event\ncallSign.addEventListener(\"input\", () => {\n  preview.textContent = \"Call sign: \" + callSign.value.toUpperCase();\n});\n",
+   "hints": [
+    "callSign.addEventListener(\"input\", () => { ... })",
+    "The text in the box: callSign.value",
+    "callSign.value.toUpperCase()"
+   ],
+   "check": {
+    "code_contains": [
+     "addEventListener",
+     "input",
+     "value"
+    ]
+   }
+  },
+  {
+   "title": "One-time launch",
+   "prompt": "The launch can only happen **once**. Complete the `onLaunch` function:\n\n- `launches` goes up by 1 and `#info` shows `Launch! Engines running.`\n- Then it removes itself with `removeEventListener`; a second click does nothing.",
+   "html": "<h1 id=\"title\">Control Panel</h1>\n<p id=\"info\">Ready.</p>\n<p>Speed: <span id=\"speed\">0</span></p>\n<p><button id=\"boost\">Speed up</button> <button id=\"brake\">Slow down</button> <button id=\"launch\">Launch</button></p>\n<p><input id=\"call-sign\" placeholder=\"Your call sign\"></p>\n<p id=\"preview\"></p>\n<ul id=\"menu\">\n  <li><button>Mars</button></li>\n  <li><button>Venus</button></li>\n  <li><button>Jupiter</button></li>\n</ul>\n",
+   "starter": "let launches = 0;\nconst launchBtn = document.querySelector(\"#launch\");\n\nfunction onLaunch() {\n  // add to launches, write to #info, remove the listener\n}\n\nlaunchBtn.addEventListener(\"click\", onLaunch);\n",
+   "solution": "let launches = 0;\nconst launchBtn = document.querySelector(\"#launch\");\n\nfunction onLaunch() {\n  // add to launches, write to #info, remove the listener\n  launches++;\n  document.querySelector(\"#info\").textContent = \"Launch! Engines running.\";\n  launchBtn.removeEventListener(\"click\", onLaunch);\n}\n\nlaunchBtn.addEventListener(\"click\", onLaunch);\n",
+   "hints": [
+    "launches++;",
+    "launchBtn.removeEventListener(\"click\", onLaunch);"
+   ],
+   "check": {
+    "code_contains": [
+     "removeEventListener"
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "title": "One listener",
+  "prompt": "Use **event delegation** for the route menu (`#menu`): add **one** `click` listener to `#menu`, not to the buttons.\n\n- If a button was clicked, write `Route: Mars` into `#info` (from the button's text).\n- Add the `selected` class to the clicked button and remove it from the other buttons in the menu.\n- If something other than a button was clicked, do nothing.\n\nTry adding a new button to the menu later and clicking it too!",
+  "html": "<h1 id=\"title\">Control Panel</h1>\n<p id=\"info\">Ready.</p>\n<p>Speed: <span id=\"speed\">0</span></p>\n<p><button id=\"boost\">Speed up</button> <button id=\"brake\">Slow down</button> <button id=\"launch\">Launch</button></p>\n<p><input id=\"call-sign\" placeholder=\"Your call sign\"></p>\n<p id=\"preview\"></p>\n<ul id=\"menu\">\n  <li><button>Mars</button></li>\n  <li><button>Venus</button></li>\n  <li><button>Jupiter</button></li>\n</ul>\n",
+  "starter": "const menu = document.querySelector(\"#menu\");\n\n// add ONE click listener to menu; find the clicked button with e.target\n\n",
+  "solution": "const menu = document.querySelector(\"#menu\");\n\n// add ONE click listener to menu; find the clicked button with e.target\nmenu.addEventListener(\"click\", (e) => {\n  if (e.target.tagName !== \"BUTTON\") return;\n  for (const b of menu.querySelectorAll(\"button\")) {\n    b.classList.remove(\"selected\");\n  }\n  e.target.classList.add(\"selected\");\n  document.querySelector(\"#info\").textContent = `Route: ${e.target.textContent}`;\n});\n",
+  "hints": [
+   "menu.addEventListener(\"click\", (e) => { ... })",
+   "if (e.target.tagName !== \"BUTTON\") return;",
+   "First remove selected from every button, then add it to e.target."
+  ],
+  "check": {
+   "code_contains": [
+    "addEventListener",
+    "e.target"
+   ]
+  }
+ },
+ "project_task": {
+  "title": "Start button",
+  "prompt": "Now the start button (`#start-btn`) should work. When it's clicked:\n\n- add the `hidden` class to `#start-screen` (the start screen disappears),\n- remove the `hidden` class from `#game-panel` (the game panel shows),\n- write `Score: 0 | Pilot: Ada` into `#hud` (the pilot's name comes from `game.pilot`).",
+  "html": "<div id=\"start-screen\" class=\"screen\">\n  <h1 id=\"game-title\">Game</h1>\n  <p>Pilot: <span id=\"pilot\">?</span></p>\n  <p>Level: <span id=\"level\">?</span></p>\n  <button id=\"start-btn\">Start</button>\n</div>\n<div id=\"game-panel\" class=\"screen hidden\">\n  <p id=\"hud\">Score: 0</p>\n  <h2>Inventory</h2>\n  <ul id=\"inventory\"></ul>\n</div>\n",
+  "starter": "const game = { title: \"Star Hunter\", pilot: \"Ada\", level: 1 };\n\nfunction showStart(g) {\n  document.querySelector(\"#game-title\").textContent = g.title;\n  document.querySelector(\"#pilot\").textContent = g.pilot;\n  document.querySelector(\"#level\").textContent = g.level;\n  document.querySelector(\"#start-btn\").classList.add(\"ready\");\n}\nshowStart(game);\n\n// switch screens when the Start button is clicked\n\n",
+  "solution": "const game = { title: \"Star Hunter\", pilot: \"Ada\", level: 1 };\n\nfunction showStart(g) {\n  document.querySelector(\"#game-title\").textContent = g.title;\n  document.querySelector(\"#pilot\").textContent = g.pilot;\n  document.querySelector(\"#level\").textContent = g.level;\n  document.querySelector(\"#start-btn\").classList.add(\"ready\");\n}\nshowStart(game);\n\n// switch screens when the Start button is clicked\ndocument.querySelector(\"#start-btn\").addEventListener(\"click\", () => {\n  document.querySelector(\"#start-screen\").classList.add(\"hidden\");\n  document.querySelector(\"#game-panel\").classList.remove(\"hidden\");\n  document.querySelector(\"#hud\").textContent = `Score: 0 | Pilot: ${game.pilot}`;\n});\n",
+  "hints": [
+   "document.querySelector(\"#start-btn\").addEventListener(\"click\", () => { ... })",
+   "classList.add(\"hidden\") and classList.remove(\"hidden\")",
+   "`Score: 0 | Pilot: ${game.pilot}`"
+  ],
+  "check": {
+   "code_contains": [
+    "addEventListener",
+    "classList"
+   ]
+  }
+ }
+}

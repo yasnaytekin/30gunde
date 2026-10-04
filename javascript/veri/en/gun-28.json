@@ -1,0 +1,124 @@
+{
+ "day": 28,
+ "title": "Clean code",
+ "region": "yildiz",
+ "project_contribution": "Tidying up the code",
+ "objective": "Tidy up code with meaningful names, small functions, constants, early returns and destructuring",
+ "story": "The light of the JavaScript Star is in sight, captain! Master captains write code that doesn't just work but is also **easy to read**. Today we'll tidy up messy code and learn to write **clean code**.",
+ "sections": [
+  {
+   "title": "Names should tell you something",
+   "body": "```js\n// Hard to understand\nconst d = 7;\nfunction c(a) { return a * 24; }\n\n// Explains itself\nconst daysLeft = 7;\nfunction daysToHours(days) { return days * 24; }\n```\n\n- A variable's name should say **what** it holds: `score`, `playerName`.\n- Variables that hold true/false should read like a question: `isReady`, `hasKey`, `canLaunch`.\n- A function's name should be a **verb**: `loadTasks`, `drawShip`, `calculateScore`.\n- Avoid unclear abbreviations: everyone knows `btn`, but nobody knows `plNm`."
+  },
+  {
+   "title": "Small functions, no repetition",
+   "body": "Each function should have **one job**. If you say \"and\" while describing a function, maybe it's really two functions.\n\nIf you've copied the same code twice, stop and turn it into a function. This is called **DRY** (Don't Repeat Yourself):\n\n```js\n// Repetition\nconsole.log(\"*** \" + \"moon\".toUpperCase() + \" ***\");\nconsole.log(\"*** \" + \"mars\".toUpperCase() + \" ***\");\n\n// One function\nfunction banner(text) {\n  return `*** ${text.toUpperCase()} ***`;\n}\n[\"moon\", \"mars\"].forEach((p) => console.log(banner(p)));\n```\n\nNow when something needs to change, you fix it in just one place."
+  },
+  {
+   "title": "Magic numbers and early returns",
+   "body": "Unexplained numbers in the middle of code are called **magic numbers**: when you write `if (d > 1000)`, nobody knows why it's 1000. Give them names. It's a common habit to write settings that never change in CAPITAL_LETTERS:\n\n```js\nconst MIN_FUEL = 50;\nconst STAR_POINTS = 10;\n```\n\nInstead of nested `if`s, use an **early return**: first rule out the problem cases and leave the function, and leave the main job for the end:\n\n```js\nfunction canLaunch(ship) {\n  if (!ship) return \"No ship\";\n  if (ship.fuel < MIN_FUEL) return \"Low fuel\";\n  return \"Launch!\";\n}\n```"
+  },
+  {
+   "title": "Destructuring, default values and comments",
+   "body": "**Destructuring** takes values out of an object or array in one line:\n\n```js\nconst ship = { name: \"Eagle\", speed: 12 };\nconst { name, speed } = ship;\nconst [first, second] = [\"Moon\", \"Mars\", \"Venus\"];\n```\n\nIt also works in parameters, and can have **default values**:\n\n```js\nfunction createShip({ name = \"Scout\", speed = 10 } = {}) {\n  return { name, speed };\n}\ncreateShip();              // { name: \"Scout\", speed: 10 }\ncreateShip({ speed: 20 }); // { name: \"Scout\", speed: 20 }\n```\n\nThe short form `{ name, speed }` means `{ name: name, speed: speed }`.\n\nA good comment explains **why** the code does something, not **what** it does. `// add 1 to x` is useless; `// we start at 0 because the first round is a warm-up` is helpful."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Before and after",
+   "code": "// Before: it's not clear what it does\nfunction x(a, b) { return a * 10 + (b ? 50 : 0); }\nconsole.log(x(3, true));\n\n// After: the same job, in a readable form\nconst STAR_POINTS = 10;\nconst BONUS_POINTS = 50;\n\nfunction calculateScore(stars, hasBonus) {\n  const bonus = hasBonus ? BONUS_POINTS : 0;\n  return stars * STAR_POINTS + bonus;\n}\nconsole.log(calculateScore(3, true));\n",
+   "note": "Both lines print 80: the behavior is the same, but they read very differently."
+  },
+  {
+   "title": "Destructuring and default values",
+   "code": "const pilot = { name: \"Sam\", level: 4, ship: \"Eagle\" };\nconst { name, ship } = pilot;\nconsole.log(`${name} is on the ship ${ship}.`);\n\nconst [gold, silver] = [\"Ada\", \"Ben\", \"Eve\"];\nconsole.log(\"First:\", gold, \"| Second:\", silver);\n\nfunction greet({ name, level = 1 }) {\n  return `Hello ${name}, level ${level}`;\n}\nconsole.log(greet(pilot));\nconsole.log(greet({ name: \"Max\" }));\n",
+   "note": "Max's level wasn't given, so the default value (1) was used."
+  }
+ ],
+ "tasks": [
+  {
+   "title": "Give magic numbers a name",
+   "prompt": "The `f` below works, but it's hard to tell what it does: it calculates the fuel needed for a trip. Write a clean version that does the same job:\n\n- Constants: `FUEL_PER_KM = 3`, `LONG_TRIP_KM = 1000`, `LONG_TRIP_EXTRA = 200`\n- `fuelNeeded(distanceKm)`: multiply by the fuel per km; if the trip is longer than `LONG_TRIP_KM`, add `LONG_TRIP_EXTRA`. The numbers 3, 1000 and 200 must **not** appear inside it; use the constants.\n- At the end, print the results of `fuelNeeded(500)` and `fuelNeeded(2000)` (1500 and 6200).",
+   "starter": "function f(d) {\n  let r = d * 3;\n  if (d > 1000) {\n    r = r + 200;\n  }\n  return r;\n}\n\nconsole.log(f(500));\nconsole.log(f(2000));\n",
+   "solution": "const FUEL_PER_KM = 3;\nconst LONG_TRIP_KM = 1000;\nconst LONG_TRIP_EXTRA = 200;\n\nfunction fuelNeeded(distanceKm) {\n  const extra = distanceKm > LONG_TRIP_KM ? LONG_TRIP_EXTRA : 0;\n  return distanceKm * FUEL_PER_KM + extra;\n}\n\nconsole.log(fuelNeeded(500));\nconsole.log(fuelNeeded(2000));\n",
+   "hints": [
+    "Write three constants like const FUEL_PER_KM = 3;",
+    "const extra = distanceKm > LONG_TRIP_KM ? LONG_TRIP_EXTRA : 0;"
+   ],
+   "check": {
+    "code_contains": [
+     "const FUEL_PER_KM",
+     "function fuelNeeded"
+    ]
+   }
+  },
+  {
+   "title": "Remove the repetition",
+   "prompt": "This code copies the same line three times. Clean it up:\n\n- `banner(name)`: **return** a text like `*** MARS ***` (use `toUpperCase()`).\n- Put the planets in an array: `const planets = [\"Mercury\", \"Venus\", \"Earth\"];`\n- Print each one with `forEach`, using the result of `banner`.\n\n`toUpperCase` and `console.log` should each appear **only once** in the code.",
+   "starter": "const a = \"Mercury\";\nconsole.log(\"*** \" + a.toUpperCase() + \" ***\");\nconst b = \"Venus\";\nconsole.log(\"*** \" + b.toUpperCase() + \" ***\");\nconst c = \"Earth\";\nconsole.log(\"*** \" + c.toUpperCase() + \" ***\");\n",
+   "solution": "const planets = [\"Mercury\", \"Venus\", \"Earth\"];\n\nfunction banner(name) {\n  return `*** ${name.toUpperCase()} ***`;\n}\n\nplanets.forEach((planet) => console.log(banner(planet)));\n",
+   "hints": [
+    "function banner(name) { return `*** ${name.toUpperCase()} ***`; }",
+    "planets.forEach((planet) => console.log(banner(planet)));"
+   ],
+   "check": {
+    "code_contains": [
+     "function banner",
+     "forEach"
+    ]
+   }
+  },
+  {
+   "title": "Early return",
+   "prompt": "`canLaunch` is full of nested `if`s. Write a flat version that gives the same results:\n\n- Define a constant for 50: `MIN_FUEL`.\n- Handle the problem cases first with `return`: if there's no ship, `No ship`; if the fuel is less than `MIN_FUEL`, `Low fuel`; if there's no crew (`crew` is 0), `No crew`; and at the very end, `Launch!`.\n- Get `fuel` and `crew` with destructuring: `const { fuel, crew } = ship;`\n- There should be no `else` left in the function.",
+   "starter": "function canLaunch(ship) {\n  if (ship) {\n    if (ship.fuel >= 50) {\n      if (ship.crew > 0) {\n        return \"Launch!\";\n      } else {\n        return \"No crew\";\n      }\n    } else {\n      return \"Low fuel\";\n    }\n  } else {\n    return \"No ship\";\n  }\n}\n\nconsole.log(canLaunch({ fuel: 80, crew: 3 }));\n",
+   "solution": "const MIN_FUEL = 50;\n\nfunction canLaunch(ship) {\n  if (!ship) return \"No ship\";\n  const { fuel, crew } = ship;\n  if (fuel < MIN_FUEL) return \"Low fuel\";\n  if (crew <= 0) return \"No crew\";\n  return \"Launch!\";\n}\n\nconsole.log(canLaunch({ fuel: 80, crew: 3 }));\n",
+   "hints": [
+    "if (!ship) return \"No ship\";",
+    "const { fuel, crew } = ship;",
+    "if (fuel < MIN_FUEL) return \"Low fuel\";"
+   ],
+   "check": {
+    "code_contains": [
+     "MIN_FUEL",
+     "return"
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "title": "Default settings",
+  "prompt": "This `createShip` has two problems: `createShip()` throws an error, and giving `speed: 0` makes the speed 10 (because `0 || 10` is 10!). Fix it:\n\n- Use destructuring and default values in the parameter: `\"Scout\"` for `name`, `10` for `speed`, `\"#f7df1e\"` for `color`; if no parameter is given at all, `{}` should be used.\n- Return with the short form: `return { name, speed, color };`\n- Also write `describeShip(ship)`: take `name` and `speed` with destructuring and return `Eagle: speed 12`.",
+  "starter": "function createShip(options) {\n  const name = options.name || \"Scout\";\n  const speed = options.speed || 10;\n  const color = options.color || \"#f7df1e\";\n  return { name: name, speed: speed, color: color };\n}\n\n// describeShip\n\nconsole.log(createShip({ name: \"Eagle\" }));\n",
+  "solution": "function createShip({ name = \"Scout\", speed = 10, color = \"#f7df1e\" } = {}) {\n  return { name, speed, color };\n}\n\n// describeShip\nfunction describeShip({ name, speed }) {\n  return `${name}: speed ${speed}`;\n}\n\nconsole.log(createShip({ name: \"Eagle\" }));\n",
+  "hints": [
+   "function createShip({ name = \"Scout\", speed = 10, color = \"#f7df1e\" } = {})",
+   "The = {} at the end uses an empty object if no parameter is given at all.",
+   "function describeShip({ name, speed }) { ... }"
+  ],
+  "check": {
+   "code_contains": [
+    "= {}",
+    "describeShip"
+   ]
+  }
+ },
+ "project_task": {
+  "title": "Tidy up the game code",
+  "prompt": "The game's old scoring code works, but it's hard to read: `s` is the score and `l` is lives; `\"s\"` means star and `\"e\"` means enemy. Write a clean version:\n\n- Constants: `STAR_POINTS = 10`, `BONUS_EVERY = 50` (one extra life every 50 points), `START_LIVES = 3`\n- `collectStar(game)`: increase the score by `STAR_POINTS`; when the score is a multiple of `BONUS_EVERY`, add a life.\n- `hitEnemy(game)`: take away one life, but lives must not go below 0.\n- `isGameOver(game)`: return `true` if lives are 0.\n- The functions should change the `game` object they receive (`{ score, lives }`), not variables outside.\n\nAt the end, create `const game = { score: 0, lives: START_LIVES };`, collect a star, hit an enemy, and print `Score: 10 | Lives: 2`.",
+  "starter": "let s = 0;\nlet l = 3;\nfunction u(t) {\n  if (t == \"s\") {\n    s = s + 10;\n    if (s % 50 == 0) {\n      l = l + 1;\n    }\n  }\n  if (t == \"e\") {\n    l = l - 1;\n    if (l < 0) l = 0;\n  }\n}\n\nu(\"s\");\nu(\"e\");\nconsole.log(\"Score: \" + s + \" | Lives: \" + l);\n",
+  "solution": "const STAR_POINTS = 10;\nconst BONUS_EVERY = 50;\nconst START_LIVES = 3;\n\nfunction collectStar(game) {\n  game.score += STAR_POINTS;\n  // a reward life every BONUS_EVERY points\n  if (game.score % BONUS_EVERY === 0) game.lives += 1;\n}\n\nfunction hitEnemy(game) {\n  game.lives = Math.max(0, game.lives - 1);\n}\n\nfunction isGameOver(game) {\n  return game.lives === 0;\n}\n\nconst game = { score: 0, lives: START_LIVES };\ncollectStar(game);\nhitEnemy(game);\nconsole.log(`Score: ${game.score} | Lives: ${game.lives}`);\n",
+  "hints": [
+   "function collectStar(game) { game.score += STAR_POINTS; ... }",
+   "Lives must not go below 0: Math.max(0, game.lives - 1)",
+   "function isGameOver(game) { return game.lives === 0; }"
+  ],
+  "check": {
+   "code_contains": [
+    "STAR_POINTS",
+    "function collectStar",
+    "function hitEnemy"
+   ]
+  }
+ }
+}

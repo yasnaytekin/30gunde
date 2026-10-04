@@ -1,0 +1,135 @@
+{
+ "day": 15,
+ "title": "Creating elements",
+ "region": "dom",
+ "project_contribution": "Inventory on screen",
+ "objective": "Create new elements with createElement, draw a list from an array (render), remove elements and use dataset",
+ "story": "It's building time on Planet DOM! So far you've changed elements that already existed on the page; today you'll make **new elements** from scratch with JavaScript and add them to the page.",
+ "sections": [
+  {
+   "title": "createElement and append",
+   "body": "A new element is added in three steps: **create, fill, add**.\n\n```js\nconst list = document.querySelector(\"#cargo\");\nconst li = document.createElement(\"li\"); // 1) create\nli.textContent = \"Oxygen tank\";           // 2) fill\nli.classList.add(\"item\");\nlist.append(li);                           // 3) add to the page (at the end)\n```\n\n`createElement` only creates the element in memory; it isn't visible on the page until you add it somewhere. `append` adds at the end, `prepend` at the start. You can also put elements inside another element: `li.append(button)`."
+  },
+  {
+   "title": "remove() and clearing",
+   "body": "`el.remove()` deletes the element from the page. To empty a box completely, just set its content to empty text:\n\n```js\ndocument.querySelector(\"#old\").remove(); // delete one element\nlist.textContent = \"\";                    // empty the list\n```"
+  },
+  {
+   "title": "A list from an array: render()",
+   "body": "Here's the real power: keep the data in an array and **draw** the screen from the array. The function that does this is usually called `render`. Every time it's called, it clears the list and rebuilds it from the array:\n\n```js\nconst items = [\"Oxygen\", \"Water\", \"Fuel\"];\n\nfunction render() {\n  list.textContent = \"\"; // clear first\n  for (const item of items) {\n    const li = document.createElement(\"li\");\n    li.textContent = item;\n    list.append(li);\n  }\n}\n\nrender();\nitems.push(\"Shield\"); // the data changed...\nrender();             // ...draw the screen again\n```\n\nThe rule is simple: **change the data first, then call `render()`.** If you forget to clear, the list is added again on every call."
+  },
+  {
+   "title": "dataset: data-* attributes",
+   "body": "You can store your own information on an element in attributes starting with `data-`. In JavaScript you reach them with `dataset`:\n\n```js\nli.dataset.id = 7;          // in HTML: <li data-id=\"7\">\nconsole.log(li.dataset.id); // \"7\" (always text!)\n```\n\nDashed names become camelCase: `data-max-speed` → `dataset.maxSpeed`.\n\nIt's very handy together with event delegation: `e.target.dataset.index` tells you which record the clicked button belongs to. The value is text, so turn it into a number with `Number(...)` if you need one."
+  }
+ ],
+ "examples": [
+  {
+   "title": "A list from an array",
+   "code": "const planets = [\"Mercury\", \"Venus\", \"Earth\", \"Mars\"];\nconst list = document.querySelector(\"#list\");\n\nfor (const name of planets) {\n  const li = document.createElement(\"li\");\n  li.textContent = name;\n  list.append(li);\n}\n\nconst sun = document.createElement(\"li\");\nsun.textContent = \"Sun (center)\";\nsun.classList.add(\"sun\");\nlist.prepend(sun);\nconsole.log(\"Number of items:\", list.children.length);\n",
+   "note": "Add Jupiter to the planets array and run it again.",
+   "html": "<ul id=\"list\"></ul>\n"
+  },
+  {
+   "title": "render() and deleting",
+   "code": "const stars = [\"Vega\", \"Sirius\"];\nconst list = document.querySelector(\"#list\");\n\nfunction render() {\n  list.textContent = \"\";\n  stars.forEach((star, i) => {\n    const li = document.createElement(\"li\");\n    li.textContent = star + \" \";\n    const del = document.createElement(\"button\");\n    del.textContent = \"Delete\";\n    del.dataset.index = i;\n    li.append(del);\n    list.append(li);\n  });\n}\n\nlist.addEventListener(\"click\", (e) => {\n  if (e.target.tagName !== \"BUTTON\") return;\n  stars.splice(Number(e.target.dataset.index), 1);\n  render();\n});\n\ndocument.querySelector(\"#add\").addEventListener(\"click\", () => {\n  stars.push(\"Star \" + Math.floor(Math.random() * 100));\n  render();\n});\n\nrender();\n",
+   "note": "Add stars, then click the Delete buttons. Every change updates the array and render() redraws the list.",
+   "html": "<ul id=\"list\"></ul>\n<button id=\"add\">Add a random star</button>\n"
+  }
+ ],
+ "tasks": [
+  {
+   "title": "First elements",
+   "prompt": "Add two elements to the `#cargo` list with code:\n\n1. Create an `<li>` that says `Oxygen tank` and add it with `append`.\n2. Create an `<li>` that says `Water tank` and add it **at the start** with `prepend`.",
+   "html": "<h1>Cargo List</h1>\n<ul id=\"cargo\"></ul>\n<p id=\"count\"></p>\n<p><input id=\"item-name\" placeholder=\"New cargo\"> <button id=\"add\">Add</button></p>\n",
+   "starter": "const cargo = document.querySelector(\"#cargo\");\n\n// 1) Oxygen tank: create, fill, append\n\n// 2) Water tank: create, fill, prepend\n\n",
+   "solution": "const cargo = document.querySelector(\"#cargo\");\n\n// 1) Oxygen tank: create, fill, append\nconst oxygen = document.createElement(\"li\");\noxygen.textContent = \"Oxygen tank\";\ncargo.append(oxygen);\n\n// 2) Water tank: create, fill, prepend\nconst water = document.createElement(\"li\");\nwater.textContent = \"Water tank\";\ncargo.prepend(water);\n",
+   "hints": [
+    "const li = document.createElement(\"li\");",
+    "li.textContent = \"Oxygen tank\"; cargo.append(li);",
+    "For the second one: cargo.prepend(...)"
+   ],
+   "check": {
+    "code_contains": [
+     "createElement",
+     "append",
+     "prepend"
+    ]
+   }
+  },
+  {
+   "title": "A list from an array",
+   "prompt": "Complete the `render()` function:\n\n- it clears `#cargo`,\n- creates and adds an `<li>` for every item in the `items` array,\n- writes the number of items into `#count` like `3 items`.\n\nTry adding a new item to the array and calling `render()` again.",
+   "html": "<h1>Cargo List</h1>\n<ul id=\"cargo\"></ul>\n<p id=\"count\"></p>\n<p><input id=\"item-name\" placeholder=\"New cargo\"> <button id=\"add\">Add</button></p>\n",
+   "starter": "const items = [\"Oxygen\", \"Water\", \"Fuel\"];\nconst cargo = document.querySelector(\"#cargo\");\n\nfunction render() {\n  // clear, an <li> for every item, then #count\n}\n\nrender();\n",
+   "solution": "const items = [\"Oxygen\", \"Water\", \"Fuel\"];\nconst cargo = document.querySelector(\"#cargo\");\n\nfunction render() {\n  // clear, an <li> for every item, then #count\n  cargo.textContent = \"\";\n  for (const item of items) {\n    const li = document.createElement(\"li\");\n    li.textContent = item;\n    cargo.append(li);\n  }\n  document.querySelector(\"#count\").textContent = `${items.length} items`;\n}\n\nrender();\n",
+   "hints": [
+    "Clear first: cargo.textContent = \"\";",
+    "for (const item of items) { ... createElement(\"li\") ... }",
+    "`${items.length} items`"
+   ],
+   "check": {
+    "code_contains": [
+     "createElement",
+     "append"
+    ]
+   }
+  },
+  {
+   "title": "ID tags",
+   "prompt": "Every item has an ID (`id`). `render()` should write the item's name into every `<li>` and store its ID with `li.dataset.id`.\n\nThen add **one** `click` listener to `#cargo`: it writes the clicked `<li>`'s ID into `#count` like `Selected ID: 12`.",
+   "html": "<h1>Cargo List</h1>\n<ul id=\"cargo\"></ul>\n<p id=\"count\"></p>\n<p><input id=\"item-name\" placeholder=\"New cargo\"> <button id=\"add\">Add</button></p>\n",
+   "starter": "const parts = [\n  { id: 7, name: \"Oxygen\" },\n  { id: 12, name: \"Water\" },\n  { id: 31, name: \"Fuel\" },\n];\nconst cargo = document.querySelector(\"#cargo\");\n\nfunction render() {\n  cargo.textContent = \"\";\n  for (const part of parts) {\n    // create an <li>: write the name, put the ID in dataset.id\n  }\n}\n\nrender();\n\n// click listener on #cargo\n\n",
+   "solution": "const parts = [\n  { id: 7, name: \"Oxygen\" },\n  { id: 12, name: \"Water\" },\n  { id: 31, name: \"Fuel\" },\n];\nconst cargo = document.querySelector(\"#cargo\");\n\nfunction render() {\n  cargo.textContent = \"\";\n  for (const part of parts) {\n    // create an <li>: write the name, put the ID in dataset.id\n    const li = document.createElement(\"li\");\n    li.textContent = part.name;\n    li.dataset.id = part.id;\n    cargo.append(li);\n  }\n}\n\nrender();\n\n// click listener on #cargo\ncargo.addEventListener(\"click\", (e) => {\n  if (e.target.tagName !== \"LI\") return;\n  document.querySelector(\"#count\").textContent = `Selected ID: ${e.target.dataset.id}`;\n});\n",
+   "hints": [
+    "li.dataset.id = part.id;",
+    "cargo.addEventListener(\"click\", (e) => { ... })",
+    "The clicked li: e.target, its ID: e.target.dataset.id"
+   ],
+   "check": {
+    "code_contains": [
+     "createElement",
+     "dataset",
+     "addEventListener"
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "title": "Add and delete",
+  "prompt": "Make the cargo list fully work:\n\n- `render()` puts a button with the class `del` that says `Delete` inside every `<li>`; the button's `dataset.index` is the item's position in the array.\n- When `#add` is clicked, the text in the `#item-name` box (cleaned with `trim()`) is added to `items`, the box is cleared and the list is redrawn. Empty text isn't added.\n- Add one listener to `#cargo`: when a `Delete` button is clicked, that item is removed from the array with `splice` and the list is redrawn.",
+  "html": "<h1>Cargo List</h1>\n<ul id=\"cargo\"></ul>\n<p id=\"count\"></p>\n<p><input id=\"item-name\" placeholder=\"New cargo\"> <button id=\"add\">Add</button></p>\n",
+  "starter": "const items = [\"Oxygen\", \"Water\", \"Fuel\"];\nconst cargo = document.querySelector(\"#cargo\");\nconst input = document.querySelector(\"#item-name\");\n\nfunction render() {\n  cargo.textContent = \"\";\n  items.forEach((item, i) => {\n    const li = document.createElement(\"li\");\n    li.textContent = item;\n    // Delete button: class \"del\", dataset.index = i\n    cargo.append(li);\n  });\n  document.querySelector(\"#count\").textContent = `${items.length} items`;\n}\n\nrender();\n\n// the Add button\n\n// the Delete buttons (event delegation)\n\n",
+  "solution": "const items = [\"Oxygen\", \"Water\", \"Fuel\"];\nconst cargo = document.querySelector(\"#cargo\");\nconst input = document.querySelector(\"#item-name\");\n\nfunction render() {\n  cargo.textContent = \"\";\n  items.forEach((item, i) => {\n    const li = document.createElement(\"li\");\n    li.textContent = item;\n    // Delete button: class \"del\", dataset.index = i\n    const del = document.createElement(\"button\");\n    del.textContent = \"Delete\";\n    del.classList.add(\"del\");\n    del.dataset.index = i;\n    li.append(del);\n    cargo.append(li);\n  });\n  document.querySelector(\"#count\").textContent = `${items.length} items`;\n}\n\nrender();\n\n// the Add button\ndocument.querySelector(\"#add\").addEventListener(\"click\", () => {\n  const name = input.value.trim();\n  if (name === \"\") return;\n  items.push(name);\n  input.value = \"\";\n  render();\n});\n\n// the Delete buttons (event delegation)\ncargo.addEventListener(\"click\", (e) => {\n  if (!e.target.classList.contains(\"del\")) return;\n  items.splice(Number(e.target.dataset.index), 1);\n  render();\n});\n",
+  "hints": [
+   "const del = document.createElement(\"button\"); del.classList.add(\"del\"); del.dataset.index = i; li.append(del);",
+   "Add: const name = input.value.trim(); if (name === \"\") return;",
+   "Delete: items.splice(Number(e.target.dataset.index), 1); render();"
+  ],
+  "check": {
+   "code_contains": [
+    "createElement",
+    "dataset",
+    "splice"
+   ]
+  }
+ },
+ "project_task": {
+  "title": "Inventory on screen",
+  "prompt": "The inventory should show on the game panel. Complete the `renderInventory()` function:\n\n- it clears the `#inventory` list,\n- and creates and adds an `<li>` with the class `item` for every thing in the `inventory` array.\n\nClick Start on the page to see the inventory. Try adding a new item to the inventory and calling `renderInventory()` again.",
+  "html": "<div id=\"start-screen\" class=\"screen\">\n  <h1 id=\"game-title\">Game</h1>\n  <p>Pilot: <span id=\"pilot\">?</span></p>\n  <p>Level: <span id=\"level\">?</span></p>\n  <button id=\"start-btn\">Start</button>\n</div>\n<div id=\"game-panel\" class=\"screen hidden\">\n  <p id=\"hud\">Score: 0</p>\n  <h2>Inventory</h2>\n  <ul id=\"inventory\"></ul>\n</div>\n",
+  "starter": "const inventory = [\"shield\", \"laser\", \"map\"];\n\n// (Day 14) the Start button opens the game panel\ndocument.querySelector(\"#start-btn\").addEventListener(\"click\", () => {\n  document.querySelector(\"#start-screen\").classList.add(\"hidden\");\n  document.querySelector(\"#game-panel\").classList.remove(\"hidden\");\n});\n\nfunction renderInventory() {\n  const list = document.querySelector(\"#inventory\");\n  // clear, an <li class=\"item\"> for every thing\n}\n\nrenderInventory();\n",
+  "solution": "const inventory = [\"shield\", \"laser\", \"map\"];\n\n// (Day 14) the Start button opens the game panel\ndocument.querySelector(\"#start-btn\").addEventListener(\"click\", () => {\n  document.querySelector(\"#start-screen\").classList.add(\"hidden\");\n  document.querySelector(\"#game-panel\").classList.remove(\"hidden\");\n});\n\nfunction renderInventory() {\n  const list = document.querySelector(\"#inventory\");\n  // clear, an <li class=\"item\"> for every thing\n  list.textContent = \"\";\n  for (const thing of inventory) {\n    const li = document.createElement(\"li\");\n    li.textContent = thing;\n    li.classList.add(\"item\");\n    list.append(li);\n  }\n}\n\nrenderInventory();\n",
+  "hints": [
+   "Clear first: list.textContent = \"\";",
+   "const li = document.createElement(\"li\"); li.classList.add(\"item\");",
+   "list.append(li);"
+  ],
+  "check": {
+   "code_contains": [
+    "createElement",
+    "append"
+   ]
+  }
+ }
+}

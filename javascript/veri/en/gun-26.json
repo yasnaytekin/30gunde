@@ -1,0 +1,131 @@
+{
+ "day": 26,
+ "title": "fetch and APIs",
+ "region": "istasyon",
+ "project_contribution": "Getting the levels from the server",
+ "objective": "Get JSON data from an API with fetch, handle errors and show the data on the page",
+ "story": "The Async Station's giant antenna is open, captain! Now we can ask faraway servers for data. Today we'll ask an **API** a question with **fetch** and pour the answer onto the page.",
+ "sections": [
+  {
+   "title": "What is an API?",
+   "body": "An **API** is a door that a program opens for other programs. You send a request to a certain address, and the server gives you data back. A weather app gets the temperature this way, and a map app gets locations.\n\nMost APIs answer in **JSON** (remember Day 12). There's a demo API made for this course. In the interactive lessons it's ready to use; when you try the code on your own computer, paste the code from the **Demo API** appendix at the back of the book at the very top of your script:\n\n| Address | What it returns |\n| --- | --- |\n| `/demo-api/cities` | 8 cities: `name`, `region`, `population`, `temp` |\n| `/demo-api/questions` | 5 questions: `question`, `options`, `answer` |\n| `/demo-api/levels/1` (2, 3) | A game level: `level`, `stars`, `enemies`, `speed` |\n| `/demo-api/tasks` | 4 tasks: `id`, `title`, `done` |\n| `/demo-api/posts` | 3 blog posts: `id`, `title`, `summary` |\n| `/demo-api/error` | Always gives an error (500): for trying things out |"
+  },
+  {
+   "title": "fetch and res.json()",
+   "body": "```js\nasync function loadCities() {\n  const res = await fetch(\"/demo-api/cities\");\n  const cities = await res.json();\n  console.log(cities.length, \"cities arrived\");\n}\nloadCities();\n```\n\n- `fetch(address)` sends the request and returns a **Promise** (Day 25!). We wait for the answer with `await`.\n- The answer (`res`) is like an envelope. To read the data inside, we wait once more: `await res.json()`.\n- There are two `await`s because first the answer's header arrives, then its body."
+  },
+  {
+   "title": "res.ok and status codes",
+   "body": "Every answer has a **status code**:\n\n| Code | Meaning |\n| --- | --- |\n| `200` | OK |\n| `404` | Not found (wrong address) |\n| `500` | Something went wrong on the server |\n\nCareful: `fetch` **doesn't throw** an error when a 404 or 500 comes back! Checking is your job:\n\n```js\nconst res = await fetch(\"/demo-api/error\");\nif (!res.ok) {\n  console.log(\"That didn't work, status code:\", res.status);\n  return;\n}\n```\n\n`res.ok` is `true` when the code is between 200 and 299. If no connection can be made at all, `fetch` really does throw an error; you catch it with `try/catch` (Day 24)."
+  },
+  {
+   "title": "Query strings and the loading state",
+   "body": "By adding `?key=value` to the end of the address, you can ask the server for filtered data: `/demo-api/cities?region=Asia` only brings the cities in Asia. If the value has spaces or special letters, make it safe with `encodeURIComponent`:\n\n```js\nconst region = \"North America\";\nconst url = `/demo-api/cities?region=${encodeURIComponent(region)}`;\n```\n\nA good page keeps the user informed while they wait. Think about three states for every request:\n\n- **Loading**: write `Loading...` before the request.\n- **Success**: show the data on the page.\n- **Error**: give a clear message; don't leave the page empty."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Get the cities",
+   "code": "const info = document.querySelector(\"#info\");\nconst list = document.querySelector(\"#list\");\n\nasync function loadCities() {\n  const res = await fetch(\"/demo-api/cities\");\n  const cities = await res.json();\n  for (const city of cities) {\n    const li = document.createElement(\"li\");\n    li.textContent = `${city.name}: ${city.temp}°C`;\n    list.append(li);\n  }\n  info.textContent = `${cities.length} cities arrived.`;\n}\n\nloadCities();\n",
+   "note": "First 'Loading...' shows; a moment later the list arrives.",
+   "html": "<p id=\"info\">Loading...</p>\n<ul id=\"list\"></ul>\n"
+  },
+  {
+   "title": "Catch the error state",
+   "code": "const info = document.querySelector(\"#info\");\n\nasync function load(url) {\n  info.textContent = \"Loading...\";\n  try {\n    const res = await fetch(url);\n    if (!res.ok) {\n      info.textContent = `Error! Status code: ${res.status}`;\n      return;\n    }\n    const posts = await res.json();\n    info.textContent = `Success: ${posts.length} posts arrived.`;\n  } catch (err) {\n    info.textContent = \"Couldn't connect.\";\n  }\n}\n\ndocument.querySelector(\"#good\").addEventListener(\"click\", () => load(\"/demo-api/posts\"));\ndocument.querySelector(\"#bad\").addEventListener(\"click\", () => load(\"/demo-api/error\"));\n",
+   "note": "Try both buttons: the wrong address shows status code 500.",
+   "html": "<button id=\"good\">Right address</button> <button id=\"bad\">Wrong address</button>\n<p id=\"info\">Press a button.</p>\n"
+  }
+ ],
+ "tasks": [
+  {
+   "title": "City list",
+   "prompt": "Complete the `loadCities()` function:\n\n- Get the cities from `/demo-api/cities` with `fetch`.\n- For every city, add an `<li>` to `#list` like `London (11°C)`.\n- At the end, write how many cities arrived into `#info`: `8 cities loaded` (the number comes from the data).",
+   "html": "<h2>City Station</h2>\n<p id=\"info\">Ready.</p>\n<ul id=\"list\"></ul>\n",
+   "starter": "const list = document.querySelector(\"#list\");\nconst info = document.querySelector(\"#info\");\n\nasync function loadCities() {\n  // 1) request with fetch  2) read with res.json()  3) add an <li> for every city\n}\n\nloadCities();\n",
+   "solution": "const list = document.querySelector(\"#list\");\nconst info = document.querySelector(\"#info\");\n\nasync function loadCities() {\n  // 1) request with fetch  2) read with res.json()  3) add an <li> for every city\n  const res = await fetch(\"/demo-api/cities\");\n  const cities = await res.json();\n  for (const city of cities) {\n    const li = document.createElement(\"li\");\n    li.textContent = `${city.name} (${city.temp}°C)`;\n    list.append(li);\n  }\n  info.textContent = `${cities.length} cities loaded`;\n}\n\nloadCities();\n",
+   "hints": [
+    "const res = await fetch(\"/demo-api/cities\");",
+    "const cities = await res.json(); then walk through them with for...of.",
+    "For the number use cities.length."
+   ],
+   "check": {
+    "code_contains": [
+     "fetch",
+     "await",
+     ".json()"
+    ]
+   }
+  },
+  {
+   "title": "Region filter",
+   "prompt": "The buttons are ready: each one calls the `loadRegion(region)` function. You write the function:\n\n- Request with a query string added to the address: `/demo-api/cities?region=...` (pass the value through `encodeURIComponent`).\n- First clear `#list`, then add each city's **name** as an `<li>`.\n- Write a summary into `#info` like `Asia: 2 cities`.\n\nLet the server do the filtering: `?region=America` brings the 2 cities whose region contains America.",
+   "html": "<h2>City Station</h2>\n<p id=\"info\">Ready.</p>\n<ul id=\"list\"></ul>\n\n<div id=\"regions\"><button data-region=\"Europe\">Europe</button><button data-region=\"Asia\">Asia</button><button data-region=\"Africa\">Africa</button></div>\n",
+   "starter": "const list = document.querySelector(\"#list\");\nconst info = document.querySelector(\"#info\");\n\nasync function loadRegion(region) {\n  // request with a query string, clear the list, add the names, write the summary\n}\n\nfor (const btn of document.querySelectorAll(\"#regions button\")) {\n  btn.addEventListener(\"click\", () => loadRegion(btn.dataset.region));\n}\n",
+   "solution": "const list = document.querySelector(\"#list\");\nconst info = document.querySelector(\"#info\");\n\nasync function loadRegion(region) {\n  // request with a query string, clear the list, add the names, write the summary\n  const res = await fetch(`/demo-api/cities?region=${encodeURIComponent(region)}`);\n  const cities = await res.json();\n  list.innerHTML = \"\";\n  for (const city of cities) {\n    const li = document.createElement(\"li\");\n    li.textContent = city.name;\n    list.append(li);\n  }\n  info.textContent = `${region}: ${cities.length} cities`;\n}\n\nfor (const btn of document.querySelectorAll(\"#regions button\")) {\n  btn.addEventListener(\"click\", () => loadRegion(btn.dataset.region));\n}\n",
+   "hints": [
+    "fetch(`/demo-api/cities?region=${encodeURIComponent(region)}`)",
+    "To clear the list: list.innerHTML = \"\";"
+   ],
+   "check": {
+    "code_contains": [
+     "?region=",
+     "encodeURIComponent"
+    ]
+   }
+  },
+  {
+   "title": "Loading and errors",
+   "prompt": "`loadData(url)` should show all three states (in `#info`):\n\n- Before the request: `Loading...` (this line is ready)\n- If the answer is successful: `OK: 4 records` (the length of the array that arrived)\n- If `res.ok` is false: `Error: 404` (the status code comes from `res.status`)\n- If no connection can be made at all (`catch`): `Couldn't connect`",
+   "html": "<h2>Data Station</h2>\n<p id=\"info\">Ready.</p>\n",
+   "starter": "const info = document.querySelector(\"#info\");\n\nasync function loadData(url) {\n  info.textContent = \"Loading...\";\n  // fetch inside try; if res is not ok write the status code, if it worked write the number of records\n  // write the connection error inside catch\n}\n\nloadData(\"/demo-api/tasks\");\n",
+   "solution": "const info = document.querySelector(\"#info\");\n\nasync function loadData(url) {\n  info.textContent = \"Loading...\";\n  // fetch inside try; if res is not ok write the status code, if it worked write the number of records\n  // write the connection error inside catch\n  try {\n    const res = await fetch(url);\n    if (!res.ok) {\n      info.textContent = `Error: ${res.status}`;\n      return;\n    }\n    const data = await res.json();\n    info.textContent = `OK: ${data.length} records`;\n  } catch (err) {\n    info.textContent = \"Couldn't connect\";\n  }\n}\n\nloadData(\"/demo-api/tasks\");\n",
+   "hints": [
+    "if (!res.ok) { info.textContent = `Error: ${res.status}`; return; }",
+    "Put the whole request inside try { ... } catch (err) { ... }."
+   ],
+   "check": {
+    "code_contains": [
+     "res.ok",
+     "res.status",
+     "catch"
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "title": "The hottest city",
+  "prompt": "`showHottest(region)` should find the **hottest** city in a region:\n\n- Request the cities with `/demo-api/cities?region=...` (an empty region `\"\"` brings all the cities).\n- Find the city with the highest `temp` (with `reduce` or a loop).\n- Write `Hottest: Mumbai (29°C)` into `#info`. If no city arrives, write `No city found`.\n\nDon't type the city's name yourself: the result must come from the data.",
+  "html": "<h2>City Station</h2>\n<p id=\"info\">Ready.</p>\n<ul id=\"list\"></ul>\n",
+  "starter": "const info = document.querySelector(\"#info\");\n\nasync function showHottest(region) {\n  // request, find the hottest city, write it\n}\n\nshowHottest(\"\");\n",
+  "solution": "const info = document.querySelector(\"#info\");\n\nasync function showHottest(region) {\n  // request, find the hottest city, write it\n  const res = await fetch(`/demo-api/cities?region=${encodeURIComponent(region)}`);\n  const cities = await res.json();\n  if (cities.length === 0) {\n    info.textContent = \"No city found\";\n    return;\n  }\n  const hottest = cities.reduce((best, city) => (city.temp > best.temp ? city : best));\n  info.textContent = `Hottest: ${hottest.name} (${hottest.temp}°C)`;\n}\n\nshowHottest(\"\");\n",
+  "hints": [
+   "cities.reduce((best, city) => (city.temp > best.temp ? city : best))",
+   "reduce fails on an empty array: check cities.length === 0 first."
+  ],
+  "check": {
+   "code_contains": [
+    "fetch",
+    "temp"
+   ]
+  }
+ },
+ "project_task": {
+  "title": "Get the levels from the server",
+  "prompt": "The game's levels are on the server now! The level buttons are ready; write the `loadLevel(n)` function:\n\n- Request it by adding `n` to the end of the `/demo-api/levels/` address.\n- If it works, save the level in `currentLevel` and write it into `#info`: `Level 2: 8 stars, 3 enemies, speed 3`\n- If `res.ok` is false (level 4 doesn't exist yet, so a 404 comes back): write `Level 4 isn't ready yet.`; `currentLevel` must not change.",
+  "html": "<h1 id=\"title\">Star Hunter</h1>\n<p id=\"info\">Choose a level.</p>\n<div id=\"levels\"><button data-level=\"1\">Level 1</button><button data-level=\"2\">Level 2</button><button data-level=\"3\">Level 3</button><button data-level=\"4\">Level 4</button></div>\n",
+  "starter": "let currentLevel = null;\nconst info = document.querySelector(\"#info\");\n\nasync function loadLevel(n) {\n  info.textContent = \"Loading...\";\n  // request the /demo-api/levels/n address\n  // if res is not ok: Level n isn't ready yet.\n  // if it works: currentLevel = level; write the info\n}\n\nfor (const btn of document.querySelectorAll(\"#levels button\")) {\n  btn.addEventListener(\"click\", () => loadLevel(Number(btn.dataset.level)));\n}\n",
+  "solution": "let currentLevel = null;\nconst info = document.querySelector(\"#info\");\n\nasync function loadLevel(n) {\n  info.textContent = \"Loading...\";\n  const res = await fetch(`/demo-api/levels/${n}`);\n  if (!res.ok) {\n    info.textContent = `Level ${n} isn't ready yet.`;\n    return;\n  }\n  const level = await res.json();\n  currentLevel = level;\n  info.textContent = `Level ${level.level}: ${level.stars} stars, ${level.enemies} enemies, speed ${level.speed}`;\n}\n\nfor (const btn of document.querySelectorAll(\"#levels button\")) {\n  btn.addEventListener(\"click\", () => loadLevel(Number(btn.dataset.level)));\n}\n",
+  "hints": [
+   "const res = await fetch(`/demo-api/levels/${n}`);",
+   "Deal with a wrong level early with if (!res.ok) { ...; return; }.",
+   "const level = await res.json(); then level.stars, level.enemies, level.speed"
+  ],
+  "check": {
+   "code_contains": [
+    "fetch",
+    "res.ok"
+   ]
+  }
+ }
+}

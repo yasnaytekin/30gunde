@@ -1,0 +1,140 @@
+{
+ "day": 25,
+ "title": "Promises and async/await",
+ "region": "istasyon",
+ "project_contribution": "Loading levels",
+ "objective": "Create Promises, wait with then/catch and async/await, catch errors, and run jobs together with Promise.all",
+ "story": "Nothing at the station finishes instantly: refueling takes time, signals are delayed. Today you'll teach JavaScript to **wait**: with Promises and async/await you'll write code that carries on from where it left off when the job is done.",
+ "sections": [
+  {
+   "title": "Why do we need to wait?",
+   "body": "Some jobs take time: data arriving from a server, reading a file, a timer. JavaScript **doesn't stop and wait** in the meantime; it carries on with other work and is told when the long job is finished:\n\n```js\nconsole.log(\"1. Signal sent\");\nsetTimeout(() => console.log(\"3. Answer arrived\"), 100);\nconsole.log(\"2. Other work while waiting\");\n```\n\nThe output order is 1, 2, 3. This kind of work is called **asynchronous**. The page doesn't freeze, but we need a tidy way to say \"when it's done, do this\": the **Promise**."
+  },
+  {
+   "title": "A Promise is a promise",
+   "body": "A Promise is a promise that says \"when the job is done, I'll give you the result\". It has three states: *pending*, *fulfilled* and *rejected*.\n\n```js\nfunction wait(ms) {\n  return new Promise((resolve) => {\n    setTimeout(() => resolve(\"ready\"), ms);\n  });\n}\n\nwait(100)\n  .then((result) => console.log(\"Result:\", result))\n  .catch((error) => console.log(\"Error:\", error.message));\n```\n\n- `resolve(value)` keeps the promise; the function inside `.then` runs with that value.\n- `reject(new Error(\"...\"))` breaks the promise; the function inside `.catch` runs with the error."
+  },
+  {
+   "title": "async and await",
+   "body": "When `.then` chains get long they're hard to read. Inside an `async` function, `await` **waits** until the Promise is done and gives you its result. The code reads from top to bottom:\n\n```js\nasync function countdown() {\n  console.log(\"Countdown...\");\n  await wait(100);\n  console.log(\"Liftoff!\");\n  return \"in orbit\";\n}\n\nconst result = await countdown(); // an async function returns a Promise too\n```\n\nIf you `await` a rejected Promise, an error is thrown; you catch it with the `try/catch` you learned yesterday:\n\n```js\ntry {\n  const level = await loadLevel(7);\n} catch (error) {\n  console.log(\"Problem:\", error.message);\n}\n```\n\n`await` can only be used inside `async` functions (and at the top level of module scripts)."
+  },
+  {
+   "title": "Promise.all: wait together",
+   "body": "Waiting one by one for jobs that don't depend on each other wastes time:\n\n```js\n// One by one: 100 + 150 = about 250 ms\nconst a = await wait(100);\nconst b = await wait(150);\n\n// Together: about 150 ms (as long as the longest one)\nconst [x, y] = await Promise.all([wait(100), wait(150)]);\n```\n\n`Promise.all` takes an array of Promises; when they're all done it gives the results as an array **in the same order**. If even one of them is rejected, the whole thing is rejected."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Whose turn is it?",
+   "code": "function wait(ms) {\n  return new Promise((resolve) => setTimeout(resolve, ms));\n}\n\n\nconsole.log(\"1. Signal sent\");\nwait(100).then(() => console.log(\"3. Answer arrived\"));\nconsole.log(\"2. Other work while waiting\");\nawait wait(150);\nconsole.log(\"4. All done\");\n",
+   "note": "The wait(100) line is second, but its output comes third."
+  },
+  {
+   "title": "Load together",
+   "code": "function loadPart(name, ms) {\n  return new Promise((resolve) => setTimeout(() => resolve(name + \" ready\"), ms));\n}\n\nconst start = Date.now();\nconst parts = await Promise.all([loadPart(\"Engine\", 150), loadPart(\"Wing\", 100), loadPart(\"Cockpit\", 120)]);\nconsole.log(parts);\nconsole.log(\"Time (ms):\", Date.now() - start);\n",
+   "note": "The total time isn't 370 but about 150 ms: the parts loaded at the same time."
+  }
+ ],
+ "tasks": [
+  {
+   "title": "A promise to wait",
+   "prompt": "Write the `wait(ms)` function: it returns a **Promise** that is fulfilled after `ms` milliseconds (`new Promise` and `setTimeout`).\n\nThen use `wait(100).then(...)` to print `Engines warmed up` when the wait is over.",
+   "starter": "function wait(ms) {\n  // return a new Promise\n}\n\n// print a message with wait(100).then(...)\n\n",
+   "solution": "function wait(ms) {\n  // return a new Promise\n  return new Promise((resolve) => {\n    setTimeout(resolve, ms);\n  });\n}\n\n// print a message with wait(100).then(...)\nwait(100).then(() => console.log(\"Engines warmed up\"));\n",
+   "hints": [
+    "return new Promise((resolve) => { ... });",
+    "Inside: setTimeout(resolve, ms);",
+    "wait(100).then(() => console.log(\"Engines warmed up\"));"
+   ],
+   "check": {
+    "code_contains": [
+     "new Promise",
+     "setTimeout",
+     ".then"
+    ],
+    "output_contains": [
+     "Engines warmed up"
+    ]
+   }
+  },
+  {
+   "title": "Refueling",
+   "prompt": "Write an `async` function called `refuel()`:\n\n1. it prints `Refueling started`,\n2. waits with `await wait(100)`,\n3. prints `Refueling done` and returns `100` (the tank percentage).\n\nThen call it at the bottom with `const fuel = await refuel();` and print `Fuel: 100`.",
+   "starter": "function wait(ms) {\n  return new Promise((resolve) => setTimeout(resolve, ms));\n}\n\n\n// async function refuel() { ... }\n\n// const fuel = await refuel();\n\n",
+   "solution": "function wait(ms) {\n  return new Promise((resolve) => setTimeout(resolve, ms));\n}\n\n\nasync function refuel() {\n  console.log(\"Refueling started\");\n  await wait(100);\n  console.log(\"Refueling done\");\n  return 100;\n}\n\nconst fuel = await refuel();\nconsole.log(\"Fuel:\", fuel);\n",
+   "hints": [
+    "async function refuel() { ... }",
+    "Inside: await wait(100);",
+    "Wait when calling it too: const fuel = await refuel();"
+   ],
+   "check": {
+    "code_contains": [
+     "async",
+     "await"
+    ],
+    "output_contains": [
+     "Refueling started\nRefueling done\nFuel: 100"
+    ]
+   }
+  },
+  {
+   "title": "Engine check",
+   "prompt": "`checkEngine(temp)` is ready: after 50 ms it is **rejected** with the error `Engine too hot!` if the temperature is over 90; otherwise it's fulfilled with `Engine ready`.\n\nWrite an `async` function called `preflight(temp)`:\n\n- it returns the result of `await checkEngine(temp)`.\n- If there's an error, it catches it with `try/catch` and returns `\"Warning: \" + error.message` (`Warning: Engine too hot!`).",
+   "starter": "function checkEngine(temp) {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      if (temp > 90) reject(new Error(\"Engine too hot!\"));\n      else resolve(\"Engine ready\");\n    }, 50);\n  });\n}\n\nasync function preflight(temp) {\n  // await checkEngine(temp) with try / catch\n}\n\nconsole.log(await preflight(60));\nconsole.log(await preflight(120));\n",
+   "solution": "function checkEngine(temp) {\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      if (temp > 90) reject(new Error(\"Engine too hot!\"));\n      else resolve(\"Engine ready\");\n    }, 50);\n  });\n}\n\nasync function preflight(temp) {\n  // await checkEngine(temp) with try / catch\n  try {\n    return await checkEngine(temp);\n  } catch (error) {\n    return \"Warning: \" + error.message;\n  }\n}\n\nconsole.log(await preflight(60));\nconsole.log(await preflight(120));\n",
+   "hints": [
+    "try { return await checkEngine(temp); } catch (error) { ... }",
+    "Inside catch: return \"Warning: \" + error.message;"
+   ],
+   "check": {
+    "code_contains": [
+     "try",
+     "catch",
+     "await"
+    ],
+    "output_contains": [
+     "Engine ready\nWarning: Engine too hot!"
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "title": "Parallel loading",
+  "prompt": "`loadPart(name, ms)` is ready. Write an `async` function called `loadAll()`:\n\n- it loads the `Engine` (150 ms), `Wing` (100 ms) and `Cockpit` (120 ms) parts **at the same time** with `Promise.all`,\n- and returns the results array (`[\"Engine\", \"Wing\", \"Cockpit\"]`).\n\nWaiting one by one takes 370 ms; loading them together takes about 150 ms.",
+  "starter": "function loadPart(name, ms) {\n  return new Promise((resolve) => setTimeout(() => resolve(name), ms));\n}\n\nasync function loadAll() {\n  // load the three parts together with Promise.all\n  return [];\n}\n\nconst start = Date.now();\nconsole.log(await loadAll());\nconsole.log(\"Time:\", Date.now() - start, \"ms\");\n",
+  "solution": "function loadPart(name, ms) {\n  return new Promise((resolve) => setTimeout(() => resolve(name), ms));\n}\n\nasync function loadAll() {\n  // load the three parts together with Promise.all\n  const parts = await Promise.all([\n    loadPart(\"Engine\", 150),\n    loadPart(\"Wing\", 100),\n    loadPart(\"Cockpit\", 120),\n  ]);\n  return parts;\n}\n\nconst start = Date.now();\nconsole.log(await loadAll());\nconsole.log(\"Time:\", Date.now() - start, \"ms\");\n",
+  "hints": [
+   "Promise.all takes an array: Promise.all([loadPart(\"Engine\", 150), ...])",
+   "const parts = await Promise.all([...]); return parts;"
+  ],
+  "check": {
+   "code_contains": [
+    "Promise.all",
+    "await"
+   ],
+   "output_contains": [
+    "[ 'Engine', 'Wing', 'Cockpit' ]"
+   ]
+  }
+ },
+ "project_task": {
+  "title": "Loading levels",
+  "prompt": "The levels will load with a little delay, as if they came from a server.\n\n- `loadLevel(n)`: returns a **Promise**. After 100 ms it's fulfilled with `LEVELS[n]`; if there's no such level it's rejected with `new Error(\"Level not found: 7\")` (the number is `n`).\n- `startLevel(n)`: an `async` function. First it writes `Loading level…` into `#info`, waits with `await loadLevel(n)`, then writes the info like `Level 2: 8 stars, speed 3`. If there's an error, it writes `Error: Level not found: 7` into `#info`.",
+  "html": "<canvas id=\"game\" width=\"300\" height=\"200\"></canvas>\n<p id=\"info\">Score: 0</p>\n",
+  "starter": "const LEVELS = {\n  1: { level: 1, stars: 5, speed: 2 },\n  2: { level: 2, stars: 8, speed: 3 },\n  3: { level: 3, stars: 12, speed: 4 },\n};\n\nfunction loadLevel(n) {\n  // return a Promise that resolves with LEVELS[n] after 100 ms (or rejects if it doesn't exist)\n}\n\nasync function startLevel(n) {\n  const info = document.querySelector(\"#info\");\n  // write loading, await loadLevel(n), write the info; catch the error\n}\n\nstartLevel(1);\n",
+  "solution": "const LEVELS = {\n  1: { level: 1, stars: 5, speed: 2 },\n  2: { level: 2, stars: 8, speed: 3 },\n  3: { level: 3, stars: 12, speed: 4 },\n};\n\nfunction loadLevel(n) {\n  // return a Promise that resolves with LEVELS[n] after 100 ms (or rejects if it doesn't exist)\n  return new Promise((resolve, reject) => {\n    setTimeout(() => {\n      if (LEVELS[n]) resolve(LEVELS[n]);\n      else reject(new Error(`Level not found: ${n}`));\n    }, 100);\n  });\n}\n\nasync function startLevel(n) {\n  const info = document.querySelector(\"#info\");\n  // write loading, await loadLevel(n), write the info; catch the error\n  info.textContent = \"Loading level…\";\n  try {\n    const level = await loadLevel(n);\n    info.textContent = `Level ${level.level}: ${level.stars} stars, speed ${level.speed}`;\n  } catch (error) {\n    info.textContent = `Error: ${error.message}`;\n  }\n}\n\nstartLevel(1);\n",
+  "hints": [
+   "return new Promise((resolve, reject) => { setTimeout(() => { ... }, 100); });",
+   "if (LEVELS[n]) resolve(LEVELS[n]); else reject(new Error(`Level not found: ${n}`));",
+   "Inside startLevel: try { const level = await loadLevel(n); ... } catch (error) { ... }"
+  ],
+  "check": {
+   "code_contains": [
+    "new Promise",
+    "reject",
+    "await",
+    "catch"
+   ]
+  }
+ }
+}

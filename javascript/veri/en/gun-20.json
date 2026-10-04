@@ -1,0 +1,148 @@
+{
+ "day": 20,
+ "title": "Saving data",
+ "region": "kusak",
+ "project_contribution": "Saving the high score",
+ "objective": "Store numbers, text, arrays and objects with localStorage; load saved data when the page opens and use default values",
+ "story": "Does your score reset when you reload the page? At the last stop of the Event Belt we give your ship a **memory**: thanks to localStorage, information stays even after the page closes.",
+ "sections": [
+  {
+   "title": "localStorage: the browser's notebook",
+   "body": "`localStorage` is a small notebook that every site has in the browser. Its contents stay even if the page closes or the computer restarts. Information is stored as **key** and **value** pairs:\n\n```js\nlocalStorage.setItem(\"pilot\", \"Ada\");      // save\nconst name = localStorage.getItem(\"pilot\"); // read → \"Ada\"\nlocalStorage.removeItem(\"pilot\");          // delete\nlocalStorage.getItem(\"pilot\");             // no record → null\n```\n\nWhile you experiment, you can wipe the notebook by typing `localStorage.clear()` in the Console."
+  },
+  {
+   "title": "Numbers are stored as text",
+   "body": "`localStorage` stores everything as **text**. If you save a number and read it back, you get text; turn it into a number with `Number(...)` before doing math:\n\n```js\nlocalStorage.setItem(\"best\", 42);\nlocalStorage.getItem(\"best\");                           // \"42\" (text!)\nconst best = Number(localStorage.getItem(\"best\")) || 0; // 42\n```\n\nIf there's no record, `getItem` gives `null`, and `Number(null)` is `0`. The `|| 0` at the end makes sure 0 is used for values that count as false, like `NaN`.\n\n- `a || b`: uses `b` if `a` counts as false (`0`, `\"\"`, `null`, `NaN`...).\n- `a ?? b`: uses `b` only if `a` is `null` or `undefined`. `0` and `\"\"` are kept."
+  },
+  {
+   "title": "Arrays and objects: JSON",
+   "body": "To store an array or object, first turn it into **JSON** text (`JSON.stringify`) and turn it back when reading (`JSON.parse`). You remember this from Day 12:\n\n```js\nconst items = [\"shield\", \"laser\"];\nlocalStorage.setItem(\"inventory\", JSON.stringify(items)); // '[\"shield\",\"laser\"]'\n\nconst back = JSON.parse(localStorage.getItem(\"inventory\")) ?? [];\nconsole.log(back.length); // 2\n```\n\n`JSON.parse(null)` gives `null`; thanks to `?? []` we use an empty array when there's no record."
+  },
+  {
+   "title": "Load on open, save on change",
+   "body": "Every page that saves data follows the same pattern:\n\n1. When the page opens, **load** the saved data (use a default if there is none).\n2. **Show** the data on the screen.\n3. **Save** it again every time it changes.\n\nFor objects like settings, spread (`...`) helps fill missing fields with defaults:\n\n```js\nconst DEFAULTS = { sound: true, volume: 5 };\nconst saved = JSON.parse(localStorage.getItem(\"settings\")) ?? {};\nconst settings = { ...DEFAULTS, ...saved }; // saved values overwrite the defaults\n```\n\nPutting the loading into a function like `loadBest()` makes things easier: you can try it again and again with different records."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Captain's note",
+   "code": "const note = document.querySelector(\"#note\");\nnote.value = localStorage.getItem(\"note\") ?? \"\";\n\nnote.addEventListener(\"input\", () => {\n  localStorage.setItem(\"note\", note.value);\n  document.querySelector(\"#info\").textContent = \"Saved.\";\n});\n",
+   "note": "Type something and reload the page: your note is still there.",
+   "html": "<textarea id=\"note\" rows=\"3\" cols=\"30\" placeholder=\"Captain's note...\"></textarea>\n<p id=\"info\"></p>\n"
+  },
+  {
+   "title": "Saving a list (JSON)",
+   "code": "const planets = [\"Mars\", \"Venus\"];\nlocalStorage.setItem(\"planets\", JSON.stringify(planets));\n\nconst text = localStorage.getItem(\"planets\");\nconsole.log(\"Stored text:\", text);\n\nconst back = JSON.parse(text);\nconsole.log(\"Array back:\", back, \"length:\", back.length);\n\ndocument.querySelector(\"#out\").textContent = back.join(\" and \");\n",
+   "note": "Notice in the Console that the stored text is JSON text with quotes.",
+   "html": "<p>Planets: <strong id=\"out\"></strong></p>"
+  }
+ ],
+ "tasks": [
+  {
+   "title": "Visit counter",
+   "prompt": "Write the `countVisit()` function:\n\n- it reads the number in the `visits` key (0 if missing),\n- adds 1 and saves it back,\n- writes `You opened this page 5 times.` into `#info`.\n\n`countVisit()` runs once when the page opens. (When the book's screenshot was taken, the notebook held 4 visits.)",
+   "html": "<p id=\"info\"></p>",
+   "storage": {
+    "visits": "4"
+   },
+   "starter": "function countVisit() {\n  // read (0 if missing), add 1, save, show\n}\n\ncountVisit();\n",
+   "solution": "function countVisit() {\n  // read (0 if missing), add 1, save, show\n  const visits = (Number(localStorage.getItem(\"visits\")) || 0) + 1;\n  localStorage.setItem(\"visits\", String(visits));\n  document.querySelector(\"#info\").textContent = `You opened this page ${visits} times.`;\n}\n\ncountVisit();\n",
+   "hints": [
+    "const visits = (Number(localStorage.getItem(\"visits\")) || 0) + 1;",
+    "localStorage.setItem(\"visits\", String(visits));"
+   ],
+   "check": {
+    "code_contains": [
+     "localStorage.getItem",
+     "localStorage.setItem",
+     "Number("
+    ]
+   }
+  },
+  {
+   "title": "Remember the pilot",
+   "prompt": "Write the `showGreeting()` function: if a name is saved in the `pilot` key, it writes `Welcome back, Alex!` into `#hello`; otherwise `Hello, new pilot!`. It runs when the page opens.\n\n- When `#name-form` is submitted, the name (spaces trimmed, if not empty) is saved in the `pilot` key and the greeting is updated.\n- The `#forget` button deletes the record (`removeItem`) and updates the greeting.",
+   "html": "<form id=\"name-form\"><input id=\"name\" placeholder=\"Pilot name\"> <button>Save</button></form>\n<button id=\"forget\">Forget</button>\n<p id=\"hello\"></p>\n",
+   "storage": {
+    "pilot": "Alex"
+   },
+   "starter": "const hello = document.querySelector(\"#hello\");\n\nfunction showGreeting() {\n  // welcome back if a name is saved, otherwise hello\n}\n\n// form: save; Forget: delete\n\nshowGreeting();\n",
+   "solution": "const hello = document.querySelector(\"#hello\");\n\nfunction showGreeting() {\n  // welcome back if a name is saved, otherwise hello\n  const name = localStorage.getItem(\"pilot\");\n  hello.textContent = name ? `Welcome back, ${name}!` : \"Hello, new pilot!\";\n}\n\n// form: save; Forget: delete\ndocument.querySelector(\"#name-form\").addEventListener(\"submit\", (e) => {\n  e.preventDefault();\n  const name = document.querySelector(\"#name\").value.trim();\n  if (name === \"\") return;\n  localStorage.setItem(\"pilot\", name);\n  showGreeting();\n});\n\ndocument.querySelector(\"#forget\").addEventListener(\"click\", () => {\n  localStorage.removeItem(\"pilot\");\n  showGreeting();\n});\n\nshowGreeting();\n",
+   "hints": [
+    "const name = localStorage.getItem(\"pilot\"); gives null if there's no record.",
+    "localStorage.removeItem(\"pilot\");"
+   ],
+   "check": {
+    "code_contains": [
+     "setItem",
+     "getItem",
+     "removeItem"
+    ]
+   }
+  },
+  {
+   "title": "Saving the inventory",
+   "prompt": "The inventory is an array, stored as JSON in the `inventory` key.\n\n- `loadItems()`: reads the record with `JSON.parse` and returns the array; returns `[]` if there's no record.\n- `addItem(name)`: adds the name to the `items` array, saves the array with `JSON.stringify` and calls `render()`.",
+   "html": "<ul id=\"inv\"></ul>",
+   "storage": {
+    "inventory": "[\"shield\",\"laser\"]"
+   },
+   "starter": "const inv = document.querySelector(\"#inv\");\n\nfunction loadItems() {\n  // read with JSON.parse; [] if there's no record\n  return [];\n}\n\nlet items = loadItems();\n\nfunction render() {\n  inv.innerHTML = \"\";\n  for (const item of items) {\n    const li = document.createElement(\"li\");\n    li.textContent = item;\n    inv.append(li);\n  }\n}\n\nfunction addItem(name) {\n  // add to the array, save, draw\n}\n\nrender();\n",
+   "solution": "const inv = document.querySelector(\"#inv\");\n\nfunction loadItems() {\n  // read with JSON.parse; [] if there's no record\n  return JSON.parse(localStorage.getItem(\"inventory\")) ?? [];\n}\n\nlet items = loadItems();\n\nfunction render() {\n  inv.innerHTML = \"\";\n  for (const item of items) {\n    const li = document.createElement(\"li\");\n    li.textContent = item;\n    inv.append(li);\n  }\n}\n\nfunction addItem(name) {\n  // add to the array, save, draw\n  items.push(name);\n  localStorage.setItem(\"inventory\", JSON.stringify(items));\n  render();\n}\n\nrender();\n",
+   "hints": [
+    "JSON.parse(localStorage.getItem(\"inventory\")) ?? []",
+    "localStorage.setItem(\"inventory\", JSON.stringify(items));"
+   ],
+   "check": {
+    "code_contains": [
+     "JSON.parse",
+     "JSON.stringify"
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "title": "Remember the settings",
+  "prompt": "The game settings are stored as an object, in JSON, in the `settings` key. The defaults: `{ sound: true, volume: 5 }`.\n\n- `loadSettings()`: reads the record and returns it with missing fields filled from the defaults (`{ ...DEFAULTS, ...saved }`). If there's no record, the defaults are returned.\n- When the page opens, the `#sound` checkbox and the `#volume` list show the loaded settings.\n- When either one changes (`change`), the settings object is updated and saved. `volume` is stored as a **number**.",
+  "html": "<label><input type=\"checkbox\" id=\"sound\"> Sound on</label> \n<label>Volume <select id=\"volume\"><option value=\"3\">3</option><option value=\"5\">5</option><option value=\"8\">8</option></select></label>\n",
+  "storage": {
+   "settings": "{\"volume\":8}"
+  },
+  "starter": "const DEFAULTS = { sound: true, volume: 5 };\nconst soundBox = document.querySelector(\"#sound\");\nconst volumeSelect = document.querySelector(\"#volume\");\n\nfunction loadSettings() {\n  // read the record, merge it with the defaults\n}\n\n// load, put the values in the boxes, save on change events\n\n",
+  "solution": "const DEFAULTS = { sound: true, volume: 5 };\nconst soundBox = document.querySelector(\"#sound\");\nconst volumeSelect = document.querySelector(\"#volume\");\n\nfunction loadSettings() {\n  // read the record, merge it with the defaults\n  const saved = JSON.parse(localStorage.getItem(\"settings\")) ?? {};\n  return { ...DEFAULTS, ...saved };\n}\n\n// load, put the values in the boxes, save on change events\nconst settings = loadSettings();\n\nfunction saveSettings() {\n  localStorage.setItem(\"settings\", JSON.stringify(settings));\n}\n\nsoundBox.checked = settings.sound;\nvolumeSelect.value = String(settings.volume);\n\nsoundBox.addEventListener(\"change\", () => {\n  settings.sound = soundBox.checked;\n  saveSettings();\n});\nvolumeSelect.addEventListener(\"change\", () => {\n  settings.volume = Number(volumeSelect.value);\n  saveSettings();\n});\n",
+  "hints": [
+   "return { ...DEFAULTS, ...saved };",
+   "soundBox.checked = settings.sound; volumeSelect.value = String(settings.volume);",
+   "settings.volume = Number(volumeSelect.value);"
+  ],
+  "check": {
+   "code_contains": [
+    "JSON.parse",
+    "JSON.stringify",
+    "change"
+   ]
+  }
+ },
+ "project_task": {
+  "title": "High score",
+  "prompt": "The game's record should stay even after the page closes. Write two functions:\n\n- `loadBest()`: returns the score in the `best` key as a **number** (0 if there's no record).\n- `saveBest(score)`: if the score beats the record, it saves it, updates `#best`, writes `New record: 50!` into `#info` and returns `true`; otherwise it changes nothing and returns `false`.\n\nWhen the page opens, the record shows in `#best`. (When the book's screenshot was taken, the record was 35.)",
+  "html": "<h2 id=\"title\">Star Hunter</h2>\n<form id=\"pilot-form\"><input id=\"pilot-name\" placeholder=\"Pilot name\" autocomplete=\"off\"> <button>Start</button></form>\n<p id=\"info\">Type the pilot's name and start.</p>\n<p id=\"hud\">Score: <span id=\"score\">0</span> · Time: <span id=\"time\">10</span> · Best: <span id=\"best\">0</span></p>\n<div id=\"field\"><div id=\"ship\"></div></div>\n<div id=\"colors\"><button data-color=\"#f7df1e\">Yellow</button> <button data-color=\"#4dd0e1\">Turquoise</button> <button data-color=\"#ff6b6b\">Red</button></div>\n",
+  "storage": {
+   "best": "35"
+  },
+  "starter": "const bestEl = document.querySelector(\"#best\");\nconst info = document.querySelector(\"#info\");\n\nfunction loadBest() {\n  // return the saved record as a number (0 if missing)\n  return 0;\n}\n\nfunction saveBest(score) {\n  // if the record is beaten, save it and return true; otherwise false\n}\n\n// show the record when the page opens\n\n",
+  "solution": "const bestEl = document.querySelector(\"#best\");\nconst info = document.querySelector(\"#info\");\n\nfunction loadBest() {\n  // return the saved record as a number (0 if missing)\n  return Number(localStorage.getItem(\"best\")) || 0;\n}\n\nfunction saveBest(score) {\n  // if the record is beaten, save it and return true; otherwise false\n  if (score <= loadBest()) return false;\n  localStorage.setItem(\"best\", String(score));\n  bestEl.textContent = score;\n  info.textContent = `New record: ${score}!`;\n  return true;\n}\n\n// show the record when the page opens\nbestEl.textContent = loadBest();\n",
+  "hints": [
+   "return Number(localStorage.getItem(\"best\")) || 0;",
+   "if (score <= loadBest()) return false;",
+   "When the page opens: bestEl.textContent = loadBest();"
+  ],
+  "check": {
+   "code_contains": [
+    "localStorage.getItem",
+    "localStorage.setItem",
+    "Number("
+   ]
+  }
+ }
+}

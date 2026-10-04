@@ -59,6 +59,11 @@ KURS_EN = {
                "alt": "Day by day across an adventure map: start coding with Piko.",
                "kurulum": "Install Python from <b>python.org</b>. Open <b>IDLE</b>, which comes with it, create a new file with "
                           "<i>File → New File</i>, write your code and run it with <b>F5</b>."},
+    "javascript": {"ad": "30 Days of JavaScript", "varsayilan_proje": "Star Hunter",
+                   "alt": "Day by day across space: start coding with Kodi.",
+                   "kurulum": "Open a browser (Chrome, Edge or Firefox) and press <b>F12</b> to open the Developer Tools. "
+                              "Type your code in the <b>Console</b> tab and press Enter; the <code>console.log</code> output appears there. "
+                              "For page (HTML) tasks, write the code inside a <code>&lt;script&gt;</code> tag in an <code>.html</code> file and open the file in the browser."},
 }
 
 # Arayüz metinleri (tr, en)
@@ -100,6 +105,7 @@ T = {
     "srt_tarih": ("Tarih", "Date"), "srt_maskot": ("{m} · yol arkadaşın", "{m} · your guide"),
     "alt_video_gun": ("Video anlatım: YouTube · „Gün {d}” videosu", "Video lesson: YouTube · “Day {d}” video"),
     "alt_video": ("Video anlatımlar: YouTube", "Video lessons: YouTube"),
+    "demoapi": ("Deneme API'si", "Demo API"),
 }
 
 
@@ -217,14 +223,17 @@ def lexer():
     return PythonLexer() if K["kod"] == "python" else JavascriptLexer()
 
 
-def kod(code, cikti=None, baslik=None, hata=False, sekil=None, lex=None):
+def kod(code, cikti=None, baslik=None, hata=False, sekil=None, lex=None, not_=None):
+    """Kod + çıktı (+ şekil) + not. Not, son kutuyla bölünmez bir blokta durur; sayfaya tek başına düşmez."""
     code = (code or "").rstrip("\n")
     out = f'<div class="code">{f"<div class=cap>{html.escape(baslik)}</div>" if baslik else ""}<pre class="hl">{highlight(code, lex or lexer(), FORMATTER).rstrip()}</pre></div>'
+    son = ""
     if cikti is not None:
-        out += f'<div class="out{" err" if hata else ""}"><span>{t("hata") if hata else t("cikti")}</span><pre>{html.escape(cikti.rstrip())}</pre></div>'
-    if sekil:
-        out += sekil
-    return f'<div class="kod-grup">{out}</div>'
+        son = f'<div class="out{" err" if hata else ""}"><span>{t("hata") if hata else t("cikti")}</span><pre>{html.escape(cikti.rstrip())}</pre></div>'
+    son += sekil or ""
+    if not_:
+        son = f'<div class="son">{son}<p class="note">{not_}</p></div>'
+    return f'<div class="kod-grup">{out}{son}</div>'
 
 
 def calistir(code, inputs=None):
@@ -263,7 +272,8 @@ def ekran_kapat():
 def sayfa_goruntusu(code, html_="", css_="", storage=None):
     """Sayfa kodunu verilen HTML ile çalıştırır; (görüntü uri'si, konsol çıktısı, hata) döndürür. Sonuçlar önbelleğe alınır."""
     import hashlib
-    anahtar = hashlib.sha1(json.dumps([code, html_, css_, storage], ensure_ascii=False).encode()).hexdigest()[:16]
+    shim = (HERE / demo_api_dosyasi()).read_text("utf8")
+    anahtar = hashlib.sha1(json.dumps([code, html_, css_, storage, shim], ensure_ascii=False).encode()).hexdigest()[:16]
     d = HERE / "is" / "ekran"; d.mkdir(parents=True, exist_ok=True)
     img, meta = d / f"{anahtar}.jpg", d / f"{anahtar}.json"
     if not meta.exists():
@@ -284,9 +294,9 @@ def sayfa_goruntusu(code, html_="", css_="", storage=None):
             elif u.startswith("http://kitap.local/"):
                 tohum = "".join(f"localStorage.setItem({json.dumps(k_)}, {json.dumps(v_)});" for k_, v_ in (storage or {}).items())
                 modul = ' type="module"' if re.search(r"^(for )?await\b", code, re.M) else ""
-                sayfa = (f'<!doctype html><html lang="tr"><head><meta charset="utf-8"><style>@font-face {{ font-family: N; src: url(/font/n.ttf); }}'
+                sayfa = (f'<!doctype html><html lang="{DIL}"><head><meta charset="utf-8"><style>@font-face {{ font-family: N; src: url(/font/n.ttf); }}'
                          f'{EKRAN_CSS}{css_ or ""}</style></head><body>{html_ or ""}'
-                         f'<script>{(HERE / "demo_api.js").read_text("utf8")}\nlocalStorage.clear();{tohum}</script>'
+                         f'<script>{shim}\nlocalStorage.clear();{tohum}</script>'
                          f'<script{modul}>{code}</script></body></html>')
                 route.fulfill(body=sayfa, content_type="text/html; charset=utf-8")
             else:
@@ -305,7 +315,11 @@ def sayfa_goruntusu(code, html_="", css_="", storage=None):
     return img.as_uri(), m["log"], m["hata"]
 
 
-def kod_ve_sonuc(code, girdi=None, sayfa=None, sekil=None):
+def demo_api_dosyasi():
+    return "demo_api_en.js" if DIL == "en" else "demo_api.js"
+
+
+def kod_ve_sonuc(code, girdi=None, sayfa=None, sekil=None, not_=None):
     """Kod bloğu + çıktısı. Sayfa (DOM) kodlarında çıktının yerine sayfanın ekran görüntüsü gelir."""
     out, err = calistir(code, girdi)
     if out is None and sayfa is not None:
@@ -313,8 +327,8 @@ def kod_ve_sonuc(code, girdi=None, sayfa=None, sekil=None):
         ekran = f'<div class="out ekran"><span>{t("sayfada")}</span><img src="{uri}"></div>'
         if hata:
             log = (log + "\n" if log else "") + hata
-        return kod(code, log if log else None, hata=bool(hata), sekil=ekran)
-    return kod(code, out, hata=err, sekil=sekil)
+        return kod(code, log if log else None, hata=bool(hata), sekil=ekran, not_=not_)
+    return kod(code, out, hata=err, sekil=sekil, not_=not_)
 
 
 def sahne(rows, root):
@@ -465,7 +479,7 @@ pre {{ margin: 0; }}
 .code pre, .out pre {{ font-family: Mono; font-size: 8.2pt; line-height: 1.45; white-space: pre-wrap; word-break: break-word; }}
 .out {{ border: 0.8pt dashed #9DB4D6; border-top: none; border-radius: 0 0 5pt 5pt; padding: 5pt 8pt 6pt; margin: 0 4pt; background: #fff; }}
 .out span, .sahne > span {{ display: block; font-family: Head; font-weight: 600; font-size: 6.5pt; letter-spacing: .08em; text-transform: uppercase; color: var(--ink2); margin-bottom: 2pt; }}
-.out.ekran {{ break-inside: avoid; }} .bolunebilir pre {{ font-size: 7.2pt; }}
+.out.ekran, .son {{ break-inside: avoid; }} .son .note {{ margin: 3pt 0 0 4pt; }} .bolunebilir pre {{ font-size: 7.2pt; }}
 .out.ekran img {{ display: block; width: 100%; border: 0.6pt solid var(--line); border-radius: 4pt; }}
 .out.err {{ border-color: #E8574A; background: #FFF4F2; }} .out.err span, .out.err pre {{ color: #B3261E; }}
 .note {{ font-size: 8.5pt; color: var(--ink2); font-style: italic; margin: -4pt 0 8pt 4pt; }}
@@ -480,7 +494,7 @@ pre {{ margin: 0; }}
 .box.sozluk dd em {{ color: var(--ink2); font-style: normal; font-size: 7.5pt; }}
 .gorev {{ border: 1pt solid var(--line); border-radius: 8pt; padding: 9pt 10pt 4pt; margin: 9pt 0; break-inside: avoid; }}
 .gorev .bas {{ break-inside: avoid; }}
-.ipucu, .kontrol {{ break-inside: avoid; }}
+.ipucu, .kontrol, .kuyruk {{ break-inside: avoid; }}
 div.hl {{ background: var(--soft); border: 0.8pt solid var(--line); border-left: 3pt solid var(--c); border-radius: 5pt; padding: 6pt 8pt; margin: 4pt 0 8pt; break-inside: avoid; }}
 div.hl pre {{ font-family: Mono; font-size: 8.2pt; line-height: 1.45; white-space: pre-wrap; }} div.hl code {{ background: none; padding: 0; font-size: 1em; }}
 .gorev .etiket {{ display: inline-block; font-family: Head; font-weight: 700; font-size: 7pt; letter-spacing: .06em; text-transform: uppercase;
@@ -604,12 +618,20 @@ def gorev_html(gv, etiket, cls, ref, root):
         kontrol.append(t("cikti_olmali") + ", ".join(f"<code>{html.escape(x)}</code>" for x in ch["output_contains"]))
     if ch.get("code_contains"):
         kontrol.append(t("kod_gecmeli") + ", ".join(f"<code>{html.escape(x)}</code>" for x in ch["code_contains"]))
+    kuyruk = ""  # kontrol + ipuçları + çözüm satırı birlikte kalır; uzun görev bölünse de son satır tek başına sayfaya düşmez
     if kontrol:
-        out += f'<div class="kontrol"><b>{t("kontrol")}</b> ' + "; ".join(kontrol) + "</div>"
+        kuyruk += f'<div class="kontrol"><b>{t("kontrol")}</b> ' + "; ".join(kontrol) + "</div>"
     if gv.get("hints"):
-        out += f'<div class="ipucu"><b>{t("ipuclari")}</b><ol>' + "".join(f"<li>{md_inline(h)}</li>" for h in gv["hints"]) + "</ol></div>"
-    out += f'<div class="cozum-ref">{t("cozum_ref", ref=ref)}</div></div>'
-    return out
+        kuyruk += f'<div class="ipucu"><b>{t("ipuclari")}</b><ol>' + "".join(f"<li>{ipucu_html(h)}</li>" for h in gv["hints"]) + "</ol></div>"
+    kuyruk += f'<div class="cozum-ref">{t("cozum_ref", ref=ref)}</div>'
+    return out + f'<div class="kuyruk">{kuyruk}</div></div>'
+
+
+def ipucu_html(h):
+    """İpucu düz kod olabilir; şablon metindeki ters tırnaklar Markdown kod işaretiyle karışmasın."""
+    if "${" in h or h.count("`") % 2:
+        return f"<code>{html.escape(h)}</code>"
+    return md_inline(h)
 
 
 def sozluk_terimleri(v):
@@ -620,7 +642,7 @@ def sozluk_terimleri(v):
         for x in ((gv or {}).get("explain") or {}).get("terms", []):
             if x.get("kind") != "değişken":  # değişken adları sözlüğü şişirir
                 terms.setdefault(x["term"], x)
-    if DIL == "en":
+    if DIL == "en" and terms:
         en = json.loads((veri_dizini(K["kod"]) / "sozluk.json").read_text("utf8"))
         terms = {k_: {"term": k_, "kind": en[k_][0], "desc": en[k_][1]} for k_ in terms if k_ in en}
     return terms
@@ -662,9 +684,8 @@ def gun_html(v, k, root):
         if not sc and e.get("scene"):
             o, _ = calistir(e["code"], e.get("inputs"))
             sc = o.split("\n") if o else None
-        body += f"<h3>{html.escape(e['title'])}</h3>" + kod_ve_sonuc(e["code"], e.get("inputs"), e if e.get("mode") == "page" or e.get("html") else {}, sahne(sc, root) if sc else None)
-        if e.get("note"):
-            body += f'<p class="note">{md_inline(e["note"])}</p>'
+        body += f"<h3>{html.escape(e['title'])}</h3>" + kod_ve_sonuc(e["code"], e.get("inputs"), e if e.get("mode") == "page" or e.get("html") else {}, sahne(sc, root) if sc else None,
+                                                                    md_inline(e["note"]) if e.get("note") else None)
     terms = sozluk_terimleri(v)
     if terms:
         body += f'<div class="box sozluk"><h4>{t("sozluk")}</h4><dl>' + "".join(
@@ -683,9 +704,10 @@ def gun_html(v, k, root):
 
 
 def cozumler_html(gunler):
-    if DIL == "en":
+    py_en = DIL == "en" and K["kod"] == "python"  # İngilizce açıklamalar yalnızca Python kodları için üretilir
+    if py_en:
         from aciklama_en import explain
-    aciklamali = DIL == "en" or any((gv or {}).get("explain") for v in gunler for gv in v["tasks"])
+    aciklamali = py_en or any((gv or {}).get("explain") for v in gunler for gv in v["tasks"])
     body = f'<section class="on"><h1>{t("cozumler")}</h1><p>{t("cozum_giris")}'
     body += t("cozum_satir") if aciklamali else t("cozum_cikti")
     body += t("cozum_farkli") + "</p>"
@@ -700,7 +722,7 @@ def cozumler_html(gunler):
         varsayilan = ["Emma", "12", "Piko", "5"] if DIL == "en" else ["Ece", "12", "Piko", "5"]
         for j, (etiket, gv) in enumerate(items, 1):
             girdi = gv.get("inputs") or varsayilan if "input(" in gv["solution"] else None
-            satirlar = explain(gv["solution"]) if DIL == "en" else (gv.get("explain") or {}).get("lines", [])
+            satirlar = explain(gv["solution"]) if py_en else (gv.get("explain") or {}).get("lines", [])
             rows = ""
             for x in satirlar:
                 notes = [nn for nn in x.get("notes", []) if nn not in gorulen]  # aynı açıklama gün içinde bir kez
@@ -760,8 +782,8 @@ def on_bolum_html(k, gunler, sayfalar, root, tam=False):
         toc = "".join(satir(v) for v in gunler)
     toc += f'<li class="bolum">{t("ekler")}</li>' if tam else ""
     toc += f'<li><b>{t("ek")}</b>{t("cozumler")}<span class="s">{sayfalar.get("cozum", "")}</span></li>'
-    if k["kod"] == "javascript" and DIL == "tr":
-        toc += f'<li><b>{t("ek")}</b>Deneme API\'si<span class="s">{sayfalar.get("demoapi", "")}</span></li>'
+    if k["kod"] == "javascript":
+        toc += f'<li><b>{t("ek")}</b>{t("demoapi")}<span class="s">{sayfalar.get("demoapi", "")}</span></li>'
     if tam:
         toc += f'<li><b>{t("son")}</b>{t("sertifikan")}<span class="s">{sayfalar.get("sertifika", "")}</span></li>'
     ornek = "" if tam else f'<p style="font-size:8.5pt;color:#4A5B7A;margin-top:14pt">{t("ornek_bolum", ad=k["ad"], a=n0, b=n1)}</p>'
@@ -780,6 +802,12 @@ def on_bolum_html(k, gunler, sayfalar, root, tam=False):
 
 
 def demo_api_html():
+    if DIL == "en":
+        return ('<section class="on"><h1>Demo API</h1><p>The <code>/demo-api/...</code> addresses used in the examples from Day 26 on '
+                "belong to a demo server made for this course. In the interactive lessons it is ready to use. When you try the code on your own computer, "
+                "paste the code below at the <b>very top</b> of your script: <code>fetch</code> requests are then answered with this data without going to the internet.</p>"
+                + kod((HERE / "demo_api_en.js").read_text("utf8"), baslik="demo-api.js").replace('class="kod-grup"', 'class="kod-grup bolunebilir"')
+                + "</section>")
     return (f'<section class="on"><h1>Deneme API\'si</h1><p>26. günden itibaren örneklerde kullanılan <code>/demo-api/...</code> adresleri '
             "bu kurs için hazırlanmış bir deneme sunucusudur. Etkileşimli derslerde hazırdır. Kendi bilgisayarında denerken aşağıdaki kodu "
             "betiğinin <b>en üstüne</b> yapıştır: <code>fetch</code> istekleri internete çıkmadan bu verilerle cevaplanır.</p>"
@@ -894,13 +922,20 @@ def main():
     gunler = [json.loads((vd / f"gun-{d:02d}.json").read_text("utf8")) for d in range(g0, g1 + 1)]
     if DIL == "en":  # sözlük terimleri Türkçe veriden gelir
         for v in gunler:
-            v["_tr"] = json.loads((REPO / a.kurs / "veri" / f"gun-{int(v['day']):02d}.json").read_text("utf8"))
-    work = HERE / "is" / DIL; work.mkdir(parents=True, exist_ok=True)
+            v["_tr"] = tr = json.loads((REPO / a.kurs / "veri" / f"gun-{int(v['day']):02d}.json").read_text("utf8"))
+            # çeviride olmayan teknik alanlar (sayfa CSS'i, kip, xp) Türkçe veriden aynı sırayla alınır
+            ciftler = list(zip(v["examples"], tr["examples"])) + list(zip(v["tasks"], tr["tasks"]))
+            ciftler += [(v[x], tr[x]) for x in ("challenge", "visual_task", "project_task") if v.get(x) and tr.get(x)]
+            for en_, tr_ in ciftler:
+                for alan in ("css", "mode", "xp", "id"):
+                    if alan in tr_ and alan not in en_:
+                        en_[alan] = tr_[alan]
+    work = HERE / "is" / f"{a.kurs}-{DIL}"; work.mkdir(parents=True, exist_ok=True)
     root = REPO.as_uri()
     gun_parca = [(f"gun-{int(v['day']):02d}", page(gun_html(v, k, root), root)) for v in gunler]
     coz = ("cozumler", page(cozumler_html(gunler), root))
     kapak = ("kapak", page(kapak_html(k, gunler, root, tam), root))
-    son = [("demoapi", page(demo_api_html(), root))] if k["kod"] == "javascript" and DIL == "tr" else []
+    son = [("demoapi", page(demo_api_html(), root))] if k["kod"] == "javascript" else []
     son += [("sertifika", page(sertifika_html(k, root), root))] if tam else []
     # ön bölümün uzunluğu sayfa numaralarına bağlı değil: önce boş numaralarla bas, sonra gerçekleriyle
     nasil, toc = on_bolum_html(k, gunler, {}, root, tam)
@@ -924,7 +959,7 @@ def main():
             d = int(ad[4:]); v = next(x for x in gunler if int(x["day"]) == d)
             sayfa_bilgisi += [(f"{t('gun', n=d)}: {v['title']}", d)] * n
         else:
-            sayfa_bilgisi += [({"cozumler": t("cozumler"), "demoapi": "Deneme API'si"}.get(ad, t("giris")), None)] * n
+            sayfa_bilgisi += [({"cozumler": t("cozumler"), "demoapi": t("demoapi")}.get(ad, t("giris")), None)] * n
     altbilgi(writer, sayfa_bilgisi, k)
     for _ in range(3):  # parçalar arasında ortak görseller bir kez (maskeler birleşince görseller de eşleşir)
         writer.compress_identical_objects(remove_duplicates=True, remove_unreferenced=True)

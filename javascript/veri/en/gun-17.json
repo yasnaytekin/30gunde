@@ -1,0 +1,132 @@
+{
+ "day": 17,
+ "title": "Keyboard and sound",
+ "region": "kusak",
+ "project_contribution": "Keyboard control and sounds",
+ "objective": "React to keys with keydown/keyup, move an element with the keyboard and play a beep with Web Audio",
+ "story": "You've entered the Event Belt! Everything here reacts to a signal. Today you'll steer your ship with the **keyboard**, and add a sound on top.",
+ "sections": [
+  {
+   "title": "keydown and keyup",
+   "body": "The moment you press a key a `keydown` event happens, and the moment you let go a `keyup` event happens. To listen to keys on the whole page, we attach the event to `document`. Which key was pressed is in `e.key`:\n\n```js\ndocument.addEventListener(\"keydown\", (e) => {\n  console.log(\"Pressed:\", e.key);\n});\n```\n\n| Key | e.key |\n|---|---|\n| Left / right arrow | `\"ArrowLeft\"` / `\"ArrowRight\"` |\n| Up / down arrow | `\"ArrowUp\"` / `\"ArrowDown\"` |\n| Enter | `\"Enter\"` |\n| Space | `\" \"` (text with a single space) |\n| Esc | `\"Escape\"` |\n| Letters and digits | `\"a\"`, `\"A\"`, `\"1\"` |\n\nClick inside the page once first so that it hears the keys."
+  },
+  {
+   "title": "Moving an element",
+   "body": "To change an element's position, keep its position in a variable and update its CSS when it changes. If the element is `position: absolute` you can use `style.left`; `transform` works on any element:\n\n```js\nlet x = 0;\nfunction move(dx) {\n  x = Math.max(0, Math.min(260, x + dx)); // keep it between 0 and 260\n  rocket.style.left = x + \"px\";\n  // or: rocket.style.transform = `translateX(${x}px)`;\n}\n```\n\n`Math.min(260, ...)` turns a number bigger than 260 into 260, and `Math.max(0, ...)` turns one smaller than zero into 0. That way the rocket can't escape the field. This is called **clamping**."
+  },
+  {
+   "title": "Stopping the default behavior",
+   "body": "The arrow keys and space normally scroll the page. In a game we don't want that: call `e.preventDefault()` only for **the keys you use**.\n\nIf the user is typing into a box, shortcuts shouldn't work. `e.target` tells you which element the event happened in:\n\n```js\ndocument.addEventListener(\"keydown\", (e) => {\n  if (e.target.tagName === \"INPUT\") return; // typing into a box\n  if (e.key === \"ArrowLeft\" || e.key === \"ArrowRight\") {\n    e.preventDefault(); // don't scroll the page\n  }\n});\n```"
+  },
+  {
+   "title": "Sound: a beep with Web Audio",
+   "body": "The browser can make sounds by itself! `AudioContext` is like a small sound studio, and an `oscillator` is like a speaker that makes a tone:\n\n```js\nfunction beep(freq = 440) {\n  try {\n    const audio = new AudioContext();\n    const osc = audio.createOscillator();\n    osc.frequency.value = freq; // the higher, the higher the pitch\n    osc.connect(audio.destination);\n    osc.start();\n    osc.stop(audio.currentTime + 0.15); // play for 0.15 seconds\n  } catch (err) {\n    console.log(\"Couldn't play the sound.\");\n  }\n}\n```\n\n`try { ... } catch (err) { ... }`: if the code inside fails, the program doesn't stop; the `catch` part runs (we'll see this in detail on Day 24).\n\nBrowsers only play sound after the user has clicked somewhere or pressed a key. Sound may not work on every device, so the rest of the game **shouldn't depend** on it."
+  }
+ ],
+ "examples": [
+  {
+   "title": "A dot with the arrow keys",
+   "code": "const dot = document.querySelector(\"#dot\");\nlet x = 0;\nlet y = 0;\ndocument.addEventListener(\"keydown\", (e) => {\n  if (e.key === \"ArrowRight\") x += 20;\n  else if (e.key === \"ArrowLeft\") x -= 20;\n  else if (e.key === \"ArrowDown\") y += 20;\n  else if (e.key === \"ArrowUp\") y -= 20;\n  else return;\n  e.preventDefault();\n  x = Math.max(0, Math.min(220, x));\n  y = Math.max(0, Math.min(100, y));\n  dot.style.left = x + \"px\";\n  dot.style.top = y + \"px\";\n  document.querySelector(\"#info\").textContent = `${e.key} → x: ${x}, y: ${y}`;\n});\n",
+   "note": "Can the dot leave the field? Try it.",
+   "html": "<div id=\"area\"><div id=\"dot\"></div></div>\n<p id=\"info\">Click the page, then press the arrow keys.</p>\n"
+  },
+  {
+   "title": "A beep",
+   "code": "let audio = null;\nfunction beep(freq = 440) {\n  try {\n    audio = audio || new AudioContext();\n    const osc = audio.createOscillator();\n    const gain = audio.createGain();\n    osc.frequency.value = freq;\n    gain.gain.value = 0.1; // volume\n    osc.connect(gain);\n    gain.connect(audio.destination);\n    osc.start();\n    osc.stop(audio.currentTime + 0.15);\n  } catch (err) {\n    console.log(\"Couldn't play the sound:\", err.message);\n  }\n}\n\ndocument.querySelector(\"#beep\").addEventListener(\"click\", () => beep());\ndocument.addEventListener(\"keydown\", (e) => {\n  if (e.key === \"b\") beep(660);\n});\n",
+   "note": "Turn your sound on. If no sound plays, that's fine; the tasks don't need sound.",
+   "html": "<button id=\"beep\">Beep!</button>\n<p>Or click the page and press the <b>b</b> key.</p>\n"
+  }
+ ],
+ "tasks": [
+  {
+   "title": "Key detector",
+   "prompt": "When a key is pressed (`keydown`), write the key's name into the `#key` paragraph like `Key pressed: a`.\n\nThe space key's `e.key` value is an invisible `\" \"`, so write `Space` instead: `Key pressed: Space`.",
+   "html": "<p id=\"key\">Click the page and press a key.</p>",
+   "starter": "// listen to the keydown event on document\n\n",
+   "solution": "// listen to the keydown event on document\ndocument.addEventListener(\"keydown\", (e) => {\n  const name = e.key === \" \" ? \"Space\" : e.key;\n  document.querySelector(\"#key\").textContent = `Key pressed: ${name}`;\n});\n",
+   "hints": [
+    "document.addEventListener(\"keydown\", (e) => { ... })",
+    "const name = e.key === \" \" ? \"Space\" : e.key;"
+   ],
+   "check": {
+    "code_contains": [
+     "keydown",
+     "e.key"
+    ]
+   }
+  },
+  {
+   "title": "Slide the rocket",
+   "prompt": "The right arrow (`ArrowRight`) adds 20 to `x`, the left arrow (`ArrowLeft`) takes 20 away. `x` always stays **between 0 and 260**.\n\nAfter every move:\n\n- move the rocket with `transform`: `rocket.style.transform` should look like `translateX(40px)`,\n- write `x: 40` into `#pos`.\n\nCall `e.preventDefault()` for the arrows; other keys shouldn't change anything.",
+   "html": "<div id=\"track\"><div id=\"rocket\"></div></div>\n<p id=\"pos\">x: 0</p>\n",
+   "starter": "const rocket = document.querySelector(\"#rocket\");\nlet x = 0;\n\n// listen to keydown\n\n",
+   "solution": "const rocket = document.querySelector(\"#rocket\");\nlet x = 0;\n\n// listen to keydown\ndocument.addEventListener(\"keydown\", (e) => {\n  if (e.key === \"ArrowRight\") x += 20;\n  else if (e.key === \"ArrowLeft\") x -= 20;\n  else return;\n  e.preventDefault();\n  x = Math.max(0, Math.min(260, x));\n  rocket.style.transform = `translateX(${x}px)`;\n  document.querySelector(\"#pos\").textContent = `x: ${x}`;\n});\n",
+   "hints": [
+    "x = Math.max(0, Math.min(260, x)); clamps x.",
+    "rocket.style.transform = `translateX(${x}px)`;"
+   ],
+   "check": {
+    "code_contains": [
+     "keydown",
+     "Math.min",
+     "Math.max",
+     "transform"
+    ]
+   }
+  },
+  {
+   "title": "Engine button",
+   "prompt": "The engine runs as long as the space key is held down:\n\n- When space is pressed (`keydown`): the `#engine` text becomes `Engine: ON` and the `on` class is added.\n- When space is released (`keyup`): it becomes `Engine: OFF` and the `on` class is removed.\n\nDon't forget to call `e.preventDefault()` for space; other keys must not affect the engine.",
+   "html": "<p id=\"engine\">Engine: OFF</p><p>Click the page, then hold down the space key.</p>",
+   "starter": "const engine = document.querySelector(\"#engine\");\n\n// listen to keydown and keyup\n\n",
+   "solution": "const engine = document.querySelector(\"#engine\");\n\n// listen to keydown and keyup\ndocument.addEventListener(\"keydown\", (e) => {\n  if (e.key !== \" \") return;\n  e.preventDefault();\n  engine.textContent = \"Engine: ON\";\n  engine.classList.add(\"on\");\n});\n\ndocument.addEventListener(\"keyup\", (e) => {\n  if (e.key !== \" \") return;\n  engine.textContent = \"Engine: OFF\";\n  engine.classList.remove(\"on\");\n});\n",
+   "hints": [
+    "if (e.key !== \" \") return; skips the other keys.",
+    "Write two separate listeners: one for keydown, one for keyup."
+   ],
+   "check": {
+    "code_contains": [
+     "keydown",
+     "keyup"
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "title": "Secret code",
+  "prompt": "Games have secret codes! Keep the pressed keys in the `pressed` array, but the array should always hold only **the last 4 keys** (`slice(-4)`).\n\nWhen the last 4 keys are `ArrowUp`, `ArrowUp`, `ArrowDown`, `ArrowDown` in that order, write `Secret mode unlocked!` into `#secret`.",
+  "html": "<p id=\"secret\">Enter the code...</p>",
+  "starter": "const CODE = [\"ArrowUp\", \"ArrowUp\", \"ArrowDown\", \"ArrowDown\"];\nlet pressed = [];\n\n// listen to keydown: add the key, keep the last 4, compare with the code\n\n",
+  "solution": "const CODE = [\"ArrowUp\", \"ArrowUp\", \"ArrowDown\", \"ArrowDown\"];\nlet pressed = [];\n\n// listen to keydown: add the key, keep the last 4, compare with the code\ndocument.addEventListener(\"keydown\", (e) => {\n  pressed.push(e.key);\n  pressed = pressed.slice(-4);\n  if (pressed.join(\",\") === CODE.join(\",\")) {\n    document.querySelector(\"#secret\").textContent = \"Secret mode unlocked!\";\n  }\n});\n",
+  "hints": [
+   "pressed.push(e.key); then pressed = pressed.slice(-4);",
+   "To compare two arrays, turn them into text: pressed.join(\",\") === CODE.join(\",\")"
+  ],
+  "check": {
+   "code_contains": [
+    "keydown",
+    "slice",
+    "push"
+   ]
+  }
+ },
+ "project_task": {
+  "title": "Keyboard control",
+  "prompt": "Let's steer the ship with the arrow keys. Write the `moveShip(dx)` function:\n\n- it changes `x` by `dx` and keeps it **between 0 and `MAX_X` (270)**,\n- it places the ship: `ship.style.left = x + \"px\"`,\n- if you like, it plays a sound with the ready-made `beep()` function when the ship hits the wall (optional).\n\nThen listen to `keydown`: the left arrow calls `moveShip(-STEP)`, the right arrow calls `moveShip(STEP)`, and `e.preventDefault()` stops the page from scrolling. The arrows shouldn't move the ship while someone is typing into the pilot name box.",
+  "html": "<h2 id=\"title\">Star Hunter</h2>\n<form id=\"pilot-form\"><input id=\"pilot-name\" placeholder=\"Pilot name\" autocomplete=\"off\"> <button>Start</button></form>\n<p id=\"info\">Type the pilot's name and start.</p>\n<p id=\"hud\">Score: <span id=\"score\">0</span> · Time: <span id=\"time\">10</span> · Best: <span id=\"best\">0</span></p>\n<div id=\"field\"><div id=\"ship\"></div></div>\n<div id=\"colors\"><button data-color=\"#f7df1e\">Yellow</button> <button data-color=\"#4dd0e1\">Turquoise</button> <button data-color=\"#ff6b6b\">Red</button></div>\n",
+  "starter": "const ship = document.querySelector(\"#ship\");\nconst STEP = 20;\nconst MAX_X = 270; // the field is 300px, the ship is 30px wide\nlet x = 0;\n\n// The beep sound (ready-made): if it can't play, the game quietly carries on\nlet audio = null;\nfunction beep(freq = 440) {\n  try {\n    audio = audio || new AudioContext();\n    const osc = audio.createOscillator();\n    const gain = audio.createGain();\n    osc.frequency.value = freq;\n    gain.gain.value = 0.05;\n    osc.connect(gain);\n    gain.connect(audio.destination);\n    osc.start();\n    osc.stop(audio.currentTime + 0.1);\n  } catch (err) {\n    // no sound is fine\n  }\n}\n\nfunction moveShip(dx) {\n  // change x, keep it between 0 and MAX_X, place the ship\n}\n\n// listen to keydown\n\n",
+  "solution": "const ship = document.querySelector(\"#ship\");\nconst STEP = 20;\nconst MAX_X = 270; // the field is 300px, the ship is 30px wide\nlet x = 0;\n\n// The beep sound (ready-made): if it can't play, the game quietly carries on\nlet audio = null;\nfunction beep(freq = 440) {\n  try {\n    audio = audio || new AudioContext();\n    const osc = audio.createOscillator();\n    const gain = audio.createGain();\n    osc.frequency.value = freq;\n    gain.gain.value = 0.05;\n    osc.connect(gain);\n    gain.connect(audio.destination);\n    osc.start();\n    osc.stop(audio.currentTime + 0.1);\n  } catch (err) {\n    // no sound is fine\n  }\n}\n\nfunction moveShip(dx) {\n  // change x, keep it between 0 and MAX_X, place the ship\n  x = x + dx;\n  if (x < 0 || x > MAX_X) beep(220); // hit the wall\n  x = Math.max(0, Math.min(MAX_X, x));\n  ship.style.left = x + \"px\";\n}\n\n// listen to keydown\ndocument.addEventListener(\"keydown\", (e) => {\n  if (e.target.tagName === \"INPUT\") return;\n  if (e.key === \"ArrowLeft\") {\n    e.preventDefault();\n    moveShip(-STEP);\n  } else if (e.key === \"ArrowRight\") {\n    e.preventDefault();\n    moveShip(STEP);\n  }\n});\n",
+  "hints": [
+   "x = Math.max(0, Math.min(MAX_X, x));",
+   "ship.style.left = x + \"px\";",
+   "Leave if someone is typing into a box: if (e.target.tagName === \"INPUT\") return;"
+  ],
+  "check": {
+   "code_contains": [
+    "keydown",
+    "preventDefault",
+    "style.left"
+   ]
+  }
+ }
+}

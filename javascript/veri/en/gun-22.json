@@ -1,0 +1,130 @@
+{
+ "day": 22,
+ "title": "Animation",
+ "region": "piksel",
+ "project_contribution": "Ship movement",
+ "objective": "Build an animation loop with requestAnimationFrame, separate update and draw, and calculate speed and bouncing",
+ "story": "The pictures on Pixel Planet have started to move! Like cartoons, games draw dozens of pictures one after another every second. Today you'll build an **animation loop** and make your ship move.",
+ "sections": [
+  {
+   "title": "How does animation work?",
+   "body": "Every movement on the screen is really a set of pictures changing fast. In every **frame** three things happen:\n\n1. Move the objects a little.\n2. Erase the old picture.\n3. Draw the new picture.\n\nThe browser gives us `requestAnimationFrame` (rAF for short) for this. It means: \"run this function just before drawing the next picture\". If the function asks for itself again every time, you get a loop that doesn't freeze the browser (usually 60 frames per second):\n\n```js\nfunction loop() {\n  update();                    // calculate\n  draw();                      // draw\n  requestAnimationFrame(loop); // ask for the next frame\n}\nrequestAnimationFrame(loop);\n```\n\nYou can't animate with `while (true)`: the browser never gets a chance to draw and the page freezes."
+  },
+  {
+   "title": "Separate update and draw",
+   "body": "A good habit: keep **calculating** and **drawing** in separate functions.\n\n```js\nconst ball = { x: 20, y: 60, r: 10, vx: 2 };\n\nfunction update() {\n  ball.x += ball.vx;  // only changes numbers\n}\n\nfunction draw() {\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  ctx.beginPath();\n  ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);\n  ctx.fill();         // only draws\n}\n```\n\nThat way you can call `update()` on its own and check the result, and when the game is paused you can call only `draw()`. Calling functions one at a time is also the easiest way to test them."
+  },
+  {
+   "title": "Speed and bouncing off the edges",
+   "body": "**Speed** (`vx`, `vy`) is how much the position changes every frame. If `vx = 3`, the object moves 3 pixels right every frame; with `vx = -3`, it moves left.\n\nTo make it come back when it hits an edge, we flip the sign of the speed:\n\n```js\nif (ball.x + ball.r > canvas.width || ball.x - ball.r < 0) {\n  ball.vx = -ball.vx;\n}\n```\n\nIf the object went a little past the edge, it's also good to put it back at the edge (**clamping**). `Math.max` and `Math.min` are the short way: `x = Math.max(0, Math.min(x, canvas.width - w));`"
+  },
+  {
+   "title": "Time difference (delta) and stopping",
+   "body": "Some screens draw 60 frames per second, some 120. If you write the speed \"per frame\", the game plays twice as fast on the faster screen! The fix: write the speed **per second** and multiply it by the time between two frames (`dt`). rAF gives the function the time in milliseconds:\n\n```js\nlet last = 0;\nfunction loop(time) {\n  if (!last) last = time;            // the first frame\n  const dt = (time - last) / 1000;   // seconds\n  last = time;\n  rocket.x += rocket.speed * dt;     // speed: pixels per second\n  draw();\n  frameId = requestAnimationFrame(loop);\n}\n```\n\n`requestAnimationFrame` returns a number. `cancelAnimationFrame(frameId)` cancels the frame with that number, and the loop stops."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Sliding square",
+   "code": "const canvas = document.querySelector(\"#c\");\nconst ctx = canvas.getContext(\"2d\");\nconst box = { x: 0, y: 50, size: 20, vx: 2 };\n\nfunction update() {\n  box.x += box.vx;\n  if (box.x > canvas.width) box.x = -box.size; // leave on the right, come in on the left\n}\n\nfunction draw() {\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  ctx.fillStyle = \"#4fc3f7\";\n  ctx.fillRect(box.x, box.y, box.size, box.size);\n}\n\nfunction loop() {\n  update();\n  draw();\n  requestAnimationFrame(loop);\n}\nrequestAnimationFrame(loop);\n",
+   "note": "Set vx to 5: the square slides faster. What happens if you make it negative?",
+   "html": "<canvas id=\"c\" width=\"200\" height=\"120\"></canvas>"
+  },
+  {
+   "title": "Bouncing ball",
+   "code": "const canvas = document.querySelector(\"#c\");\nconst ctx = canvas.getContext(\"2d\");\nconst ball = { x: 50, y: 40, r: 10, vx: 2.5, vy: 1.5 };\n\nfunction update() {\n  ball.x += ball.vx;\n  ball.y += ball.vy;\n  if (ball.x + ball.r > canvas.width || ball.x - ball.r < 0) ball.vx = -ball.vx;\n  if (ball.y + ball.r > canvas.height || ball.y - ball.r < 0) ball.vy = -ball.vy;\n}\n\nfunction draw() {\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  ctx.beginPath();\n  ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);\n  ctx.fillStyle = \"#ff9800\";\n  ctx.fill();\n}\n\nfunction loop() {\n  update();\n  draw();\n  requestAnimationFrame(loop);\n}\nrequestAnimationFrame(loop);\n",
+   "note": "If you delete the clearRect line in draw, the ball leaves a trail behind it.",
+   "html": "<canvas id=\"c\" width=\"200\" height=\"120\"></canvas>"
+  }
+ ],
+ "tasks": [
+  {
+   "title": "First movement",
+   "prompt": "The loop is ready; you write two functions:\n\n- `update()`: adds `box.vx` to `box.x`.\n- `draw()`: clears the canvas with `clearRect` and draws the box at `(box.x, box.y)` as a blue (`#4fc3f7`) square of size `size` × `size`.",
+   "html": "<canvas id=\"c\" width=\"200\" height=\"120\"></canvas>",
+   "starter": "const canvas = document.querySelector(\"#c\");\nconst ctx = canvas.getContext(\"2d\");\nconst box = { x: 10, y: 50, size: 20, vx: 1 };\n\nfunction update() {\n  // add vx to box.x\n}\n\nfunction draw() {\n  // clear and draw the box\n}\n\nfunction loop() {\n  update();\n  draw();\n  requestAnimationFrame(loop);\n}\nrequestAnimationFrame(loop);\n\n",
+   "solution": "const canvas = document.querySelector(\"#c\");\nconst ctx = canvas.getContext(\"2d\");\nconst box = { x: 10, y: 50, size: 20, vx: 1 };\n\nfunction update() {\n  // add vx to box.x\n  box.x += box.vx;\n}\n\nfunction draw() {\n  // clear and draw the box\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  ctx.fillStyle = \"#4fc3f7\";\n  ctx.fillRect(box.x, box.y, box.size, box.size);\n}\n\nfunction loop() {\n  update();\n  draw();\n  requestAnimationFrame(loop);\n}\nrequestAnimationFrame(loop);\n\n",
+   "hints": [
+    "box.x += box.vx;",
+    "draw: ctx.clearRect(0, 0, canvas.width, canvas.height); then fillStyle and fillRect(box.x, box.y, box.size, box.size)"
+   ],
+   "check": {
+    "code_contains": [
+     "box.vx",
+     "clearRect",
+     "fillRect"
+    ]
+   }
+  },
+  {
+   "title": "Bounce off the walls",
+   "prompt": "The ball should bounce off all four walls. The position already changes inside `update()`; add these below it:\n\n- If the ball went past the right or left edge (`ball.x + ball.r > canvas.width` or `ball.x - ball.r < 0`), flip the sign of `vx`.\n- Do the same for the top and bottom edges with `vy` and `canvas.height`.",
+   "html": "<canvas id=\"c\" width=\"200\" height=\"120\"></canvas>",
+   "starter": "const canvas = document.querySelector(\"#c\");\nconst ctx = canvas.getContext(\"2d\");\nconst ball = { x: 100, y: 60, r: 10, vx: 3, vy: 2 };\n\nfunction update() {\n  ball.x += ball.vx;\n  ball.y += ball.vy;\n  // bounce off the edges\n}\n\nfunction draw() {\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  ctx.beginPath();\n  ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);\n  ctx.fillStyle = \"#ff9800\";\n  ctx.fill();\n}\n\n\nfunction loop() {\n  update();\n  draw();\n  requestAnimationFrame(loop);\n}\nrequestAnimationFrame(loop);\n\n",
+   "solution": "const canvas = document.querySelector(\"#c\");\nconst ctx = canvas.getContext(\"2d\");\nconst ball = { x: 100, y: 60, r: 10, vx: 3, vy: 2 };\n\nfunction update() {\n  ball.x += ball.vx;\n  ball.y += ball.vy;\n  // bounce off the edges\n  if (ball.x + ball.r > canvas.width || ball.x - ball.r < 0) {\n    ball.vx = -ball.vx;\n  }\n  if (ball.y + ball.r > canvas.height || ball.y - ball.r < 0) {\n    ball.vy = -ball.vy;\n  }\n}\n\nfunction draw() {\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  ctx.beginPath();\n  ctx.arc(ball.x, ball.y, ball.r, 0, Math.PI * 2);\n  ctx.fillStyle = \"#ff9800\";\n  ctx.fill();\n}\n\n\nfunction loop() {\n  update();\n  draw();\n  requestAnimationFrame(loop);\n}\nrequestAnimationFrame(loop);\n\n",
+   "hints": [
+    "if (ball.x + ball.r > canvas.width || ball.x - ball.r < 0) { ball.vx = -ball.vx; }",
+    "Write the same with y, vy and canvas.height."
+   ],
+   "check": {
+    "code_contains": [
+     "canvas.width",
+     "canvas.height"
+    ]
+   }
+  },
+  {
+   "title": "120 pixels per second",
+   "prompt": "The rocket's speed is now in pixels **per second**: `speed: 120`.\n\n- Write the `update(dt)` function: `dt` is the time that passed, in seconds; the rocket moves forward by `speed * dt`.\n- Inside `loop(time)`, calculate `dt`: `(time - last) / 1000`. Then set `last = time` and call `update(dt)`.",
+   "html": "<canvas id=\"c\" width=\"200\" height=\"120\"></canvas>",
+   "starter": "const canvas = document.querySelector(\"#c\");\nconst ctx = canvas.getContext(\"2d\");\nconst rocket = { x: 0, y: 50, speed: 120 };\nlet last = 0;\n\nfunction update(dt) {\n  // move forward by speed * dt\n}\n\nfunction draw() {\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  ctx.fillStyle = \"#e53935\";\n  ctx.fillRect(rocket.x, rocket.y, 24, 12);\n}\n\nfunction loop(time) {\n  if (!last) last = time;\n  // calculate dt, update last, call update(dt)\n  if (rocket.x > canvas.width) rocket.x = -24;\n  draw();\n  requestAnimationFrame(loop);\n}\nrequestAnimationFrame(loop);\n",
+   "solution": "const canvas = document.querySelector(\"#c\");\nconst ctx = canvas.getContext(\"2d\");\nconst rocket = { x: 0, y: 50, speed: 120 };\nlet last = 0;\n\nfunction update(dt) {\n  // move forward by speed * dt\n  rocket.x += rocket.speed * dt;\n}\n\nfunction draw() {\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  ctx.fillStyle = \"#e53935\";\n  ctx.fillRect(rocket.x, rocket.y, 24, 12);\n}\n\nfunction loop(time) {\n  if (!last) last = time;\n  // calculate dt, update last, call update(dt)\n  const dt = (time - last) / 1000;\n  last = time;\n  update(dt);\n  if (rocket.x > canvas.width) rocket.x = -24;\n  draw();\n  requestAnimationFrame(loop);\n}\nrequestAnimationFrame(loop);\n",
+   "hints": [
+    "rocket.x += rocket.speed * dt;",
+    "const dt = (time - last) / 1000; last = time; update(dt);"
+   ],
+   "check": {
+    "code_contains": [
+     "dt",
+     "1000"
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "title": "Stop / Start",
+  "prompt": "Stop and restart the animation with a button. The number returned by `requestAnimationFrame` is kept in `frameId`.\n\n- If the button is clicked while `running` is true: stop it with `cancelAnimationFrame(frameId)`, set `running = false`, and the button's text becomes `Start`.\n- If it's clicked while `running` is false: set `running = true`, restart the loop with `requestAnimationFrame(loop)`, and the button's text becomes `Stop`.",
+  "html": "<canvas id=\"c\" width=\"200\" height=\"120\"></canvas>\n<p><button id=\"toggle\">Stop</button></p>\n",
+  "starter": "const canvas = document.querySelector(\"#c\");\nconst ctx = canvas.getContext(\"2d\");\nconst btn = document.querySelector(\"#toggle\");\nlet angle = 0;\nlet running = true;\nlet frameId = 0;\n\nfunction draw() {\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  const x = 100 + Math.cos(angle) * 40;\n  const y = 60 + Math.sin(angle) * 40;\n  ctx.beginPath();\n  ctx.arc(x, y, 8, 0, Math.PI * 2);\n  ctx.fillStyle = \"#4fc3f7\";\n  ctx.fill();\n}\n\nfunction loop() {\n  angle += 0.05;\n  draw();\n  frameId = requestAnimationFrame(loop);\n}\nframeId = requestAnimationFrame(loop);\n\nbtn.addEventListener(\"click\", () => {\n  // stop or start depending on running\n});\n",
+  "solution": "const canvas = document.querySelector(\"#c\");\nconst ctx = canvas.getContext(\"2d\");\nconst btn = document.querySelector(\"#toggle\");\nlet angle = 0;\nlet running = true;\nlet frameId = 0;\n\nfunction draw() {\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  const x = 100 + Math.cos(angle) * 40;\n  const y = 60 + Math.sin(angle) * 40;\n  ctx.beginPath();\n  ctx.arc(x, y, 8, 0, Math.PI * 2);\n  ctx.fillStyle = \"#4fc3f7\";\n  ctx.fill();\n}\n\nfunction loop() {\n  angle += 0.05;\n  draw();\n  frameId = requestAnimationFrame(loop);\n}\nframeId = requestAnimationFrame(loop);\n\nbtn.addEventListener(\"click\", () => {\n  // stop or start depending on running\n  if (running) {\n    cancelAnimationFrame(frameId);\n    running = false;\n    btn.textContent = \"Start\";\n  } else {\n    running = true;\n    frameId = requestAnimationFrame(loop);\n    btn.textContent = \"Stop\";\n  }\n});\n",
+  "hints": [
+   "if (running) { ... } else { ... }",
+   "To stop: cancelAnimationFrame(frameId);",
+   "To start: frameId = requestAnimationFrame(loop);"
+  ],
+  "check": {
+   "code_contains": [
+    "cancelAnimationFrame",
+    "requestAnimationFrame"
+   ]
+  }
+ },
+ "project_task": {
+  "title": "Ship movement",
+  "prompt": "The ship should now move back and forth by itself.\n\n- `update()`: add `ship.vx` to `ship.x`. If the ship goes past the left edge (`ship.x < 0`), put it at `0`; if it goes past the right edge (`ship.x + ship.w > canvas.width`), put it at `canvas.width - ship.w`. In both cases, flip the sign of `vx`.\n- `draw()` is ready: it draws the background, the ship and the stars.\n- `loop()`: calls `update()` and `draw()` and asks for itself again with `requestAnimationFrame`. Don't forget to start the loop.",
+  "html": "<canvas id=\"game\" width=\"300\" height=\"200\"></canvas>\n<p id=\"info\">Score: 0</p>\n",
+  "starter": "const canvas = document.querySelector(\"#game\");\nconst ctx = canvas.getContext(\"2d\");\n\nconst ship = { x: 20, y: 150, w: 30, h: 20, vx: 3 };\nconst stars = [\n  { x: 120, y: 40 },\n  { x: 200, y: 60 },\n  { x: 260, y: 110 },\n];\n\nfunction draw() {\n  ctx.fillStyle = \"#0b1026\";\n  ctx.fillRect(0, 0, canvas.width, canvas.height);\n  ctx.fillStyle = \"#4fc3f7\";\n  ctx.fillRect(ship.x, ship.y, ship.w, ship.h);\n  ctx.fillStyle = \"#f7df1e\";\n  for (const star of stars) {\n    ctx.beginPath();\n    ctx.arc(star.x, star.y, 6, 0, Math.PI * 2);\n    ctx.fill();\n  }\n}\n\nfunction update() {\n  // move, stop at the edge and turn back\n}\n\n// write the loop function and start it\n\ndraw();\n",
+  "solution": "const canvas = document.querySelector(\"#game\");\nconst ctx = canvas.getContext(\"2d\");\n\nconst ship = { x: 20, y: 150, w: 30, h: 20, vx: 3 };\nconst stars = [\n  { x: 120, y: 40 },\n  { x: 200, y: 60 },\n  { x: 260, y: 110 },\n];\n\nfunction draw() {\n  ctx.fillStyle = \"#0b1026\";\n  ctx.fillRect(0, 0, canvas.width, canvas.height);\n  ctx.fillStyle = \"#4fc3f7\";\n  ctx.fillRect(ship.x, ship.y, ship.w, ship.h);\n  ctx.fillStyle = \"#f7df1e\";\n  for (const star of stars) {\n    ctx.beginPath();\n    ctx.arc(star.x, star.y, 6, 0, Math.PI * 2);\n    ctx.fill();\n  }\n}\n\nfunction update() {\n  // move, stop at the edge and turn back\n  ship.x += ship.vx;\n  if (ship.x < 0) {\n    ship.x = 0;\n    ship.vx = -ship.vx;\n  } else if (ship.x + ship.w > canvas.width) {\n    ship.x = canvas.width - ship.w;\n    ship.vx = -ship.vx;\n  }\n}\n\n// write the loop function and start it\nfunction loop() {\n  update();\n  draw();\n  requestAnimationFrame(loop);\n}\nrequestAnimationFrame(loop);\n\ndraw();\n",
+  "hints": [
+   "ship.x += ship.vx;",
+   "if (ship.x + ship.w > canvas.width) { ship.x = canvas.width - ship.w; ship.vx = -ship.vx; }",
+   "function loop() { update(); draw(); requestAnimationFrame(loop); }"
+  ],
+  "check": {
+   "code_contains": [
+    "ship.vx",
+    "requestAnimationFrame"
+   ]
+  }
+ }
+}

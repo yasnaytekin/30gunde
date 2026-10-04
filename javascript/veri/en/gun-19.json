@@ -1,0 +1,130 @@
+{
+ "day": 19,
+ "title": "Controlling CSS with code",
+ "region": "kusak",
+ "project_contribution": "Theme and effects",
+ "objective": "Change how things look from JavaScript with style, classList, CSS variables and data-* attributes",
+ "story": "Your ship now moves and keeps time; now it's time for looks! Today you'll **control CSS** with JavaScript and build themes, effects and color pickers.",
+ "sections": [
+  {
+   "title": "element.style: properties one by one",
+   "body": "Every element has a `style` object. Dashed CSS names are written in **camelCase** here (`background-color` → `backgroundColor`), and values are text, so don't forget the unit:\n\n```js\nconst box = document.querySelector(\"#box\");\nbox.style.backgroundColor = \"#f7df1e\";\nbox.style.width = \"150px\"; // not 150, but \"150px\"\n```\n\n`box.style` only shows what was written directly on the element. To see the final value that comes from the CSS rules, use `getComputedStyle(box).width`."
+  },
+  {
+   "title": "States with classList",
+   "body": "Instead of writing lots of styles one by one, write the look as a **class** in CSS and only add or remove the class in JavaScript:\n\n```\n.shield.active { border-color: #26c6da; background: #e0f7fa; }\n```\n\n```js\nshield.classList.add(\"active\");      // add\nshield.classList.remove(\"active\");   // remove\nshield.classList.toggle(\"active\");   // remove if it's there, add if not\nshield.classList.contains(\"active\"); // true / false\nbtn.classList.toggle(\"active\", color === \"#f7df1e\"); // add if the condition is true, remove if not\n```"
+  },
+  {
+   "title": "CSS variables",
+   "body": "In CSS, names starting with `--` are **variables**. You define them once and use them everywhere with `var(...)`:\n\n```\n:root { --accent: #f7df1e; }\nh2 { border-bottom: 4px solid var(--accent); }\nbutton.active { outline: 3px solid var(--accent); }\n```\n\nYou change them with one line of JavaScript, and **everything** that uses the variable updates at once:\n\n```js\nconst root = document.documentElement; // :root, that is <html>\nroot.style.setProperty(\"--accent\", \"#b388ff\");\nconst now = getComputedStyle(root).getPropertyValue(\"--accent\").trim();\n```"
+  },
+  {
+   "title": "data-* attributes",
+   "body": "Attributes starting with `data-` in HTML are a way to add your own information to an element. In JavaScript they're read and written with `dataset`:\n\n```js\n// <button data-color=\"#e53935\">Crimson</button>\nbtn.dataset.color;                    // \"#e53935\"\ndocument.body.dataset.mode = \"night\"; // <body data-mode=\"night\">\n```\n\nCSS can select by these attributes too: `body[data-mode=\"night\"] #panel { ... }`. That way, when one value changes, the whole look changes."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Night mode",
+   "code": "const btn = document.querySelector(\"#toggle\");\nbtn.addEventListener(\"click\", () => {\n  document.body.classList.toggle(\"night\");\n  const night = document.body.classList.contains(\"night\");\n  btn.textContent = night ? \"Day mode\" : \"Night mode\";\n});\n",
+   "note": "All the colors are in the CSS; JavaScript only changes the class.",
+   "html": "<div id=\"card\"><h3>Captain's Log</h3><p>Today we toured the Event Belt.</p></div>\n<button id=\"toggle\">Night mode</button>\n"
+  },
+  {
+   "title": "Size slider",
+   "code": "const slider = document.querySelector(\"#size\");\nslider.addEventListener(\"input\", () => {\n  const value = slider.value + \"px\";\n  document.documentElement.style.setProperty(\"--size\", value);\n  document.querySelector(\"#label\").textContent = value;\n});\n",
+   "note": "Move the slider: the star's size changes through a CSS variable.",
+   "html": "<input type=\"range\" id=\"size\" min=\"20\" max=\"120\" value=\"60\"> <span id=\"label\">60px</span>\n<div id=\"star\"></div>\n"
+  }
+ ],
+ "tasks": [
+  {
+   "title": "Paint the box",
+   "prompt": "When the `#paint` button is clicked, change the `style` of the `#box`:\n\n- its background color becomes `#f7df1e` (`backgroundColor`),\n- its width becomes `150px`.",
+   "html": "<div id=\"box\">Cargo</div>\n<button id=\"paint\">Paint</button>\n",
+   "starter": "const box = document.querySelector(\"#box\");\n\n// when #paint is clicked, paint it with box.style\n\n",
+   "solution": "const box = document.querySelector(\"#box\");\n\n// when #paint is clicked, paint it with box.style\ndocument.querySelector(\"#paint\").addEventListener(\"click\", () => {\n  box.style.backgroundColor = \"#f7df1e\";\n  box.style.width = \"150px\";\n});\n",
+   "hints": [
+    "box.style.backgroundColor = \"#f7df1e\";",
+    "Don't forget the unit: box.style.width = \"150px\";"
+   ],
+   "check": {
+    "code_contains": [
+     "style.backgroundColor",
+     "style.width"
+    ]
+   }
+  },
+  {
+   "title": "Shield",
+   "prompt": "Every time `#shield-btn` is clicked, toggle the `active` class on `#shield` (`classList.toggle`).\n\n`#status` shows `Shield: ON` when the shield is on and `Shield: OFF` when it's off (find the state with `classList.contains`).",
+   "html": "<div id=\"shield\">Shield</div>\n<button id=\"shield-btn\">Toggle shield</button>\n<p id=\"status\">Shield: OFF</p>\n",
+   "starter": "const shield = document.querySelector(\"#shield\");\n\n// on click, toggle the active class and update #status\n\n",
+   "solution": "const shield = document.querySelector(\"#shield\");\n\n// on click, toggle the active class and update #status\ndocument.querySelector(\"#shield-btn\").addEventListener(\"click\", () => {\n  shield.classList.toggle(\"active\");\n  const on = shield.classList.contains(\"active\");\n  document.querySelector(\"#status\").textContent = on ? \"Shield: ON\" : \"Shield: OFF\";\n});\n",
+   "hints": [
+    "shield.classList.toggle(\"active\");",
+    "const on = shield.classList.contains(\"active\");"
+   ],
+   "check": {
+    "code_contains": [
+     "classList.toggle",
+     "classList.contains"
+    ]
+   }
+  },
+  {
+   "title": "Planet color",
+   "prompt": "The planet's color comes from the CSS variable `--planet`. When any button with a `data-color` attribute is clicked:\n\n- set the color to the button's `dataset.color` with `document.documentElement.style.setProperty(\"--planet\", ...)`,\n- write the variable's new value into `#current` like `Color: #1e88e5` (read it with `getComputedStyle(...).getPropertyValue(\"--planet\")` and `trim()` it).",
+   "html": "<div id=\"planet\"></div>\n<button data-color=\"#e53935\">Crimson</button> <button data-color=\"#1e88e5\">Blue</button> <button data-color=\"#43a047\">Green</button>\n<p id=\"current\">Color: #f7df1e</p>\n",
+   "starter": "const root = document.documentElement;\nconst colorButtons = document.querySelectorAll(\"[data-color]\");\n\n// add a click listener to every button\n\n",
+   "solution": "const root = document.documentElement;\nconst colorButtons = document.querySelectorAll(\"[data-color]\");\n\n// add a click listener to every button\ncolorButtons.forEach((btn) => {\n  btn.addEventListener(\"click\", () => {\n    root.style.setProperty(\"--planet\", btn.dataset.color);\n    const value = getComputedStyle(root).getPropertyValue(\"--planet\").trim();\n    document.querySelector(\"#current\").textContent = `Color: ${value}`;\n  });\n});\n",
+   "hints": [
+    "root.style.setProperty(\"--planet\", btn.dataset.color);",
+    "getComputedStyle(root).getPropertyValue(\"--planet\").trim()"
+   ],
+   "check": {
+    "code_contains": [
+     "setProperty",
+     "dataset",
+     "getPropertyValue"
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "title": "Panel mode",
+  "prompt": "Write the `setMode(mode)` function:\n\n- it sets `document.body.dataset.mode` to `mode` (the CSS changes the panel's color based on it),\n- it adds the `selected` class to the button whose `data-mode` equals `mode` and removes it from the others,\n- it writes `Mode: night` into `#mode-label`.\n\nWhen any `[data-mode]` button is clicked, it calls `setMode` with its own mode. When the page opens, `setMode(\"day\")` runs.",
+  "html": "<div id=\"panel\">Control panel</div>\n<button data-mode=\"day\">Day</button> <button data-mode=\"night\">Night</button> <button data-mode=\"alarm\">Alarm</button>\n<p id=\"mode-label\"></p>\n",
+  "css": "#panel{padding:12px;border-radius:8px;background:#fff8d6;color:#1b1f33;margin-bottom:8px}body[data-mode=\"night\"] #panel{background:#0b1026;color:#eef1ff}body[data-mode=\"alarm\"] #panel{background:#c62828;color:#fff}button.selected{outline:3px solid #f7df1e}",
+  "starter": "const modeButtons = document.querySelectorAll(\"[data-mode]\");\n\nfunction setMode(mode) {\n  // body.dataset.mode, the selected class, #mode-label\n}\n\n// listen to the buttons and set the starting mode\n\n",
+  "solution": "const modeButtons = document.querySelectorAll(\"[data-mode]\");\n\nfunction setMode(mode) {\n  // body.dataset.mode, the selected class, #mode-label\n  document.body.dataset.mode = mode;\n  modeButtons.forEach((btn) => {\n    btn.classList.toggle(\"selected\", btn.dataset.mode === mode);\n  });\n  document.querySelector(\"#mode-label\").textContent = `Mode: ${mode}`;\n}\n\n// listen to the buttons and set the starting mode\nmodeButtons.forEach((btn) => {\n  btn.addEventListener(\"click\", () => setMode(btn.dataset.mode));\n});\nsetMode(\"day\");\n",
+  "hints": [
+   "document.body.dataset.mode = mode;",
+   "btn.classList.toggle(\"selected\", btn.dataset.mode === mode);"
+  ],
+  "check": {
+   "code_contains": [
+    "dataset",
+    "classList"
+   ]
+  }
+ },
+ "project_task": {
+  "title": "Theme and effects",
+  "prompt": "Let's add color and effects to the game. The ship's color comes from the CSS variable `--ship-color`.\n\n- `setShipColor(color)`: sets `--ship-color` to `color` (`document.documentElement.style.setProperty`).\n- When any `[data-color]` button inside `#colors` is clicked, it calls `setShipColor` with its own `dataset.color`.\n- `flashHit()`: when the ship is hit, the play field (`#field`) flashes red: it adds the `hit` class and removes it **150 ms later** (`setTimeout`).",
+  "html": "<h2 id=\"title\">Star Hunter</h2>\n<form id=\"pilot-form\"><input id=\"pilot-name\" placeholder=\"Pilot name\" autocomplete=\"off\"> <button>Start</button></form>\n<p id=\"info\">Type the pilot's name and start.</p>\n<p id=\"hud\">Score: <span id=\"score\">0</span> · Time: <span id=\"time\">10</span> · Best: <span id=\"best\">0</span></p>\n<div id=\"field\"><div id=\"ship\"></div></div>\n<div id=\"colors\"><button data-color=\"#f7df1e\">Yellow</button> <button data-color=\"#4dd0e1\">Turquoise</button> <button data-color=\"#ff6b6b\">Red</button></div>\n",
+  "starter": "const field = document.querySelector(\"#field\");\n\nfunction setShipColor(color) {\n  // change the --ship-color variable\n}\n\nfunction flashHit() {\n  // add the hit class, remove it 150 ms later\n}\n\n// listen to the color buttons\n\n",
+  "solution": "const field = document.querySelector(\"#field\");\n\nfunction setShipColor(color) {\n  // change the --ship-color variable\n  document.documentElement.style.setProperty(\"--ship-color\", color);\n}\n\nfunction flashHit() {\n  // add the hit class, remove it 150 ms later\n  field.classList.add(\"hit\");\n  setTimeout(() => {\n    field.classList.remove(\"hit\");\n  }, 150);\n}\n\n// listen to the color buttons\ndocument.querySelectorAll(\"#colors [data-color]\").forEach((btn) => {\n  btn.addEventListener(\"click\", () => setShipColor(btn.dataset.color));\n});\n",
+  "hints": [
+   "document.documentElement.style.setProperty(\"--ship-color\", color);",
+   "field.classList.add(\"hit\"); setTimeout(() => field.classList.remove(\"hit\"), 150);"
+  ],
+  "check": {
+   "code_contains": [
+    "setProperty",
+    "classList",
+    "setTimeout"
+   ]
+  }
+ }
+}
