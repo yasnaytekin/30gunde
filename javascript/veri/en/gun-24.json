@@ -1,0 +1,142 @@
+{
+ "day": 24,
+ "title": "Errors and debugging",
+ "region": "istasyon",
+ "project_contribution": "An error-proof game",
+ "objective": "Recognize error types, catch errors with try/catch/finally, throw your own errors with throw, and debug",
+ "story": "You've docked at the Async Station! The station's computer gives a red alarm now and then. No panic: today you'll learn to **read error messages**, catch errors and throw your own.",
+ "sections": [
+  {
+   "title": "Read the error message",
+   "body": "Every error message has three parts: the **type**, the **description** and the **line number**. The types you'll see most:\n\n| Type | What it means | Example |\n|---|---|---|\n| `ReferenceError` | No such name (a typo or not defined) | `consle.log(1)` |\n| `TypeError` | The value isn't right for what you want to do | `undefined.length`, `5()` |\n| `SyntaxError` | The code breaks JavaScript's rules, or the text isn't valid JSON | `if (x > 1 {`, `JSON.parse(\"{\")` |\n| `RangeError` | A number outside the allowed range | `new Array(-1)` |\n\nRead the description word by word: *is not defined* = it doesn't exist, *cannot read properties of undefined* = you tried to read a property of something undefined, *is not a function* = this isn't a function."
+  },
+  {
+   "title": "try, catch, finally",
+   "body": "If you put code that might fail into a `try` block, the program doesn't crash; JavaScript jumps straight to the `catch` block:\n\n```js\ntry {\n  const data = JSON.parse(\"{broken\");   // an error happens here\n  console.log(\"This line doesn't run\");\n} catch (error) {\n  console.log(\"Caught:\", error.name);   // SyntaxError\n  console.log(error.message);\n} finally {\n  console.log(\"This runs in every case\");\n}\nconsole.log(\"The program carries on!\");\n```\n\n- The `error` object has `name` (type) and `message` (description) properties.\n- `finally` runs whether there was an error or not: ideal for cleaning up (removing a loading message, enabling a button again).\n\nUse `catch` only for errors you **expect**: reading JSON, user input, the network. Wrapping everything in `try` hides real bugs."
+  },
+  {
+   "title": "throw: throw your own error",
+   "body": "If a function gets bad data, it should stop with a clear message instead of quietly giving a wrong result:\n\n```js\nfunction setFuel(amount) {\n  if (typeof amount !== \"number\") {\n    throw new Error(\"Fuel must be a number\");\n  }\n  if (amount < 0 || amount > 100) {\n    throw new Error(\"Fuel must be between 0 and 100\");\n  }\n  return amount;\n}\n\ntry {\n  setFuel(150);\n} catch (error) {\n  console.log(\"Error:\", error.message); // Error: Fuel must be between 0 and 100\n}\n```\n\n`throw` stops the function immediately and sends the error to the code that called it. A `try/catch` there catches it; if nothing catches it, the program stops with a red error message."
+  },
+  {
+   "title": "A debugging strategy",
+   "body": "Programmers find bugs step by step, not by guessing:\n\n1. **Read the message**: type, description, line number.\n2. **Look at the values**: write `console.log(\"total:\", total)` where you're suspicious. For arrays, `console.table(list)` makes it easier.\n3. **Shrink the problem**: comment out part of the code; is the error still there?\n4. **Change one thing, run again**: if you change many things at once, you won't know what worked.\n\n`console.error(...)` marks a message as an error and `console.warn(...)` as a warning; they stand out in the Console.\n\nCommon traps: `\"5\" + 3` gives `\"53\"` (joining text). If you see `NaN`, there's text or `undefined` somewhere instead of a number. The last item of an array is `list[list.length - 1]`; `list[list.length]` is always `undefined`."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Broken saves",
+   "code": "const saves = ['{\"score\": 12}', \"{broken save\", '{\"score\": 30}'];\n\nfor (const text of saves) {\n  try {\n    const data = JSON.parse(text);\n    console.log(\"Score:\", data.score);\n  } catch (error) {\n    console.log(\"Couldn't read it:\", error.name);\n  } finally {\n    console.log(\"---\");\n  }\n}\n",
+   "note": "The broken save didn't stop the program; the loop carried on with the next save."
+  },
+  {
+   "title": "Error types and console.table",
+   "code": "const tests = [\n  () => undefinedVariable + 1,\n  () => null.length,\n  () => JSON.parse(\"{\"),\n  () => { throw new Error(\"My own error\"); },\n];\n\nfor (const test of tests) {\n  try {\n    test();\n  } catch (error) {\n    console.error(error.name + \": \" + error.message);\n  }\n}\n\nconsole.table([{ name: \"Ada\", score: 12 }, { name: \"Ben\", score: 30 }]);\n",
+   "note": "Look at which type of error each test gives."
+  }
+ ],
+ "tasks": [
+  {
+   "title": "Safe reading",
+   "prompt": "Fix the `safeParse(text)` function: put `JSON.parse` inside `try/catch`.\n\n- If the text is valid JSON, it returns the value that was read.\n- If not, the program must not crash; it returns `null`.",
+   "starter": "function safeParse(text) {\n  // put JSON.parse inside try/catch; return null if it fails\n  return JSON.parse(text);\n}\n\nconsole.log(safeParse('{\"score\": 42}'));\n",
+   "solution": "function safeParse(text) {\n  // put JSON.parse inside try/catch; return null if it fails\n  try {\n    return JSON.parse(text);\n  } catch (error) {\n    return null;\n  }\n}\n\nconsole.log(safeParse('{\"score\": 42}'));\nconsole.log(safeParse(\"{broken\"));\n",
+   "hints": [
+    "try { return JSON.parse(text); } catch (error) { ... }",
+    "Inside catch: return null;"
+   ],
+   "check": {
+    "code_contains": [
+     "try",
+     "catch"
+    ],
+    "output_contains": [
+     "{ score: 42 }\nnull"
+    ]
+   }
+  },
+  {
+   "title": "Fuel validation",
+   "prompt": "Complete the `setFuel(amount)` function:\n\n- If `amount` isn't a number: `throw new Error(\"Fuel must be a number\")`\n- If it's less than 0 or more than 100: `throw new Error(\"Fuel must be between 0 and 100\")`\n- Otherwise it returns `amount`.\n\nThe `try/catch` below is ready; when run, it should print `Error: Fuel must be between 0 and 100`.",
+   "starter": "function setFuel(amount) {\n  // write the checks; if something is wrong, throw new Error(...)\n  return amount;\n}\n\ntry {\n  setFuel(150);\n  console.log(\"Fuel set\");\n} catch (error) {\n  console.log(\"Error:\", error.message);\n}\n",
+   "solution": "function setFuel(amount) {\n  // write the checks; if something is wrong, throw new Error(...)\n  if (typeof amount !== \"number\") {\n    throw new Error(\"Fuel must be a number\");\n  }\n  if (amount < 0 || amount > 100) {\n    throw new Error(\"Fuel must be between 0 and 100\");\n  }\n  return amount;\n}\n\ntry {\n  setFuel(150);\n  console.log(\"Fuel set\");\n} catch (error) {\n  console.log(\"Error:\", error.message);\n}\n",
+   "hints": [
+    "Is it a number? typeof amount !== \"number\"",
+    "The range: if (amount < 0 || amount > 100) { throw new Error(\"...\"); }"
+   ],
+   "check": {
+    "code_contains": [
+     "throw new Error",
+     "typeof"
+    ],
+    "output_contains": [
+     "Error: Fuel must be between 0 and 100"
+    ]
+   }
+  },
+  {
+   "title": "Closing with finally",
+   "prompt": "`launch(ok)` writes the launch steps into the `steps` array and returns it. Complete it with `try/catch/finally`:\n\n- Inside `try`: if `ok` is false, `throw new Error(\"Engine failure\")`; otherwise add `\"Launch successful\"` to `steps`.\n- Inside `catch`: add `\"Problem: \"` joined with the error's message to `steps` (`Problem: Engine failure`).\n- Inside `finally`: add `\"Panel closed\"` to `steps`.",
+   "starter": "function launch(ok) {\n  const steps = [];\n  // try / catch / finally\n  return steps;\n}\n\nconsole.log(launch(true));\nconsole.log(launch(false));\n",
+   "solution": "function launch(ok) {\n  const steps = [];\n  // try / catch / finally\n  try {\n    if (!ok) throw new Error(\"Engine failure\");\n    steps.push(\"Launch successful\");\n  } catch (error) {\n    steps.push(\"Problem: \" + error.message);\n  } finally {\n    steps.push(\"Panel closed\");\n  }\n  return steps;\n}\n\nconsole.log(launch(true));\nconsole.log(launch(false));\n",
+   "hints": [
+    "try { if (!ok) throw new Error(\"Engine failure\"); steps.push(\"Launch successful\"); }",
+    "catch (error) { steps.push(\"Problem: \" + error.message); }",
+    "finally { steps.push(\"Panel closed\"); }"
+   ],
+   "check": {
+    "code_contains": [
+     "try",
+     "catch",
+     "finally",
+     "throw"
+    ],
+    "output_contains": [
+     "[ 'Problem: Engine failure', 'Panel closed' ]"
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "title": "Bug hunt",
+  "prompt": "`average(list)` should calculate the average of an array, but the result is `NaN`! There are **three** problems in the code. Find and fix them by looking at the values with `console.log`:\n\n- `average([12, 30, 18])` → `20`\n- For an empty array it should return `0` (no dividing by zero).\n\nHint: uncomment the line inside the loop and study the output.",
+  "starter": "const scores = [12, 30, 18];\nconsole.table(scores);\n\nfunction average(list) {\n  let total = \"0\";\n  for (let i = 0; i <= list.length; i++) {\n    total = total + list[i];\n    // console.log(\"i:\", i, \"item:\", list[i], \"total:\", total);\n  }\n  return total / list.length;\n}\n\nconsole.log(\"Average:\", average(scores));\n",
+  "solution": "const scores = [12, 30, 18];\nconsole.table(scores);\n\nfunction average(list) {\n  if (list.length === 0) return 0;\n  let total = 0;\n  for (let i = 0; i < list.length; i++) {\n    total = total + list[i];\n    // console.log(\"i:\", i, \"item:\", list[i], \"total:\", total);\n  }\n  return total / list.length;\n}\n\nconsole.log(\"Average:\", average(scores));\n",
+  "hints": [
+   "total starts as text: \"0\" + 12 = \"012\". Start it as a number: let total = 0;",
+   "The last round reads list[list.length], which is undefined. Use <.",
+   "Empty array: if (list.length === 0) return 0;"
+  ],
+  "check": {
+   "code_contains": [
+    "return"
+   ],
+   "output_contains": [
+    "Average: 20"
+   ]
+  }
+ },
+ "project_task": {
+  "title": "A broken save file",
+  "prompt": "If the save file breaks, the game must not crash! Write the `loadSave()` function:\n\n- Read the `starSave` key from `localStorage` and decode it with `JSON.parse`.\n- If there's no record (`null`) or `JSON.parse` fails, return `{ best: 0, level: 1 }`. For a broken record, also write `console.warn(\"Save is broken, starting from scratch.\")`.\n- If the record is fine, return the object that was read.\n\nWhen the book's screenshot was taken, the record in the notebook was left broken on purpose. The code that runs on open writes the result into `#info` like `Best: 0 · Level: 1`.",
+  "html": "<canvas id=\"game\" width=\"300\" height=\"200\"></canvas>\n<p id=\"info\">Score: 0</p>\n",
+  "storage": {
+   "starSave": "{\"best\": 42, \"level\": "
+  },
+  "starter": "const DEFAULT_SAVE = { best: 0, level: 1 };\n\nfunction loadSave() {\n  const text = localStorage.getItem(\"starSave\");\n  // make JSON.parse safe with try/catch\n  return { ...DEFAULT_SAVE };\n}\n\nconst save = loadSave();\ndocument.querySelector(\"#info\").textContent = `Best: ${save.best} · Level: ${save.level}`;\n",
+  "solution": "const DEFAULT_SAVE = { best: 0, level: 1 };\n\nfunction loadSave() {\n  const text = localStorage.getItem(\"starSave\");\n  // make JSON.parse safe with try/catch\n  if (text === null) return { ...DEFAULT_SAVE };\n  try {\n    return JSON.parse(text);\n  } catch (error) {\n    console.warn(\"Save is broken, starting from scratch.\");\n    return { ...DEFAULT_SAVE };\n  }\n}\n\nconst save = loadSave();\ndocument.querySelector(\"#info\").textContent = `Best: ${save.best} · Level: ${save.level}`;\n",
+  "hints": [
+   "If there's no record, getItem returns null: if (text === null) return { ...DEFAULT_SAVE };",
+   "try { return JSON.parse(text); } catch (error) { ... }",
+   "Inside catch, console.warn(...) and return the default."
+  ],
+  "check": {
+   "code_contains": [
+    "try",
+    "catch",
+    "JSON.parse",
+    "console.warn"
+   ]
+  }
+ }
+}

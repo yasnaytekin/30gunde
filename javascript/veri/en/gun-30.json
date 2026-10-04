@@ -1,0 +1,145 @@
+{
+ "day": 30,
+ "title": "The final",
+ "region": "yildiz",
+ "project_contribution": "Publish and share",
+ "objective": "Bring what you've learned together in one project, and learn how to publish your project and what to do next",
+ "story": "That light shining in front of you is the **JavaScript Star**, captain! You're at the last stop of your 30-day journey. Today you'll put the pieces together, finish your project and get ready to show it to the world.",
+ "sections": [
+  {
+   "title": "What have you learned?",
+   "body": "| Region | What you learned |\n| --- | --- |\n| Launch Base | variables, data types, operators, text |\n| Loop Moon | conditions, arrays, loops, functions |\n| Function Nebula | scope, objects, map/filter/reduce, JSON |\n| Planet DOM | changing the page, events, creating elements, forms |\n| Event Belt | the keyboard, timers, CSS, localStorage |\n| Pixel Planet | canvas, animation, the game loop |\n| Async Station | errors, Promises, fetch, classes |\n| JavaScript Star | clean code, accessibility, the final project |\n\nThis is the basic toolbox a web developer uses every day. Now you can write an interactive page from scratch!"
+  },
+  {
+   "title": "Publish your project",
+   "body": "In this book, each piece of code ran in a single script. A real website usually has three files:\n\n- `index.html`: the page's skeleton (the HTML in the tasks)\n- `style.css`: how it looks\n- `script.js`: how it behaves, that is, the code you've written so far\n\n`index.html` connects the other two like this: `<link rel=\"stylesheet\" href=\"style.css\">` and `<script src=\"script.js\" defer></script>`.\n\nWhen you upload these files to a **static site** service, you get an address that anyone can open. Two common options: **GitHub Pages** (you put the files in a GitHub repository and turn on Pages in the settings) and **Netlify** (you drag and drop the folder). Roughly, the steps are:\n\n1. Make a folder on your computer and put the three files in it.\n2. Open `index.html` in the browser and try it; there should be no red errors in the Console.\n3. Create an account on the service together with an adult (most services require you to be 13 or older).\n4. Upload the files, open the address you're given and share it with your friends.\n\nBefore sharing, make sure the page has no **personal information** such as your full name, school, address or phone number."
+  },
+  {
+   "title": "The next stop",
+   "body": "- **More projects**: the best way to learn is by making things. A calculator, a drawing app, a quiz for your class...\n- **TypeScript**: adds type checking to JavaScript; it catches some bugs before the code even runs.\n- **React, Vue, Svelte**: help you build big interfaces out of components. Remember the `render()` idea: these tools do it cleverly for you.\n- **Node.js**: runs JavaScript outside the browser, on a server. You could write your own API like the `/demo-api` you used in this book!\n- **Game libraries**: with libraries like Phaser you can make canvas games faster.\n- If you've also finished the Python course, you now know two languages: the ideas (variables, loops, functions, classes) are the same; only the way they're written is different."
+  },
+  {
+   "title": "The final checklist",
+   "body": "Before you share your project, ask yourself:\n\n- Are there any red errors in the console?\n- Does it open and work on a phone (a small screen)?\n- Can everything also be done with the keyboard? Do your icon buttons have an `aria-label`?\n- Are your variable and function names clear? Is there any repeated code left?\n- What does the user see if the data doesn't arrive (a fetch error)?\n\nCongratulations, captain: in 30 days you've become a JavaScript developer who writes working projects from scratch. This isn't an ending, it's a new **launch**!"
+  }
+ ],
+ "examples": [
+  {
+   "title": "All together: a star counter",
+   "code": "const COUNT_KEY = \"stars\";\nconst state = { stars: Number(localStorage.getItem(COUNT_KEY)) || 0 };\nconst countEl = document.querySelector(\"#count\");\n\nfunction update(action) {\n  if (action === \"plus\") state.stars += 1;\n  if (action === \"reset\") state.stars = 0;\n  localStorage.setItem(COUNT_KEY, String(state.stars));\n}\n\nfunction render() {\n  countEl.textContent = `${state.stars} stars`;\n}\n\nfunction init() {\n  document.querySelector(\"#plus\").addEventListener(\"click\", () => {\n    update(\"plus\");\n    render();\n  });\n  document.querySelector(\"#reset\").addEventListener(\"click\", () => {\n    update(\"reset\");\n    render();\n  });\n  render();\n}\n\ninit();\n",
+   "note": "Click a few times, then reload the page: the number continues from where it left off.",
+   "html": "<p id=\"count\" aria-live=\"polite\"></p>\n<button id=\"plus\">Collect a star</button> <button id=\"reset\">Reset</button>\n"
+  },
+  {
+   "title": "A class and fetch: post cards",
+   "code": "class PostCard {\n  constructor({ title, summary }) {\n    this.title = title;\n    this.summary = summary;\n  }\n\n  render() {\n    const card = document.createElement(\"article\");\n    card.className = \"card\";\n    const h3 = document.createElement(\"h3\");\n    h3.textContent = this.title;\n    const p = document.createElement(\"p\");\n    p.textContent = this.summary;\n    card.append(h3, p);\n    return card;\n  }\n}\n\nasync function init() {\n  const box = document.querySelector(\"#posts\");\n  try {\n    const res = await fetch(\"/demo-api/posts\");\n    if (!res.ok) throw new Error(`Status code ${res.status}`);\n    const posts = await res.json();\n    box.textContent = \"\";\n    posts.forEach((post) => box.append(new PostCard(post).render()));\n  } catch (err) {\n    box.textContent = \"The posts couldn't be loaded.\";\n  }\n}\n\ninit();\n",
+   "note": "A class, destructuring, fetch, error handling and the DOM: all together.",
+   "html": "<div id=\"posts\">Loading...</div>"
+  }
+ ],
+ "tasks": [
+  {
+   "title": "Graduation card",
+   "prompt": "The course is over, so make your card! The form and `localStorage` should work together:\n\n- `showCard(name)`: put an `<h2>` (`Congratulations, Ada!`) and a `<p>` (`Completed the 30 Days of JavaScript journey.`) inside `#card`.\n- When the page opens, if `localStorage` has a `graduate` key, the card should appear right away.\n- When the form is submitted: the page must not reload, and the name should be cleaned with `trim`; if it's empty, do nothing; otherwise save the name under the `graduate` key and show the card.",
+   "html": "<form id=\"f\"><input id=\"name\" placeholder=\"Your name\" aria-label=\"Your name\"><button>Make my card</button></form>\n<div id=\"card\"></div>\n",
+   "storage": {
+    "graduate": "Sam"
+   },
+   "starter": "const form = document.querySelector(\"#f\");\nconst card = document.querySelector(\"#card\");\n\nfunction showCard(name) {\n  // h2 and p\n}\n\n// on opening, show the saved name if there is one\n\n// when the form is submitted\n\n",
+   "solution": "const form = document.querySelector(\"#f\");\nconst card = document.querySelector(\"#card\");\n\nfunction showCard(name) {\n  card.innerHTML = \"\";\n  const title = document.createElement(\"h2\");\n  title.textContent = `Congratulations, ${name}!`;\n  const text = document.createElement(\"p\");\n  text.textContent = \"Completed the 30 Days of JavaScript journey.\";\n  card.append(title, text);\n}\n\n// on opening, show the saved name if there is one\nconst saved = localStorage.getItem(\"graduate\");\nif (saved) showCard(saved);\n\n// when the form is submitted\nform.addEventListener(\"submit\", (e) => {\n  e.preventDefault();\n  const name = document.querySelector(\"#name\").value.trim();\n  if (!name) return;\n  localStorage.setItem(\"graduate\", name);\n  showCard(name);\n});\n",
+   "hints": [
+    "const saved = localStorage.getItem(\"graduate\"); if (saved) showCard(saved);",
+    "In the form: e.preventDefault(); then if (!name) return;",
+    "localStorage.setItem(\"graduate\", name);"
+   ],
+   "check": {
+    "code_contains": [
+     "preventDefault",
+     "localStorage.setItem",
+     "localStorage.getItem"
+    ]
+   }
+  },
+  {
+   "title": "Live search",
+   "prompt": "Get the cities once, then filter the list as the user types in the box:\n\n- When the page opens, get `/demo-api/cities` with `fetch`, put them in `cities` and show them all.\n- `render(list)`: clear `#list` and add each city's name as an `<li>`; write `8 results` into `#count`.\n- When an `input` event happens in the `#search` box, show the cities whose names contain what was typed (upper/lower case shouldn't matter: `toLowerCase()`).",
+   "html": "<input id=\"search\" placeholder=\"Search cities\" aria-label=\"Search cities\">\n<p id=\"count\"></p>\n<ul id=\"list\"></ul>\n",
+   "starter": "let cities = [];\nconst list = document.querySelector(\"#list\");\nconst search = document.querySelector(\"#search\");\n\nfunction render(items) {\n  // clear the list, add the names, write the number of results\n}\n\nasync function init() {\n  // get the cities, put them in cities, show them all\n}\n\n// filter on the input event\n\ninit();\n",
+   "solution": "let cities = [];\nconst list = document.querySelector(\"#list\");\nconst search = document.querySelector(\"#search\");\n\nfunction render(items) {\n  list.innerHTML = \"\";\n  items.forEach((city) => {\n    const li = document.createElement(\"li\");\n    li.textContent = city.name;\n    list.append(li);\n  });\n  document.querySelector(\"#count\").textContent = `${items.length} results`;\n}\n\nasync function init() {\n  const res = await fetch(\"/demo-api/cities\");\n  cities = await res.json();\n  render(cities);\n}\n\n// filter on the input event\nsearch.addEventListener(\"input\", () => {\n  const text = search.value.trim().toLowerCase();\n  render(cities.filter((city) => city.name.toLowerCase().includes(text)));\n});\n\ninit();\n",
+   "hints": [
+    "cities = await res.json(); render(cities);",
+    "search.addEventListener(\"input\", () => { ... })",
+    "cities.filter((city) => city.name.toLowerCase().includes(text))"
+   ],
+   "check": {
+    "code_contains": [
+     "fetch",
+     "input",
+     "filter"
+    ]
+   }
+  },
+  {
+   "title": "A scoreboard class",
+   "prompt": "The `Scoreboard` class keeps scores in `localStorage`. Write the two missing methods:\n\n- `save()`: write `this.items` as JSON under the `this.key` key.\n- `add(name, score)`: add `{ name, score }`, sort the list from highest to lowest, keep only the top 3, then call `save()`.",
+   "html": "<h2>Top pilots</h2>\n<ol id=\"scores\"></ol>\n",
+   "storage": {
+    "scores": "[{\"name\":\"Ada\",\"score\":40},{\"name\":\"Ben\",\"score\":25}]"
+   },
+   "starter": "class Scoreboard {\n  constructor(key) {\n    this.key = key;\n    this.items = JSON.parse(localStorage.getItem(key) || \"[]\");\n  }\n\n  add(name, score) {\n    // add, sort, top 3, save\n  }\n\n  save() {\n    // save as JSON\n  }\n\n  render(listEl) {\n    listEl.innerHTML = \"\";\n    for (const item of this.items) {\n      const li = document.createElement(\"li\");\n      li.textContent = `${item.name}: ${item.score}`;\n      listEl.append(li);\n    }\n  }\n}\n\nconst board = new Scoreboard(\"scores\");\nboard.render(document.querySelector(\"#scores\"));\n",
+   "solution": "class Scoreboard {\n  constructor(key) {\n    this.key = key;\n    this.items = JSON.parse(localStorage.getItem(key) || \"[]\");\n  }\n\n  add(name, score) {\n    this.items.push({ name, score });\n    this.items.sort((a, b) => b.score - a.score);\n    this.items = this.items.slice(0, 3);\n    this.save();\n  }\n\n  save() {\n    localStorage.setItem(this.key, JSON.stringify(this.items));\n  }\n\n  render(listEl) {\n    listEl.innerHTML = \"\";\n    for (const item of this.items) {\n      const li = document.createElement(\"li\");\n      li.textContent = `${item.name}: ${item.score}`;\n      listEl.append(li);\n    }\n  }\n}\n\nconst board = new Scoreboard(\"scores\");\nboard.render(document.querySelector(\"#scores\"));\n",
+   "hints": [
+    "Highest to lowest: this.items.sort((a, b) => b.score - a.score);",
+    "Top 3: this.items = this.items.slice(0, 3);",
+    "localStorage.setItem(this.key, JSON.stringify(this.items));"
+   ],
+   "check": {
+    "code_contains": [
+     "JSON.stringify",
+     "sort",
+     "slice"
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "title": "All the levels",
+  "prompt": "Ask for the three levels **at the same time** and show them in a table:\n\n- Ask for `/demo-api/levels/1`, `2` and `3` together with `Promise.all` (`[1, 2, 3].map(...)`).\n- Add a row to `#levels tbody` for each level: level, stars, enemies (three `<td>`s).\n- Write the total number of stars into `#total`: `Total: 25 stars` (calculate it with `reduce`).",
+  "html": "<table id=\"levels\"><thead><tr><th>Level</th><th>Stars</th><th>Enemies</th></tr></thead><tbody></tbody></table>\n<p id=\"total\"></p>\n",
+  "starter": "const tbody = document.querySelector(\"#levels tbody\");\n\nasync function loadAllLevels() {\n  // ask for the three levels with Promise.all, add the rows, write the total\n}\n\nloadAllLevels();\n",
+  "solution": "const tbody = document.querySelector(\"#levels tbody\");\n\nasync function getLevel(n) {\n  const res = await fetch(`/demo-api/levels/${n}`);\n  return res.json();\n}\n\nasync function loadAllLevels() {\n  const levels = await Promise.all([1, 2, 3].map(getLevel));\n  for (const level of levels) {\n    const row = document.createElement(\"tr\");\n    for (const value of [level.level, level.stars, level.enemies]) {\n      const cell = document.createElement(\"td\");\n      cell.textContent = value;\n      row.append(cell);\n    }\n    tbody.append(row);\n  }\n  const total = levels.reduce((sum, level) => sum + level.stars, 0);\n  document.querySelector(\"#total\").textContent = `Total: ${total} stars`;\n}\n\nloadAllLevels();\n",
+  "hints": [
+   "const levels = await Promise.all([1, 2, 3].map(getLevel));",
+   "One tr for each level, with three tds inside.",
+   "levels.reduce((sum, level) => sum + level.stars, 0)"
+  ],
+  "check": {
+   "code_contains": [
+    "Promise.all",
+    "reduce"
+   ]
+  }
+ },
+ "project_task": {
+  "title": "Star Hunter: the final",
+  "prompt": "The final version of the game! The screens, the game loop (`update`) and the drawing are ready. Connect the pieces:\n\n- `showScreen(name)`: hide all the screens in `screens` (`hidden = true`) and show only the one called `name`.\n- `startGame()`: reset `state` (`score` 0, `time` 0, `running` true) and show the `game` screen.\n- `endGame()`: set `running` to false and show the `over` screen; write `Score: 30` into `#final-score`. Read the best score from the `best` key in `localStorage`; if the new score is higher, save it. Write `Best: 30` into `#best`.\n- When `#start-btn` or `#again-btn` is clicked, call `startGame()`.",
+  "html": "<section id=\"start-screen\"><h1>Star Hunter</h1><p>Collect the stars and beat the best score!</p><button id=\"start-btn\">Start</button></section>\n<section id=\"game-screen\" hidden><p id=\"hud\">Score: 0</p><canvas id=\"game\" width=\"300\" height=\"150\"></canvas></section>\n<section id=\"over-screen\" hidden><h2>Game over!</h2><p id=\"final-score\"></p><p id=\"best\"></p><button id=\"again-btn\">Play again</button></section>\n",
+  "storage": {
+   "best": "20"
+  },
+  "starter": "const BEST_KEY = \"best\";\nconst GAME_LENGTH = 100;\nconst canvas = document.querySelector(\"#game\");\nconst ctx = canvas.getContext(\"2d\");\nconst state = { score: 0, time: 0, running: false };\nconst screens = {\n  start: document.querySelector(\"#start-screen\"),\n  game: document.querySelector(\"#game-screen\"),\n  over: document.querySelector(\"#over-screen\"),\n};\n\n// Ready: called every frame, calls endGame() when time runs out\nfunction update() {\n  if (!state.running) return;\n  state.time += 1;\n  if (state.time % 10 === 0) state.score += 10; // (simplified) a star was collected\n  document.querySelector(\"#hud\").textContent = `Score: ${state.score}`;\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  ctx.fillStyle = \"#f7df1e\";\n  ctx.fillRect(135, 110, 30, 30);\n  if (state.time >= GAME_LENGTH) endGame();\n}\n\nfunction showScreen(name) {\n  // hide all screens, show only the one called name\n}\n\nfunction startGame() {\n  // reset state and show the game screen\n}\n\nfunction endGame() {\n  // the end screen, the score, the best score (localStorage)\n}\n\n// the Start and Play again buttons\n\nfunction loop() {\n  update();\n  requestAnimationFrame(loop);\n}\nloop();\n",
+  "solution": "const BEST_KEY = \"best\";\nconst GAME_LENGTH = 100;\nconst canvas = document.querySelector(\"#game\");\nconst ctx = canvas.getContext(\"2d\");\nconst state = { score: 0, time: 0, running: false };\nconst screens = {\n  start: document.querySelector(\"#start-screen\"),\n  game: document.querySelector(\"#game-screen\"),\n  over: document.querySelector(\"#over-screen\"),\n};\n\n// Ready: called every frame, calls endGame() when time runs out\nfunction update() {\n  if (!state.running) return;\n  state.time += 1;\n  if (state.time % 10 === 0) state.score += 10; // (simplified) a star was collected\n  document.querySelector(\"#hud\").textContent = `Score: ${state.score}`;\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  ctx.fillStyle = \"#f7df1e\";\n  ctx.fillRect(135, 110, 30, 30);\n  if (state.time >= GAME_LENGTH) endGame();\n}\n\nfunction showScreen(name) {\n  for (const id in screens) {\n    screens[id].hidden = id !== name;\n  }\n}\n\nfunction startGame() {\n  state.score = 0;\n  state.time = 0;\n  state.running = true;\n  showScreen(\"game\");\n}\n\nfunction endGame() {\n  state.running = false;\n  showScreen(\"over\");\n  document.querySelector(\"#final-score\").textContent = `Score: ${state.score}`;\n  const best = Math.max(Number(localStorage.getItem(BEST_KEY)) || 0, state.score);\n  localStorage.setItem(BEST_KEY, String(best));\n  document.querySelector(\"#best\").textContent = `Best: ${best}`;\n}\n\n// the Start and Play again buttons\ndocument.querySelector(\"#start-btn\").addEventListener(\"click\", startGame);\ndocument.querySelector(\"#again-btn\").addEventListener(\"click\", startGame);\n\nfunction loop() {\n  update();\n  requestAnimationFrame(loop);\n}\nloop();\n",
+  "hints": [
+   "showScreen: for (const id in screens) { screens[id].hidden = id !== name; }",
+   "Best: Math.max(Number(localStorage.getItem(BEST_KEY)) || 0, state.score)",
+   "document.querySelector(\"#start-btn\").addEventListener(\"click\", startGame);"
+  ],
+  "check": {
+   "code_contains": [
+    "function showScreen",
+    "localStorage.setItem",
+    "addEventListener"
+   ]
+  }
+ }
+}

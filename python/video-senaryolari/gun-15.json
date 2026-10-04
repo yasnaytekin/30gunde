@@ -5,6 +5,25 @@
   "maskot": "piko",
   "ozet": "Piko, atölyenin dedektif bürosunda hata mesajlarını okumayı anlatıyor: satır, tip ve açıklama; NameError, ValueError, AttributeError, TypeError gibi sık hatalar ve print ile iz sürme.",
   "hedef_sure_sn": 141,
+  "dil": "tr",
+  "giris": {
+    "anlatim": "Gün 15: Hata tipleri! Bu derste hata mesajlarını okumayı, sık görülen hata tiplerini tanımayı ve print ile iz sürmeyi öğreneceksin.",
+    "maddeler": [
+      "Hata mesajı nasıl okunur?",
+      "NameError, ValueError, AttributeError",
+      "print ile iz sürmek"
+    ]
+  },
+  "cikis": {
+    "anlatim": "Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!",
+    "baslik": "İnteraktif dersler için",
+    "adres": "30gunde.com.tr",
+    "maddeler": [
+      "Kodunu tarayıcıda yaz ve çalıştır",
+      "Görevleri tamamla, rozet kazan",
+      "30 günde adım adım Python"
+    ]
+  },
   "sahneler": [
     {
       "no": 1,

@@ -1,0 +1,41 @@
+{
+ "day": 2,
+ "title": "Variables and built-in functions",
+ "region": "kamp",
+ "project_contribution": "Player info",
+ "game_role": "The hero's name, health and gold appear on the game's top bar.",
+ "objective": "Create variables, get to know data types, read input and use built-in functions",
+ "story": "Our game is going to have a hero. But how will the computer remember the hero's name, health and gold? Today we open labeled boxes in the computer's memory. We call them **variables**!",
+ "sections": [
+  {"title": "A variable is a labeled box", "body": "A variable is a labeled box you put information into.\n\n```python\nname = \"Piko\"\nhp = 100\n```\n\nThe `=` sign here is not the equals sign from math. It means \"put the value on the right into the box on the left\". Later you use what's inside by writing the box's name: `print(name)`"},
+  {"title": "Naming rules", "body": "- Start with a letter or `_`: `score`, `_secret`\n- No spaces; use `_` instead: `player_name`\n- Upper and lower case are different: `Score` and `score` are separate boxes\n- Stick to plain English letters (a–z) in names\n- Choose meaningful names: `gold` instead of `x`"},
+  {"title": "Data types", "body": "You can put different kinds of information into boxes:\n\n- `str` (text): `\"Piko\"`\n- `int` (whole number): `100`\n- `float` (decimal number): `3.5`\n- `bool` (true/false): `True` or `False`\n\nTo find out a value's type, use `type()`: `print(type(100))`"},
+  {"title": "Changing what's in the box", "body": "Giving a variable a new value replaces the old one:\n\n```python\ngold = 10\ngold = gold + 5\nprint(gold)  # 15\n```"},
+  {"title": "Asking the user", "body": "`input()` asks the user for an answer. The answer is **always text** (str). To turn it into a number we use `int()`:\n\n```python\nage = int(input(\"How old are you? \"))\n```\n\nWhen the program reaches `input()` it waits for you: type your answer and press Enter.\n\nYou can go the other way too: `str(12)` turns a number into text."},
+  {"title": "Python's built-in functions", "body": "Python comes with many ready-to-use functions. They are called **built-in functions**. So far you've met `print()`, `input()`, `type()`, `int()` and `str()`. A few more:\n\n- `len(\"Piko\")` gives the length of a text: `4`\n- `float(\"2.5\")` turns text into a decimal number\n- `round(7.6)` rounds to the nearest whole number: `8`\n- `max(3, 9, 4)` gives the largest, `min(3, 9, 4)` the smallest\n\nIf you forget what a function does, run `help(len)`."}
+ ],
+ "examples": [
+  {"title": "The hero's boxes", "code": "name = \"Piko\"\nhp = 100\nspeed = 2.5\nis_alive = True\nprint(name, hp, speed, is_alive)\nprint(type(name))\nprint(type(hp))\n", "note": ""},
+  {"title": "Update a value", "code": "gold = 10\nprint(\"At first:\", gold)\ngold = gold + 25\nprint(\"After the treasure:\", gold)\n", "note": ""},
+  {"title": "Let's read input", "code": "name = input(\"What's your name? \")\nprint(\"Hello\", name)\n", "note": "Run it again with a different name.", "inputs": ["Emma"]},
+  {"title": "Built-in functions", "code": "name = \"Piko\"\nprint(len(name))\nprint(float(\"2.5\") + 1)\nprint(round(7.6))\nprint(max(3, 9, 4), min(3, 9, 4))\n", "note": "Try to guess each line's result before you run it."}
+ ],
+ "tasks": [
+  {"title": "Fill the box", "prompt": "Put your own name into the `name` variable and run it.", "starter": "name = \"Sam\"\nprint(name)\n", "solution": "name = \"Alex\"\nprint(name)\n",
+   "hints": ["Only change the name inside the quotes.", "Example: name = \"Mia\""]},
+  {"title": "Hero card", "prompt": "Create three variables: `hero` (the hero's name, text), `age` (their age, a whole number) and `hp` (value 100). Then print all three with `print()`.", "starter": "# Create the variables here\n",
+   "solution": "hero = \"Piko\"\nage = 12\nhp = 100\nprint(hero, age, hp)\n", "hints": ["Each variable on its own line: hero = ...", "age should be a number without quotes: age = 12", "To print them all: print(hero, age, hp)"]},
+  {"title": "Type detective", "prompt": "This code fails because text and a number can't be added together. Turn `a` into a number so that `total` becomes 10. Don't change the line `a = \"7\"`.",
+   "starter": "a = \"7\"\nb = 3\ntotal = a + b  # This line causes an error!\nprint(total)\n", "solution": "a = \"7\"\nb = 3\ntotal = int(a) + b\nprint(total)\n",
+   "hints": ["Read the error message: a str can't be added to an int.", "int() turns text into a number.", "total = int(a) + b"], "check": {"code_contains": ["int("]}}
+ ],
+ "visual_task": {"title": "An army with a variable", "prompt": "The width of the army is stored in the `width` variable. Print **3 rows**, each with `width` Pikos. Don't count stars by hand: `\"*\" * width` prints `width` stars side by side.\n\nIf you change it to `width = 6`, the army should grow by itself!",
+  "starter": "width = 4\n\nprint(\"****\")\n", "solution": "width = 4\n\nprint(\"*\" * width)\nprint(\"*\" * width)\nprint(\"*\" * width)\n",
+  "hints": ["One row: print(\"*\" * width)", "Write that line three times."], "scene": {"target": ["****", "****", "****"]}},
+ "challenge": {"title": "Swap the boxes", "prompt": "You're given two glasses, one with milk and one with juice. To swap them you need a third glass, right? Swap the contents of the variables `a` and `b`. You may not type the words \"apple\" and \"pear\" again!",
+  "starter": "a = \"apple\"\nb = \"pear\"\n# swap the contents of a and b\n\nprint(a, b)\n", "solution": "a = \"apple\"\nb = \"pear\"\ntemp = a\na = b\nb = temp\nprint(a, b)\n",
+  "hints": ["Create a third variable: temp = a", "Then put b into a, and temp into b."]},
+ "project_task": {"title": "Player info", "prompt": "Let's keep our hero's info in variables:\n\n- `player_name`: the hero's name\n- `player_hp`: 100\n- `player_gold`: 0\n- `player_level`: 1\n\nThen print a line like `Hero: Piko` (the name should come from the variable).",
+  "starter": "# The hero's info\n", "solution": "player_name = \"Piko\"\nplayer_hp = 100\nplayer_gold = 0\nplayer_level = 1\nprint(\"Hero:\", player_name)\n",
+  "hints": ["Create the four variables one by one.", "print(\"Hero:\", player_name)"]}
+}

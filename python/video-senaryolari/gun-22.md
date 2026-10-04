@@ -21,6 +21,14 @@ Ders metni: [gun-22.md](../gunler/gun-22.md)
 | 11 | ozet | 11 sn | on (sag) |
 | 12 | kapanis | 12 sn | tebrik (orta) |
 
+## Giriş (konu tanıtımı)
+
+**Seslendirme:** Gün 22: Web kazıma! Bu derste HTML'in yapısını ve BeautifulSoup ile sayfalardan başlık, bağlantı ve metin toplamayı öğreneceksin.
+
+- HTML etiketleri
+- find ve find_all
+- Kibar bir kazıyıcı olmak
+
 ## Sahne 1: acilis (14 sn)
 
 **Seslendirme:** Selam, ben Piko! Bilgi Limanı'nın panosu ilanlarla dolu: gemi saatleri, fiyatlar, kayıp eşyalar. Hepsini elle deftere geçirmek saatler sürer. Web sayfaları da böyle panolar. Bugün sayfalardan bilgi toplamayı, yani web kazımayı öğreniyoruz!
@@ -275,3 +283,13 @@ print(len(soup.find_all("p")))
 - Proje düzeni
 
 **Maskot:** tebrik pozu, orta
+
+## Çıkış (30gunde.com.tr yönlendirmesi)
+
+**Seslendirme:** Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!
+
+**Ekranda:** İnteraktif dersler için **30gunde.com.tr**
+
+- Kodunu tarayıcıda yaz ve çalıştır
+- Görevleri tamamla, rozet kazan
+- 30 günde adım adım Python

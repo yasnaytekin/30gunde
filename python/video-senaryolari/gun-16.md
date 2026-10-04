@@ -22,6 +22,14 @@ Ders metni: [gun-16.md](../gunler/gun-16.md)
 | 12 | ozet | 11 sn | on (sag) |
 | 13 | kapanis | 12 sn | tebrik (orta) |
 
+## Giriş (konu tanıtımı)
+
+**Seslendirme:** Gün 16: Tarih ve saat! Bu derste datetime modülüyle tarih oluşturmayı, biçimlendirmeyi ve tarihler arasında gün hesabı yapmayı öğreneceksin.
+
+- date ve datetime
+- strftime ile biçimlendirmek
+- timedelta ile gün hesabı
+
 ## Sahne 1: acilis (13 sn)
 
 **Seslendirme:** Selam, ben Piko! Keşif Adası'na ayak bastık. Adanın ortasında dev bir güneş saati var ve üstünde şöyle yazıyor: Zamanı okuyan, adanın sırrını çözer. Oyunlardaki günlük seriler nasıl sayılıyor dersin? Bugün Python'la zamanı okuyoruz!
@@ -280,3 +288,13 @@ print(date(2026, 9, 30) - date(2026, 9, 1))
 - raise ile kendi hatan
 
 **Maskot:** tebrik pozu, orta
+
+## Çıkış (30gunde.com.tr yönlendirmesi)
+
+**Seslendirme:** Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!
+
+**Ekranda:** İnteraktif dersler için **30gunde.com.tr**
+
+- Kodunu tarayıcıda yaz ve çalıştır
+- Görevleri tamamla, rozet kazan
+- 30 günde adım adım Python

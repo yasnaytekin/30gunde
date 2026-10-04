@@ -1,0 +1,40 @@
+{
+ "day": 11, "title": "Functions", "region": "atolye",
+ "project_contribution": "Moving around",
+ "game_role": "Every time you press an arrow key, Piko walks with your move() function.",
+ "objective": "Write your own functions, take parameters and return results",
+ "story": "Welcome to the Tool Workshop! Every tool here has a job: the hammer hammers, the saw saws. A tool you make once can be used again and again. Code can do the same: write a job once and call it as often as you like. We call these tools **functions**.",
+ "sections": [
+  {"title": "Defining a function", "body": "You make your own function with `def`. The lines inside are indented, and the function doesn't run **until it's called**:\n\n```python\ndef greet():\n    print(\"Hello!\")\n\ngreet()\ngreet()\n```\n\nGive functions names that say what they do: `greet`, `attack`, `calculate_score`."},
+  {"title": "Parameters", "body": "The names you write inside the parentheses are **parameters**. When you call the function, you put values into these boxes:\n\n```python\ndef greet(name):\n    print(f\"Hello {name}!\")\n\ngreet(\"Piko\")\ngreet(\"Emma\")\n```\n\nSeveral parameters are separated by commas: `def add(a, b):`"},
+  {"title": "return: give the result back", "body": "`print` only writes the result on the screen. `return` **gives the result back to where the function was called**, so you can put it into a variable and use it:\n\n```python\ndef add(a, b):\n    return a + b\n\ntotal = add(3, 4)\nprint(total * 2)   # 14\n```\n\nWhen `return` runs, the function ends there; the lines below it don't run."},
+  {"title": "Default values", "body": "If you give a parameter a default value, you don't have to pass it when calling:\n\n```python\ndef attack(hp, damage=10):\n    return hp - damage\n\nprint(attack(50))       # 40\nprint(attack(50, 25))   # 25\nprint(attack(hp=50, damage=5))  # you can pass them by name too\n```\n\nFor functions that take any number of values, use `*args`: `def total(*numbers):`"}
+ ],
+ "examples": [
+  {"title": "First function", "code": "def greet(name):\n    print(f\"Hello {name}, welcome to the workshop!\")\n\ngreet(\"Piko\")\ngreet(\"Alex\")\n", "note": ""},
+  {"title": "Calculating with return", "code": "def area(width, height):\n    return width * height\n\nroom = area(4, 5)\ngarden = area(10, 3)\nprint(\"Room:\", room)\nprint(\"Garden:\", garden)\nprint(\"Total:\", room + garden)\n", "note": ""},
+  {"title": "Defaults and *args", "code": "def attack(hp, damage=10):\n    return hp - damage\n\nprint(attack(50))\nprint(attack(50, 25))\n\ndef total(*numbers):\n    result = 0\n    for n in numbers:\n        result += n\n    return result\n\nprint(total(1, 2, 3, 4))\n", "note": ""}
+ ],
+ "tasks": [
+  {"title": "Greeting function", "prompt": "Write a function called `greet` that takes a `name` parameter and prints a greeting like `Hello Piko!`. Then call it with `greet(\"Piko\")`.",
+   "starter": "# write the greet function\n\n\n# call the function\n", "solution": "def greet(name):\n    print(f\"Hello {name}!\")\n\ngreet(\"Piko\")\n",
+   "hints": ["Start with def greet(name):", "Inside it write print(f\"Hello {name}!\")", "At the bottom call greet(\"Piko\")"], "check": {"output_contains": ["Hello Piko!"], "code_contains": ["def greet"]}},
+  {"title": "Area calculator", "prompt": "The `area(width, height)` function should **return** the area of a rectangle (not print it).",
+   "starter": "def area(width, height):\n    # return the area\n    pass\n\nprint(area(4, 5))\n", "solution": "def area(width, height):\n    return width * height\n\nprint(area(4, 5))\n",
+   "hints": ["Area = width x height", "Instead of print: return width * height"], "check": {"code_contains": ["return"], "output_contains": ["20"]}},
+  {"title": "Default damage", "prompt": "The `attack(hp, damage)` function should return the remaining health. If `damage` isn't given, it should be 10.",
+   "starter": "def attack(hp, damage):\n    return hp - damage\n\nprint(attack(50, 25))\nprint(attack(50))\n", "solution": "def attack(hp, damage=10):\n    return hp - damage\n\nprint(attack(50, 25))\nprint(attack(50))\n",
+   "hints": ["The default value goes next to the parameter: damage=10"], "check": {"code_contains": ["damage=10"]}}
+ ],
+ "visual_task": {"title": "Army factory", "prompt": "The `army(rows, cols)` function should print `rows` rows with `cols` Pikos in each. Then call it as `army(2, 5)`.\n\nTry your function with other numbers too.",
+  "starter": "def army(rows, cols):\n    pass\n\narmy(2, 5)\n", "solution": "def army(rows, cols):\n    for i in range(rows):\n        print(\"*\" * cols)\n\narmy(2, 5)\n",
+  "hints": ["Inside the function: for i in range(rows):", "In the loop: print(\"*\" * cols)"], "scene": {"target": ["*****", "*****"]}},
+ "challenge": {"title": "Highest score", "prompt": "`biggest(numbers)` should return the largest number in the list. Find it with a loop, without `max()`.",
+  "starter": "def biggest(numbers):\n    # find the largest without max()\n    pass\n\nprint(biggest([3, 17, 8]))\n",
+  "solution": "def biggest(numbers):\n    best = numbers[0]\n    for n in numbers:\n        if n > best:\n            best = n\n    return best\n\nprint(biggest([3, 17, 8]))\n",
+  "hints": ["Assume the first item is the largest: best = numbers[0]", "When you see a bigger one in the loop, update best."]},
+ "project_task": {"title": "Moving around", "prompt": "Let's move Piko by direction. `move(pos, direction)` should return the new position as a **tuple**:\n\n- `\"north\"`: y goes up by one\n- `\"south\"`: y goes down by one\n- `\"east\"`: x goes up by one\n- `\"west\"`: x goes down by one\n- Any other direction leaves the position unchanged.",
+  "starter": "def move(pos, direction):\n    x, y = pos\n    # change x or y depending on the direction\n    return (x, y)\n\nprint(move((0, 0), \"north\"))\n",
+  "solution": "def move(pos, direction):\n    x, y = pos\n    if direction == \"north\":\n        y += 1\n    elif direction == \"south\":\n        y -= 1\n    elif direction == \"east\":\n        x += 1\n    elif direction == \"west\":\n        x -= 1\n    return (x, y)\n\nprint(move((0, 0), \"north\"))\n",
+  "hints": ["Unpack the position first: x, y = pos", "Check each direction with if/elif.", "Finally return (x, y)"], "check": {"output_contains": ["(0, 1)"]}}
+}

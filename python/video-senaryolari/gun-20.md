@@ -21,6 +21,14 @@ Ders metni: [gun-20.md](../gunler/gun-20.md)
 | 11 | ozet | 12 sn | on (sag) |
 | 12 | kapanis | 13 sn | tebrik (orta) |
 
+## Giriş (konu tanıtımı)
+
+**Seslendirme:** Gün 20: Paket yöneticisi pip! Bu derste paketleri, pip komutlarını, requirements.txt dosyasını ve sürüm karşılaştırma tuzağını öğreneceksin.
+
+- Paket ve PyPI
+- pip komutları
+- requirements.txt ve sürümler
+
 ## Sahne 1: acilis (13 sn)
 
 **Seslendirme:** Selam, ben Piko! Keşif Adası'nın limanına her gün gemiler yanaşıyor ve dünyanın dört bir yanından kutular iniyor. İçlerinde başka programcıların yaptığı hazır aletler var. Bu kutulara paket, onları getiren gemiye pip diyoruz!
@@ -221,3 +229,13 @@ Sayı olarak: False
 - class, __init__, self
 
 **Maskot:** tebrik pozu, orta
+
+## Çıkış (30gunde.com.tr yönlendirmesi)
+
+**Seslendirme:** Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!
+
+**Ekranda:** İnteraktif dersler için **30gunde.com.tr**
+
+- Kodunu tarayıcıda yaz ve çalıştır
+- Görevleri tamamla, rozet kazan
+- 30 günde adım adım Python

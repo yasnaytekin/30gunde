@@ -1,0 +1,231 @@
+{
+  "kurs": "python",
+  "gun": 4,
+  "baslik": "Strings",
+  "maskot": "piko",
+  "ozet": "Using the signs of Python Village, Piko explains joining strings, indexes and slices, string methods, and formatting with f-strings.",
+  "hedef_sure_sn": 122,
+  "dil": "en",
+  "giris": {
+    "anlatim": "Day 4: Strings! In this lesson you'll join text, slice it letter by letter, and decorate it with f-strings.",
+    "maddeler": [
+      "Joining and repeating",
+      "Indexes and slices",
+      "Methods and f-strings"
+    ]
+  },
+  "cikis": {
+    "anlatim": "The interactive version of this lesson is waiting for you at 30gunde.com.tr. Write your code right in the browser, run it instantly, and finish the tasks!",
+    "baslik": "Interactive lessons at",
+    "adres": "30gunde.com.tr",
+    "maddeler": [
+      "Write and run code in your browser",
+      "Finish tasks, earn badges",
+      "Learn Python step by step in 30 days"
+    ]
+  },
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 12,
+      "anlatim": "Hi, I'm Piko! Python Village is full of signs, conversations and letters. In games, characters talk and names shine on the screen. Today we play with text, which we call strings. Want to print a word backwards?",
+      "ekran": {
+        "baslik": "Day 4: Strings",
+        "gorsel": "gorseller/python/harita/koy.webp"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "A string is a sequence of characters inside quotes. You join strings with plus, repeat them with a star, and measure how many characters they have with len. Spaces and apostrophes count too!",
+      "ekran": {
+        "baslik": "Join and repeat",
+        "kod": "first = \"Pi\"\nsecond = \"ko\"\nprint(first + second)\nprint(\"ha\" * 3)\nprint(len(\"Piko's Adventure\"))\n",
+        "dil": "python",
+        "cikti": "Piko\nhahaha\n16"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "Every letter has a position number, and counting starts at zero. Minus one gives the last letter. A slice from zero to three doesn't include three. And with a step of minus one, the word flips backwards!",
+      "ekran": {
+        "baslik": "Indexes and slices",
+        "kod": "word = \"Python\"\nprint(word[0], word[-1])\nprint(word[0:3])\nprint(word[::-1])\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          3,
+          4
+        ],
+        "cikti": "P n\nPyt\nnohtyP"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "Strings come with their own tools, called methods. strip removes spaces at the edges, upper makes everything uppercase, title capitalizes each word, count counts, and replace swaps one piece of text for another.",
+      "ekran": {
+        "baslik": "String methods",
+        "kod": "name = \"  piko  \"\nprint(name.strip().upper())\nprint(\"python village\".title())\nprint(\"banana\".count(\"a\"))\nprint(\"hello world\".replace(\"world\", \"Piko\"))\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          5
+        ],
+        "cikti": "PIKO\nPython Village\n3\nhello Piko"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 11,
+      "anlatim": "My favorite tool: the f-string! Put an f before the quotes, and variables inside curly braces are replaced by their values. You can even call a method inside the braces.",
+      "ekran": {
+        "baslik": "f-strings",
+        "kod": "name = \"Piko\"\ngold = 42\nprint(f\"{name} carries {gold} gold coins.\")\nprint(f\"{name.upper()} is coming!\")\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          3,
+          4
+        ],
+        "cikti": "Piko carries 42 gold coins.\nPIKO is coming!"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 6,
+      "tur": "hata",
+      "sure_sn": 11,
+      "anlatim": "Try to join text and a number with plus, and Python gives you a TypeError again: you can only add text to text. Your rescuers are ready: an f-string or the str function.",
+      "ekran": {
+        "baslik": "Text + number = TypeError",
+        "kod": "name = \"Piko\"\nlevel = 3\nprint(name + \" level \" + level)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          3
+        ],
+        "cikti": "TypeError: can only concatenate str (not \"int\") to str",
+        "duzeltme": {
+          "kod": "name = \"Piko\"\nlevel = 3\nprint(f\"{name} level {level}\")\n",
+          "cikti": "Piko level 3"
+        }
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "soru",
+      "sure_sn": 10,
+      "anlatim": "A hint: in asks whether one piece of text is inside another. Now tell me: what does this code print?",
+      "ekran": {
+        "baslik": "What will it print?",
+        "kod": "word = \"Python\"\nprint(word[1:4])\nprint(\"th\" in word)\n",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "cikti",
+      "sure_sn": 10,
+      "anlatim": "The slice from one to four: y, t, h. Four isn't included! And yes, t h appears in the word, so in says True.",
+      "ekran": {
+        "baslik": "The answer",
+        "kod": "word = \"Python\"\nprint(word[1:4])\nprint(\"th\" in word)\n",
+        "dil": "python",
+        "cikti": "yth\nTrue"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "gorev",
+      "sure_sn": 13,
+      "anlatim": "In the tasks you'll write a sign in shouting capital letters, catch the first and last letter of a name, and build a level message with an f-string. In the challenge you'll hunt words that read the same backwards, like level!",
+      "ekran": {
+        "baslik": "Today's tasks",
+        "maddeler": [
+          "Task 1: The sign",
+          "Task 2: First and last letter",
+          "Task 3: Level message",
+          "Stage task: Piko at the castle",
+          "Challenge: Palindrome hunter"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 10,
+      "tur": "ozet",
+      "sure_sn": 7,
+      "anlatim": "Today we joined text, sliced it letter by letter, changed it with methods and decorated it with f-strings.",
+      "ekran": {
+        "baslik": "What you learned today",
+        "maddeler": [
+          "+ joins, * repeats, len() measures",
+          "Indexes start at 0; [0:3] slices, [::-1] reverses",
+          "upper, title, strip, count and f-strings"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "kapanis",
+      "sure_sn": 8,
+      "anlatim": "You're the village's word master! Tomorrow we enter the Data Forest and gather everything in the hero's bag into a single list.",
+      "ekran": {
+        "baslik": "Tomorrow: Lists",
+        "gorsel": "gorseller/python/harita/orman.webp"
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

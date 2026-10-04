@@ -1,0 +1,232 @@
+{
+  "kurs": "python",
+  "gun": 9,
+  "baslik": "Conditions",
+  "maskot": "piko",
+  "ozet": "At the gate of Logic Castle, Piko teaches the program to make decisions: if, elif, else, indentation rules, and combining conditions with and, or and in.",
+  "hedef_sure_sn": 124,
+  "dil": "en",
+  "giris": {
+    "anlatim": "Day 9: Conditions! In this lesson you'll teach your program to make decisions with if, elif and else, learn the indentation rules, and combine conditions.",
+    "maddeler": [
+      "if, elif, else",
+      "Colons and indentation",
+      "Conditions with and, or, in"
+    ]
+  },
+  "cikis": {
+    "anlatim": "The interactive version of this lesson is waiting for you at 30gunde.com.tr. Write your code right in the browser, run it instantly, and finish the tasks!",
+    "baslik": "Interactive lessons at",
+    "adres": "30gunde.com.tr",
+    "maddeler": [
+      "Write and run code in your browser",
+      "Finish tasks, earn badges",
+      "Learn Python step by step in 30 days"
+    ]
+  },
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 12,
+      "anlatim": "Hi, I'm Piko! We've reached Logic Castle. Its gate only opens for those who have the key! In games everything runs on rules: when your health runs out, the game is over. Today we write those rules in Python.",
+      "ekran": {
+        "baslik": "Day 9: Conditions",
+        "gorsel": "gorseller/python/harita/kale.webp"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "if means if. When the condition is True, the line under it runs. else means otherwise. Watch out for two things: the colon at the end of the line, and the four-space indent. What if there were no key? The gate would stay locked.",
+      "ekran": {
+        "baslik": "if and else",
+        "kod": "has_key = True\nif has_key:\n    print(\"The gate opened!\")\nelse:\n    print(\"The gate is locked.\")\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2,
+          4
+        ],
+        "cikti": "The gate opened!"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "When there are more than two cases, we use elif: else if. Python checks from top to bottom and runs the first block that's true. Forty-five isn't more than seventy, but it is more than thirty.",
+      "ekran": {
+        "baslik": "elif: else if",
+        "kod": "hp = 45\nif hp > 70:\n    print(\"You're strong\")\nelif hp > 30:\n    print(\"Be careful\")\nelse:\n    print(\"Drink a potion!\")\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          4,
+          5
+        ],
+        "cikti": "Be careful"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "anlatim",
+      "sure_sn": 10,
+      "anlatim": "Indentation matters a lot in Python. It looks at the spaces to know which lines belong to the if. In most editors, type a colon and press Enter, and the indent appears by itself.",
+      "ekran": {
+        "baslik": "Block rules",
+        "maddeler": [
+          "A condition line ends with :",
+          "The block is 4 spaces in",
+          "The first true block runs, the rest are skipped"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "You can combine conditions with and, or and not. Here both must be true: the age is thirteen or more, and less than twenty. Try it with different ages.",
+      "ekran": {
+        "baslik": "Combining conditions",
+        "kod": "age = int(input(\"How old are you? \"))\nif age >= 13 and age < 20:\n    print(\"You're a teen!\")\nelse:\n    print(\"Your age:\", age)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "How old are you? 15\nYou're a teen!"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 6,
+      "tur": "hata",
+      "sure_sn": 12,
+      "anlatim": "Forgetting the colon is the most common mistake. Python says SyntaxError and even tells you what it expected: a colon! If you forget the indent, you'll get an IndentationError too.",
+      "ekran": {
+        "baslik": "The forgotten colon",
+        "kod": "hp = 45\nif hp > 30\n    print(\"Be careful\")\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "SyntaxError: expected ':'"
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "soru",
+      "sure_sn": 9,
+      "anlatim": "You can write conditions with lists too. There's no key in the bag, but there is a sword. What do you think this code prints?",
+      "ekran": {
+        "baslik": "What will it print?",
+        "kod": "inventory = [\"sword\", \"potion\"]\nif \"key\" in inventory:\n    print(\"Open the gate\")\nelif \"sword\" in inventory:\n    print(\"Ready for battle\")\nelse:\n    print(\"Empty-handed\")\n",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "cikti",
+      "sure_sn": 10,
+      "anlatim": "Ready for battle! The first condition was false, because there's no key. The second condition was true, and Python never even looked at the else.",
+      "ekran": {
+        "baslik": "The answer",
+        "kod": "inventory = [\"sword\", \"potion\"]\nif \"key\" in inventory:\n    print(\"Open the gate\")\nelif \"sword\" in inventory:\n    print(\"Ready for battle\")\nelse:\n    print(\"Empty-handed\")\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          4,
+          5
+        ],
+        "cikti": "Ready for battle"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "gorev",
+      "sure_sn": 13,
+      "anlatim": "In the tasks you'll open the castle gate, build a health meter, and combine two conditions for a treasure chest. In the stage task, health shows up as hearts. And in the challenge you'll pick a game mode based on age.",
+      "ekran": {
+        "baslik": "Today's tasks",
+        "maddeler": [
+          "Task 1: The castle gate",
+          "Task 2: Health meter",
+          "Task 3: Treasure chest",
+          "Stage task: Health meter",
+          "Challenge: Game mode"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 10,
+      "tur": "ozet",
+      "sure_sn": 8,
+      "anlatim": "Today we taught our program to make decisions. Now it can take different paths based on rules, just like a game.",
+      "ekran": {
+        "baslik": "What you learned today",
+        "maddeler": [
+          "if, elif, else: the first true block runs",
+          ": at the end of the line, block 4 spaces in",
+          "Combine conditions with and, or, not and in"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "kapanis",
+      "sure_sn": 8,
+      "anlatim": "The castle gate is open! Tomorrow we'll climb the castle's hundred-step tower. We'll learn loops, which let the computer do repeating work for us.",
+      "ekran": {
+        "baslik": "Tomorrow: Loops",
+        "gorsel": "gorseller/python/harita/kale.webp"
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

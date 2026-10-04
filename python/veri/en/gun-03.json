@@ -1,0 +1,47 @@
+{
+ "day": 3,
+ "title": "Operators",
+ "region": "koy",
+ "project_contribution": "Score and points",
+ "game_role": "The coins you collect are turned into points by your score calculation.",
+ "objective": "Use arithmetic, assignment, comparison and logical operators",
+ "story": "Welcome to Python Village! In games, everything runs on numbers: score, health, gold, speed... Today you'll do the math at the village market.",
+ "sections": [
+  {"title": "Two kinds of numbers", "body": "`int` is a whole number: `7`, `-3`, `1000`. `float` is a decimal number: `3.14`, `0.5`. Python uses a **dot** for decimals, not a comma!\n\nIf you divide two whole numbers with `/`, the result is always a float: `8 / 2` gives `4.0`"},
+  {"title": "New operators", "body": "- `//` floor division: `7 // 2` gives `3`\n- `%` remainder: `7 % 2` gives `1`\n- `**` power: `3 ** 2` gives `9`\n\n`%` is very handy: to see whether a number is even, we check whether `number % 2` is 0."},
+  {"title": "Order of operations", "body": "Python follows the same order as math: parentheses first, then powers, then multiplication and division, and finally addition and subtraction.\n\n```python\nprint(2 + 3 * 4)    # 14\nprint((2 + 3) * 4)  # 20\n```"},
+  {"title": "Shortcuts", "body": "Instead of `score = score + 10` you can write `score += 10`. The same works for `-=`, `*=` and `/=`."},
+  {"title": "Helpful functions", "body": "- `round(3.14159, 2)` gives `3.14`\n- `abs(-5)` gives `5`\n- `max(4, 9, 2)` gives `9`\n- `min(4, 9, 2)` gives `2`"},
+  {"title": "Comparison operators", "body": "When you compare two values, Python answers `True` or `False`. These answers are called **booleans**.\n\n- `==` equal? `!=` not equal?\n- `>` greater? `<` smaller?\n- `>=` greater or equal? `<=` smaller or equal?\n\n```python\nprint(10 > 3)    # True\nprint(5 == 7)    # False\n```\n\nA single `=` puts a value into a box; a double `==` asks a question. Mixing them up is a very common mistake."},
+  {"title": "Logical operators", "body": "To combine several questions:\n\n- `and`: `True` if both are true\n- `or`: `True` if at least one is true\n- `not`: flips the answer\n\n```python\ngold = 30\nprint(gold > 10 and gold < 50)   # True\nprint(not gold > 10)             # False\n```\n\nWe'll use these a lot with conditions on Day 9."}
+ ],
+ "examples": [
+  {"title": "Three ways to divide", "code": "print(7 / 2)\nprint(7 // 2)\nprint(7 % 2)\nprint(2 ** 10)\n", "note": ""},
+  {"title": "The score goes up", "code": "score = 0\nscore += 10\nscore += 10\nscore *= 2\nprint(\"Score:\", score)\n", "note": ""},
+  {"title": "Rounding", "code": "pi = 3.14159\nprint(round(pi, 2))\nprint(max(12, 45, 7), min(12, 45, 7))\n", "note": ""},
+  {"title": "True or false?", "code": "hp = 40\ngold = 120\nprint(hp > 50)\nprint(gold >= 100)\nprint(hp > 20 and gold > 100)\nprint(hp > 50 or gold > 100)\nprint(not hp > 50)\n", "note": "Change hp and gold and see how the answers change."}
+ ],
+ "tasks": [
+  {"title": "Sharing pizza", "prompt": "17 slices of pizza are shared equally among 5 friends. Let `each` be the number of slices each person gets and `left` the number of slices left over. Don't type the numbers yourself; calculate them with the `slices` and `people` variables.",
+   "starter": "slices = 17\npeople = 5\n\neach = 0   # slices per person?\nleft = 0   # slices left over?\n\nprint(\"Each:\", each)\nprint(\"Left:\", left)\n",
+   "solution": "slices = 17\npeople = 5\n\neach = slices // people\nleft = slices % people\n\nprint(\"Each:\", each)\nprint(\"Left:\", left)\n",
+   "hints": ["Use // for floor division and % for the remainder.", "each = slices // people"]},
+  {"title": "Health potion", "prompt": "`hp` starts at 40. First drink a potion and raise health by 25 (`+=`), then step on a trap and lose 15 (`-=`).",
+   "starter": "hp = 40\n# drink a potion: +25\n\n# you stepped on a trap: -15\n\nprint(\"Health:\", hp)\n", "solution": "hp = 40\nhp += 25\nhp -= 15\nprint(\"Health:\", hp)\n",
+   "hints": ["hp += 25 raises health by 25.", "To lower it: hp -= 15"], "check": {"code_contains": ["+=", "-="]}},
+  {"title": "Average", "prompt": "Calculate the average of three scores, round it to 1 decimal place with `round()` and store it in `average`.",
+   "starter": "score1 = 80\nscore2 = 95\nscore3 = 72\n\naverage = 0\nprint(average)\n", "solution": "score1 = 80\nscore2 = 95\nscore3 = 72\n\naverage = round((score1 + score2 + score3) / 3, 1)\nprint(average)\n",
+   "hints": ["Average = total / count", "Put the total in parentheses: (score1 + score2 + score3) / 3", "round(number, 1) keeps 1 decimal place."], "check": {"code_contains": ["round("]}}
+ ],
+ "visual_task": {"title": "Equal rows", "prompt": "`pikos` Pikos are shared **equally** among `rows` rows. Calculate the number of Pikos per row with floor division (`//`) and store it in `per_row`. Then print 3 rows: `\"*\" * per_row`.\n\n12 Pikos in 3 rows means 4 each. With `pikos = 15` every row should have 5 Pikos.",
+  "starter": "pikos = 12\nrows = 3\nper_row = 0\n\nprint(\"*\" * per_row)\n", "solution": "pikos = 12\nrows = 3\nper_row = pikos // rows\n\nprint(\"*\" * per_row)\nprint(\"*\" * per_row)\nprint(\"*\" * per_row)\n",
+  "hints": ["per_row = pikos // rows", "Then print(\"*\" * per_row) three times"], "scene": {"target": ["****", "****", "****"]}, "check": {"code_contains": ["//"]}},
+ "challenge": {"title": "Seconds converter", "prompt": "Convert the time in `seconds` into hours, minutes and seconds. 3725 seconds = 1 hour 2 minutes 5 seconds. Hint: `//` and `%` are your best friends.",
+  "starter": "seconds = 3725\n\nhours = 0\nminutes = 0\nsecs = 0\n\nprint(hours, \"hours\", minutes, \"minutes\", secs, \"seconds\")\n",
+  "solution": "seconds = 3725\n\nhours = seconds // 3600\nminutes = seconds % 3600 // 60\nsecs = seconds % 60\n\nprint(hours, \"hours\", minutes, \"minutes\", secs, \"seconds\")\n",
+  "hints": ["An hour has 3600 seconds.", "Seconds left after the hours: seconds % 3600", "Floor-divide that by 60 to get the minutes."]},
+ "project_task": {"title": "Score system", "prompt": "Let's build our game's score system. The hero collected 3 coins and every coin is worth 10 points. First add these points to `score`, then double the score because the boss was defeated.",
+  "starter": "score = 0\ncoin_value = 10\ncoins = 3\n\n# 1) Add the points for the collected coins to score\n\n# 2) Boss defeated! Double the score\n\nprint(\"Score:\", score)\n",
+  "solution": "score = 0\ncoin_value = 10\ncoins = 3\n\nscore += coins * coin_value\nscore *= 2\n\nprint(\"Score:\", score)\n",
+  "hints": ["Coin points: coins * coin_value", "To double: score *= 2"]}
+}

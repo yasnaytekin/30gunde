@@ -20,6 +20,14 @@ Ders metni: [gun-07.md](../gunler/gun-07.md)
 | 10 | ozet | 7 sn | on (sag) |
 | 11 | kapanis | 7 sn | tebrik (orta) |
 
+## Giriş (konu tanıtımı)
+
+**Seslendirme:** Gün 7: Set'ler! Bu derste tekrarları kendiliğinden atan set'leri, eleman eklemeyi ve çıkarmayı, birleşim, kesişim ve fark işlemlerini öğreneceksin.
+
+- Set: tekrarsız koleksiyon
+- add, discard, remove
+- Birleşim, kesişim, fark
+
 ## Sahne 1: acilis (12 sn)
 
 **Seslendirme:** Selam, ben Piko! Ormanda dolaşırken aynı yerlerden defalarca geçtim. Her geçişi haritaya yazarsam sayfa dolacak! Aslında bana sadece hangi yerleri gördüğüm lazım. Bugün tekrarları kendiliğinden atan set'lerle tanışıyoruz.
@@ -233,3 +241,13 @@ print(type(b))
 **Görsel:** `gorseller/python/harita/orman.webp`
 
 **Maskot:** tebrik pozu, orta
+
+## Çıkış (30gunde.com.tr yönlendirmesi)
+
+**Seslendirme:** Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!
+
+**Ekranda:** İnteraktif dersler için **30gunde.com.tr**
+
+- Kodunu tarayıcıda yaz ve çalıştır
+- Görevleri tamamla, rozet kazan
+- 30 günde adım adım Python

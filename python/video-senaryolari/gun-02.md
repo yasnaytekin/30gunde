@@ -22,6 +22,14 @@ Ders metni: [gun-02.md](../gunler/gun-02.md)
 | 12 | ozet | 8 sn | on (sag) |
 | 13 | kapanis | 10 sn | tebrik (orta) |
 
+## Giriş (konu tanıtımı)
+
+**Seslendirme:** Gün 2: Değişkenler ve hazır fonksiyonlar! Bu derste bilgileri etiketli kutularda saklamayı, veri tiplerini tanımayı ve hazır fonksiyonları kullanmayı öğreneceksin.
+
+- Değişkenler: etiketli kutular
+- Veri tipleri ve input()
+- len, round, max, min
+
 ## Sahne 1: acilis (11 sn)
 
 **Seslendirme:** Selam, ben Piko! Hâlâ Başlangıç Kampı'ndayız. Oyunumuzun bir kahramanı olacak. Ama bilgisayar kahramanın adını, canını, altınını nasıl hatırlayacak? Bugün hafızada etiketli kutular açıyoruz!
@@ -278,3 +286,13 @@ print(gold)
 **Maskot:** tebrik pozu, orta
 
 *Yönetmen notu: Harita kamptan köye doğru kayar.*
+
+## Çıkış (30gunde.com.tr yönlendirmesi)
+
+**Seslendirme:** Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!
+
+**Ekranda:** İnteraktif dersler için **30gunde.com.tr**
+
+- Kodunu tarayıcıda yaz ve çalıştır
+- Görevleri tamamla, rozet kazan
+- 30 günde adım adım Python

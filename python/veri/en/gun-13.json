@@ -1,0 +1,33 @@
+{
+ "day": 13, "title": "List comprehensions", "region": "atolye",
+ "project_contribution": "Loot filter",
+ "game_role": "At the end of the game, your loot is valued with your filter.",
+ "objective": "Build short, readable lists with list comprehensions and get to know lambda functions",
+ "story": "In the corner of the workshop there's a magic mold: you throw materials in on one side and finished products come out the other. In Python this is called a **list comprehension**. It squeezes four-line loops into a single line!",
+ "sections": [
+  {"title": "A list in one line", "body": "The long way to make a new list from a list:\n\n```python\ndoubled = []\nfor n in nums:\n    doubled.append(n * 2)\n```\n\nThe short way with a list comprehension:\n\n```python\ndoubled = [n * 2 for n in nums]\n```\n\nRead it like this: \"for every n in nums, take n * 2.\""},
+  {"title": "Picking with a condition", "body": "Add an `if` at the end to take only the items you want:\n\n```python\nbig = [n for n in nums if n > 10]\nevens = [n for n in range(20) if n % 2 == 0]\n```"},
+  {"title": "Transforming with if and else", "body": "If you want to choose one of two results for each item, the `if ... else` goes **at the front**:\n\n```python\nlabels = [\"even\" if n % 2 == 0 else \"odd\" for n in nums]\n```\n\nThe same idea works for dictionaries and sets: `{n: n * n for n in range(4)}`"},
+  {"title": "lambda: a tiny nameless function", "body": "You can write small one-line functions with `lambda`:\n\n```python\nsquare = lambda x: x * x\nprint(square(5))   # 25\n\nadd = lambda a, b: a + b\n```\n\n`lambda` is especially handy with `sorted`, `map` and `filter`, which we'll see tomorrow."}
+ ],
+ "examples": [
+  {"title": "The long way, the short way", "code": "nums = [1, 2, 3, 4, 5]\n\ndoubled = []\nfor n in nums:\n    doubled.append(n * 2)\nprint(doubled)\n\nprint([n * 2 for n in nums])\n", "note": ""},
+  {"title": "Filter", "code": "scores = [45, 90, 12, 77, 100, 63]\npassed = [s for s in scores if s >= 60]\nprint(\"Passed:\", passed)\nprint([\"pass\" if s >= 60 else \"fail\" for s in scores])\n", "note": ""},
+  {"title": "lambda", "code": "square = lambda x: x * x\nadd = lambda a, b: a + b\nprint(square(6))\nprint(add(2, 3))\nprint({n: square(n) for n in range(1, 5)})\n", "note": ""}
+ ],
+ "tasks": [
+  {"title": "Double it", "prompt": "Make a `doubled` list containing twice every number in `nums`, using a **list comprehension**.", "starter": "nums = [3, 7, 10]\n\ndoubled = []\n\nprint(doubled)\n",
+   "solution": "nums = [3, 7, 10]\n\ndoubled = [n * 2 for n in nums]\n\nprint(doubled)\n", "hints": ["The pattern: [expression for n in nums]", "doubled = [n * 2 for n in nums]"], "check": {"output_contains": ["[6, 14, 20]"]}},
+  {"title": "In capitals", "prompt": "Turn the names in `names` into capitals and put them in the `loud` list. Do it in one line.", "starter": "names = [\"piko\", \"emma\", \"ben\"]\n\nloud = []\n\nprint(loud)\n",
+   "solution": "names = [\"piko\", \"emma\", \"ben\"]\n\nloud = [name.upper() for name in names]\n\nprint(loud)\n", "hints": ["For capitals: .upper()", "loud = [name.upper() for name in names]"], "check": {"output_contains": ["['PIKO', 'EMMA', 'BEN']"]}},
+  {"title": "Valuable loot", "prompt": "Take only the prices of 50 or more from `prices` and put them in the `valuable` list.", "starter": "prices = [120, 5, 60, 49, 300, 1]\n\nvaluable = []\n\nprint(valuable)\n",
+   "solution": "prices = [120, 5, 60, 49, 300, 1]\n\nvaluable = [p for p in prices if p >= 50]\n\nprint(valuable)\n", "hints": ["Add an if at the end: [p for p in prices if ...]"], "check": {"output_contains": ["[120, 60, 300]"]}}
+ ],
+ "challenge": {"title": "With lambda", "prompt": "Write a **lambda** called `square` that returns the square of a number. Then the `squares` list should hold the squares of the numbers from 1 to `n`.",
+  "starter": "n = 5\n\nsquare = None\n\nsquares = []\n\nprint(squares)\n", "solution": "n = 5\n\nsquare = lambda x: x * x\n\nsquares = [square(i) for i in range(1, n + 1)]\n\nprint(squares)\n",
+  "hints": ["square = lambda x: x * x", "range(1, n + 1) gives the numbers 1 to n."], "check": {"code_contains": ["lambda"], "output_contains": ["[1, 4, 9, 16, 25]"]}},
+ "project_task": {"title": "Loot filter", "prompt": "The items in Piko's bag are stored as `(name, value)` tuples. With one-line lists:\n\n- `valuable`: the **names** of the items worth 50 or more\n- `total`: the sum of all the items' values (you can use a list comprehension and `sum()`)",
+  "starter": "loot = [(\"sword\", 120), (\"rock\", 1), (\"potion\", 60), (\"rope\", 8)]\n\nvaluable = []\ntotal = 0\n\nprint(\"Valuable:\", valuable)\nprint(\"Total value:\", total)\n",
+  "solution": "loot = [(\"sword\", 120), (\"rock\", 1), (\"potion\", 60), (\"rope\", 8)]\n\nvaluable = [name for name, price in loot if price >= 50]\ntotal = sum([price for name, price in loot])\n\nprint(\"Valuable:\", valuable)\nprint(\"Total value:\", total)\n",
+  "hints": ["You can unpack tuples in the loop: for name, price in loot", "total = sum([price for name, price in loot])"], "check": {"output_contains": ["Valuable: ['sword', 'potion']", "Total value: 189"]}}
+}

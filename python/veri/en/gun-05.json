@@ -1,0 +1,38 @@
+{
+ "day": 5, "title": "Lists", "region": "orman",
+ "project_contribution": "Inventory",
+ "game_role": "You start the game with your bag.",
+ "objective": "Create lists, add and remove items and inspect a list",
+ "story": "Welcome to the Data Forest! Every hero who sets off on an adventure has a bag: a sword, a potion, a map... Keeping dozens of items in separate variables would be hard. Today we collect them all in a single **list**.",
+ "sections": [
+  {"title": "What is a list?", "body": "A list is a set of values inside square brackets, separated by commas:\n\n```python\ninventory = [\"sword\", \"potion\", \"map\"]\nscores = [40, 85, 60]\n```\n\nJust like with strings, the index **starts at 0**: `inventory[0]` gives `\"sword\"`, `inventory[-1]` gives `\"map\"`. `len(inventory)` gives the number of items."},
+  {"title": "Changing a list", "body": "- `append(x)` adds to the end\n- `insert(0, x)` adds at the position you choose\n- `remove(x)` removes the first x it finds\n- `pop()` removes the last item and gives it to you\n- `inventory[1] = \"shield\"` changes an item"},
+  {"title": "Inspecting a list", "body": "- `\"potion\" in inventory` is the item there? (`True` or `False`)\n- `inventory.count(\"potion\")` how many are there?\n- `sum(scores)`, `max(scores)`, `min(scores)`: total, largest, smallest\n- `sorted(scores)` gives a new sorted list, `scores.sort()` sorts the list itself"},
+  {"title": "Slicing", "body": "You can slice lists just like strings: `scores[0:2]` is the first two items, `scores[::-1]` is the list reversed."}
+ ],
+ "examples": [
+  {"title": "The bag", "code": "inventory = [\"sword\", \"potion\"]\ninventory.append(\"map\")\nprint(inventory)\nprint(\"First item:\", inventory[0])\nprint(\"Number of items:\", len(inventory))\n", "note": ""},
+  {"title": "Remove and check", "code": "inventory = [\"sword\", \"potion\", \"rock\"]\ninventory.remove(\"rock\")\nprint(inventory)\nprint(\"potion\" in inventory)\nlast = inventory.pop()\nprint(\"Removed:\", last, \"Left:\", inventory)\n", "note": ""},
+  {"title": "Scores", "code": "scores = [40, 85, 60, 95]\nprint(sum(scores), max(scores), min(scores))\nprint(sorted(scores))\n", "note": ""}
+ ],
+ "tasks": [
+  {"title": "Add to the bag", "prompt": "Add `\"potion\"` to the end of the bag.", "starter": "inventory = [\"sword\", \"shield\"]\n\n# add \"potion\"\n\nprint(inventory)\n",
+   "solution": "inventory = [\"sword\", \"shield\"]\n\ninventory.append(\"potion\")\n\nprint(inventory)\n", "hints": ["append() adds to the end.", "inventory.append(\"potion\")"], "check": {"code_contains": ["append("]}},
+  {"title": "Throw away the rock", "prompt": "There are useless rocks in the bag. Remove the first `\"rock\"` with `remove()`.", "starter": "inventory = [\"apple\", \"rock\", \"key\", \"rock\"]\n\n# Remove the first \"rock\"\n\nprint(inventory)\n",
+   "solution": "inventory = [\"apple\", \"rock\", \"key\", \"rock\"]\n\ninventory.remove(\"rock\")\n\nprint(inventory)\n", "hints": ["remove() only removes the first item it finds.", "inventory.remove(\"rock\")"], "check": {"code_contains": ["remove("]}},
+  {"title": "Scoreboard", "prompt": "Let `best` be the highest score, `total` the sum of the scores and `count` how many scores there are. Calculate them all with functions.",
+   "starter": "scores = [40, 85, 60, 95]\n\nbest = 0\ntotal = 0\ncount = 0\n\nprint(best, total, count)\n", "solution": "scores = [40, 85, 60, 95]\n\nbest = max(scores)\ntotal = sum(scores)\ncount = len(scores)\n\nprint(best, total, count)\n",
+   "hints": ["Use the max(), sum() and len() functions.", "best = max(scores)"]}
+ ],
+ "visual_task": {"title": "Put Piko in the room", "prompt": "The `stage` list holds the 3 rows of a room, but there's no Piko in the middle row. Replace item **number 1** of the list with `\"# * #\"`. Then print the items in order (0, 1, 2).",
+  "starter": "stage = [\"#####\", \"#   #\", \"#####\"]\n\nprint(stage[0])\n", "solution": "stage = [\"#####\", \"#   #\", \"#####\"]\nstage[1] = \"# * #\"\n\nprint(stage[0])\nprint(stage[1])\nprint(stage[2])\n",
+  "hints": ["To change an item: stage[1] = \"# * #\"", "Indexes start at 0: stage[0], stage[1], stage[2]"], "scene": {"target": ["#####", "# * #", "#####"]}, "check": {"code_contains": ["stage[1] ="]}},
+ "challenge": {"title": "Alphabetical order", "prompt": "Let `sorted_names` be the names in alphabetical order, and `top3` the first three names of the sorted list. Hint: `sorted()` and slicing.",
+  "starter": "names = [\"Zoe\", \"Ali\", \"Max\", \"Ben\", \"Ella\"]\n\nsorted_names = []\ntop3 = []\n\nprint(sorted_names)\nprint(top3)\n",
+  "solution": "names = [\"Zoe\", \"Ali\", \"Max\", \"Ben\", \"Ella\"]\n\nsorted_names = sorted(names)\ntop3 = sorted_names[0:3]\n\nprint(sorted_names)\nprint(top3)\n",
+  "hints": ["sorted(names) gives a new sorted list.", "First three items: list[0:3]"]},
+ "project_task": {"title": "Inventory", "prompt": "Let's pack our hero's bag.\n\n- Add `\"lantern\"`, `\"map\"` and `\"key\"` to the empty `inventory` list\n- Print `You have 3 items in your bag` with an f-string and `len()`",
+  "starter": "inventory = []\n\n# add lantern, map and key\n\n# print \"You have 3 items in your bag\" (find the number with len())\n",
+  "solution": "inventory = []\n\ninventory.append(\"lantern\")\ninventory.append(\"map\")\ninventory.append(\"key\")\n\nprint(f\"You have {len(inventory)} items in your bag\")\n",
+  "hints": ["Use append() three times.", "print(f\"You have {len(inventory)} items in your bag\")"], "check": {"code_contains": ["len("], "output_contains": ["You have 3 items in your bag"]}}
+}

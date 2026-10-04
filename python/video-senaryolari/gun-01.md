@@ -21,6 +21,14 @@ Ders metni: [gun-01.md](../gunler/gun-01.md)
 | 11 | ozet | 10 sn | on (sag) |
 | 12 | kapanis | 9 sn | tebrik (orta) |
 
+## Giriş (konu tanıtımı)
+
+**Seslendirme:** Gün 1: Python ile tanışma! Bu derste print ile ekrana yazı yazmayı, Python'a hesap yaptırmayı ve ilk hata mesajını okumayı öğreneceksin.
+
+- print() ile ekrana yazmak
+- Python ile hesap yapmak
+- İlk hata mesajını okumak
+
 ## Sahne 1: acilis (12 sn)
 
 **Seslendirme:** Selam, ben Piko! Başlangıç Kampı'na hoş geldin. Bilgisayarlar çok hızlıdır ama ne yapacaklarını kendileri bilmez. Onlara ne yapacaklarını sen söyleyeceksin. Hazır mısın? Bugün bilgisayarla ilk kez konuşuyoruz!
@@ -158,6 +166,18 @@ prin("Merhaba!")
 NameError: name 'prin' is not defined. Did you mean: 'print'?
 ```
 
+**Düzeltilmiş kod:**
+
+```python
+print("Merhaba!")
+```
+
+**Düzeltilmiş çıktı:**
+
+```text
+Merhaba!
+```
+
 **Maskot:** sasirma pozu, sag
 
 *Yönetmen notu: Hata satırı kırmızı yanıp söner; eksik 't' harfi yerine yerleşince yeşile döner.*
@@ -242,3 +262,13 @@ print("3 + 4")
 **Maskot:** tebrik pozu, orta
 
 *Yönetmen notu: İlk Kod rozeti ekrana süzülür, ardından kamp haritası yavaşça kararır.*
+
+## Çıkış (30gunde.com.tr yönlendirmesi)
+
+**Seslendirme:** Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!
+
+**Ekranda:** İnteraktif dersler için **30gunde.com.tr**
+
+- Kodunu tarayıcıda yaz ve çalıştır
+- Görevleri tamamla, rozet kazan
+- 30 günde adım adım Python

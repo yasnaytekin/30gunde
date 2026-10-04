@@ -1,0 +1,125 @@
+{
+ "day": 27,
+ "title": "Classes and modules",
+ "region": "istasyon",
+ "project_contribution": "The Ship class",
+ "objective": "Write object blueprints with class; use constructor, methods, getters and extends, and understand the idea of modules",
+ "story": "There are dozens of ships at the station, and each one has a name, a speed and fuel. Instead of writing each one by hand, let's make a blueprint: today we're building a ship factory with **classes**.",
+ "sections": [
+  {
+   "title": "A class: a blueprint for objects",
+   "body": "On Day 10 we wrote objects by hand. When you need lots of objects with the same shape, a **class** works like a blueprint:\n\n```js\nclass Ship {\n  constructor(name, speed) {\n    this.name = name;\n    this.speed = speed;\n  }\n}\nconst a = new Ship(\"Eagle\", 10);\nconst b = new Ship(\"Falcon\", 12);\nconsole.log(a.name, b.speed);  // Eagle 12\n```\n\n- `new Ship(...)` makes a new object from the blueprint. This object is called an **instance** of the class.\n- `constructor` runs once, while the object is being made.\n- `this` means \"the current object\": `this.name = name` adds a property to the new object.\n- Class names start with a capital letter: `Ship`, `Planet`."
+  },
+  {
+   "title": "Methods and getters",
+   "body": "You write functions inside the class, without the word `function` in front. These are called **methods**:\n\n```js\nclass Ship {\n  constructor(name) {\n    this.name = name;\n    this.fuel = 100;\n  }\n  fly(km) {\n    this.fuel -= km / 10;\n  }\n  get isEmpty() {\n    return this.fuel <= 0;\n  }\n}\nconst s = new Ship(\"Eagle\");\ns.fly(300);\nconsole.log(s.fuel, s.isEmpty);  // 70 false\n```\n\nA **getter**, written with `get`, is read like a property (`s.isEmpty`, no parentheses), but it's calculated again every time you read it."
+  },
+  {
+   "title": "extends and super",
+   "body": "You can extend a class to make a new one. The new class **inherits** everything from the old one:\n\n```js\nclass CargoShip extends Ship {\n  constructor(name, cargo) {\n    super(name);         // Ship's constructor runs first\n    this.cargo = cargo;\n  }\n}\nconst c = new CargoShip(\"Cargo-1\", 40);\nc.fly(100);             // a method that comes from Ship\n```\n\n- `super(...)` calls the parent class's constructor; it must come before `this`.\n- `super.method()` calls the method in the parent class; you can write a method with the same name in the child class and extend it.\n- Properties and methods written with `static` belong to **the class itself**, not to its instances: like `Math.max`, you use them as `Ship.count`."
+  },
+  {
+   "title": "Modules: splitting code into files",
+   "body": "In big projects we don't put everything in one file; we split the code into **modules**. One file shares with `export`, and another takes it with `import`:\n\n```js\n// ship.js\nexport class Ship { /* ... */ }\nexport const MAX_SPEED = 20;\n\n// main.js\nimport { Ship, MAX_SPEED } from \"./ship.js\";\nconst s = new Ship(\"Eagle\");\n```\n\nIn HTML, the main file is loaded with `<script type=\"module\" src=\"main.js\"></script>`. In this book's tasks we write all the code in a single script, so we don't use `import`. But in real projects we split code into files, and classes are a great fit for that: each class lives in its own file."
+  }
+ ],
+ "examples": [
+  {
+   "title": "A Robot class",
+   "code": "class Robot {\n  constructor(name, battery) {\n    this.name = name;\n    this.battery = battery;\n  }\n\n  work(hours) {\n    this.battery -= hours * 10;\n  }\n\n  get status() {\n    return this.battery > 20 ? \"ready\" : \"needs charging\";\n  }\n}\n\nconst r1 = new Robot(\"Techno\", 100);\nconst r2 = new Robot(\"Beep\", 30);\nr2.work(2);\nconsole.log(r1.name, r1.status);\nconsole.log(r2.name, r2.battery, r2.status);\n",
+   "note": "status is a getter: it's read without parentheses but calculated again every time."
+  },
+  {
+   "title": "extends and super",
+   "code": "class Ship {\n  constructor(name) {\n    this.name = name;\n  }\n  describe() {\n    return `the ship ${this.name}`;\n  }\n}\n\nclass Explorer extends Ship {\n  constructor(name, planet) {\n    super(name);\n    this.planet = planet;\n  }\n  describe() {\n    return `${super.describe()}, target: ${this.planet}`;\n  }\n}\n\nconst e = new Explorer(\"Scout\", \"Mars\");\nconsole.log(e.describe());\nconsole.log(e instanceof Ship);\n",
+   "note": "instanceof tells you which class an object comes from. An Explorer is a Ship too."
+  }
+ ],
+ "tasks": [
+  {
+   "title": "The Planet class",
+   "prompt": "Complete the `Planet` class:\n\n- `constructor(name, moons)`: save the `name` and `moons` properties.\n- `describe()`: **return** a text like `Mars: 2 moons`.",
+   "starter": "class Planet {\n  constructor(name, moons) {\n    // save the properties\n  }\n\n  describe() {\n    // return the text\n  }\n}\n\nconst mars = new Planet(\"Mars\", 2);\nconsole.log(mars.describe());\n",
+   "solution": "class Planet {\n  constructor(name, moons) {\n    // save the properties\n    this.name = name;\n    this.moons = moons;\n  }\n\n  describe() {\n    // return the text\n    return `${this.name}: ${this.moons} moons`;\n  }\n}\n\nconst mars = new Planet(\"Mars\", 2);\nconsole.log(mars.describe());\n",
+   "hints": [
+    "this.name = name;",
+    "return `${this.name}: ${this.moons} moons`;"
+   ],
+   "check": {
+    "code_contains": [
+     "this.name",
+     "return"
+    ]
+   }
+  },
+  {
+   "title": "Fuel tank",
+   "prompt": "Add two things to the `FuelTank` class:\n\n- `use(liters)`: if the tank has the fuel you ask for, subtract it from `amount` and return `true`; otherwise change nothing and return `false`.\n- `get percent`: a **getter** that gives how full the tank is, as a percentage (a whole number, using `Math.round`).",
+   "starter": "class FuelTank {\n  constructor(capacity) {\n    this.capacity = capacity;\n    this.amount = capacity;\n  }\n\n  use(liters) {\n    // if there's enough, subtract and return true, else false\n  }\n\n  get percent() {\n    // what percent is full?\n  }\n}\n\nconst tank = new FuelTank(200);\ntank.use(50);\nconsole.log(\"Full: \" + tank.percent + \"%\");\n",
+   "solution": "class FuelTank {\n  constructor(capacity) {\n    this.capacity = capacity;\n    this.amount = capacity;\n  }\n\n  use(liters) {\n    // if there's enough, subtract and return true, else false\n    if (liters > this.amount) return false;\n    this.amount -= liters;\n    return true;\n  }\n\n  get percent() {\n    // what percent is full?\n    return Math.round((this.amount / this.capacity) * 100);\n  }\n}\n\nconst tank = new FuelTank(200);\ntank.use(50);\nconsole.log(\"Full: \" + tank.percent + \"%\");\n",
+   "hints": [
+    "use(liters) { if (liters > this.amount) return false; ... }",
+    "get percent() { return Math.round(...); }"
+   ],
+   "check": {
+    "code_contains": [
+     "this.amount -=",
+     "Math.round"
+    ]
+   }
+  },
+  {
+   "title": "Cargo ship",
+   "prompt": "The `Ship` class is ready. Write a `CargoShip` class that extends it:\n\n- `constructor(name, cargo)`: set up `Ship` with `super(name)`, then save `cargo`.\n- `info()`: use `Ship`'s `info()` (`super.info()`) and add the cargo at the end: `Cargo-1 (speed 0) - cargo: 40 tons`",
+   "starter": "class Ship {\n  constructor(name) {\n    this.name = name;\n    this.speed = 0;\n  }\n  info() {\n    return `${this.name} (speed ${this.speed})`;\n  }\n}\n\n// write the CargoShip class\n\n",
+   "solution": "class Ship {\n  constructor(name) {\n    this.name = name;\n    this.speed = 0;\n  }\n  info() {\n    return `${this.name} (speed ${this.speed})`;\n  }\n}\n\n// write the CargoShip class\nclass CargoShip extends Ship {\n  constructor(name, cargo) {\n    super(name);\n    this.cargo = cargo;\n  }\n  info() {\n    return `${super.info()} - cargo: ${this.cargo} tons`;\n  }\n}\n\nconst cargo = new CargoShip(\"Cargo-1\", 40);\nconsole.log(cargo.info());\n",
+   "hints": [
+    "class CargoShip extends Ship { ... }",
+    "The first line inside the constructor: super(name);",
+    "return `${super.info()} - cargo: ${this.cargo} tons`;"
+   ],
+   "check": {
+    "code_contains": [
+     "extends",
+     "super(",
+     "super.info()"
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "title": "Astronaut records",
+  "prompt": "The `Astronaut` class should give each new astronaut a number in order:\n\n- `static count = 0`: how many astronauts have been made so far (belongs to the class).\n- `constructor(name)`: increase `Astronaut.count` by 1, set `this.id` to that number, and save `name`.\n- `badge()`: return something like `#2 Ben`.\n- `static fromList(names)`: make an array of astronauts from an array of names (`map`).",
+  "starter": "class Astronaut {\n  // static count\n\n  constructor(name) {\n    // increase the counter, id and name\n  }\n\n  badge() {\n    // #1 Ada\n  }\n\n  static fromList(names) {\n    return [];\n  }\n}\n\nconst crew = Astronaut.fromList([\"Ada\", \"Ben\", \"Eve\"]);\ncrew.forEach((a) => console.log(a.badge()));\n",
+  "solution": "class Astronaut {\n  // static count\n  static count = 0;\n\n  constructor(name) {\n    // increase the counter, id and name\n    Astronaut.count += 1;\n    this.id = Astronaut.count;\n    this.name = name;\n  }\n\n  badge() {\n    // #1 Ada\n    return `#${this.id} ${this.name}`;\n  }\n\n  static fromList(names) {\n    return names.map((name) => new Astronaut(name));\n  }\n}\n\nconst crew = Astronaut.fromList([\"Ada\", \"Ben\", \"Eve\"]);\ncrew.forEach((a) => console.log(a.badge()));\n",
+  "hints": [
+   "static count = 0; goes inside the class, outside the methods.",
+   "You reach the counter through the class name: Astronaut.count += 1;",
+   "return names.map((name) => new Astronaut(name));"
+  ],
+  "check": {
+   "code_contains": [
+    "static",
+    "Astronaut.count"
+   ]
+  }
+ },
+ "project_task": {
+  "title": "The Ship class",
+  "prompt": "Let's gather all of the ship's behavior into a class. Complete the `Ship` class (the drawing and keyboard code is ready):\n\n- `constructor(x, y)`: save the position.\n- `move(dx)`: change `x` by `dx`, but the ship must not leave the canvas: `x` must be at least `0` and at most `canvas.width - SHIP_SIZE`.\n- `hits(star)`: return `true` if the star's point (`star.x`, `star.y`) is inside the ship's square (edges included).",
+  "html": "<h1 id=\"title\">Star Hunter</h1>\n<canvas id=\"game\" width=\"300\" height=\"150\"></canvas>\n",
+  "starter": "const canvas = document.querySelector(\"#game\");\nconst ctx = canvas.getContext(\"2d\");\nconst SHIP_SIZE = 30;\n\nclass Ship {\n  constructor(x, y) {\n    // save x and y\n  }\n\n  move(dx) {\n    // change x, keep it between 0 and canvas.width - SHIP_SIZE\n  }\n\n  hits(star) {\n    // is the star inside the square?\n    return false;\n  }\n\n  draw() {\n    ctx.fillStyle = \"#f7df1e\";\n    ctx.fillRect(this.x, this.y, SHIP_SIZE, SHIP_SIZE);\n  }\n}\n\nconst ship = new Ship(135, 110);\n\nfunction render() {\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  ship.draw();\n}\n\ndocument.addEventListener(\"keydown\", (e) => {\n  if (e.key === \"ArrowLeft\") ship.move(-10);\n  if (e.key === \"ArrowRight\") ship.move(10);\n  render();\n});\n\nrender();\n",
+  "solution": "const canvas = document.querySelector(\"#game\");\nconst ctx = canvas.getContext(\"2d\");\nconst SHIP_SIZE = 30;\n\nclass Ship {\n  constructor(x, y) {\n    this.x = x;\n    this.y = y;\n  }\n\n  move(dx) {\n    const maxX = canvas.width - SHIP_SIZE;\n    this.x = Math.min(maxX, Math.max(0, this.x + dx));\n  }\n\n  hits(star) {\n    const insideX = star.x >= this.x && star.x <= this.x + SHIP_SIZE;\n    const insideY = star.y >= this.y && star.y <= this.y + SHIP_SIZE;\n    return insideX && insideY;\n  }\n\n  draw() {\n    ctx.fillStyle = \"#f7df1e\";\n    ctx.fillRect(this.x, this.y, SHIP_SIZE, SHIP_SIZE);\n  }\n}\n\nconst ship = new Ship(135, 110);\n\nfunction render() {\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  ship.draw();\n}\n\ndocument.addEventListener(\"keydown\", (e) => {\n  if (e.key === \"ArrowLeft\") ship.move(-10);\n  if (e.key === \"ArrowRight\") ship.move(10);\n  render();\n});\n\nrender();\n",
+  "hints": [
+   "this.x = x; this.y = y;",
+   "To limit it: Math.min(maxX, Math.max(0, this.x + dx))",
+   "hits: star.x >= this.x && star.x <= this.x + SHIP_SIZE (the same for y)"
+  ],
+  "check": {
+   "code_contains": [
+    "this.x",
+    "Math.max"
+   ]
+  }
+ }
+}

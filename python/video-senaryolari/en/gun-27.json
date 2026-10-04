@@ -1,0 +1,255 @@
+{
+  "kurs": "python",
+  "gun": 27,
+  "baslik": "Python and MongoDB",
+  "maskot": "piko",
+  "ozet": "Starting from the library on Python Mountain, Piko explains the idea of a document database, MongoDB's insert, find and update operations, and bringing them to life with Python dictionaries.",
+  "hedef_sure_sn": 160,
+  "dil": "en",
+  "giris": {
+    "anlatim": "Day 27: Python and MongoDB! In this lesson you'll learn the idea of a document database, MongoDB's insert, find and update operations, and how to act them out in Python.",
+    "maddeler": [
+      "Documents and collections",
+      "insert, find, update",
+      "Matching a query"
+    ]
+  },
+  "cikis": {
+    "anlatim": "The interactive version of this lesson is waiting for you at 30gunde.com.tr. Write your code right in the browser, run it instantly, and finish the tasks!",
+    "baslik": "Interactive lessons at",
+    "adres": "30gunde.com.tr",
+    "maddeler": [
+      "Write and run code in your browser",
+      "Finish tasks, earn badges",
+      "Learn Python step by step in 30 days"
+    ]
+  },
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 15,
+      "anlatim": "Hi, I'm Piko! In the library on the slopes of Python Mountain, every player has a file. When the librarian hears a name, they find the right file in seconds, open new files, and update levels. In the computer world, this librarian is called a database!",
+      "ekran": {
+        "baslik": "Day 27: Python and MongoDB",
+        "maddeler": [
+          "Python Mountain",
+          "Documents, collections, queries"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 2,
+      "tur": "anlatim",
+      "sure_sn": 16,
+      "anlatim": "When a program closes, its variables are lost. To search thousands of players' data quickly and keep it safe, we use a database. MongoDB is a document database: every record is a document that looks like a dictionary, and documents are gathered in collections.",
+      "ekran": {
+        "baslik": "What is a database?",
+        "maddeler": [
+          "Document: {\"name\": \"Piko\", \"level\": 3}",
+          "Collection: where documents are gathered",
+          "MongoDB = a document database"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 3,
+      "tur": "anlatim",
+      "sure_sn": 17,
+      "anlatim": "On your own computer, you connect to a real MongoDB with the pymongo package. insert_one adds, find searches, update_one updates, and delete_one deletes. We can't connect to a database on our site, so we'll act out the collection with a list of dictionaries.",
+      "ekran": {
+        "baslik": "Real MongoDB with pymongo",
+        "kod": "from pymongo import MongoClient\nclient = MongoClient(\"mongodb://localhost:27017\")\ndb = client[\"game\"]\n\ndb.players.insert_one({\"name\": \"Piko\", \"level\": 3})\nfor p in db.players.find({\"level\": 3}):\n    print(p[\"name\"])\ndb.players.update_one({\"name\": \"Piko\"}, {\"$set\": {\"level\": 4}})\n",
+        "vurgu_satirlari": [
+          5,
+          6,
+          8
+        ],
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "Here's our collection: a list made of dictionaries. Adding a new document is as easy as append, which is exactly what insert does. And I go through all the documents with a loop.",
+      "ekran": {
+        "baslik": "Collections and documents",
+        "kod": "players = [\n    {\"name\": \"Piko\", \"level\": 3},\n    {\"name\": \"Ece\", \"level\": 5},\n]\nplayers.append({\"name\": \"Can\", \"level\": 1})\nfor p in players:\n    print(p[\"name\"], \"level\", p[\"level\"])\n",
+        "vurgu_satirlari": [
+          5
+        ],
+        "dil": "python",
+        "cikti": "Piko level 3\nEce level 5\nCan level 1"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "anlatim",
+      "sure_sn": 15,
+      "anlatim": "The query inside find is a dictionary too. If it says level three, it brings back every document whose level is three. A document has to match every field in the query. The all function answers the question are they all true in a single line.",
+      "ekran": {
+        "baslik": "What is a query?",
+        "maddeler": [
+          "find({\"level\": 3})",
+          "Every field in the query must match",
+          "all(): are they all true?",
+          "any(): is at least one true?"
+        ]
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 6,
+      "tur": "soru",
+      "sure_sn": 10,
+      "anlatim": "I'm trying one document against four different queries. The last one is an empty query. Which ones do you think come out True, and which False?",
+      "ekran": {
+        "baslik": "What will it print?",
+        "kod": "doc = {\"name\": \"Piko\", \"level\": 3, \"club\": \"blue\"}\nfor query in [{\"level\": 3}, {\"level\": 3, \"club\": \"blue\"}, {\"level\": 4}, {}]:\n    ok = all(doc.get(k) == v for k, v in query.items())\n    print(query, \"->\", ok)\n",
+        "vurgu_satirlari": [
+          3
+        ],
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 7,
+      "tur": "cikti",
+      "sure_sn": 12,
+      "anlatim": "Level four didn't match, so it's False. The empty query has no fields to check, and all gives True when it's empty. So an empty query matches every document and brings them all back.",
+      "ekran": {
+        "baslik": "The answer",
+        "kod": "doc = {\"name\": \"Piko\", \"level\": 3, \"club\": \"blue\"}\nfor query in [{\"level\": 3}, {\"level\": 3, \"club\": \"blue\"}, {\"level\": 4}, {}]:\n    ok = all(doc.get(k) == v for k, v in query.items())\n    print(query, \"->\", ok)\n",
+        "dil": "python",
+        "cikti": "{'level': 3} -> True\n{'level': 3, 'club': 'blue'} -> True\n{'level': 4} -> False\n{} -> True"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "kod",
+      "sure_sn": 13,
+      "anlatim": "To update, I find Piko and write the new values with update. And break ends the search after the first match, just like update_one.",
+      "ekran": {
+        "baslik": "Updating",
+        "kod": "players = [{\"name\": \"Piko\", \"level\": 3}, {\"name\": \"Ece\", \"level\": 5}]\nfor p in players:\n    if p[\"name\"] == \"Piko\":\n        p.update({\"level\": 4})\n        break\nprint(players)\n",
+        "vurgu_satirlari": [
+          4,
+          5
+        ],
+        "dil": "python",
+        "cikti": "[{'name': 'Piko', 'level': 4}, {'name': 'Ece', 'level': 5}]"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "hata",
+      "sure_sn": 12,
+      "anlatim": "A common mistake: reading a field some documents don't have with square brackets. Documents can have different fields, and Python gives a KeyError. Use get to read safely.",
+      "ekran": {
+        "baslik": "Common mistake: a missing field",
+        "kod": "players = [{\"name\": \"Piko\", \"level\": 3}, {\"name\": \"Can\"}]\nfor p in players:\n    print(p[\"name\"], p[\"level\"])\n",
+        "vurgu_satirlari": [
+          3
+        ],
+        "cikti": "Piko 3\nKeyError: 'level'",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "uzgun",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 10,
+      "tur": "gorev",
+      "sure_sn": 13,
+      "anlatim": "In the tasks you'll write your own insert_one, find and update_one functions. That means you're building the inside of MongoDB yourself! In the project you're adding players and leveling them up.",
+      "ekran": {
+        "baslik": "Today's tasks",
+        "maddeler": [
+          "Task 1: insert_one",
+          "Task 2: find",
+          "Task 3: update_one",
+          "Challenge: The $gt sign",
+          "Project: Player database"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "ozet",
+      "sure_sn": 11,
+      "anlatim": "In short: in MongoDB, documents are like dictionaries and are gathered in collections. You find them with queries, update them with update, and delete them with delete.",
+      "ekran": {
+        "baslik": "What you learned today",
+        "maddeler": [
+          "Documents and collections",
+          "insert, find, update, delete",
+          "Matching a query: all()"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 12,
+      "tur": "kapanis",
+      "sure_sn": 12,
+      "anlatim": "You're the library's new master! Tomorrow we move to the radio in the camp house. We'll learn about APIs, where programs talk to each other, and how to read JSON responses. See you!",
+      "ekran": {
+        "baslik": "Tomorrow: Using APIs",
+        "maddeler": [
+          "What is an API?",
+          "JSON and status codes"
+        ]
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

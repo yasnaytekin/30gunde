@@ -21,6 +21,14 @@ Ders metni: [gun-30.md](../gunler/gun-30.md)
 | 11 | ozet | 12 sn | on (sag) |
 | 12 | kapanis | 16 sn | tebrik (orta) |
 
+## Giriş (konu tanıtımı)
+
+**Seslendirme:** Gün 30: Final ve sonrası! Bu derste otuz günlük yolculuğu özetleyecek, öğrendiklerini tek bir oyunda birleştirecek ve sonraki adımlarını göreceksin.
+
+- 30 günün özeti
+- Hepsi bir arada: final macerası
+- Bundan sonra ne yapabilirsin?
+
 ## Sahne 1: acilis (14 sn)
 
 **Seslendirme:** Selam, ben Piko! Başardın, Python Dağı'nın zirvesindeyiz! Buradan geriye bak: ilk print'ten kendi API'ne kadar uzun bir yol yürüdün. Ben çok gururluyum. Son bir macera kaldı: her şeyi tek bir oyunda birleştirmek!
@@ -266,3 +274,13 @@ NameError: name 'scroe' is not defined. Did you mean: 'score'?
 **Maskot:** tebrik pozu, orta
 
 *Yönetmen notu: Final projesi rozeti ortada parlar, konfeti yağar, Piko el sallayarak kutlar.*
+
+## Çıkış (30gunde.com.tr yönlendirmesi)
+
+**Seslendirme:** Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!
+
+**Ekranda:** İnteraktif dersler için **30gunde.com.tr**
+
+- Kodunu tarayıcıda yaz ve çalıştır
+- Görevleri tamamla, rozet kazan
+- 30 günde adım adım Python

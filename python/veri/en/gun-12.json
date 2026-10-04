@@ -1,0 +1,36 @@
+{
+ "day": 12, "title": "Modules", "region": "atolye",
+ "project_contribution": "Random events",
+ "game_role": "When you open chests, your random events and coins pop out.",
+ "objective": "Import ready-made modules and use the math and random modules",
+ "story": "There's a giant tool cabinet on the workshop wall. Each drawer holds tools made by other craftspeople: one has calculating tools, another has dice and lottery tools... In Python these drawers are called **modules**. Today we open the drawers!",
+ "sections": [
+  {"title": "What is a module?", "body": "A module is a Python file full of functions written by someone else (or by you). You bring it into your project with `import`:\n\n```python\nimport math\nprint(math.sqrt(49))   # 7.0\n```\n\nPython comes with hundreds of modules when you install it. This is called the **standard library**."},
+  {"title": "math: calculating tools", "body": "- `math.sqrt(x)` square root\n- `math.pi` the number pi (3.14159...)\n- `math.floor(4.7)` rounds down: 4\n- `math.ceil(4.2)` rounds up: 5\n- `math.pow(2, 3)` power: 8.0"},
+  {"title": "random: luck tools", "body": "The surprises in games come from here:\n\n- `random.randint(1, 6)` a random whole number from 1 to 6 (both included)\n- `random.choice(list)` a random item from a list\n- `random.shuffle(list)` shuffles a list\n- `random.random()` a random decimal number between 0 and 1\n\nYou get a different result every run. If you want to see the same results again, write `random.seed(42)` at the start."},
+  {"title": "from, as and your own module", "body": "Use `from` to take just one part, and `as` to shorten long names:\n\n```python\nfrom math import pi, sqrt\nimport random as rnd\nprint(pi, sqrt(16), rnd.randint(1, 3))\n```\n\nIf you write a file called `tools.py` on your computer, another file in the same folder can use its functions with `import tools`. Big projects are organized this way."}
+ ],
+ "examples": [
+  {"title": "Calculating tools", "code": "import math\n\nprint(math.sqrt(81))\nprint(round(math.pi, 4))\nprint(math.floor(4.7), math.ceil(4.2))\n", "note": ""},
+  {"title": "Dice and draws", "code": "import random\n\nprint(\"Dice:\", random.randint(1, 6))\nfriends = [\"Ali\", \"Emma\", \"Ben\", \"Zoe\"]\nprint(\"The winner is:\", random.choice(friends))\nrandom.shuffle(friends)\nprint(\"Shuffled order:\", friends)\n", "note": "Run it a few times. Do the results change?"},
+  {"title": "from and as", "code": "from math import sqrt, pi\nimport random as rnd\n\nprint(sqrt(144))\nprint(pi)\nrnd.seed(7)\nprint(rnd.randint(1, 100))\n", "note": "Because the seed is fixed, you get the same number every time."}
+ ],
+ "tasks": [
+  {"title": "Square root", "prompt": "Use the `math` module to find the square root of `area` and store it in `side`.",
+   "starter": "area = 81\n\n# import the math module and calculate side\nside = 0\n\nprint(\"One side:\", side)\n", "solution": "import math\n\narea = 81\n\nside = math.sqrt(area)\n\nprint(\"One side:\", side)\n",
+   "hints": ["Write import math at the top.", "Square root: math.sqrt(area)"], "check": {"output_contains": ["One side: 9.0"]}},
+  {"title": "Roll the dice", "prompt": "Roll a dice from 1 to 6 with the `random` module, store the result in `dice` and print something like `Dice: 4`.",
+   "starter": "# import the random module\n\ndice = 1\n\nprint(f\"Dice: {dice}\")\n", "solution": "import random\n\ndice = random.randint(1, 6)\n\nprint(f\"Dice: {dice}\")\n",
+   "hints": ["import random", "random.randint(1, 6) includes both 1 and 6."], "check": {"code_contains": ["random"]}},
+  {"title": "Random treasure", "prompt": "Pick a random treasure from the `treasures` list and store it in `prize`.",
+   "starter": "import random\n\ntreasures = [\"gold\", \"diamond\", \"map\", \"potion\"]\n\nprize = treasures[0]\n\nprint(\"Treasure:\", prize)\n", "solution": "import random\n\ntreasures = [\"gold\", \"diamond\", \"map\", \"potion\"]\n\nprize = random.choice(treasures)\n\nprint(\"Treasure:\", prize)\n",
+   "hints": ["To pick randomly from a list: random.choice(...)"], "check": {"code_contains": ["choice("]}}
+ ],
+ "challenge": {"title": "Circle area", "prompt": "Get pi with `from math import pi`. Calculate the area of a circle with radius `radius`, **round it to 2 decimal places** and store it in `area`. Formula: pi x r x r",
+  "starter": "radius = 3\n\n# get pi from the math module\n\narea = 0\n\nprint(\"Area:\", area)\n", "solution": "from math import pi\n\nradius = 3\n\narea = round(pi * radius ** 2, 2)\n\nprint(\"Area:\", area)\n",
+  "hints": ["from math import pi", "round(number, 2) rounds to two decimal places."], "check": {"code_contains": ["from math import"], "output_contains": ["Area: 28.27"]}},
+ "project_task": {"title": "Random events", "prompt": "Let's make the adventure full of surprises! The `random_event()` function should **return** a random event from the `events` list. The `find_gold()` function should return a random number from 5 to 20.",
+  "starter": "import random\n\nevents = [\"You found a potion!\", \"You stepped on a trap!\", \"A friend arrived!\", \"It started to rain!\"]\n\ndef random_event():\n    pass\n\ndef find_gold():\n    pass\n\nprint(random_event())\nprint(\"Gold found:\", find_gold())\n",
+  "solution": "import random\n\nevents = [\"You found a potion!\", \"You stepped on a trap!\", \"A friend arrived!\", \"It started to rain!\"]\n\ndef random_event():\n    return random.choice(events)\n\ndef find_gold():\n    return random.randint(5, 20)\n\nprint(random_event())\nprint(\"Gold found:\", find_gold())\n",
+  "hints": ["Inside random_event: return random.choice(events)", "Inside find_gold: return random.randint(5, 20)"]}
+}

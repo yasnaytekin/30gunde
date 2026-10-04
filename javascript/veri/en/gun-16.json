@@ -1,0 +1,132 @@
+{
+ "day": 16,
+ "title": "Forms",
+ "region": "dom",
+ "project_contribution": "Pilot name form",
+ "objective": "Read values from a form (text, numbers, checkboxes, select lists), validate them and show errors on the page",
+ "story": "You're at the last stop on Planet DOM! The control tower wants the details of every pilot who's about to fly. Today you'll learn to get data from **forms** and to catch information that was entered wrong.",
+ "sections": [
+  {
+   "title": "The submit event and preventDefault",
+   "body": "When you press the button inside a form (or press Enter in a box), the form is **submitted** and a `submit` event happens. Normally the browser reloads the page at that moment, and everything you typed is lost. `e.preventDefault()` stops this default behavior:\n\n```js\nconst form = document.querySelector(\"#pilot-form\");\nform.addEventListener(\"submit\", (e) => {\n  e.preventDefault(); // don't reload the page\n  console.log(\"Form submitted!\");\n});\n```\n\nAttach the event to the **form** (`submit`), not to the button (`click`). That way the Enter key works too."
+  },
+  {
+   "title": "Reading the value in a box",
+   "body": "The text inside an `input` is in its `.value` property, and it's **always text**, even if a number was typed:\n\n```js\nconst raw = document.querySelector(\"#fuel\").value; // \"150\"\nconst fuel = Number(raw);                          // 150\nif (Number.isNaN(fuel)) {\n  console.log(\"That's not a number!\");\n}\n```\n\n- `.value.trim()` removes spaces at the start and end: `\"  Ada \"` → `\"Ada\"`\n- `Number(\"abc\")` gives `NaN`; you can tell with `Number.isNaN(...)`.\n- `Number(\"\")` gives `0`. Don't forget to check for an empty box separately!"
+  },
+  {
+   "title": "Checkboxes and select lists",
+   "body": "With a checkbox (`type=\"checkbox\"`) what matters isn't the text but whether it's ticked: `.checked` gives us `true` or `false`. In a select list (`select`), `.value` is the `value` of the selected `option`:\n\n```js\nconst ready = document.querySelector(\"#ready\").checked;      // true / false\nconst crew = Number(document.querySelector(\"#crew\").value);  // \"3\" → 3\n```"
+  },
+  {
+   "title": "Validation, error messages and resetting",
+   "body": "Checking the values before accepting a form is called **validation**. Show the error message on the page so the user can see what to fix:\n\n```js\nif (name === \"\") {\n  info.textContent = \"Type the pilot's name first!\";\n  info.classList.add(\"error\");\n  return; // don't run the rest\n}\ninfo.classList.remove(\"error\");\nform.reset(); // empties all the boxes\n```\n\n`return` leaves the event function immediately; if there's an error, the rest doesn't run.\n\nTip: put the validation in a separate function like `validate(...)`. It returns the message if there's an error, or empty text `\"\"` if not. That way you can try it with different values one by one."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Pilot sign-up",
+   "code": "const form = document.querySelector(\"#f\");\nconst info = document.querySelector(\"#info\");\n\nform.addEventListener(\"submit\", (e) => {\n  e.preventDefault();\n  const name = document.querySelector(\"#name\").value.trim();\n  if (name === \"\") {\n    info.textContent = \"You forgot to type your name!\";\n    return;\n  }\n  info.textContent = `Welcome, Captain ${name}!`;\n  form.reset();\n});\n",
+   "note": "Try it with the box empty too.",
+   "html": "<form id=\"f\"><input id=\"name\" placeholder=\"Your name\"> <button>Save</button></form>\n<p id=\"info\">Type your name, then press Save.</p>\n"
+  },
+  {
+   "title": "Checkbox and select list",
+   "code": "const form = document.querySelector(\"#f\");\nform.addEventListener(\"submit\", (e) => {\n  e.preventDefault();\n  const shield = document.querySelector(\"#shield\").checked;\n  const speed = Number(document.querySelector(\"#speed\").value);\n  console.log(\"Shield:\", shield, \"Speed:\", speed);\n  document.querySelector(\"#info\").textContent = `Shield ${shield ? \"on\" : \"off\"}, speed ${speed * 100} km/s`;\n});\n",
+   "note": "Tick the checkbox, change the speed and press Apply.",
+   "html": "<form id=\"f\"><label><input type=\"checkbox\" id=\"shield\"> Shield on</label> \n<select id=\"speed\"><option value=\"1\">Slow</option><option value=\"2\">Normal</option><option value=\"3\">Fast</option></select> <button>Apply</button></form>\n<p id=\"info\"></p>\n"
+  }
+ ],
+ "tasks": [
+  {
+   "title": "Mission log",
+   "prompt": "When the form is submitted:\n\n- the page must not reload (`preventDefault`),\n- the mission name in the `#mission` box, with spaces trimmed, is written into `#out` like `Mission saved: Explore Mars`,\n- the form is reset (`form.reset()`).",
+   "html": "<form id=\"mission-form\"><input id=\"mission\" placeholder=\"Mission name\"> <button>Save</button></form>\n<p id=\"out\">No mission yet.</p>\n",
+   "starter": "const form = document.querySelector(\"#mission-form\");\n\n// listen to the submit event\n\n",
+   "solution": "const form = document.querySelector(\"#mission-form\");\n\n// listen to the submit event\nform.addEventListener(\"submit\", (e) => {\n  e.preventDefault();\n  const mission = document.querySelector(\"#mission\").value.trim();\n  document.querySelector(\"#out\").textContent = `Mission saved: ${mission}`;\n  form.reset();\n});\n",
+   "hints": [
+    "form.addEventListener(\"submit\", (e) => { e.preventDefault(); ... })",
+    "document.querySelector(\"#mission\").value.trim()"
+   ],
+   "check": {
+    "code_contains": [
+     "submit",
+     "preventDefault",
+     ".value"
+    ]
+   }
+  },
+  {
+   "title": "Fuel calculator",
+   "prompt": "When the form is submitted, calculate the total fuel: the number in the `#fuel` box × the number of tanks chosen in the `#tanks` list.\n\n- Write the result into `#out` like `Total fuel: 300 liters`.\n- If the fuel isn't a number, or is 0 or less, write `Please type a valid number.`",
+   "html": "<form id=\"fuel-form\"><label>Fuel per tank <input id=\"fuel\" placeholder=\"e.g. 150\"></label> \n<label>Tanks <select id=\"tanks\"><option value=\"1\">1</option><option value=\"2\">2</option><option value=\"3\">3</option></select></label> <button>Calculate</button></form>\n<p id=\"out\"></p>\n",
+   "starter": "const form = document.querySelector(\"#fuel-form\");\nconst result = document.querySelector(\"#out\");\n\n// listen to the submit event, turn the values into numbers with Number\n\n",
+   "solution": "const form = document.querySelector(\"#fuel-form\");\nconst result = document.querySelector(\"#out\");\n\n// listen to the submit event, turn the values into numbers with Number\nform.addEventListener(\"submit\", (e) => {\n  e.preventDefault();\n  const fuel = Number(document.querySelector(\"#fuel\").value);\n  const tanks = Number(document.querySelector(\"#tanks\").value);\n  if (Number.isNaN(fuel) || fuel <= 0) {\n    result.textContent = \"Please type a valid number.\";\n    return;\n  }\n  result.textContent = `Total fuel: ${fuel * tanks} liters`;\n});\n",
+   "hints": [
+    "const fuel = Number(document.querySelector(\"#fuel\").value);",
+    "If Number.isNaN(fuel) || fuel <= 0, write the error message and leave with return."
+   ],
+   "check": {
+    "code_contains": [
+     "Number(",
+     "submit"
+    ]
+   }
+  },
+  {
+   "title": "Launch approval",
+   "prompt": "When the form is submitted:\n\n- If the `#ready` checkbox is **not** ticked, write `Confirm the safety check first!` into `#out` and add the `error` class to `#out`.\n- If it's ticked, write `Launch approved: crew of 3` (the number comes from the `#crew` list) and remove the `error` class.",
+   "html": "<form id=\"launch-form\"><label><input type=\"checkbox\" id=\"ready\"> Safety check done</label><br>\n<label>Crew: <select id=\"crew\"><option value=\"2\">2 people</option><option value=\"3\">3 people</option><option value=\"4\">4 people</option></select></label> <button>Launch</button></form>\n<p id=\"out\"></p>\n",
+   "starter": "const form = document.querySelector(\"#launch-form\");\nconst result = document.querySelector(\"#out\");\n\n// listen to the submit event; use .checked for the checkbox\n\n",
+   "solution": "const form = document.querySelector(\"#launch-form\");\nconst result = document.querySelector(\"#out\");\n\n// listen to the submit event; use .checked for the checkbox\nform.addEventListener(\"submit\", (e) => {\n  e.preventDefault();\n  const ready = document.querySelector(\"#ready\").checked;\n  const crew = document.querySelector(\"#crew\").value;\n  if (!ready) {\n    result.textContent = \"Confirm the safety check first!\";\n    result.classList.add(\"error\");\n    return;\n  }\n  result.textContent = `Launch approved: crew of ${crew}`;\n  result.classList.remove(\"error\");\n});\n",
+   "hints": [
+    "document.querySelector(\"#ready\").checked gives true or false.",
+    "if (!ready) { ... return; }"
+   ],
+   "check": {
+    "code_contains": [
+     ".checked",
+     "classList"
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "title": "Sign-up form",
+  "prompt": "Validate the sign-up form. When the form is submitted, find all the errors and add each one to the `#errors` list as a separate `<li>` (clear the list first):\n\n- If the username (spaces trimmed) isn't between 3 and 12 letters: `The username must be 3-12 letters.`\n- If the age isn't a whole number between 10 and 99: `The age must be a number between 10 and 99.`\n\nIf there are no errors, write `Signed up, Ada!` into `#out` and reset the form. If there are errors, `#out` stays empty.",
+  "html": "<form id=\"signup\"><input id=\"username\" placeholder=\"Username\"> <input id=\"age\" placeholder=\"Age\"> <button>Sign up</button></form>\n<ul id=\"errors\"></ul>\n<p id=\"out\"></p>\n",
+  "starter": "const form = document.querySelector(\"#signup\");\nconst errorList = document.querySelector(\"#errors\");\nconst result = document.querySelector(\"#out\");\n\n// listen to the submit event: collect the errors in an array, then show them in the list\n\n",
+  "solution": "const form = document.querySelector(\"#signup\");\nconst errorList = document.querySelector(\"#errors\");\nconst result = document.querySelector(\"#out\");\n\n// listen to the submit event: collect the errors in an array, then show them in the list\nform.addEventListener(\"submit\", (e) => {\n  e.preventDefault();\n  const username = document.querySelector(\"#username\").value.trim();\n  const age = Number(document.querySelector(\"#age\").value);\n  const errors = [];\n  if (username.length < 3 || username.length > 12) {\n    errors.push(\"The username must be 3-12 letters.\");\n  }\n  if (!Number.isInteger(age) || age < 10 || age > 99) {\n    errors.push(\"The age must be a number between 10 and 99.\");\n  }\n  errorList.innerHTML = \"\";\n  for (const error of errors) {\n    const li = document.createElement(\"li\");\n    li.textContent = error;\n    errorList.append(li);\n  }\n  if (errors.length === 0) {\n    result.textContent = `Signed up, ${username}!`;\n    form.reset();\n  } else {\n    result.textContent = \"\";\n  }\n});\n",
+  "hints": [
+   "const errors = []; every time you find an error: errors.push(\"...\")",
+   "To clear the list: errorList.innerHTML = \"\";",
+   "A whole number? Number.isInteger(age)"
+  ],
+  "check": {
+   "code_contains": [
+    "preventDefault",
+    "push",
+    "createElement"
+   ]
+  }
+ },
+ "project_task": {
+  "title": "Pilot name form",
+  "prompt": "Let's get the pilot's name before the game starts. When `#pilot-form` is submitted:\n\n- The page must not reload.\n- If the name (spaces trimmed) is empty, write `Type the pilot's name first!` into `#info` and add the `error` class.\n- Otherwise put the name into the `pilotName` variable, write `Get ready, Captain Ada!` into `#info`, remove the `error` class and reset the form.",
+  "html": "<h2 id=\"title\">Star Hunter</h2>\n<form id=\"pilot-form\"><input id=\"pilot-name\" placeholder=\"Pilot name\" autocomplete=\"off\"> <button>Start</button></form>\n<p id=\"info\">Type the pilot's name and start.</p>\n<p id=\"hud\">Score: <span id=\"score\">0</span> · Time: <span id=\"time\">10</span> · Best: <span id=\"best\">0</span></p>\n<div id=\"field\"><div id=\"ship\"></div></div>\n<div id=\"colors\"><button data-color=\"#f7df1e\">Yellow</button> <button data-color=\"#4dd0e1\">Turquoise</button> <button data-color=\"#ff6b6b\">Red</button></div>\n",
+  "starter": "const form = document.querySelector(\"#pilot-form\");\nconst info = document.querySelector(\"#info\");\nlet pilotName = \"\";\n\n// listen to the submit event\n\n",
+  "solution": "const form = document.querySelector(\"#pilot-form\");\nconst info = document.querySelector(\"#info\");\nlet pilotName = \"\";\n\n// listen to the submit event\nform.addEventListener(\"submit\", (e) => {\n  e.preventDefault();\n  const name = document.querySelector(\"#pilot-name\").value.trim();\n  if (name === \"\") {\n    info.textContent = \"Type the pilot's name first!\";\n    info.classList.add(\"error\");\n    return;\n  }\n  pilotName = name;\n  info.textContent = `Get ready, Captain ${pilotName}!`;\n  info.classList.remove(\"error\");\n  form.reset();\n});\n",
+  "hints": [
+   "const name = document.querySelector(\"#pilot-name\").value.trim();",
+   "If it's empty: info.classList.add(\"error\"); return;",
+   "If it worked: pilotName = name; ... form.reset();"
+  ],
+  "check": {
+   "code_contains": [
+    "preventDefault",
+    "trim",
+    "reset"
+   ]
+  }
+ }
+}

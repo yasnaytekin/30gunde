@@ -1,0 +1,134 @@
+{
+ "day": 21,
+ "title": "Drawing with canvas",
+ "region": "piksel",
+ "project_contribution": "Drawing the play field",
+ "objective": "Draw rectangles, circles and lines on a canvas; draw a picture from an array with a loop",
+ "story": "You've landed on Pixel Planet! Everything here is made of tiny colored dots: pixels. Today you'll draw with code on a drawing surface called **canvas** and draw the first picture of the play field.",
+ "sections": [
+  {
+   "title": "Canvas and brush",
+   "body": "The `<canvas>` tag in HTML is an empty drawing canvas. To draw on it, we first ask it for a **brush** (the drawing context):\n\n```js\nconst canvas = document.querySelector(\"#game\");\nconst ctx = canvas.getContext(\"2d\");\n```\n\n`ctx` is now the object that knows all the drawing commands. The canvas size is set in HTML with `width` and `height`: `<canvas id=\"game\" width=\"300\" height=\"200\">`. In code you read these values with `canvas.width` and `canvas.height`."
+  },
+  {
+   "title": "Coordinates: y grows downwards",
+   "body": "Every point on the canvas has an `(x, y)` address. **The top-left corner is `(0, 0)`**. `x` grows to the right, and `y` grows **downwards** (the opposite of math class!).\n\n| Point | x | y |\n|---|---|---|\n| Top-left corner | 0 | 0 |\n| Top-right corner | 300 | 0 |\n| Bottom-left corner | 0 | 200 |\n| Middle | 150 | 100 |\n\nSo to move something up, you **decrease** `y`."
+  },
+  {
+   "title": "Rectangles, outlines and the eraser",
+   "body": "Choose the color first, then draw. `fillStyle` affects every fill drawing after it:\n\n```js\nctx.fillStyle = \"#0b1026\";       // fill color\nctx.fillRect(0, 0, 300, 200);    // x, y, width, height\n\nctx.strokeStyle = \"#f7df1e\";     // line color\nctx.lineWidth = 3;\nctx.strokeRect(20, 20, 60, 40);  // an empty outline\n\nctx.clearRect(0, 0, 300, 200);   // erases the area (makes it transparent)\n```\n\nYou can write colors as hexadecimal (hex) codes like `\"#f7df1e\"` or as names like `\"white\"`. A rectangle's `(x, y)` point is its **top-left corner**."
+  },
+  {
+   "title": "Circles, lines, text and drawing from data",
+   "body": "Circles and lines are drawn as a **path**: start with `beginPath()`, describe the shape, then say `fill()` or `stroke()`:\n\n```js\nctx.beginPath();\nctx.arc(150, 100, 30, 0, Math.PI * 2); // center x, y, radius, full turn\nctx.fillStyle = \"#ff9800\";\nctx.fill();\n\nctx.beginPath();\nctx.moveTo(10, 190);  // put the pen here\nctx.lineTo(290, 190); // draw up to here\nctx.strokeStyle = \"white\";\nctx.stroke();\n\nctx.fillStyle = \"white\";\nctx.font = \"16px sans-serif\";\nctx.fillText(\"Star Hunter\", 10, 20);\n```\n\nThe real power is drawing the picture **from data**: you run the same command in a loop for every item of an array. When the array changes, the picture changes too:\n\n```js\nconst stars = [{ x: 40, y: 30 }, { x: 120, y: 80 }, { x: 250, y: 50 }];\nctx.fillStyle = \"#f7df1e\";\nfor (const star of stars) {\n  ctx.fillRect(star.x, star.y, 6, 6);\n}\n```"
+  }
+ ],
+ "examples": [
+  {
+   "title": "Night scene",
+   "code": "const ctx = document.querySelector(\"#sky\").getContext(\"2d\");\n\n// Sky\nctx.fillStyle = \"#0b1026\";\nctx.fillRect(0, 0, 300, 160);\n\n// Moon\nctx.beginPath();\nctx.arc(240, 40, 22, 0, Math.PI * 2);\nctx.fillStyle = \"#fff5c0\";\nctx.fill();\n\n// Ground\nctx.fillStyle = \"#2e7d32\";\nctx.fillRect(0, 130, 300, 30);\n\n// Rocket: fill and outline\nctx.fillStyle = \"#e53935\";\nctx.fillRect(60, 80, 16, 50);\nctx.strokeStyle = \"white\";\nctx.strokeRect(60, 80, 16, 50);\n\n// Text\nctx.fillStyle = \"white\";\nctx.font = \"14px sans-serif\";\nctx.fillText(\"Pixel Planet\", 10, 20);\n",
+   "note": "Change the coordinates: to move the rocket right change x, to move it up decrease y.",
+   "html": "<canvas id=\"sky\" width=\"300\" height=\"160\"></canvas>"
+  },
+  {
+   "title": "A sky from data",
+   "code": "const canvas = document.querySelector(\"#sky\");\nconst ctx = canvas.getContext(\"2d\");\nctx.fillStyle = \"#0b1026\";\nctx.fillRect(0, 0, canvas.width, canvas.height);\n\n// 40 random stars\nctx.fillStyle = \"white\";\nfor (let i = 0; i < 40; i++) {\n  const x = Math.random() * canvas.width;\n  const y = Math.random() * canvas.height;\n  ctx.fillRect(x, y, 2, 2);\n}\n\n// Planets from an array\nconst planets = [\n  { x: 60, y: 90, r: 25, color: \"#ff9800\" },\n  { x: 150, y: 50, r: 15, color: \"#4fc3f7\" },\n  { x: 235, y: 100, r: 35, color: \"#e53935\" },\n];\nfor (const p of planets) {\n  ctx.beginPath();\n  ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);\n  ctx.fillStyle = p.color;\n  ctx.fill();\n}\n",
+   "note": "The stars are in different places every time. Add a new planet to the planets array.",
+   "html": "<canvas id=\"sky\" width=\"300\" height=\"160\"></canvas>"
+  }
+ ],
+ "tasks": [
+  {
+   "title": "Space background",
+   "prompt": "Paint **the whole** `#c` canvas dark navy (`#0b1026`). Then draw a red (`#e53935`) rectangle on top, starting at `(20, 30)`, 60 wide and 40 high.\n\nDon't type the canvas size yourself: use `canvas.width` and `canvas.height`.",
+   "html": "<canvas id=\"c\" width=\"200\" height=\"120\"></canvas>",
+   "starter": "const canvas = document.querySelector(\"#c\");\nconst ctx = canvas.getContext(\"2d\");\n\n// First the background, then the red rectangle\n\n",
+   "solution": "const canvas = document.querySelector(\"#c\");\nconst ctx = canvas.getContext(\"2d\");\n\n// First the background, then the red rectangle\nctx.fillStyle = \"#0b1026\";\nctx.fillRect(0, 0, canvas.width, canvas.height);\nctx.fillStyle = \"#e53935\";\nctx.fillRect(20, 30, 60, 40);\n",
+   "hints": [
+    "Choose the color first: ctx.fillStyle = \"#0b1026\";",
+    "The whole canvas: ctx.fillRect(0, 0, canvas.width, canvas.height);",
+    "Then change the color and ctx.fillRect(20, 30, 60, 40);"
+   ],
+   "check": {
+    "code_contains": [
+     "fillStyle",
+     "fillRect"
+    ]
+   }
+  },
+  {
+   "title": "Orange planet",
+   "prompt": "Draw an orange (`#ff9800`) **circle** with its center at `(100, 60)` and a radius of `30`. Use `beginPath`, `arc` and `fill`.",
+   "html": "<canvas id=\"c\" width=\"200\" height=\"120\"></canvas>",
+   "starter": "const canvas = document.querySelector(\"#c\");\nconst ctx = canvas.getContext(\"2d\");\n\n// Draw the circle\n\n",
+   "solution": "const canvas = document.querySelector(\"#c\");\nconst ctx = canvas.getContext(\"2d\");\n\n// Draw the circle\nctx.beginPath();\nctx.arc(100, 60, 30, 0, Math.PI * 2);\nctx.fillStyle = \"#ff9800\";\nctx.fill();\n",
+   "hints": [
+    "ctx.arc(x, y, radius, 0, Math.PI * 2) describes a full circle.",
+    "First ctx.beginPath(), at the end ctx.fill()."
+   ],
+   "check": {
+    "code_contains": [
+     "beginPath",
+     "arc",
+     "fill"
+    ]
+   }
+  },
+  {
+   "title": "Draw the stars from an array",
+   "prompt": "Write the `drawStars()` function:\n\n1. First it clears the whole canvas with `clearRect`.\n2. Then for every star in the `stars` array it draws a 10×10 yellow (`#f7df1e`) square starting at `(x, y)`.\n\nWhen the array changes and `drawStars()` is called again, the picture should change too.",
+   "html": "<canvas id=\"c\" width=\"200\" height=\"120\"></canvas>",
+   "starter": "const canvas = document.querySelector(\"#c\");\nconst ctx = canvas.getContext(\"2d\");\nconst stars = [\n  { x: 20, y: 20 },\n  { x: 90, y: 70 },\n  { x: 160, y: 30 },\n];\n\nfunction drawStars() {\n  // clear, then draw every star\n}\n\ndrawStars();\n",
+   "solution": "const canvas = document.querySelector(\"#c\");\nconst ctx = canvas.getContext(\"2d\");\nconst stars = [\n  { x: 20, y: 20 },\n  { x: 90, y: 70 },\n  { x: 160, y: 30 },\n];\n\nfunction drawStars() {\n  // clear, then draw every star\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  ctx.fillStyle = \"#f7df1e\";\n  for (const star of stars) {\n    ctx.fillRect(star.x, star.y, 10, 10);\n  }\n}\n\ndrawStars();\n",
+   "hints": [
+    "ctx.clearRect(0, 0, canvas.width, canvas.height);",
+    "for (const star of stars) { ctx.fillRect(star.x, star.y, 10, 10); }"
+   ],
+   "check": {
+    "code_contains": [
+     "clearRect",
+     "fillRect",
+     "for"
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "title": "Chessboard",
+  "prompt": "Draw an 8×8 chessboard on the `#board` canvas. Each square is 20×20 pixels.\n\n- If the sum of the row and column numbers is **even**, the square is white (`#ffffff`); if it's **odd**, it's dark (`#1b1f33`).\n- Use two nested `for` loops: one for the rows (`row`), one for the columns (`col`).\n- A square starts at `(col * 20, row * 20)`.",
+  "html": "<canvas id=\"board\" width=\"160\" height=\"160\"></canvas>",
+  "starter": "const ctx = document.querySelector(\"#board\").getContext(\"2d\");\n\n// 64 squares with two nested loops\n\n",
+  "solution": "const ctx = document.querySelector(\"#board\").getContext(\"2d\");\n\n// 64 squares with two nested loops\nfor (let row = 0; row < 8; row++) {\n  for (let col = 0; col < 8; col++) {\n    ctx.fillStyle = (row + col) % 2 === 0 ? \"#ffffff\" : \"#1b1f33\";\n    ctx.fillRect(col * 20, row * 20, 20, 20);\n  }\n}\n",
+  "hints": [
+   "for (let row = 0; row < 8; row++) { for (let col = 0; col < 8; col++) { ... } }",
+   "Is it even? (row + col) % 2 === 0",
+   "ctx.fillRect(col * 20, row * 20, 20, 20);"
+  ],
+  "check": {
+   "code_contains": [
+    "for",
+    "%",
+    "fillRect"
+   ]
+  }
+ },
+ "project_task": {
+  "title": "Play field",
+  "prompt": "Time to draw Star Hunter's play field! Write the `drawGame()` function:\n\n1. Paint the whole canvas `#0b1026` (this also erases the old picture).\n2. Draw the ship as a blue (`#4fc3f7`) rectangle using the `x`, `y`, `w`, `h` values in the `ship` object.\n3. Draw every star in the `stars` array as a yellow (`#f7df1e`) circle with its center at `(x, y)` and a radius of `6`.\n\nWhen the ship or the stars change and `drawGame()` is called again, the picture should change too.",
+  "html": "<canvas id=\"game\" width=\"300\" height=\"200\"></canvas>\n<p id=\"info\">Score: 0</p>\n",
+  "starter": "const canvas = document.querySelector(\"#game\");\nconst ctx = canvas.getContext(\"2d\");\n\nconst ship = { x: 20, y: 90, w: 30, h: 20 };\nconst stars = [\n  { x: 120, y: 40 },\n  { x: 200, y: 150 },\n  { x: 260, y: 70 },\n];\n\nfunction drawGame() {\n  // 1. background  2. ship  3. stars\n}\n\ndrawGame();\n",
+  "solution": "const canvas = document.querySelector(\"#game\");\nconst ctx = canvas.getContext(\"2d\");\n\nconst ship = { x: 20, y: 90, w: 30, h: 20 };\nconst stars = [\n  { x: 120, y: 40 },\n  { x: 200, y: 150 },\n  { x: 260, y: 70 },\n];\n\nfunction drawGame() {\n  // 1. background  2. ship  3. stars\n  ctx.fillStyle = \"#0b1026\";\n  ctx.fillRect(0, 0, canvas.width, canvas.height);\n\n  ctx.fillStyle = \"#4fc3f7\";\n  ctx.fillRect(ship.x, ship.y, ship.w, ship.h);\n\n  ctx.fillStyle = \"#f7df1e\";\n  for (const star of stars) {\n    ctx.beginPath();\n    ctx.arc(star.x, star.y, 6, 0, Math.PI * 2);\n    ctx.fill();\n  }\n}\n\ndrawGame();\n",
+  "hints": [
+   "Background: ctx.fillRect(0, 0, canvas.width, canvas.height);",
+   "Ship: ctx.fillRect(ship.x, ship.y, ship.w, ship.h);",
+   "For every star: beginPath, arc(star.x, star.y, 6, 0, Math.PI * 2) and fill."
+  ],
+  "check": {
+   "code_contains": [
+    "fillRect",
+    "arc",
+    "for"
+   ]
+  }
+ }
+}

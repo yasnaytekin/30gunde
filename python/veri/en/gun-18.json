@@ -1,0 +1,39 @@
+{
+ "day": 18, "title": "Regular expressions", "region": "ada",
+ "project_contribution": "Command parser",
+ "game_role": "Your parser understands typed commands like \"go north 3\".",
+ "objective": "Search, find and replace patterns in text with the re module",
+ "story": "The walls of the island's cave are covered in writing. Somewhere in there are hidden numbers, codes and commands. Reading it all line by line would take days! Luckily Python has a magnifying glass: **regular expressions** (regex). You describe a pattern and Python finds it in the text.",
+ "sections": [
+  {"title": "What is a pattern?", "body": "A regular expression is a **description** of what you're looking for, like \"a word that contains an e\" or \"digits next to each other\". In Python you use them with the `re` module:\n\n```python\nimport re\ntext = \"Piko found 3 apples and 12 coins\"\nprint(re.findall(r\"\\d+\", text))   # ['3', '12']\n```\n\nWe put an `r` in front of patterns (`r\"...\"`) so that backslashes are read correctly."},
+  {"title": "Special characters", "body": "- `\\d` a digit, `\\w` a letter, digit or underscore, `\\s` a space\n- `.` any character\n- `+` one or more, `*` zero or more, `?` maybe there, maybe not\n- `{3}` exactly 3, `{2,4}` between 2 and 4\n- `[aei]` one of the characters in brackets, `[0-9]` 0 to 9\n- `^` the start, `$` the end"},
+  {"title": "Four basic functions", "body": "- `re.findall(pattern, text)` gives a list of every matching piece\n- `re.search(pattern, text)` finds the first match, or gives `None`\n- `re.fullmatch(pattern, text)` does the **whole** text match the pattern?\n- `re.sub(pattern, new, text)` replaces the matches\n\n```python\nprint(re.sub(r\"\\d\", \"*\", \"Code 4821\"))   # Code ****\n```"},
+  {"title": "Groups", "body": "Parentheses split a pattern into parts. After a match you get each part with `group()`:\n\n```python\nm = re.search(r\"(\\w+) (\\d+) coins\", \"Emma 45 coins found\")\nif m:\n    print(m.group(1))   # Emma\n    print(m.group(2))   # 45\n```"}
+ ],
+ "examples": [
+  {"title": "Find the numbers", "code": "import re\n\ntext = \"Piko found 3 apples, 12 coins and 7 potions\"\nprint(re.findall(r\"\\d+\", text))\nprint(re.findall(r\"\\d\", text))\n", "note": "Notice the difference between \\d+ and \\d."},
+  {"title": "Search and replace", "code": "import re\n\nmsg = \"My code is 4821, my phone is 07123456789\"\nprint(re.search(r\"\\d{4}\", msg).group())\nprint(re.sub(r\"\\d\", \"*\", msg))\n", "note": ""},
+  {"title": "Split with groups", "code": "import re\n\nfor line in [\"Emma 45 coins\", \"Ben 7 coins\", \"wrong line\"]:\n    m = re.search(r\"(\\w+) (\\d+) coins\", line)\n    if m:\n        print(m.group(1), \"->\", int(m.group(2)))\n    else:\n        print(\"No match:\", line)\n", "note": ""}
+ ],
+ "tasks": [
+  {"title": "Add up the numbers", "prompt": "Find all the numbers in `text` with `re.findall` and put them in the `numbers` list. Then calculate their sum as `total`.",
+   "starter": "import re\n\ntext = \"Piko found 3 apples, 12 coins and 7 potions\"\n\nnumbers = []\ntotal = 0\n\nprint(numbers, total)\n",
+   "solution": "import re\n\ntext = \"Piko found 3 apples, 12 coins and 7 potions\"\n\nnumbers = re.findall(r\"\\d+\", text)\ntotal = sum([int(n) for n in numbers])\n\nprint(numbers, total)\n",
+   "hints": ["Pattern: r\"\\d+\" (one or more digits)", "findall gives a list of text; turn them into numbers with int() to add them."], "check": {"code_contains": ["findall"], "output_contains": ["['3', '12', '7'] 22"]}},
+  {"title": "Is there an email?", "prompt": "If `text` contains an email address, `has_email` should be True, otherwise False. A simple pattern is enough: letters, `@`, letters, a dot, letters.",
+   "starter": "import re\n\ntext = \"Write to me at piko@example.com\"\n\nhas_email = False\n\nprint(has_email)\n",
+   "solution": "import re\n\ntext = \"Write to me at piko@example.com\"\n\nhas_email = re.search(r\"\\w+@\\w+\\.\\w+\", text) is not None\n\nprint(has_email)\n",
+   "hints": ["Pattern: r\"\\w+@\\w+\\.\\w+\"", "re.search gives None when it finds nothing: ... is not None"], "check": {"code_contains": ["re."], "output_contains": ["True"]}},
+  {"title": "Hide the code", "prompt": "Use `re.sub` to replace every digit in `text` with `*` and store it in `hidden`.",
+   "starter": "import re\n\ntext = \"The safe's code is 4821\"\n\nhidden = text\n\nprint(hidden)\n", "solution": "import re\n\ntext = \"The safe's code is 4821\"\n\nhidden = re.sub(r\"\\d\", \"*\", text)\n\nprint(hidden)\n",
+   "hints": ["re.sub(r\"\\d\", \"*\", text)"], "check": {"code_contains": ["re.sub"], "output_contains": ["The safe's code is ****"]}}
+ ],
+ "challenge": {"title": "Phone number", "prompt": "The `is_phone(text)` function should return True if the text is exactly an **11-digit** number starting with `07`, otherwise False.",
+  "starter": "import re\n\ndef is_phone(text):\n    return False\n\nprint(is_phone(\"07123456789\"))\n",
+  "solution": "import re\n\ndef is_phone(text):\n    return re.fullmatch(r\"07\\d{9}\", text) is not None\n\nprint(is_phone(\"07123456789\"))\n",
+  "hints": ["After 07 there must be 9 more digits: \\d{9}", "The whole text must match: re.fullmatch"], "check": {"output_contains": ["True"]}},
+ "project_task": {"title": "Command parser", "prompt": "The player gives commands as text, like `go north 3`. The `parse(command)` function:\n\n- If the command starts with `go`, followed by a direction (`north`, `south`, `east`, `west`) and a number, it should return the tuple `(\"north\", 3)` (the number as an int).\n- Otherwise it should return `None`.",
+  "starter": "import re\n\ndef parse(command):\n    return None\n\nprint(parse(\"go north 3\"))\nprint(parse(\"fly to the sky\"))\n",
+  "solution": "import re\n\ndef parse(command):\n    m = re.fullmatch(r\"go (north|south|east|west) (\\d+)\", command)\n    if m:\n        return (m.group(1), int(m.group(2)))\n    return None\n\nprint(parse(\"go north 3\"))\nprint(parse(\"fly to the sky\"))\n",
+  "hints": ["Use | for choices: (north|south|east|west)", "The number group: (\\d+)", "m.group(1) is the direction, int(m.group(2)) the number of steps"], "check": {"output_contains": ["('north', 3)", "None"]}}
+}

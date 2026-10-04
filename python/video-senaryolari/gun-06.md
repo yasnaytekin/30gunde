@@ -20,6 +20,14 @@ Ders metni: [gun-06.md](../gunler/gun-06.md)
 | 10 | ozet | 6 sn | on (sag) |
 | 11 | kapanis | 8 sn | tebrik (orta) |
 
+## Giriş (konu tanıtımı)
+
+**Seslendirme:** Gün 6: Tuple'lar! Bu derste değiştirilemeyen mühürlü kutuları, onları açmayı ve tek elemanlı tuple tuzağını öğreneceksin.
+
+- Tuple nedir, neden değişmez?
+- list() ve tuple() ile dönüştürme
+- Tuple açmak: x, y = pos
+
 ## Sahne 1: acilis (12 sn)
 
 **Seslendirme:** Selam, ben Piko! Veri Ormanı'nın ağaçlarına eski kaşifler işaretler kazımış: üç virgül beş, sekiz virgül iki. Bunlar gizli yerlerin koordinatları ve kimse onları değiştiremez. Bugün mühürlü kutuları, yani tuple'ları açıyoruz!
@@ -232,3 +240,13 @@ print(type(b))
 **Görsel:** `gorseller/python/harita/orman.webp`
 
 **Maskot:** tebrik pozu, orta
+
+## Çıkış (30gunde.com.tr yönlendirmesi)
+
+**Seslendirme:** Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!
+
+**Ekranda:** İnteraktif dersler için **30gunde.com.tr**
+
+- Kodunu tarayıcıda yaz ve çalıştır
+- Görevleri tamamla, rozet kazan
+- 30 günde adım adım Python

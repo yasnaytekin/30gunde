@@ -1,0 +1,254 @@
+{
+  "kurs": "python",
+  "gun": 18,
+  "baslik": "Regular expressions",
+  "maskot": "piko",
+  "ozet": "In the written cave of Discovery Island, Piko explains building patterns with the re module, and pulling information out of text with findall, search, fullmatch, sub and groups.",
+  "hedef_sure_sn": 152,
+  "dil": "en",
+  "giris": {
+    "anlatim": "Day 18: Regular expressions! In this lesson you'll search for patterns in text with the re module, and find and replace information with findall, search and sub.",
+    "maddeler": [
+      "What is a pattern?",
+      "findall, search, sub",
+      "Splitting with groups"
+    ]
+  },
+  "cikis": {
+    "anlatim": "The interactive version of this lesson is waiting for you at 30gunde.com.tr. Write your code right in the browser, run it instantly, and finish the tasks!",
+    "baslik": "Interactive lessons at",
+    "adres": "30gunde.com.tr",
+    "maddeler": [
+      "Write and run code in your browser",
+      "Finish tasks, earn badges",
+      "Learn Python step by step in 30 days"
+    ]
+  },
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 13,
+      "anlatim": "Hi, I'm Piko! We're in the cave of Discovery Island. The walls are covered in writing, and secret numbers and passwords are hidden somewhere. Reading it all one by one would take days! Luckily, Python has a magnifying glass: regular expressions.",
+      "ekran": {
+        "baslik": "Day 18: Regular expressions",
+        "maddeler": [
+          "Discovery Island",
+          "The re module (regex)"
+        ]
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 2,
+      "tur": "anlatim",
+      "sure_sn": 13,
+      "anlatim": "A regular expression is a description of what you're looking for. Like digits next to each other, or a word with the letter e in it. You write the description, and the re module finds it in the text.",
+      "ekran": {
+        "baslik": "What is a pattern?",
+        "maddeler": [
+          "Pattern = a description of what you're looking for",
+          "import re",
+          "Put an r before the pattern: r\"...\""
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 3,
+      "tur": "anlatim",
+      "sure_sn": 15,
+      "anlatim": "We use special characters to write descriptions. Backslash d means a digit, and backslash w means a letter or a digit. A plus sign means one or more, and a number in curly braces says exactly how many.",
+      "ekran": {
+        "baslik": "Special characters",
+        "maddeler": [
+          "\\d digit, \\w letter/digit, \\s space",
+          ". any character",
+          "+ one or more, * zero or more",
+          "{3} exactly 3, [0-9] a range",
+          "^ start, $ end"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "findall gives you every matching piece as a list. The pattern with a plus counts digits next to each other as one piece, so twelve stays whole. The pattern without a plus collects every digit separately.",
+      "ekran": {
+        "baslik": "Find the numbers: findall",
+        "kod": "import re\n\ntext = \"Piko found 3 apples, 12 gold and 7 potions\"\nprint(re.findall(r\"\\d+\", text))\nprint(re.findall(r\"\\d\", text))\n",
+        "vurgu_satirlari": [
+          4,
+          5
+        ],
+        "dil": "python",
+        "cikti": "['3', '12', '7']\n['3', '1', '2', '7']"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "search finds the first match; here, the first four digits in a row, which is the password. sub replaces everything that matches. I turned all the digits into stars to hide the information.",
+      "ekran": {
+        "baslik": "Search and replace: search, sub",
+        "kod": "import re\n\nmsg = \"My password is 4821, my phone is 05321234567\"\nprint(re.search(r\"\\d{4}\", msg).group())\nprint(re.sub(r\"\\d\", \"*\", msg))\n",
+        "vurgu_satirlari": [
+          4,
+          5
+        ],
+        "dil": "python",
+        "cikti": "4821\nMy password is ****, my phone is ***********"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "Parentheses split a pattern into groups. The first group catches the name, the second catches the number, and I take them with group. On a line that doesn't fit the pattern, search gives None, and the if catches that.",
+      "ekran": {
+        "baslik": "Split it with groups",
+        "kod": "import re\n\nfor line in [\"Ece 45 gold\", \"Can 7 gold\", \"wrong line\"]:\n    m = re.search(r\"(\\w+) (\\d+) gold\", line)\n    if m:\n        print(m.group(1), \"->\", int(m.group(2)))\n    else:\n        print(\"No match:\", line)\n",
+        "vurgu_satirlari": [
+          4,
+          6
+        ],
+        "dil": "python",
+        "cikti": "Ece -> 45\nCan -> 7\nNo match: wrong line"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "hata",
+      "sure_sn": 12,
+      "anlatim": "Here's the most common mistake: calling group directly when there's no match. If search finds nothing, it returns None, and since None has no group, you get an AttributeError. Check with if m first!",
+      "ekran": {
+        "baslik": "Common mistake: None.group()",
+        "kod": "import re\n\nm = re.search(r\"\\d+\", \"no number here\")\nprint(m.group())\n",
+        "vurgu_satirlari": [
+          4
+        ],
+        "cikti": "AttributeError: 'NoneType' object has no attribute 'group'",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "uzgun",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "soru",
+      "sure_sn": 10,
+      "anlatim": "Your turn! fullmatch checks whether the whole text fits the pattern. The pattern wants exactly three digits. What do you think the two lines print?",
+      "ekran": {
+        "baslik": "What will it print?",
+        "kod": "import re\n\nprint(bool(re.fullmatch(r\"\\d{3}\", \"123\")))\nprint(bool(re.fullmatch(r\"\\d{3}\", \"1234\")))\n",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 9,
+      "tur": "cikti",
+      "sure_sn": 9,
+      "anlatim": "The first is True, because it's exactly three digits. The second is False: there are four digits, and fullmatch doesn't accept extras.",
+      "ekran": {
+        "baslik": "The answer",
+        "kod": "import re\n\nprint(bool(re.fullmatch(r\"\\d{3}\", \"123\")))\nprint(bool(re.fullmatch(r\"\\d{3}\", \"1234\")))\n",
+        "dil": "python",
+        "cikti": "True\nFalse"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 10,
+      "tur": "gorev",
+      "sure_sn": 13,
+      "anlatim": "In the tasks you'll find the numbers in a text and add them up, look for an email address, and hide a password. In the project you're writing a function that understands commands like go north three.",
+      "ekran": {
+        "baslik": "Today's tasks",
+        "maddeler": [
+          "Task 1: Add up the numbers",
+          "Task 2: Is there an email?",
+          "Task 3: Hide the password",
+          "Challenge: Phone number",
+          "Project: Command parser"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "ozet",
+      "sure_sn": 11,
+      "anlatim": "In short: describe the pattern, find them all with findall, catch the first with search, and replace with sub.",
+      "ekran": {
+        "baslik": "What you learned today",
+        "maddeler": [
+          "Build patterns with \\d, \\w, +, {n}",
+          "findall, search, fullmatch, sub",
+          "Groups in parentheses come back with group(1), group(2)"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 12,
+      "tur": "kapanis",
+      "sure_sn": 12,
+      "anlatim": "We cracked the cave's codes, congratulations! Tomorrow, so we don't lose what we found, we'll learn to write to files and save the game with JSON. See you!",
+      "ekran": {
+        "baslik": "Tomorrow: Working with files",
+        "maddeler": [
+          "Write to a file, read from a file",
+          "Save with JSON"
+        ]
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

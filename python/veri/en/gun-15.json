@@ -1,0 +1,34 @@
+{
+ "day": 15, "title": "Error types", "region": "atolye",
+ "project_contribution": "Bug hunt",
+ "game_role": "The code you fixed prints the player's status at the start of the game.",
+ "objective": "Recognize Python's error types, read error messages and fix errors",
+ "story": "The last room of the workshop is a detective's office! The desk is covered with broken code, and all of it shows red error messages. But error messages aren't our enemies, they're clues: they tell us what broke and where. Today we become error detectives.",
+ "sections": [
+  {"title": "How to read an error message", "body": "An error message holds three important pieces of information:\n\n- **Line number:** where is the problem?\n- **Error type:** like `NameError` or `TypeError`\n- **Description:** the short sentence next to the type\n\nGo to the line first, then look at the error type. Most of the time the problem is on that line or the one just above it."},
+  {"title": "The most common errors", "body": "- `SyntaxError`: a writing rule is broken (a forgotten `:` or parenthesis)\n- `IndentationError`: wrong indentation\n- `NameError`: a name that isn't defined (usually a typo)\n- `TypeError`: the wrong types used together (`\"Age: \" + 12`)\n- `ValueError`: the type is right but the value isn't suitable (`int(\"twelve\")`)\n- `IndexError`: a position that isn't in the list (`items[10]`)\n- `KeyError`: a key that isn't in the dictionary\n- `ZeroDivisionError`: dividing by zero\n- `AttributeError`: a method that type doesn't have (`5.upper()`)\n- `ModuleNotFoundError`: a module that doesn't exist"},
+  {"title": "Checking types", "body": "Many errors come from mixed-up types. Use `type()` to look at a value's type:\n\n```python\nage = \"12\"\nprint(type(age))       # <class 'str'>\nprint(int(age) + 1)    # 13\n```\n\nWhen joining text and numbers, use `str()` or an f-string: `f\"Age: {age}\"`"},
+  {"title": "Detective tactics", "body": "- Put `print()` in between to see what's inside your variables\n- Run the code in small pieces\n- Read the error message out loud; it really says a lot\n- Could the list be empty? Could the number be zero? Think about edge cases\n\nIn a few days, on Discovery Island, we'll learn to catch these errors without the program crashing (`try` and `except`)."}
+ ],
+ "examples": [
+  {"title": "Fix the type mix-up", "code": "age = 12\nprint(\"I am \" + str(age))\nprint(f\"I am {age}\")\ntext = \"7\"\nprint(int(text) + 3)\n", "note": ""},
+  {"title": "Look at the type", "code": "values = [3, \"3\", 3.0, True, [3]]\nfor v in values:\n    print(repr(v), \"->\", type(v).__name__)\n", "note": ""},
+  {"title": "Looking safely", "code": "items = [\"sword\", \"shield\"]\nhero = {\"name\": \"Piko\"}\nprint(items[-1])\nprint(hero.get(\"gold\", 0))\nnums = []\nprint(sum(nums) / len(nums) if nums else 0)\n", "note": "Each of these lines shows a way to prevent an error."}
+ ],
+ "tasks": [
+  {"title": "Fix the TypeError", "prompt": "This code raises a `TypeError`. Fix it so that it prints `I am 12`.", "starter": "age = 12\nprint(\"I am \" + age)\n",
+   "solution": "age = 12\nprint(\"I am \" + str(age))\n", "hints": ["Text and a number can't be joined with +.", "Turn age into text with str(age), or use an f-string."], "check": {"output_contains": ["I am 12"]}},
+  {"title": "Fix the IndexError", "prompt": "This code wants to print the last item in the bag but fails. Fix it. It should still print the last item even if the bag grows.", "starter": "items = [\"sword\", \"shield\", \"potion\"]\nprint(\"Last item:\", items[3])\n",
+   "solution": "items = [\"sword\", \"shield\", \"potion\"]\nprint(\"Last item:\", items[-1])\n", "hints": ["Positions start at 0; the last index of a 3-item list is 2.", "The shortcut that always gives the last item: items[-1]"], "check": {"output_contains": ["Last item: potion"]}},
+  {"title": "Fix the KeyError", "prompt": "There's no `gold` key in the dictionary, so the code fails. Fix it with `get()`: if the key is missing, it should print `0`.", "starter": "hero = {\"name\": \"Piko\", \"hp\": 100}\nprint(\"Gold:\", hero[\"gold\"])\n",
+   "solution": "hero = {\"name\": \"Piko\", \"hp\": 100}\nprint(\"Gold:\", hero.get(\"gold\", 0))\n", "hints": ["hero.get(\"gold\", 0) gives 0 if the key is missing."], "check": {"code_contains": [".get("], "output_contains": ["Gold: 0"]}}
+ ],
+ "challenge": {"title": "Dividing by zero", "prompt": "`average(nums)` returns the average, but with an empty list it raises a `ZeroDivisionError`. Fix it so it returns `0` when the list is empty.",
+  "starter": "def average(nums):\n    return sum(nums) / len(nums)\n\nprint(average([2, 4, 6]))\nprint(average([]))\n",
+  "solution": "def average(nums):\n    if len(nums) == 0:\n        return 0\n    return sum(nums) / len(nums)\n\nprint(average([2, 4, 6]))\nprint(average([]))\n",
+  "hints": ["Check whether the list is empty before dividing.", "if len(nums) == 0: return 0"]},
+ "project_task": {"title": "Bug hunt", "prompt": "Three bugs have sneaked into Piko's game! Run the code, read the error messages and fix them one by one. When it works it should print:\n\n```\nPlayer: Piko\nHealth: 100\nFirst item: sword\n```",
+  "starter": "player = {\"name\": \"Piko\", \"hp\": 100}\nitems = [\"sword\", \"potion\"]\n\nprint(\"Player: \" + plyer[\"name\"])\nprint(\"Health: \" + player[\"hp\"])\nprint(\"First item: \" + items[1])\n",
+  "solution": "player = {\"name\": \"Piko\", \"hp\": 100}\nitems = [\"sword\", \"potion\"]\n\nprint(\"Player: \" + player[\"name\"])\nprint(\"Health: \" + str(player[\"hp\"]))\nprint(\"First item: \" + items[0])\n",
+  "hints": ["The first bug is a NameError: look closely at the variable's name.", "The second bug is a TypeError: turn the number into text with str().", "The third is a wrong result: the first item is items[0]"], "check": {"output_contains": ["Player: Piko", "Health: 100", "First item: sword"]}}
+}

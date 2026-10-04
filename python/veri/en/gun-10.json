@@ -1,0 +1,36 @@
+{
+ "day": 10, "title": "Loops", "region": "kale",
+ "project_contribution": "Game rounds",
+ "game_role": "When you meet the bat, the battle rounds run on your loop.",
+ "objective": "Automate repeated work with while and for loops",
+ "story": "The tower of Logic Castle has 100 steps. If we had to write a separate `print` for every step, our fingers would get tired! Computers do repeated work without ever getting bored. Today we learn **loops**.",
+ "sections": [
+  {"title": "while: as long as the condition is true", "body": "A `while` loop runs the code inside it again and again as long as its condition is `True`:\n\n```python\ncount = 3\nwhile count > 0:\n    print(count)\n    count -= 1\nprint(\"Go!\")\n```\n\nDon't forget to change the condition inside the loop. Without `count -= 1` the loop would never end. That's called an **infinite loop**; such a program never stops on its own. If it happens to you, stop it with **Ctrl+C**."},
+  {"title": "for and range()", "body": "To repeat something a set number of times, use `for` and `range()`:\n\n- `range(5)` 0, 1, 2, 3, 4\n- `range(1, 6)` 1, 2, 3, 4, 5 (the last number isn't included)\n- `range(0, 10, 2)` 0, 2, 4, 6, 8 (in steps of two)\n\n```python\nfor i in range(1, 4):\n    print(\"Round\", i)\n```"},
+  {"title": "Walking through collections", "body": "`for` gives you every item of a list, tuple, set, or even a string, one by one:\n\n```python\nbag = [\"sword\", \"potion\", \"map\"]\nfor item in bag:\n    print(\"In the bag:\", item)\n```\n\nTo walk through a dictionary you can use `for key, value in hero.items():`. If you also need the position number, `enumerate()` helps: `for i, item in enumerate(bag, 1):`"},
+  {"title": "break and continue", "body": "- `break` leaves the loop immediately\n- `continue` skips this round and moves to the next one\n\n```python\nfor n in range(1, 10):\n    if n == 5:\n        break\n    if n % 2 == 0:\n        continue\n    print(n)   # 1 and 3\n```"}
+ ],
+ "examples": [
+  {"title": "Countdown", "code": "count = 5\nwhile count > 0:\n    print(count)\n    count -= 1\nprint(\"Liftoff!\")\n", "note": ""},
+  {"title": "Adding machine", "code": "total = 0\nfor n in range(1, 101):\n    total += n\nprint(\"Sum from 1 to 100:\", total)\n", "note": "How long would this take by hand?"},
+  {"title": "Count the bag", "code": "bag = [\"sword\", \"potion\", \"map\", \"key\"]\nfor i, item in enumerate(bag, 1):\n    print(f\"{i}. {item}\")\n    if item == \"map\":\n        print(\"Found the map, I'll stop searching.\")\n        break\n", "note": ""}
+ ],
+ "tasks": [
+  {"title": "Countdown", "prompt": "Count down from `count` to 1 with a `while` loop, then print `Go!` at the end.", "starter": "count = 5\n\n# count down with while, then print \"Go!\"\n",
+   "solution": "count = 5\n\nwhile count > 0:\n    print(count)\n    count -= 1\n\nprint(\"Go!\")\n", "hints": ["Start with while count > 0:", "Don't forget count -= 1 inside the loop."], "check": {"code_contains": ["while"], "output_contains": ["Go!"]}},
+  {"title": "Times table", "prompt": "Print the times table of `n` from 1 to 10. Each line should look like: `7 x 3 = 21`", "starter": "n = 7\n\n# print the times table of n with for and range\n",
+   "solution": "n = 7\n\nfor i in range(1, 11):\n    print(f\"{n} x {i} = {n * i}\")\n", "hints": ["range(1, 11) gives you the numbers 1 to 10.", "print(f\"{n} x {i} = {n * i}\")"], "check": {"code_contains": ["for"], "output_contains": ["7 x 3 = 21", "7 x 10 = 70"]}},
+  {"title": "Collect the coins", "prompt": "Add up the coins in the `coins` list with a `for` loop and store the result in `total`. No `sum()` this time!", "starter": "coins = [5, 10, 3, 7]\ntotal = 0\n\n# go through coins with for and add to total\n\nprint(\"Total gold:\", total)\n",
+   "solution": "coins = [5, 10, 3, 7]\ntotal = 0\n\nfor c in coins:\n    total += c\n\nprint(\"Total gold:\", total)\n", "hints": ["Write for c in coins: and inside it total += c."], "check": {"code_contains": ["for"], "output_contains": ["Total gold: 25"]}}
+ ],
+ "visual_task": {"title": "Piko pyramid", "prompt": "Build a Piko pyramid with a `for` loop: 1 Piko in row 1, 2 Pikos in row 2... with `floors` rows in total.\n\nWith `floors = 6` the pyramid should have 6 floors!", "starter": "floors = 4\n\n",
+  "solution": "floors = 4\n\nfor i in range(1, floors + 1):\n    print(\"*\" * i)\n", "hints": ["for i in range(1, floors + 1):", "Inside the loop: print(\"*\" * i)"], "scene": {"target": ["*", "**", "***", "****"]}, "check": {"code_contains": ["for"]}},
+ "challenge": {"title": "PiKo numbers", "prompt": "Print the numbers from 1 to `n`. But if a number is divisible by 3 print `Pi`, if it's divisible by 5 print `Ko`, and if it's divisible by both print `PiKo`.",
+  "starter": "n = 15\n\n# 1 to n: divisible by 3 -> Pi, by 5 -> Ko, by both -> PiKo\n",
+  "solution": "n = 15\n\nfor i in range(1, n + 1):\n    if i % 15 == 0:\n        print(\"PiKo\")\n    elif i % 3 == 0:\n        print(\"Pi\")\n    elif i % 5 == 0:\n        print(\"Ko\")\n    else:\n        print(i)\n",
+  "hints": ["Check divisibility with the remainder: i % 3 == 0", "Check the \"divisible by both\" case first."]},
+ "project_task": {"title": "Game rounds", "prompt": "Piko's health is `hp`. Each round the enemy deals as much damage as the `attacks` list says.\n\n- Each round, lower the health and print something like `Round 1: health 22`.\n- If health drops to 0 or below, print `Piko is exhausted, game over!` and leave the loop.\n- If health is still above 0 after all rounds, print `Piko survived!`.",
+  "starter": "hp = 30\nattacks = [8, 5, 12, 9]\n\n# lower health on every attack and print the round\n",
+  "solution": "hp = 30\nattacks = [8, 5, 12, 9]\n\nfor turn, damage in enumerate(attacks, 1):\n    hp -= damage\n    print(f\"Round {turn}: health {hp}\")\n    if hp <= 0:\n        print(\"Piko is exhausted, game over!\")\n        break\n\nif hp > 0:\n    print(\"Piko survived!\")\n",
+  "hints": ["enumerate(attacks, 1) gives you the round number and the damage together.", "When health reaches 0 or below, leave with break.", "After the loop, check with if hp > 0:"], "check": {"output_contains": ["Round 1: health 22", "Piko is exhausted, game over!"]}}
+}

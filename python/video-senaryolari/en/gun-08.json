@@ -1,0 +1,249 @@
+{
+  "kurs": "python",
+  "gun": 8,
+  "baslik": "Dictionaries",
+  "maskot": "piko",
+  "ozet": "Piko keeps ID cards for the creatures of the Data Forest in dictionaries: reaching values by key, adding, changing and deleting, reading safely with get(), and nested data.",
+  "hedef_sure_sn": 122,
+  "dil": "en",
+  "giris": {
+    "anlatim": "Day 8: Dictionaries! In this lesson you'll store information with keys and values, update it, and read it safely with get.",
+    "maddeler": [
+      "Keys and values",
+      "Add, change, delete",
+      "get() and nested data"
+    ]
+  },
+  "cikis": {
+    "anlatim": "The interactive version of this lesson is waiting for you at 30gunde.com.tr. Write your code right in the browser, run it instantly, and finish the tasks!",
+    "baslik": "Interactive lessons at",
+    "adres": "30gunde.com.tr",
+    "maddeler": [
+      "Write and run code in your browser",
+      "Finish tasks, earn badges",
+      "Learn Python step by step in 30 days"
+    ]
+  },
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 12,
+      "anlatim": "Hi, I'm Piko! Every creature living in the Data Forest has an ID card: its name, its health, its strength. If we keep them in a list, we'll mix up which is which. Today we meet Python's dictionaries!",
+      "ekran": {
+        "baslik": "Day 8: Dictionaries",
+        "gorsel": "gorseller/python/harita/orman.webp"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "In a real dictionary you look up a word to find its meaning. In a Python dictionary you look up a key to find its value. With lists we used position numbers; with dictionaries we use names.",
+      "ekran": {
+        "baslik": "Keys and values",
+        "kod": "player = {\"name\": \"Piko\", \"hp\": 100, \"gold\": 50}\nprint(player[\"name\"])\nprint(player[\"gold\"])\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          1
+        ],
+        "cikti": "Piko\n50"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "To add a new key, write its name in square brackets and put in a value. You change a value the same way. And del deletes a key together with its value.",
+      "ekran": {
+        "baslik": "Add, change, delete",
+        "kod": "player = {\"name\": \"Piko\", \"hp\": 100, \"gold\": 50}\nplayer[\"level\"] = 1\nplayer[\"hp\"] = player[\"hp\"] - 10\ndel player[\"gold\"]\nprint(player)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2,
+          3,
+          4
+        ],
+        "cikti": "{'name': 'Piko', 'hp': 90, 'level': 1}"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "hata",
+      "sure_sn": 9,
+      "anlatim": "Ask for a key that doesn't exist and Python gives you a KeyError. The message is very clear: there's no key called shield in the dictionary.",
+      "ekran": {
+        "baslik": "KeyError",
+        "kod": "player = {\"name\": \"Piko\", \"hp\": 100}\nprint(player[\"shield\"])\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "KeyError: 'shield'"
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 11,
+      "anlatim": "Here comes our rescuer, get! It never gives an error. If the key exists it returns its value; if not, it returns the backup value you chose. The goblin has a name but no shield.",
+      "ekran": {
+        "baslik": "Safe lookup: get()",
+        "kod": "enemy = {\"name\": \"Goblin\", \"hp\": 30}\nprint(enemy.get(\"name\"))\nprint(enemy.get(\"shield\", \"No shield!\"))\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          3
+        ],
+        "cikti": "Goblin\nNo shield!"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 11,
+      "anlatim": "keys gives all the keys, and values gives all the values. in asks whether a key is there, and len tells you how many keys there are.",
+      "ekran": {
+        "baslik": "Exploring a dictionary",
+        "kod": "player = {\"name\": \"Piko\", \"hp\": 100}\nprint(player.keys())\nprint(player.values())\nprint(\"hp\" in player, len(player))\n",
+        "dil": "python",
+        "cikti": "dict_keys(['name', 'hp'])\ndict_values(['Piko', 100])\nTrue 2"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "kod",
+      "sure_sn": 10,
+      "anlatim": "You can even use a list as a value. The hero's bag is now inside the ID card! We add a new item to the bag with append.",
+      "ekran": {
+        "baslik": "Nested data",
+        "kod": "hero = {\"name\": \"Piko\", \"inventory\": [\"sword\", \"potion\"]}\nhero[\"inventory\"].append(\"map\")\nprint(hero[\"inventory\"])\nprint(len(hero[\"inventory\"]), \"items\")\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "['sword', 'potion', 'map']\n3 items"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "soru",
+      "sure_sn": 10,
+      "anlatim": "Look carefully! Does the second line add a new key, or does it do something else? What does this code print?",
+      "ekran": {
+        "baslik": "What will it print?",
+        "kod": "hero = {\"name\": \"Piko\", \"hp\": 100}\nhero[\"hp\"] = 80\nprint(len(hero), hero[\"hp\"])\n",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "cikti",
+      "sure_sn": 9,
+      "anlatim": "Two and eighty! The hp key was already there, so no new key was added. Only its value changed.",
+      "ekran": {
+        "baslik": "The answer",
+        "kod": "hero = {\"name\": \"Piko\", \"hp\": 100}\nhero[\"hp\"] = 80\nprint(len(hero), hero[\"hp\"])\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "2 80"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 10,
+      "tur": "gorev",
+      "sure_sn": 11,
+      "anlatim": "In the tasks you'll give the player gold, lower the goblin's health, and read the shield safely. In the challenge you'll work out a shopping bill with a price dictionary. No typing the prices by hand!",
+      "ekran": {
+        "baslik": "Today's tasks",
+        "maddeler": [
+          "Task 1: Add gold",
+          "Task 2: Take damage",
+          "Task 3: Safe lookup",
+          "Challenge: Shopping bill"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "ozet",
+      "sure_sn": 6,
+      "anlatim": "Today we stored information by name, updated it, and learned to read it safely without errors.",
+      "ekran": {
+        "baslik": "What you learned today",
+        "maddeler": [
+          "Dictionary: {key: value}, reached by name",
+          "d[key] = value adds or changes",
+          "get() looks without errors; keys, values, in"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 12,
+      "tur": "kapanis",
+      "sure_sn": 9,
+      "anlatim": "You've finished the Data Forest, congratulations! Tomorrow we reach Logic Castle, whose gate only opens for those with a key. There we'll teach our program to make decisions.",
+      "ekran": {
+        "baslik": "Tomorrow: Conditions",
+        "gorsel": "gorseller/python/harita/kale.webp"
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

@@ -1,0 +1,38 @@
+{
+ "day": 6, "title": "Tuples", "region": "orman",
+ "project_contribution": "Map positions",
+ "game_role": "When you leave each region, a summary of your steps is shown.",
+ "objective": "Create, unpack and use tuples, groups of data that never change",
+ "story": "Old explorers carved marks into the trees of the Data Forest: (3, 5), (8, 2)... These are coordinates of secret places, and nobody can change them. Today we learn about Python's sealed boxes that can't be changed: **tuples**.",
+ "sections": [
+  {"title": "What is a tuple?", "body": "A tuple is very similar to a list, but it's written with **parentheses** and **can't be changed** once it's created.\n\n```python\npos = (3, 5)\ncolors = (\"blue\", \"yellow\", \"green\")\nprint(colors[0])    # blue\nprint(len(colors))  # 3\n```\n\nYou reach items by their position number (index), just like in a list. `colors[-1]` gives the last item."},
+  {"title": "Why shouldn't it change?", "body": "Some information should never change: the coordinates of a point on a map, the days of the week, the code of a color. A tuple stops us from breaking that information by accident.\n\nIf you write `colors[0] = \"red\"`, Python raises a `TypeError`. If you really need to change it, turn it into a list, change it, and turn it back into a tuple:\n\n```python\nitems = list(colors)\nitems.append(\"purple\")\ncolors = tuple(items)\n```"},
+  {"title": "Unpacking a tuple", "body": "You can spread the values of a tuple into separate variables in one line. This is called **unpacking**:\n\n```python\npos = (3, 5)\nx, y = pos\nprint(x)  # 3\nprint(y)  # 5\n```\n\nThe same trick swaps the values of two variables: `a, b = b, a`"},
+  {"title": "Useful operations", "body": "- `\"yellow\" in colors` asks whether it's in the tuple\n- `colors.count(\"blue\")` counts how many times it appears\n- `colors.index(\"yellow\")` tells you its position\n- `(1, 2) + (3, 4)` joins two tuples into a new tuple\n\nDon't forget the comma when writing a one-item tuple: `(5,)`. Without the comma Python thinks it's just a number in parentheses."}
+ ],
+ "examples": [
+  {"title": "Position", "code": "pos = (3, 5)\nprint(\"Position:\", pos)\nx, y = pos\nprint(\"x =\", x)\nprint(\"y =\", y)\n", "note": ""},
+  {"title": "Unlock, change, lock", "code": "colors = (\"blue\", \"yellow\")\nitems = list(colors)\nitems.append(\"green\")\ncolors = tuple(items)\nprint(colors)\nprint(type(colors))\n", "note": "The only way to change a tuple is to make a new tuple."},
+  {"title": "Swapping", "code": "left = \"sword\"\nright = \"shield\"\nleft, right = right, left\nprint(\"Left hand:\", left)\nprint(\"Right hand:\", right)\n", "note": ""}
+ ],
+ "tasks": [
+  {"title": "Unpack the position", "prompt": "Unpack the `pos` tuple into the variables `x` and `y`. The code should print `x = 4, y = 9`.",
+   "starter": "pos = (4, 9)\n\n# unpack pos into x and y\n\nprint(f\"x = {x}, y = {y}\")\n", "solution": "pos = (4, 9)\n\nx, y = pos\n\nprint(f\"x = {x}, y = {y}\")\n",
+   "hints": ["One line is enough: x, y = pos", "Two variables on the left of the =, the tuple on the right."], "check": {"output_contains": ["x = 4, y = 9"]}},
+  {"title": "Color palette", "prompt": "Print the first color, the last color and the number of colors in the `colors` tuple:\n\n```\nFirst color: blue\nLast color: green\nNumber of colors: 3\n```",
+   "starter": "colors = (\"blue\", \"yellow\", \"green\")\n\n# Print the first color, the last color and the number of colors\n",
+   "solution": "colors = (\"blue\", \"yellow\", \"green\")\n\nprint(f\"First color: {colors[0]}\")\nprint(f\"Last color: {colors[-1]}\")\nprint(f\"Number of colors: {len(colors)}\")\n",
+   "hints": ["The first item is colors[0], the last is colors[-1]", "Use len() for the number of items."], "check": {"output_contains": ["First color: blue", "Last color: green", "Number of colors: 3"]}},
+  {"title": "Add a new item", "prompt": "A tuple can't be changed, but we can turn it into a list and make a new tuple. Add `\"shield\"` to the end of the `items` tuple. In the end `items` must be a **tuple** again.",
+   "starter": "items = (\"sword\", \"potion\")\n\n# turn items into a list, add \"shield\", make it a tuple again\n\nprint(items)\n",
+   "solution": "items = (\"sword\", \"potion\")\n\nbag = list(items)\nbag.append(\"shield\")\nitems = tuple(bag)\n\nprint(items)\n",
+   "hints": ["list(items) makes a list from the tuple.", "Add with append(), then turn it back with tuple(...)."], "check": {"code_contains": ["list(", "tuple("]}}
+ ],
+ "challenge": {"title": "Swap places", "prompt": "Swap the values of `a` and `b` **without using a third variable**. Remember the tuple unpacking trick.",
+  "starter": "a = \"left\"\nb = \"right\"\n\n# swap a and b\n\nprint(\"a:\", a)\nprint(\"b:\", b)\n", "solution": "a = \"left\"\nb = \"right\"\n\na, b = b, a\n\nprint(\"a:\", a)\nprint(\"b:\", b)\n",
+  "hints": ["It works in one line: a, b = b, a"]},
+ "project_task": {"title": "Map positions", "prompt": "Piko's steps in the forest are stored as tuples in the `path` list. Each tuple is a position: `(x, y)`.\n\n- Let `start` be the first position and `current` the last.\n- Then print:\n\n```\nStart: (0, 0)\nNow: (2, 1)\nSteps: 3\n```\n\nThe number of steps is one less than the number of positions.",
+  "starter": "path = [(0, 0), (1, 0), (1, 1), (2, 1)]\n\n# create start and current\n\n# print the three lines\n",
+  "solution": "path = [(0, 0), (1, 0), (1, 1), (2, 1)]\n\nstart = path[0]\ncurrent = path[-1]\n\nprint(f\"Start: {start}\")\nprint(f\"Now: {current}\")\nprint(f\"Steps: {len(path) - 1}\")\n",
+  "hints": ["The first position is path[0], the last is path[-1]", "Number of steps: len(path) - 1"], "check": {"output_contains": ["Start: (0, 0)", "Now: (2, 1)", "Steps: 3"]}}
+}

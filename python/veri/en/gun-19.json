@@ -1,0 +1,38 @@
+{
+ "day": 19, "title": "Working with files", "region": "ada",
+ "project_contribution": "Saving the game",
+ "game_role": "The game's save and load feature uses your functions.",
+ "objective": "Write to files, read from files and save data with JSON",
+ "story": "We found a captain's logbook in the island's lighthouse. Every evening the captain wrote down what had happened, so hundreds of years later we can read it. Programs can have a notebook too: **files**. Even when the program closes, the information in the file stays. Today we learn to save our game.",
+ "sections": [
+  {"title": "Opening a file", "body": "`open(file_name, mode)` opens a file. The mode says what you want to do:\n\n- `\"r\"` to read (the default)\n- `\"w\"` to write: creates the file if it doesn't exist, **erases it if it does**\n- `\"a\"` to append to the end\n\nA file must be closed when we're done. `with` does that for us automatically:\n\n```python\nwith open(\"diary.txt\", \"w\") as f:\n    f.write(\"Today I learned Python\\n\")\n```\n\n`\\n` means a new line. `write` doesn't move to the next line by itself."},
+  {"title": "Reading", "body": "```python\nwith open(\"diary.txt\") as f:\n    text = f.read()          # the whole file as one text\n\nwith open(\"diary.txt\") as f:\n    for line in f:           # line by line\n        print(line.strip())\n```\n\n`strip()` cleans the `\\n` character from the end of the line."},
+  {"title": "Saving with JSON", "body": "The easiest way to save lists and dictionaries to a file is the **JSON** format:\n\n```python\nimport json\n\nhero = {\"name\": \"Piko\", \"hp\": 80}\nwith open(\"save.json\", \"w\") as f:\n    json.dump(hero, f)\n\nwith open(\"save.json\") as f:\n    loaded = json.load(f)\n```\n\nTo check whether a file exists: `import os` and `os.path.exists(\"save.json\")`"},
+  {"title": "Files in the tasks", "body": "Python on your computer really writes files to disk: even after the program closes, the file stays in the folder where your code is. In the tasks we'll still write first and then read **in the same code**, so every task works on its own."}
+ ],
+ "examples": [
+  {"title": "Write and read", "code": "with open(\"diary.txt\", \"w\") as f:\n    f.write(\"Day 1: We reached the camp\\n\")\n    f.write(\"Day 2: We explored the village\\n\")\n\nwith open(\"diary.txt\") as f:\n    print(f.read())\n", "note": ""},
+  {"title": "Append to the end", "code": "with open(\"list.txt\", \"w\") as f:\n    f.write(\"sword\\n\")\n\nwith open(\"list.txt\", \"a\") as f:\n    f.write(\"potion\\n\")\n\nwith open(\"list.txt\") as f:\n    for i, line in enumerate(f, 1):\n        print(i, line.strip())\n", "note": ""},
+  {"title": "A JSON save", "code": "import json, os\n\nhero = {\"name\": \"Piko\", \"hp\": 80, \"bag\": [\"map\"]}\nwith open(\"save.json\", \"w\") as f:\n    json.dump(hero, f)\n\nprint(\"Does the file exist?\", os.path.exists(\"save.json\"))\nwith open(\"save.json\") as f:\n    print(json.load(f))\n", "note": ""}
+ ],
+ "tasks": [
+  {"title": "Write a diary", "prompt": "Write the `entry` text to the `diary.txt` file, then read the file and print its contents.", "starter": "entry = \"Today I learned Python\"\n\n# write it to diary.txt\n\n# read the file and print it\n",
+   "solution": "entry = \"Today I learned Python\"\n\nwith open(\"diary.txt\", \"w\") as f:\n    f.write(entry)\n\nwith open(\"diary.txt\") as f:\n    print(f.read())\n",
+   "hints": ["To write: with open(\"diary.txt\", \"w\") as f:", "To read: with open(\"diary.txt\") as f: print(f.read())"], "check": {"code_contains": ["open(", "diary.txt"], "output_contains": ["Today I learned Python"]}},
+  {"title": "Count the lines", "prompt": "Write every item in the `lines` list to `bag.txt` as a separate line. Then read the file and store the number of lines in `count`.", "starter": "lines = [\"sword\", \"shield\", \"potion\"]\n\n# write each item on its own line\n\ncount = 0\n\nprint(count, \"lines\")\n",
+   "solution": "lines = [\"sword\", \"shield\", \"potion\"]\n\nwith open(\"bag.txt\", \"w\") as f:\n    for item in lines:\n        f.write(item + \"\\n\")\n\ncount = 0\nwith open(\"bag.txt\") as f:\n    for line in f:\n        count += 1\n\nprint(count, \"lines\")\n",
+   "hints": ["Add \"\\n\" to the end of each item.", "Count while reading with for line in f:"], "check": {"code_contains": ["open("], "output_contains": ["3 lines"]}},
+  {"title": "Append to the end", "prompt": "First write `100` to the `scores.txt` file. Then open the file in **append mode** and add `new_score`. Finally read the file and print it.",
+   "starter": "new_score = 250\n\nwith open(\"scores.txt\", \"w\") as f:\n    f.write(\"100\\n\")\n\n# append new_score to the end of the file\n\nwith open(\"scores.txt\") as f:\n    print(f.read())\n",
+   "solution": "new_score = 250\n\nwith open(\"scores.txt\", \"w\") as f:\n    f.write(\"100\\n\")\n\nwith open(\"scores.txt\", \"a\") as f:\n    f.write(str(new_score) + \"\\n\")\n\nwith open(\"scores.txt\") as f:\n    print(f.read())\n",
+   "hints": ["Append mode: open(\"scores.txt\", \"a\")", "Turn the number into text with str() before writing it."], "check": {"output_contains": ["100", "250"]}}
+ ],
+ "challenge": {"title": "Save and load JSON", "prompt": "Save the `hero` dictionary to `hero.json` with **json.dump**. Then read it back with **json.load** and store it in `loaded`.",
+  "starter": "import json\n\nhero = {\"name\": \"Piko\", \"hp\": 80, \"bag\": [\"map\", \"key\"]}\n\nloaded = None\n\nprint(loaded)\n",
+  "solution": "import json\n\nhero = {\"name\": \"Piko\", \"hp\": 80, \"bag\": [\"map\", \"key\"]}\n\nwith open(\"hero.json\", \"w\") as f:\n    json.dump(hero, f)\n\nwith open(\"hero.json\") as f:\n    loaded = json.load(f)\n\nprint(loaded)\n",
+  "hints": ["Save: with open(\"hero.json\", \"w\") as f: json.dump(hero, f)", "Load: with open(\"hero.json\") as f: loaded = json.load(f)"], "check": {"code_contains": ["json.dump", "json.load"]}},
+ "project_task": {"title": "Saving the game", "prompt": "Piko's Adventure can now be saved!\n\n- `save_game(state)` should write the dictionary to `save.json` as JSON.\n- `load_game()` should return the dictionary in the file if it exists, and **`None` if it doesn't**.",
+  "starter": "import json\nimport os\n\ndef save_game(state):\n    pass\n\ndef load_game():\n    pass\n\nprint(load_game())\nsave_game({\"hp\": 50, \"place\": \"lighthouse\"})\nprint(load_game())\n",
+  "solution": "import json\nimport os\n\ndef save_game(state):\n    with open(\"save.json\", \"w\") as f:\n        json.dump(state, f)\n\ndef load_game():\n    if not os.path.exists(\"save.json\"):\n        return None\n    with open(\"save.json\") as f:\n        return json.load(f)\n\nprint(load_game())\nsave_game({\"hp\": 50, \"place\": \"lighthouse\"})\nprint(load_game())\n",
+  "hints": ["Use json.dump inside save_game.", "Inside load_game, first check with os.path.exists(\"save.json\")."], "check": {"output_contains": ["None", "{'hp': 50, 'place': 'lighthouse'}"]}}
+}

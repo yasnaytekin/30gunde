@@ -1,0 +1,238 @@
+{
+  "kurs": "python",
+  "gun": 25,
+  "baslik": "Pandas",
+  "maskot": "piko",
+  "ozet": "Starting from the harbor master's giant logbook, Piko explains building tables with pandas, filtering, sorting, and summarizing CSV data with groups.",
+  "hedef_sure_sn": 145,
+  "dil": "en",
+  "giris": {
+    "anlatim": "Day 25: Pandas! In this lesson you'll build tables with pandas, filter and sort them, and summarize CSV data with groupby.",
+    "maddeler": [
+      "DataFrame: your first table",
+      "Filter and sort",
+      "CSV and groupby"
+    ]
+  },
+  "cikis": {
+    "anlatim": "The interactive version of this lesson is waiting for you at 30gunde.com.tr. Write your code right in the browser, run it instantly, and finish the tasks!",
+    "baslik": "Interactive lessons at",
+    "adres": "30gunde.com.tr",
+    "maddeler": [
+      "Write and run code in your browser",
+      "Finish tasks, earn badges",
+      "Learn Python step by step in 30 days"
+    ]
+  },
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 16,
+      "anlatim": "Hi, I'm Piko! There's a giant logbook on the harbor master's desk: a ship on every row, a piece of information in every column. Instead of reading it row by row, the harbor master wants to ask who carries the most cargo and get an answer right away. Today we meet pandas!",
+      "ekran": {
+        "baslik": "Day 25: Pandas",
+        "maddeler": [
+          "Knowledge Harbor",
+          "Table data: the DataFrame"
+        ]
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 16,
+      "anlatim": "The heart of pandas is a table called a DataFrame. I build it from a dictionary: the keys become the column names, and the lists become the column values. The zero, one, two on the left are the row numbers. shape gives the number of rows and columns.",
+      "ekran": {
+        "baslik": "Your first table: DataFrame",
+        "kod": "import pandas as pd\n\ndata = {\"name\": [\"Piko\", \"Ece\", \"Can\"], \"score\": [300, 250, 120]}\ndf = pd.DataFrame(data)\nprint(df)\nprint(\"Size:\", df.shape)\nprint(\"Average score:\", df[\"score\"].mean())\n",
+        "vurgu_satirlari": [
+          4,
+          6
+        ],
+        "dil": "python",
+        "cikti": "   name  score\n0  Piko    300\n1   Ece    250\n2   Can    120\nSize: (3, 2)\nAverage score: 223.33333333333334"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 3,
+      "tur": "anlatim",
+      "sure_sn": 13,
+      "anlatim": "There are a few shortcuts for getting to know a table. You take a single column with square brackets; that's called a Series. A Series has ready-made methods like mean, max and sum.",
+      "ekran": {
+        "baslik": "Getting to know the table",
+        "maddeler": [
+          "df.head(): the first 5 rows",
+          "df.shape, df.columns",
+          "df.describe(): a numeric summary",
+          "df[\"score\"]: one column (a Series)"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "To filter, I write a condition inside the table. The rows with a score of two hundred fifty or more stay. Notice the row numbers are kept: row two, which was Can's, dropped out.",
+      "ekran": {
+        "baslik": "Filter",
+        "kod": "import pandas as pd\n\ndf = pd.DataFrame({\"name\": [\"Piko\", \"Ece\", \"Can\", \"Ada\"],\n                   \"score\": [300, 250, 120, 280]})\nprint(df[df[\"score\"] >= 250])\n",
+        "vurgu_satirlari": [
+          5
+        ],
+        "dil": "python",
+        "cikti": "   name  score\n0  Piko    300\n1   Ece    250\n3   Ada    280"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "soru",
+      "sure_sn": 10,
+      "anlatim": "Now it's your turn! I sort the table by score from biggest to smallest and turn the names into a list. What order do you think the list will be in?",
+      "ekran": {
+        "baslik": "What will it print?",
+        "kod": "import pandas as pd\n\ndf = pd.DataFrame({\"name\": [\"Piko\", \"Ece\", \"Can\", \"Ada\"],\n                   \"score\": [300, 250, 120, 280]})\ntop = df.sort_values(\"score\", ascending=False)\nprint(top[\"name\"].tolist())\n",
+        "vurgu_satirlari": [
+          5
+        ],
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 6,
+      "tur": "cikti",
+      "sure_sn": 10,
+      "anlatim": "Piko is on top, then Ada, Ece and Can. ascending False means biggest to smallest, and tolist turns the column into a plain list.",
+      "ekran": {
+        "baslik": "The answer",
+        "kod": "import pandas as pd\n\ndf = pd.DataFrame({\"name\": [\"Piko\", \"Ece\", \"Can\", \"Ada\"],\n                   \"score\": [300, 250, 120, 280]})\ntop = df.sort_values(\"score\", ascending=False)\nprint(top[\"name\"].tolist())\n",
+        "dil": "python",
+        "cikti": "['Piko', 'Ada', 'Ece', 'Can']"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "kod",
+      "sure_sn": 17,
+      "anlatim": "Real data usually comes in a CSV file, as lines separated by commas. read_csv turns it into a table; here I read the text like a file with StringIO. groupby adds up each player's scores, and idxmax finds the winner.",
+      "ekran": {
+        "baslik": "CSV and grouping",
+        "kod": "import io\nimport pandas as pd\n\ncsv = \"player,score\\nPiko,50\\nEce,70\\nPiko,40\\nEce,10\\n\"\ndf = pd.read_csv(io.StringIO(csv))\ntotals = df.groupby(\"player\")[\"score\"].sum()\nprint(totals)\nprint(\"Winner:\", totals.idxmax())\n",
+        "vurgu_satirlari": [
+          5,
+          6,
+          8
+        ],
+        "dil": "python",
+        "cikti": "player\nEce     80\nPiko    90\nName: score, dtype: int64\nWinner: Piko"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "hata",
+      "sure_sn": 12,
+      "anlatim": "A common mistake: writing a column name wrong. The table has name, but I asked for username. When pandas can't find the column, it gives a KeyError. If you're not sure, look at the names with df.columns.",
+      "ekran": {
+        "baslik": "Common mistake: a column that doesn't exist",
+        "kod": "import pandas as pd\n\ndf = pd.DataFrame({\"name\": [\"Piko\"], \"score\": [300]})\nprint(df[\"username\"])\n",
+        "vurgu_satirlari": [
+          4
+        ],
+        "cikti": "KeyError: 'username'",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "gorev",
+      "sure_sn": 13,
+      "anlatim": "In the tasks you'll build your first table and count its rows, find the ships' average cargo, and list the heavy ships. In the project you're analyzing game scores and picking the winner.",
+      "ekran": {
+        "baslik": "Today's tasks",
+        "maddeler": [
+          "Task 1: My first table",
+          "Task 2: Average cargo",
+          "Task 3: Heavy ships",
+          "Challenge: The best player",
+          "Project: Score analysis"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 10,
+      "tur": "ozet",
+      "sure_sn": 11,
+      "anlatim": "In short: build a table from a dictionary or a CSV, filter it with conditions, sort it, and summarize it with groupby.",
+      "ekran": {
+        "baslik": "What you learned today",
+        "maddeler": [
+          "pd.DataFrame and pd.read_csv",
+          "df[condition], sort_values, tolist",
+          "Adding up with groupby"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "kapanis",
+      "sure_sn": 13,
+      "anlatim": "We've finished Knowledge Harbor too, you're fantastic! Tomorrow we climb the last region, Python Mountain. First stop: how the web works with requests and responses, and making web pages with Python. See you!",
+      "ekran": {
+        "baslik": "Tomorrow: The web with Python",
+        "maddeler": [
+          "New region: Python Mountain",
+          "Requests, responses, routing"
+        ]
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

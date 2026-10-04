@@ -1,0 +1,129 @@
+{
+ "day": 23,
+ "title": "The game loop",
+ "region": "piksel",
+ "project_contribution": "Collisions and collecting stars",
+ "objective": "Keep the game's state in one object, calculate rectangle collisions, and manage the score and game over",
+ "story": "You're at the last stop on Pixel Planet. You've learned to draw and to move things; now you'll put it all together and build a real **game loop**: move, catch collisions, collect points, and end the game when needed.",
+ "sections": [
+  {
+   "title": "The game's state in one place",
+   "body": "In a game, everything at a given moment (the player's position, the stars, the score, whether the game is over) is called the **state**. Keeping it all in one object makes things much easier:\n\n```js\nconst game = {\n  player: { x: 20, y: 150, w: 30, h: 20 },\n  stars: [{ x: 120, y: 40, w: 12, h: 12 }],\n  score: 0,\n  over: false,\n};\n```\n\nNow `console.log(game)` shows the whole game; saving, restarting and hunting bugs become easy."
+  },
+  {
+   "title": "The three steps of the loop",
+   "body": "Every frame follows the same order: **update → check collisions → draw**.\n\n```js\nfunction step() {\n  if (!game.over) {\n    update();   // move everything\n    collide();  // look at collisions, change the score\n  }\n  draw();       // draw the state on the screen\n}\n\nfunction loop() {\n  step();\n  requestAnimationFrame(loop);\n}\n```\n\nThe order matters: movement first, then collisions, drawing last. That way the screen always shows the latest state. When the game is over, `update` and `collide` stop but `draw` keeps showing the final picture."
+  },
+  {
+   "title": "Rectangle collision (AABB)",
+   "body": "Two rectangles collide if they overlap horizontally **and** vertically. We write that with four conditions:\n\n```js\nfunction hits(a, b) {\n  return a.x < b.x + b.w &&  // a starts before b's right edge\n         a.x + a.w > b.x &&  // a's right edge passes b's left\n         a.y < b.y + b.h &&  // the same vertically\n         a.y + a.h > b.y;\n}\n```\n\nIf even one of the four conditions is false, there's a gap between them. Exactly touching edges (`a.x + a.w === b.x`) don't count as a collision.\n\nIn games this is called the **AABB** (axis-aligned bounding box) test: it's very fast and good enough for most games. Even for round objects, the box around them is often used."
+  },
+  {
+   "title": "Collecting, game over, restart",
+   "body": "The safe way to remove the stars that touch and give a point for each is `filter` (deleting items from an array inside a loop causes confusion):\n\n```js\nconst before = game.stars.length;\ngame.stars = game.stars.filter((s) => !hits(game.player, s));\ngame.score += before - game.stars.length;\nif (game.stars.length === 0) game.over = true;\n```\n\nTo restart, write a function that builds the state from scratch:\n\n```js\nfunction newGame() {\n  return { player: { x: 20, y: 150, w: 30, h: 20 }, stars: makeStars(), score: 0, over: false };\n}\nlet game = newGame();\nfunction restart() {\n  game = newGame();\n}\n```\n\nIt's important to make a **new** object and a **new** array every time: if you reuse the old array, the collected stars don't come back."
+  }
+ ],
+ "examples": [
+  {
+   "title": "Collision detector",
+   "code": "const canvas = document.querySelector(\"#c\");\nconst ctx = canvas.getContext(\"2d\");\nconst wall = { x: 130, y: 30, w: 40, h: 40 };\nconst box = { x: 0, y: 40, w: 20, h: 20, vx: 1.5 };\n\nfunction hits(a, b) {\n  return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;\n}\n\nfunction step() {\n  box.x += box.vx;\n  if (box.x > canvas.width) box.x = -box.w;\n  const hit = hits(box, wall);\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  ctx.fillStyle = hit ? \"#e53935\" : \"#9e9e9e\";\n  ctx.fillRect(wall.x, wall.y, wall.w, wall.h);\n  ctx.fillStyle = \"#4fc3f7\";\n  ctx.fillRect(box.x, box.y, box.w, box.h);\n  document.querySelector(\"#info\").textContent = hit ? \"Collision!\" : \"The way is clear\";\n}\n\nfunction loop() {\n  step();\n  requestAnimationFrame(loop);\n}\nloop();\n",
+   "note": "When the box enters the wall, the wall turns red. Set wall.y to 70: now they don't collide.",
+   "html": "<canvas id=\"c\" width=\"240\" height=\"100\"></canvas>\n<p id=\"info\"></p>\n"
+  },
+  {
+   "title": "Mini game: collect the stars",
+   "code": "const canvas = document.querySelector(\"#c\");\nconst ctx = canvas.getContext(\"2d\");\nconst info = document.querySelector(\"#info\");\n\nfunction hits(a, b) {\n  return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;\n}\n\nfunction newGame() {\n  return {\n    player: { x: 10, y: 40, w: 20, h: 20, vx: 0, vy: 0 },\n    stars: [\n      { x: 80, y: 20, w: 10, h: 10 },\n      { x: 150, y: 70, w: 10, h: 10 },\n      { x: 210, y: 30, w: 10, h: 10 },\n    ],\n    score: 0,\n    over: false,\n  };\n}\nlet game = newGame();\n\ndocument.addEventListener(\"keydown\", (e) => {\n  const p = game.player;\n  if (e.key === \"ArrowRight\") p.vx = 2;\n  if (e.key === \"ArrowLeft\") p.vx = -2;\n  if (e.key === \"ArrowUp\") p.vy = -2;\n  if (e.key === \"ArrowDown\") p.vy = 2;\n  if (e.key === \"r\") game = newGame();\n});\ndocument.addEventListener(\"keyup\", () => {\n  game.player.vx = 0;\n  game.player.vy = 0;\n});\n\nfunction update() {\n  const p = game.player;\n  p.x = Math.max(0, Math.min(p.x + p.vx, canvas.width - p.w));\n  p.y = Math.max(0, Math.min(p.y + p.vy, canvas.height - p.h));\n}\n\nfunction collide() {\n  const before = game.stars.length;\n  game.stars = game.stars.filter((s) => !hits(game.player, s));\n  game.score += before - game.stars.length;\n  if (game.stars.length === 0) game.over = true;\n}\n\nfunction draw() {\n  ctx.fillStyle = \"#0b1026\";\n  ctx.fillRect(0, 0, canvas.width, canvas.height);\n  ctx.fillStyle = \"#f7df1e\";\n  for (const s of game.stars) ctx.fillRect(s.x, s.y, s.w, s.h);\n  ctx.fillStyle = \"#4fc3f7\";\n  ctx.fillRect(game.player.x, game.player.y, game.player.w, game.player.h);\n  info.textContent = game.over ? \"Well done! Press R to restart\" : \"Score: \" + game.score;\n}\n\nfunction loop() {\n  if (!game.over) {\n    update();\n    collide();\n  }\n  draw();\n  requestAnimationFrame(loop);\n}\nloop();\n",
+   "note": "Click the page, then steer the ship with the arrow keys.",
+   "html": "<canvas id=\"c\" width=\"240\" height=\"100\"></canvas>\n<p id=\"info\"></p>\n"
+  }
+ ],
+ "tasks": [
+  {
+   "title": "Do they collide?",
+   "prompt": "Write the `hits(a, b)` function: it returns `true` if two rectangles of the form `{ x, y, w, h }` overlap, and `false` if they don't.\n\nExactly touching edges don't count as a collision. The code below writes the result into `#info`.",
+   "html": "<canvas id=\"c\" width=\"200\" height=\"120\"></canvas>\n<p id=\"info\"></p>\n",
+   "starter": "const ctx = document.querySelector(\"#c\").getContext(\"2d\");\nconst ship = { x: 40, y: 40, w: 40, h: 30 };\nconst rock = { x: 70, y: 60, w: 30, h: 30 };\n\nfunction hits(a, b) {\n  // four conditions\n  return false;\n}\n\nctx.fillStyle = \"#4fc3f7\";\nctx.fillRect(ship.x, ship.y, ship.w, ship.h);\nctx.fillStyle = \"#9e9e9e\";\nctx.fillRect(rock.x, rock.y, rock.w, rock.h);\ndocument.querySelector(\"#info\").textContent = \"Collision: \" + (hits(ship, rock) ? \"yes\" : \"no\");\n",
+   "solution": "const ctx = document.querySelector(\"#c\").getContext(\"2d\");\nconst ship = { x: 40, y: 40, w: 40, h: 30 };\nconst rock = { x: 70, y: 60, w: 30, h: 30 };\n\nfunction hits(a, b) {\n  // four conditions\n  return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;\n}\n\nctx.fillStyle = \"#4fc3f7\";\nctx.fillRect(ship.x, ship.y, ship.w, ship.h);\nctx.fillStyle = \"#9e9e9e\";\nctx.fillRect(rock.x, rock.y, rock.w, rock.h);\ndocument.querySelector(\"#info\").textContent = \"Collision: \" + (hits(ship, rock) ? \"yes\" : \"no\");\n",
+   "hints": [
+    "Horizontally: a.x < b.x + b.w && a.x + a.w > b.x",
+    "The same vertically with y and h. Join all four with &&."
+   ],
+   "check": {
+    "code_contains": [
+     "&&"
+    ]
+   }
+  },
+  {
+   "title": "When a meteor hits",
+   "prompt": "Meteors that touch the player cost lives. Write the `collide()` function:\n\n- remove the meteors that touch the player from `game.meteors` (`filter`) and lower `game.lives` by 1 for each one removed.\n- If `game.lives` is `0` or less, set `game.over = true` and write `Game over!` into `#info`.\n\nThe `hits` function is ready.",
+   "html": "<canvas id=\"c\" width=\"200\" height=\"120\"></canvas>\n<p id=\"info\"></p>\n",
+   "starter": "function hits(a, b) {\n  return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;\n}\n\nconst game = {\n  player: { x: 80, y: 80, w: 30, h: 20 },\n  meteors: [\n    { x: 90, y: 70, w: 15, h: 15 },\n    { x: 20, y: 20, w: 15, h: 15 },\n  ],\n  lives: 3,\n  over: false,\n};\n\nfunction collide() {\n  // remove the meteors that touch, lose lives, end the game if needed\n}\n\ncollide();\ndocument.querySelector(\"#info\").textContent = `Lives: ${game.lives}`;\n",
+   "solution": "function hits(a, b) {\n  return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;\n}\n\nconst game = {\n  player: { x: 80, y: 80, w: 30, h: 20 },\n  meteors: [\n    { x: 90, y: 70, w: 15, h: 15 },\n    { x: 20, y: 20, w: 15, h: 15 },\n  ],\n  lives: 3,\n  over: false,\n};\n\nfunction collide() {\n  // remove the meteors that touch, lose lives, end the game if needed\n  const before = game.meteors.length;\n  game.meteors = game.meteors.filter((m) => !hits(game.player, m));\n  game.lives -= before - game.meteors.length;\n  if (game.lives <= 0) {\n    game.over = true;\n    document.querySelector(\"#info\").textContent = \"Game over!\";\n  }\n}\n\ncollide();\ndocument.querySelector(\"#info\").textContent = `Lives: ${game.lives}`;\n",
+   "hints": [
+    "const before = game.meteors.length; keep the old count first.",
+    "game.meteors = game.meteors.filter((m) => !hits(game.player, m));",
+    "Lives lost: before - game.meteors.length"
+   ],
+   "check": {
+    "code_contains": [
+     "filter",
+     "hits("
+    ]
+   }
+  },
+  {
+   "title": "Restart",
+   "prompt": "Write the `newGame()` function: every time it's called it returns a **brand-new** state object:\n\n```js\n{ score: 0, over: false, stars: [ /* 3 stars */ ] }\n```\n\nThe stars are at `(40, 30)`, `(100, 70)` and `(160, 40)`; each has `w` and `h` of `10`.\n\nWhen the `#restart` button is clicked, `game = newGame()` and `#info` says `Score: 0`.",
+   "html": "<p id=\"info\">Score: 7 · Game over</p>\n<button id=\"restart\">Restart</button>\n",
+   "starter": "let game = { score: 7, over: true, stars: [] };\n\nfunction newGame() {\n  // return a new state object\n}\n\n// restart when #restart is clicked\n\n",
+   "solution": "let game = { score: 7, over: true, stars: [] };\n\nfunction newGame() {\n  // return a new state object\n  return {\n    score: 0,\n    over: false,\n    stars: [\n      { x: 40, y: 30, w: 10, h: 10 },\n      { x: 100, y: 70, w: 10, h: 10 },\n      { x: 160, y: 40, w: 10, h: 10 },\n    ],\n  };\n}\n\n// restart when #restart is clicked\ndocument.querySelector(\"#restart\").addEventListener(\"click\", () => {\n  game = newGame();\n  document.querySelector(\"#info\").textContent = `Score: ${game.score}`;\n});\n\n",
+   "hints": [
+    "Write the object inside the function and return it: a new object is created on every call.",
+    "On click: game = newGame(); then update #info."
+   ],
+   "check": {
+    "code_contains": [
+     "return",
+     "addEventListener"
+    ]
+   }
+  }
+ ],
+ "challenge": {
+  "title": "Falling stars",
+  "prompt": "Stars are falling from above. Write the `update()` function:\n\n- If the game is over (`game.over`), do nothing.\n- Add each star's own `vy` to its `y`.\n- Remove the stars that fall out of the bottom of the canvas (`y > canvas.height`) from the array; add 1 to `game.missed` for each one.\n- When `game.missed` is `3` or more, set `game.over = true` and write `Game over! Missed: 3` into `#info`.",
+  "html": "<canvas id=\"c\" width=\"200\" height=\"120\"></canvas>\n<p id=\"info\"></p>\n",
+  "starter": "const canvas = document.querySelector(\"#c\");\nconst ctx = canvas.getContext(\"2d\");\nconst game = {\n  stars: [\n    { x: 30, y: 0, vy: 1 },\n    { x: 100, y: -40, vy: 1.5 },\n    { x: 160, y: -10, vy: 0.8 },\n  ],\n  missed: 0,\n  over: false,\n};\n\nfunction update() {\n  // drop them, count the missed ones, end the game if needed\n}\n\nfunction draw() {\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  ctx.fillStyle = \"#f7df1e\";\n  for (const s of game.stars) ctx.fillRect(s.x, s.y, 8, 8);\n}\n\nfunction loop() {\n  update();\n  draw();\n  requestAnimationFrame(loop);\n}\nrequestAnimationFrame(loop);\n\n",
+  "solution": "const canvas = document.querySelector(\"#c\");\nconst ctx = canvas.getContext(\"2d\");\nconst game = {\n  stars: [\n    { x: 30, y: 0, vy: 1 },\n    { x: 100, y: -40, vy: 1.5 },\n    { x: 160, y: -10, vy: 0.8 },\n  ],\n  missed: 0,\n  over: false,\n};\n\nfunction update() {\n  // drop them, count the missed ones, end the game if needed\n  if (game.over) return;\n  for (const s of game.stars) {\n    s.y += s.vy;\n  }\n  const before = game.stars.length;\n  game.stars = game.stars.filter((s) => s.y <= canvas.height);\n  game.missed += before - game.stars.length;\n  if (game.missed >= 3) {\n    game.over = true;\n    document.querySelector(\"#info\").textContent = `Game over! Missed: ${game.missed}`;\n  }\n}\n\nfunction draw() {\n  ctx.clearRect(0, 0, canvas.width, canvas.height);\n  ctx.fillStyle = \"#f7df1e\";\n  for (const s of game.stars) ctx.fillRect(s.x, s.y, 8, 8);\n}\n\nfunction loop() {\n  update();\n  draw();\n  requestAnimationFrame(loop);\n}\nrequestAnimationFrame(loop);\n\n",
+  "hints": [
+   "At the very start: if (game.over) return;",
+   "The ones left: game.stars.filter((s) => s.y <= canvas.height)",
+   "Number missed: the old length - the new length"
+  ],
+  "check": {
+   "code_contains": [
+    "filter",
+    "game.over"
+   ]
+  }
+ },
+ "project_task": {
+  "title": "Collecting stars",
+  "prompt": "The ship should collect the stars it touches! The stars are now boxes: `{ x, y, w, h }`. `update()` and `draw()` are ready.\n\n- `hits(a, b)`: do two rectangles collide (AABB)?\n- `collect()`: removes the stars that touch the ship from `stars`, adds 1 to `score` for each and writes something like `Score: 2` into `#info`. When no stars are left, `#info` says `Well done! All the stars are collected.`\n- `step()`: calls `update()`, `collect()` and `draw()` in order. The loop calls `step()` every frame.",
+  "html": "<canvas id=\"game\" width=\"300\" height=\"200\"></canvas>\n<p id=\"info\">Score: 0</p>\n",
+  "starter": "const canvas = document.querySelector(\"#game\");\nconst ctx = canvas.getContext(\"2d\");\nconst info = document.querySelector(\"#info\");\n\nconst ship = { x: 20, y: 150, w: 30, h: 20, vx: 3 };\nlet stars = [\n  { x: 120, y: 155, w: 12, h: 12 },\n  { x: 200, y: 150, w: 12, h: 12 },\n  { x: 260, y: 160, w: 12, h: 12 },\n];\nlet score = 0;\n\nfunction update() {\n  ship.x += ship.vx;\n  if (ship.x < 0 || ship.x + ship.w > canvas.width) {\n    ship.x = Math.max(0, Math.min(ship.x, canvas.width - ship.w));\n    ship.vx = -ship.vx;\n  }\n}\n\nfunction draw() {\n  ctx.fillStyle = \"#0b1026\";\n  ctx.fillRect(0, 0, canvas.width, canvas.height);\n  ctx.fillStyle = \"#f7df1e\";\n  for (const s of stars) ctx.fillRect(s.x, s.y, s.w, s.h);\n  ctx.fillStyle = \"#4fc3f7\";\n  ctx.fillRect(ship.x, ship.y, ship.w, ship.h);\n}\n\nfunction hits(a, b) {\n  // AABB: four conditions\n  return false;\n}\n\nfunction collect() {\n  // remove the stars that touch, add to the score, update #info\n}\n\nfunction step() {\n  // update → collect → draw\n}\n\nfunction loop() {\n  step();\n  requestAnimationFrame(loop);\n}\nrequestAnimationFrame(loop);\ndraw();\n",
+  "solution": "const canvas = document.querySelector(\"#game\");\nconst ctx = canvas.getContext(\"2d\");\nconst info = document.querySelector(\"#info\");\n\nconst ship = { x: 20, y: 150, w: 30, h: 20, vx: 3 };\nlet stars = [\n  { x: 120, y: 155, w: 12, h: 12 },\n  { x: 200, y: 150, w: 12, h: 12 },\n  { x: 260, y: 160, w: 12, h: 12 },\n];\nlet score = 0;\n\nfunction update() {\n  ship.x += ship.vx;\n  if (ship.x < 0 || ship.x + ship.w > canvas.width) {\n    ship.x = Math.max(0, Math.min(ship.x, canvas.width - ship.w));\n    ship.vx = -ship.vx;\n  }\n}\n\nfunction draw() {\n  ctx.fillStyle = \"#0b1026\";\n  ctx.fillRect(0, 0, canvas.width, canvas.height);\n  ctx.fillStyle = \"#f7df1e\";\n  for (const s of stars) ctx.fillRect(s.x, s.y, s.w, s.h);\n  ctx.fillStyle = \"#4fc3f7\";\n  ctx.fillRect(ship.x, ship.y, ship.w, ship.h);\n}\n\nfunction hits(a, b) {\n  // AABB: four conditions\n  return a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y;\n}\n\nfunction collect() {\n  // remove the stars that touch, add to the score, update #info\n  const before = stars.length;\n  stars = stars.filter((s) => !hits(ship, s));\n  score += before - stars.length;\n  if (stars.length === 0) {\n    info.textContent = \"Well done! All the stars are collected.\";\n  } else {\n    info.textContent = `Score: ${score}`;\n  }\n}\n\nfunction step() {\n  // update → collect → draw\n  update();\n  collect();\n  draw();\n}\n\nfunction loop() {\n  step();\n  requestAnimationFrame(loop);\n}\nrequestAnimationFrame(loop);\ndraw();\n",
+  "hints": [
+   "hits: a.x < b.x + b.w && a.x + a.w > b.x && a.y < b.y + b.h && a.y + a.h > b.y",
+   "collect: stars = stars.filter((s) => !hits(ship, s)); and add how many fewer there are to score.",
+   "step: update(); collect(); draw();"
+  ],
+  "check": {
+   "code_contains": [
+    "filter",
+    "hits(ship"
+   ]
+  }
+ }
+}

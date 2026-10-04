@@ -1,0 +1,39 @@
+{
+ "day": 17, "title": "Handling errors", "region": "ada",
+ "project_contribution": "Sturdy commands",
+ "game_role": "Your code catches typed commands that can't be understood.",
+ "objective": "Catch errors with try, except, else and finally; raise your own errors with raise",
+ "story": "The bridges on Discovery Island may be rotten. A smart explorer ties a rope at every step so they don't fall. Python has that rope too: if an error happens, instead of crashing, the program holds on to the rope and knows what to do. Today we learn **error handling**.",
+ "sections": [
+  {"title": "try and except", "body": "We put code that might fail inside `try`, and what to do if it fails inside `except`:\n\n```python\ntext = \"twelve\"\ntry:\n    age = int(text)\n    print(\"Your age:\", age)\nexcept ValueError:\n    print(\"Please type digits.\")\n```\n\nIf an error happens, the program doesn't crash; the `except` block runs and the program carries on."},
+  {"title": "Which error are you catching?", "body": "Write the error type next to `except`. You can answer different errors differently:\n\n```python\ntry:\n    result = 10 / int(text)\nexcept ValueError:\n    print(\"Not a number!\")\nexcept ZeroDivisionError:\n    print(\"Can't divide by zero!\")\n```\n\nTo see the error message: `except ValueError as err: print(err)`\n\nWriting just `except:` to catch every error is easy, but it hides real bugs. Write the error you expect."},
+  {"title": "else and finally", "body": "- `else`: runs if there was no error at all\n- `finally`: **always** runs, error or not\n\n```python\ntry:\n    n = int(\"5\")\nexcept ValueError:\n    print(\"Error!\")\nelse:\n    print(\"Success:\", n)\nfinally:\n    print(\"Check finished.\")\n```"},
+  {"title": "raise: throw your own error", "body": "Sometimes, when a wrong value comes in, we want to raise an error **on purpose**:\n\n```python\ndef set_hp(value):\n    if value < 0:\n        raise ValueError(\"Health can't be negative\")\n    return value\n```\n\nThat way the problem is caught early, with a clear message."}
+ ],
+ "examples": [
+  {"title": "A program that doesn't crash", "code": "answers = [\"12\", \"twelve\", \"7\"]\nfor text in answers:\n    try:\n        age = int(text)\n        print(\"Age:\", age)\n    except ValueError:\n        print(f\"'{text}' is not a number.\")\n", "note": ""},
+  {"title": "Two error types", "code": "for text in [\"5\", \"0\", \"five\"]:\n    try:\n        print(100 / int(text))\n    except ValueError:\n        print(\"Not a number!\")\n    except ZeroDivisionError:\n        print(\"Can't divide by zero!\")\n", "note": ""},
+  {"title": "raise and catch", "code": "def set_hp(value):\n    if value < 0:\n        raise ValueError(\"Health can't be negative\")\n    return value\n\ntry:\n    set_hp(-5)\nexcept ValueError as err:\n    print(\"Caught:\", err)\nfinally:\n    print(\"Check finished.\")\n", "note": ""}
+ ],
+ "tasks": [
+  {"title": "A safe number", "prompt": "If `text` can be turned into a number, print twice its value. If it can't, the program shouldn't crash; it should print `That's not a number!`",
+   "starter": "text = \"abc\"\n\nnumber = int(text)\nprint(number * 2)\n", "solution": "text = \"abc\"\n\ntry:\n    number = int(text)\n    print(number * 2)\nexcept ValueError:\n    print(\"That's not a number!\")\n",
+   "hints": ["Put the int(text) line inside a try: block.", "Write the message under except ValueError:"], "check": {"code_contains": ["try", "except"], "output_contains": ["That's not a number!"]}},
+  {"title": "Safe division", "prompt": "`safe_divide(a, b)` should return the result of the division. If `b` is zero, it should return `None` instead of failing. Use `try`, not `if`.",
+   "starter": "def safe_divide(a, b):\n    return a / b\n\nprint(safe_divide(10, 2))\nprint(safe_divide(10, 0))\n",
+   "solution": "def safe_divide(a, b):\n    try:\n        return a / b\n    except ZeroDivisionError:\n        return None\n\nprint(safe_divide(10, 2))\nprint(safe_divide(10, 0))\n",
+   "hints": ["try: return a / b", "except ZeroDivisionError: return None"], "check": {"code_contains": ["try", "ZeroDivisionError"]}},
+  {"title": "Ask the age", "prompt": "Ask the user's age. If they type digits show `Your age: 12`; if not, show `Please type digits.` Run the program a few times and try different answers.",
+   "starter": "age = int(input(\"How old are you? \"))\nprint(\"Your age:\", age)\n",
+   "solution": "try:\n    age = int(input(\"How old are you? \"))\n    print(\"Your age:\", age)\nexcept ValueError:\n    print(\"Please type digits.\")\n",
+   "hints": ["Put the input line inside try.", "Catch it with except ValueError:"], "inputs": ["twelve"]}
+ ],
+ "challenge": {"title": "Guard with raise", "prompt": "`set_level(level)` should return levels from 1 to 10. Any other value should raise a `ValueError`.",
+  "starter": "def set_level(level):\n    return level\n\nprint(set_level(3))\n",
+  "solution": "def set_level(level):\n    if level < 1 or level > 10:\n        raise ValueError(\"The level must be from 1 to 10\")\n    return level\n\nprint(set_level(3))\n",
+  "hints": ["if level < 1 or level > 10:", "raise ValueError(\"...\")"], "check": {"code_contains": ["raise"]}},
+ "project_task": {"title": "Sturdy commands", "prompt": "The player types how many steps to take, but sometimes types letters. Try to turn each command in `commands` into a number:\n\n- If it's a number, add it to `moved`.\n- If not, print `'two' was not understood` and carry on.\n- At the end print `Total steps: 8`.",
+  "starter": "commands = [\"3\", \"two\", \"5\", \"hop\"]\nmoved = 0\n\n# try every command\n\nprint(f\"Total steps: {moved}\")\n",
+  "solution": "commands = [\"3\", \"two\", \"5\", \"hop\"]\nmoved = 0\n\nfor c in commands:\n    try:\n        moved += int(c)\n    except ValueError:\n        print(f\"'{c}' was not understood\")\n\nprint(f\"Total steps: {moved}\")\n",
+  "hints": ["Use try inside for c in commands:", "Print the message inside except ValueError:"], "check": {"code_contains": ["try", "except"], "output_contains": ["'two' was not understood", "Total steps: 8"]}}
+}

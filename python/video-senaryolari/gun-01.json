@@ -3,8 +3,27 @@
   "gun": 1,
   "baslik": "Python ile tanışma",
   "maskot": "piko",
+  "dil": "tr",
   "ozet": "Piko, Başlangıç Kampı'nda print() ile ekrana yazı yazmayı, Python'ı hesap makinesi gibi kullanmayı, yorumları ve ilk hata mesajını anlatıyor.",
   "hedef_sure_sn": 133,
+  "giris": {
+    "anlatim": "Gün 1: Python ile tanışma! Bu derste print ile ekrana yazı yazmayı, Python'a hesap yaptırmayı ve ilk hata mesajını okumayı öğreneceksin.",
+    "maddeler": [
+      "print() ile ekrana yazmak",
+      "Python ile hesap yapmak",
+      "İlk hata mesajını okumak"
+    ]
+  },
+  "cikis": {
+    "anlatim": "Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!",
+    "baslik": "İnteraktif dersler için",
+    "adres": "30gunde.com.tr",
+    "maddeler": [
+      "Kodunu tarayıcıda yaz ve çalıştır",
+      "Görevleri tamamla, rozet kazan",
+      "30 günde adım adım Python"
+    ]
+  },
   "sahneler": [
     {
       "no": 1,
@@ -52,7 +71,8 @@
           1,
           2
         ],
-        "cikti": "Merhaba Dünya!\n42"
+        "cikti": "Merhaba Dünya!\n42",
+        "cikti_cumle": 3
       },
       "maskot": {
         "poz": "isaret",
@@ -110,7 +130,8 @@
         "baslik": "Sahnede çizim",
         "kod": "print(\"*****\")\nprint(\"#####\")\n",
         "dil": "python",
-        "cikti": "*****\n#####"
+        "cikti": "*****\n#####",
+        "izgara": true
       },
       "maskot": {
         "poz": "mutlu",
@@ -131,7 +152,11 @@
         "vurgu_satirlari": [
           1
         ],
-        "cikti": "NameError: name 'prin' is not defined. Did you mean: 'print'?"
+        "cikti": "NameError: name 'prin' is not defined. Did you mean: 'print'?",
+        "duzeltme": {
+          "kod": "print(\"Merhaba!\")\n",
+          "cikti": "Merhaba!"
+        }
       },
       "maskot": {
         "poz": "sasirma",

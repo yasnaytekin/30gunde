@@ -20,6 +20,14 @@ Ders metni: [gun-09.md](../gunler/gun-09.md)
 | 10 | ozet | 8 sn | on (sag) |
 | 11 | kapanis | 8 sn | tebrik (orta) |
 
+## Giriş (konu tanıtımı)
+
+**Seslendirme:** Gün 9: Koşullar! Bu derste if, elif ve else ile programa karar vermeyi, girinti kurallarını ve koşulları birleştirmeyi öğreneceksin.
+
+- if, elif, else
+- İki nokta ve girinti
+- and, or, in ile koşullar
+
 ## Sahne 1: acilis (12 sn)
 
 **Seslendirme:** Selam, ben Piko! Mantık Kalesi'ne vardık. Kalenin kapısı sadece anahtarı olanlara açılır! Oyunlarda her şey kurallarla çalışır: can biterse oyun biter. Bugün bu kuralları Python'a yazıyoruz.
@@ -230,3 +238,13 @@ Savaşa hazır
 **Görsel:** `gorseller/python/harita/kale.webp`
 
 **Maskot:** tebrik pozu, orta
+
+## Çıkış (30gunde.com.tr yönlendirmesi)
+
+**Seslendirme:** Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!
+
+**Ekranda:** İnteraktif dersler için **30gunde.com.tr**
+
+- Kodunu tarayıcıda yaz ve çalıştır
+- Görevleri tamamla, rozet kazan
+- 30 günde adım adım Python

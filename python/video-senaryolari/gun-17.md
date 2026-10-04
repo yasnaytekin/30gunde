@@ -21,6 +21,14 @@ Ders metni: [gun-17.md](../gunler/gun-17.md)
 | 11 | ozet | 11 sn | on (sag) |
 | 12 | kapanis | 12 sn | tebrik (orta) |
 
+## Giriş (konu tanıtımı)
+
+**Seslendirme:** Gün 17: Hata yönetimi! Bu derste try ve except ile hataları yakalamayı, else ve finally ile toparlamayı ve raise ile kendi hatanı fırlatmayı öğreneceksin.
+
+- try ve except
+- else ve finally
+- raise ile kendi hatan
+
 ## Sahne 1: acilis (13 sn)
 
 **Seslendirme:** Selam, ben Piko! Keşif Adası'nda köprüler çürük olabilir. Akıllı bir kaşif her adımda beline bir ip bağlar. Peki programın bir hataya çarpınca çökmek yerine ipe tutunabilir mi? Evet! Bugün hata yönetimini öğreniyoruz.
@@ -274,3 +282,13 @@ Bitti.
 - Metinde desen aramak
 
 **Maskot:** tebrik pozu, orta
+
+## Çıkış (30gunde.com.tr yönlendirmesi)
+
+**Seslendirme:** Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!
+
+**Ekranda:** İnteraktif dersler için **30gunde.com.tr**
+
+- Kodunu tarayıcıda yaz ve çalıştır
+- Görevleri tamamla, rozet kazan
+- 30 günde adım adım Python

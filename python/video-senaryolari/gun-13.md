@@ -20,6 +20,14 @@ Ders metni: [gun-13.md](../gunler/gun-13.md)
 | 10 | ozet | 7 sn | on (sag) |
 | 11 | kapanis | 10 sn | tebrik (orta) |
 
+## Giriş (konu tanıtımı)
+
+**Seslendirme:** Gün 13: List comprehension! Bu derste tek satırda liste üretmeyi, if ile süzmeyi ve lambda ile mini fonksiyonlar yazmayı öğreneceksin.
+
+- Tek satırda liste
+- if ile süzmek, if-else ile dönüştürmek
+- lambda: mini fonksiyon
+
 ## Sahne 1: acilis (12 sn)
 
 **Seslendirme:** Selam, ben Piko! Atölyenin köşesinde sihirli bir kalıp var: bir tarafından malzemeleri atıyorsun, öbür tarafından hazır ürünler çıkıyor. Python'da buna list comprehension denir. Dört satırlık döngüleri tek satıra sığdırır!
@@ -224,3 +232,13 @@ print([len(w) for w in words if len(w) > 2])
 **Görsel:** `gorseller/python/harita/atolye.webp`
 
 **Maskot:** tebrik pozu, orta
+
+## Çıkış (30gunde.com.tr yönlendirmesi)
+
+**Seslendirme:** Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!
+
+**Ekranda:** İnteraktif dersler için **30gunde.com.tr**
+
+- Kodunu tarayıcıda yaz ve çalıştır
+- Görevleri tamamla, rozet kazan
+- 30 günde adım adım Python

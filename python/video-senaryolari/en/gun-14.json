@@ -1,0 +1,231 @@
+{
+  "kurs": "python",
+  "gun": 14,
+  "baslik": "Higher-order functions",
+  "maskot": "piko",
+  "ozet": "Piko shows how to use functions as values: passing a function to a function, map, filter, sorted with key, and functions that return functions (closures).",
+  "hedef_sure_sn": 124,
+  "dil": "en",
+  "giris": {
+    "anlatim": "Day 14: Higher-order functions! In this lesson you'll use functions as values, work with map, filter and sorted, and write functions that make functions.",
+    "maddeler": [
+      "Functions are values",
+      "map, filter, sorted and key",
+      "Functions that make functions"
+    ]
+  },
+  "cikis": {
+    "anlatim": "The interactive version of this lesson is waiting for you at 30gunde.com.tr. Write your code right in the browser, run it instantly, and finish the tasks!",
+    "baslik": "Interactive lessons at",
+    "adres": "30gunde.com.tr",
+    "maddeler": [
+      "Write and run code in your browser",
+      "Finish tasks, earn badges",
+      "Learn Python step by step in 30 days"
+    ]
+  },
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 12,
+      "anlatim": "Hi, I'm Piko! The workshop master told me a secret: you can plug tools into other tools! Like swapping the bit on a drill, you can hand one function to another. Today we learn higher-order functions.",
+      "ekran": {
+        "baslik": "Day 14: Higher-order functions",
+        "gorsel": "gorseller/python/harita/atolye.webp"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "Write a function without parentheses and you don't call it, you get the function itself. use_twice applies the function you give it two times. hey first gets capital letters and an exclamation mark, then one more. You can pass a lambda too!",
+      "ekran": {
+        "baslik": "Functions are values",
+        "kod": "def shout(text):\n    return text.upper() + \"!\"\n\ndef use_twice(func, value):\n    return func(func(value))\n\nprint(use_twice(shout, \"hey\"))\nprint(use_twice(lambda n: n * 10, 3))\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          5,
+          7
+        ],
+        "cikti": "HEY!!\n300"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 11,
+      "anlatim": "map applies the function to every item: all the scores doubled. filter keeps the items the function says True to: here, the ones under sixty.",
+      "ekran": {
+        "baslik": "map and filter",
+        "kod": "scores = [40, 75, 90, 55]\nprint(list(map(lambda s: s * 2, scores)))\nprint(list(filter(lambda s: s < 60, scores)))\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2,
+          3
+        ],
+        "cikti": "[80, 150, 180, 110]\n[40, 55]"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "hata",
+      "sure_sn": 10,
+      "anlatim": "Forget list, and Python shows a map object instead of the results. It's not an error, but it's no help either. To see the results, wrap it in list.",
+      "ekran": {
+        "baslik": "Forgetting list()",
+        "kod": "scores = [40, 75, 90]\nprint(map(lambda s: s * 2, scores))\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "<map object at 0x7f3a2c1b5e10>"
+      },
+      "maskot": {
+        "poz": "uzgun",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "With key, you tell sorted what to sort by. Here we look at each player's score, and reverse True puts them from biggest to smallest. Give len as the key, and short names come first.",
+      "ekran": {
+        "baslik": "sorted and key",
+        "kod": "players = [(\"Ali\", 120), (\"Piko\", 300), (\"Ece\", 250)]\nfor name, score in sorted(players, key=lambda p: p[1], reverse=True):\n    print(name, score)\nprint(\"Short names first:\", sorted([\"Zeynep\", \"Can\", \"Ece\"], key=len))\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2,
+          4
+        ],
+        "cikti": "Piko 300\nEce 250\nAli 120\nShort names first: ['Can', 'Ece', 'Zeynep']"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "A function can make a new function inside it and return it. The inner function remembers the outer one's value; this is called a closure. plus5 is now a brand new tool that adds five to any number.",
+      "ekran": {
+        "baslik": "A function that makes functions",
+        "kod": "def make_adder(n):\n    def add(x):\n        return x + n\n    return add\n\nplus5 = make_adder(5)\nprint(plus5(10))\nprint(plus5(1))\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          4,
+          7
+        ],
+        "cikti": "15\n6"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "soru",
+      "sure_sn": 9,
+      "anlatim": "max takes a key too, and you can give map a ready-made function. What do you think these two lines print?",
+      "ekran": {
+        "baslik": "What will it print?",
+        "kod": "names = [\"Piko\", \"Al\", \"Ece\"]\nprint(max(names, key=len))\nprint(list(map(len, names)))\n",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "cikti",
+      "sure_sn": 10,
+      "anlatim": "Piko, and four, two, three! max picked the longest name. And map applied the len function to each name and put the lengths in a list.",
+      "ekran": {
+        "baslik": "The answer",
+        "kod": "names = [\"Piko\", \"Al\", \"Ece\"]\nprint(max(names, key=len))\nprint(list(map(len, names)))\n",
+        "dil": "python",
+        "cikti": "Piko\n[4, 2, 3]"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "gorev",
+      "sure_sn": 13,
+      "anlatim": "In the tasks you'll hand a function to another function, add bonus points to scores with map, and pick out who passed with filter. In the challenge you'll write a function that makes functions: a multiplier maker.",
+      "ekran": {
+        "baslik": "Today's tasks",
+        "maddeler": [
+          "Task 1: Apply it",
+          "Task 2: Bonus points",
+          "Task 3: Who passed",
+          "Challenge: Multiplier maker"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 10,
+      "tur": "ozet",
+      "sure_sn": 8,
+      "anlatim": "Today we passed functions around like values, applied them to lists, and made new functions.",
+      "ekran": {
+        "baslik": "What you learned today",
+        "maddeler": [
+          "A function without parentheses = the function itself",
+          "map applies, filter sifts; see it with list()",
+          "sorted/max take a key; a closure remembers values"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "kapanis",
+      "sure_sn": 9,
+      "anlatim": "You're a tool master now! Tomorrow we enter the workshop's last room: a detective office. We'll read red error messages and get to know the types of errors.",
+      "ekran": {
+        "baslik": "Tomorrow: Error types",
+        "gorsel": "gorseller/python/harita/atolye.webp"
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

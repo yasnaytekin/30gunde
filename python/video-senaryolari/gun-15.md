@@ -22,6 +22,14 @@ Ders metni: [gun-15.md](../gunler/gun-15.md)
 | 12 | ozet | 7 sn | on (sag) |
 | 13 | kapanis | 11 sn | tebrik (orta) |
 
+## Giriş (konu tanıtımı)
+
+**Seslendirme:** Gün 15: Hata tipleri! Bu derste hata mesajlarını okumayı, sık görülen hata tiplerini tanımayı ve print ile iz sürmeyi öğreneceksin.
+
+- Hata mesajı nasıl okunur?
+- NameError, ValueError, AttributeError
+- print ile iz sürmek
+
 ## Sahne 1: acilis (12 sn)
 
 **Seslendirme:** Selam, ben Piko! Atölyenin son odası bir dedektif bürosu. Masada bir sürü bozuk kod var ve hepsi kırmızı hata mesajları veriyor. Ama hata mesajları düşmanımız değil, ipucudur. Bugün hata dedektifi oluyoruz!
@@ -258,3 +266,13 @@ TypeError: can only concatenate str (not "int") to str
 **Maskot:** tebrik pozu, orta
 
 *Yönetmen notu: Piko atölyeden çıkıp iskelede bekleyen tekneye atlar; ufukta Keşif Adası görünür.*
+
+## Çıkış (30gunde.com.tr yönlendirmesi)
+
+**Seslendirme:** Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!
+
+**Ekranda:** İnteraktif dersler için **30gunde.com.tr**
+
+- Kodunu tarayıcıda yaz ve çalıştır
+- Görevleri tamamla, rozet kazan
+- 30 günde adım adım Python

@@ -1,0 +1,39 @@
+{
+ "day": 7, "title": "Sets", "region": "orman",
+ "project_contribution": "Discovered places",
+ "game_role": "When you enter a new region, the places you discovered are listed.",
+ "objective": "Use sets, collections without duplicates, and do set operations",
+ "story": "While wandering in the forest, Piko passed the same places again and again. If he writes every visit on his map, the page will fill up! What he really needs is **which places he has seen**, not how many times. Today we meet **sets**, which throw away duplicates by themselves.",
+ "sections": [
+  {"title": "What is a set?", "body": "A set is a collection written with **curly braces** in which **the same item can't appear twice**. The items have no order.\n\n```python\nplaces = {\"camp\", \"village\", \"camp\"}\nprint(places)       # {'camp', 'village'}  (order may vary)\nprint(len(places))  # 2\n```\n\nTo create an empty set, write `set()`. If you write `{}`, you get an empty dictionary."},
+  {"title": "Removing duplicates from a list", "body": "Put a list inside `set()` and the duplicates disappear:\n\n```python\nvisits = [\"forest\", \"village\", \"forest\", \"camp\"]\nunique = set(visits)\nprint(len(unique))  # 3\n```\n\nTo see the result in order, use `sorted(unique)`; it gives you an alphabetical list."},
+  {"title": "Add and remove", "body": "- `places.add(\"harbor\")` adds an item (nothing happens if it's already there)\n- `places.remove(\"camp\")` removes it, and raises an error if it's missing\n- `places.discard(\"camp\")` removes it, and quietly moves on if it's missing\n- `\"village\" in places` asks whether it's there, and it's very fast"},
+  {"title": "Set operations", "body": "Like sets in math, you can compare two sets:\n\n- `a | b` union: everything in both\n- `a & b` intersection: what's in both\n- `a - b` difference: what's in a but not in b\n- `a <= b` is every item of a also in b?\n\nThere are word versions too: `a.union(b)`, `a.intersection(b)`, `a.difference(b)`."}
+ ],
+ "examples": [
+  {"title": "Duplicates gone", "code": "visits = [\"forest\", \"village\", \"forest\", \"camp\", \"village\"]\nunique = set(visits)\nprint(len(visits), \"visits\")\nprint(len(unique), \"different places\")\nprint(sorted(unique))\n", "note": ""},
+  {"title": "Add and remove", "code": "bag = {\"sword\", \"potion\"}\nbag.add(\"map\")\nbag.add(\"potion\")\nbag.discard(\"sword\")\nprint(sorted(bag))\nprint(\"potion\" in bag)\n", "note": "We tried to add the potion twice, but the set has only one."},
+  {"title": "Friends' games", "code": "ali = {\"chess\", \"hide and seek\", \"football\"}\nemma = {\"football\", \"chess\", \"swimming\"}\nprint(\"Both:\", sorted(ali & emma))\nprint(\"All:\", sorted(ali | emma))\nprint(\"Only Ali:\", sorted(ali - emma))\n", "note": ""}
+ ],
+ "tasks": [
+  {"title": "Remove duplicates", "prompt": "Make a set without duplicates from the `visits` list and call it `unique`. Then print how many different places there are: `3 different places`",
+   "starter": "visits = [\"forest\", \"village\", \"forest\", \"camp\", \"village\"]\n\n# create a set called unique\n\n# print how many different places there are\n",
+   "solution": "visits = [\"forest\", \"village\", \"forest\", \"camp\", \"village\"]\n\nunique = set(visits)\n\nprint(f\"{len(unique)} different places\")\n",
+   "hints": ["set(visits) throws away duplicates.", "print(f\"{len(unique)} different places\")"], "check": {"output_contains": ["3 different places"]}},
+  {"title": "Explore a new place", "prompt": "Add `\"forest\"` to the `explored` set and remove `\"camp\"`. Then print it sorted.",
+   "starter": "explored = {\"camp\", \"village\"}\n\n# add \"forest\", remove \"camp\"\n\nprint(sorted(explored))\n", "solution": "explored = {\"camp\", \"village\"}\n\nexplored.add(\"forest\")\nexplored.discard(\"camp\")\n\nprint(sorted(explored))\n",
+   "hints": ["add() to add, discard() or remove() to remove"]},
+  {"title": "Shared games", "prompt": "Let `both` be the games the two friends **share**, and `all_games` **all** of their games.",
+   "starter": "ali = {\"chess\", \"hide and seek\", \"football\"}\nemma = {\"football\", \"chess\", \"swimming\"}\n\nboth = set()        # shared games\nall_games = set()   # all games\n\nprint(sorted(both))\nprint(sorted(all_games))\n",
+   "solution": "ali = {\"chess\", \"hide and seek\", \"football\"}\nemma = {\"football\", \"chess\", \"swimming\"}\n\nboth = ali & emma\nall_games = ali | emma\n\nprint(sorted(both))\nprint(sorted(all_games))\n",
+   "hints": ["Use & for intersection and | for union."]}
+ ],
+ "challenge": {"title": "Missing badges", "prompt": "Let `missing` be the badges not earned yet. Then print them sorted like `Missing: [...]`. If all of them are earned, print `All done!`.",
+  "starter": "all_badges = {\"First Step\", \"First Code\", \"5 Days\", \"Python Friend\"}\nearned = {\"First Step\", \"First Code\"}\n\n# missing = ?\n\n# if missing is empty \"All done!\", otherwise \"Missing: [...]\"\n",
+  "solution": "all_badges = {\"First Step\", \"First Code\", \"5 Days\", \"Python Friend\"}\nearned = {\"First Step\", \"First Code\"}\n\nmissing = all_badges - earned\n\nif len(missing) == 0:\n    print(\"All done!\")\nelse:\n    print(f\"Missing: {sorted(missing)}\")\n",
+  "hints": ["Use - for the difference: all_badges - earned", "Check whether it's empty with len(missing) == 0."]},
+ "project_task": {"title": "Discovered places", "prompt": "The places Piko walked through are in the `route` list, and the places he already knew are in the `known` set.\n\n- `visited`: the different places he walked through (a set)\n- `new_places`: places he walked through but didn't know before\n\nThen print:\n\n```\n4 different places visited\nNew discoveries: ['cave', 'harbor']\n```",
+  "starter": "route = [\"camp\", \"village\", \"cave\", \"village\", \"harbor\", \"camp\"]\nknown = {\"camp\", \"village\"}\n\n# visited and new_places\n\n# print the two lines\n",
+  "solution": "route = [\"camp\", \"village\", \"cave\", \"village\", \"harbor\", \"camp\"]\nknown = {\"camp\", \"village\"}\n\nvisited = set(route)\nnew_places = visited - known\n\nprint(f\"{len(visited)} different places visited\")\nprint(f\"New discoveries: {sorted(new_places)}\")\n",
+  "hints": ["visited = set(route)", "New places are a difference: visited - known"], "check": {"output_contains": ["4 different places visited", "New discoveries: ['cave', 'harbor']"]}}
+}

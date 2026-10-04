@@ -1,0 +1,36 @@
+{
+ "day": 8, "title": "Dictionaries", "region": "orman",
+ "project_contribution": "Hero record",
+ "game_role": "Your hero dictionary becomes the hero of the game.",
+ "objective": "Learn the key-value structure",
+ "story": "Every creature living in the forest has an ID card: its name, health, power... Today we learn how to store information about the characters in the game. For that we'll use Python's **dictionaries**.",
+ "sections": [
+  {"title": "What is a dictionary?", "body": "In a real dictionary you look up a word to find its meaning. In a Python dictionary you look up a **key** to find its **value**.\n\n```python\nplayer = {\"name\": \"Piko\", \"hp\": 100, \"gold\": 50}\nprint(player[\"name\"])  # Piko\n```\n\nIn a list we reach items by position (0, 1, 2); in a dictionary we use names (`\"name\"`, `\"hp\"`)."},
+  {"title": "Add, change, delete", "body": "```python\nplayer[\"level\"] = 1                # add a new key\nplayer[\"hp\"] = player[\"hp\"] - 10   # change\ndel player[\"gold\"]                 # delete\n```"},
+  {"title": "A safe look: get()", "body": "If you ask for a key that doesn't exist, like `player[\"shield\"]`, Python raises a `KeyError`. `get()` doesn't fail; it returns the backup value you choose:\n\n```python\nshield = player.get(\"shield\", 0)  # 0 if missing\n```"},
+  {"title": "Inspecting a dictionary", "body": "- `player.keys()` all the keys\n- `player.values()` all the values\n- `\"hp\" in player` is this key there?\n- `len(player)` how many keys?\n\nYou can even use a list as a value: `{\"inventory\": [\"sword\", \"potion\"]}`"}
+ ],
+ "examples": [
+  {"title": "ID card", "code": "player = {\"name\": \"Piko\", \"hp\": 100, \"gold\": 50}\nprint(player[\"name\"])\nplayer[\"level\"] = 1\nprint(player)\nprint(player.keys())\n", "note": ""},
+  {"title": "Attack the enemy", "code": "enemy = {\"name\": \"Goblin\", \"hp\": 30}\nenemy[\"hp\"] -= 12\nprint(enemy[\"name\"], \"health:\", enemy[\"hp\"])\nprint(enemy.get(\"shield\", \"No shield!\"))\n", "note": ""},
+  {"title": "Nested", "code": "hero = {\"name\": \"Piko\", \"inventory\": [\"sword\", \"potion\"]}\nhero[\"inventory\"].append(\"map\")\nprint(hero[\"inventory\"])\nprint(len(hero[\"inventory\"]), \"items\")\n", "note": ""}
+ ],
+ "tasks": [
+  {"title": "Add gold", "prompt": "Add the key `\"gold\"` with the value `50` to the player's dictionary.", "starter": "player = {\"name\": \"Piko\", \"hp\": 100}\n\n# add the key \"gold\" with the value 50\n\nprint(player)\n",
+   "solution": "player = {\"name\": \"Piko\", \"hp\": 100}\n\nplayer[\"gold\"] = 50\n\nprint(player)\n", "hints": ["Adding a new key: dictionary[key] = value", "player[\"gold\"] = 50"]},
+  {"title": "Take damage", "prompt": "The goblin took 12 damage. Lower its health by 12. Don't type the new number yourself; change `enemy[\"hp\"]`.",
+   "starter": "enemy = {\"name\": \"Goblin\", \"hp\": 30}\n\n# the goblin took 12 damage\n\nprint(enemy[\"name\"], \"health:\", enemy[\"hp\"])\n", "solution": "enemy = {\"name\": \"Goblin\", \"hp\": 30}\n\nenemy[\"hp\"] -= 12\n\nprint(enemy[\"name\"], \"health:\", enemy[\"hp\"])\n",
+   "hints": ["You reach the value with enemy[\"hp\"].", "enemy[\"hp\"] -= 12"], "check": {"output_contains": ["Goblin health: 18"]}},
+  {"title": "A safe look", "prompt": "Read the player's shield with `get()`. If there's no `\"shield\"` in the dictionary, the result should be `0`.",
+   "starter": "player = {\"name\": \"Piko\", \"hp\": 100}\n\nshield = None  # read it with get()\nprint(\"Shield:\", shield)\n", "solution": "player = {\"name\": \"Piko\", \"hp\": 100}\n\nshield = player.get(\"shield\", 0)\nprint(\"Shield:\", shield)\n",
+   "hints": ["get() takes two things: the key and a backup value.", "shield = player.get(\"shield\", 0)"], "check": {"code_contains": ["get("]}}
+ ],
+ "challenge": {"title": "Shopping bill", "prompt": "Calculate the total price of the items in the cart using the `prices` dictionary and store it in `total`. No typing prices by hand! Hint: `prices[cart[0]]` gives the price of the first item.",
+  "starter": "prices = {\"potion\": 25, \"sword\": 120, \"shield\": 80}\ncart = [\"potion\", \"potion\", \"shield\"]\n\ntotal = 0\nprint(\"Total:\", total)\n",
+  "solution": "prices = {\"potion\": 25, \"sword\": 120, \"shield\": 80}\ncart = [\"potion\", \"potion\", \"shield\"]\n\ntotal = prices[cart[0]] + prices[cart[1]] + prices[cart[2]]\nprint(\"Total:\", total)\n",
+  "hints": ["cart[0] is the name of the first item.", "Use that name as a key in the prices dictionary."], "check": {"output_contains": ["Total: 130"]}},
+ "project_task": {"title": "Hero record", "prompt": "On earlier days we kept the hero's info in separate variables. Now let's collect it all in one `hero` dictionary:\n\n- `\"name\"`: the hero's name\n- `\"hp\"`: 100\n- `\"gold\"`: 0\n- `\"inventory\"`: a list containing `\"lantern\"`\n\nThen print a line like `Piko - Health: 100`. The name and health must come from the dictionary.",
+  "starter": "# All of the hero's info in one dictionary\nhero = {\n    \"name\": \"Piko\",\n}\n\n",
+  "solution": "hero = {\n    \"name\": \"Piko\",\n    \"hp\": 100,\n    \"gold\": 0,\n    \"inventory\": [\"lantern\"],\n}\n\nprint(f\"{hero['name']} - Health: {hero['hp']}\")\n",
+  "hints": ["Separate the key-value pairs with commas.", "\"inventory\": [\"lantern\"]", "print(hero[\"name\"], \"- Health:\", hero[\"hp\"])"], "check": {"output_contains": ["Piko - Health: 100"]}}
+}

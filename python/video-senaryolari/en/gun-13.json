@@ -1,0 +1,228 @@
+{
+  "kurs": "python",
+  "gun": 13,
+  "baslik": "List comprehensions",
+  "maskot": "piko",
+  "ozet": "With the workshop's magic mold, Piko explains list comprehensions: building a list in one line, filtering with if, transforming with if-else, and tiny nameless functions with lambda.",
+  "hedef_sure_sn": 117,
+  "dil": "en",
+  "giris": {
+    "anlatim": "Day 13: List comprehensions! In this lesson you'll build lists in a single line, filter them with if, and write tiny functions with lambda.",
+    "maddeler": [
+      "Lists in one line",
+      "Filter with if, transform with if-else",
+      "lambda: a mini function"
+    ]
+  },
+  "cikis": {
+    "anlatim": "The interactive version of this lesson is waiting for you at 30gunde.com.tr. Write your code right in the browser, run it instantly, and finish the tasks!",
+    "baslik": "Interactive lessons at",
+    "adres": "30gunde.com.tr",
+    "maddeler": [
+      "Write and run code in your browser",
+      "Finish tasks, earn badges",
+      "Learn Python step by step in 30 days"
+    ]
+  },
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 13,
+      "anlatim": "Hi, I'm Piko! In the corner of the workshop there's a magic mold: you drop materials in one side, and finished products come out the other. In Python this is called a list comprehension. It squeezes four-line loops into a single line!",
+      "ekran": {
+        "baslik": "Day 13: List comprehensions",
+        "gorsel": "gorseller/python/harita/atolye.webp"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "The long way to make a new list from a list: an empty list, a loop, and append. The short way is one line! Read it like this: for each n in nums, take n times ten. Both ways give the same result.",
+      "ekran": {
+        "baslik": "The long way, the short way",
+        "kod": "nums = [1, 2, 3, 4, 5]\n\ntens = []\nfor n in nums:\n    tens.append(n * 10)\nprint(tens)\n\nprint([n * 10 for n in nums])\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          8
+        ],
+        "cikti": "[10, 20, 30, 40, 50]\n[10, 20, 30, 40, 50]"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 9,
+      "anlatim": "Add an if at the end and you keep only the items you want. The mold doesn't let the scores under sixty through.",
+      "ekran": {
+        "baslik": "Filter with if",
+        "kod": "scores = [45, 90, 12, 77, 100, 63]\npassed = [s for s in scores if s >= 60]\nprint(\"Passed:\", passed)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "Passed: [90, 77, 100, 63]"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "If you want to pick one of two results for every item, if and else go at the front. To filter, the if goes at the end; to transform, the if-else goes at the front. Keep that in mind!",
+      "ekran": {
+        "baslik": "Transform with if and else",
+        "kod": "scores = [45, 90, 12, 77]\nprint([\"pass\" if s >= 60 else \"fail\" for s in scores])\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "['fail', 'pass', 'fail', 'pass']"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 13,
+      "anlatim": "You can write tiny one-line functions with lambda. The left side of the colon is the parameter, and the right side is the result it returns. The same mold idea works for dictionaries too: a dictionary of squares with curly braces!",
+      "ekran": {
+        "baslik": "lambda: a nameless mini function",
+        "kod": "square = lambda x: x * x\nadd = lambda a, b: a + b\nprint(square(6))\nprint(add(2, 3))\nprint({n: square(n) for n in range(1, 5)})\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          1,
+          2
+        ],
+        "cikti": "36\n5\n{1: 1, 2: 4, 3: 9, 4: 16}"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 6,
+      "tur": "hata",
+      "sure_sn": 10,
+      "anlatim": "Put the else at the end and Python gives a SyntaxError. Remember: if there's only an if, it goes at the end; if the if comes with an else, they go at the front.",
+      "ekran": {
+        "baslik": "else in the wrong place",
+        "kod": "nums = [1, 2, 3]\nprint([n for n in nums if n > 1 else 0])\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "SyntaxError: invalid syntax"
+      },
+      "maskot": {
+        "poz": "uzgun",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "soru",
+      "sure_sn": 8,
+      "anlatim": "This mold filters and transforms at the same time. Which list do you think shows up on the screen?",
+      "ekran": {
+        "baslik": "What will it print?",
+        "kod": "words = [\"sword\", \"potion\", \"ax\"]\nprint([len(w) for w in words if len(w) > 2])\n",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 8,
+      "tur": "cikti",
+      "sure_sn": 10,
+      "anlatim": "Five and six! Ax has only two letters, so it got stuck in the filter. The other two words were replaced by their lengths.",
+      "ekran": {
+        "baslik": "The answer",
+        "kod": "words = [\"sword\", \"potion\", \"ax\"]\nprint([len(w) for w in words if len(w) > 2])\n",
+        "dil": "python",
+        "cikti": "[5, 6]"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "gorev",
+      "sure_sn": 11,
+      "anlatim": "In the tasks you'll make, in a single line, double every number, turn names into capital letters, and keep only the valuable loot. In the challenge you'll write a lambda and build a list of squares.",
+      "ekran": {
+        "baslik": "Today's tasks",
+        "maddeler": [
+          "Task 1: Double it",
+          "Task 2: In capitals",
+          "Task 3: Valuable loot",
+          "Challenge: With lambda"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 10,
+      "tur": "ozet",
+      "sure_sn": 7,
+      "anlatim": "Today we turned long loops into one-line molds and met tiny nameless functions.",
+      "ekran": {
+        "baslik": "What you learned today",
+        "maddeler": [
+          "[expression for x in list]",
+          "Filter: if at the end; transform: if-else at the front",
+          "A mini function with lambda x: x * x"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "kapanis",
+      "sure_sn": 10,
+      "anlatim": "You've mastered the magic mold! Tomorrow the workshop master shares a secret: plugging tools into other tools. We'll play with functions using map, filter and sorted.",
+      "ekran": {
+        "baslik": "Tomorrow: Higher-order functions",
+        "gorsel": "gorseller/python/harita/atolye.webp"
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

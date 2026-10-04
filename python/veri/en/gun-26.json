@@ -1,0 +1,37 @@
+{
+ "day": 26, "title": "Python on the web", "region": "dag",
+ "project_contribution": "The game's web page",
+ "game_role": "The hero's profile card is drawn with your HTML.",
+ "objective": "Understand how the web works with requests and responses, build HTML pages with Python and do routing",
+ "story": "We're at the foot of Python Mountain! At the top stands a giant observation tower that receives messages from all over the world. Every message is a request, and every answer the tower gives is a response. Websites on the internet work exactly like this. Today we build our own web pages with Python.",
+ "sections": [
+  {"title": "Request and response", "body": "What happens when you type an address into your browser:\n\n- The browser sends a **request** to the server: \"Give me the `/profile` page.\"\n- The server reads the request, prepares the page and sends back a **response**.\n- The response contains HTML and a **status code**.\n\nThe best-known status codes: `200` all good, `404` page not found, `500` something went wrong on the server."},
+  {"title": "A site with Flask", "body": "One of the most loved ways to build websites in Python is the **Flask** package. On your own computer it looks like this:\n\n```python\nfrom flask import Flask\napp = Flask(__name__)\n\n@app.route(\"/\")\ndef home():\n    return \"<h1>Welcome to Piko's site!</h1>\"\n\napp.run()\n```\n\n`@app.route(\"/\")` says: \"If someone asks for the `/` address, run the `home` function.\" In the examples we'll try the same idea with plain Python, without starting a server. To try Flask yourself: `pip install flask`."},
+  {"title": "Building HTML with Python", "body": "A web server's main job is to turn data into HTML text. f-strings and `join` are enough for that:\n\n```python\nname = \"Piko\"\npage = f\"<h1>Hello {name}</h1>\"\n\nitems = [\"sword\", \"potion\"]\nhtml = \"<ul>\" + \"\".join(f\"<li>{i}</li>\" for i in items) + \"</ul>\"\n```"},
+  {"title": "Routing", "body": "We can keep which address goes to which function in a dictionary:\n\n```python\ndef home():\n    return \"Home page\"\n\ndef about():\n    return \"About\"\n\nroutes = {\"/\": home, \"/about\": about}\nprint(routes[\"/about\"]())   # About\n```\n\nIf an address that isn't in the dictionary comes in, we need to show a `404` page. Flask does this for you."}
+ ],
+ "examples": [
+  {"title": "Build a page", "code": "name = \"Piko\"\nitems = [\"sword\", \"potion\", \"map\"]\n\npage = f\"<h1>{name}'s bag</h1>\"\npage += \"<ul>\" + \"\".join(f\"<li>{i}</li>\" for i in items) + \"</ul>\"\nprint(page)\n", "note": ""},
+  {"title": "Status codes", "code": "codes = {200: \"OK\", 404: \"Not Found\", 500: \"Server Error\"}\nfor code in [200, 404, 500, 418]:\n    print(code, codes.get(code, \"Unknown\"))\n", "note": ""},
+  {"title": "Mini routing", "code": "def home():\n    return \"<h1>Home page</h1>\"\n\ndef about():\n    return \"<h1>About</h1>\"\n\nroutes = {\"/\": home, \"/about\": about}\n\nfor path in [\"/\", \"/about\", \"/secret\"]:\n    view = routes.get(path)\n    print(path, \"->\", view() if view else \"404 Not Found\")\n", "note": ""}
+ ],
+ "tasks": [
+  {"title": "Welcome page", "prompt": "`page` should be an HTML heading like `<h1>Hello Piko</h1>`. The name must come from the `name` variable.",
+   "starter": "name = \"Piko\"\n\npage = \"\"\n\nprint(page)\n", "solution": "name = \"Piko\"\n\npage = f\"<h1>Hello {name}</h1>\"\n\nprint(page)\n",
+   "hints": ["f\"<h1>Hello {name}</h1>\""], "check": {"output_contains": ["<h1>Hello Piko</h1>"]}},
+  {"title": "List page", "prompt": "Build an HTML list from `items`: `<ul><li>sword</li><li>potion</li></ul>` (no spaces or line breaks).",
+   "starter": "items = [\"sword\", \"potion\"]\n\nhtml = \"\"\n\nprint(html)\n", "solution": "items = [\"sword\", \"potion\"]\n\nhtml = \"<ul>\" + \"\".join(f\"<li>{i}</li>\" for i in items) + \"</ul>\"\n\nprint(html)\n",
+   "hints": ["Make f\"<li>{i}</li>\" for every item.", "Join them all with \"\".join(...) and wrap them in <ul>."], "check": {"output_contains": ["<ul><li>sword</li><li>potion</li></ul>"]}},
+  {"title": "Status code", "prompt": "The `status_text(code)` function should return `OK` for 200, `Not Found` for 404, `Server Error` for 500 and `Unknown` for anything else.",
+   "starter": "def status_text(code):\n    return \"\"\n\nprint(status_text(404))\n", "solution": "def status_text(code):\n    texts = {200: \"OK\", 404: \"Not Found\", 500: \"Server Error\"}\n    return texts.get(code, \"Unknown\")\n\nprint(status_text(404))\n",
+   "hints": ["You can use a dictionary and get().", "texts.get(code, \"Unknown\")"], "check": {"output_contains": ["Not Found"]}}
+ ],
+ "challenge": {"title": "Mini server", "prompt": "The `handle(path)` function should return a `(status_code, html)` tuple. If the address is in `routes`, return `(200, page)`; otherwise `(404, \"<h1>Not Found</h1>\")`.",
+  "starter": "def home():\n    return \"<h1>Home page</h1>\"\n\ndef about():\n    return \"<h1>About</h1>\"\n\nroutes = {\"/\": home, \"/about\": about}\n\ndef handle(path):\n    pass\n\nprint(handle(\"/\"))\nprint(handle(\"/secret\"))\n",
+  "solution": "def home():\n    return \"<h1>Home page</h1>\"\n\ndef about():\n    return \"<h1>About</h1>\"\n\nroutes = {\"/\": home, \"/about\": about}\n\ndef handle(path):\n    if path in routes:\n        return (200, routes[path]())\n    return (404, \"<h1>Not Found</h1>\")\n\nprint(handle(\"/\"))\nprint(handle(\"/secret\"))\n",
+  "hints": ["Check with if path in routes:", "Don't forget to call the function: routes[path]()"], "check": {"output_contains": ["(200, '<h1>Home page</h1>')", "(404, '<h1>Not Found</h1>')"]}},
+ "project_task": {"title": "The game's web page", "prompt": "Let's build the player profile page for Piko's Adventure. `render_profile(hero)` should return an HTML text containing:\n\n- `<h1>Piko</h1>` (the hero's name)\n- `<p>Health: 80</p>`\n- `<p>Gold: 35</p>`",
+  "starter": "def render_profile(hero):\n    return \"\"\n\nprint(render_profile({\"name\": \"Piko\", \"hp\": 80, \"gold\": 35}))\n",
+  "solution": "def render_profile(hero):\n    html = f\"<h1>{hero['name']}</h1>\"\n    html += f\"<p>Health: {hero['hp']}</p>\"\n    html += f\"<p>Gold: {hero['gold']}</p>\"\n    return html\n\nprint(render_profile({\"name\": \"Piko\", \"hp\": 80, \"gold\": 35}))\n",
+  "hints": ["Use different quotes when reading from a dictionary inside an f-string: {hero['name']}", "Join the three parts with += and return it."], "check": {"output_contains": ["<h1>Piko</h1>", "<p>Health: 80</p>", "<p>Gold: 35</p>"]}}
+}

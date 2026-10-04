@@ -5,6 +5,25 @@
   "maskot": "piko",
   "ozet": "Piko, kahramanın bilgilerini etiketli kutularda saklamayı anlatıyor: değişkenler, veri tipleri, input() ile girdi almak ve len, round, max gibi hazır fonksiyonlar.",
   "hedef_sure_sn": 147,
+  "dil": "tr",
+  "giris": {
+    "anlatim": "Gün 2: Değişkenler ve hazır fonksiyonlar! Bu derste bilgileri etiketli kutularda saklamayı, veri tiplerini tanımayı ve hazır fonksiyonları kullanmayı öğreneceksin.",
+    "maddeler": [
+      "Değişkenler: etiketli kutular",
+      "Veri tipleri ve input()",
+      "len, round, max, min"
+    ]
+  },
+  "cikis": {
+    "anlatim": "Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!",
+    "baslik": "İnteraktif dersler için",
+    "adres": "30gunde.com.tr",
+    "maddeler": [
+      "Kodunu tarayıcıda yaz ve çalıştır",
+      "Görevleri tamamla, rozet kazan",
+      "30 günde adım adım Python"
+    ]
+  },
   "sahneler": [
     {
       "no": 1,

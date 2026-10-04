@@ -5,6 +5,25 @@
   "maskot": "piko",
   "ozet": "Piko, Bilgi Limanı'nın ilan panosundan yola çıkarak HTML'in yapısını ve BeautifulSoup ile başlık, bağlantı ve metin toplamayı anlatıyor.",
   "hedef_sure_sn": 155,
+  "dil": "tr",
+  "giris": {
+    "anlatim": "Gün 22: Web kazıma! Bu derste HTML'in yapısını ve BeautifulSoup ile sayfalardan başlık, bağlantı ve metin toplamayı öğreneceksin.",
+    "maddeler": [
+      "HTML etiketleri",
+      "find ve find_all",
+      "Kibar bir kazıyıcı olmak"
+    ]
+  },
+  "cikis": {
+    "anlatim": "Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!",
+    "baslik": "İnteraktif dersler için",
+    "adres": "30gunde.com.tr",
+    "maddeler": [
+      "Kodunu tarayıcıda yaz ve çalıştır",
+      "Görevleri tamamla, rozet kazan",
+      "30 günde adım adım Python"
+    ]
+  },
   "sahneler": [
     {
       "no": 1,

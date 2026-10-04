@@ -1,0 +1,253 @@
+{
+  "kurs": "python",
+  "gun": 22,
+  "baslik": "Web scraping",
+  "maskot": "piko",
+  "ozet": "Starting from the notice board of Knowledge Harbor, Piko explains the structure of HTML and how to collect titles, links and text with BeautifulSoup.",
+  "hedef_sure_sn": 155,
+  "dil": "en",
+  "giris": {
+    "anlatim": "Day 22: Web scraping! In this lesson you'll learn how HTML is built, and collect titles, links and text from pages with BeautifulSoup.",
+    "maddeler": [
+      "HTML tags",
+      "find and find_all",
+      "Being a polite scraper"
+    ]
+  },
+  "cikis": {
+    "anlatim": "The interactive version of this lesson is waiting for you at 30gunde.com.tr. Write your code right in the browser, run it instantly, and finish the tasks!",
+    "baslik": "Interactive lessons at",
+    "adres": "30gunde.com.tr",
+    "maddeler": [
+      "Write and run code in your browser",
+      "Finish tasks, earn badges",
+      "Learn Python step by step in 30 days"
+    ]
+  },
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 14,
+      "anlatim": "Hi, I'm Piko! The notice board at Knowledge Harbor is full of notices: ship times, prices, lost items. Copying them all into a notebook by hand would take hours. Web pages are boards like this too. Today we learn to collect information from pages: web scraping!",
+      "ekran": {
+        "baslik": "Day 22: Web scraping",
+        "maddeler": [
+          "Knowledge Harbor",
+          "HTML and BeautifulSoup"
+        ]
+      },
+      "maskot": {
+        "poz": "sasirma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 2,
+      "tur": "anlatim",
+      "sure_sn": 15,
+      "anlatim": "Web pages are written in HTML. Content is marked with tags: h1 is a heading, p is a paragraph, and a is a link. class and href are the tag's attributes, and the words between the tags are the text.",
+      "ekran": {
+        "baslik": "A quick look at HTML",
+        "kod": "<h1>Title</h1>\n<p class=\"price\">25 gold</p>\n<a href=\"/map\">Go to the map</a>\n",
+        "dil": "html",
+        "vurgu_satirlari": [
+          2,
+          3
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 17,
+      "anlatim": "BeautifulSoup reads HTML and lets us search inside it. soup.title gets the title, find gets the first matching tag, and find_all brings them all back as a list. The .text at the end gives the words inside the tag.",
+      "ekran": {
+        "baslik": "The title and paragraphs",
+        "kod": "from bs4 import BeautifulSoup\n\nhtml = \"\"\"<title>Harbor Board</title>\n<h1>Today's ships</h1>\n<p>Seagull leaves at 10:00.</p>\n<p>Dolphin arrives at 14:30.</p>\"\"\"\n\nsoup = BeautifulSoup(html, \"html.parser\")\nprint(soup.title.text)\nprint(soup.find(\"h1\").text)\nfor p in soup.find_all(\"p\"):\n    print(\"-\", p.text)\n",
+        "vurgu_satirlari": [
+          8,
+          11
+        ],
+        "dil": "python",
+        "cikti": "Harbor Board\nToday's ships\n- Seagull leaves at 10:00.\n- Dolphin arrives at 14:30."
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "To get an attribute's value, I treat the tag like a dictionary: href inside square brackets. Each link's text and address come out side by side.",
+      "ekran": {
+        "baslik": "Links",
+        "kod": "from bs4 import BeautifulSoup\n\nhtml = '<a href=\"/map\">Map</a> <a href=\"/ships\">Ships</a>'\nsoup = BeautifulSoup(html, \"html.parser\")\nfor a in soup.find_all(\"a\"):\n    print(a.text, \"->\", a[\"href\"])\n",
+        "vurgu_satirlari": [
+          6
+        ],
+        "dil": "python",
+        "cikti": "Map -> /map\nShips -> /ships"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 15,
+      "anlatim": "I only want the prices. Since class is a special word in Python, I put an underscore after it. I turn the text I find into numbers with int and add them up.",
+      "ekran": {
+        "baslik": "Find by class: class_",
+        "kod": "from bs4 import BeautifulSoup\n\nhtml = \"\"\"<li>Rope <span class=\"price\">5</span></li>\n<li>Lantern <span class=\"price\">40</span></li>\"\"\"\nsoup = BeautifulSoup(html, \"html.parser\")\nspans = soup.find_all(\"span\", class_=\"price\")\nprices = [int(s.text) for s in spans]\nprint(prices, \"total:\", sum(prices))\n",
+        "vurgu_satirlari": [
+          6
+        ],
+        "dil": "python",
+        "cikti": "[5, 40] total: 45"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 6,
+      "tur": "hata",
+      "sure_sn": 13,
+      "anlatim": "A common mistake: searching for a tag that isn't on the page. If find doesn't find anything, it returns None. Since None has no text, you get an AttributeError. Check whether the result is None first.",
+      "ekran": {
+        "baslik": "Common mistake: a tag that isn't there",
+        "kod": "from bs4 import BeautifulSoup\n\nsoup = BeautifulSoup(\"<p>Hello</p>\", \"html.parser\")\nprint(soup.find(\"h1\").text)\n",
+        "vurgu_satirlari": [
+          4
+        ],
+        "cikti": "AttributeError: 'NoneType' object has no attribute 'text'",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "uzgun",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "soru",
+      "sure_sn": 9,
+      "anlatim": "Mini question! There are three paragraphs. What do you think find brings back, and how long is find_all's list?",
+      "ekran": {
+        "baslik": "What will it print?",
+        "kod": "from bs4 import BeautifulSoup\n\nhtml = \"<p>Rope</p><p>Lantern</p><p>Map</p>\"\nsoup = BeautifulSoup(html, \"html.parser\")\nprint(soup.find(\"p\").text)\nprint(len(soup.find_all(\"p\")))\n",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 8,
+      "tur": "cikti",
+      "sure_sn": 9,
+      "anlatim": "find brought back only the first paragraph: Rope. find_all found all three.",
+      "ekran": {
+        "baslik": "The answer",
+        "kod": "from bs4 import BeautifulSoup\n\nhtml = \"<p>Rope</p><p>Lantern</p><p>Map</p>\"\nsoup = BeautifulSoup(html, \"html.parser\")\nprint(soup.find(\"p\").text)\nprint(len(soup.find_all(\"p\")))\n",
+        "dil": "python",
+        "cikti": "Rope\n3"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sol"
+      },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "anlatim",
+      "sure_sn": 15,
+      "anlatim": "On a real site, the HTML is first downloaded from the internet with requests. But be a polite scraper: check whether the site allows it, don't flood the server with requests, and don't collect personal information. If the site offers an API, use that.",
+      "ekran": {
+        "baslik": "Be a polite scraper",
+        "maddeler": [
+          "In real life: html = requests.get(address).text",
+          "Terms of use and robots.txt",
+          "Don't send requests too fast",
+          "Don't collect personal information",
+          "If there's an API, use it"
+        ]
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 10,
+      "tur": "gorev",
+      "sure_sn": 13,
+      "anlatim": "In the tasks you'll find a page's title, collect all its links, and add up the prices. In the project you're sorting real treasure clues from traps on an old page.",
+      "ekran": {
+        "baslik": "Today's tasks",
+        "maddeler": [
+          "Task 1: Page title",
+          "Task 2: All the links",
+          "Task 3: Add up the prices",
+          "Challenge: Read the table",
+          "Project: Treasure clues"
+        ]
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "ozet",
+      "sure_sn": 11,
+      "anlatim": "In short: give the HTML to BeautifulSoup, find one with find and all with find_all, then take the text and the attributes.",
+      "ekran": {
+        "baslik": "What you learned today",
+        "maddeler": [
+          "HTML: tags, attributes, text",
+          "find, find_all, class_",
+          ".text and tag[\"href\"]"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 12,
+      "tur": "kapanis",
+      "sure_sn": 12,
+      "anlatim": "You learned to read the board, bravo! Tomorrow we'll get our projects in order. We'll meet virtual environments, which give every project its own package cupboard. See you!",
+      "ekran": {
+        "baslik": "Tomorrow: Virtual environments",
+        "maddeler": [
+          "venv",
+          "Project structure"
+        ]
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

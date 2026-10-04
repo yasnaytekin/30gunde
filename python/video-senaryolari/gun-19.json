@@ -5,6 +5,25 @@
   "maskot": "piko",
   "ozet": "Piko, Keşif Adası'nın deniz fenerinde bulunan kaptan günlüğünden yola çıkarak dosyaya yazmayı, dosyadan okumayı ve JSON ile oyun kaydetmeyi anlatıyor.",
   "hedef_sure_sn": 155,
+  "dil": "tr",
+  "giris": {
+    "anlatim": "Gün 19: Dosya işlemleri! Bu derste dosyaya yazmayı, dosyadan okumayı ve JSON ile oyunu kaydetmeyi öğreneceksin.",
+    "maddeler": [
+      "open ve dosya modları",
+      "Yaz, oku, sonuna ekle",
+      "JSON ile kaydet"
+    ]
+  },
+  "cikis": {
+    "anlatim": "Bu dersin interaktif hâli 30gunde.com.tr'de seni bekliyor. Kodunu tarayıcıda yaz, hemen çalıştır ve görevleri tamamla!",
+    "baslik": "İnteraktif dersler için",
+    "adres": "30gunde.com.tr",
+    "maddeler": [
+      "Kodunu tarayıcıda yaz ve çalıştır",
+      "Görevleri tamamla, rozet kazan",
+      "30 günde adım adım Python"
+    ]
+  },
   "sahneler": [
     {
       "no": 1,

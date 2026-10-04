@@ -1,0 +1,261 @@
+{
+  "kurs": "python",
+  "gun": 3,
+  "baslik": "Operators",
+  "maskot": "piko",
+  "ozet": "At the Python Village market, Piko explains three ways to divide, the order of operations, the += shortcut, and comparison and logical operators.",
+  "hedef_sure_sn": 138,
+  "dil": "en",
+  "giris": {
+    "anlatim": "Day 3: Operators! In this lesson you'll learn three ways to divide, the order of operations, and comparison and logical operators.",
+    "maddeler": [
+      "Dividing with /, // and %",
+      "Order of operations and +=",
+      "Comparisons: and, or, not"
+    ]
+  },
+  "cikis": {
+    "anlatim": "The interactive version of this lesson is waiting for you at 30gunde.com.tr. Write your code right in the browser, run it instantly, and finish the tasks!",
+    "baslik": "Interactive lessons at",
+    "adres": "30gunde.com.tr",
+    "maddeler": [
+      "Write and run code in your browser",
+      "Finish tasks, earn badges",
+      "Learn Python step by step in 30 days"
+    ]
+  },
+  "sahneler": [
+    {
+      "no": 1,
+      "tur": "acilis",
+      "sure_sn": 12,
+      "anlatim": "Hi, I'm Piko! Welcome to Python Village. In games everything runs on numbers: score, health, gold. Today you're doing the math at the village market. First question: how do you share seven apples between two people?",
+      "ekran": {
+        "baslik": "Day 3: Operators",
+        "gorsel": "gorseller/python/harita/koy.webp"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 2,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "Division comes in three flavors. A single slash gives a decimal result. A double slash is whole-number division, and the percent sign gives the remainder. So each person gets three apples, and one is left over.",
+      "ekran": {
+        "baslik": "Three ways to divide",
+        "kod": "print(7 / 2)\nprint(7 // 2)\nprint(7 % 2)\nprint(2 ** 10)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2,
+          3
+        ],
+        "cikti": "3.5\n3\n1\n1024"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 3,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "Python follows the order from math: parentheses first, then powers, then multiplication and division, and finally addition and subtraction. Add parentheses, and the result jumps from fourteen to twenty.",
+      "ekran": {
+        "baslik": "Order of operations",
+        "kod": "print(2 + 3 * 4)\nprint((2 + 3) * 4)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "14\n20"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 4,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "Instead of writing score equals score plus ten, you can just write plus equals. The same trick works for minus, times and divide. The score first becomes twenty, then gets multiplied by two.",
+      "ekran": {
+        "baslik": "Shortcuts: += and *=",
+        "kod": "score = 0\nscore += 10\nscore += 10\nscore *= 2\nprint(\"Score:\", score)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2,
+          4
+        ],
+        "cikti": "Score: 40"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 5,
+      "tur": "kod",
+      "sure_sn": 14,
+      "anlatim": "When you compare two values, Python says True or False. Careful: a single equals sign puts a value in a box, but a double equals sign asks a question. And exclamation equals asks: are they not equal?",
+      "ekran": {
+        "baslik": "Comparison operators",
+        "kod": "hp = 40\ngold = 120\nprint(hp > 50)\nprint(gold >= 100)\nprint(hp == 40)\nprint(hp != 40)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          5,
+          6
+        ],
+        "cikti": "False\nTrue\nTrue\nFalse"
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 6,
+      "tur": "kod",
+      "sure_sn": 12,
+      "anlatim": "To combine questions we have logical operators. and gives True if both are true, or gives True if at least one is true. And not flips the answer.",
+      "ekran": {
+        "baslik": "and, or, not",
+        "kod": "hp = 40\ngold = 120\nprint(hp > 20 and gold > 100)\nprint(hp > 50 or gold > 100)\nprint(not hp > 50)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          3,
+          4,
+          5
+        ],
+        "cikti": "True\nTrue\nTrue"
+      },
+      "maskot": {
+        "poz": "konusma",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 7,
+      "tur": "hata",
+      "sure_sn": 12,
+      "anlatim": "This bug doesn't even give an error message, which makes it sneaky! Python uses a dot for decimals. If you use a comma, Python sees two separate numbers and prints three and six. For three and a half, write 3.5.",
+      "ekran": {
+        "baslik": "A dot, not a comma!",
+        "kod": "print(3,5 + 1)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          1
+        ],
+        "cikti": "3 6",
+        "cikti_cumle": 2,
+        "duzeltme": {
+          "kod": "print(3.5 + 1)\n",
+          "cikti": "4.5"
+        }
+      },
+      "maskot": {
+        "poz": "uzgun",
+        "konum": "sag"
+      },
+      "calistir": false
+    },
+    {
+      "no": 8,
+      "tur": "soru",
+      "sure_sn": 8,
+      "anlatim": "Now you tell me: is nine an even number? What do you think this code prints?",
+      "ekran": {
+        "baslik": "What will it print?",
+        "kod": "x = 9\nprint(x % 2 == 0)\n",
+        "dil": "python"
+      },
+      "maskot": {
+        "poz": "dusunme",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 9,
+      "tur": "cikti",
+      "sure_sn": 11,
+      "anlatim": "False! Nine divided by two leaves a remainder of one. One isn't equal to zero, so the answer is False, which means nine is odd. The percent sign is the easiest way to tell even from odd.",
+      "ekran": {
+        "baslik": "The answer",
+        "kod": "x = 9\nprint(x % 2 == 0)\n",
+        "dil": "python",
+        "vurgu_satirlari": [
+          2
+        ],
+        "cikti": "False"
+      },
+      "maskot": {
+        "poz": "mutlu",
+        "konum": "sag"
+      },
+      "calistir": true
+    },
+    {
+      "no": 10,
+      "tur": "gorev",
+      "sure_sn": 14,
+      "anlatim": "The market is yours! You'll share seventeen slices of pizza among five friends, give your hero a health potion, and find the average of three scores. In the challenge you'll turn seconds into hours and minutes. Hint: remember the three ways to divide.",
+      "ekran": {
+        "baslik": "Today's tasks",
+        "maddeler": [
+          "Task 1: Pizza sharing",
+          "Task 2: Health potion",
+          "Task 3: Average",
+          "Stage task: Equal rows",
+          "Challenge: Seconds converter"
+        ]
+      },
+      "maskot": {
+        "poz": "isaret",
+        "konum": "sol"
+      }
+    },
+    {
+      "no": 11,
+      "tur": "ozet",
+      "sure_sn": 8,
+      "anlatim": "Today we learned three ways to divide, the shortcuts, and how to ask Python true or false questions.",
+      "ekran": {
+        "baslik": "What you learned today",
+        "maddeler": [
+          "/ decimal, // whole division, % remainder",
+          "+= for quick updates; parentheses change the order",
+          "Comparisons and and, or, not: True or False"
+        ]
+      },
+      "maskot": {
+        "poz": "on",
+        "konum": "sag"
+      }
+    },
+    {
+      "no": 12,
+      "tur": "kapanis",
+      "sure_sn": 9,
+      "anlatim": "Now you're the market's math master! Tomorrow we stay in the village, but this time we play with text: we'll join strings, slice them up and decorate them.",
+      "ekran": {
+        "baslik": "Tomorrow: Strings",
+        "gorsel": "gorseller/python/harita/koy.webp"
+      },
+      "maskot": {
+        "poz": "tebrik",
+        "konum": "orta"
+      }
+    }
+  ]
+}

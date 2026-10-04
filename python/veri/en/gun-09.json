@@ -1,0 +1,44 @@
+{
+ "day": 9, "title": "Conditions", "region": "kale",
+ "project_contribution": "Game rules",
+ "game_role": "The game's win and lose rules are your conditions.",
+ "objective": "Make the program decide with if, elif and else",
+ "story": "The gate of Logic Castle only opens for those who have the key! In games everything runs on rules: if your health runs out, the game ends; if you have the key, the door opens. Today we learn to write these rules in Python.",
+ "sections": [
+  {"title": "True and False", "body": "You can ask Python a question, and the answer is `True` or `False`:\n\n- `==` equal? A single `=` puts a value into a box; a double `==` asks!\n- `!=` not equal?\n- `>` and `<` greater, smaller?\n- `>=` and `<=` greater or equal, smaller or equal\n\n```python\nhp = 30\nprint(hp > 50)   # False\nprint(hp == 30)  # True\n```"},
+  {"title": "if", "body": "```python\nif has_key:\n    print(\"The door opened!\")\n```\n\nWatch out for two things: there's a **colon** (`:`) at the end of the line, and the line below is **4 spaces in**. This space is called **indentation**; Python uses it to see which lines belong to the if. In editors like IDLE, typing `:` and pressing Enter adds the indentation for you."},
+  {"title": "else and elif", "body": "`else` means \"otherwise\". When there are more cases, we use `elif` (\"else if\"). Python checks from top to bottom and runs **the first block that is true**:\n\n```python\nif hp > 70:\n    print(\"You're strong\")\nelif hp > 30:\n    print(\"Be careful\")\nelse:\n    print(\"Drink a potion!\")\n```"},
+  {"title": "and, or, not", "body": "- `and`: true if both are true\n- `or`: true if one is true\n- `not`: flips it\n\n```python\nif has_key and gold >= 10:\n    print(\"The chest opened\")\n```\n\nYou can write conditions with lists too: `if \"key\" in inventory:`"}
+ ],
+ "examples": [
+  {"title": "The door", "code": "has_key = True\nif has_key:\n    print(\"The door opened!\")\nelse:\n    print(\"The door is locked.\")\n", "note": "Set has_key to False and run it again."},
+  {"title": "Health status", "code": "hp = 45\nif hp > 70:\n    print(\"You're strong\")\nelif hp > 30:\n    print(\"Be careful\")\nelse:\n    print(\"Drink a potion!\")\n", "note": ""},
+  {"title": "Age question", "code": "age = int(input(\"How old are you? \"))\nif age >= 13 and age < 20:\n    print(\"You're a teenager!\")\nelse:\n    print(\"Your age:\", age)\n", "note": "Run the program a few times and try different ages.", "inputs": ["14"]}
+ ],
+ "tasks": [
+  {"title": "The castle gate", "prompt": "If `has_key` is True print `The door opened!`, otherwise `The door is locked.`",
+   "starter": "has_key = True\n\n# if has_key is True print \"The door opened!\", otherwise \"The door is locked.\"\n",
+   "solution": "has_key = True\n\nif has_key:\n    print(\"The door opened!\")\nelse:\n    print(\"The door is locked.\")\n",
+   "hints": ["Type if has_key: and press Enter.", "The else: block must line up with the if."], "check": {"code_contains": ["if", "else"], "output_contains": ["The door opened!"]}},
+  {"title": "Health meter", "prompt": "If `hp` is greater than 70 print `You're strong`, if it's greater than 30 print `Be careful`, otherwise print `Drink a potion!`.",
+   "starter": "hp = 25\n\n# greater than 70: \"You're strong\"\n# greater than 30: \"Be careful\"\n# otherwise: \"Drink a potion!\"\n",
+   "solution": "hp = 25\n\nif hp > 70:\n    print(\"You're strong\")\nelif hp > 30:\n    print(\"Be careful\")\nelse:\n    print(\"Drink a potion!\")\n",
+   "hints": ["There are three cases: if, elif and else.", "Check from the biggest to the smallest."]},
+  {"title": "Treasure chest", "prompt": "If you have the key **and** at least 10 gold, print `The chest opened!`, otherwise `The chest stayed shut.`",
+   "starter": "has_key = True\ngold = 15\n\n# key AND at least 10 gold: \"The chest opened!\"\n# otherwise: \"The chest stayed shut.\"\n",
+   "solution": "has_key = True\ngold = 15\n\nif has_key and gold >= 10:\n    print(\"The chest opened!\")\nelse:\n    print(\"The chest stayed shut.\")\n",
+   "hints": ["Join the two conditions with and.", "At least 10: gold >= 10"], "check": {"code_contains": ["and"]}}
+ ],
+ "visual_task": {"title": "Heart meter", "prompt": "In games, health is shown with hearts. On the stage every `H` is a heart. Depending on the `lives` variable, print:\n\n- `HHH` if it's 3 or more\n- `HH` if it's 2\n- `H` if it's 1\n- `Game over!` if it's 0 or less\n\nTry your code with different values.",
+  "starter": "lives = 3\n\nprint(\"HHH\")\n",
+  "solution": "lives = 3\n\nif lives >= 3:\n    print(\"HHH\")\nelif lives == 2:\n    print(\"HH\")\nelif lives == 1:\n    print(\"H\")\nelse:\n    print(\"Game over!\")\n",
+  "hints": ["Start with if lives >= 3:", "Then elif lives == 2: and elif lives == 1:", "else: for everything else"], "scene": {"target": ["HHH"]}},
+ "challenge": {"title": "Game mode", "prompt": "Ask the user's age. If it's 13 or more print `Adventure mode on!`, otherwise `Kids mode on!`. When the program asks, type your age and press Enter.",
+  "starter": "age = int(input(\"How old are you? \"))\n\n# 13 or more: \"Adventure mode on!\", otherwise \"Kids mode on!\"\n",
+  "solution": "age = int(input(\"How old are you? \"))\n\nif age >= 13:\n    print(\"Adventure mode on!\")\nelse:\n    print(\"Kids mode on!\")\n",
+  "hints": ["13 or more: age >= 13", "if and else are enough."], "inputs": ["15"]},
+ "project_task": {"title": "Game rules", "prompt": "Let's write our game's rules. Look at the `hero` dictionary:\n\n- If health is 0 or below: `Game over!`\n- Otherwise, if gold is 100 or more: `You win!`\n- If neither: `The adventure goes on!`",
+  "starter": "hero = {\"name\": \"Piko\", \"hp\": 100, \"gold\": 40}\n\n# Rules:\n# health 0 or below  -> \"Game over!\"\n# gold 100 or more   -> \"You win!\"\n# otherwise          -> \"The adventure goes on!\"\n",
+  "solution": "hero = {\"name\": \"Piko\", \"hp\": 100, \"gold\": 40}\n\nif hero[\"hp\"] <= 0:\n    print(\"Game over!\")\nelif hero[\"gold\"] >= 100:\n    print(\"You win!\")\nelse:\n    print(\"The adventure goes on!\")\n",
+  "hints": ["Health: hero[\"hp\"], gold: hero[\"gold\"]", "Check health first: if hero[\"hp\"] <= 0:"], "check": {"output_contains": ["The adventure goes on!"]}}
+}
