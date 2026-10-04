@@ -33,7 +33,7 @@ KURS = {
                "renk": "#2F6DB5", "renk2": "#FFC83D", "ink": "#13233F",
                "logo": "gorseller/python/logo-128.png", "bolge": "gorseller/python/harita/{}.webp", "bolge_tur": "harita",
                "poz": "maskotlar/piko-python/pozlar/{}.png", "kapak_poz": "maskotlar/piko-python/pozlar/tebrik.png",
-               "acilis_poz": ("mutlu", "konusma"), "url": "https://30gunde.com.tr/#/ders/{}",
+               "acilis_poz": ("mutlu", "konusma"), "url": "https://30gunde.com.tr",
                "varsayilan_proje": "Piko'nun Macerası", "alt": "Macera haritasıyla, her gün bir adım: kodlamaya Piko ile başla.",
                "kurulum": "Bilgisayarına <b>python.org</b> adresinden Python'u kur. Kurulumla gelen <b>IDLE</b> programını aç, "
                           "<i>File → New File</i> ile yeni bir dosya aç, kodunu yaz ve <b>F5</b> tuşuyla çalıştır."},
@@ -43,8 +43,7 @@ KURS = {
                    "uzay": "gorseller/javascript/arka-plan/bg-space-wide.webp",
                    "poz": "maskotlar/kodi-javascript/pozlar/{}.png", "kapak_poz": "maskotlar/kodi-javascript/kahraman.png",
                    "acilis_poz": ("el-sallama", "konusma"),
-                   # Sitede JavaScript derslerinin adresi doğrulanmalı; varsayım:
-                   "url": "https://30gunde.com.tr/#/js/ders/{}",
+                   "url": "https://30gunde.com.tr",  # derslerin gün gün ayrı adresi yok
                    "varsayilan_proje": "Yıldız Avcısı", "alt": "Uzay yolculuğuyla, her gün bir adım: kodlamaya Kodi ile başla.",
                    "kurulum": "Bir tarayıcı aç (Chrome, Edge ya da Firefox) ve <b>F12</b> ile Geliştirici Araçları'nı aç. "
                               "<b>Console</b> sekmesine kodunu yaz ve Enter'a bas; <code>console.log</code> çıktıları orada görünür. "
@@ -64,7 +63,7 @@ KURS_EN = {
 
 # Arayüz metinleri (tr, en)
 T = {
-    "cikti": ("Çıktı", "Output"), "hata": ("Hata", "Error"), "sahne": ("Sahne", "Stage"),
+    "cikti": ("Çıktı", "Output"), "sayfada": ("Sayfa açılınca", "When the page opens"), "hata": ("Hata", "Error"), "sahne": ("Sahne", "Stage"),
     "html_hazir": ("Sayfanın HTML'i (hazır)", "The page's HTML (ready-made)"), "baslangic": ("Başlangıç kodu", "Starter code"),
     "kontrol": ("Kendini kontrol et:", "Check yourself:"), "cikti_olmali": ("çıktında şunlar olmalı: ", "your output should contain: "),
     "kod_gecmeli": ("kodunda şunlar geçmeli: ", "your code should contain: "), "ipuclari": ("İpuçları", "Hints"),
@@ -76,7 +75,7 @@ T = {
     "challenge": ("Challenge", "Challenge"), "proje": ("Proje", "Project"),
     "video_kutu": ("<b>Video anlatım</b>YouTube'da <b style=\"display:inline\">30 Günde Kod</b> kanalında „Gün {n} · {title}” videosu",
                    "<b>Video lesson</b>On the <b style=\"display:inline\">30 Günde Kod</b> YouTube channel: the “Day {n} · {title}” video"),
-    "site_kutu": ("<b>Etkileşimli ders</b>Görevleri tarayıcında dene:<br>{url}", ""),
+    "site_kutu": ("<b>Etkileşimli ders</b>Görevleri tarayıcında dene:<br>30gunde.com.tr · {kurs} · Gün {n}", ""),
     "paket": ("<b>Bu gün için:</b> kodları kendi bilgisayarında çalıştırmadan önce terminalde <code>pip install {p}</code> yaz (bkz. 20. gün).",
               "<b>For this day:</b> before running the code on your computer, type <code>pip install {p}</code> in the terminal (see Day 20)."),
     "cozumler": ("Çözümler", "Solutions"),
@@ -160,6 +159,37 @@ UYARLA = [
     ("Bu parçayı da ekleyince **Proje** sayfasına git ve **Oyunumu oyna**'ya bas. 30 gün boyunca", "Bu parçayla 30 gün boyunca"),
     ("Yön tuşlarıyla oynarsın ve hangi parçanın ne yaptığını oyunun günlüğünde görürsün.",
      "İstersen 30gunde.com.tr'deki **Proje** sayfasında **Oyunumu oyna**'ya bas: parçaların yön tuşlarıyla oynanan bir oyuna dönüşür."),
+    # JavaScript
+    ("; editörün tuş çubuğunda da var.", "."),
+    ("Sayfanın HTML'i görevle birlikte hazır gelir; sen yalnızca JavaScript yazarsın. Editörün yanındaki **önizleme** paneli sayfayı gösterir. "
+     "Kodun sayfa yüklendikten sonra çalışır, yani bütün elemanlar hazırdır. `console.log` da çalışmaya devam eder; çıktısı yine Çıktı alanında görünür.",
+     "Sayfanın HTML'i her görevde hazır verilir; sen yalnızca JavaScript yazarsın. Bir `.html` dosyası oluştur, verilen HTML'i `<body>` içine, "
+     "kodunu da en alta bir `<script>` etiketinin içine yaz ve dosyayı tarayıcıda aç. Kod sayfa yüklendikten sonra çalışır, yani bütün elemanlar hazırdır. "
+     "`console.log` çıktıları Geliştirici Araçları'nın **Console** sekmesinde görünür. Kitapta her sayfa kodunun altında, sayfa açılınca nasıl "
+     "göründüğünü gösteren bir ekran görüntüsü var."),
+    ("Kodu değiştirip Çalıştır'a bas; önizleme her çalıştırmada sayfayı baştan kurar.", "Kodu değiştirip sayfayı yenile; tarayıcı her yenilemede sayfayı baştan kurar."),
+    ("Kodu çalıştırdıktan sonra önizlemedeki düğmeye kendin tıklayıp dene.", "Sayfayı açtıktan sonra düğmeye kendin tıklayıp dene."),
+    ("Çalıştır'a bastıktan sonra önizlemedeki düğmeye birkaç kez tıkla.", "Sayfayı açınca düğmeye birkaç kez tıkla."),
+    ("Önizlemede Başla'ya tıklayınca envanteri görürsün. Kontrol, envantere yeni eşya ekleyip `renderInventory()`'yi tekrar çağıracak.",
+     "Sayfada Başla'ya tıklayınca envanteri görürsün. Envantere yeni bir eşya ekleyip `renderInventory()`'yi tekrar çağırarak da dene."),
+    ("Önizleme tuşları duysun diye önce önizlemenin içine bir kez tıkla.", "Sayfa tuşları duysun diye önce sayfanın içine bir kez tıkla."),
+    ("Bu kursun önizlemesinde `localStorage` bir taklittir: aynı görevde çalıştırmalar arasında korunur ama gerçek tarayıcı defterine yazmaz.",
+     "Denerken kayıtları silmek istersen Console'a `localStorage.clear()` yaz."),
+    ("Bir şey yaz ve Çalıştır'a yeniden bas: notun yerinde duruyor. Gerçek bir sitede sayfa yenilense de kalır.",
+     "Bir şey yaz ve sayfayı yenile: notun yerinde duruyor."),
+    ("Çıktı alanında", "Console'da"),
+    ("(Önizleme 4 ziyaretle başlıyor.)", "(Kitaptaki ekran görüntüsü alınırken defterde 4 ziyaret kayıtlıydı.)"),
+    ("(Önizleme 35 rekoruyla başlıyor.)", "(Kitaptaki ekran görüntüsü alınırken rekor 35'ti.)"),
+    ("Önizlemedeki kayıt bilerek bozuk bırakıldı.", "Kitaptaki ekran görüntüsünde defterdeki kayıt bilerek bozuk bırakıldı."),
+    ("(ve bu editördeki gibi en üst seviyede)", "(ve modül betiklerinde en üst seviyede)"),
+    ("Bu kursun editörü her görevde tek bir betik çalıştırdığı için görevlerde `import` kullanamayız; bütün kod tek kutuda.",
+     "Kitaptaki görevlerde her şeyi tek bir betikte yazdığımız için `import` kullanmıyoruz."),
+    ("Önizlemeye tıkla, sonra", "Sayfaya tıkla, sonra"),
+    ("önizlemeye tıklayıp", "sayfaya tıklayıp"),
+    ("Birkaç kez tıkla, sonra yeniden Çalıştır:", "Birkaç kez tıkla, sonra sayfayı yenile:"),
+    ("Bu kursta önizleme gerçek internete çıkmaz; senin için hazırlanmış bir deneme API'si var:",
+     "Bu kurs için hazırlanmış bir deneme API'si var. Etkileşimli derslerde hazırdır; kendi bilgisayarında denerken kitabın sonundaki "
+     "**Deneme API'si** ekindeki kodu betiğinin en üstüne yapıştır:"),
     ("Görevleri bitirince 30. günü tamamla ve sertifikanı al.", "Görevleri bitirince 30 günlük macerayı tamamlamış olursun; kitabın sonundaki sertifika seni bekliyor."),
 ]
 
@@ -215,6 +245,76 @@ def calistir(code, inputs=None):
         last = r.stderr.strip().splitlines()[-1] if r.stderr.strip() else "Hata"
         return (r.stdout + last).strip("\n"), True
     return r.stdout.rstrip("\n"), False
+
+
+# ---------- JavaScript sayfa (DOM) kodları: tarayıcıda çalıştırılıp ekran görüntüsü alınır ----------
+EKRAN = {}  # tembel açılan tarayıcı
+EKRAN_CSS = """body { font-family: N, sans-serif; font-size: 15px; color: #13233F; margin: 12px; background: #fff; line-height: 1.4; }
+button { font: inherit; padding: 4px 12px; border-radius: 7px; border: 1px solid #9DB4D6; background: #EAF1FB; color: #13233F; }
+input, select, textarea { font: inherit; padding: 3px 6px; border: 1px solid #9DB4D6; border-radius: 6px; }
+h1, h2, h3 { margin: 4px 0 8px; } canvas { max-width: 100%; }"""
+
+
+def ekran_kapat():
+    if EKRAN:
+        EKRAN["b"].close(); EKRAN["p"].stop(); EKRAN.clear()
+
+
+def sayfa_goruntusu(code, html_="", css_="", storage=None):
+    """Sayfa kodunu verilen HTML ile çalıştırır; (görüntü uri'si, konsol çıktısı, hata) döndürür. Sonuçlar önbelleğe alınır."""
+    import hashlib
+    anahtar = hashlib.sha1(json.dumps([code, html_, css_, storage], ensure_ascii=False).encode()).hexdigest()[:16]
+    d = HERE / "is" / "ekran"; d.mkdir(parents=True, exist_ok=True)
+    img, meta = d / f"{anahtar}.jpg", d / f"{anahtar}.json"
+    if not meta.exists():
+        if not EKRAN:
+            from playwright.sync_api import sync_playwright
+            EKRAN["p"] = sync_playwright().start()
+            EKRAN["b"] = EKRAN["p"].chromium.launch()
+        ctx = EKRAN["b"].new_context(viewport={"width": round((W_MM - 28) / 25.4 * 96), "height": 700}, device_scale_factor=2)
+        pg = ctx.new_page()
+        loglar, hatalar = [], []
+        pg.on("console", lambda m: loglar.append(m.text) if m.type in ("log", "info", "warning", "error") else None)
+        pg.on("pageerror", lambda e: hatalar.append(str(e).splitlines()[0]))
+
+        def yonlendir(route):
+            u = route.request.url
+            if u.startswith("http://kitap.local/font/"):
+                route.fulfill(path=str(FONTS / "Nunito-400.ttf"))
+            elif u.startswith("http://kitap.local/"):
+                tohum = "".join(f"localStorage.setItem({json.dumps(k_)}, {json.dumps(v_)});" for k_, v_ in (storage or {}).items())
+                modul = ' type="module"' if re.search(r"^(for )?await\b", code, re.M) else ""
+                sayfa = (f'<!doctype html><html lang="tr"><head><meta charset="utf-8"><style>@font-face {{ font-family: N; src: url(/font/n.ttf); }}'
+                         f'{EKRAN_CSS}{css_ or ""}</style></head><body>{html_ or ""}'
+                         f'<script>{(HERE / "demo_api.js").read_text("utf8")}\nlocalStorage.clear();{tohum}</script>'
+                         f'<script{modul}>{code}</script></body></html>')
+                route.fulfill(body=sayfa, content_type="text/html; charset=utf-8")
+            else:
+                route.abort()
+        pg.route("**/*", yonlendir)
+        pg.goto("http://kitap.local/index.html")
+        pg.wait_for_timeout(2500)  # zamanlayıcılar, fetch ve animasyonlar bir süre çalışsın
+        h = pg.evaluate("Math.ceil(document.documentElement.getBoundingClientRect().height)")
+        pg.screenshot(path=str(d / f"{anahtar}.png"), clip={"x": 0, "y": 0, "width": pg.viewport_size["width"], "height": max(40, min(h, 520))})
+        ctx.close()
+        from PIL import Image
+        Image.open(d / f"{anahtar}.png").convert("RGB").save(img, "JPEG", quality=88, optimize=True)
+        (d / f"{anahtar}.png").unlink()
+        meta.write_text(json.dumps({"log": "\n".join(loglar), "hata": hatalar[0] if hatalar else ""}, ensure_ascii=False), "utf8")
+    m = json.loads(meta.read_text("utf8"))
+    return img.as_uri(), m["log"], m["hata"]
+
+
+def kod_ve_sonuc(code, girdi=None, sayfa=None, sekil=None):
+    """Kod bloğu + çıktısı. Sayfa (DOM) kodlarında çıktının yerine sayfanın ekran görüntüsü gelir."""
+    out, err = calistir(code, girdi)
+    if out is None and sayfa is not None:
+        uri, log, hata = sayfa_goruntusu(code, sayfa.get("html", ""), sayfa.get("css", ""), sayfa.get("storage"))
+        ekran = f'<div class="out ekran"><span>{t("sayfada")}</span><img src="{uri}"></div>'
+        if hata:
+            log = (log + "\n" if log else "") + hata
+        return kod(code, log if log else None, hata=bool(hata), sekil=ekran)
+    return kod(code, out, hata=err, sekil=sekil)
 
 
 def sahne(rows, root):
@@ -359,12 +459,13 @@ li {{ margin-bottom: 2pt; }}
 code, pre {{ font-variant-ligatures: none; font-feature-settings: "liga" 0, "calt" 0; }}
 code {{ font-family: Mono; font-size: 0.9em; background: #EAF1FB; padding: 0.5pt 3pt; border-radius: 3pt; }}
 pre {{ margin: 0; }}
-.kod-grup {{ break-inside: avoid; margin: 5pt 0 9pt; }}
+.kod-grup {{ break-inside: avoid; margin: 5pt 0 9pt; }} .kod-grup.bolunebilir {{ break-inside: auto; }}
 .code {{ background: var(--soft); border: 0.8pt solid var(--line); border-left: 3pt solid var(--c); border-radius: 5pt; padding: 6pt 8pt; }}
 .code .cap {{ font-family: Head; font-weight: 600; font-size: 7.5pt; color: var(--ink2); margin-bottom: 3pt; }}
 .code pre, .out pre {{ font-family: Mono; font-size: 8.2pt; line-height: 1.45; white-space: pre-wrap; word-break: break-word; }}
 .out {{ border: 0.8pt dashed #9DB4D6; border-top: none; border-radius: 0 0 5pt 5pt; padding: 5pt 8pt 6pt; margin: 0 4pt; background: #fff; }}
 .out span, .sahne > span {{ display: block; font-family: Head; font-weight: 600; font-size: 6.5pt; letter-spacing: .08em; text-transform: uppercase; color: var(--ink2); margin-bottom: 2pt; }}
+.out.ekran img {{ display: block; width: 100%; border: 0.6pt solid var(--line); border-radius: 4pt; }}
 .out.err {{ border-color: #E8574A; background: #FFF4F2; }} .out.err span, .out.err pre {{ color: #B3261E; }}
 .note {{ font-size: 8.5pt; color: var(--ink2); font-style: italic; margin: -4pt 0 8pt 4pt; }}
 .hl .k, .hl .kn, .hl .kc, .hl .ow {{ color: #8B3FC8; font-weight: 600; }} .hl .s, .hl .s1, .hl .s2, .hl .sa, .hl .si, .hl .se {{ color: #2E7D32; }}
@@ -532,8 +633,7 @@ def gun_html(v, k, root):
         gorsel = f'<div class="uzay" style="background-image:url({jpg(k["uzay"], 1400, 120 / 62)})"><img src="{bolge_gorseli(k, v["region"], 700)}"></div>'
     else:
         gorsel = bolge_kutusu(k, reg)
-    ders = k["url"].format(n)
-    site = f'<div>{qr_svg(ders, 15)}<span>{t("site_kutu", url=html.escape(ders.replace("https://", "")))}</span></div>' if DIL == "tr" else ""
+    site = f'<div>{qr_svg(k["url"], 15)}<span>{t("site_kutu", kurs=k["dil_adi"], n=n)}</span></div>' if DIL == "tr" else ""
     baglanti = f"""<div class="baglanti">
   <div class="video">{qr_svg(VIDEO, 15)}<span>{t("video_kutu", n=n, title=html.escape(v["title"]))}</span></div>
   {site}
@@ -557,11 +657,11 @@ def gun_html(v, k, root):
         body += f"<h3>{html.escape(baslik)}</h3>{md(sec['body'])}"
     body += f"<h2>{t('ornekler')}</h2>"
     for e in v["examples"]:
-        out, err = calistir(e["code"], e.get("inputs"))
         sc = (e.get("scene") or {}).get("target") if isinstance(e.get("scene"), dict) else None
-        if not sc and e.get("scene") and out:
-            sc = out.split("\n")
-        body += f"<h3>{html.escape(e['title'])}</h3>" + kod(e["code"], out, hata=err, sekil=sahne(sc, root) if sc else None)
+        if not sc and e.get("scene"):
+            o, _ = calistir(e["code"], e.get("inputs"))
+            sc = o.split("\n") if o else None
+        body += f"<h3>{html.escape(e['title'])}</h3>" + kod_ve_sonuc(e["code"], e.get("inputs"), e if e.get("mode") == "page" or e.get("html") else {}, sahne(sc, root) if sc else None)
         if e.get("note"):
             body += f'<p class="note">{md_inline(e["note"])}</p>'
     terms = sozluk_terimleri(v)
@@ -598,7 +698,7 @@ def cozumler_html(gunler):
         gorulen = set()
         varsayilan = ["Emma", "12", "Piko", "5"] if DIL == "en" else ["Ece", "12", "Piko", "5"]
         for j, (etiket, gv) in enumerate(items, 1):
-            out, err = calistir(gv["solution"], gv.get("inputs") or varsayilan if "input(" in gv["solution"] else None)
+            girdi = gv.get("inputs") or varsayilan if "input(" in gv["solution"] else None
             satirlar = explain(gv["solution"]) if DIL == "en" else (gv.get("explain") or {}).get("lines", [])
             rows = ""
             for x in satirlar:
@@ -606,7 +706,7 @@ def cozumler_html(gunler):
                 gorulen.update(notes)
                 if notes:
                     rows += f'<tr><td>{x["n"]}</td><td>{html.escape(x["code"])}</td><td>{" ".join(md_inline(nn) for nn in notes)}</td></tr>'
-            body += f'<div class="cozum"><h3><small>{n}.{j}</small>{etiket}: {html.escape(gv["title"])}</h3>' + kod(gv["solution"], out, hata=err)
+            body += f'<div class="cozum"><h3><small>{n}.{j}</small>{etiket}: {html.escape(gv["title"])}</h3>' + kod_ve_sonuc(gv["solution"], girdi, gv)
             if rows:
                 body += f'<table class="aciklama">{rows}</table>'
             body += "</div>"
@@ -659,6 +759,8 @@ def on_bolum_html(k, gunler, sayfalar, root, tam=False):
         toc = "".join(satir(v) for v in gunler)
     toc += f'<li class="bolum">{t("ekler")}</li>' if tam else ""
     toc += f'<li><b>{t("ek")}</b>{t("cozumler")}<span class="s">{sayfalar.get("cozum", "")}</span></li>'
+    if k["kod"] == "javascript" and DIL == "tr":
+        toc += f'<li><b>{t("ek")}</b>Deneme API\'si<span class="s">{sayfalar.get("demoapi", "")}</span></li>'
     if tam:
         toc += f'<li><b>{t("son")}</b>{t("sertifikan")}<span class="s">{sayfalar.get("sertifika", "")}</span></li>'
     ornek = "" if tam else f'<p style="font-size:8.5pt;color:#4A5B7A;margin-top:14pt">{t("ornek_bolum", ad=k["ad"], a=n0, b=n1)}</p>'
@@ -674,6 +776,14 @@ def on_bolum_html(k, gunler, sayfalar, root, tam=False):
 {ornek}
 <p style="font-size:7.5pt;color:#4A5B7A;margin-top:{6 if tam else 30}pt">{t("telif")}</p>
 </section>"""
+
+
+def demo_api_html():
+    return (f'<section class="on"><h1>Deneme API\'si</h1><p>26. günden itibaren örneklerde kullanılan <code>/demo-api/...</code> adresleri '
+            "bu kurs için hazırlanmış bir deneme sunucusudur. Etkileşimli derslerde hazırdır. Kendi bilgisayarında denerken aşağıdaki kodu "
+            "betiğinin <b>en üstüne</b> yapıştır: <code>fetch</code> istekleri internete çıkmadan bu verilerle cevaplanır.</p>"
+            + kod((HERE / "demo_api.js").read_text("utf8"), baslik="demo-api.js").replace('class="kod-grup"', 'class="kod-grup bolunebilir"')
+            + "</section>")
 
 
 def kapak_html(k, gunler, root, tam=False):
@@ -789,9 +899,11 @@ def main():
     gun_parca = [(f"gun-{int(v['day']):02d}", page(gun_html(v, k, root), root)) for v in gunler]
     coz = ("cozumler", page(cozumler_html(gunler), root))
     kapak = ("kapak", page(kapak_html(k, gunler, root, tam), root))
-    son = [("sertifika", page(sertifika_html(k, root), root))] if tam else []
+    son = [("demoapi", page(demo_api_html(), root))] if k["kod"] == "javascript" and DIL == "tr" else []
+    son += [("sertifika", page(sertifika_html(k, root), root))] if tam else []
     # ön bölümün uzunluğu sayfa numaralarına bağlı değil: önce boş numaralarla bas, sonra gerçekleriyle
     nasil, toc = on_bolum_html(k, gunler, {}, root, tam)
+    ekran_kapat()
     bilgi = pdf_bas([kapak, ("on", page(nasil, root)), ("icindekiler", page(toc, root))] + gun_parca + [coz] + son, work)
     sayfa = 1; baslangic = {}
     for ad, _, n in bilgi:
@@ -799,6 +911,7 @@ def main():
     nums = {int(v["day"]): baslangic[f"gun-{int(v['day']):02d}"] for v in gunler}
     nums["cozum"] = baslangic["cozumler"]
     nums["sertifika"] = baslangic.get("sertifika", "")
+    nums["demoapi"] = baslangic.get("demoapi", "")
     bilgi[2] = pdf_bas([("icindekiler", page(on_bolum_html(k, gunler, nums, root, tam)[1], root))], work)[0]
     writer = PdfWriter(); sayfa_bilgisi = []
     for ad, pdf, n in bilgi:
@@ -810,7 +923,7 @@ def main():
             d = int(ad[4:]); v = next(x for x in gunler if int(x["day"]) == d)
             sayfa_bilgisi += [(f"{t('gun', n=d)}: {v['title']}", d)] * n
         else:
-            sayfa_bilgisi += [(t("cozumler") if ad == "cozumler" else t("giris"), None)] * n
+            sayfa_bilgisi += [({"cozumler": t("cozumler"), "demoapi": "Deneme API'si"}.get(ad, t("giris")), None)] * n
     altbilgi(writer, sayfa_bilgisi, k)
     for _ in range(3):  # parçalar arasında ortak görseller bir kez (maskeler birleşince görseller de eşleşir)
         writer.compress_identical_objects(remove_duplicates=True, remove_unreferenced=True)
