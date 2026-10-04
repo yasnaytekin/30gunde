@@ -494,7 +494,7 @@ pre {{ margin: 0; }}
 .box.sozluk dd em {{ color: var(--ink2); font-style: normal; font-size: 7.5pt; }}
 .gorev {{ border: 1pt solid var(--line); border-radius: 8pt; padding: 9pt 10pt 4pt; margin: 9pt 0; break-inside: avoid; }}
 .gorev .bas {{ break-inside: avoid; }}
-.ipucu, .kontrol, .kuyruk {{ break-inside: avoid; }}
+.ipucu, .kontrol, .kuyruk, .son-blok {{ break-inside: avoid; }}
 div.hl {{ background: var(--soft); border: 0.8pt solid var(--line); border-left: 3pt solid var(--c); border-radius: 5pt; padding: 6pt 8pt; margin: 4pt 0 8pt; break-inside: avoid; }}
 div.hl pre {{ font-family: Mono; font-size: 8.2pt; line-height: 1.45; white-space: pre-wrap; }} div.hl code {{ background: none; padding: 0; font-size: 1em; }}
 .gorev .etiket {{ display: inline-block; font-family: Head; font-weight: 700; font-size: 7pt; letter-spacing: .06em; text-transform: uppercase;
@@ -608,10 +608,12 @@ def gorev_html(gv, etiket, cls, ref, root):
     sc = (gv.get("scene") or {}).get("target")
     if sc:
         out += sahne(sc, root)
+    son = ""  # görevin son kod bloğu kuyrukla aynı sayfada kalır: kuyruk sonraki sayfanın başına tek başına düşmez
     if (gv.get("html") or "").strip():
-        out += kod(gv["html"], baslik=t("html_hazir"), lex=HtmlLexer())
+        son = kod(gv["html"], baslik=t("html_hazir"), lex=HtmlLexer())
     if (gv.get("starter") or "").strip():
-        out += kod(gv["starter"], baslik=t("baslangic"))
+        out += son
+        son = kod(gv["starter"], baslik=t("baslangic"))
     ch = gv.get("check") or {}
     kontrol = []
     if ch.get("output_contains"):
@@ -624,7 +626,7 @@ def gorev_html(gv, etiket, cls, ref, root):
     if gv.get("hints"):
         kuyruk += f'<div class="ipucu"><b>{t("ipuclari")}</b><ol>' + "".join(f"<li>{ipucu_html(h)}</li>" for h in gv["hints"]) + "</ol></div>"
     kuyruk += f'<div class="cozum-ref">{t("cozum_ref", ref=ref)}</div>'
-    return out + f'<div class="kuyruk">{kuyruk}</div></div>'
+    return out + f'<div class="son-blok">{son}<div class="kuyruk">{kuyruk}</div></div></div>'
 
 
 def ipucu_html(h):
