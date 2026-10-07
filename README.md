@@ -10,6 +10,7 @@ gün gün konu anlatımları ve konu anlatım videoları için senaryolar ile vi
 | Müfredat | [python/mufredat.md](python/mufredat.md) | [javascript/mufredat.md](javascript/mufredat.md) |
 | Günler | [python/gunler/](python/gunler/) | [javascript/gunler/](javascript/gunler/) |
 | Video senaryoları | [python/video-senaryolari/](python/video-senaryolari/) | [javascript/video-senaryolari/](javascript/video-senaryolari/) |
+| Video planı | (120 video üretildi) | [javascript/video-plani.md](javascript/video-plani.md) |
 
 ## Klasörler
 
